@@ -1,0 +1,8 @@
+- figure out how to deploy on Heroku
+- add last4, stripe customer id to contact record in SF
+- what to do if query matches more than one contact/account?
+- the stripe form shows the wrong amount
+- create account if it doesn't exist
+- make amount field in form be read-only
+- use a different base image
+- use Python 3
