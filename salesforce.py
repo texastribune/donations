@@ -1,13 +1,15 @@
 import json
 import requests
 import locale
+from datetime import datetime
+import os
 
 SALESFORCE = {
     "HOST": os.environ['SALESFORCE_HOST'],
     "CLIENT_ID": os.environ['SALESFORCE_CLIENT_ID'],
-    "CLIENT_SECRET": os.environ['CLIENT_SECRET'],
-    "USERNAME": os.environ['USERNAME'],
-    "PASSWORD": os.environ['PASSWORD'],
+    "CLIENT_SECRET": os.environ['SALESFORCE_CLIENT_SECRET'],
+    "USERNAME": os.environ['SALESFORCE_USERNAME'],
+    "PASSWORD": os.environ['SALESFORCE_PASSWORD'],
 }
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
@@ -38,7 +40,7 @@ class SalesforceConnection(object):
                 'Content-Type': 'application/json'
                 }
 
-    def get_contact(self, email, path='/services/data/v33.0/query'):
+    def get_account(self, email):
         query = """SELECT AccountId
                     FROM Contact
                     WHERE All_In_One_EMail__c
@@ -48,14 +50,20 @@ class SalesforceConnection(object):
         account_id = response[0]['AccountId']
         return account_id
 
-    def add_opp(self, account_id, amount):
+    def add_opp(self, account_id, amount, charge_id, customer_id, card, last_four):
+        now = datetime.now().strftime('%Y-%m-%d')
         opportunity = {
                 'AccountId': '{}'.format(account_id),
                 'StageName': 'Closed Won',
                 'Amount': '{}'.format(amount),
-                'CloseDate': '2015-08-07',
+                'CloseDate': now,
                 'RecordTypeId': '01216000001IhHpAAK',
-                'Name': 'test2'
+                'Name': 'test2',
+                'last4__c': last_four,
+                'Stripe_Customer_ID__c': customer_id,
+                'Stripe_Transaction_ID__c': charge_id,
+                'Stripe_Card__c': card,
+                'LeadSource': 'Stripe',
                 # Lead Source
                 # the stripe IDs
                 # Description
@@ -67,6 +75,7 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.post(url, headers=self.headers, data=json.dumps(opportunity))
         response = json.loads(resp.text)
+        print response
 
 
     def query(self, query, path='/services/data/v33.0/query'):

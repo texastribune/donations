@@ -20,24 +20,41 @@ def checkout_form():
 @app.route('/charge', methods=['POST'])
 def charge():
     # Amount in cents
-    amount = int(request.form['amount']) * 100
+    amount = request.form['Opportunity.Amount']
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
     )
+    import ipdb; ipdb.set_trace()
+
+    print 'Customer: {}'.format(customer)
+    customer_id = customer.id
     # grab the last four of card #
     last_four = customer.sources.data[0].last4
 
+    #charge = stripe.Charge.create(
+    #    customer=customer.id,
+    #    amount=amount,
+    #    currency='usd',
+    #    description='Change Me'
+    #)
+
     charge = stripe.Charge.create(
-        customer=customer.id,
+        customer='cus_6t5hciwdDmKInK',
         amount=amount,
         currency='usd',
-        description='Change Me'
+        source='card_16fJVlG8bHZDNB6TiizHbH4A',
     )
+
+    print 'Charge: {}'.format(charge)
+    charge_id = charge.id
+    card = charge.source.id
+
     sf = SalesforceConnection()
-    account_id = sf.get_contact(request.form['stripeEmail'])
-    foo = sf.add_opp(account_id, amount, )
+    account_id = sf.get_account(request.form['stripeEmail'])
+
+    foo = sf.add_opp(account_id, amount, charge_id, customer_id, card, last_four)
 
     return render_template('charge.html', amount=amount)
 
