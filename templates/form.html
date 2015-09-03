@@ -30,6 +30,33 @@
     .tk-league-gothic {
       font-family: "league-gothic", sans-serif;
     }
+    .stripe-button-el {
+      background-color: #ffc200 !important;
+      background-image: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      color: black !important;
+      text-shadow: none !important;
+    }
+    .stripe-button-el:hover {
+      background-color: #008990 !important;
+      color: white !important;
+    }
+    .stripe-button-el span:hover {
+      background-color: #008990 !important;
+      color: white !important;
+    }
+    .stripe-button-el span {
+      background: #ffc200 !important;
+      background-color: #ffc200 !important;
+      background-image: none !important;
+      border-radius: 0 !important;
+      color: black !important;
+      text-shadow: none !important;
+    }
+    form {
+      padding: 0 2em;
+    }
   </style>
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
   <script src="./jquery.min.js"></script>
@@ -85,7 +112,7 @@
         <label for="PaymentControl_txtAmount" id="PaymentControl_lbltxtAmount" class="lbltxtAmount control-label required-label">Annual Amount</label>
         <div id="PaymentControl_divAmountControl" class="controls">
             <span class="add-on">$</span>
-            <input name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
+            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
           </div>
 
         <label for="PaymentControl_ddlRecurringFrequency" id="PaymentControl_lblddlRecurringFrequency" class="lblddlRecurringFrequency control-label">Length</label>
