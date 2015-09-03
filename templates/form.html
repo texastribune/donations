@@ -52,10 +52,34 @@
       background-image: none !important;
       border-radius: 0 !important;
       color: black !important;
+      font-size: 1.2em !important;
       text-shadow: none !important;
     }
     form {
       padding: 0 2em;
+    }
+    .controls {
+      padding: 0.2em 0 0.6em 0;
+    }
+    label {
+      font-size: 1.2em;
+      font-weight: 500;
+    }
+    .main {
+      padding: 2em 0;
+    }
+    .masthead {
+      border-bottom: 2px solid #ffc200;
+    }
+    #PaymentControl_txtBillAddress {
+      width: 250px;
+    }
+    select {
+      border-radius: 0;
+    }
+    p {
+      font-style: italic;
+      padding: 0 0 1em 2em;
     }
   </style>
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
@@ -107,12 +131,14 @@
       </ul>
     </nav> #}
   <div class="main">
+      <p>Thank you for supporting The Texas Tribune!</p>
       <form action="/charge" method="post">
       <div class="control-group">
         <label for="PaymentControl_txtAmount" id="PaymentControl_lbltxtAmount" class="lbltxtAmount control-label required-label">Annual Amount</label>
         <div id="PaymentControl_divAmountControl" class="controls">
             <span class="add-on">$</span>
             <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
+            <a href="http://support.texastribune.org/">Change donation amount</a>
           </div>
 
         <label for="PaymentControl_ddlRecurringFrequency" id="PaymentControl_lblddlRecurringFrequency" class="lblddlRecurringFrequency control-label">Length</label>
@@ -166,8 +192,9 @@
             <label for="PaymentControl_txtBillCity" id="PaymentControl_BillCityStateZipLabel" class="control-label required-label">
               Zip Code
             </label>
-            <br>
-            <input name="Contact.postalCode" type="text" maxlength="5" id="PaymentControl_txtZip" class="input-small">
+            <div class="controls">
+              <input name="Contact.postalCode" type="text" maxlength="5" id="PaymentControl_txtZip" class="input-small">
+            </div>
           </div>
       </div>
       <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
