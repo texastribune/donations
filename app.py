@@ -26,26 +26,25 @@ def charge():
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
     )
-    import ipdb; ipdb.set_trace()
 
     print 'Customer: {}'.format(customer)
     customer_id = customer.id
     # grab the last four of card #
     last_four = customer.sources.data[0].last4
 
-    #charge = stripe.Charge.create(
-    #    customer=customer.id,
-    #    amount=amount,
-    #    currency='usd',
-    #    description='Change Me'
-    #)
-
     charge = stripe.Charge.create(
-        customer='cus_6t5hciwdDmKInK',
-        amount=amount,
-        currency='usd',
-        source='card_16fJVlG8bHZDNB6TiizHbH4A',
+       customer=customer.id,
+       amount=int(amount) * 100,
+       currency='usd',
+       description='Change Me'
     )
+
+    # charge = stripe.Charge.create(
+    #     customer='cus_6t5hciwdDmKInK',
+    #     amount=amount,
+    #     currency='usd',
+    #     source='card_16fJVlG8bHZDNB6TiizHbH4A',
+    # )
 
     print 'Charge: {}'.format(charge)
     charge_id = charge.id
