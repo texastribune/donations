@@ -19,9 +19,6 @@
   <link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://s3.amazonaws.com/static.texastribune.org/media/icons/iPhone_Icon_120x120.png">
   <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://s3.amazonaws.com/static.texastribune.org/media/icons/iPad_Icon_152x152.png">
   <link href="http://support.texastribune.org/stylesheets/all-bd025c18.css" rel="stylesheet">
-  <script type="text/javascript" async="" src="http://www.google-analytics.com/analytics.js"></script>
-  <script async="" src="http://www.google-analytics.com/analytics.js"></script>
-  <script async="" src="http://www.google-analytics.com/analytics.js"></script>
   <script src="//use.typekit.net/ngv2xmw.js"></script>
   <script>try{Typekit.load();}catch(e){}</script>
   <style type="text/css"></style>
@@ -33,14 +30,58 @@
     .tk-league-gothic {
       font-family: "league-gothic", sans-serif;
     }
+    .stripe-button-el {
+      background-color: #ffc200 !important;
+      background-image: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      color: black !important;
+      text-shadow: none !important;
+    }
+    .stripe-button-el:hover {
+      background-color: #008990 !important;
+      color: white !important;
+    }
+    .stripe-button-el span:hover {
+      background-color: #008990 !important;
+      color: white !important;
+    }
+    .stripe-button-el span {
+      background: #ffc200 !important;
+      background-color: #ffc200 !important;
+      background-image: none !important;
+      border-radius: 0 !important;
+      color: black !important;
+      font-size: 1.2em !important;
+      text-shadow: none !important;
+    }
+    form {
+      padding: 0 2em;
+    }
+    .controls {
+      padding: 0.2em 0 0.6em 0;
+    }
+    label {
+      font-size: 1.2em;
+      font-weight: 500;
+    }
+    .main {
+      padding: 2em 0;
+    }
+    .masthead {
+      border-bottom: 2px solid #ffc200;
+    }
+    #PaymentControl_txtBillAddress {
+      width: 250px;
+    }
+    select {
+      border-radius: 0;
+    }
+    p {
+      font-style: italic;
+      padding: 0 0 1em 2em;
+    }
   </style>
-  <link rel="stylesheet" href="https://use.typekit.net/c/333257/1w;league-gothic,7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191,ZvZ:W:i4,ZvY:W:n4;proxima-nova,7cdcb44be4a7db8877ffa5c0007b8dd865b3bbc383831fe2ea177f62257a9191,gbm:W:i4,gbt:W:i7,gbl:W:n4,gbs:W:n7/d?3bb2a6e53c9684ffdc9a98ff1d5b2a620e72064206337821b0c1b72b5c00a9ff715d2dac93b61ac8b4ec4a1a411e73f62f4f6a6d0363b36098695369cece7cd21c81c4049191c428fa3384d0fddc4dced98c9aed29ef73a21d8fb58f4b59a8e62667db16a754108c0578ad9ac01a52aaa78945cd7f3a80e0acfe275217088d4ad04d5493c31c7c52b74a23fb1fb926af988c453d584f2da1adf51a19ced690c90c37ab5b15f3cf09ca5f1f106c90c5672e24b99362831eb57bfe30d7f30439cfc9b93e2b47808d80e1236831a32e47804aa6cbc30162529b51433e947f3383e2b7cd5dece3a135bb33646c063244839e5378b991d8ec28c96cf06aa2166c9f06136d9539f125f8588ede79e24c5fba98328dc5062a0853a1a57d4d5547430c20d080f79ebc9aaa3574"
-  media="all">
-  <script>
-    try {
-      Typekit.load();
-    } catch (e) {}
-  </script>
   <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
   <script src="./jquery.min.js"></script>
   <script src="//support.texastribune.org/javascripts/all-df60c690.js"></script>
@@ -68,12 +109,18 @@
 
 <body class="index">
   <section class="masthead">
-    <a href="http://www.texastribune.org/">
+    <a href="//www.texastribune.org/">
       <img src="//support.texastribune.org/images/logo-02196e7d.png">
     </a>
   </section>
-  <div class="splash">
-    <nav class="nav desktop-nav"
+  {# <div class="splash" style="background-image: url('http://support.texastribune.org/images/support-us-header-bg-c1928e91.jpg'); background-size: cover;">
+    <div class="splash-wrapper">
+      <div class="splash-greeting">
+        <h1 class="splash-header">Support Us</h1>
+      </div>
+    </div>
+  </div>
+    <nav class="nav desktop-nav">
       <ul>
         <li class="active"><a href="./form2.html">Become<br> a Member<i class="fa fa-caret-down"></i></a></li>
         <li><a href="http://support.texastribune.org/levels.html">Explore<br> Benefits<i class="fa fa-caret-down"></i></a></li>
@@ -82,24 +129,18 @@
         <li><a href="http://www.texastribune.org/support-us/corporate-sponsors/">Corporate<br> Sponsors</a></li>
         <li><a href="http://support.texastribune.org/faq.html">Frequently<br> Asked Questions<i class="fa fa-caret-down"></i></a></li>
       </ul>
-    </nav>
-  </div>
+    </nav> #}
   <div class="main">
+      <p>Thank you for supporting The Texas Tribune!</p>
       <form action="/charge" method="post">
-
-   <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-           data-key="{{ key }}"
-           data-description="A Flask Charge"
-           data-amount="{{ request.args.amount|int * 100 }}"></script>
       <div class="control-group">
         <label for="PaymentControl_txtAmount" id="PaymentControl_lbltxtAmount" class="lbltxtAmount control-label required-label">Annual Amount</label>
         <div id="PaymentControl_divAmountControl" class="controls">
             <span class="add-on">$</span>
-            <input name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
+            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
+            <br>
+            <a href="http://support.texastribune.org/">Change donation amount</a>
           </div>
-          &nbsp;
-        </div>
-      </div>
 
         <label for="PaymentControl_ddlRecurringFrequency" id="PaymentControl_lblddlRecurringFrequency" class="lblddlRecurringFrequency control-label">Length</label>
         <div class="controls">
@@ -108,6 +149,7 @@
             <option value="one-time">One Time</option>
             <option value="until-cancelled">Until Cancelled</option>
           </select>
+        </div>
         </div>
 
 
@@ -147,79 +189,35 @@
               <br>
             </div>
           </div>
+          <div class="control-group">
+            <label>City</label>
+            <div class="controls">
+              <input type="text"></input>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>State</label>
+            <div class="controls">
+              <input type="text"></input>
+            </div>
+          </div>
           <div class="control-group divBillCSZ" id="divBillCSZ">
             <label for="PaymentControl_txtBillCity" id="PaymentControl_BillCityStateZipLabel" class="control-label required-label">
               Zip Code
             </label>
-            <br>
-            <input name="Contact.postalCode" type="text" maxlength="5" id="PaymentControl_txtZip" class="input-small">
+            <div class="controls">
+              <input name="Contact.postalCode" type="text" maxlength="5" id="PaymentControl_txtZip" class="input-small">
+            </div>
           </div>
       </div>
+      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+           data-key="{{ key }}"
+           data-description="A Flask Charge"
+           data-amount="{{ request.args.amount|int * 100 }}"></script>
     </form>
 
 
   </div>
-  <div class="main-mobile">
-    <h2 class="tagline">Nonpartisan. Nonprofit. News.</h2>
-    <div class="video-label">Our mission in action</div>
-    <div class="outer-info video-wrapper" id="video-top"> <a class="video inner-info" href="https://www.youtube.com/watch?v=m4RbuLrJV48">Watch Now</a> </div>
-    <div class="watch-more"> <a href="http://www.texastribune.org/multimedia/video/">Watch more videos <i class="fa fa-chevron-right"></i></a>
-      <hr> </div>
-    <div class="outer-video-wrapper">
-      <div class="video-label">60+ free, statewide events a year</div>
-      <div class="outer-info video-wrapper secondary-video" id="video-two"> <a class="video inner-info" href="https://www.youtube.com/watch?v=hB18hnSqt80">Watch Now</a> </div>
-      <div class="video-label">Hard-hitting investigative projects</div>
-      <div class="outer-info video-wrapper secondary-video" id="video-three"> <a class="video inner-info" href="https://www.youtube.com/watch?v=Td4NJgWJmMo">Watch Now</a> </div>
-      <div class="video-label">Interactive data projects</div>
-      <div class="outer-info video-wrapper secondary-video" id="video-four"> <a class="video inner-info" href="https://www.youtube.com/watch?v=hquwElFso7M">Watch Now</a> </div>
-    </div>
-    <h3 class="section-header">Have a Question?</h3>
-    <div class="contact-info">
-      <h5>Membership</h5>
-      <h4>Mary Pharris</h4>
-      <p class="italic">Assistant Director of Marketing</p>
-      <p>512-716-8686</p>
-      <p><a href="mailto:mpharris@texastribune.org">mpharris@texastribune.org <i class="fa fa-chevron-right"></i></a></p>
-    </div>
-    <div class="contact-info">
-      <h5>Foundations, Major Gifts &amp; Circle Membership</h5>
-      <h4>Terry Quinn</h4>
-      <p class="italic">Chief Development Officer</p>
-      <p>512-716-8613</p>
-      <p><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org <i class="fa fa-chevron-right"></i></a></p>
-    </div>
-    <div class="contact-info">
-      <h5>Corporate Sponsorships</h5>
-      <h4>April Hinkle</h4>
-      <p class="italic">Chief Financial Officer</p>
-      <p>512-716-8634</p>
-      <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org <i class="fa fa-chevron-right"></i></a></p>
-    </div>
-    <hr>
-    <div class="social-wrapper">
-      <h3 class="section-header">Ready to share?</h3>
-      <a href="https://www.facebook.com/sharer/sharer.php?u=http://support.texastribune.org" target="_blank">
-        <div class="button social facebook"> <i class="fa fa-facebook"></i> Share on Facebook </div>
-      </a>
-      <a href="http://twitter.com/share?text=Join%20me%20in%20supporting%20the%20Tribune%E2%80%99s%20nonprofit%20newsroom%20by%20becoming%20a%20member%20today." target="_blank">
-        <div class="button social twitter"> <i class="fa fa-twitter"></i> Tweet to your followers </div>
-      </a>
-      <a href="mailto:?&subject=Join%20me%20in%20supporting%20The%20Texas%20Tribune&body=Friends,%0A%0AI%20support%20The%20Texas%20Tribune%20as%20a%20member,%20and%20I%E2%80%99m%20writing%20to%20ask%20you%20to%20do%20the%20same.%20Support%20from%20people%20like%20you%20and%20me%20allows%20the%20Tribune%20%E2%80%94%C2%A0a%20member-supported,%20digitally%20focused,%20nonprofit,%20nonpartisan%20news%20organization%20%E2%80%94%20to%20inform%20and%20engage%20Texans%20with%20the%20news%20that%20matters.%20I%20hope%20you%E2%80%99ll%20join%20me%20in%20supporting%20the%20Tribune%E2%80%99s%20coverage%20of%20public%20policy,%20politics%20and%20statewide%20government.%20http://support.texastribune.org"
-      target="_blank">
-        <div class="button social email"> <i class="fa fa-envelope"></i> Email to your friends </div>
-      </a>
-    </div>
-  </div>
-  <nav class="nav mobile-nav">
-    <ul>
-      <li><a href="./form2.html">Become a Member</a></li>
-      <li><a href="http://support.texastribune.org/levels.html">Explore Benefits</a></li>
-      <li><a href="http://support.texastribune.org/circle.html">Circle Membership</a></li>
-      <li><a href="http://www.texastribune.org/support-us/donors-and-members/">Donor and Member Wall</a></li>
-      <li><a href="http://www.texastribune.org/support-us/corporate-sponsors/">Corporate Sponsors</a></li>
-      <li><a href="http://support.texastribune.org/faq.html">Frequently Asked Questions</a></li>
-    </ul>
-  </nav>
   <footer class="footer">
     <nav class="left-nav">
       <ul>
@@ -255,301 +253,3 @@
     ga('require', 'displayfeatures');
     ga('send', 'pageview');
   </script>
-  <script>
-    (function(w, d, s, l, i) {
-      w[l] = w[l] || [];
-      w[l].push({
-        'gtm.start': new Date().getTime(),
-        event: 'gtm.js'
-      });
-      var f = d.getElementsByTagName(s)[0],
-        j = d.createElement(s),
-        dl = l != 'dataLayer' ? '&l=' + l : '';
-      j.async = true;
-      j.src =
-        '//www.googletagmanager.com/gtm.js?id=' + i + dl;
-      f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'mipData', 'GTM-NBBG35');
-  </script>
-  <script type="text/javascript" id="gtm-send-hit-task">
-    (function(i, s, o, g, r, a, m) {
-      i["GoogleAnalyticsObject"] = r;
-      i[r] = i[r] || function() {
-        (i[r].q = i[r].q || []).push(arguments)
-      }, i[r].l = 1 * new Date;
-      a = s.createElement(o), m = s.getElementsByTagName(o)[0];
-      a.async = 1;
-      a.src = g;
-      m.parentNode.insertBefore(a, m)
-    })(window, document, "script", "//www.google-analytics.com/analytics.js", google_tag_manager["GTM-NBBG35"].macro('gtm1439774398014'));
-    window[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398015')]("create", google_tag_manager["GTM-NBBG35"].macro('gtm1439774398016'), "auto", {
-      "cookieName": google_tag_manager["GTM-NBBG35"].macro('gtm1439774398017'),
-      "siteSpeedSampleRate": 0
-    });
-    window[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398018')](function(tracker) {
-      var originalSendHitTask = tracker.get("sendHitTask");
-      tracker.set("sendHitTask", function(model) {
-        var d = new Date + 1E3 * 60 * parseInt(google_tag_manager["GTM-NBBG35"].macro('gtm1439774398019'));
-        document.cookie = google_tag_manager["GTM-NBBG35"].macro('gtm1439774398020') + "\x3d1; Expires\x3d" + d + "; Path\x3d/";
-        originalSendHitTask(model);
-        var hitPayload = model.get("hitPayload");
-        var byteCount = google_tag_manager["GTM-NBBG35"].macro('gtm1439774398021');
-        var verb = "POST";
-        var cacheBuster = "\x26z\x3d" + Math.round(Math.random() * 2147483647);
-        try {
-          var xhr;
-          if ("XDomainRequest" in window && window.XDomainRequest !==
-            null) {
-            xhr = new XDomainRequest;
-            xhr.onprogress = function() {};
-            xhr.ontimeout = function() {};
-            xhr.onerror = function() {};
-            xhr.onload = function() {}
-          } else xhr = new XMLHttpRequest;
-          if (xhr) setTimeout(function() {
-            xhr.open(verb, google_tag_manager["GTM-NBBG35"].macro('gtm1439774398022') + (verb === "GET" ? "?" + hitPayload + cacheBuster : ""), 1);
-            xhr.send(verb === "POST" ? hitPayload : "")
-          }, 0)
-        } catch (e) {
-          window.console && console.log(e.message)
-        }
-      })
-    });
-    window[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398023')].push({
-      "event": "mip.ready"
-    });
-  </script>
-  <script type="text/javascript" id="mip-gtm-scroll-tracking">
-    "undefined" !== typeof jQuery && function(d, f, p, k) {
-      var q = {
-          minHeight: 0,
-          elements: [],
-          percentage: !0,
-          userTiming: !0,
-          pixelDepth: !0,
-          nonInteraction: !0
-        },
-        g = d(f),
-        l = [],
-        r, t = f[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398024')].push;
-      k = function(a) {
-        function k(a, h) {
-          d.each(a, function(b, a) {
-            -1 === d.inArray(b, l) && h >= a && (t({
-              event: "ScrollDistance",
-              attributes: {
-                distance: b
-              }
-            }), l.push(b))
-          })
-        }
-
-        function u(a, d) {
-          var b, f, c, e = null,
-            m = 0,
-            k = function() {
-              m = new Date;
-              e = null;
-              c = a.apply(b, f)
-            };
-          return function() {
-            var g = new Date;
-            m || (m = g);
-            var l = d - (g - m);
-            b = this;
-            f = arguments;
-            0 >= l ? (clearTimeout(e),
-              e = null, m = g, c = a.apply(b, f)) : e || (e = setTimeout(k, l));
-            return c
-          }
-        }
-        a = d.extend({}, q, a);
-        if (!(d("#footer").offset().top < a.minHeight)) g.on("scroll.scrollDepth", u(function() {
-          r || (r = !0, t({
-            event: "ScrollDistance",
-            attributes: {
-              distance: "start"
-            }
-          }));
-          var n = a.topElementSelector ? d(a.topElementSelector).offset().top : 0,
-            h = a.bottomElementSelector ? d(a.bottomElementSelector).offset().top : d(p).height(),
-            b;
-          if (google_tag_manager["GTM-NBBG35"].macro('gtm1439774398025')) try {
-            -1 < google_tag_manager["GTM-NBBG35"].macro('gtm1439774398026').join().indexOf("article") && (b = d("#site_footer").offset().top)
-          } catch (q) {}
-          var c =
-            h,
-            h = f.innerHeight ? f.innerHeight : g.height(),
-            h = g.scrollTop() + h,
-            c = parseInt(c, 10),
-            e = parseInt(n, 10),
-            n = parseInt(b, 10),
-            c = {
-              "25%": .25 * (c - e) + e,
-              "50%": .5 * (c - e) + e,
-              "75%": .75 * (c - e) + e,
-              "100%": c,
-              end: d(p).height() - 5
-            };
-          b && (c.supplemental = n);
-          b = c;
-          l.length >= b.length ? g.off("scroll.scrollDepth") : a.percentage && k(b, h)
-        }, 500))
-      };
-      k({
-        topElementSelector: google_tag_manager["GTM-NBBG35"].macro('gtm1439774398028'),
-        bottomElementSelector: google_tag_manager["GTM-NBBG35"].macro('gtm1439774398030')
-      })
-    }(jQuery, window, document);
-  </script>
-  <script type="text/javascript" id="gtm-mip-engagement-timer">
-    (function(b, d, q) {
-      function l() {
-        for (i = f.length; - 1 < i; i--) {
-          var a = f[i];
-          g(d, a, m)
-        }
-      }
-
-      function h() {
-        a = setInterval(function() {
-          n++;
-          d[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398031')].push({
-            event: "engagementTimer",
-            attributes: {
-              counter: 15 * n
-            }
-          })
-        }, Number(google_tag_manager["GTM-NBBG35"].macro('gtm1439774398032')))
-      }
-
-      function k() {
-        setTimeout(function() {
-          clearInterval(a);
-          a = !1
-        }, Number(google_tag_manager["GTM-NBBG35"].macro('gtm1439774398033')) + 1)
-      }
-
-      function m() {
-        for (i = f.length; - 1 < i; i--) {
-          var b = f[i];
-          p(d, b, m)
-        }
-        setTimeout(function() {
-          l()
-        }, 1500);
-        a || h();
-        clearTimeout(k);
-        k()
-      }
-      var g = google_tag_manager["GTM-NBBG35"].macro('gtm1439774398034'),
-        p = google_tag_manager["GTM-NBBG35"].macro('gtm1439774398035'),
-        n = 0,
-        f = ["mousemove",
-          "touchstart", "scroll", "keydown"
-        ],
-        a, e, c;
-      "undefined" !== typeof b.hidden ? (e = "hidden", c = "visibilitychange") : "undefined" !== typeof b.mozHidden ? (e = "mozHidden", c = "mozvisibilitychange") : "undefined" !== typeof b.msHidden ? (e = "msHidden", c = "msvisibilitychange") :
-        "undefined" !== typeof b.webkitHidden && (e = "webkitHidden", c = "webkitvisibilitychange");
-      k();
-      l();
-      h();
-      c ? g(b, c, function() {
-        clearInterval(a);
-        b[e] || h()
-      }) : (g(d, "blur", function() {
-        clearInterval(a)
-      }), g(d, "focus", function() {
-        clearInterval(a);
-        h()
-      }))
-    })(document, window);
-  </script>
-  <script type="text/javascript" id="mip-gtm-link-click-listener">
-    (function(c, r, f) {
-      function h(c) {
-        var f = this,
-          h = this.classList || "",
-          n = this.id || "",
-          t = this.target || "",
-          p = this.href || "";
-        setTimeout(function() {
-          var c = r[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398036')],
-            k = c[c.length - 1],
-            k = k["gtm.elementUrl"];
-          if (!q)
-            for (e = c.length - 1; - 1 < e; e--) {
-              var g = c[e];
-              if ("gtm.linkClick" === g.event && !g.spoof) {
-                l = g.eventCallback || l;
-                m = g.eventReporter || m;
-                q = !0;
-                break
-              }
-            }
-          p !== k && c.push({
-            event: "gtm.linkClick",
-            "gtm.element": f,
-            "gtm.elementClasses": h,
-            "gtm.elementId": n,
-            "gtm.elementTarget": t,
-            "gtm.elementUrl": p,
-            eventTimeout: 2E3,
-            eventCallback: l,
-            eventReporter: m,
-            spoof: 1
-          })
-        }, 1)
-      }
-      c = c.getElementsByTagName("a");
-      f = google_tag_manager["GTM-NBBG35"].macro('gtm1439774398037');
-      var l = function() {
-          try {
-            b.simulateDefault && (b.targetWindow ? b.targetWindow.location.href = a.href : (d = d || J().getTime(), 500 > J().getTime() - d && u.setTimeout(mc(a, b, d), 25)))
-          } catch (c) {}
-        },
-        m = function(c) {
-          try {
-            d.eventReport = c
-          } catch (e) {}
-        },
-        q = !1,
-        e;
-      for (e = c.length - 1; - 1 < e; e--) {
-        var n = c[e];
-        f(n, "click", h)
-      }
-    })(document, window);
-  </script>
-  <script type="text/javascript" id="mip-gtm-support-submission-listener">
-    google_tag_manager["GTM-NBBG35"].macro('gtm1439774398043')("CHTML - Support Form Submission Listener", function() {
-      (function(a) {
-        function b() {
-          var a = window[google_tag_manager["GTM-NBBG35"].macro('gtm1439774398044')];
-          if (a) {
-            var b = this.classList || "",
-              c = this.id || "",
-              d = this.target || "",
-              e = this.href || "";
-            a.push({
-              event: "gtm.linkClick",
-              "gtm.element": this,
-              "gtm.elementClasses": b,
-              "gtm.elementId": c,
-              "gtm.elementTarget": d,
-              "gtm.elementUrl": e,
-              spoof: 1
-            })
-          }
-        }
-        var c = google_tag_manager["GTM-NBBG35"].macro('gtm1439774398045'),
-          d = a.getElementById("contribution-form-bottom");
-        a = a.getElementById("top-contribute");
-        c(d, "submit", b);
-        c(a, "submit", b)
-      })(document)
-    });
-  </script>
-</body>
-
-</html>
