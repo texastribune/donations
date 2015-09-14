@@ -75,7 +75,7 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.post(url, headers=self.headers, data=json.dumps(opportunity))
         response = json.loads(resp.text)
-        print response
+        print (response)
 
 
     def query(self, query, path='/services/data/v33.0/query'):
