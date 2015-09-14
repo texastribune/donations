@@ -27,7 +27,7 @@ def charge():
         card=request.form['stripeToken']
     )
 
-    print 'Customer: {}'.format(customer)
+    print ('Customer: {}'.format(customer))
     customer_id = customer.id
     # grab the last four of card #
     last_four = customer.sources.data[0].last4
@@ -46,7 +46,7 @@ def charge():
     #     source='card_16fJVlG8bHZDNB6TiizHbH4A',
     # )
 
-    print 'Charge: {}'.format(charge)
+    print ('Charge: {}'.format(charge))
     charge_id = charge.id
     card = charge.source.id
 
