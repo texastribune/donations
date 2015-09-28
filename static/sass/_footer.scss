@@ -1,0 +1,48 @@
+.footer {
+  @include outer-container;
+  background: $black;
+  max-width: none;
+  padding: 0.5em 0;
+  .left-nav {
+    @include span-columns(3);
+    @media (max-width: 985px) {
+      @include span-columns(12);
+    }
+    ul {
+      float: left;
+    }
+  }
+  .right-nav {
+    @include span-columns(9);
+    @media (max-width: 985px) {
+      @include visually-hidden;
+    }
+    ul {
+      float: right;
+      margin-right: 1.5em;
+    }
+  }
+  ul {
+    li {
+      border-right: 1px solid $white;
+      display: inline-block;
+      &.copyright {
+        border: none;
+        color: $gray-medium;
+        a {
+          color: $gray-medium;
+        }
+      }
+      &.donate {
+        border: none;
+        a {
+          color: $teal-tribune;
+        }
+      }
+      a {
+        color: $white;
+        padding: 0.5em;
+      }
+    }
+  }
+}

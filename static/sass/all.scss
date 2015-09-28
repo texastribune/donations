@@ -1,3 +1,10 @@
+@import 'bourbon';
+@import 'neat';
+
+// general
+@import 'settings';
+@import 'footer';
+
 .tk-proxima-nova {
   font-family: "proxima-nova", sans-serif;
 }

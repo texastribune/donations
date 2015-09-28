@@ -1,0 +1,75 @@
+// Breakpoints
+$desktop: new-breakpoint(min-width 800px 12);
+$tablet: new-breakpoint(max-width 799px);
+$mobile: new-breakpoint(max-width 520px);
+
+
+// Colors
+$yellow-tribune: #ffc200;
+$teal-tribune: #008990;
+
+$black: #000000;
+$gray-medium: #aaaaaa;
+$gray-light: #ebebeb;
+$white: #ffffff;
+
+$bg-contribute: white;
+$bg-nav: #000000;
+
+$link-nav: white;
+
+
+// Fonts
+$league-gothic: 'league-gothic', sans-serif;
+
+
+// Mixins
+@mixin hide-for-mobile {
+  @include media($mobile) {
+    display: none;
+  }
+}
+
+@mixin show-for-mobile {
+  display: none;
+  @include media($mobile) {
+    display: block;
+  }
+}
+
+// for visually hiding but remaining accessible
+@mixin visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
+
+@mixin background-sizing {
+  background-size: cover;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
+@mixin fast-transition($property) {
+  @include transition-property($property);
+  @include transition-duration(0.2s);
+  @include transition-timing-function(ease-in);
+}
+
+@mixin medium-transition($property) {
+  @include transition-property($property);
+  @include transition-duration(0.5s);
+  @include transition-timing-function(ease-in);
+}
+
+
+// Helper classes
+.visually-hidden {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  height: 1px; width: 1px;
+  margin: -1px; padding: 0; border: 0;
+}
