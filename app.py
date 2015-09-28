@@ -2,6 +2,7 @@ import os
 from flask import Flask, render_template, request
 import stripe
 from salesforce import SalesforceConnection
+from sassutils.wsgi import SassMiddleware
 
 stripe_keys = {
     'secret_key': os.environ['SECRET_KEY'],
@@ -10,6 +11,10 @@ stripe_keys = {
 stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
+
+app.wsgi_app = SassMiddleware(app.wsgi_app, {
+        'app': ('static/sass', 'static/css', 'static/css')
+    })
 
 @app.route('/form')
 def checkout_form():
