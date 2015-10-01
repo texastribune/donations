@@ -53,44 +53,44 @@
       <p>Thank you for supporting The Texas Tribune!</p>
       <form action="/charge" method="post">
         <div>
-          <label>Annual Amount</label>
+          <label>Annual Amount</label><br>
             <span>$</span>
             <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
             <a href="http://support.texastribune.org/">Change donation amount</a>
         </div>
         <div>
-          <label>Length</label>
-            <select name="frequency" onchange="showHideExpirationPC()">
+          <label>Length</label><br>
+            <select name="frequency">
               <option value="one-time">One Time</option>
               <option value="until-cancelled">Until Cancelled</option>
             </select>
         </div>
         <div>
-          <label>First Name</label>
+          <label>First Name</label><br>
             <input name="Contact.FirstName" type="text" maxlength="50">
         </div>
         <div>
-          <label>Last Name</label>
+          <label>Last Name</label><br>
             <input name="Contact.LastName" type="text" maxlength="50">
         </div>
         <div>
-          <label>Phone</label>
+          <label>Phone</label><br>
             <input name="Contact.HomePhone" maxlength="50" type="text">
         </div>
         <div>
-          <label>Billing Address</label>
+          <label>Billing Address</label><br>
             <input name="Contact.street" type="text" maxlength="50">
         </div>
         <div>
-          <label>City</label>
-            <input type="text"></input>
+          <label>City</label><br>
+            <input name="Contact.city" type="text"></input>
         </div>
         <div>
-          <label>State</label>
-            <input type="text"></input>
+          <label>State</label><br>
+            <input name="Contact.state" type="text"></input>
         </div>
         <div>
-          <label>Zip Code</label>
+          <label>Zip Code</label><br>
             <input name="Contact.postalCode" type="text" maxlength="5">
         </div>
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
