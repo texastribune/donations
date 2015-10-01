@@ -13,8 +13,12 @@
 
 
 // General styles
+body {
+  margin: 0;
+}
+
 .main {
-  padding: 1.5em 0;
+  padding: 1em 0 2em 0;
 }
 
 
@@ -22,6 +26,14 @@
 html {
   font-family: $helvetica;
   font-size: 14px;
+}
+
+a {
+  color: $teal-tribune;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
 }
 
 
@@ -58,8 +70,17 @@ form {
   padding: 0 2em;
 }
 label {
-  font-size: 1.2em;
-  font-weight: 500;
+  color: $black;
+  cursor: pointer;
+  float: left;
+  font-size: 0.8em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  min-width: 150px;
+}
+input, select {
+  margin: 0.5em 0.5em 1em 0;
 }
 select {
   border-radius: 0;
