@@ -52,90 +52,52 @@
   <div class="main">
       <p>Thank you for supporting The Texas Tribune!</p>
       <form action="/charge" method="post">
-      <div class="control-group">
-        <label for="PaymentControl_txtAmount" id="PaymentControl_lbltxtAmount" class="lbltxtAmount control-label required-label">Annual Amount</label>
-        <div id="PaymentControl_divAmountControl" class="controls">
-            <span class="add-on">$</span>
+        <div>
+          <label>Annual Amount</label>
+            <span>$</span>
             <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
-            <br>
             <a href="http://support.texastribune.org/">Change donation amount</a>
-          </div>
-
-        <label for="PaymentControl_ddlRecurringFrequency" id="PaymentControl_lblddlRecurringFrequency" class="lblddlRecurringFrequency control-label">Length</label>
-        <div class="controls">
-
-          <select name="frequency" onchange="showHideExpirationPC()">
-            <option value="one-time">One Time</option>
-            <option value="until-cancelled">Until Cancelled</option>
-          </select>
         </div>
+        <div>
+          <label>Length</label>
+            <select name="frequency" onchange="showHideExpirationPC()">
+              <option value="one-time">One Time</option>
+              <option value="until-cancelled">Until Cancelled</option>
+            </select>
         </div>
-
-
-          <div class="control-group" id="divFirstName">
-            <label for="PaymentControl_txtFname" id="PaymentControl_Label1" class="control-label required-label">First Name</label>
-            <div class="controls">
-              <input name="Contact.FirstName" type="text" maxlength="50" id="PaymentControl_txtFname">
-              <span id="PaymentControl_RequiredFieldValidator3" class="text-error" style="display:none;">First name is required.</span>
-            </div>
-          </div>
-          <div class="control-group" id="divLastName">
-            <label for="PaymentControl_txtLname" id="PaymentControl_Label2" class="control-label required-label">Last Name</label>
-            <div class="controls">
-              <input name="Contact.LastName" type="text" maxlength="50" id="PaymentControl_txtLname">
-              <span id="PaymentControl_RequiredFieldValidator4" class="text-error" style="display:none;">Last name is required.</span>
-            </div>
-          </div>
-          <div id="PaymentControl_divHomePhone" class="control-group">
-            <label for="PaymentControl_txtHomePhone" id="PaymentControl_lblHomePhone" class="control-label required-label">Phone</label>
-            <div class="controls">
-              <input name="Contact.HomePhone" maxlength="50" id="PaymentControl_txtHomePhone" type="text">
-              <span id="PaymentControl_rfvHomePhone" class="text-error" style="display:none;">Phone is required.</span>
-            </div>
-          </div>
-
-
-
-      <div id="PaymentControl_divBillingAddress" class="span7">
-
-
-
-          <div class="control-group divBillAddress" id="divBillAddress">
-            <label for="PaymentControl_txtBillAddress" id="PaymentControl_Label4" class="control-label required-label">Billing Address</label>
-            <div class="controls">
-              <input name="Contact.street" type="text" maxlength="50" id="PaymentControl_txtBillAddress" class="input-large">
-              <span id="PaymentControl_rfvBillAddress" class="text-error" style="display:none;">Address is required.</span>
-              <br>
-            </div>
-          </div>
-          <div class="control-group">
-            <label>City</label>
-            <div class="controls">
-              <input type="text"></input>
-            </div>
-          </div>
-          <div class="control-group">
-            <label>State</label>
-            <div class="controls">
-              <input type="text"></input>
-            </div>
-          </div>
-          <div class="control-group divBillCSZ" id="divBillCSZ">
-            <label for="PaymentControl_txtBillCity" id="PaymentControl_BillCityStateZipLabel" class="control-label required-label">
-              Zip Code
-            </label>
-            <div class="controls">
-              <input name="Contact.postalCode" type="text" maxlength="5" id="PaymentControl_txtZip" class="input-small">
-            </div>
-          </div>
-      </div>
-      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-           data-key="{{ key }}"
-           data-description="A Flask Charge"
-           data-amount="{{ request.args.amount|int * 100 }}"></script>
-    </form>
-
-
+        <div>
+          <label>First Name</label>
+            <input name="Contact.FirstName" type="text" maxlength="50">
+        </div>
+        <div>
+          <label>Last Name</label>
+            <input name="Contact.LastName" type="text" maxlength="50">
+        </div>
+        <div>
+          <label>Phone</label>
+            <input name="Contact.HomePhone" maxlength="50" type="text">
+        </div>
+        <div>
+          <label>Billing Address</label>
+            <input name="Contact.street" type="text" maxlength="50">
+        </div>
+        <div>
+          <label>City</label>
+            <input type="text"></input>
+        </div>
+        <div>
+          <label>State</label>
+            <input type="text"></input>
+        </div>
+        <div>
+          <label>Zip Code</label>
+            <input name="Contact.postalCode" type="text" maxlength="5">
+        </div>
+        <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+             data-key="{{ key }}"
+             data-description="A Flask Charge"
+             data-amount="{{ request.args.amount|int * 100 }}"></script>
+      </form>
   </div>
   <footer class="footer">
     <nav class="left-nav">
