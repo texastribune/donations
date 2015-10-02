@@ -16,8 +16,8 @@ run:
 clean:
 	docker stop ${APP} && docker rm ${APP}
 
-interactive: build
-	docker run --workdir=/flask --volume=$$(pwd):/flask --env-file=env --rm --interactive --tty --publish=80:5000 --name=${APP} ${NS}/${APP} bash
+interactive: build-dev
+	docker run --workdir=/flask --volume=$$(pwd):/flask --env-file=env --rm --interactive --tty --publish=80:5000 --name=${APP} ${NS}/${APP}:dev bash
 
 test:
 	docker run --volume=$$(pwd):/app --workdir=/app --rm --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test --cov=.
