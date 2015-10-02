@@ -1,3 +1,3 @@
 FROM texastribune/checkout
 
-RUN pip3 install pytest pytest-cov
+RUN pip3 install pytest pytest-cov ipdb
