@@ -19,5 +19,8 @@ clean:
 interactive: build
 	docker run --workdir=/flask --volume=$$(pwd):/flask --env-file=env --rm --interactive --tty --publish=80:5000 --name=${APP} ${NS}/${APP} bash
 
+test:
+	docker run --volume=$$(pwd):/app --workdir=/app --rm --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test --cov=.
+
 push:
 	docker push ${NS}/${APP}
