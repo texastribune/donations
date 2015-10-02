@@ -1,4 +1,4 @@
-APP=stripe
+APP=checkout
 NS=texastribune
 
 build:
