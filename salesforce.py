@@ -48,12 +48,10 @@ class SalesforceConnection(object):
                     LIKE '%{}%'
                 """.format(email)
         response = self.query(query)
-        if len(response) > 1 {
-                return "more than one result"
-                }
-        elif len(response) = < 1 {
+        if len(response) > 1:
+            return "more than one result"
+        elif len(response) < 1:
                 return "no results"
-                }
 
         account_id = response[0]['AccountId']
 
