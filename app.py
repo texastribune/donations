@@ -1,7 +1,8 @@
 import os
 from flask import Flask, render_template, request
 import stripe
-from salesforce import SalesforceConnection
+from salesforce import add_opportunity
+from salesforce import add_recurring_donation
 
 stripe_keys = {
     'secret_key': os.environ['SECRET_KEY'],
@@ -17,10 +18,17 @@ def checkout_form():
     return render_template('form.html', key=stripe_keys['publishable_key'])
 
 
+@app.route('/error')
+def error():
+    message = "Something went wrong!"
+    return render_template('error.html', message=message)
+
+
 @app.route('/charge', methods=['POST'])
 def charge():
     # Amount in cents
     amount = request.form['Opportunity.Amount']
+#    description = request.form['Description']
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
@@ -28,32 +36,22 @@ def charge():
     )
 
     print ('Customer: {}'.format(customer))
-    customer_id = customer.id
-    # grab the last four of card #
-    last_four = customer.sources.data[0].last4
 
     charge = stripe.Charge.create(
        customer=customer.id,
        amount=int(amount) * 100,
        currency='usd',
-       description='Change Me'
+       description='Change Me' # TODO
     )
 
-    # charge = stripe.Charge.create(
-    #     customer='cus_6t5hciwdDmKInK',
-    #     amount=amount,
-    #     currency='usd',
-    #     source='card_16fJVlG8bHZDNB6TiizHbH4A',
-    # )
-
     print ('Charge: {}'.format(charge))
-    charge_id = charge.id
-    card = charge.source.id
 
-    sf = SalesforceConnection()
-    account_id = sf.get_account(request.form['stripeEmail'])
-
-    foo = sf.add_opp(account_id, amount, charge_id, customer_id, card, last_four)
+    if (request.form['frequency'] == 'one-time'):
+        add_opportunity(request=request.form, customer=customer, charge=charge,
+                reason="I heart the Trib!") # TODO
+    else:
+        add_recurring_donation(request=request.form, customer=customer, charge=charge,
+                reason="I love the Trib!") #TODO
 
     return render_template('charge.html', amount=amount)
 

@@ -3,6 +3,7 @@ import requests
 import locale
 from datetime import datetime
 import os
+import collections
 
 SALESFORCE = {
     "HOST": os.environ['SALESFORCE_HOST'],
@@ -14,8 +15,10 @@ SALESFORCE = {
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
+ContactAccount = collections.namedtuple('ContactAccount', 'contact account')
 
 class SalesforceConnection(object):
+
 
     def __init__(self):
 
@@ -41,46 +44,6 @@ class SalesforceConnection(object):
                 'Content-Type': 'application/json'
                 }
 
-    def get_account(self, email):
-        query = """SELECT AccountId
-                    FROM Contact
-                    WHERE All_In_One_EMail__c
-                    LIKE '%{}%'
-                """.format(email)
-        response = self.query(query)
-        if len(response) > 1:
-            return "more than one result"
-        elif len(response) < 1:
-                return "no results"
-
-        account_id = response[0]['AccountId']
-
-        return account_id
-
-    def add_opp(self, account_id, amount, charge_id, customer_id, card, last_four):
-        now = datetime.now().strftime('%Y-%m-%d')
-        opportunity = {
-                'AccountId': '{}'.format(account_id),
-                'StageName': 'Closed Won',
-                'Amount': '{}'.format(amount),
-                'CloseDate': now,
-                'RecordTypeId': '01216000001IhHpAAK',
-                'Name': 'test2',
-                'Stripe_Customer_ID__c': customer_id,
-                'Stripe_Transaction_ID__c': charge_id,
-                'Stripe_Card__c': card,
-                'LeadSource': 'Stripe',
-                # Description
-                # Encouraged to Contribute by
-                # Co Member First name, last name, and email
-
-                }
-        path = '/services/data/v33.0/sobjects/Opportunity'
-        url = '{}{}'.format(self.instance_url, path)
-        resp = requests.post(url, headers=self.headers, data=json.dumps(opportunity))
-        response = json.loads(resp.text)
-        print (response)
-
 
     def query(self, query, path='/services/data/v33.0/query'):
         url = '{}{}'.format(self.instance_url, path)
@@ -96,3 +59,150 @@ class SalesforceConnection(object):
             return response['records'] + self.query(query=None,
                     path=response['nextRecordsUrl'])
         return response['records']
+
+
+    def create_contact(self, request):
+
+        contact = {
+            'Email': request['stripeEmail'],
+            'Description': 'added by Stripe/Checkout app',
+            'FirstName': request['Contact.FirstName'],
+            'LastName': request['Contact.LastName'],
+            'HomePhone': request['Contact.HomePhone'],
+            'MailingCity': 'Austin',
+            'MailingPostalCode': request['Contact.postalCode'],
+#            'MailingPostalCode': request['Contact.MailingPostalCode'],
+            'MailingState': 'TX',
+#            'MailingStreet': request['Contact.MailingStreet'],
+            'MailingStreet': request['Contact.street'],
+            'LeadSource': 'Stripe',
+            }
+
+        path = '/services/data/v33.0/sobjects/Contact'
+        url = '{}{}'.format(self.instance_url, path)
+        resp = requests.post(url, headers=self.headers, data=json.dumps(contact))
+        response = json.loads(resp.text)
+        contact_id = response['id']
+        query = """SELECT AccountId FROM Contact WHERE id = '{}'""".format(contact_id)
+        response = self.query(query)
+        # unlike elsewhere there should only be one result here because we're
+        # querying on a 1:1 relationship:
+        return ContactAccount(contact=contact_id, account=response[0]['AccountId'])
+
+    def get_or_create_account(self, request):
+
+        email = request['stripeEmail']
+        query = """SELECT AccountId, Id
+                    FROM Contact
+                    WHERE All_In_One_EMail__c
+                    LIKE '%{}%'
+                """.format(email)
+        response = self.query(query)
+
+        if len(response) == 1:
+            account_id = response[0]['AccountId']
+            contact_id = response[0]['Id']
+            contact_account = ContactAccount(contact=contact_id, account=account_id)
+        elif len(response) > 1:
+            # More than one account matches. Let's add it to the first one we found
+            # but raise a warning:
+            print ("more than one result")
+            account_id = response[0]['AccountId']
+            contact_id = response[0]['Id']
+            contact_account = ContactAccount(contact=contact_id, account=account_id)
+            # TODO: send alert
+        elif len(response) < 1:
+            contact_account = self.create_contact(request)
+
+# [{'AccountId': '0011700000BpR8PAAV', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BHQzBAAX'}}, {'AccountId': '0011700000BqjZSAAZ', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BM3J4AAL'}}]
+
+#{'Name': 'test2', 'AccountId': '0011700000BpR8PAAV', 'RecordTypeId': '01216000001IhHpAAK', 'CloseDate': '2015-10-02', 'Stripe_Transaction_ID__c': 'ch_16rIZfG8bHZDNB6TmUE9u7Ej', 'Encouraged_to_contribute_by__c': 'I heart the Trib!', 'Description': 'Change Me', 'Amount': '100.0', 'Stripe_Card__c': 'card_16rIZbG8bHZDNB6TY0auxz2i', 'LeadSource': 'Stripe', 'Stripe_Customer_ID__c': 'cus_75TWyYoU5MKJOX', 'StageName': 'Closed Won'}
+
+        return contact_account
+
+    def get_or_create_contact(self, request):
+
+        email = request['stripeEmail']
+        query = """SELECT Id
+                    FROM Contact
+                    WHERE All_In_One_EMail__c
+                    LIKE '%{}%'
+                """.format(email)
+        response = self.query(query)
+
+
+        if len(response) == 1:
+            contact_id = response[0]['Id']
+        elif len(response) > 1:
+            # More than one account matches. Let's add it to the first one we found
+            # but raise a warning:
+            print ("more than one result")
+            contact_id = response[0]['Id']
+            # TODO: send alert
+        elif len(response) < 1:
+            contact_id = self.create_contact(request).contact
+
+# [{'AccountId': '0011700000BpR8PAAV', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BHQzBAAX'}}, {'AccountId': '0011700000BqjZSAAZ', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BM3J4AAL'}}]
+
+#{'Name': 'test2', 'AccountId': '0011700000BpR8PAAV', 'RecordTypeId': '01216000001IhHpAAK', 'CloseDate': '2015-10-02', 'Stripe_Transaction_ID__c': 'ch_16rIZfG8bHZDNB6TmUE9u7Ej', 'Encouraged_to_contribute_by__c': 'I heart the Trib!', 'Description': 'Change Me', 'Amount': '100.0', 'Stripe_Card__c': 'card_16rIZbG8bHZDNB6TY0auxz2i', 'LeadSource': 'Stripe', 'Stripe_Customer_ID__c': 'cus_75TWyYoU5MKJOX', 'StageName': 'Closed Won'}
+
+        return account_id
+
+
+
+def add_opportunity(request=None, customer=None, charge=None, reason=None):
+
+    sf = SalesforceConnection()
+    account_id = sf.get_or_create_account(request)
+    now = datetime.now().strftime('%Y-%m-%d')
+
+    opportunity = {
+            'AccountId': '{}'.format(account_id),
+            'StageName': 'Closed Won',
+            'Amount': '{}'.format(charge.amount / 100),
+            'CloseDate': now,
+            'RecordTypeId': '01216000001IhHpAAK',  #TODO: magic number
+            'Name': 'TODO',
+            'Stripe_Customer_ID__c': customer.id,
+            'Stripe_Transaction_ID__c': charge.id,
+            'Stripe_Card__c': charge.source.id,
+            'LeadSource': 'Stripe',
+            'Description': charge.description,
+            'Encouraged_to_contribute_by__c': reason,
+            # Co Member First name, last name, and email
+            }
+    print (opportunity)
+    path = '/services/data/v33.0/sobjects/Opportunity'
+    url = '{}{}'.format(sf.instance_url, path)
+    resp = requests.post(url, headers=sf.headers, data=json.dumps(opportunity))
+    response = json.loads(resp.text)
+#    {'errors': [], 'success': True, 'id': '00617000005g6PBAAY'}
+
+
+def add_recurring_donation(request=None, customer=None, charge=None, reason=None):
+
+    sf = SalesforceConnection()
+    contact_account = sf.get_or_create_account(request)
+    now = datetime.now().strftime('%Y-%m-%d')
+    recurring_donation = {
+            'npe03__Contact__c': '{}'.format(contact_account.contact),
+            'npe03__Amount__c': '{}'.format(charge.amount / 100),
+            'npe03__Date_Established__c': now,
+            'npe03__Open_Ended_Status__c': '',
+            'Name': 'TODO',
+            'Stripe_Customer_ID__c': customer.id,
+            'Stripe_Transaction_ID__c': charge.id,
+            'Stripe_Card__c': charge.source.id,
+            'Lead_Source__c': 'Stripe', # TODO: this is showing as Givalike in SF; probably a trigger to remove
+            'Encouraged_to_contribute_by__c': reason,
+            # Co Member First name, last name, and email
+            # Type (Giving Circle, etc)
+            # TODO: set open-ended status
+            }
+    print (recurring_donation)
+    path = '/services/data/v33.0/sobjects/npe03__Recurring_Donation__c'
+    url = '{}{}'.format(sf.instance_url, path)
+    resp = requests.post(url, headers=sf.headers, data=json.dumps(recurring_donation))
+    response = json.loads(resp.text)
+    #TODO: error handling
+    print (response)
