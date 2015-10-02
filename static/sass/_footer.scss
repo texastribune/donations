@@ -3,6 +3,7 @@
   background: $black;
   max-width: none;
   padding: 0.5em 0;
+  width: 100%;
   .left-nav {
     @include span-columns(3);
     @media (max-width: 985px) {
