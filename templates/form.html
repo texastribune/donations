@@ -52,46 +52,55 @@
   <div class="main">
       <p>Thank you for supporting <a href="//www.texastribune.org/">The Texas Tribune</a>!</p>
       <form action="/charge" method="post">
-        <div>
-          <label>Annual Amount</label><br>
-            <span>$</span>
-            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number">
-            <a href="http://support.texastribune.org/">Change donation amount</a>
+        <div class="form-outer-section">
+          <h2>Donation Info</h2>
+          <div class="form-section">
+            <label>Amount</label><br>
+              <span class="dollar">$</span>
+              <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar"><br>
+              <a href="http://support.texastribune.org/">Change amount</a>
+          </div>
+          <div class="form-section">
+            <label>Length</label><br>
+              <select name="frequency">
+                <option value="one-time">One Time</option>
+                <option value="until-cancelled">Until Cancelled</option>
+              </select>
+          </div>
         </div>
-        <div>
-          <label>Length</label><br>
-            <select name="frequency">
-              <option value="one-time">One Time</option>
-              <option value="until-cancelled">Until Cancelled</option>
-            </select>
+        <div class="form-outer-section">
+          <h2>Name</h2>
+          <div class="form-section">
+            <label>First</label><br>
+              <input name="Contact.FirstName" type="text" maxlength="50">
+          </div>
+          <div class="form-section">
+            <label>Last</label><br>
+              <input name="Contact.LastName" type="text" maxlength="50">
+          </div>
         </div>
-        <div>
-          <label>First Name</label><br>
-            <input name="Contact.FirstName" type="text" maxlength="50">
-        </div>
-        <div>
-          <label>Last Name</label><br>
-            <input name="Contact.LastName" type="text" maxlength="50">
-        </div>
-        <div>
-          <label>Phone</label><br>
-            <input name="Contact.HomePhone" maxlength="50" type="text">
-        </div>
-        <div>
-          <label>Billing Address</label><br>
-            <input name="Contact.street" type="text" maxlength="50">
-        </div>
-        <div>
-          <label>City</label><br>
-            <input name="Contact.city" type="text"></input>
-        </div>
-        <div>
-          <label>State</label><br>
-            <input name="Contact.state" type="text"></input>
-        </div>
-        <div>
-          <label>Zip Code</label><br>
-            <input name="Contact.postalCode" type="text" maxlength="5">
+        <div class="form-outer-section">
+          <h2>Billing Info</h2>
+          <div class="form-section">
+            <label>Phone</label><br>
+              <input name="Contact.HomePhone" maxlength="50" type="text">
+          </div>
+          <div class="form-section break">
+            <label>Billing Address</label><br>
+              <input name="Contact.street" type="text" maxlength="50">
+          </div>
+          <div class="form-section break">
+            <label>City</label><br>
+              <input name="Contact.city" type="text"></input>
+          </div>
+          <div class="form-section">
+            <label>State</label><br>
+              <input name="Contact.state" type="text"></input>
+          </div>
+          <div class="form-section">
+            <label>Zip Code</label><br>
+              <input name="Contact.postalCode" type="text" maxlength="5">
+          </div>
         </div>
         <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
              data-key="{{ key }}"
