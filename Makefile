@@ -7,6 +7,9 @@ build:
 debug:
 	docker run --volumes-from=${APP} --interactive=true --tty=true ${NS}/${APP} bash
 
+build-dev: build
+	docker build -f Dockerfile.dev --tag=${NS}/${APP}:dev .
+
 run:
 	docker run --name=${APP} --detach=true --publish=5000:80 ${NS}/${APP}
 
