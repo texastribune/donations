@@ -14,6 +14,7 @@ SALESFORCE = {
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
+
 class SalesforceConnection(object):
 
     def __init__(self):
@@ -47,7 +48,15 @@ class SalesforceConnection(object):
                     LIKE '%{}%'
                 """.format(email)
         response = self.query(query)
+        if len(response) > 1 {
+                return "more than one result"
+                }
+        elif len(response) = < 1 {
+                return "no results"
+                }
+
         account_id = response[0]['AccountId']
+
         return account_id
 
     def add_opp(self, account_id, amount, charge_id, customer_id, card, last_four):
@@ -59,13 +68,10 @@ class SalesforceConnection(object):
                 'CloseDate': now,
                 'RecordTypeId': '01216000001IhHpAAK',
                 'Name': 'test2',
-                'last4__c': last_four,
                 'Stripe_Customer_ID__c': customer_id,
                 'Stripe_Transaction_ID__c': charge_id,
                 'Stripe_Card__c': card,
                 'LeadSource': 'Stripe',
-                # Lead Source
-                # the stripe IDs
                 # Description
                 # Encouraged to Contribute by
                 # Co Member First name, last name, and email
