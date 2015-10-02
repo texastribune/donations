@@ -89,7 +89,12 @@ a {
   border-bottom: 2px solid #ffc200;
   padding: 1em 0;
   .form-section {
-    @include span-columns(3);
+    &.three {
+      @include span-columns(3);
+    }
+    &.four {
+      @include span-columns(4);
+    }
     @include media($tablet) {
       @include span-columns(12);
       margin-top: 1em;
