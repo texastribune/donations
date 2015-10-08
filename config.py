@@ -1,0 +1,15 @@
+import os
+import stripe
+
+stripe_keys = {
+    'secret_key': os.environ['SECRET_KEY'],
+    'publishable_key': os.environ['PUBLISHABLE_KEY']
+}
+
+SALESFORCE = {
+    "CLIENT_ID": os.environ[ 'SALESFORCE_CLIENT_ID' ],
+    "CLIENT_SECRET": os.environ[ 'SALESFORCE_CLIENT_SECRET' ],
+    "USERNAME": os.environ[ 'SALESFORCE_USERNAME' ],
+    "PASSWORD": os.environ[ 'SALESFORCE_PASSWORD' ],
+    "HOST": os.environ[ "SALESFORCE_HOST" ]
+}
