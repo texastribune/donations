@@ -1,13 +1,13 @@
 import os
-from flask import Flask, render_template, request
 import stripe
-from salesforce import SalesforceConnection
-from sassutils.wsgi import SassMiddleware
+from flask import Flask, render_template, request
+from salesforce import add_opportunity
+from salesforce import add_recurring_donation
+from salesforce import upsert
+from config import stripe_keys
 
-stripe_keys = {
-    'secret_key': os.environ['SECRET_KEY'],
-    'publishable_key': os.environ['PUBLISHABLE_KEY']
-}
+from pprint import pprint
+
 stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
@@ -22,45 +22,50 @@ def checkout_form():
     return render_template('form.html', key=stripe_keys['publishable_key'])
 
 
+@app.route('/error')
+def error():
+    message = "Something went wrong!"
+    return render_template('error.html', message=message)
+
+
+# create customer in Stripe
+# get or create payer in Salesforce - add Stripe Customer Id
+# create opportunity or recurring donation object
+
+# Sample Request
+
 @app.route('/charge', methods=['POST'])
 def charge():
-    # Amount in cents
-    amount = request.form['Opportunity.Amount']
+
+    pprint ('Request: {}'.format(request.form))
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
     )
+    #print ('Customer: {}'.format(customer))
+    upsert(request=request, customer=customer)
 
-    print ('Customer: {}'.format(customer))
-    customer_id = customer.id
-    # grab the last four of card #
-    last_four = customer.sources.data[0].last4
+    #charge = stripe.Charge.create(
+    #   customer=customer.id,
+    #   amount=int(request.form['Opportunity.Amount']) * 100,
+    #   currency='usd',
+    #   description='Change Me' # TODO
+    #)
+    # except stripe.error.CardError, e:
+    # The card has been declined
+    #print ('Charge: {}'.format(charge))
 
-    charge = stripe.Charge.create(
-       customer=customer.id,
-       amount=int(amount) * 100,
-       currency='usd',
-       description='Change Me'
-    )
+    if (request.form['frequency'] == 'one-time'):
+        print("----One time payment...")
+        add_opportunity(request=request, customer=customer,
+                reason="I heart the Trib!") # TODO
+    else:
+        print("----Recurring payment...")
+        add_recurring_donation(request=request, customer=customer,
+                reason="I love the Trib!") #TODO
 
-    # charge = stripe.Charge.create(
-    #     customer='cus_6t5hciwdDmKInK',
-    #     amount=amount,
-    #     currency='usd',
-    #     source='card_16fJVlG8bHZDNB6TiizHbH4A',
-    # )
-
-    print ('Charge: {}'.format(charge))
-    charge_id = charge.id
-    card = charge.source.id
-
-    sf = SalesforceConnection()
-    account_id = sf.get_account(request.form['stripeEmail'])
-
-    foo = sf.add_opp(account_id, amount, charge_id, customer_id, card, last_four)
-
-    return render_template('charge.html', amount=amount)
+    return render_template('charge.html', amount=request.form['Opportunity.Amount'])
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

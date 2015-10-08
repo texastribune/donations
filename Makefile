@@ -1,4 +1,4 @@
-APP=stripe
+APP=checkout
 NS=texastribune
 
 build:
@@ -7,14 +7,20 @@ build:
 debug:
 	docker run --volumes-from=${APP} --interactive=true --tty=true ${NS}/${APP} bash
 
+build-dev: build
+	docker build -f Dockerfile.dev --tag=${NS}/${APP}:dev .
+
 run:
 	docker run --name=${APP} --detach=true --publish=5000:80 ${NS}/${APP}
 
 clean:
 	docker stop ${APP} && docker rm ${APP}
 
-interactive: build
-	docker run --workdir=/flask --volume=$$(pwd):/flask --env-file=env --rm --interactive --tty --publish=80:5000 --name=${APP} ${NS}/${APP} bash
+interactive: build-dev
+	docker run --workdir=/flask --volume=$$(pwd):/flask --env-file=env --rm --interactive --tty --publish=80:5000 --name=${APP} ${NS}/${APP}:dev bash
+
+test:
+	docker run --volume=$$(pwd):/app --workdir=/app --rm --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test --cov=.
 
 push:
 	docker push ${NS}/${APP}
