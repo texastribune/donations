@@ -8,6 +8,8 @@ from config import stripe_keys
 
 from pprint import pprint
 
+from sassutils.wsgi import SassMiddleware
+
 stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
