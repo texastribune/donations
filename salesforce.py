@@ -5,7 +5,10 @@ from datetime import datetime
 import os
 import collections
 from config import SALESFORCE
-from pprint import pprint
+from pprint import pprint  # TODO: remove
+from pytz import timezone
+
+Central = timezone("US/Central")
 
 #TODO: insert URLs like this? https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
 
@@ -62,7 +65,7 @@ class SalesforceConnection(object):
         print (resp.status_code)
         if resp.status_code != 201:
             import ipdb; ipdb.set_trace()
-            raise Exception("bad")
+            raise Exception("bad")  #TODO
         else:
             return response
 
@@ -173,7 +176,7 @@ def add_opportunity(request=None, customer=None, charge=None, reason=None):
     print ("----Adding opportunity...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(request.form)
-    now = datetime.now().strftime('%Y-%m-%d')
+    now = datetime.now(tz=Central).strftime('%Y-%m-%d')
 
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),

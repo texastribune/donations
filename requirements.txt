@@ -2,3 +2,4 @@ stripe==1.26.0
 Flask==0.10.1
 #uWSGI==2.0.11.1
 gunicorn==19.3.0
+pytz==2015.6
