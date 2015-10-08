@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Become a Member | The Texas Tribune</title>
-  <link rel="shortcut icon" type="image/x-icon" href="http://support.texastribune.org/images/favicon.ico">
+  <title>Support Us | The Texas Tribune</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
   <meta property="og:url" content="http://support.texastribune.org/">
-  <meta property="og:image" content="http://s3.amazonaws.com/support.texastribune.org/images/SMD15-web-ad-300x250.png">
+  <meta property="og:image" content="">
   <meta property="og:title" content="Support Us | The Texas Tribune">
   <meta property="og:type" content="website">
   <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
@@ -18,7 +18,6 @@
   <link href="{{ url_for('static', filename='css/all.scss.css') }}" rel="stylesheet" type="text/css">
   <script src="//use.typekit.net/ngv2xmw.js"></script>
   <script>try{Typekit.load();}catch(e){}</script>
-  <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css">
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>window.jQuery || document.write('<script src="{{
   url_for('static', filename='js/jquery.min.js') }}">\x3C/script>')</script>
@@ -45,7 +44,7 @@
 <body>
   <section class="masthead">
     <a href="http://www.texastribune.org/">
-      <img src="//support.texastribune.org/images/logo-02196e7d.png">
+      <img src="{{ url_for('static', filename='img/logo.png') }}">
     </a>
   </section>
   {% block content %}{% endblock %}
@@ -63,7 +62,6 @@
       <li><a href="http://www.texastribune.org/terms-of-service/">Terms of Service</a></li>
       <li><a href="http://www.texastribune.org/ethics/">Code of Ethics</a></li>
       <li><a href="http://www.texastribune.org/privacy/">Privacy Policy</a></li>
-      <li class="donate"><a href="/">Donate</a></li>
     </ul>
   </nav>
 </footer>

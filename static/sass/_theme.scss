@@ -96,9 +96,11 @@ a {
     &.four {
       @include span-columns(4);
     }
-    @include media($tablet) {
-      @include span-columns(12);
-      margin-top: 1em;
+    &.three, .four {
+      @include media($tablet) {
+        @include span-columns(12);
+        margin-top: 1em;
+      }
     }
     &.break {
       clear: both;
