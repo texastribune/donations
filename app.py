@@ -1,13 +1,13 @@
 import os
-from flask import Flask, render_template, request
 import stripe
+from flask import Flask, render_template, request
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
+from salesforce import upsert
+from config import stripe_keys
 
-stripe_keys = {
-    'secret_key': os.environ['SECRET_KEY'],
-    'publishable_key': os.environ['PUBLISHABLE_KEY']
-}
+from pprint import pprint
+
 stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
@@ -24,36 +24,44 @@ def error():
     return render_template('error.html', message=message)
 
 
+# create customer in Stripe
+# get or create payer in Salesforce - add Stripe Customer Id
+# create opportunity or recurring donation object
+
+# Sample Request
+
 @app.route('/charge', methods=['POST'])
 def charge():
-    # Amount in cents
-    amount = request.form['Opportunity.Amount']
-#    description = request.form['Description']
+
+    pprint ('Request: {}'.format(request.form))
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
     )
+    #print ('Customer: {}'.format(customer))
+    upsert(request=request, customer=customer)
 
-    print ('Customer: {}'.format(customer))
-
-    charge = stripe.Charge.create(
-       customer=customer.id,
-       amount=int(amount) * 100,
-       currency='usd',
-       description='Change Me' # TODO
-    )
-
-    print ('Charge: {}'.format(charge))
+    #charge = stripe.Charge.create(
+    #   customer=customer.id,
+    #   amount=int(request.form['Opportunity.Amount']) * 100,
+    #   currency='usd',
+    #   description='Change Me' # TODO
+    #)
+    # except stripe.error.CardError, e:
+    # The card has been declined
+    #print ('Charge: {}'.format(charge))
 
     if (request.form['frequency'] == 'one-time'):
-        add_opportunity(request=request.form, customer=customer, charge=charge,
+        print("----One time payment...")
+        add_opportunity(request=request, customer=customer,
                 reason="I heart the Trib!") # TODO
     else:
-        add_recurring_donation(request=request.form, customer=customer, charge=charge,
+        print("----Recurring payment...")
+        add_recurring_donation(request=request, customer=customer,
                 reason="I love the Trib!") #TODO
 
-    return render_template('charge.html', amount=amount)
+    return render_template('charge.html', amount=request.form['Opportunity.Amount'])
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))

@@ -4,21 +4,14 @@ import locale
 from datetime import datetime
 import os
 import collections
+from config import SALESFORCE
+from pprint import pprint
 
-SALESFORCE = {
-    "HOST": os.environ['SALESFORCE_HOST'],
-    "CLIENT_ID": os.environ['SALESFORCE_CLIENT_ID'],
-    "CLIENT_SECRET": os.environ['SALESFORCE_CLIENT_SECRET'],
-    "USERNAME": os.environ['SALESFORCE_USERNAME'],
-    "PASSWORD": os.environ['SALESFORCE_PASSWORD'],
-}
+#TODO: insert URLs like this? https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
-ContactAccount = collections.namedtuple('ContactAccount', 'contact account')
-
 class SalesforceConnection(object):
-
 
     def __init__(self):
 
@@ -45,7 +38,7 @@ class SalesforceConnection(object):
                 }
 
 
-    def query(self, query, path='/services/data/v33.0/query'):
+    def query(self, query, path='/services/data/v34.0/query'):
         url = '{}{}'.format(self.instance_url, path)
         if query is None:
             payload = {}
@@ -60,149 +53,184 @@ class SalesforceConnection(object):
                     path=response['nextRecordsUrl'])
         return response['records']
 
+    def post(self, path=None, data=None):
+        url = '{}{}'.format(self.instance_url, path)
+        resp = requests.post(url, headers=self.headers, data=json.dumps(data))
+        response = json.loads(resp.text)
+        pprint (response)
+        pprint (resp)
+        print (resp.status_code)
+        if resp.status_code != 201:
+            import ipdb; ipdb.set_trace()
+            raise Exception("bad")
+        else:
+            return response
 
     def create_contact(self, request):
 
+        print ("----Creating contact...")
+
+
+        try:
+            stripe_id = request['Stripe_Customer_Id__c']
+        except KeyError:
+            stripe_id = None
+
         contact = {
             'Email': request['stripeEmail'],
-            'Description': 'added by Stripe/Checkout app',
             'FirstName': request['Contact.FirstName'],
             'LastName': request['Contact.LastName'],
             'HomePhone': request['Contact.HomePhone'],
+            'MailingStreet': request['Contact.street'],
+#            'MailingStreet': request['Contact.MailingStreet'],
             'MailingCity': 'Austin',
+            'MailingState': 'TX',
             'MailingPostalCode': request['Contact.postalCode'],
 #            'MailingPostalCode': request['Contact.MailingPostalCode'],
-            'MailingState': 'TX',
-#            'MailingStreet': request['Contact.MailingStreet'],
-            'MailingStreet': request['Contact.street'],
+            'Description': 'added by Stripe/Checkout app',
             'LeadSource': 'Stripe',
+            'Stripe_Customer_Id__c': stripe_id,
             }
-
-        path = '/services/data/v33.0/sobjects/Contact'
-        url = '{}{}'.format(self.instance_url, path)
-        resp = requests.post(url, headers=self.headers, data=json.dumps(contact))
-        response = json.loads(resp.text)
+        path = '/services/data/v34.0/sobjects/Contact'
+        response = self.post(path=path, data=contact)
+#        url = '{}{}'.format(self.instance_url, path)
+#        resp = requests.post(url, headers=self.headers, data=json.dumps(contact))
+#        response = json.loads(resp.text)
         contact_id = response['id']
-        query = """SELECT AccountId FROM Contact WHERE id = '{}'""".format(contact_id)
+        query = """
+                SELECT AccountId
+                FROM Contact
+                WHERE id = '{}'
+                """.format(contact_id)
+        #pprint (query)
         response = self.query(query)
         # unlike elsewhere there should only be one result here because we're
         # querying on a 1:1 relationship:
-        return ContactAccount(contact=contact_id, account=response[0]['AccountId'])
+        return response[0]
 
-    def get_or_create_account(self, request):
+    def get_contact(self, email=None):
 
-        email = request['stripeEmail']
-        query = """SELECT AccountId, Id
-                    FROM Contact
-                    WHERE All_In_One_EMail__c
-                    LIKE '%{}%'
+        query = """
+                SELECT AccountId, Id, Stripe_Customer_Id__c
+                FROM Contact
+                WHERE All_In_One_EMail__c
+                LIKE '%{}%'
                 """.format(email)
+        #pprint (query)
         response = self.query(query)
-
-        if len(response) == 1:
-            account_id = response[0]['AccountId']
-            contact_id = response[0]['Id']
-            contact_account = ContactAccount(contact=contact_id, account=account_id)
-        elif len(response) > 1:
-            # More than one account matches. Let's add it to the first one we found
-            # but raise a warning:
-            print ("more than one result")
-            account_id = response[0]['AccountId']
-            contact_id = response[0]['Id']
-            contact_account = ContactAccount(contact=contact_id, account=account_id)
-            # TODO: send alert
-        elif len(response) < 1:
-            contact_account = self.create_contact(request)
-
-# [{'AccountId': '0011700000BpR8PAAV', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BHQzBAAX'}}, {'AccountId': '0011700000BqjZSAAZ', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BM3J4AAL'}}]
-
-#{'Name': 'test2', 'AccountId': '0011700000BpR8PAAV', 'RecordTypeId': '01216000001IhHpAAK', 'CloseDate': '2015-10-02', 'Stripe_Transaction_ID__c': 'ch_16rIZfG8bHZDNB6TmUE9u7Ej', 'Encouraged_to_contribute_by__c': 'I heart the Trib!', 'Description': 'Change Me', 'Amount': '100.0', 'Stripe_Card__c': 'card_16rIZbG8bHZDNB6TY0auxz2i', 'LeadSource': 'Stripe', 'Stripe_Customer_ID__c': 'cus_75TWyYoU5MKJOX', 'StageName': 'Closed Won'}
-
-        return contact_account
+        return response
 
     def get_or_create_contact(self, request):
 
-        email = request['stripeEmail']
-        query = """SELECT Id
-                    FROM Contact
-                    WHERE All_In_One_EMail__c
-                    LIKE '%{}%'
-                """.format(email)
-        response = self.query(query)
+        created = False
 
+        response = self.get_contact(email=request['stripeEmail'])
 
-        if len(response) == 1:
-            contact_id = response[0]['Id']
+        # if the response is empty then nothing matched and we have to create a contact:
+        if len(response) < 1:
+            created = True
+            contact = self.create_contact(request)
+            return created, contact
+
+        elif len(response) == 1:
+            pass
         elif len(response) > 1:
-            # More than one account matches. Let's add it to the first one we found
-            # but raise a warning:
             print ("more than one result")
-            contact_id = response[0]['Id']
-            # TODO: send alert
-        elif len(response) < 1:
-            contact_id = self.create_contact(request).contact
+            # TODO: send alert because more than one account matched
 
-# [{'AccountId': '0011700000BpR8PAAV', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BHQzBAAX'}}, {'AccountId': '0011700000BqjZSAAZ', 'attributes': {'type': 'Contact', 'url': '/services/data/v33.0/sobjects/Contact/0031700000BM3J4AAL'}}]
+        return created, response[0]
 
-#{'Name': 'test2', 'AccountId': '0011700000BpR8PAAV', 'RecordTypeId': '01216000001IhHpAAK', 'CloseDate': '2015-10-02', 'Stripe_Transaction_ID__c': 'ch_16rIZfG8bHZDNB6TmUE9u7Ej', 'Encouraged_to_contribute_by__c': 'I heart the Trib!', 'Description': 'Change Me', 'Amount': '100.0', 'Stripe_Card__c': 'card_16rIZbG8bHZDNB6TY0auxz2i', 'LeadSource': 'Stripe', 'Stripe_Customer_ID__c': 'cus_75TWyYoU5MKJOX', 'StageName': 'Closed Won'}
 
-        return account_id
+def upsert(customer=None, request=None):
 
+    update = { 'Stripe_Customer_Id__c': customer.id }
+    updated_request = update.copy()
+
+    updated_request.update(request.form.to_dict())
+
+    sf = SalesforceConnection()
+    created, contact = sf.get_or_create_contact(updated_request)
+
+    if not created:
+        print ("----Exists, updating")
+        #pprint (contact)
+        path = '/services/data/v34.0/sobjects/Contact/{}'.format(contact['Id'])
+#        sf.execute(path=path, data=update, verb='patch', expected_status='204')
+        url = '{}{}'.format(sf.instance_url, path)
+        resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
+        # TODO: check 'errors' and 'success' too
+        print (resp)
+        if resp.status_code == 204:
+            print ("ok")
+        else:
+            raise Exception('problem')
+
+    return True
 
 
 def add_opportunity(request=None, customer=None, charge=None, reason=None):
 
+    print ("----Adding opportunity...")
     sf = SalesforceConnection()
-    account_id = sf.get_or_create_account(request)
+    _, contact = sf.get_or_create_contact(request.form)
     now = datetime.now().strftime('%Y-%m-%d')
 
     opportunity = {
-            'AccountId': '{}'.format(account_id),
-            'StageName': 'Closed Won',
-            'Amount': '{}'.format(charge.amount / 100),
+            'AccountId': '{}'.format(contact['AccountId']),
+            'Amount': '{}'.format(request.form['Opportunity.Amount']),
             'CloseDate': now,
             'RecordTypeId': '01216000001IhHpAAK',  #TODO: magic number
             'Name': 'TODO',
-            'Stripe_Customer_ID__c': customer.id,
-            'Stripe_Transaction_ID__c': charge.id,
-            'Stripe_Card__c': charge.source.id,
+            'StageName': 'Pledged',
+            'Stripe_Customer_Id__c': customer.id,
+#            'Stripe_Transaction_Id__c': charge.id,
+#            'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
-            'Description': charge.description,
+#            'Description': charge.description,
             'Encouraged_to_contribute_by__c': reason,
             # Co Member First name, last name, and email
             }
-    print (opportunity)
-    path = '/services/data/v33.0/sobjects/Opportunity'
-    url = '{}{}'.format(sf.instance_url, path)
-    resp = requests.post(url, headers=sf.headers, data=json.dumps(opportunity))
-    response = json.loads(resp.text)
-#    {'errors': [], 'success': True, 'id': '00617000005g6PBAAY'}
+    #pprint (opportunity)
+    path = '/services/data/v34.0/sobjects/Opportunity'
+    response = sf.post(path=path, data=opportunity)
+#    url = '{}{}'.format(sf.instance_url, path)
+#    resp = requests.post(url, headers=sf.headers, data=json.dumps(opportunity))
+#    response = json.loads(resp.text)
+    pprint (response)
+
+    return response
 
 
-def add_recurring_donation(request=None, customer=None, charge=None, reason=None):
+def add_recurring_donation(request=None, customer=None, reason=None):
 
+    print ("----Adding recurring donation...")
     sf = SalesforceConnection()
-    contact_account = sf.get_or_create_account(request)
+    _, contact = sf.get_or_create_contact(request.form)
     now = datetime.now().strftime('%Y-%m-%d')
     recurring_donation = {
-            'npe03__Contact__c': '{}'.format(contact_account.contact),
-            'npe03__Amount__c': '{}'.format(charge.amount / 100),
+            'npe03__Contact__c': '{}'.format(contact['Id']),
+            'npe03__Amount__c': '{}'.format(request.form['Opportunity.Amount']),
             'npe03__Date_Established__c': now,
             'npe03__Open_Ended_Status__c': '',
-            'Name': 'TODO',
-            'Stripe_Customer_ID__c': customer.id,
-            'Stripe_Transaction_ID__c': charge.id,
-            'Stripe_Card__c': charge.source.id,
+#            'Name': 'TODO',
+            'Stripe_Customer_Id__c': customer.id,
+#            'Stripe_Transaction_Id__c': charge.id,
+#            'Stripe_Card__c': charge.source.id,
             'Lead_Source__c': 'Stripe', # TODO: this is showing as Givalike in SF; probably a trigger to remove
             'Encouraged_to_contribute_by__c': reason,
+            'npe03__Open_Ended_Status__c': 'Open',
+            'npe03__Installment_Period__c': 'Monthly',
             # Co Member First name, last name, and email
             # Type (Giving Circle, etc)
             # TODO: set open-ended status
             }
-    print (recurring_donation)
-    path = '/services/data/v33.0/sobjects/npe03__Recurring_Donation__c'
-    url = '{}{}'.format(sf.instance_url, path)
-    resp = requests.post(url, headers=sf.headers, data=json.dumps(recurring_donation))
-    response = json.loads(resp.text)
+    #pprint (recurring_donation)
+    path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
+    response = sf.post(path=path, data=recurring_donation)
+#    url = '{}{}'.format(sf.instance_url, path)
+#    resp = requests.post(url, headers=sf.headers, data=json.dumps(recurring_donation))
+#    response = json.loads(resp.text)
     #TODO: error handling
-    print (response)
+    pprint (response)
+
+    return True
