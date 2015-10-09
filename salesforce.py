@@ -2,14 +2,14 @@ import json
 import requests
 import locale
 from datetime import datetime
-import os
-import collections
 from config import SALESFORCE
 from pprint import pprint  # TODO: remove
 
-#TODO: insert URLs like this? https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
+# TODO: insert URLs like this?
+# https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+
 
 class SalesforceConnection(object):
 
@@ -37,7 +37,6 @@ class SalesforceConnection(object):
                 'Content-Type': 'application/json'
                 }
 
-
     def query(self, query, path='/services/data/v34.0/query'):
         url = '{}{}'.format(self.instance_url, path)
         if query is None:
@@ -57,11 +56,11 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
         response = json.loads(resp.text)
-        pprint (response)
-        pprint (resp)
+        pprint(response)
+        pprint(resp)
         print (resp.status_code)
         if resp.status_code != 201:
-            raise Exception("bad")  #TODO
+            raise Exception("bad")  # TODO
         else:
             return response
 
@@ -97,7 +96,7 @@ class SalesforceConnection(object):
                 FROM Contact
                 WHERE id = '{}'
                 """.format(contact_id)
-        #pprint (query)
+        # pprint (query)
         response = self.query(query)
         # unlike elsewhere there should only be one result here because we're
         # querying on a 1:1 relationship:
@@ -111,7 +110,7 @@ class SalesforceConnection(object):
                 WHERE All_In_One_EMail__c
                 LIKE '%{}%'
                 """.format(email)
-        #pprint (query)
+        # jpprint (query)
         response = self.query(query)
         return response
 
@@ -121,7 +120,8 @@ class SalesforceConnection(object):
 
         response = self.get_contact(email=request['stripeEmail'])
 
-        # if the response is empty then nothing matched and we have to create a contact:
+        # if the response is empty then nothing matched and we
+        # have to create a contact:
         if len(response) < 1:
             contact = self.create_contact(request)
             created = True
@@ -135,10 +135,16 @@ class SalesforceConnection(object):
 
 
 def upsert(customer=None, request=None):
+    print (customer)
+    print (request)
 
-    update = { 'Stripe_Customer_Id__c': customer.id }
+    if customer is None:
+        raise Exception("Value for 'customer' must be specified.")
+    if request is None:
+        raise Exception("Value for 'request' must be specified.")
+
+    update = {'Stripe_Customer_Id__c': customer.id}
     updated_request = update.copy()
-
     updated_request.update(request.form.to_dict())
 
     sf = SalesforceConnection()
@@ -146,9 +152,8 @@ def upsert(customer=None, request=None):
 
     if not created:
         print ("----Exists, updating")
-        #pprint (contact)
+        # pprint (contact)
         path = '/services/data/v34.0/sobjects/Contact/{}'.format(contact['Id'])
-#        sf.execute(path=path, data=update, verb='patch', expected_status='204')
         url = '{}{}'.format(sf.instance_url, path)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
@@ -172,7 +177,7 @@ def add_opportunity(request=None, customer=None, charge=None, reason=None):
             'AccountId': '{}'.format(contact['AccountId']),
             'Amount': '{}'.format(request.form['Opportunity.Amount']),
             'CloseDate': now,
-            'RecordTypeId': '01216000001IhHpAAK',  #TODO: magic number
+            'RecordTypeId': '01216000001IhHpAAK',  # TODO: magic number
             'Name': 'TODO',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
@@ -186,9 +191,6 @@ def add_opportunity(request=None, customer=None, charge=None, reason=None):
     #pprint (opportunity)
     path = '/services/data/v34.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
-#    url = '{}{}'.format(sf.instance_url, path)
-#    resp = requests.post(url, headers=sf.headers, data=json.dumps(opportunity))
-#    response = json.loads(resp.text)
     pprint (response)
 
     return response
@@ -202,7 +204,8 @@ def add_recurring_donation(request=None, customer=None, reason=None):
     now = datetime.now().strftime('%Y-%m-%d')
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
-            'npe03__Amount__c': '{}'.format(request.form['Opportunity.Amount']),
+            'npe03__Amount__c': '{}'.format(
+                request.form['Opportunity.Amount']),
             'npe03__Date_Established__c': now,
             'npe03__Open_Ended_Status__c': '',
 #            'Name': 'TODO',
@@ -217,13 +220,10 @@ def add_recurring_donation(request=None, customer=None, reason=None):
             # Type (Giving Circle, etc)
             # TODO: set open-ended status
             }
-    #pprint (recurring_donation)
+    # pprint (recurring_donation)
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
     response = sf.post(path=path, data=recurring_donation)
-#    url = '{}{}'.format(sf.instance_url, path)
-#    resp = requests.post(url, headers=sf.headers, data=json.dumps(recurring_donation))
-#    response = json.loads(resp.text)
-    #TODO: error handling
-    pprint (response)
+    # TODO: error handling
+    pprint(response)
 
     return True
