@@ -8,9 +8,15 @@ from config import stripe_keys
 
 from pprint import pprint
 
+from sassutils.wsgi import SassMiddleware
+
 stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
+
+app.wsgi_app = SassMiddleware(app.wsgi_app, {
+        'app': ('static/sass', 'static/css', 'static/css')
+    })
 
 @app.route('/form')
 def checkout_form():

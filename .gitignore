@@ -1,2 +1,5 @@
 env
+.env
 *.pyc
+/static/css/
+*.DS_Store

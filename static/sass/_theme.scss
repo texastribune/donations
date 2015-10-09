@@ -1,0 +1,139 @@
+// Masthead with logo
+.masthead {
+  @include outer-container;
+  border-bottom: 2px solid #ffc200;
+  margin-left: 0;
+  img {
+    padding: 1em 2em;
+    @include span-columns(4);
+    @include media($mobile) {
+      @include span-columns(8);
+    }
+  }
+}
+
+
+// General styles
+body {
+  margin: 0;
+}
+
+.main {
+  min-height: 500px;
+  padding: 1em 0 2em 0;
+}
+
+.dollar {
+  border: none;
+  color: $black;
+  font-family: "league-gothic";
+  font-size: 3.5em;
+  margin: 0;
+  padding: 0 0.2em;
+  width: 100px;
+}
+
+
+// Typography
+html {
+  font-family: $helvetica;
+  font-size: 14px;
+}
+
+h2 {
+  font-size: 1.5em;
+  font-weight: bold;
+  letter-spacing: -1px;
+  margin: 0 0 0.5em 0;
+}
+
+a {
+  color: $teal-tribune;
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+
+// Stripe button styles
+.stripe-button-el {
+  background-color: #ffc200 !important;
+  background-image: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: black !important;
+  margin-top: 1em;
+  text-shadow: none !important;
+}
+.stripe-button-el:hover {
+  background-color: #008990 !important;
+  color: white !important;
+}
+.stripe-button-el span:hover {
+  background-color: #008990 !important;
+  color: white !important;
+}
+.stripe-button-el span {
+  background: #ffc200 !important;
+  background-color: #ffc200 !important;
+  background-image: none !important;
+  border-radius: 0 !important;
+  color: black !important;
+  font-size: 1.2em !important;
+  text-shadow: none !important;
+}
+
+
+// Form styles
+.form-outer-section {
+  @include outer-container;
+  border-bottom: 2px solid #ffc200;
+  padding: 1em 0;
+  &:last-child {
+    border-bottom: none;
+  }
+  .form-section {
+    &.three {
+      @include span-columns(3);
+    }
+    &.four {
+      @include span-columns(4);
+    }
+    &.three, .four {
+      @include media($tablet) {
+        @include span-columns(12);
+        margin-top: 1em;
+      }
+    }
+    &.break {
+      clear: both;
+    }
+  }
+}
+
+form {
+  padding: 0 2em;
+}
+label {
+  color: #7f7f7f;
+  cursor: pointer;
+  float: left;
+  font-size: 0.8em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  min-width: 150px;
+}
+input {
+  font-size: 1em;
+}
+input, select {
+  margin: 0.5em 0.5em 1em 0;
+}
+select {
+  border-radius: 0;
+}
+p {
+  font-style: italic;
+}
