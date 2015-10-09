@@ -2,9 +2,10 @@
 .masthead {
   @include outer-container;
   border-bottom: 2px solid #ffc200;
+  margin-left: 0;
   img {
-    padding: 1em 0 1em 2em;
-    @include span-columns(5);
+    padding: 1em 2em;
+    @include span-columns(4);
     @include media($mobile) {
       @include span-columns(8);
     }
@@ -89,6 +90,9 @@ a {
   @include outer-container;
   border-bottom: 2px solid #ffc200;
   padding: 1em 0;
+  &:last-child {
+    border-bottom: none;
+  }
   .form-section {
     &.three {
       @include span-columns(3);
@@ -132,5 +136,4 @@ select {
 }
 p {
   font-style: italic;
-  padding-left: 2em;
 }

@@ -2,9 +2,9 @@
 
 {% block content %}
 <div class="main">
-  <p>Thank you for supporting The Texas Tribune!</p>
   <form action="/charge" method="post">
     <div class="form-outer-section">
+      <p>Thank you for supporting The Texas Tribune!</p>
       <h2>Donation Info</h2>
       <div class="form-section three">
         <label>Amount</label><br>
@@ -62,10 +62,12 @@
       </div>
     </div>
     <input name="Description" class="visually-hidden">
+    <div class="form-outer-section">
     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
          data-key="{{ key }}"
          data-description="A Flask Charge"
          data-amount="{{ request.args.amount|int * 100 }}"></script>
+    </div>
   </form>
 </div>
 {% endblock %}
