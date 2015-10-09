@@ -6,9 +6,6 @@ import os
 import collections
 from config import SALESFORCE
 from pprint import pprint  # TODO: remove
-from pytz import timezone
-
-Central = timezone("US/Central")
 
 #TODO: insert URLs like this? https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
 
@@ -64,7 +61,6 @@ class SalesforceConnection(object):
         pprint (resp)
         print (resp.status_code)
         if resp.status_code != 201:
-            import ipdb; ipdb.set_trace()
             raise Exception("bad")  #TODO
         else:
             return response
@@ -72,7 +68,6 @@ class SalesforceConnection(object):
     def create_contact(self, request):
 
         print ("----Creating contact...")
-
 
         try:
             stripe_id = request['Stripe_Customer_Id__c']
@@ -96,9 +91,6 @@ class SalesforceConnection(object):
             }
         path = '/services/data/v34.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
-#        url = '{}{}'.format(self.instance_url, path)
-#        resp = requests.post(url, headers=self.headers, data=json.dumps(contact))
-#        response = json.loads(resp.text)
         contact_id = response['id']
         query = """
                 SELECT AccountId
@@ -131,12 +123,10 @@ class SalesforceConnection(object):
 
         # if the response is empty then nothing matched and we have to create a contact:
         if len(response) < 1:
-            created = True
             contact = self.create_contact(request)
+            created = True
             return created, contact
 
-        elif len(response) == 1:
-            pass
         elif len(response) > 1:
             print ("more than one result")
             # TODO: send alert because more than one account matched
@@ -176,7 +166,7 @@ def add_opportunity(request=None, customer=None, charge=None, reason=None):
     print ("----Adding opportunity...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(request.form)
-    now = datetime.now(tz=Central).strftime('%Y-%m-%d')
+    now = datetime.now().isoformat()
 
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
