@@ -1,5 +1,7 @@
 import os
-import stripe
+
+MEMBERSHIP_RECORDTYPEID = '01216000001IhHp'
+DONATION_RECORDTYPEID = '01216000001IhI9'
 
 stripe_keys = {
     'secret_key': os.environ['SECRET_KEY'],
