@@ -39,6 +39,7 @@ def error():
 @app.route('/charge', methods=['POST'])
 def charge():
 
+
     pprint ('Request: {}'.format(request.form))
 
     customer = stripe.Customer.create(

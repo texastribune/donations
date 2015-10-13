@@ -3,6 +3,7 @@ import requests
 import locale
 from datetime import datetime
 from config import SALESFORCE
+from config import DONATION_RECORDTYPEID
 from pprint import pprint  # TODO: remove
 
 # TODO: insert URLs like this?
@@ -15,7 +16,7 @@ class SalesforceConnection(object):
 
     def __init__(self):
 
-        payload = {
+        self.payload = {
                 'grant_type': 'password',
                 'client_id': SALESFORCE['CLIENT_ID'],
                 'client_secret': SALESFORCE['CLIENT_SECRET'],
@@ -23,10 +24,15 @@ class SalesforceConnection(object):
                 'password': SALESFORCE['PASSWORD'],
                 }
         token_path = '/services/oauth2/token'
-        url = '{}://{}{}'.format('https', SALESFORCE['HOST'],
+        self.url = '{}://{}{}'.format('https', SALESFORCE['HOST'],
                 token_path)
+
+    def init(self):
+
         # TODO: some error handling here:
-        r = requests.post(url, data=payload)
+        r = requests.post(self.url, data=self.payload)
+        print (r)
+        print (r.text)
         response = json.loads(r.text)
         self.instance_url = response['instance_url']
         access_token = response['access_token']
@@ -36,6 +42,8 @@ class SalesforceConnection(object):
                 'X-PrettyPrint': '1',
                 'Content-Type': 'application/json'
                 }
+
+        return True
 
     def query(self, query, path='/services/data/v34.0/query'):
         url = '{}{}'.format(self.instance_url, path)
@@ -135,8 +143,10 @@ class SalesforceConnection(object):
 
 
 def upsert(customer=None, request=None):
-    print (customer)
-    print (request)
+    """
+    Creates the user if it doesn't exist in Salesforce. If it does exist
+    the Stripe Customer ID is added to the Salesforce record.
+    """
 
     if customer is None:
         raise Exception("Value for 'customer' must be specified.")
@@ -148,6 +158,7 @@ def upsert(customer=None, request=None):
     updated_request.update(request.form.to_dict())
 
     sf = SalesforceConnection()
+    sf.init()
     created, contact = sf.get_or_create_contact(updated_request)
 
     if not created:
@@ -155,6 +166,7 @@ def upsert(customer=None, request=None):
         # pprint (contact)
         path = '/services/data/v34.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
+        print (url)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
         print (resp)
@@ -170,6 +182,7 @@ def add_opportunity(request=None, customer=None, charge=None, reason=None):
 
     print ("----Adding opportunity...")
     sf = SalesforceConnection()
+    sf.init()
     _, contact = sf.get_or_create_contact(request.form)
     now = datetime.now().isoformat()
 
@@ -177,7 +190,7 @@ def add_opportunity(request=None, customer=None, charge=None, reason=None):
             'AccountId': '{}'.format(contact['AccountId']),
             'Amount': '{}'.format(request.form['Opportunity.Amount']),
             'CloseDate': now,
-            'RecordTypeId': '01216000001IhHpAAK',  # TODO: magic number
+            'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': 'TODO',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
@@ -200,6 +213,7 @@ def add_recurring_donation(request=None, customer=None, reason=None):
 
     print ("----Adding recurring donation...")
     sf = SalesforceConnection()
+    sf.init()
     _, contact = sf.get_or_create_contact(request.form)
     now = datetime.now().strftime('%Y-%m-%d')
     recurring_donation = {
@@ -215,10 +229,10 @@ def add_recurring_donation(request=None, customer=None, reason=None):
             'Lead_Source__c': 'Stripe', # TODO: this is showing as Givalike in SF; probably a trigger to remove
             'Encouraged_to_contribute_by__c': reason,
             'npe03__Open_Ended_Status__c': 'Open',
-            'npe03__Installment_Period__c': 'Monthly',
-            # Co Member First name, last name, and email
-            # Type (Giving Circle, etc)
-            # TODO: set open-ended status
+            'npe03__Installments__c': '', # TODO: 3 or 36 for circle
+            'npe03__Installment_Period__c': 'Monthly', #TODO: could be yearly
+            # Co Member First name, last name, and email  TODO
+            # Type (Giving Circle, etc) TODO
             }
     # pprint (recurring_donation)
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'

@@ -9,9 +9,11 @@ stripe_keys = {
 }
 
 SALESFORCE = {
-    "CLIENT_ID": os.environ[ 'SALESFORCE_CLIENT_ID' ],
-    "CLIENT_SECRET": os.environ[ 'SALESFORCE_CLIENT_SECRET' ],
-    "USERNAME": os.environ[ 'SALESFORCE_USERNAME' ],
-    "PASSWORD": os.environ[ 'SALESFORCE_PASSWORD' ],
-    "HOST": os.environ[ "SALESFORCE_HOST" ]
+    "CLIENT_ID": os.environ['SALESFORCE_CLIENT_ID'],
+    "CLIENT_SECRET": os.environ['SALESFORCE_CLIENT_SECRET'],
+    "USERNAME": os.environ['SALESFORCE_USERNAME'],
+    "PASSWORD": os.environ['SALESFORCE_PASSWORD'],
+    "HOST": os.environ["SALESFORCE_HOST"]
 }
+
+
