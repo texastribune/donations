@@ -61,12 +61,10 @@ def charge():
 
     if (request.form['frequency'] == 'one-time'):
         print("----One time payment...")
-        add_opportunity(request=request, customer=customer,
-                reason="I heart the Trib!") # TODO
+        add_opportunity(request=request, customer=customer)
     else:
         print("----Recurring payment...")
-        add_recurring_donation(request=request, customer=customer,
-                reason="I love the Trib!") #TODO
+        add_recurring_donation(request=request, customer=customer)
 
     return render_template('charge.html', amount=request.form['Opportunity.Amount'])
 

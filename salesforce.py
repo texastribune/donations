@@ -1,10 +1,14 @@
 import json
 import requests
+from pytz import timezone
 import locale
 from datetime import datetime
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
 from pprint import pprint  # TODO: remove
+
+# TODO: read environment for the timezone?
+zone = timezone('US/Central')
 
 # TODO: insert URLs like this?
 # https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
@@ -27,13 +31,12 @@ class SalesforceConnection(object):
         self.url = '{}://{}{}'.format('https', SALESFORCE['HOST'],
                 token_path)
 
-    def init(self):
-
         # TODO: some error handling here:
         r = requests.post(self.url, data=self.payload)
         print (r)
         print (r.text)
         response = json.loads(r.text)
+        print(response)
         self.instance_url = response['instance_url']
         access_token = response['access_token']
 
@@ -43,6 +46,12 @@ class SalesforceConnection(object):
                 'Content-Type': 'application/json'
                 }
 
+        return None
+
+    def check_response(response=None, expected_status=200):
+        if response.status_code != expected_status:
+            raise Exception("bad")
+        import ipdb; ipdb.set_trace()
         return True
 
     def query(self, query, path='/services/data/v34.0/query'):
@@ -67,14 +76,14 @@ class SalesforceConnection(object):
         pprint(response)
         pprint(resp)
         print (resp.status_code)
+        self.check_response(response=resp, expected_status=201)
         if resp.status_code != 201:
             raise Exception("bad")  # TODO
         else:
             return response
 
-    def create_contact(self, request):
 
-        print ("----Creating contact...")
+    def _format_contact(self, request=None):
 
         try:
             stripe_id = request['Stripe_Customer_Id__c']
@@ -86,19 +95,24 @@ class SalesforceConnection(object):
             'FirstName': request['Contact.FirstName'],
             'LastName': request['Contact.LastName'],
             'HomePhone': request['Contact.HomePhone'],
-            'MailingStreet': request['Contact.street'],
-#            'MailingStreet': request['Contact.MailingStreet'],
+            'MailingStreet': request['Contact.MailingStreet'],
             'MailingCity': 'Austin',
             'MailingState': 'TX',
-            'MailingPostalCode': request['Contact.postalCode'],
-#            'MailingPostalCode': request['Contact.MailingPostalCode'],
+            'MailingPostalCode': request['Contact.MailingPostalCode'],
             'Description': 'added by Stripe/Checkout app',
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
             }
-        path = '/services/data/v34.0/sobjects/Contact'
-        response = self.post(path=path, data=contact)
-        contact_id = response['id']
+
+        return contact
+
+    def _get_contact(self, contact_id=None):
+        """
+        We get the contact (after creating it) so that we can find out the ID
+        of the account that also created. We need the account so we can tie
+        an opportunity to it.
+        """
+
         query = """
                 SELECT AccountId
                 FROM Contact
@@ -108,9 +122,29 @@ class SalesforceConnection(object):
         response = self.query(query)
         # unlike elsewhere there should only be one result here because we're
         # querying on a 1:1 relationship:
-        return response[0]
+        contact = response[0]
+        return contact
 
-    def get_contact(self, email=None):
+    def create_contact(self, request):
+        """
+        Create and return a contact. Then fetch that created contact to get
+        the associated account ID.
+        """
+
+        print ("----Creating contact...")
+        contact = self._format_contact(request=request)
+        path = '/services/data/v34.0/sobjects/Contact'
+        response = self.post(path=path, data=contact)
+        print(response)
+        contact_id = response['id']
+        contact = self._get_contact(contact_id)
+        return contact
+
+    def find_contact(self, email=None):
+        """
+        Given an email address return all contacts matching
+        it. Returns a list with Account and Stripe IDs.
+        """
 
         query = """
                 SELECT AccountId, Id, Stripe_Customer_Id__c
@@ -118,15 +152,19 @@ class SalesforceConnection(object):
                 WHERE All_In_One_EMail__c
                 LIKE '%{}%'
                 """.format(email)
-        # jpprint (query)
+        # pprint (query)
         response = self.query(query)
         return response
 
     def get_or_create_contact(self, request):
+        """
+        Return a contact. If one already exists it's returned. Otherwise
+        a new contact is created and returned.
+        """
 
         created = False
 
-        response = self.get_contact(email=request['stripeEmail'])
+        response = self.find_contact(email=request['stripeEmail'])
 
         # if the response is empty then nothing matched and we
         # have to create a contact:
@@ -158,7 +196,6 @@ def upsert(customer=None, request=None):
     updated_request.update(request.form.to_dict())
 
     sf = SalesforceConnection()
-    sf.init()
     created, contact = sf.get_or_create_contact(updated_request)
 
     if not created:
@@ -178,62 +215,86 @@ def upsert(customer=None, request=None):
     return True
 
 
-def add_opportunity(request=None, customer=None, charge=None, reason=None):
+def _format_opportunity(contact=None, request=None, customer=None):
+    """
+    Format an opportunity for insertion.
+    """
 
-    print ("----Adding opportunity...")
-    sf = SalesforceConnection()
-    sf.init()
-    _, contact = sf.get_or_create_contact(request.form)
-    now = datetime.now().isoformat()
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
             'Amount': '{}'.format(request.form['Opportunity.Amount']),
-            'CloseDate': now,
+            'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
-            'Name': 'TODO',
+            'Name': '{}{} ({})'.format(
+                request.form['Contact.FirstName'],
+                request.form['Contact.LastName'],
+                request.form['stripeEmail'],
+                ),
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
 #            'Stripe_Transaction_Id__c': charge.id,
 #            'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
 #            'Description': charge.description,
-            'Encouraged_to_contribute_by__c': reason,
+            'Encouraged_to_contribute_by__c': '{}'.format(request.form['Reason']),
             # Co Member First name, last name, and email
             }
-    #pprint (opportunity)
+    pprint (opportunity)
+    return opportunity
+
+
+def add_opportunity(request=None, customer=None, charge=None):
+
+    print ("----Adding opportunity...")
+    sf = SalesforceConnection()
+    _, contact = sf.get_or_create_contact(request.form)
+    opportunity = _format_opportunity(contact=contact, request=request,
+            customer=customer)
     path = '/services/data/v34.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
-    pprint (response)
+    pprint(response)
 
     return response
 
 
-def add_recurring_donation(request=None, customer=None, reason=None):
+def _format_recurring_donation(contact=None, request=None, customer=None):
 
-    print ("----Adding recurring donation...")
-    sf = SalesforceConnection()
-    sf.init()
-    _, contact = sf.get_or_create_contact(request.form)
-    now = datetime.now().strftime('%Y-%m-%d')
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
+
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(
                 request.form['Opportunity.Amount']),
-            'npe03__Date_Established__c': now,
+            'npe03__Date_Established__c': today,
             'npe03__Open_Ended_Status__c': '',
-#            'Name': 'TODO',
+            'Name': '{} for {} {}'.format(
+                now,
+                request.form['Contact.FirstName'],
+                request.form['Contact.LastName'],
+                ),
             'Stripe_Customer_Id__c': customer.id,
-#            'Stripe_Transaction_Id__c': charge.id,
-#            'Stripe_Card__c': charge.source.id,
-            'Lead_Source__c': 'Stripe', # TODO: this is showing as Givalike in SF; probably a trigger to remove
-            'Encouraged_to_contribute_by__c': reason,
+            'Lead_Source__c': 'Stripe',
+            'Encouraged_to_contribute_by__c': '{}'.format(
+                request.form['Reason']),
             'npe03__Open_Ended_Status__c': 'Open',
-            'npe03__Installments__c': '', # TODO: 3 or 36 for circle
-            'npe03__Installment_Period__c': 'Monthly', #TODO: could be yearly
+            'npe03__Installments__c': '',  # TODO: 3 or 36 for circle
+            'npe03__Installment_Period__c': 'Monthly',  # TODO: could be yearly
             # Co Member First name, last name, and email  TODO
             # Type (Giving Circle, etc) TODO
             }
+    return recurring_donation
+
+
+def add_recurring_donation(request=None, customer=None):
+
+    print ("----Adding recurring donation...")
+    sf = SalesforceConnection()
+    _, contact = sf.get_or_create_contact(request.form)
+    recurring_donation = _format_recurring_donation(contact=contact,
+            request=request, customer=customer)
     # pprint (recurring_donation)
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
     response = sf.post(path=path, data=recurring_donation)
