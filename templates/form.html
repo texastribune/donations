@@ -62,6 +62,11 @@
       </div>
     </div>
     <input name="Description" class="visually-hidden">
+    {% if installments %}
+      <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
+    {% else %}
+      <input name="Installments" value="None" class="visually-hidden">
+    {% endif %}
     <div class="form-outer-section">
     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
          data-key="{{ key }}"
