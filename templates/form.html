@@ -62,12 +62,12 @@
       </div>
     </div>
     <input name="Description" class="visually-hidden">
-    {% if installments %}
+    {% if request.args.installments %}
       <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
     {% else %}
       <input name="Installments" value="None" class="visually-hidden">
     {% endif %}
-    {% if installmentPeriod %}
+    {% if request.args.installmentPeriod %}
       <input name="InstallmentPeriod" value="{{ request.args.installmentPeriod }}" class="visually-hidden">
     {% else %}
       <input name="InstallmentPeriod" value="None" class="visually-hidden">
