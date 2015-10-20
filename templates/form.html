@@ -14,9 +14,9 @@
       </div>
       <div class="form-section three">
         <label>Length</label><br>
-          <select name="frequency">
-            <option value="one-time">One Time</option>
-            <option value="until-cancelled">Until Cancelled</option>
+          <select name="OpenEndedStatus">
+            <option value="None">One Time</option>
+            <option value="Open">Until Cancelled</option>
           </select>
       </div>
     </div>
@@ -62,6 +62,16 @@
       </div>
     </div>
     <input name="Description" class="visually-hidden">
+    {% if request.args.installments %}
+      <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
+    {% else %}
+      <input name="Installments" value="None" class="visually-hidden">
+    {% endif %}
+    {% if request.args.installmentPeriod %}
+      <input name="InstallmentPeriod" value="{{ request.args.installmentPeriod }}" class="visually-hidden">
+    {% else %}
+      <input name="InstallmentPeriod" value="None" class="visually-hidden">
+    {% endif %}
     <div class="form-outer-section">
     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
          data-key="{{ key }}"
