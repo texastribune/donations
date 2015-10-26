@@ -76,7 +76,7 @@ class SalesforceConnection(object):
         pprint(response)
         pprint(resp)
         print (resp.status_code)
-        self.check_response(response=resp, expected_status=201)
+        # self.check_response(response=resp, expected_status=201)
         if resp.status_code != 201:
             raise Exception("bad")  # TODO
         else:

@@ -65,7 +65,7 @@ def charge():
     # The card has been declined
     #print ('Charge: {}'.format(charge))
 
-    if (request.form['frequency'] == 'one-time'):
+    if (request.form['Installments'] == 'None'):
         print("----One time payment...")
         add_opportunity(request=request, customer=customer)
     else:
