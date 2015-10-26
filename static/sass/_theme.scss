@@ -61,32 +61,27 @@ a {
 }
 
 
-// Stripe button styles
-.stripe-button-el {
-  background-color: #ffc200 !important;
-  background-image: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  color: black !important;
-  margin-top: 1em;
-  text-shadow: none !important;
+// Stripe form submit button styles
+.button {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0.5em 1.8em;
+  text-align: center;
+  &:focus {
+    outline: none;
+  }
 }
-.stripe-button-el:hover {
-  background-color: #008990 !important;
-  color: white !important;
-}
-.stripe-button-el span:hover {
-  background-color: #008990 !important;
-  color: white !important;
-}
-.stripe-button-el span {
-  background: #ffc200 !important;
-  background-color: #ffc200 !important;
-  background-image: none !important;
-  border-radius: 0 !important;
-  color: black !important;
-  font-size: 1.2em !important;
-  text-shadow: none !important;
+
+.button-flat {
+  background-color: $yellow-tribune;
+  border: none;
+  color: $black;
+  &:hover {
+    @include fast-transition(background-color);
+    background-color: $teal-tribune;
+    color: $white;
+    cursor: pointer;
+  }
 }
 
 
