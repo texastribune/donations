@@ -90,6 +90,8 @@
         token: function(token) {
           // Use the token to create the charge with a server-side script.
           // Uses `token.id` to access the Stripe token ID
+          var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
+          $('form').append($emailInput);
           var $input = $('<input type=hidden name=stripeToken />').val(token.id);
           $('form').append($input).submit();
         }
