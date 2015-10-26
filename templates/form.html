@@ -77,16 +77,65 @@
       <input name="InstallmentPeriod" value="None" class="visually-hidden">
     {% endif %}
     <div class="form-outer-section">
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <button id="customButton">Purchase</button>
     {% if request.args.amount %}
-      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-         data-key="{{ key }}"
-         data-description="A Flask Charge"
-         data-amount="{{ request.args.amount|int * 100 }}"></script>
+      <script>
+        var handler = StripeCheckout.configure({
+          key: '{{ key }}',
+          image: '/img/logo.png',
+          locale: 'auto',
+          token: function(token) {
+            // Use the token to create the charge with a server-side script.
+            // You can access the token ID with `token.id`
+          }
+        });
+
+        $('#customButton').on('click', function(e) {
+          // Open Checkout with further options
+          handler.open({
+            name: 'Stripe.com',
+            description: 'The Texas Tribune',
+            amount: {{ request.args.amount }}
+          });
+          e.preventDefault();
+        });
+
+        // Close Checkout on page navigation
+        $(window).on('popstate', function() {
+          handler.close();
+        });
+      </script>
     {% else %}
-      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-         data-key="{{ key }}"
-         data-description="A Flask Charge"
-         data-amount="{{ 10 * 100 }}"></script>
+      <script>
+        var donation_amount = $('.dollar').val();
+        donation_amount *= 100;
+
+        var handler = StripeCheckout.configure({
+          key: '{{ key }}',
+          image: '/img/logo.png',
+          locale: 'auto',
+          token: function(token) {
+            // Use the token to create the charge with a server-side script.
+            // You can access the token ID with `token.id`
+          }
+        });
+
+        $('#customButton').on('click', function(e) {
+          // Open Checkout with further options
+          handler.open({
+            name: 'Stripe.com',
+            description: 'The Texas Tribune',
+            amount: donation_amount
+          });
+          e.preventDefault();
+        });
+
+        // Close Checkout on page navigation
+        $(window).on('popstate', function() {
+          handler.close();
+        });
+      </script>
     {% endif %}
     </div>
   </form>
