@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="main member-form">
+<div class="main">
   <form action="/charge" method="post">
     <div class="form-outer-section">
       <p>Thank you for supporting The Texas Tribune!</p>
@@ -9,8 +9,12 @@
       <div class="form-section three">
         <label>Amount</label><br>
           <span class="dollar">$</span>
-          <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar"><br>
-          <a href="http://support.texastribune.org/">Change amount</a>
+          {% if request.args.amount %}
+            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable"><br>
+            <a href="http://support.texastribune.org/">Change amount</a>
+          {% else %}
+            <input name="Opportunity.Amount" value="10" type="number" class="dollar">
+          {% endif %}
       </div>
       <div class="form-section three">
         <label>Length</label><br>
@@ -73,10 +77,17 @@
       <input name="InstallmentPeriod" value="None" class="visually-hidden">
     {% endif %}
     <div class="form-outer-section">
-    <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+    {% if request.args.amount %}
+      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
          data-key="{{ key }}"
          data-description="A Flask Charge"
          data-amount="{{ request.args.amount|int * 100 }}"></script>
+    {% else %}
+      <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+         data-key="{{ key }}"
+         data-description="A Flask Charge"
+         data-amount="{{ 10 * 100 }}"></script>
+    {% endif %}
     </div>
   </form>
 </div>

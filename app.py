@@ -26,7 +26,7 @@ def checkout_form():
 
 @app.route('/form2')
 def donate_renew_form():
-    return render_template('donate-renew-form.html', key=stripe_keys['publishable_key'])
+    return render_template('form.html', key=stripe_keys['publishable_key'])
 
 
 @app.route('/error')
