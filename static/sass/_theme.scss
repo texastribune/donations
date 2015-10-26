@@ -23,8 +23,13 @@ body {
   padding: 1em 0 2em 0;
 }
 
+.member-form {
+  .dollar {
+    border: none;
+  }
+}
+
 .dollar {
-  border: none;
   color: $black;
   font-family: "league-gothic";
   font-size: 3.5em;

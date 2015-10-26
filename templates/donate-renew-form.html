@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="main member-form">
+<div class="main donate-form">
   <form action="/charge" method="post">
     <div class="form-outer-section">
       <p>Thank you for supporting The Texas Tribune!</p>
@@ -9,8 +9,7 @@
       <div class="form-section three">
         <label>Amount</label><br>
           <span class="dollar">$</span>
-          <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar"><br>
-          <a href="http://support.texastribune.org/">Change amount</a>
+          <input name="Opportunity.Amount" value="10" type="number" class="dollar">
       </div>
       <div class="form-section three">
         <label>Length</label><br>
@@ -76,7 +75,7 @@
     <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
          data-key="{{ key }}"
          data-description="A Flask Charge"
-         data-amount="{{ request.args.amount|int * 100 }}"></script>
+         data-amount="10 * 100"></script>
     </div>
   </form>
 </div>
