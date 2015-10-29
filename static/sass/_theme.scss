@@ -2,7 +2,6 @@
 .masthead {
   @include outer-container;
   border-bottom: 2px solid #ffc200;
-  margin-left: 0;
   img {
     padding: 1em 2em;
     @include span-columns(4);
@@ -20,7 +19,7 @@ body {
 
 .main {
   min-height: 500px;
-  padding: 1em 0 2em 0;
+  padding: 0 0 1em 0;
 }
 
 .dollar {
@@ -58,6 +57,15 @@ a {
   &:hover {
     text-decoration: underline;
   }
+}
+
+.label-info {
+  font-family: Helvetica, sans-serif;
+  font-size: 1.2em;
+  font-style: normal;
+  font-weight: 500;
+  margin: 0;
+  padding: 1em 0;
 }
 
 
@@ -138,8 +146,6 @@ select {
   background-color: $white;
   border-radius: 5px;
   border: none;
-  font-family: Helvetica, sans-serif;
-  font-size: 16px;
   padding: 1em 0;
 }
 p {

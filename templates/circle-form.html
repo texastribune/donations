@@ -4,7 +4,7 @@
 <div class="main">
   <form action="/charge" method="post">
     <div class="form-outer-section">
-      <p>Thank you for becoming a Circle member of The Texas Tribune! <a href="http://support.texastribune.org/">Choose a different membership level.</a></p>
+      <p>Thank you for becoming a Circle member of The Texas Tribune! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level.</p>
       <h2>Circle Membership Info</h2>
       <div class="form-section three">
         <label>{{ request.args.installmentPeriod }} Amount</label><br>
@@ -14,15 +14,15 @@
       <div class="form-section three">
         <label>Length</label><br>
           {% if request.args.installments == '3' %}
-            <h3>3 years</h3>
+            <p class="label-info">3 years</p>
           {% else %}
-            <h3>36 months</h3>
+            <p class="label-info">36 months</p>
           {% endif %}
       </div>
       {% if request.args.installmentPeriod and request.args.amount %}
         <div class="form-section three">
           <label>Level</label><br>
-          <h3 class="level"></h3>
+          <p class="level label-info"></p>
         </div>
       {% endif %}
     </div>

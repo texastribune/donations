@@ -17,14 +17,14 @@
       </div>
       <div class="form-section three">
         <label>Length</label><br>
-          <select name="OpenEndedStatus">
+          <select name="OpenEndedStatus" class="label-info">
             <option value="Open">Until Cancelled</option>
           </select>
       </div>
       {% if request.args.installmentPeriod and request.args.amount %}
       <div class="form-section three">
         <label>Level</label><br>
-        <h3 class="level"></h3>
+        <p class="level label-info"></p>
       </div>
       {% endif %}
     </div>
