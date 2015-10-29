@@ -14,11 +14,17 @@
       <div class="form-section three">
         <label>Length</label><br>
           {% if request.args.installments == '3' %}
-            <p>3 years</p>
+            <h3>3 years</h3>
           {% else %}
-            <p>36 months</p>
+            <h3>36 months</h3>
           {% endif %}
       </div>
+      {% if request.args.installmentPeriod and request.args.amount %}
+        <div class="form-section three">
+          <label>Level</label><br>
+          <h3 class="level"></h3>
+        </div>
+      {% endif %}
     </div>
     <div class="form-outer-section">
       <h2>Name</h2>
@@ -78,4 +84,61 @@
     </div>
   </form>
 </div>
+{% if request.args.installmentPeriod and request.args.amount %}
+<script>
+  var display_level = function() {
+    console.log('hello');
+
+    var frequency = $('input[name="InstallmentPeriod"]').val();
+
+    console.log(frequency);
+
+    var input_amount = $('input[name="Opportunity.Amount"]').val();
+
+    var level_label = $('.level');
+
+    if (frequency == 'monthly') {
+      // detemine level and update text based on monthly frequency
+      if (input_amount > 3 && input_amount <= 5) {
+        level_label.text('Enthusiast');
+      } else if (input_amount > 5 && input_amount <= 12) {
+        level_label.text('Activist');
+      } else if (input_amount > 12 && input_amount <= 21) {
+        level_label.text('Advocate');
+      } else if (input_amount > 21 && input_amount <= 42) {
+        level_label.text('Diplomat');
+      } else if (input_amount > 42 && input_amount <= 83) {
+        level_label.text('Benefactor');
+      } else if (input_amount > 83 && input_amount <= 208) {
+        level_label.text("Editor's Circle");
+      } else if (input_amount > 208 && input_amount <= 416) {
+        level_label.text('Leadership Circle');
+      } else if (input_amount > 416) {
+        level_label.text("Chairman's Circle");
+      }
+    } else {
+      // detemine level and update text based on yearly frequency
+      if (input_amount > 35 && input_amount <= 59) {
+        level_label.text('Enthusiast');
+      } else if (input_amount > 59 && input_amount <= 149) {
+        level_label.text('Activist');
+      } else if (input_amount > 149 && input_amount <= 249) {
+        level_label.text('Advocate');
+      } else if (input_amount > 249 && input_amount <= 499) {
+        level_label.text('Diplomat');
+      } else if (input_amount > 499 && input_amount <= 999) {
+        level_label.text('Benefactor');
+      } else if (input_amount > 999 && input_amount <= 2499) {
+        level_label.text("Editor's Circle");
+      } else if (input_amount > 2499 && input_amount <= 4999) {
+        level_label.text('Leadership Circle');
+      } else if (input_amount > 4999) {
+        level_label.text("Chairman's Circle");
+      }
+    }
+  }
+
+  display_level();
+</script>
+{% endif %}
 {% endblock %}
