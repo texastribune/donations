@@ -4,14 +4,13 @@
 <div class="main">
   <form action="/charge" method="post">
     <div class="form-outer-section">
-      <p>Thank you for donating to The Texas Tribune!</p>
+      <p>Thank you for donating to The Texas Tribune! <a href="http://support.texastribune.org/">Become a member instead.</a></p>
       <h2>Donation Info</h2>
       <div class="form-section three">
         <label>Amount</label><br>
           <span class="dollar">$</span>
           {% if request.args.amount %}
             <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar"><br>
-            <a href="http://support.texastribune.org/">Change amount</a>
           {% else %}
             <input name="Opportunity.Amount" value="10" type="number" class="dollar">
           {% endif %}

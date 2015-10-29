@@ -4,20 +4,19 @@
 <div class="main">
   <form action="/charge" method="post">
     <div class="form-outer-section">
-      <p>Thank you for becoming a Circle member of The Texas Tribune!</p>
+      <p>Thank you for becoming a Circle member of The Texas Tribune! <a href="http://support.texastribune.org/">Choose a different membership level.</a></p>
       <h2>Circle Membership Info</h2>
       <div class="form-section three">
-        <label>Amount</label><br>
+        <label>{{ request.args.installmentPeriod }} Amount</label><br>
           <span class="dollar">$</span>
             <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable"><br>
-            <a href="http://support.texastribune.org/">Change membership level</a>
       </div>
       <div class="form-section three">
         <label>Length</label><br>
           {% if request.args.installments == '3' %}
-            <p>per year for 3 years</p>
+            <p>3 years</p>
           {% else %}
-            <p>per month for 36 months</p>
+            <p>36 months</p>
           {% endif %}
       </div>
     </div>
