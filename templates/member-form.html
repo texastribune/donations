@@ -1,146 +1,39 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="main">
-  <form action="/charge" method="post">
-    <div class="form-outer-section">
-      <p>Thank you for supporting The Texas Tribune by becoming a member! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, click <a href="/donateform?amount=10">here</a>.</p>
-      <h2>Membership Info</h2>
-      <div class="form-section three">
-        <label>{{ request.args.installmentPeriod }} Amount</label><br>
-          <span class="dollar">$</span>
-          {% if request.args.amount %}
-            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable">
-          {% else %}
-            <input name="Opportunity.Amount" value="10" type="number" class="dollar">
-          {% endif %}
+  <div class="main">
+    <form action="/charge" method="post">
+      <div class="form-outer-section">
+        <p>Thank you for supporting The Texas Tribune by becoming a member! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, click <a href="/donateform?amount=10">here</a>.</p>
+        <h2>Membership Info</h2>
+        <div class="form-section three">
+          <label>{{ request.args.installmentPeriod }} Amount</label><br>
+            <span class="dollar">$</span>
+            {% if request.args.amount %}
+              <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable">
+            {% else %}
+              <input name="Opportunity.Amount" value="10" type="number" class="dollar">
+            {% endif %}
+        </div>
+        <div class="form-section three">
+          <label>Length</label><br>
+            <select name="OpenEndedStatus" class="label-info">
+              <option value="Open">Until Cancelled</option>
+            </select>
+        </div>
+        {% if request.args.installmentPeriod and request.args.amount %}
+        <div class="form-section three">
+          <label>Level</label><br>
+          <p class="level label-info"></p>
+        </div>
+        {% endif %}
       </div>
-      <div class="form-section three">
-        <label>Length</label><br>
-          <select name="OpenEndedStatus" class="label-info">
-            <option value="Open">Until Cancelled</option>
-          </select>
-      </div>
-      {% if request.args.installmentPeriod and request.args.amount %}
-      <div class="form-section three">
-        <label>Level</label><br>
-        <p class="level label-info"></p>
-      </div>
-      {% endif %}
-    </div>
-    <div class="form-outer-section">
-      <h2>Name</h2>
-      <div class="form-section three">
-        <label>First</label><br>
-          <input name="Contact.FirstName" type="text" maxlength="50">
-      </div>
-      <div class="form-section three">
-        <label>Last</label><br>
-          <input name="Contact.LastName" type="text" maxlength="50">
-      </div>
-    </div>
-    <div class="form-outer-section">
-      <h2>Billing Info</h2>
-      <div class="form-section three">
-        <label>Phone</label><br>
-          <input name="Contact.HomePhone" maxlength="50" type="text">
-      </div>
-      <div class="form-section three break">
-        <label>Billing Address</label><br>
-          <input name="Contact.MailingStreet" type="text" maxlength="50">
-      </div>
-      <div class="form-section three break">
-        <label>City</label><br>
-          <input name="Contact.MailingCity" type="text"></input>
-      </div>
-      <div class="form-section three">
-        <label>State</label><br>
-          <input name="Contact.MailingState" type="text"></input>
-      </div>
-      <div class="form-section three">
-        <label>Zip Code</label><br>
-          <input name="Contact.MailingPostalCode" type="text" maxlength="5">
-      </div>
-    </div>
-    <div class="form-outer-section">
-      <h2>Additional Info</h2>
-      <div class="form-section four">
-        <label>Encouraged to contribute by</label>
-          <input name="Reason" type="text" maxlength="100">
-      </div>
-    </div>
-    <input name="Description" class="visually-hidden">
-    {% if request.args.installments %}
-      <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
-    {% else %}
-      <input name="Installments" value="None" class="visually-hidden">
-    {% endif %}
-    {% if request.args.installmentPeriod %}
-      <input name="InstallmentPeriod" value="{{ request.args.installmentPeriod }}" class="visually-hidden">
-    {% else %}
-      <input name="InstallmentPeriod" value="None" class="visually-hidden">
-    {% endif %}
-    <div class="form-outer-section">
-    <script src="https://checkout.stripe.com/checkout.js"></script>
-    <button id="customButton" class="button button-flat">Pay by Card</button>
-    </div>
-  </form>
-</div>
-{% if request.args.installmentPeriod and request.args.amount %}
-<script>
-  var display_level = function() {
-    console.log('hello');
 
-    var frequency = $('input[name="InstallmentPeriod"]').val();
+      {% include 'includes/form_inner.html' %}
 
-    console.log(frequency);
-
-    var input_amount = $('input[name="Opportunity.Amount"]').val();
-
-    var level_label = $('.level');
-
-    if (frequency == 'monthly') {
-      // detemine level and update text based on monthly frequency
-      if (input_amount > 3 && input_amount <= 5) {
-        level_label.text('Enthusiast');
-      } else if (input_amount > 5 && input_amount <= 12) {
-        level_label.text('Activist');
-      } else if (input_amount > 12 && input_amount <= 21) {
-        level_label.text('Advocate');
-      } else if (input_amount > 21 && input_amount <= 42) {
-        level_label.text('Diplomat');
-      } else if (input_amount > 42 && input_amount <= 83) {
-        level_label.text('Benefactor');
-      } else if (input_amount > 83 && input_amount <= 208) {
-        level_label.text("Editor's Circle");
-      } else if (input_amount > 208 && input_amount <= 416) {
-        level_label.text('Leadership Circle');
-      } else if (input_amount > 416) {
-        level_label.text("Chairman's Circle");
-      }
-    } else {
-      // detemine level and update text based on yearly frequency
-      if (input_amount > 35 && input_amount <= 59) {
-        level_label.text('Enthusiast');
-      } else if (input_amount > 59 && input_amount <= 149) {
-        level_label.text('Activist');
-      } else if (input_amount > 149 && input_amount <= 249) {
-        level_label.text('Advocate');
-      } else if (input_amount > 249 && input_amount <= 499) {
-        level_label.text('Diplomat');
-      } else if (input_amount > 499 && input_amount <= 999) {
-        level_label.text('Benefactor');
-      } else if (input_amount > 999 && input_amount <= 2499) {
-        level_label.text("Editor's Circle");
-      } else if (input_amount > 2499 && input_amount <= 4999) {
-        level_label.text('Leadership Circle');
-      } else if (input_amount > 4999) {
-        level_label.text("Chairman's Circle");
-      }
-    }
-  }
-
-  display_level();
-</script>
-{% endif %}
+    </form>
+  </div>
+  {% if request.args.installmentPeriod and request.args.amount %}
+    {% include 'includes/display_levels_js.html' %}
+  {% endif %}
 {% endblock %}
