@@ -4,13 +4,13 @@
 <div class="main">
   <form action="/charge" method="post">
     <div class="form-outer-section">
-      <p>Thank you for supporting The Texas Tribune!</p>
+      <p>Thank you for donating to The Texas Tribune!</p>
       <h2>Donation Info</h2>
       <div class="form-section three">
         <label>Amount</label><br>
           <span class="dollar">$</span>
           {% if request.args.amount %}
-            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable"><br>
+            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar"><br>
             <a href="http://support.texastribune.org/">Change amount</a>
           {% else %}
             <input name="Opportunity.Amount" value="10" type="number" class="dollar">
@@ -20,7 +20,6 @@
         <label>Length</label><br>
           <select name="OpenEndedStatus">
             <option value="None">One Time</option>
-            <option value="Open">Until Cancelled</option>
           </select>
       </div>
     </div>
@@ -79,39 +78,6 @@
     <div class="form-outer-section">
     <script src="https://checkout.stripe.com/checkout.js"></script>
     <button id="customButton" class="button button-flat">Donate</button>
-    <script type="text/javascript">
-      var donation_amount = $('.dollar').val();
-      donation_amount *= 100;
-
-      var handler = StripeCheckout.configure({
-        key: '{{ key }}',
-        image: "{{ url_for('static', filename='img/favicon.ico') }}",
-        locale: 'auto',
-        token: function(token) {
-          // Use the token to create the charge with a server-side script.
-          // Uses `token.id` to access the Stripe token ID
-          var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
-          $('form').append($emailInput);
-          var $input = $('<input type=hidden name=stripeToken />').val(token.id);
-          $('form').append($input).submit();
-        }
-      });
-
-      $('#customButton').on('click', function(e) {
-        // Open Checkout with further options
-        handler.open({
-          name: 'The Texas Tribune',
-          description: 'The Texas Tribune Donation',
-          amount: donation_amount
-        });
-        e.preventDefault();
-      });
-
-      // Close Checkout on page navigation
-      $(window).on('popstate', function() {
-        handler.close();
-      });
-    </script>
     </div>
   </form>
 </div>

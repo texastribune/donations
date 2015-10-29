@@ -1,0 +1,84 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="main">
+  <form action="/charge" method="post">
+    <div class="form-outer-section">
+      <p>Thank you for supporting The Texas Tribune!</p>
+      <h2>Membership Info</h2>
+      <div class="form-section three">
+        <label>Amount</label><br>
+          <span class="dollar">$</span>
+          {% if request.args.amount %}
+            <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable"><br>
+            <a href="http://support.texastribune.org/">Change amount</a>
+          {% else %}
+            <input name="Opportunity.Amount" value="10" type="number" class="dollar">
+          {% endif %}
+      </div>
+      <div class="form-section three">
+        <label>Length</label><br>
+          <select name="OpenEndedStatus">
+            <option value="Open">Until Cancelled</option>
+          </select>
+      </div>
+    </div>
+    <div class="form-outer-section">
+      <h2>Name</h2>
+      <div class="form-section three">
+        <label>First</label><br>
+          <input name="Contact.FirstName" type="text" maxlength="50">
+      </div>
+      <div class="form-section three">
+        <label>Last</label><br>
+          <input name="Contact.LastName" type="text" maxlength="50">
+      </div>
+    </div>
+    <div class="form-outer-section">
+      <h2>Billing Info</h2>
+      <div class="form-section three">
+        <label>Phone</label><br>
+          <input name="Contact.HomePhone" maxlength="50" type="text">
+      </div>
+      <div class="form-section three break">
+        <label>Billing Address</label><br>
+          <input name="Contact.MailingStreet" type="text" maxlength="50">
+      </div>
+      <div class="form-section three break">
+        <label>City</label><br>
+          <input name="Contact.MailingCity" type="text"></input>
+      </div>
+      <div class="form-section three">
+        <label>State</label><br>
+          <input name="Contact.MailingState" type="text"></input>
+      </div>
+      <div class="form-section three">
+        <label>Zip Code</label><br>
+          <input name="Contact.MailingPostalCode" type="text" maxlength="5">
+      </div>
+    </div>
+    <div class="form-outer-section">
+      <h2>Additional Info</h2>
+      <div class="form-section four">
+        <label>Encouraged to contribute by</label>
+          <input name="Reason" type="text" maxlength="100">
+      </div>
+    </div>
+    <input name="Description" class="visually-hidden">
+    {% if request.args.installments %}
+      <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
+    {% else %}
+      <input name="Installments" value="None" class="visually-hidden">
+    {% endif %}
+    {% if request.args.installmentPeriod %}
+      <input name="InstallmentPeriod" value="{{ request.args.installmentPeriod }}" class="visually-hidden">
+    {% else %}
+      <input name="InstallmentPeriod" value="None" class="visually-hidden">
+    {% endif %}
+    <div class="form-outer-section">
+    <script src="https://checkout.stripe.com/checkout.js"></script>
+    <button id="customButton" class="button button-flat">Pay by Card</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
