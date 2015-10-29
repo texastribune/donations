@@ -72,7 +72,7 @@
 
     var handler = StripeCheckout.configure({
       key: '{{ key }}',
-      image: "{{ url_for('static', filename='img/favicon.ico') }}",
+      image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
       locale: 'auto',
       token: function(token) {
         // Use the token to create the charge with a server-side script.
