@@ -132,7 +132,15 @@ input, select {
   margin: 0.5em 0.5em 1em 0;
 }
 select {
-  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: $white;
+  border-radius: 5px;
+  border: none;
+  font-family: Helvetica, sans-serif;
+  font-size: 16px;
+  padding: 1em 0;
 }
 p {
   font-style: italic;
