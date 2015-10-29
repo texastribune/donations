@@ -51,7 +51,6 @@ def charge():
 
 
     pprint ('Request: {}'.format(request.form))
-    pprint (request)
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
