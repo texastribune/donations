@@ -1,0 +1,37 @@
+<script>
+var stripe_donation = function() {
+  var donation_amount = $('.dollar').val();
+  donation_amount *= 100;
+
+  var handler = StripeCheckout.configure({
+    key: '{{ key }}',
+    image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
+    locale: 'auto',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // Uses `token.id` to access the Stripe token ID
+      var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
+      $('form').append($emailInput);
+      var $input = $('<input type=hidden name=stripeToken />').val(token.id);
+      $('form').append($input).submit();
+    }
+  });
+
+  $('#customButton').on('click', function(e) {
+    // Open Checkout with further options
+    handler.open({
+      name: 'The Texas Tribune',
+      description: 'The Texas Tribune Donation',
+      amount: donation_amount
+    });
+    e.preventDefault();
+  });
+
+  // Close Checkout on page navigation
+  $(window).on('popstate', function() {
+    handler.close();
+  });
+};
+
+window.onload = stripe_donation();
+</script>

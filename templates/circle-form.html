@@ -32,4 +32,5 @@
   {% if request.args.installmentPeriod and request.args.amount %}
     {% include 'includes/display_levels_js.html' %}
   {% endif %}
+  {% include 'includes/stripe_checkout_js.html' %}
 {% endblock %}
