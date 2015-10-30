@@ -13,6 +13,9 @@
         </div>
         <div class="form-section three">
           <label>Length</label><br>
+            <select class="visually-hidden" name="OpenEndedStatus" class="label-info">
+              <option value="None">One Time</option>
+            </select>
             {% if request.args.installments == '3' %}
               <p class="label-info">3 years</p>
             {% else %}
