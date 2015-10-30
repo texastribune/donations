@@ -48,11 +48,6 @@ class SalesforceConnection(object):
 
         return None
 
-    def check_response(response=None, expected_status=200):
-        if response.status_code != expected_status:
-            raise Exception("bad")
-        import ipdb; ipdb.set_trace()
-        return True
 
     def query(self, query, path='/services/data/v34.0/query'):
         url = '{}{}'.format(self.instance_url, path)
@@ -76,7 +71,7 @@ class SalesforceConnection(object):
         pprint(response)
         pprint(resp)
         print (resp.status_code)
-        self.check_response(response=resp, expected_status=201)
+        check_response(response=resp, expected_status=201)
         if resp.status_code != 201:
             raise Exception("bad")  # TODO
         else:
@@ -178,6 +173,12 @@ class SalesforceConnection(object):
             # TODO: send alert because more than one account matched
 
         return created, response[0]
+
+
+def check_response(response=None, expected_status=200):
+    if response.status_code != expected_status:
+        raise Exception("bad")
+    return True
 
 
 def upsert(customer=None, request=None):
