@@ -78,22 +78,22 @@ class SalesforceConnection(object):
             return response
 
 
-    def _format_contact(self, request=None):
+    def _format_contact(self, request_form=None):
 
         try:
-            stripe_id = request['Stripe_Customer_Id__c']
+            stripe_id = request_form['Stripe_Customer_Id__c']
         except KeyError:
             stripe_id = None
 
         contact = {
-            'Email': request['stripeEmail'],
-            'FirstName': request['Contact.FirstName'],
-            'LastName': request['Contact.LastName'],
-            'HomePhone': request['Contact.HomePhone'],
-            'MailingStreet': request['Contact.MailingStreet'],
+            'Email': request_form['stripeEmail'],
+            'FirstName': request_form['Contact.FirstName'],
+            'LastName': request_form['Contact.LastName'],
+            'HomePhone': request_form['Contact.HomePhone'],
+            'MailingStreet': request_form['Contact.MailingStreet'],
             'MailingCity': 'Austin',
             'MailingState': 'TX',
-            'MailingPostalCode': request['Contact.MailingPostalCode'],
+            'MailingPostalCode': request_form['Contact.MailingPostalCode'],
             'Description': 'added by Stripe/Checkout app',
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
@@ -120,14 +120,14 @@ class SalesforceConnection(object):
         contact = response[0]
         return contact
 
-    def create_contact(self, request):
+    def create_contact(self, request_form):
         """
         Create and return a contact. Then fetch that created contact to get
         the associated account ID.
         """
 
         print ("----Creating contact...")
-        contact = self._format_contact(request=request)
+        contact = self._format_contact(request_form=request_form)
         path = '/services/data/v34.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
         print(response)
@@ -151,7 +151,7 @@ class SalesforceConnection(object):
         response = self.query(query)
         return response
 
-    def get_or_create_contact(self, request):
+    def get_or_create_contact(self, request_form):
         """
         Return a contact. If one already exists it's returned. Otherwise
         a new contact is created and returned.
@@ -159,12 +159,12 @@ class SalesforceConnection(object):
 
         created = False
 
-        response = self.find_contact(email=request['stripeEmail'])
+        response = self.find_contact(email=request_form['stripeEmail'])
 
         # if the response is empty then nothing matched and we
         # have to create a contact:
         if len(response) < 1:
-            contact = self.create_contact(request)
+            contact = self.create_contact(request_form)
             created = True
             return created, contact
 
