@@ -50,7 +50,7 @@ def error():
 def charge():
 
 
-    pprint ('Request: {}'.format(request.form))
+    pprint ('Request: {}'.format(request))
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
