@@ -136,6 +136,11 @@ label {
 input {
   font-size: 1em;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button, {
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
 input, select {
   margin: 0.5em 0.5em 1em 0;
 }
