@@ -18,10 +18,20 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
         'app': ('static/sass', 'static/css', 'static/css')
     })
 
-@app.route('/form')
+@app.route('/memberform')
 def checkout_form():
     amount = request.args.get('amount')
-    return render_template('form.html', key=stripe_keys['publishable_key'])
+    return render_template('member-form.html', key=stripe_keys['publishable_key'])
+
+
+@app.route('/donateform')
+def donate_renew_form():
+    return render_template('donate-form.html', key=stripe_keys['publishable_key'])
+
+
+@app.route('/circleform')
+def circle_form():
+    return render_template('circle-form.html', key=stripe_keys['publishable_key'])
 
 
 @app.route('/error')
@@ -59,7 +69,7 @@ def charge():
     # The card has been declined
     #print ('Charge: {}'.format(charge))
 
-    if (request.form['frequency'] == 'one-time'):
+    if (request.form['OpenEndedStatus'] == 'None'):
         print("----One time payment...")
         add_opportunity(request=request, customer=customer)
     else:

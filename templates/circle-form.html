@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="main">
+    <form action="/charge" method="post">
+      <div class="form-outer-section">
+        <p>Thank you for becoming a Circle member of The Texas Tribune! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level.</p>
+        <h2>Circle Membership Info</h2>
+        <div class="form-section three">
+          <label>{{ request.args.installmentPeriod }} Amount</label><br>
+            <span class="dollar">$</span>
+              <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable"><br>
+        </div>
+        <div class="form-section three">
+          <label>Length</label><br>
+            <select class="visually-hidden" name="OpenEndedStatus" class="label-info">
+              <option value="None">One Time</option>
+            </select>
+            {% if request.args.installments == '3' %}
+              <p class="label-info">3 years</p>
+            {% else %}
+              <p class="label-info">36 months</p>
+            {% endif %}
+        </div>
+        {% if request.args.installmentPeriod and request.args.amount %}
+          <div class="form-section three">
+            <label>Level</label><br>
+            <p class="level label-info"></p>
+          </div>
+        {% endif %}
+      </div>
+      {% include 'includes/form_inner.html' %}
+    </form>
+  </div>
+  {% if request.args.installmentPeriod and request.args.amount %}
+    {% include 'includes/display_levels_js.html' %}
+  {% endif %}
+  {% include 'includes/stripe_checkout_js.html' %}
+{% endblock %}

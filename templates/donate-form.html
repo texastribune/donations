@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="main">
+    <form action="/charge" method="post">
+      <div class="form-outer-section">
+        <p>Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, click <a href="http://support.texastribune.org/">here</a>.</p>
+        <h2>Donation Info</h2>
+        <div class="form-section three">
+          <label>Amount</label><br>
+            <span class="dollar">$</span>
+            {% if request.args.amount %}
+              <input name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar"><br>
+            {% else %}
+              <input name="Opportunity.Amount" value="10" type="number" class="dollar">
+            {% endif %}
+        </div>
+        <div class="form-section three">
+          <label>Length</label><br>
+            <select name="OpenEndedStatus" class="label-info">
+              <option value="None">One Time</option>
+            </select>
+        </div>
+      </div>
+      {% include 'includes/form_inner.html' %}
+    </form>
+  </div>
+  {% include 'includes/stripe_checkout_js.html' %}
+{% endblock %}
