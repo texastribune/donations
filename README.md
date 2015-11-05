@@ -6,9 +6,9 @@ This repo integrates [Stripe Checkout](https://stripe.com/docs/checkout) and [Sa
 Getting Started
 ---------------
 
-The recommended method for running this repo locally is to use [Docker](https://www.docker.com/). 
+The recommended method for running this repo locally is to use [Docker](https://www.docker.com/). If you don't already have Docker set up, you'll want to [install Docker Toolbox](https://www.docker.com/docker-toolbox) to get a Docker environment set up on your computer.
 
-You'll need to have an `env` file set up with the environment variables for Stripe and Salesforce so that Docker can find them.
+You'll also need to have an `env` file set up with the environment variables for Stripe and Salesforce so that Docker can find them.
 
 Running the Project
 -------------------
