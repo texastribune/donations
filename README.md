@@ -22,4 +22,7 @@ Run `python3 app.py`. You should then be able to interact with the app at `docke
 Running tests
 -------------
 
+To run the project tests, run
+`make interactive`
+`py.test tests.py`
 
