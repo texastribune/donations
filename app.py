@@ -29,23 +29,38 @@ def member_form():
     else:
         amount=False
     installment_period = request.args.get('installmentPeriod')
-    installments = None
+    installments = 'None'
     openended_status = 'Open'
     return render_template('member-form.html', form=form, amount=amount, \
         installment_period=installment_period, installments=installments, \
-        key=stripe_keys['publishable_key'])
+        openended_status=openended_status, key=stripe_keys['publishable_key'])
 
 
 @app.route('/donateform')
 def donate_renew_form():
     form = DonateForm()
-    return render_template('donate-form.html', form=form, key=stripe_keys['publishable_key'])
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        amount=False
+    openended_status = 'None'
+    installments = 'None'
+    installment_period = 'None'
+    return render_template('donate-form.html', form=form, amount=amount, \
+        installment_period=installment_period, installments=installments, \
+        openended_status=openended_status, key=stripe_keys['publishable_key'])
 
 
 @app.route('/circleform')
 def circle_form():
     form = DonateForm()
-    return render_template('circle-form.html', form=form, key=stripe_keys['publishable_key'])
+    amount = request.args.get('amount')
+    openended_status = 'None'
+    installments = request.args.get('installments')
+    installment_period = request.args.get('installmentPeriod')
+    return render_template('circle-form.html', form=form, amount=amount, \
+        installment_period=installment_period, installments=installments, \
+        openended_status=openended_status, key=stripe_keys['publishable_key'])
 
 
 @app.route('/error')

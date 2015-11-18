@@ -8,27 +8,22 @@
         <p>Thank you for becoming a Circle member of The Texas Tribune! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level.</p>
         <h2>Circle Membership Info</h2>
         <div class="form-section three">
-          <label>{{ request.args.installmentPeriod }} Amount</label><br>
+          <label>{% if installment_period == 'annually' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
             <span class="dollar">$</span>
-              <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable"><br>
+              {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
         </div>
         <div class="form-section three">
           <label>Length</label><br>
-            <select class="visually-hidden" name="OpenEndedStatus" class="label-info">
-              <option value="None">One Time</option>
-            </select>
-            {% if request.args.installments == '3' %}
+            {% if installments == 3 %}
               <p class="label-info">3 years</p>
             {% else %}
               <p class="label-info">36 months</p>
             {% endif %}
         </div>
-        {% if request.args.installmentPeriod and request.args.amount %}
-          <div class="form-section three">
-            <label>Level</label><br>
-            <p class="level label-info"></p>
-          </div>
-        {% endif %}
+        <div class="form-section three">
+          <label>Level</label><br>
+          <p class="level label-info"></p>
+        </div>
       </div>
       {% include 'includes/form_inner.html' %}
     </form>
