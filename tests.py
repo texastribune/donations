@@ -198,17 +198,17 @@ def test__format_recurring_donation():
             customer=customer)
     expected_response = {
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
-            'npe03__Date_Established__c': '2015-11-16',
+            'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
             'npe03__Contact__c': '0031700000BHQzBAAX',
             'npe03__Installment_Period__c': 'yearly',
             'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '100',
+            'npe03__Amount__c': '300',   # 3 * 100
             'Name': 'foo',
             'npe03__Installments__c': '3',
             'npe03__Open_Ended_Status__c': 'None',
-            'Type': 'Giving Circle'
+            'Type__c': 'Giving Circle'
             }
     response['Name'] = 'foo'
     assert response == expected_response
