@@ -56,7 +56,8 @@ def warn_multiple_accounts(email, count):
 
 def send_multiple_account_warning():
 
-    for email, count in WARNINGS:
+    for email in WARNINGS:
+        count = WARNINGS[email]
         body = """
         {} accounts were found matching the email address [{}]
         while inserting a Stripe transaction.
