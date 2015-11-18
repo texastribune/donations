@@ -17,6 +17,7 @@ zone = timezone('US/Central')
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
+WARNINGS = dict()
 
 def send_email(recipient, subject, body, sender=None):
     import smtplib
@@ -50,23 +51,27 @@ def send_email(recipient, subject, body, sender=None):
     except:
         print ('failed to send mail')
 
+def warn_multiple_accounts(email, count):
+    WARNINGS[email] = count
 
-def send_multiple_account_warning(email):
-    body = """
-    Multiple accounts were found matching the email address [{}]
-    while inserting a Stripe transaction.
+def send_multiple_account_warning():
 
-    The transaction was attached to the first match found. You may want to
-    move the transaction to the proper account if the one chosen is not
-    correct. You may also want to delete or otherwise correct the duplicate
-    account(s).
-    """.format(email)
+    for email, count in WARNINGS:
+        body = """
+        {} accounts were found matching the email address [{}]
+        while inserting a Stripe transaction.
 
-    send_email(
-            recipient='dcraigmile@texastribune.org',
-            subject="Multiple accounts found for {}".format(email),
-            body=body
-            )
+        The transaction was attached to the first match found. You may want to
+        move the transaction to the proper account if the one chosen is not
+        correct. You may also want to delete or otherwise correct the duplicate
+        account(s).
+        """.format(count, email)
+
+        send_email(
+                recipient='dcraigmile@texastribune.org',
+                subject="Multiple accounts found for {}".format(email),
+                body=body
+                )
 
 
 class SalesforceConnection(object):
@@ -220,7 +225,7 @@ class SalesforceConnection(object):
             return created, contact
 
         elif len(response) > 1:
-            send_multiple_account_warning(email=email)
+            warn_multiple_accounts(email=email, count=len(response))
 
         return created, response[0]
 
@@ -305,6 +310,7 @@ def add_opportunity(request=None, customer=None, charge=None):
     path = '/services/data/v34.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
     # pprint(response)
+    send_multiple_account_warning()
 
     return response
 
@@ -356,15 +362,14 @@ def add_recurring_donation(request=None, customer=None):
 
     print ("----Adding recurring donation...")
     sf = SalesforceConnection()
-    try:
-        _, contact = sf.get_or_create_contact(request.form)
-    finally:
-        recurring_donation = _format_recurring_donation(contact=contact,
-                request=request, customer=customer)
-        # pprint (recurring_donation)
-        path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
-        response = sf.post(path=path, data=recurring_donation)
-        # TODO: error handling
-        # pprint(response)
+    _, contact = sf.get_or_create_contact(request.form)
+    recurring_donation = _format_recurring_donation(contact=contact,
+            request=request, customer=customer)
+    # pprint (recurring_donation)
+    path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
+    response = sf.post(path=path, data=recurring_donation)
+    # TODO: error handling
+    # pprint(response)
+    send_multiple_account_warning()
 
     return True
