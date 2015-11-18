@@ -50,8 +50,6 @@ def error():
 # get or create payer in Salesforce - add Stripe Customer Id
 # create opportunity or recurring donation object
 
-# Sample Request
-
 @app.route('/charge', methods=['POST'])
 def charge():
 
@@ -74,8 +72,7 @@ def charge():
     # except stripe.error.CardError, e:
     # The card has been declined
     #print ('Charge: {}'.format(charge))
-
-    if (request.form['OpenEndedStatus'] == 'None'):
+    if (request.form['InstallmentPeriod'] == 'None'):
         print("----One time payment...")
         add_opportunity(request=request, customer=customer)
     else:

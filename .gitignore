@@ -4,3 +4,5 @@ env
 /static/css/
 *.DS_Store
 .cache
+.coverage
+htmlcov
