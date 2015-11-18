@@ -2,7 +2,6 @@ import os
 
 import stripe
 from flask import Flask, render_template, request
-from flask.ext.mail import Mail, Message
 
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
@@ -27,7 +26,6 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 
 app.config.from_pyfile('config.py')
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
-mail = Mail(app)
 
 #import ipdb; ipdb.set_trace()
 
