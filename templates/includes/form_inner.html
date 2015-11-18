@@ -1,8 +1,8 @@
 <div class="form-outer-section">
   <h2>Name</h2>
   <div class="form-section three">
-    <label>First</label><br>
-      <input name="Contact.FirstName" type="text" maxlength="50">
+    {{ form.first_name.label }}<br>
+      {{ form.first_name(maxlength=50) }}
   </div>
   <div class="form-section three">
     <label>Last</label><br>
@@ -10,33 +10,10 @@
   </div>
 </div>
 <div class="form-outer-section">
-  <h2>Billing Info</h2>
-  <div class="form-section three">
-    <label>Phone</label><br>
-      <input name="Contact.HomePhone" maxlength="50" type="tel">
-  </div>
-  <div class="form-section three break">
-    <label>Billing Address</label><br>
-      <input name="Contact.MailingStreet" type="text" maxlength="50">
-  </div>
-  <div class="form-section three break">
-    <label>City</label><br>
-      <input name="Contact.MailingCity" type="text"></input>
-  </div>
-  <div class="form-section three">
-    <label>State</label><br>
-      <input name="Contact.MailingState" type="text"></input>
-  </div>
-  <div class="form-section three">
-    <label>Zip Code</label><br>
-      <input name="Contact.MailingPostalCode" type="text" maxlength="5" data-parsley-required="true" data-parsley-minlength="5" data-parsley-maxlength="5">
-  </div>
-</div>
-<div class="form-outer-section">
   <h2>Additional Info</h2>
   <div class="form-section four">
-    <label>Encouraged to contribute by</label>
-      <input name="Reason" type="text" maxlength="100">
+    {{ form.reason.label }}
+      {{ form.reason(maxlength=100) }}
   </div>
 </div>
 <input name="Description" class="visually-hidden">

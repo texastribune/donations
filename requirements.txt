@@ -4,3 +4,5 @@ Flask==0.10.1
 gunicorn==19.3.0
 libsass==0.8.3
 pytz==2015.6
+Flask-WTF==0.9.5
+WTForms==2.0.2

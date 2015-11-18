@@ -4,7 +4,8 @@ from flask import Flask, render_template, request
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
-from config import stripe_keys
+from config import stripe_keys, FLASK_SECRET_KEY
+from forms import DonateForm
 
 from pprint import pprint
 
@@ -14,24 +15,29 @@ stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
 
+app.secret_key = FLASK_SECRET_KEY
+
 app.wsgi_app = SassMiddleware(app.wsgi_app, {
         'app': ('static/sass', 'static/css', 'static/css')
     })
 
 @app.route('/memberform')
-def checkout_form():
+def member_form():
+    form = DonateForm()
     amount = request.args.get('amount')
-    return render_template('member-form.html', key=stripe_keys['publishable_key'])
+    return render_template('member-form.html', form=form, key=stripe_keys['publishable_key'])
 
 
 @app.route('/donateform')
 def donate_renew_form():
-    return render_template('donate-form.html', key=stripe_keys['publishable_key'])
+    form = DonateForm()
+    return render_template('donate-form.html', form=form, key=stripe_keys['publishable_key'])
 
 
 @app.route('/circleform')
 def circle_form():
-    return render_template('circle-form.html', key=stripe_keys['publishable_key'])
+    form = DonateForm()
+    return render_template('circle-form.html', form=form, key=stripe_keys['publishable_key'])
 
 
 @app.route('/error')

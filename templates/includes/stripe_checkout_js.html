@@ -1,16 +1,7 @@
 <script>
 var stripe_donation = function() {
   var donation_amount = $('.dollar').val();
-  var valid = false;
   donation_amount *= 100;
-
-  var validateAll = function () {
-    if (true === $('#form').parsley().isValid()) {
-      valid = true;
-    } else {
-      valid = false;
-    }
-  };
 
   var handler = StripeCheckout.configure({
     key: '{{ key }}',
@@ -27,10 +18,6 @@ var stripe_donation = function() {
   });
 
   $('#customButton').on('click', function(e) {
-    $('#form').parsley().validate();
-    validateAll();
-
-    if (valid === true) {
       // If form is valid, open Checkout with further options
       handler.open({
         name: 'The Texas Tribune',
@@ -38,7 +25,6 @@ var stripe_donation = function() {
         amount: donation_amount
       });
       e.preventDefault();
-      }
   });
 
   // Close Checkout on page navigation

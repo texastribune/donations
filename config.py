@@ -8,6 +8,8 @@ stripe_keys = {
     'publishable_key': os.environ['PUBLISHABLE_KEY']
 }
 
+FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
+
 SALESFORCE = {
     "CLIENT_ID": os.environ['SALESFORCE_CLIENT_ID'],
     "CLIENT_SECRET": os.environ['SALESFORCE_CLIENT_SECRET'],
@@ -15,5 +17,3 @@ SALESFORCE = {
     "PASSWORD": os.environ['SALESFORCE_PASSWORD'],
     "HOST": os.environ["SALESFORCE_HOST"]
 }
-
-

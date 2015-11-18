@@ -2,7 +2,8 @@
 
 {% block content %}
   <div class="main">
-    <form id="form" action="/charge" method="post" data-parsley-validate="">
+    <form action="/charge" method="post">
+      {{ form.csrf_token }}
       <div class="form-outer-section">
         <p>Thank you for supporting The Texas Tribune by becoming a member! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, click <a href="/donateform?amount=10">here</a>.</p>
         <h2>Membership Info</h2>
@@ -28,9 +29,7 @@
         </div>
         {% endif %}
       </div>
-
       {% include 'includes/form_inner.html' %}
-
     </form>
   </div>
   {% if request.args.installmentPeriod and request.args.amount %}
