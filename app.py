@@ -76,6 +76,7 @@ def error():
 @app.route('/charge', methods=['POST'])
 def charge():
 
+    form = DonateForm(request.form)
 
     pprint ('Request: {}'.format(request))
 
@@ -95,14 +96,17 @@ def charge():
     # except stripe.error.CardError, e:
     # The card has been declined
     #print ('Charge: {}'.format(charge))
-    if (request.form['InstallmentPeriod'] == 'None'):
-        print("----One time payment...")
-        add_opportunity(request=request, customer=customer)
+    if form.validate():
+        if (request.form['installment_period'] == 'None'):
+            print("----One time payment...")
+            add_opportunity(request=request, customer=customer)
+        else:
+            print("----Recurring payment...")
+            add_recurring_donation(request=request, customer=customer)
+        return render_template('charge.html', amount=request.form['amount'])
     else:
-        print("----Recurring payment...")
-        add_recurring_donation(request=request, customer=customer)
-
-    return render_template('charge.html', amount=request.form['Opportunity.Amount'])
+        message = "Sorry, there was an issue saving your form."
+        return render_template('error.html', message=message)
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
