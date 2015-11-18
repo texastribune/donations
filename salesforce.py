@@ -321,6 +321,7 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
     amount = request.form['Opportunity.Amount']
+    type = ''
 
     # TODO: test this
     if request.form['OpenEndedStatus'] == 'None' and (
