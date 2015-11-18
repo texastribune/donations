@@ -7,7 +7,7 @@ from pytz import timezone
 
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
-#from pprint import pprint  # TODO: remove
+# from pprint import pprint  # TODO: remove
 
 # TODO: read environment for the timezone?
 zone = timezone('US/Central')
@@ -16,6 +16,57 @@ zone = timezone('US/Central')
 # https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+
+
+def send_email(recipient, subject, body, sender=None):
+    import smtplib
+
+    from config import MAIL_SERVER
+    from config import MAIL_PORT
+    from config import MAIL_USERNAME
+    from config import MAIL_PASSWORD
+    from config import DEFAULT_MAIL_SENDER
+
+    if sender is None:
+        FROM = DEFAULT_MAIL_SENDER
+    else:
+        FROM = sender
+
+    TO = recipient if type(recipient) is list else [recipient]
+    SUBJECT = subject
+    TEXT = body
+
+    # Prepare actual message
+    message = """\From: %s\nTo: %s\nSubject: %s\n\n%s
+    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
+    try:
+        server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
+        server.ehlo()
+        server.starttls()
+        server.login(MAIL_USERNAME, MAIL_PASSWORD)
+        server.sendmail(FROM, TO, message)
+        server.close()
+        print ('successfully sent the mail')
+    except:
+        print ('failed to send mail')
+
+
+def send_multiple_account_warning(email):
+    body = """
+    Multiple accounts were found matching the email address [{}]
+    while inserting a Stripe transaction.
+
+    The transaction was attached to the first match found. You may want to
+    move the transaction to the proper account if the one chosen is not
+    correct. You may also want to delete or otherwise correct the duplicate
+    account(s).
+    """.format(email)
+
+    send_email(
+            recipient='dcraigmile@texastribune.org',
+            subject="Multiple accounts found for {}".format(email),
+            body=body
+            )
 
 
 class SalesforceConnection(object):
@@ -157,8 +208,9 @@ class SalesforceConnection(object):
         """
 
         created = False
+        email = request_form['stripeEmail']
 
-        response = self.find_contact(email=request_form['stripeEmail'])
+        response = self.find_contact(email=email)
 
         # if the response is empty then nothing matched and we
         # have to create a contact:
@@ -168,14 +220,14 @@ class SalesforceConnection(object):
             return created, contact
 
         elif len(response) > 1:
-            print ("more than one result")
-            # TODO: send alert because more than one account matched
+            send_multiple_account_warning(email=email)
 
         return created, response[0]
 
 
 def check_response(response=None, expected_status=200):
     if response.status_code != expected_status:
+        # TODO: do something useful with the exception arg
         raise Exception("bad")
     return True
 
@@ -304,13 +356,15 @@ def add_recurring_donation(request=None, customer=None):
 
     print ("----Adding recurring donation...")
     sf = SalesforceConnection()
-    _, contact = sf.get_or_create_contact(request.form)
-    recurring_donation = _format_recurring_donation(contact=contact,
-            request=request, customer=customer)
-    # pprint (recurring_donation)
-    path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
-    response = sf.post(path=path, data=recurring_donation)
-    # TODO: error handling
-    # pprint(response)
+    try:
+        _, contact = sf.get_or_create_contact(request.form)
+    finally:
+        recurring_donation = _format_recurring_donation(contact=contact,
+                request=request, customer=customer)
+        # pprint (recurring_donation)
+        path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
+        response = sf.post(path=path, data=recurring_donation)
+        # TODO: error handling
+        # pprint(response)
 
     return True
