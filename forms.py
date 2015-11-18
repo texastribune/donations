@@ -8,7 +8,7 @@ from flask import request
 class DonateForm(Form):
     first_name = StringField(u'First',
         [validators.required(message="Your first name is required.")])
-    last_name = StringField(u'Last Name',
+    last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
     amount = IntegerField(u'Amount',
         [validators.required(message="Please choose a donation amount.")])

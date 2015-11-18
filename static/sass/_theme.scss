@@ -143,18 +143,12 @@ input::-webkit-inner-spin-button, {
     -webkit-appearance: none;
     margin: 0;
 }
-input, select {
+input {
   margin: 0.5em 0.5em 1em 0;
-}
-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: $white;
-  border-radius: 5px;
-  border: none;
-  padding: 1em 0;
 }
 p {
   font-style: italic;
+}
+.error-message {
+  color: red;
 }

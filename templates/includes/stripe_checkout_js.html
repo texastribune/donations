@@ -32,6 +32,7 @@ var stripe_donation = function() {
   $('#customButton').on('click', function(e) {
       check_required_inputs();
       if (first_name_exists & last_name_exists) {
+        $('.error-message').text('');
         // If form is valid, open Checkout with further options
         handler.open({
           name: 'The Texas Tribune',
@@ -39,7 +40,7 @@ var stripe_donation = function() {
           amount: donation_amount
         });
       } else {
-        alert('Please enter both first and last name');
+        $('.error-message').text('Please check that you entered your first and last name, and then resubmit.');
       };
       e.preventDefault();
   });
