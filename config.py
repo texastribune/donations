@@ -26,7 +26,7 @@ DEFAULT_MAIL_SENDER = 'salesforce@texastribune.org'
 MEMBERSHIP_RECORDTYPEID = '01216000001IhHp'
 DONATION_RECORDTYPEID = '01216000001IhI9'
 
-stripe_keys = {
+STRIPE_KEYS = {
     'secret_key': os.environ['SECRET_KEY'],
     'publishable_key': os.environ['PUBLISHABLE_KEY']
 }

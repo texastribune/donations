@@ -319,7 +319,7 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
         type = 'Giving Circle'
 
     # TODO: test this:
-    if request.form['installments'] is not 'None':
+    if request.form['installments'] == '3' or request.form['installments'] == '36':
         amount = int(amount) * int(request.form['installments'])
 
     recurring_donation = {

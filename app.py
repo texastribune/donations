@@ -8,6 +8,8 @@ from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
 #from config import stripe_keys
+from config import FLASK_SECRET_KEY
+from forms import DonateForm
 
 from pprint import pprint
 
@@ -42,7 +44,7 @@ def member_form():
     openended_status = 'Open'
     return render_template('member-form.html', form=form, amount=amount, \
         installment_period=installment_period, installments=installments, \
-        openended_status=openended_status, key=stripe_keys['publishable_key'])
+        openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/donateform')
@@ -57,7 +59,7 @@ def donate_renew_form():
     installment_period = 'None'
     return render_template('donate-form.html', form=form, amount=amount, \
         installment_period=installment_period, installments=installments, \
-        openended_status=openended_status, key=stripe_keys['publishable_key'])
+        openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/circleform')
@@ -69,7 +71,7 @@ def circle_form():
     installment_period = request.args.get('installmentPeriod')
     return render_template('circle-form.html', form=form, amount=amount, \
         installment_period=installment_period, installments=installments, \
-        openended_status=openended_status, key=stripe_keys['publishable_key'])
+        openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/error')
