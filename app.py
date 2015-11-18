@@ -1,37 +1,46 @@
 import os
+
 import stripe
 from flask import Flask, render_template, request
+from flask.ext.mail import Mail, Message
+
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
-from config import stripe_keys
+#from config import stripe_keys
 
 from pprint import pprint
 
 from sassutils.wsgi import SassMiddleware
 
-stripe.api_key = stripe_keys['secret_key']
+#stripe.api_key = stripe_keys['secret_key']
 
 app = Flask(__name__)
-
 app.wsgi_app = SassMiddleware(app.wsgi_app, {
         'app': ('static/sass', 'static/css', 'static/css')
-    })
+        })
+
+app.config.from_pyfile('config.py')
+stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
+mail = Mail(app)
+
+#import ipdb; ipdb.set_trace()
+
 
 @app.route('/memberform')
 def checkout_form():
     amount = request.args.get('amount')
-    return render_template('member-form.html', key=stripe_keys['publishable_key'])
+    return render_template('member-form.html', key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/donateform')
 def donate_renew_form():
-    return render_template('donate-form.html', key=stripe_keys['publishable_key'])
+    return render_template('donate-form.html', key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/circleform')
 def circle_form():
-    return render_template('circle-form.html', key=stripe_keys['publishable_key'])
+    return render_template('circle-form.html', key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/error')
@@ -40,9 +49,7 @@ def error():
     return render_template('error.html', message=message)
 
 
-# create customer in Stripe
-# get or create payer in Salesforce - add Stripe Customer Id
-# create opportunity or recurring donation object
+
 
 @app.route('/charge', methods=['POST'])
 def charge():
