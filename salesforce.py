@@ -1,11 +1,13 @@
+from datetime import datetime
 import json
+import locale
+
 import requests
 from pytz import timezone
-import locale
-from datetime import datetime
+
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
-from pprint import pprint  # TODO: remove
+#from pprint import pprint  # TODO: remove
 
 # TODO: read environment for the timezone?
 zone = timezone('US/Central')
@@ -68,14 +70,11 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
         response = json.loads(resp.text)
-        pprint(response)
-        pprint(resp)
+        # pprint(response)
+        # pprint(resp)
         print (resp.status_code)
         check_response(response=resp, expected_status=201)
-        if resp.status_code != 201:
-            raise Exception("bad")  # TODO
-        else:
-            return response
+        return response
 
 
     def _format_contact(self, request_form=None):
@@ -197,16 +196,14 @@ def upsert(customer=None, request=None):
     if not created:
         print ("----Exists, updating")
         # pprint (contact)
+
         path = '/services/data/v34.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
         print (url)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
         print (resp)
-        if resp.status_code == 204:
-            print ("ok")
-        else:
-            raise Exception('problem')
+        check_response(response=resp, expected_status=204)
 
     return True
 
@@ -237,7 +234,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
             'Encouraged_to_contribute_by__c': '{}'.format(request.form['Reason']),
             # Co Member First name, last name, and email
             }
-    pprint (opportunity)
+    # pprint (opportunity)
     return opportunity
 
 
@@ -250,7 +247,7 @@ def add_opportunity(request=None, customer=None, charge=None):
             customer=customer)
     path = '/services/data/v34.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
-    pprint(response)
+    # pprint(response)
 
     return response
 
@@ -259,11 +256,23 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
+    amount = request.form['Opportunity.Amount']
+
+    # TODO: test this
+    if request.form['OpenEndedStatus'] == 'None' and (
+            request.form['Installments'] == '3' or
+            request.form['Installments'] == '36') and (
+                    request.form['InstallmentPeriod'] == 'yearly' or
+            request.form['InstallmentPeriod'] == 'monthly'):
+        type = 'Giving Circle'
+
+    # TODO: test this:
+    if request.form['Installments'] is not None:
+        amount = int(amount) * int(request.form['Installments'])
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
-            'npe03__Amount__c': '{}'.format(
-                request.form['Opportunity.Amount']),
+            'npe03__Amount__c': '{}'.format(amount),
             'npe03__Date_Established__c': today,
             'npe03__Open_Ended_Status__c': '',
             'Name': '{} for {} {}'.format(
@@ -275,9 +284,11 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'Lead_Source__c': 'Stripe',
             'Encouraged_to_contribute_by__c': '{}'.format(
                 request.form['Reason']),
-            'npe03__Open_Ended_Status__c': 'Open',
-            'npe03__Installments__c': '',  # TODO: 3 or 36 for circle
-            'npe03__Installment_Period__c': 'Monthly',  # TODO: could be yearly
+            'npe03__Open_Ended_Status__c': request.form['OpenEndedStatus'],
+            'npe03__Installments__c': request.form['Installments'],
+            'npe03__Installment_Period__c': request.form['InstallmentPeriod'],
+            'Type__c': type,
+
             # Co Member First name, last name, and email  TODO
             # Type (Giving Circle, etc) TODO
             }
@@ -295,6 +306,6 @@ def add_recurring_donation(request=None, customer=None):
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
     response = sf.post(path=path, data=recurring_donation)
     # TODO: error handling
-    pprint(response)
+    # pprint(response)
 
     return True
