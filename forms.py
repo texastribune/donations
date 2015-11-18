@@ -1,15 +1,17 @@
 from flask_wtf import Form
 
-from wtforms.fields import StringField, IntegerField
-from wtforms.validators import *
+from wtforms.fields import StringField, IntegerField, HiddenField
+from wtforms import validators
 
 from flask import request
 
 class DonateForm(Form):
-    first_name = StringField(u'First')
-    last_name = StringField(u'Last Name')
+    first_name = StringField(u'First',
+        [validators.required(message="Your first name is required.")])
+    last_name = StringField(u'Last Name',
+        [validators.required(message="Your last name is required.")])
     amount = IntegerField(u'Amount')
-    installment_period = StringField(u'Installment Period')
-    installments = IntegerField(u'Installments')
     reason = StringField(u'Encouraged to contribute by')
-    openended_status = StringField(u'Openended Status')
+    installment_period = HiddenField(u'Installment Period')
+    installments = HiddenField(u'Installments')
+    openended_status = HiddenField(u'Openended Status')

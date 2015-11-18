@@ -1,7 +1,7 @@
 var display_level = function() {
-  var frequency = $('input[name="InstallmentPeriod"]').val();
+  var frequency = $('input[name="installment_period"]').val();
 
-  var input_amount = $('input[name="Opportunity.Amount"]').val();
+  var input_amount = $('input[name="amount"]').val();
 
   var level_label = $('.level');
 

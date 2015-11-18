@@ -24,8 +24,16 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 @app.route('/memberform')
 def member_form():
     form = DonateForm()
-    amount = request.args.get('amount')
-    return render_template('member-form.html', form=form, key=stripe_keys['publishable_key'])
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        amount=False
+    installment_period = request.args.get('installmentPeriod')
+    installments = None
+    openended_status = 'Open'
+    return render_template('member-form.html', form=form, amount=amount, \
+        installment_period=installment_period, installments=installments, \
+        key=stripe_keys['publishable_key'])
 
 
 @app.route('/donateform')

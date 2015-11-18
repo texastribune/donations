@@ -87,13 +87,8 @@ class SalesforceConnection(object):
 
         contact = {
             'Email': request_form['stripeEmail'],
-            'FirstName': request_form['Contact.FirstName'],
-            'LastName': request_form['Contact.LastName'],
-            'HomePhone': request_form['Contact.HomePhone'],
-            'MailingStreet': request_form['Contact.MailingStreet'],
-            'MailingCity': 'Austin',
-            'MailingState': 'TX',
-            'MailingPostalCode': request_form['Contact.MailingPostalCode'],
+            'FirstName': request_form['first_name'],
+            'LastName': request_form['last_name'],
             'Description': 'added by Stripe/Checkout app',
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
@@ -229,8 +224,8 @@ def _format_opportunity(contact=None, request=None, customer=None):
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': '{}{} ({})'.format(
-                request.form['Contact.FirstName'],
-                request.form['Contact.LastName'],
+                request.form['first_name'],
+                request.form['last_name'],
                 request.form['stripeEmail'],
                 ),
             'StageName': 'Pledged',
@@ -273,8 +268,8 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'npe03__Open_Ended_Status__c': '',
             'Name': '{} for {} {}'.format(
                 now,
-                request.form['Contact.FirstName'],
-                request.form['Contact.LastName'],
+                request.form['first_name'],
+                request.form['last_name'],
                 ),
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',

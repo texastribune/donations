@@ -8,21 +8,19 @@
         <p>Thank you for supporting The Texas Tribune by becoming a member! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, click <a href="/donateform?amount=10">here</a>.</p>
         <h2>Membership Info</h2>
         <div class="form-section three">
-          <label>{{ request.args.installmentPeriod }} Amount</label><br>
+          <label>{% if installment_period == 'annually' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
             <span class="dollar">$</span>
-            {% if request.args.amount %}
-              <input readonly name="Opportunity.Amount" value="{{ request.args.amount }}" type="number" class="dollar uneditable">
+            {% if amount %}
+              {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
             {% else %}
-              <input name="Opportunity.Amount" value="10" type="number" class="dollar">
+              {{ form.amount(value=10, class="dollar") }}
             {% endif %}
         </div>
         <div class="form-section three">
-          <label>Length</label><br>
-            <select name="OpenEndedStatus" class="label-info">
-              <option value="Open">Until Cancelled</option>
-            </select>
+          <label>Membership</label><br>
+            <p class="label-info">{{ installment_period|title }} Until Canceled</p>
         </div>
-        {% if request.args.installmentPeriod and request.args.amount %}
+        {% if installment_period and amount %}
         <div class="form-section three">
           <label>Level</label><br>
           <p class="level label-info"></p>

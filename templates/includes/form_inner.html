@@ -5,8 +5,8 @@
       {{ form.first_name(maxlength=50) }}
   </div>
   <div class="form-section three">
-    <label>Last</label><br>
-      <input name="Contact.LastName" type="text" maxlength="50">
+    {{ form.last_name.label }}<br>
+      {{ form.last_name(maxlength=50) }}
   </div>
 </div>
 <div class="form-outer-section">
@@ -16,17 +16,10 @@
       {{ form.reason(maxlength=100) }}
   </div>
 </div>
-<input name="Description" class="visually-hidden">
-{% if request.args.installments %}
-  <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
-{% else %}
-  <input name="Installments" value="None" class="visually-hidden">
-{% endif %}
-{% if request.args.installmentPeriod %}
-  <input name="InstallmentPeriod" value="{{ request.args.installmentPeriod }}" class="visually-hidden">
-{% else %}
-  <input name="InstallmentPeriod" value="None" class="visually-hidden">
-{% endif %}
+  <input name="Description" class="visually-hidden">
+  {{ form.installments(value=installments) }}
+  {{ form.installment_period(value=installment_period) }}
+  {{ form.openended_status(value=openended_status) }}
 <div class="form-outer-section">
   <script src="https://checkout.stripe.com/checkout.js"></script>
   <button id="customButton" class="button button-flat">Pay by Card</button>
