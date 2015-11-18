@@ -30,7 +30,7 @@
       {% include 'includes/form_inner.html' %}
     </form>
   </div>
-  {% if request.args.installmentPeriod and request.args.amount %}
+  {% if installment_period and amount %}
     {% include 'includes/display_levels_js.html' %}
   {% endif %}
   {% include 'includes/stripe_checkout_js.html' %}
