@@ -14,6 +14,7 @@ var stripe_donation = function() {
 
   var donation_amount = $('.dollar').val();
   donation_amount *= 100;
+  var charge_description = $('#description').val();
 
   var handler = StripeCheckout.configure({
     key: '{{ key }}',
@@ -36,7 +37,7 @@ var stripe_donation = function() {
         // If form is valid, open Checkout with further options
         handler.open({
           name: 'The Texas Tribune',
-          description: 'The Texas Tribune Donation',
+          description: charge_description,
           amount: donation_amount
         });
       } else {

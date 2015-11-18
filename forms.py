@@ -16,3 +16,4 @@ class DonateForm(Form):
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
     openended_status = HiddenField(u'Openended Status')
+    description = HiddenField(u'Description')
