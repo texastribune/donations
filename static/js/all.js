@@ -26,7 +26,9 @@ var display_level = function() {
     }
   } else {
     // detemine level and update text based on yearly frequency
-    if (input_amount > 35 && input_amount <= 59) {
+    if (input_amount == 10) {
+      level_label.text('Student');
+    } else if (input_amount > 35 && input_amount <= 59) {
       level_label.text('Enthusiast');
     } else if (input_amount > 59 && input_amount <= 149) {
       level_label.text('Activist');

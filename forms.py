@@ -10,7 +10,8 @@ class DonateForm(Form):
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last Name',
         [validators.required(message="Your last name is required.")])
-    amount = IntegerField(u'Amount')
+    amount = IntegerField(u'Amount',
+        [validators.required(message="Please choose a donation amount.")])
     reason = StringField(u'Encouraged to contribute by')
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
