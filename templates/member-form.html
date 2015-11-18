@@ -8,7 +8,7 @@
         <p>Thank you for supporting The Texas Tribune by becoming a member! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, click <a href="/donateform">here</a>.</p>
         <h2>Membership Info</h2>
         <div class="form-section three">
-          <label>{% if installment_period == 'annually' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
+          <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
             <span class="dollar">$</span>
             {% if amount %}
               {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
@@ -18,7 +18,7 @@
         </div>
         <div class="form-section three">
           <label>Membership</label><br>
-            <p class="label-info">{{ installment_period|title }} Until Canceled</p>
+            <p class="label-info">{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Until Canceled</p>
         </div>
         {% if installment_period and amount %}
         <div class="form-section three">

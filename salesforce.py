@@ -217,7 +217,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
 
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(request.form['Opportunity.Amount']),
+            'Amount': '{}'.format(request.form['amount']),
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': '{}{} ({})'.format(
@@ -231,7 +231,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
 #            'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
 #            'Description': charge.description,
-            'Encouraged_to_contribute_by__c': '{}'.format(request.form['Reason']),
+            'Encouraged_to_contribute_by__c': '{}'.format(request.form['reason']),
             # Co Member First name, last name, and email
             }
     # pprint (opportunity)
@@ -256,19 +256,19 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
-    amount = request.form['Opportunity.Amount']
+    amount = request.form['amount']
 
     # TODO: test this
-    if request.form['OpenEndedStatus'] == 'None' and (
-            request.form['Installments'] == '3' or
-            request.form['Installments'] == '36') and (
-                    request.form['InstallmentPeriod'] == 'yearly' or
-            request.form['InstallmentPeriod'] == 'monthly'):
+    if request.form['openended_status'] == 'None' and (
+            request.form['installments'] == '3' or
+            request.form['installments'] == '36') and (
+                    request.form['installment_period'] == 'yearly' or
+            request.form['installment_period'] == 'monthly'):
         type = 'Giving Circle'
 
     # TODO: test this:
-    if request.form['Installments'] is not None:
-        amount = int(amount) * int(request.form['Installments'])
+    if request.form['installments'] is not 'None':
+        amount = int(amount) * int(request.form['installments'])
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
@@ -283,10 +283,10 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',
             'Encouraged_to_contribute_by__c': '{}'.format(
-                request.form['Reason']),
-            'npe03__Open_Ended_Status__c': request.form['OpenEndedStatus'],
-            'npe03__Installments__c': request.form['Installments'],
-            'npe03__Installment_Period__c': request.form['InstallmentPeriod'],
+                request.form['reason']),
+            'npe03__Open_Ended_Status__c': request.form['openended_status'],
+            'npe03__Installments__c': request.form['installments'],
+            'npe03__Installment_Period__c': request.form['installment_period'],
             'Type__c': type,
 
             # Co Member First name, last name, and email  TODO

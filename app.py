@@ -100,10 +100,11 @@ def charge():
         if (request.form['installment_period'] == 'None'):
             print("----One time payment...")
             add_opportunity(request=request, customer=customer)
+            return render_template('charge.html', amount=request.form['amount'])
         else:
             print("----Recurring payment...")
             add_recurring_donation(request=request, customer=customer)
-        return render_template('charge.html', amount=request.form['amount'])
+            return render_template('charge.html', amount=request.form['amount'])
     else:
         message = "Sorry, there was an issue saving your form."
         return render_template('error.html', message=message)
