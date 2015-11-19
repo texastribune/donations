@@ -328,19 +328,30 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
     amount = request.form['Opportunity.Amount']
-    type = ''
+    type__c = ''
+    try:
+        installments = request.form['Installments']
+    except:
+        installments = None
+    try:
+        open_ended_status = request.form['OpenEndedStatus']
+    except:
+        open_ended_status = None
+    try:
+        installment_period = request.form['InstallmentPeriod']
+    except:
+        installment_period = None
 
     # TODO: test this
-    if request.form['OpenEndedStatus'] == 'None' and (
-            request.form['Installments'] == '3' or
-            request.form['Installments'] == '36') and (
-                    request.form['InstallmentPeriod'] == 'yearly' or
-            request.form['InstallmentPeriod'] == 'monthly'):
-        type = 'Giving Circle'
+    if ['open_ended_status'] == 'None' and (
+            installments == '3' or installments == '36') and (
+                    installment_period == 'yearly' or
+                    installment_period == 'monthly'):
+        type__c = 'Giving Circle'
 
     # TODO: test this:
-    if request.form['Installments'] is not None:
-        amount = int(amount) * int(request.form['Installments'])
+    if installments is not None:
+        amount = int(amount) * int(installments)
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
@@ -356,10 +367,10 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'Lead_Source__c': 'Stripe',
             'Encouraged_to_contribute_by__c': '{}'.format(
                 request.form['Reason']),
-            'npe03__Open_Ended_Status__c': request.form['OpenEndedStatus'],
-            'npe03__Installments__c': request.form['Installments'],
-            'npe03__Installment_Period__c': request.form['InstallmentPeriod'],
-            'Type__c': type,
+            'npe03__Open_Ended_Status__c': open_ended_status,
+            'npe03__Installments__c': installments,
+            'npe03__Installment_Period__c': installment_period,
+            'Type__c': type__c,
 
             # Co Member First name, last name, and email  TODO
             # Type (Giving Circle, etc) TODO
