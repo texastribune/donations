@@ -19,6 +19,7 @@ locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 WARNINGS = dict()
 
+
 def send_email(recipient, subject, body, sender=None):
     import smtplib
 
@@ -51,8 +52,10 @@ def send_email(recipient, subject, body, sender=None):
     except:
         print ('failed to send mail')
 
+
 def warn_multiple_accounts(email, count):
     WARNINGS[email] = count
+
 
 def send_multiple_account_warning():
 
@@ -107,7 +110,6 @@ class SalesforceConnection(object):
 
         return None
 
-
     def query(self, query, path='/services/data/v34.0/query'):
         url = '{}{}'.format(self.instance_url, path)
         if query is None:
@@ -132,7 +134,6 @@ class SalesforceConnection(object):
         print (resp.status_code)
         check_response(response=resp, expected_status=201)
         return response
-
 
     def _format_contact(self, request_form=None):
 
@@ -289,7 +290,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
             'Amount': '{}'.format(request.form['Opportunity.Amount']),
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
-            'Name': '{}{} ({})'.format(
+            'Name': '{} {} ({})'.format(
                 request.form['Contact.FirstName'],
                 request.form['Contact.LastName'],
                 request.form['stripeEmail'],

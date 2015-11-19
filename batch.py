@@ -21,11 +21,12 @@ query = """
     AND Stripe_Customer_Id__c != ''
     """.format(today, three_days_ago)
 
-# print(query)
+print(query)
 sf = SalesforceConnection()
-sf.init()
+
 response = sf.query(query)
-# print(response)
+# TODO: check response code
+
 print ("---- Found {} opportunities available to process:".format(
     len(response)))
 
