@@ -232,9 +232,15 @@ class SalesforceConnection(object):
 
 
 def check_response(response=None, expected_status=200):
-    if response.status_code != expected_status:
-        # TODO: do something useful with the exception arg
-        raise Exception("bad")
+    code = response.status_code
+    try:
+        content = json.loads(response.content.decode('utf-8'))
+        if not content['success']:
+            print(content['errors'])
+    except:
+        print ('unable to parse response')
+    if code != expected_status:
+        raise Exception('Expected {} but got {}'.format(expected_status, code))
     return True
 
 
