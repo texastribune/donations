@@ -327,15 +327,15 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     try:
         installments = request.form['Installments']
     except:
-        installments = None
+        installments = 'None'
     try:
         open_ended_status = request.form['OpenEndedStatus']
     except:
-        open_ended_status = None
+        open_ended_status = 'None'
     try:
         installment_period = request.form['InstallmentPeriod']
     except:
-        installment_period = None
+        installment_period = 'None'
 
     # TODO: test this
     if ['open_ended_status'] == 'None' and (
@@ -345,8 +345,10 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
         type__c = 'Giving Circle'
 
     # TODO: test this:
-    if installments is not None:
+    if installments != 'None':
         amount = int(amount) * int(installments)
+    else:
+        installments = 0
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
