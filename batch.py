@@ -1,11 +1,11 @@
 from salesforce import SalesforceConnection
 import stripe
-from config import stripe_keys
+from config import STRIPE_KEYS
 import requests
 import json
 from datetime import datetime, timedelta
 
-stripe.api_key = stripe_keys['secret_key']
+stripe.api_key = STRIPE_KEYS['secret_key']
 
 # TODO: send alert for failures
 

@@ -6,7 +6,6 @@ from flask import Flask, render_template, request
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
-#from config import stripe_keys
 
 from pprint import pprint
 
