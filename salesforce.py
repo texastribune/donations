@@ -7,13 +7,9 @@ from pytz import timezone
 
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
-# from pprint import pprint  # TODO: remove
+from config import TIMEZONE
 
-# TODO: read environment for the timezone?
-zone = timezone('US/Central')
-
-# TODO: insert URLs like this?
-# https://dashboard.stripe.com/test/customers/cus_77dLtLXIezcSHe?
+zone = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
