@@ -1,13 +1,14 @@
 from salesforce import SalesforceConnection
 import stripe
-from config import stripe_keys
+from config import STRIPE_KEYS
 import requests
 import json
 from datetime import datetime, timedelta
 
-stripe.api_key = stripe_keys['secret_key']
+stripe.api_key = STRIPE_KEYS['secret_key']
 
 # TODO: send alert for failures
+# TODO: send report at the end of each run?
 
 three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
 today = datetime.now().strftime('%Y-%m-%d')
@@ -21,11 +22,12 @@ query = """
     AND Stripe_Customer_Id__c != ''
     """.format(today, three_days_ago)
 
-# print(query)
+print(query)
 sf = SalesforceConnection()
-sf.init()
+
 response = sf.query(query)
-# print(response)
+# TODO: check response code
+
 print ("---- Found {} opportunities available to process:".format(
     len(response)))
 

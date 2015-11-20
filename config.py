@@ -1,5 +1,7 @@
 import os
 
+TIMEZONE = "US/Central"
+
 ########
 # Celery
 #
