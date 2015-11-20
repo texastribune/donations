@@ -8,6 +8,7 @@ from datetime import datetime, timedelta
 stripe.api_key = STRIPE_KEYS['secret_key']
 
 # TODO: send alert for failures
+# TODO: send report at the end of each run?
 
 three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
 today = datetime.now().strftime('%Y-%m-%d')
