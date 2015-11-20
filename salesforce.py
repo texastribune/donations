@@ -368,7 +368,6 @@ def add_recurring_donation(request=None, customer=None):
             request=request, customer=customer)
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
     response = sf.post(path=path, data=recurring_donation)
-    check_response(response)
     send_multiple_account_warning()
 
     return True
