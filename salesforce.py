@@ -89,12 +89,10 @@ class SalesforceConnection(object):
         self.url = '{}://{}{}'.format('https', SALESFORCE['HOST'],
                 token_path)
 
-        # TODO: some error handling here:
         r = requests.post(self.url, data=self.payload)
-        print (r)
-        print (r.text)
+        check_response(r)
         response = json.loads(r.text)
-        print(response)
+
         self.instance_url = response['instance_url']
         access_token = response['access_token']
 
@@ -112,8 +110,8 @@ class SalesforceConnection(object):
             payload = {}
         else:
             payload = {'q': query}
-        # TODO: error handling:
         r = requests.get(url, headers=self.headers, params=payload)
+        check_response(r)
         response = json.loads(r.text)
         # recursively get the rest of the records:
         if response['done'] is False:
@@ -125,9 +123,6 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
         response = json.loads(resp.text)
-        # pprint(response)
-        # pprint(resp)
-        print (resp.status_code)
         check_response(response=resp, expected_status=201)
         return response
 
@@ -166,7 +161,6 @@ class SalesforceConnection(object):
                 FROM Contact
                 WHERE id = '{}'
                 """.format(contact_id)
-        # pprint (query)
         response = self.query(query)
         # unlike elsewhere there should only be one result here because we're
         # querying on a 1:1 relationship:
@@ -183,7 +177,6 @@ class SalesforceConnection(object):
         contact = self._format_contact(request_form=request_form)
         path = '/services/data/v34.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
-        print(response)
         contact_id = response['id']
         contact = self._get_contact(contact_id)
         return contact
@@ -200,7 +193,6 @@ class SalesforceConnection(object):
                 WHERE All_In_One_EMail__c
                 LIKE '%{}%'
                 """.format(email)
-        # pprint (query)
         response = self.query(query)
         return response
 
@@ -229,12 +221,13 @@ class SalesforceConnection(object):
 
 
 def check_response(response=None, expected_status=200):
+    # TODO: look for 'success'
     code = response.status_code
     try:
         content = json.loads(response.content.decode('utf-8'))
         print (content)
     except:
-        print ('unable to parse response')
+        print ('unable to parse response (this is probably okay)')
     if code != expected_status:
         raise Exception('Expected {} but got {}'.format(expected_status, code))
     return True
@@ -260,14 +253,10 @@ def upsert(customer=None, request=None):
 
     if not created:
         print ("----Exists, updating")
-        # pprint (contact)
 
         path = '/services/data/v34.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
-        print (url)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
-        # TODO: check 'errors' and 'success' too
-        print (resp)
         check_response(response=resp, expected_status=204)
 
     return True
@@ -292,14 +281,13 @@ def _format_opportunity(contact=None, request=None, customer=None):
                 ),
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
-#            'Stripe_Transaction_Id__c': charge.id,
-#            'Stripe_Card__c': charge.source.id,
+#           'Stripe_Transaction_Id__c': charge.id,
+#           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
-#            'Description': charge.description,
+#           'Description': charge.description,
             'Encouraged_to_contribute_by__c': '{}'.format(request.form['Reason']),
             # Co Member First name, last name, and email
             }
-    # pprint (opportunity)
     return opportunity
 
 
@@ -312,7 +300,6 @@ def add_opportunity(request=None, customer=None, charge=None):
             customer=customer)
     path = '/services/data/v34.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
-    # pprint(response)
     send_multiple_account_warning()
 
     return response
@@ -368,9 +355,6 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'npe03__Installments__c': installments,
             'npe03__Installment_Period__c': installment_period,
             'Type__c': type__c,
-
-            # Co Member First name, last name, and email  TODO
-            # Type (Giving Circle, etc) TODO
             }
     return recurring_donation
 
@@ -382,11 +366,9 @@ def add_recurring_donation(request=None, customer=None):
     _, contact = sf.get_or_create_contact(request.form)
     recurring_donation = _format_recurring_donation(contact=contact,
             request=request, customer=customer)
-    # pprint (recurring_donation)
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
     response = sf.post(path=path, data=recurring_donation)
-    # TODO: error handling
-    # pprint(response)
+    check_response(response)
     send_multiple_account_warning()
 
     return True
