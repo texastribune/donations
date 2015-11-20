@@ -2,15 +2,16 @@ import os
 
 import stripe
 from flask import Flask, render_template, request
+from sassutils.wsgi import SassMiddleware
 
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
+from app_celery import make_celery
 #from config import stripe_keys
 
 from pprint import pprint
 
-from sassutils.wsgi import SassMiddleware
 
 #stripe.api_key = stripe_keys['secret_key']
 
@@ -22,6 +23,7 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 app.config.from_pyfile('config.py')
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
+celery = make_celery(app)
 #import ipdb; ipdb.set_trace()
 
 
