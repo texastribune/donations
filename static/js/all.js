@@ -47,3 +47,15 @@ var display_level = function() {
     }
   }
 }
+
+var pay_fee_amount = function() {
+  var input_amount = $('input[name="amount"]').val();
+  var pay_fee_element = $('#pay-fee-amount');
+
+  input_amount *= 0.029;
+  input_amount += 0.30;
+
+  input_amount = Math.round(input_amount * 100) / 100;
+
+  pay_fee_element.text('$' + input_amount);
+}

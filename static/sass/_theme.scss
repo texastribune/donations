@@ -113,7 +113,7 @@ a {
     &.four {
       @include span-columns(4);
     }
-    &.three, .four {
+    &.three, &.four {
       @include media($tablet) {
         @include span-columns(12);
         margin-top: 1em;
@@ -150,6 +150,10 @@ input::-webkit-inner-spin-button, {
 }
 input {
   margin: 0.5em 0.5em 1em 0;
+}
+#pay_fees {
+  clear: both;
+  float: left;
 }
 p {
   font-style: italic;
