@@ -4,6 +4,10 @@
   max-width: none;
   padding: 0.5em 0;
   width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 60px;
   .left-nav {
     @include span-columns(3);
     @media (max-width: 985px) {
