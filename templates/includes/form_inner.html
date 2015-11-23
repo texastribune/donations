@@ -18,6 +18,10 @@
     {{ form.reason.label }}
       {{ form.reason(maxlength=100) }}
   </div>
+  <div class="form-section four">
+    {{ form.pay_fees.label }}
+      {{ form.pay_fees }}
+  </div>
 </div>
   {{ form.installments(value=installments) }}
   {{ form.installment_period(value=installment_period) }}

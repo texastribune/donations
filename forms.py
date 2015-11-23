@@ -1,6 +1,6 @@
 from flask_wtf import Form
 
-from wtforms.fields import StringField, IntegerField, HiddenField
+from wtforms.fields import StringField, IntegerField, HiddenField, BooleanField
 from wtforms import validators
 
 from flask import request
@@ -17,3 +17,4 @@ class DonateForm(Form):
     installments = HiddenField(u'Installments')
     openended_status = HiddenField(u'Openended Status')
     description = HiddenField(u'Description')
+    pay_fees = BooleanField(u'Agree to pay fees')
