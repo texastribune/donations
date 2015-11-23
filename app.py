@@ -14,8 +14,6 @@ from pprint import pprint
 
 from sassutils.wsgi import SassMiddleware
 
-#stripe.api_key = stripe_keys['secret_key']
-
 app = Flask(__name__)
 
 app.secret_key = FLASK_SECRET_KEY
@@ -26,8 +24,6 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 
 app.config.from_pyfile('config.py')
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
-
-#import ipdb; ipdb.set_trace()
 
 
 @app.route('/memberform')
@@ -78,20 +74,17 @@ def error():
     return render_template('error.html', message=message)
 
 
-
-
 @app.route('/charge', methods=['POST'])
 def charge():
 
     form = DonateForm(request.form)
-
-    pprint ('Request: {}'.format(request))
+    pprint('Request: {}'.format(request))
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
     )
-    #print ('Customer: {}'.format(customer))
+
     upsert(request=request, customer=customer)
 
     #charge = stripe.Charge.create(
