@@ -9,6 +9,7 @@ from salesforce import upsert
 #from config import stripe_keys
 from config import FLASK_SECRET_KEY
 from forms import DonateForm
+from validate_email import validate_email
 
 from pprint import pprint
 
@@ -80,10 +81,17 @@ def charge():
     form = DonateForm(request.form)
     pprint('Request: {}'.format(request))
 
-    customer = stripe.Customer.create(
+    email_is_valid = validate_email(request.form['stripeEmail'])
+
+    if email_is_valid:
+        customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
     )
+    else:
+        message = "Please enter a valid email address."
+        return render_template('error.html', message=message)
+
 
     upsert(request=request, customer=customer)
 
