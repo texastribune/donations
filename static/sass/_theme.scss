@@ -27,6 +27,10 @@ body {
   padding: 0 0 1em 0;
 }
 
+.page-wrap {
+  padding: 0 2em;
+}
+
 .dollar {
   &.uneditable {
     border: none;
@@ -169,3 +173,17 @@ p {
   font-size: 1.5em;
   padding: 0 2em;
 }
+
+// 404 page
+.sorry-img-wrapper {
+  text-align: center;
+  img {
+    width: 450px;
+    @media screen and (max-width: 480px) {
+      width: 100%;
+    }
+  }
+}
+
+
+
