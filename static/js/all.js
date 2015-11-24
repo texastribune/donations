@@ -46,7 +46,7 @@ var display_level = function() {
       level_label.text("Chairman's Circle");
     }
   }
-}
+};
 
 var pay_fee_amount = function() {
   var input_amount = $('input[name="amount"]').val();
@@ -57,5 +57,5 @@ var pay_fee_amount = function() {
 
   input_amount = Math.round(input_amount * 100) / 100;
 
-  pay_fee_element.text('$' + input_amount);
-}
+  pay_fee_element.prepend('$' + input_amount);
+};

@@ -103,7 +103,7 @@ a {
   @include outer-container;
   border-bottom: 2px solid #ffc200;
   padding: 1em 0;
-  &:last-child {
+  &:last-of-type {
     border-bottom: none;
   }
   .form-section {
@@ -154,6 +154,10 @@ input {
 #pay_fees {
   clear: both;
   float: left;
+}
+#pay-fee-amount {
+  float: left;
+  padding: 0.2em;
 }
 p {
   font-style: italic;

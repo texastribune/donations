@@ -21,7 +21,7 @@
   <div class="form-section four">
     {{ form.pay_fees.label }}
       {{ form.pay_fees }}
-    <p id="pay-fee-amount"></p>
+    <p id="pay-fee-amount" class="label-info">{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
   </div>
 </div>
   {{ form.installments(value=installments) }}
