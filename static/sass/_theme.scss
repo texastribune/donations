@@ -1,23 +1,11 @@
-// Masthead with logo
-.masthead {
-  @include outer-container;
-  border-bottom: 2px solid #ffc200;
-  img {
-    padding: 1em 2em;
-    @include span-columns(4);
-    @include media($mobile) {
-      @include span-columns(8);
-    }
-  }
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-
 // General styles
+html {
+  font-family: $helvetica;
+  font-size: 14px;
+  min-height: 100%;
+  position: relative;
+}
+
 body {
   margin: 0 0 60px;
 }
@@ -31,28 +19,8 @@ body {
   padding: 0 2em;
 }
 
-.dollar {
-  &.uneditable {
-    border: none;
-  }
-}
-
-.dollar {
-  color: $black;
-  font-family: "league-gothic";
-  font-size: 3.5em;
-  margin: 0;
-  padding: 0 0.2em;
-  width: 100px;
-}
-
 
 // Typography
-html {
-  font-family: $helvetica;
-  font-size: 14px;
-}
-
 h2 {
   font-size: 1.5em;
   font-weight: bold;
@@ -78,26 +46,16 @@ a {
 }
 
 
-// Stripe form submit button styles
-.button {
-  font-size: 1.2em;
-  font-weight: bold;
-  padding: 0.5em 1.8em;
-  text-align: center;
-  &:focus {
-    outline: none;
-  }
-}
-
-.button-flat {
-  background-color: $yellow-tribune;
-  border: none;
-  color: $black;
-  &:hover {
-    @include fast-transition(background-color);
-    background-color: $teal-tribune;
-    color: $white;
-    cursor: pointer;
+// Masthead with logo
+.masthead {
+  @include outer-container;
+  border-bottom: 2px solid $yellow-tribune;
+  img {
+    padding: 1em 2em;
+    @include span-columns(4);
+    @include media($mobile) {
+      @include span-columns(8);
+    }
   }
 }
 
@@ -105,7 +63,7 @@ a {
 // Form styles
 .form-outer-section {
   @include outer-container;
-  border-bottom: 2px solid #ffc200;
+  border-bottom: 2px solid $yellow-tribune;
   padding: 1em 0;
   &:last-of-type {
     border-bottom: none;
@@ -132,6 +90,19 @@ a {
 form {
   padding: 0 2em;
 }
+
+.dollar {
+  color: $black;
+  font-family: "league-gothic";
+  font-size: 3.5em;
+  margin: 0;
+  padding: 0 0.2em;
+  width: 100px;
+  &.uneditable {
+    border: none;
+  }
+}
+
 label {
   color: #7f7f7f;
   cursor: pointer;
@@ -139,40 +110,66 @@ label {
   font-size: 0.8em;
   font-weight: bold;
   letter-spacing: 2px;
-  text-transform: uppercase;
   min-width: 150px;
+  text-transform: uppercase;
 }
+
 input {
   font-size: 1em;
+  margin: 0.5em 0.5em 1em 0;
   -moz-appearance: textfield; // hides number input spinner on Firefox
 }
+
 // For hiding number input spinner on webkit browsers
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button, {
     -webkit-appearance: none;
     margin: 0;
 }
-input {
-  margin: 0.5em 0.5em 1em 0;
-}
+
 #pay_fees {
   clear: both;
   float: left;
 }
+
 #pay-fee-amount {
   float: left;
   padding: 0.2em;
 }
-p {
-  font-style: italic;
+
+// Stripe form submit button styles
+.button {
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 0.5em 1.8em;
+  text-align: center;
+  &:focus {
+    outline: none;
+  }
 }
+
+.button-flat {
+  background-color: $yellow-tribune;
+  border: none;
+  color: $black;
+  &:hover {
+    @include fast-transition(background-color);
+    background-color: $teal-tribune;
+    color: $white;
+    cursor: pointer;
+  }
+}
+
+// Error styles
 .error-form-message {
   color: red;
 }
+
 .error-page-message {
   font-size: 1.5em;
   padding: 0 2em;
 }
+
 
 // 404 page
 .sorry-img-wrapper {
@@ -184,6 +181,3 @@ p {
     }
   }
 }
-
-
-
