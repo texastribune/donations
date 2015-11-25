@@ -48,6 +48,18 @@ var display_level = function() {
   }
 };
 
+var listen_for_fee_check = function() {
+  var fee_checkbox = $('input[name="pay_fees"]');
+
+  fee_checkbox.change(function() {
+    if ( $(this).is(":checked") ) {
+      fee_checkbox.val("True");
+    } else if ( $(this).not(":checked") ) {
+      fee_checkbox.val("False");
+    }
+  });
+};
+
 var pay_fee_amount = function() {
   var input_amount = $('input[name="amount"]').val();
   var pay_fee_element = $('#pay-fee-amount');

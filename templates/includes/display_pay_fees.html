@@ -1,6 +1,8 @@
 <script>
   window.onload = pay_fee_amount();
 
+  window.onload = listen_for_fee_check();
+
   $('input[name="amount"]').keyup(function() {
     pay_fee_amount();
   });

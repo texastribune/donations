@@ -264,6 +264,11 @@ def _format_opportunity(contact=None, request=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
+    if request.form['pay_fees'] == 'True':
+        pay_fees = True
+    else:
+        pay_fees = False
+
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
             'Amount': '{}'.format(request.form['amount']),
@@ -280,6 +285,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
 #           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
             'Description': '{}'.format(request.form['description']),
+            'Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(request.form['reason']),
             # Co Member First name, last name, and email
             }
@@ -332,6 +338,11 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     else:
         installments = 0
 
+    if request.form['pay_fees'] == 'True':
+        pay_fees = True
+    else:
+        pay_fees = False
+
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
@@ -345,6 +356,7 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',
             'Stripe_Description__c': '{}'.format(request.form['description']),
+            'Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(
                 request.form['reason']),
             'npe03__Open_Ended_Status__c': open_ended_status,
