@@ -33,7 +33,8 @@ def member_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        amount=False
+        message = "Please select a membership level at support.texastribune.org."
+        return render_template("error.html", message=message)
     installment_period = request.args.get('installmentPeriod')
     installments = 'None'
     openended_status = 'Open'
@@ -60,7 +61,11 @@ def donate_renew_form():
 @app.route('/circleform')
 def circle_form():
     form = DonateForm()
-    amount = request.args.get('amount')
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        message = "Please select a membership level at support.texastribune.org."
+        return render_template("error.html", message=message)
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')

@@ -137,7 +137,7 @@ class SalesforceConnection(object):
             'Email': request_form['stripeEmail'],
             'FirstName': request_form['first_name'],
             'LastName': request_form['last_name'],
-            'Description': 'added by Stripe/Checkout app',
+            'Description': request_form['description'],
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
             }
@@ -279,7 +279,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
 #           'Stripe_Transaction_Id__c': charge.id,
 #           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
-#            'Description': charge.description,
+            'Description': '{}'.format(request.form['description']),
             'Encouraged_to_contribute_by__c': '{}'.format(request.form['reason']),
             # Co Member First name, last name, and email
             }
