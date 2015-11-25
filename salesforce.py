@@ -320,7 +320,7 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
         installment_period = 'None'
 
     # TODO: test this
-    if ['openended_status'] == 'None' and (
+    if request.form['openended_status'] == 'None' and (
             installments == '3' or installments == '36') and (
                     installment_period == 'yearly' or
                     installment_period == 'monthly'):

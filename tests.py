@@ -134,20 +134,17 @@ class Request(object):
 request = Request()
 
 form = MultiDict()
-form.add('Opportunity.Amount', '100')
+form.add('amount', '100')
 form.add('frequency', " "'until-cancelled'),
-form.add('Contact.LastName', 'C'),
-form.add('Contact.MailingStreet', '823 Congress Ave Ste 1400'),
+form.add('last_name', 'C'),
 form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-form.add('Contact.FirstName', 'D'),
-form.add('Contact.HomePhone', '5551212'),
+form.add('first_name', 'D'),
 form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
 form.add('stripeTokenType', 'card'),
-form.add('Contact.MailingPostalCode', '78701')
-form.add('Reason', 'Because I love the Trib!')
-form.add('InstallmentPeriod', 'yearly')
-form.add('Installments', '3')
-form.add('OpenEndedStatus', 'None')
+form.add('reason', 'Because I love the Trib!')
+form.add('installment_period', 'yearly')
+form.add('installments', '3')
+form.add('openended_status', 'None')
 request.form = form
 
 
@@ -222,13 +219,13 @@ def test__format_contact():
     expected_response = {'Description': 'added by Stripe/Checkout app',
             'Email': 'dcraigmile+test6@texastribune.org',
             'FirstName': 'D',
-            'HomePhone': '5551212',
+            # 'HomePhone': '5551212',
             'LastName': 'C',
             'LeadSource': 'Stripe',
-            'MailingCity': 'Austin',
-            'MailingPostalCode': '78701',
-            'MailingState': 'TX',
-            'MailingStreet': '823 Congress Ave Ste 1400',
+            # 'MailingCity': 'Austin',
+            # 'MailingPostalCode': '78701',
+            # 'MailingState': 'TX',
+            # 'MailingStreet': '823 Congress Ave Ste 1400',
             'Stripe_Customer_Id__c': None}
 
     assert response == expected_response
