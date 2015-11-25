@@ -1,13 +1,13 @@
 .footer {
   @include outer-container;
   background: $black;
-  max-width: none;
-  padding: 0.5em 0;
-  width: 100%;
-  position: absolute;
-  left: 0;
   bottom: 0;
   height: 60px;
+  left: 0;
+  max-width: none;
+  padding: 0.5em 0;
+  position: absolute;
+  width: 100%;
   .left-nav {
     @include span-columns(3);
     @media (max-width: 985px) {

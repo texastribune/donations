@@ -6,7 +6,6 @@ from flask import Flask, render_template, request
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
-#from config import stripe_keys
 from config import FLASK_SECRET_KEY
 from forms import DonateForm
 from validate_email import validate_email
@@ -97,7 +96,7 @@ def charge():
         customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
         card=request.form['stripeToken']
-    )
+        )
     else:
         message = "Please enter a valid email address."
         return render_template('error.html', message=message)
@@ -105,15 +104,6 @@ def charge():
 
     upsert(request=request, customer=customer)
 
-    #charge = stripe.Charge.create(
-    #   customer=customer.id,
-    #   amount=int(request.form['Opportunity.Amount']) * 100,
-    #   currency='usd',
-    #   description='Change Me' # TODO
-    #)
-    # except stripe.error.CardError, e:
-    # The card has been declined
-    #print ('Charge: {}'.format(charge))
     if form.validate():
         if (request.form['installment_period'] == 'None'):
             print("----One time payment...")
