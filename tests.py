@@ -262,7 +262,7 @@ def test__get_contact():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf._get_contact('schnitzel')
@@ -279,7 +279,7 @@ def test_create_contact():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
     responses.add(responses.POST,
             'http://foo/services/data/v34.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
@@ -300,7 +300,7 @@ def test_find_contact():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf.find_contact(email='bogus')
@@ -318,7 +318,7 @@ def test_get_or_create_contact_non_extant():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
     responses.add(responses.POST,
             'http://foo/services/data/v34.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
@@ -347,7 +347,7 @@ def test_get_or_create_contact_extant():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(request_form=request.form)
@@ -368,7 +368,7 @@ def test_get_or_create_contact_multiple():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(request_form=request.form)
@@ -384,7 +384,7 @@ def test_upsert_non_extant():
             responses.POST,
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201,
+            status=200,
             )
     responses.add(
             responses.POST,
@@ -443,13 +443,13 @@ def test_upsert_extant():
             responses.POST,
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201,
+            status=200,
             )
     responses.add(
             responses.POST,
             'http://foo/services/data/v34.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
-            status=201,
+            status=200,
             )
     responses.add_callback(
             responses.GET,
