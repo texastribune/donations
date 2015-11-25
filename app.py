@@ -19,10 +19,15 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
         })
 
 app.config.from_pyfile('config.py')
+app.config.update(
+        CELERY_ALWAYS_EAGER=False,
+        CELERY_TASK_SERIALIZER="pickle",
+        CELERY_IMPORTS=('app', 'salesforce', 'batch'),
+        )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
 celery = make_celery(app)
-#import ipdb; ipdb.set_trace()
+
 
 @app.route('/memberform')
 def checkout_form():
@@ -48,6 +53,19 @@ def error():
     return render_template('error.html', message=message)
 
 
+@celery.task(name='app.add_customer_and_charge')
+def add_customer_and_charge(form=None, customer=None):
+    upsert_customer(form=form, customer=customer)
+
+    if (form['InstallmentPeriod'] == 'None'):
+        print("----One time payment...")
+        add_opportunity(form=form, customer=customer)
+    else:
+        print("----Recurring payment...")
+        add_recurring_donation(form=form, customer=customer)
+    return True
+
+
 @app.route('/charge', methods=['POST'])
 def charge():
 
@@ -58,14 +76,9 @@ def charge():
         card=request.form['stripeToken']
     )
 
-    upsert(request=request, customer=customer)
-
-    if (request.form['InstallmentPeriod'] == 'None'):
-        print("----One time payment...")
-        add_opportunity(request=request, customer=customer)
-    else:
-        print("----Recurring payment...")
-        add_recurring_donation(request=request, customer=customer)
+    result = add_customer_and_charge.delay(form=request.form,
+            customer=customer)
+    pprint(result)
 
     return render_template('charge.html',
             amount=request.form['Opportunity.Amount'])

@@ -9,6 +9,12 @@ TIMEZONE = "US/Central"
 CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
 CELERY_RESULT_BACKEND = os.environ['CELERY_RESULT_BACKEND']
 CELERY_ALWAYS_EAGER = os.environ['CELERY_ALWAYS_EAGER']
+CELERYBEAT_SCHEDULE = {
+        'add-every-30-seconds': {
+            'task': 'batch.charge_cards',
+            'schedule': timedelta(seconds=10)
+            },
+        }
 ######
 # SMTP
 #

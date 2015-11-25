@@ -126,22 +126,22 @@ class SalesforceConnection(object):
         check_response(response=resp, expected_status=201)
         return response
 
-    def _format_contact(self, request_form=None):
+    def _format_contact(self, form=None):
 
         try:
-            stripe_id = request_form['Stripe_Customer_Id__c']
+            stripe_id = form['Stripe_Customer_Id__c']
         except KeyError:
             stripe_id = None
 
         contact = {
-            'Email': request_form['stripeEmail'],
-            'FirstName': request_form['Contact.FirstName'],
-            'LastName': request_form['Contact.LastName'],
-            'HomePhone': request_form['Contact.HomePhone'],
-            'MailingStreet': request_form['Contact.MailingStreet'],
+            'Email': form['stripeEmail'],
+            'FirstName': form['Contact.FirstName'],
+            'LastName': form['Contact.LastName'],
+            'HomePhone': form['Contact.HomePhone'],
+            'MailingStreet': form['Contact.MailingStreet'],
             'MailingCity': 'Austin',
             'MailingState': 'TX',
-            'MailingPostalCode': request_form['Contact.MailingPostalCode'],
+            'MailingPostalCode': form['Contact.MailingPostalCode'],
             'Description': 'added by Stripe/Checkout app',
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
