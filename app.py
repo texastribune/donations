@@ -3,14 +3,15 @@ import os
 import stripe
 from flask import Flask, render_template, request
 from sassutils.wsgi import SassMiddleware
-
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
-from salesforce import upsert
+from salesforce import upsert_customer
+
 from app_celery import make_celery
 
-from pprint import pprint
+import batch
 
+from pprint import pprint
 
 app = Flask(__name__)
 app.wsgi_app = SassMiddleware(app.wsgi_app, {
