@@ -145,6 +145,8 @@ form.add('reason', 'Because I love the Trib!')
 form.add('installment_period', 'yearly')
 form.add('installments', '3')
 form.add('openended_status', 'None')
+form.add('description', 'The Texas Tribune Membership')
+form.add('pay_fees', 'True')
 request.form = form
 
 
@@ -183,7 +185,9 @@ def test__format_opportunity():
             'Name': 'DC (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhI9',
             'StageName': 'Pledged',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn'
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'Description': 'The Texas Tribune Membership',
+            'Agreed_to_pay_fees__c': True,
             }
 
     assert response == expected_response
@@ -205,6 +209,8 @@ def test__format_recurring_donation():
             'Name': 'foo',
             'npe03__Installments__c': '3',
             'npe03__Open_Ended_Status__c': 'None',
+            'Stripe_Description__c': 'The Texas Tribune Membership',
+            'Agreed_to_pay_fees__c': True,
             'Type__c': 'Giving Circle'
             }
     response['Name'] = 'foo'
@@ -216,16 +222,11 @@ def test__format_contact():
 
     response = sf._format_contact(request_form=request.form)
 
-    expected_response = {'Description': 'added by Stripe/Checkout app',
+    expected_response = {'Description': 'The Texas Tribune Membership',
             'Email': 'dcraigmile+test6@texastribune.org',
             'FirstName': 'D',
-            # 'HomePhone': '5551212',
             'LastName': 'C',
             'LeadSource': 'Stripe',
-            # 'MailingCity': 'Austin',
-            # 'MailingPostalCode': '78701',
-            # 'MailingState': 'TX',
-            # 'MailingStreet': '823 Congress Ave Ste 1400',
             'Stripe_Customer_Id__c': None}
 
     assert response == expected_response
