@@ -42,6 +42,8 @@ def member_form():
         message = "Please select a membership level at support.texastribune.org."
         return render_template("error.html", message=message)
     installment_period = request.args.get('installmentPeriod')
+    if installment_period is None:
+        installment_period = 'None'
     installments = 'None'
     openended_status = 'Open'
     return render_template('member-form.html', form=form, amount=amount, \

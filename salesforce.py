@@ -355,9 +355,12 @@ def add_recurring_donation(form=None, customer=None):
 
 @celery.task(name='salesforce.add_customer_and_charge')
 def add_customer_and_charge(form=None, customer=None):
+    pprint(form)
+
     upsert_customer(form=form, customer=customer)
 
-    if (form['InstallmentPeriod'] == 'None'):
+
+    if (form['installment_period'] == 'None'):
         print("----One time payment...")
         add_opportunity(form=form, customer=customer)
     else:
