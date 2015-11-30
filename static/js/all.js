@@ -50,12 +50,15 @@ var display_level = function() {
 
 var listen_for_fee_check = function() {
   var fee_checkbox = $('input[name="pay_fees"]');
+  var fees_value = $('input[name="pay_fees_value"]');
+
+  fees_value.val("False");
 
   fee_checkbox.change(function() {
     if ( $(this).is(":checked") ) {
-      fee_checkbox.val("True");
+      fees_value.val("True");
     } else if ( $(this).not(":checked") ) {
-      fee_checkbox.val("False");
+      fees_value.val("False");
     }
   });
 };

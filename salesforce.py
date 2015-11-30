@@ -326,7 +326,7 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
         installment_period = 'None'
 
     # TODO: test this
-    if request.form['openended_status'] == 'None' and (
+    if open_ended_status == 'None' and (
             installments == '3' or installments == '36') and (
                     installment_period == 'yearly' or
                     installment_period == 'monthly'):
@@ -338,10 +338,11 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     else:
         installments = 0
 
-    if request.form['pay_fees'] == 'True':
+    if request.form['pay_fees_value'] == 'True':
         pay_fees = True
     else:
         pay_fees = False
+
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),

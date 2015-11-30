@@ -20,10 +20,11 @@
   </div>
   <div class="form-section four">
     {{ form.pay_fees.label }}
-      {{ form.pay_fees(checked=False, value="False") }}
+      {{ form.pay_fees(checked=False) }}
     <p id="pay-fee-amount" class="label-info">{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
   </div>
 </div>
+  {{ form.pay_fees_value(value="False") }}
   {{ form.installments(value=installments) }}
   {{ form.installment_period(value=installment_period) }}
   {{ form.openended_status(value=openended_status) }}

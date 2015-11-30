@@ -18,3 +18,4 @@ class DonateForm(Form):
     openended_status = HiddenField(u'Openended Status')
     description = HiddenField(u'Description')
     pay_fees = BooleanField(u'Agree to pay fees')
+    pay_fees_value = HiddenField(u'Pay Fees Value')
