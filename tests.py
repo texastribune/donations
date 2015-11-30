@@ -146,7 +146,7 @@ form.add('installment_period', 'yearly')
 form.add('installments', '3')
 form.add('openended_status', 'None')
 form.add('description', 'The Texas Tribune Membership')
-form.add('pay_fees', 'True')
+form.add('pay_fees_value', 'True')
 request.form = form
 
 
