@@ -2,6 +2,7 @@ from datetime import timedelta
 import os
 
 TIMEZONE = "US/Central"
+FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
 
 ########
 # Celery
@@ -15,6 +16,7 @@ CELERYBEAT_SCHEDULE = {
             'schedule': timedelta(seconds=10)
             },
         }
+
 ######
 # SMTP
 #
@@ -24,6 +26,7 @@ MAIL_PASSWORD = '5484376211e6b6'
 MAIL_PORT = '2525'
 MAIL_USE_TLS = True
 DEFAULT_MAIL_SENDER = 'salesforce@texastribune.org'
+
 ############
 # Salesforce
 #
@@ -36,6 +39,7 @@ SALESFORCE = {
     "PASSWORD": os.environ['SALESFORCE_PASSWORD'],
     "HOST": os.environ["SALESFORCE_HOST"]
 }
+
 ########
 # Stripe
 #

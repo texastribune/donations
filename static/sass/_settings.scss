@@ -13,11 +13,6 @@ $gray-medium: #aaaaaa;
 $gray-light: #ebebeb;
 $white: #ffffff;
 
-$bg-contribute: white;
-$bg-nav: #000000;
-
-$link-nav: white;
-
 
 // Fonts
 $league-gothic: 'league-gothic', sans-serif;
@@ -44,12 +39,6 @@ $league-gothic: 'league-gothic', sans-serif;
   clip: rect(0 0 0 0);
   height: 1px; width: 1px;
   margin: -1px; padding: 0; border: 0;
-}
-
-@mixin background-sizing {
-  background-size: cover;
-  background-position: 50%;
-  background-repeat: no-repeat;
 }
 
 @mixin fast-transition($property) {
