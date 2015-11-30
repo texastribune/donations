@@ -68,14 +68,14 @@ def charge_cards():
         except stripe.error.CardError as e:
             log.it("The card has been declined: {}".format(e))
             raise Exception('problem')
-            # TODO: send alert for failure
         # print ('Charge: {}'.format(charge))
         # TODO: check for success
 
         # print ("Charge id: {}".format(charge.id))
         # TODO: copy transaction ID too
         update = {
-                'Stripe_Card__c': charge.id,
+                'Stripe_Transaction_Id__c': charge.id,
+                'Stripe_Card__c': charge.source.id,
                 'StageName': 'Closed Won',
                 }
         path = item['attributes']['url']
