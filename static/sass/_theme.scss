@@ -19,6 +19,17 @@ body {
   padding: 0 2em;
 }
 
+.outer-section {
+  @include outer-container;
+  .six {
+    @include span-columns(6);
+    padding: 1em;
+    @include media($tablet) {
+      @include span-columns(12);
+    }
+  }
+}
+
 
 // Typography
 h2 {
@@ -34,6 +45,11 @@ a {
   &:hover {
     text-decoration: underline;
   }
+}
+
+p {
+  margin: 0;
+  padding: 1em 0;
 }
 
 .label-info {
@@ -171,10 +187,11 @@ input::-webkit-inner-spin-button, {
 }
 
 
-// 404 page
-.sorry-img-wrapper {
+// 404 and thank-you page images
+.img-wrapper {
   text-align: center;
   img {
+    padding: 1em;
     width: 450px;
     @media screen and (max-width: 480px) {
       width: 100%;
