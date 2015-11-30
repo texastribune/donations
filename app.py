@@ -3,9 +3,7 @@ import os
 import stripe
 from flask import Flask, render_template, request
 from sassutils.wsgi import SassMiddleware
-from salesforce import add_opportunity
-from salesforce import add_recurring_donation
-from salesforce import upsert_customer
+from salesforce import add_customer_and_charge
 
 from app_celery import make_celery
 
@@ -20,8 +18,8 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 
 app.config.from_pyfile('config.py')
 app.config.update(
-        CELERY_ALWAYS_EAGER=False,
-        CELERY_TASK_SERIALIZER="pickle",
+        CELERY_ALWAYS_EAGER=True,
+        CELERY_TASK_SERIALIZER="json",
         CELERY_IMPORTS=('app', 'salesforce', 'batch'),
         )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
@@ -51,19 +49,6 @@ def circle_form():
 def error():
     message = "Something went wrong!"
     return render_template('error.html', message=message)
-
-
-@celery.task(name='app.add_customer_and_charge')
-def add_customer_and_charge(form=None, customer=None):
-    upsert_customer(form=form, customer=customer)
-
-    if (form['InstallmentPeriod'] == 'None'):
-        print("----One time payment...")
-        add_opportunity(form=form, customer=customer)
-    else:
-        print("----Recurring payment...")
-        add_recurring_donation(form=form, customer=customer)
-    return True
 
 
 @app.route('/charge', methods=['POST'])

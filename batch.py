@@ -5,22 +5,38 @@ import requests
 import json
 from datetime import datetime, timedelta
 import celery
-from time import sleep
+from emails import send_email
 
 stripe.api_key = STRIPE_KEYS['secret_key']
 
-# TODO: send alert for failures
-# TODO: send report at the end of each run?
+
+class Log(object):
+    def __init__(self):
+        self.log = list()
+
+    def it(self, string):
+        print(string)
+        self.log.append(string)
+
+    def send(self):
+        body = '\n'.join(self.log)
+        recipient = 'dcraigmile@texastribune.org'
+        subject = 'Batch run'
+        send_email(body=body, recipient=recipient, subject=subject)
+
 
 @celery.task()
 def charge_cards():
 
-    sleep(10)
+    log = Log()
+
+    print('---Starting batch job...')
+
     three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
     today = datetime.now().strftime('%Y-%m-%d')
 
     query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description
         FROM Opportunity
         WHERE CloseDate <= {}
         AND CloseDate >= {}
@@ -34,29 +50,30 @@ def charge_cards():
     response = sf.query(query)
     # TODO: check response code
 
-    print ("---- Found {} opportunities available to process:".format(
+    log.it('Found {} opportunities available to process.'.format(
         len(response)))
 
     for item in response:
         # print (item)
         try:
-            print ("---- Charging ${} to {} ({})".format(item['Amount'],
+            log.it("---- Charging ${} to {} ({})".format(item['Amount'],
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
                     customer=item['Stripe_Customer_ID__c'],
                     amount=int(item['Amount']) * 100,
                     currency='usd',
-                    description='Change Me'  # TODO
+                    description=item['Description'],
                     )
         except stripe.error.CardError as e:
-            print("The card has been declined: {}".format(e))
+            log.it("The card has been declined: {}".format(e))
             raise Exception('problem')
             # TODO: send alert for failure
         # print ('Charge: {}'.format(charge))
         # TODO: check for success
 
         # print ("Charge id: {}".format(charge.id))
+        # TODO: copy transaction ID too
         update = {
                 'Stripe_Card__c': charge.id,
                 'StageName': 'Closed Won',
@@ -68,9 +85,11 @@ def charge_cards():
         # TODO: check 'errors' and 'success' too
         # print (resp)
         if resp.status_code == 204:
-            print ("ok")
+            log.it("ok")
         else:
             raise Exception('problem')
+
+    log.send()
 
 if __name__ == '__main__':
     charge_cards()

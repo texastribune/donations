@@ -2,12 +2,14 @@ from datetime import datetime
 import json
 import locale
 
+import celery
 import requests
 from pytz import timezone
 
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
 from config import TIMEZONE
+from emails import send_email
 
 zone = timezone(TIMEZONE)
 
@@ -15,38 +17,8 @@ locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 WARNINGS = dict()
 
-
-def send_email(recipient, subject, body, sender=None):
-    import smtplib
-
-    from config import MAIL_SERVER
-    from config import MAIL_PORT
-    from config import MAIL_USERNAME
-    from config import MAIL_PASSWORD
-    from config import DEFAULT_MAIL_SENDER
-
-    if sender is None:
-        FROM = DEFAULT_MAIL_SENDER
-    else:
-        FROM = sender
-
-    TO = recipient if type(recipient) is list else [recipient]
-    SUBJECT = subject
-    TEXT = body
-
-    # Prepare actual message
-    message = """\From: %s\nTo: %s\nSubject: %s\n\n%s
-    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
-    try:
-        server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
-        server.ehlo()
-        server.starttls()
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.sendmail(FROM, TO, message)
-        server.close()
-        print ('successfully sent the mail')
-    except:
-        print ('failed to send mail')
+# TODO: use v35 of Salesforce API
+# TODO: use latest version of Stripe API
 
 
 def warn_multiple_accounts(email, count):
@@ -58,7 +30,7 @@ def send_multiple_account_warning():
     for email in WARNINGS:
         count = WARNINGS[email]
         body = """
-        {} accounts were found matching the email address [{}]
+        {} accounts were found matching the email address <{}>
         while inserting a Stripe transaction.
 
         The transaction was attached to the first match found. You may want to
@@ -221,11 +193,11 @@ class SalesforceConnection(object):
 
 
 def check_response(response=None, expected_status=200):
-    # TODO: look for 'success'
     code = response.status_code
     try:
         content = json.loads(response.content.decode('utf-8'))
-        print (content)
+        # TODO: look for 'success'
+        #print (content)
     except:
         print ('unable to parse response (this is probably okay)')
     if code != expected_status:
@@ -370,4 +342,17 @@ def add_recurring_donation(form=None, customer=None):
     sf.post(path=path, data=recurring_donation)
     send_multiple_account_warning()
 
+    return True
+
+
+@celery.task(name='salesforce.add_customer_and_charge')
+def add_customer_and_charge(form=None, customer=None):
+    upsert_customer(form=form, customer=customer)
+
+    if (form['InstallmentPeriod'] == 'None'):
+        print("----One time payment...")
+        add_opportunity(form=form, customer=customer)
+    else:
+        print("----Recurring payment...")
+        add_recurring_donation(form=form, customer=customer)
     return True
