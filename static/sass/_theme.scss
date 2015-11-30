@@ -35,7 +35,7 @@ body {
 h2 {
   font-size: 1.5em;
   font-weight: bold;
-  letter-spacing: -1px;
+  letter-spacing: 0.03em;
   margin: 0 0 0.5em 0;
 }
 
@@ -109,7 +109,7 @@ form {
 
 .dollar {
   color: $black;
-  font-family: $league-gothic;
+  font-family: $helvetica;
   font-size: 3.5em;
   margin: 0;
   padding: 0 0.2em;
@@ -155,8 +155,10 @@ input::-webkit-inner-spin-button, {
 
 // Stripe form submit button styles
 .button {
+  font-family: $helvetica;
   font-size: 1.2em;
   font-weight: bold;
+  letter-spacing: 0.03em;
   padding: 0.5em 1.8em;
   text-align: center;
   &:focus {
