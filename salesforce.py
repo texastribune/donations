@@ -135,14 +135,9 @@ class SalesforceConnection(object):
 
         contact = {
             'Email': request_form['stripeEmail'],
-            'FirstName': request_form['Contact.FirstName'],
-            'LastName': request_form['Contact.LastName'],
-            'HomePhone': request_form['Contact.HomePhone'],
-            'MailingStreet': request_form['Contact.MailingStreet'],
-            'MailingCity': 'Austin',
-            'MailingState': 'TX',
-            'MailingPostalCode': request_form['Contact.MailingPostalCode'],
-            'Description': 'added by Stripe/Checkout app',
+            'FirstName': request_form['first_name'],
+            'LastName': request_form['last_name'],
+            'Description': request_form['description'],
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
             }
@@ -269,14 +264,19 @@ def _format_opportunity(contact=None, request=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
+    if request.form['pay_fees_value'] == 'True':
+        pay_fees = True
+    else:
+        pay_fees = False
+
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(request.form['Opportunity.Amount']),
+            'Amount': '{}'.format(request.form['amount']),
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
-            'Name': '{} {} ({})'.format(
-                request.form['Contact.FirstName'],
-                request.form['Contact.LastName'],
+            'Name': '{}{} ({})'.format(
+                request.form['first_name'],
+                request.form['last_name'],
                 request.form['stripeEmail'],
                 ),
             'StageName': 'Pledged',
@@ -284,8 +284,9 @@ def _format_opportunity(contact=None, request=None, customer=None):
 #           'Stripe_Transaction_Id__c': charge.id,
 #           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
-#           'Description': charge.description,
-            'Encouraged_to_contribute_by__c': '{}'.format(request.form['Reason']),
+            'Description': '{}'.format(request.form['description']),
+            'Agreed_to_pay_fees__c': pay_fees,
+            'Encouraged_to_contribute_by__c': '{}'.format(request.form['reason']),
             # Co Member First name, last name, and email
             }
     return opportunity
@@ -309,23 +310,23 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
-    amount = request.form['Opportunity.Amount']
+    amount = request.form['amount']
     type__c = ''
     try:
-        installments = request.form['Installments']
+        installments = request.form['installments']
     except:
         installments = 'None'
     try:
-        open_ended_status = request.form['OpenEndedStatus']
+        open_ended_status = request.form['openended_status']
     except:
         open_ended_status = 'None'
     try:
-        installment_period = request.form['InstallmentPeriod']
+        installment_period = request.form['installment_period']
     except:
         installment_period = 'None'
 
     # TODO: test this
-    if ['open_ended_status'] == 'None' and (
+    if open_ended_status == 'None' and (
             installments == '3' or installments == '36') and (
                     installment_period == 'yearly' or
                     installment_period == 'monthly'):
@@ -337,6 +338,12 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     else:
         installments = 0
 
+    if request.form['pay_fees_value'] == 'True':
+        pay_fees = True
+    else:
+        pay_fees = False
+
+
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
@@ -344,13 +351,15 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'npe03__Open_Ended_Status__c': '',
             'Name': '{} for {} {}'.format(
                 now,
-                request.form['Contact.FirstName'],
-                request.form['Contact.LastName'],
+                request.form['first_name'],
+                request.form['last_name'],
                 ),
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',
+            'Stripe_Description__c': '{}'.format(request.form['description']),
+            'Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(
-                request.form['Reason']),
+                request.form['reason']),
             'npe03__Open_Ended_Status__c': open_ended_status,
             'npe03__Installments__c': installments,
             'npe03__Installment_Period__c': installment_period,

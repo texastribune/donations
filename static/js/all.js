@@ -1,7 +1,7 @@
 var display_level = function() {
-  var frequency = $('input[name="InstallmentPeriod"]').val();
+  var frequency = $('input[name="installment_period"]').val();
 
-  var input_amount = $('input[name="Opportunity.Amount"]').val();
+  var input_amount = $('input[name="amount"]').val();
 
   var level_label = $('.level');
 
@@ -26,7 +26,9 @@ var display_level = function() {
     }
   } else {
     // detemine level and update text based on yearly frequency
-    if (input_amount > 35 && input_amount <= 59) {
+    if (input_amount == 10) {
+      level_label.text('Student');
+    } else if (input_amount > 35 && input_amount <= 59) {
       level_label.text('Enthusiast');
     } else if (input_amount > 59 && input_amount <= 149) {
       level_label.text('Activist');
@@ -44,4 +46,37 @@ var display_level = function() {
       level_label.text("Chairman's Circle");
     }
   }
-}
+};
+
+var listen_for_fee_check = function() {
+  var fee_checkbox = $('input[name="pay_fees"]');
+  var fees_value = $('input[name="pay_fees_value"]');
+
+  fees_value.val("False");
+
+  fee_checkbox.change(function() {
+    if ( $(this).is(":checked") ) {
+      fees_value.val("True");
+    } else if ( $(this).not(":checked") ) {
+      fees_value.val("False");
+    }
+  });
+};
+
+var pay_fee_amount = function() {
+  var input_amount = $('input[name="amount"]').val();
+  var pay_fee_element = $('#pay-fee-amount');
+
+  // Calculate the Stripe fee per charge
+  // https://stripe.com/us/pricing
+  input_amount *= 0.029;
+  input_amount += 0.30;
+
+  input_amount = Math.round(input_amount * 100) / 100;
+
+  // Make sure to always get two decimal places
+  input_amount = input_amount.toFixed(2);
+
+  // Add a dollar sign
+  pay_fee_element.prepend('$' + input_amount);
+};

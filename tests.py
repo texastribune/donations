@@ -134,20 +134,19 @@ class Request(object):
 request = Request()
 
 form = MultiDict()
-form.add('Opportunity.Amount', '100')
+form.add('amount', '100')
 form.add('frequency', " "'until-cancelled'),
-form.add('Contact.LastName', 'C'),
-form.add('Contact.MailingStreet', '823 Congress Ave Ste 1400'),
+form.add('last_name', 'C'),
 form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-form.add('Contact.FirstName', 'D'),
-form.add('Contact.HomePhone', '5551212'),
+form.add('first_name', 'D'),
 form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
 form.add('stripeTokenType', 'card'),
-form.add('Contact.MailingPostalCode', '78701')
-form.add('Reason', 'Because I love the Trib!')
-form.add('InstallmentPeriod', 'yearly')
-form.add('Installments', '3')
-form.add('OpenEndedStatus', 'None')
+form.add('reason', 'Because I love the Trib!')
+form.add('installment_period', 'yearly')
+form.add('installments', '3')
+form.add('openended_status', 'None')
+form.add('description', 'The Texas Tribune Membership')
+form.add('pay_fees_value', 'True')
 request.form = form
 
 
@@ -186,7 +185,9 @@ def test__format_opportunity():
             'Name': 'DC (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhI9',
             'StageName': 'Pledged',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn'
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'Description': 'The Texas Tribune Membership',
+            'Agreed_to_pay_fees__c': True,
             }
 
     assert response == expected_response
@@ -208,6 +209,8 @@ def test__format_recurring_donation():
             'Name': 'foo',
             'npe03__Installments__c': '3',
             'npe03__Open_Ended_Status__c': 'None',
+            'Stripe_Description__c': 'The Texas Tribune Membership',
+            'Agreed_to_pay_fees__c': True,
             'Type__c': 'Giving Circle'
             }
     response['Name'] = 'foo'
@@ -219,16 +222,11 @@ def test__format_contact():
 
     response = sf._format_contact(request_form=request.form)
 
-    expected_response = {'Description': 'added by Stripe/Checkout app',
+    expected_response = {'Description': 'The Texas Tribune Membership',
             'Email': 'dcraigmile+test6@texastribune.org',
             'FirstName': 'D',
-            'HomePhone': '5551212',
             'LastName': 'C',
             'LeadSource': 'Stripe',
-            'MailingCity': 'Austin',
-            'MailingPostalCode': '78701',
-            'MailingState': 'TX',
-            'MailingStreet': '823 Congress Ave Ste 1400',
             'Stripe_Customer_Id__c': None}
 
     assert response == expected_response
@@ -264,7 +262,7 @@ def test__get_contact():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf._get_contact('schnitzel')
@@ -281,7 +279,7 @@ def test_create_contact():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
     responses.add(responses.POST,
             'http://foo/services/data/v34.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
@@ -302,7 +300,7 @@ def test_find_contact():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf.find_contact(email='bogus')
@@ -320,7 +318,7 @@ def test_get_or_create_contact_non_extant():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
     responses.add(responses.POST,
             'http://foo/services/data/v34.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
@@ -349,7 +347,7 @@ def test_get_or_create_contact_extant():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(request_form=request.form)
@@ -370,7 +368,7 @@ def test_get_or_create_contact_multiple():
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201)
+            status=200)
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(request_form=request.form)
@@ -386,7 +384,7 @@ def test_upsert_non_extant():
             responses.POST,
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201,
+            status=200,
             )
     responses.add(
             responses.POST,
@@ -445,13 +443,13 @@ def test_upsert_extant():
             responses.POST,
             'https://cs22.salesforce.com/services/oauth2/token',
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=201,
+            status=200,
             )
     responses.add(
             responses.POST,
             'http://foo/services/data/v34.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
-            status=201,
+            status=200,
             )
     responses.add_callback(
             responses.GET,

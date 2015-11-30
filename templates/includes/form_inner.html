@@ -1,56 +1,35 @@
 <div class="form-outer-section">
   <h2>Name</h2>
   <div class="form-section three">
-    <label>First</label><br>
-      <input name="Contact.FirstName" type="text" maxlength="50">
+    {{ form.first_name.label }}<br>
+      {{ form.first_name(maxlength=50) }}
   </div>
   <div class="form-section three">
-    <label>Last</label><br>
-      <input name="Contact.LastName" type="text" maxlength="50">
+    {{ form.last_name.label }}<br>
+      {{ form.last_name(maxlength=50) }}
   </div>
-</div>
-<div class="form-outer-section">
-  <h2>Billing Info</h2>
-  <div class="form-section three">
-    <label>Phone</label><br>
-      <input name="Contact.HomePhone" maxlength="50" type="text">
-  </div>
-  <div class="form-section three break">
-    <label>Billing Address</label><br>
-      <input name="Contact.MailingStreet" type="text" maxlength="50">
-  </div>
-  <div class="form-section three break">
-    <label>City</label><br>
-      <input name="Contact.MailingCity" type="text"></input>
-  </div>
-  <div class="form-section three">
-    <label>State</label><br>
-      <input name="Contact.MailingState" type="text"></input>
-  </div>
-  <div class="form-section three">
-    <label>Zip Code</label><br>
-      <input name="Contact.MailingPostalCode" type="text" maxlength="5">
+  <div style="clear: both;" class="form-section six">
+    <p class="error-form-message"></p>
   </div>
 </div>
 <div class="form-outer-section">
   <h2>Additional Info</h2>
   <div class="form-section four">
-    <label>Encouraged to contribute by</label>
-      <input name="Reason" type="text" maxlength="100">
+    {{ form.reason.label }}
+      {{ form.reason(maxlength=100) }}
+  </div>
+  <div class="form-section four">
+    {{ form.pay_fees.label }}
+      {{ form.pay_fees(checked=False) }}
+    <p id="pay-fee-amount" class="label-info">{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
   </div>
 </div>
-<input name="Description" class="visually-hidden">
-{% if request.args.installments %}
-  <input name="Installments" value="{{ request.args.installments }}" class="visually-hidden">
-{% else %}
-  <input name="Installments" value="None" class="visually-hidden">
-{% endif %}
-{% if request.args.installmentPeriod %}
-  <input name="InstallmentPeriod" value="{{ request.args.installmentPeriod }}" class="visually-hidden">
-{% else %}
-  <input name="InstallmentPeriod" value="None" class="visually-hidden">
-{% endif %}
+  {{ form.pay_fees_value(value="False") }}
+  {{ form.installments(value=installments) }}
+  {{ form.installment_period(value=installment_period) }}
+  {{ form.openended_status(value=openended_status) }}
 <div class="form-outer-section">
   <script src="https://checkout.stripe.com/checkout.js"></script>
   <button id="customButton" class="button button-flat">Pay by Card</button>
+  <p>Prefer to mail a check? Use our <a href="http://support.texastribune.org/images/TT-member-form-2015.pdf">membership form</a>.</p>
 </div>
