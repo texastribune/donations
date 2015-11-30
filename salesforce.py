@@ -264,7 +264,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
-    if request.form['pay_fees'] == 'True':
+    if request.form['pay_fees_value'] == 'True':
         pay_fees = True
     else:
         pay_fees = False
