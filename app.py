@@ -1,14 +1,14 @@
 import os
 
 import stripe
+from config import FLASK_SECRET_KEY
 from flask import Flask, render_template, request
+from forms import DonateForm
+from validate_email import validate_email
 
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
 from salesforce import upsert
-from config import FLASK_SECRET_KEY
-from forms import DonateForm
-from validate_email import validate_email
 
 from pprint import pprint
 
