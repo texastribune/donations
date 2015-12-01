@@ -58,7 +58,7 @@ p {
   font-style: normal;
   font-weight: 500;
   margin: 0;
-  padding: 1em 0;
+  padding: 0.2em 0 0.8em 0;
 }
 
 
@@ -109,10 +109,9 @@ form {
 
 .dollar {
   color: $black;
-  font-family: $helvetica;
+  font-family: $league-gothic;
   font-size: 3.5em;
   margin: 0;
-  padding: 0 0.2em;
   width: 150px;
   &.uneditable {
     border: none;
@@ -153,6 +152,11 @@ input::-webkit-inner-spin-button, {
   padding: 0.2em;
 }
 
+#pay-fee-info {
+  clear: both;
+  padding: 0;
+}
+
 // Stripe form submit button styles
 .button {
   font-family: $helvetica;
@@ -179,6 +183,10 @@ input::-webkit-inner-spin-button, {
 }
 
 // Error styles
+.form-error {
+  display: none;
+}
+
 .error-form-message {
   color: red;
 }

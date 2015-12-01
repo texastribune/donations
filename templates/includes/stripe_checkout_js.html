@@ -41,6 +41,7 @@ var stripe_donation = function() {
           amount: donation_amount
         });
       } else {
+        $('.form-error').show();
         $('.error-form-message').text('Please check that you entered a first and last name, and then resubmit.');
       };
       e.preventDefault();

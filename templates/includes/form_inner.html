@@ -8,7 +8,7 @@
     {{ form.last_name.label }}<br>
       {{ form.last_name(maxlength=50) }}
   </div>
-  <div style="clear: both;" class="form-section six">
+  <div class="form-section six form-error">
     <p class="error-form-message"></p>
   </div>
 </div>
@@ -17,11 +17,6 @@
   <div class="form-section four">
     {{ form.reason.label }}
       {{ form.reason(maxlength=100) }}
-  </div>
-  <div class="form-section four">
-    {{ form.pay_fees.label }}
-      {{ form.pay_fees(checked=False) }}
-    <p id="pay-fee-amount" class="label-info">{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
   </div>
 </div>
   {{ form.pay_fees_value(value="False") }}
