@@ -145,11 +145,12 @@ input::-webkit-inner-spin-button, {
 #pay_fees {
   clear: both;
   float: left;
+  margin-left: -20px;
 }
 
 #pay-fee-amount {
   float: left;
-  padding: 0.2em;
+  padding: 0.2em 0 0 0;
 }
 
 #pay-fee-info {
