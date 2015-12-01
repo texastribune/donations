@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, request
 from forms import DonateForm
+from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
 from validate_email import validate_email
