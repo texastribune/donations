@@ -80,14 +80,20 @@ def internal_texasweekly_form():
         amount = request.args.get('amount')
     else:
         amount = 349
-    return render_template('internal_texasweekly_form.html', form = form, amount=amount)
+    return render_template('internal_texasweekly_form.html', form=form, amount=amount)
 
 
 @app.route('/submit-tw', methods=['POST'])
 def submit_tw():
     form = TexasWeeklyForm(request.form)
-    # Temporary render of charge template while integrating new TW form
-    return render_template('charge.html')
+
+    if form.validate():
+        # add_tw_subscrip(form=form)
+        # Temporary render of charge template while integrating new TW form
+        return render_template('charge.html')
+    else:
+        message = "Sorry, there was an issue saving your form."
+        return render_template('error.html', message=message)
 
 
 @app.route('/error')

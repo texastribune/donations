@@ -20,9 +20,16 @@
           {{ form.last_name.label }}<br>
             {{ form.last_name(maxlength=50) }}
         </div>
+        <div style="clear: both;" class="form-section six">
+          <p class="error-form-message"></p>
+        </div>
       </div>
       {{ form.description(value='Texas Weekly Subscription') }}
-      <input type="submit">
+      <div class="form-outer-section">
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <button id="customButton" class="button button-flat">Submit</button>
+      </div>
     </form>
+    {% include 'includes/stripe_checkout_js.html' %}
   </div>
 {% endblock %}
