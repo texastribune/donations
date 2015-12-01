@@ -6,7 +6,7 @@ import requests
 from pytz import timezone
 
 from config import SALESFORCE
-from config import DONATION_RECORDTYPEID
+from config import DONATION_RECORDTYPEID, TEXASWEEKLY_RECORDTYPEID
 from config import TIMEZONE
 
 zone = timezone(TIMEZONE)
@@ -290,6 +290,46 @@ def _format_opportunity(contact=None, request=None, customer=None):
             # Co Member First name, last name, and email
             }
     return opportunity
+
+
+def _format_tw_opportunity(contact=None, request=None, customer=None):
+    """
+    Format a Texas Weekly opportunity for insertion.
+    """
+
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+
+    opportunity = {
+            'AccountId': '{}'.format(contact['AccountId']),
+            'Amount': '{}'.format(request.form['amount']),
+            'CloseDate': today,
+            'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
+            'Name': '{}{} ({})'.format(
+                request.form['first_name'],
+                request.form['last_name'],
+                request.form['stripeEmail'],
+                ),
+            'StageName': 'Pledged',
+            'Stripe_Customer_Id__c': customer.id,
+            'LeadSource': 'Stripe',
+            'Description': '{}'.format(request.form['description']),
+            }
+    print(opportunity)
+    return opportunity
+
+
+def add_tw_subscription(request=None, customer=None, charge=None):
+
+    print ("----Adding TW subscription opportunity...")
+    sf = SalesforceConnection()
+    _, contact = sf.get_or_create_contact(request.form)
+    opportunity = _format_tw_opportunity(contact=contact, request=request,
+            customer=customer)
+    path = '/services/data/v34.0/sobjects/Opportunity'
+    response = sf.post(path=path, data=opportunity)
+    send_multiple_account_warning()
+
+    return response
 
 
 def add_opportunity(request=None, customer=None, charge=None):

@@ -8,6 +8,7 @@ from validate_email import validate_email
 
 from salesforce import add_opportunity
 from salesforce import add_recurring_donation
+from salesforce import add_tw_subscription
 from salesforce import upsert
 
 from pprint import pprint
@@ -80,16 +81,30 @@ def internal_texasweekly_form():
         amount = request.args.get('amount')
     else:
         amount = 349
-    return render_template('internal_texasweekly_form.html', form=form, amount=amount)
+    return render_template('internal_texasweekly_form.html', form=form, amount=amount, \
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/submit-tw', methods=['POST'])
 def submit_tw():
     form = TexasWeeklyForm(request.form)
 
+    email_is_valid = validate_email(request.form['stripeEmail'])
+
+    if email_is_valid:
+        customer = stripe.Customer.create(
+            email=request.form['stripeEmail'],
+            card=request.form['stripeToken']
+        )
+    else:
+        message = "Please enter a valid email address."
+        return render_template('error.html', message=message)
+
+    upsert(request=request, customer=customer)
+
     if form.validate():
-        # add_tw_subscrip(form=form)
-        # Temporary render of charge template while integrating new TW form
+        print("----Adding TW subscription...")
+        add_tw_subscription(request=request, customer=customer)
         return render_template('charge.html')
     else:
         message = "Sorry, there was an issue saving your form."
