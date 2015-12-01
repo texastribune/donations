@@ -19,7 +19,7 @@
         <div class="form-section three">
           {{ form.pay_fees.label }}
             {{ form.pay_fees(checked=False) }}
-          <p id="pay-fee-amount" class="label-info">{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
+          <p id="pay-fee-amount" class="label-info"><span></span></p>
           <p id="pay-fee-info">If you pay these fees, The Texas Tribune will receive your full donation amount.</p>
         </div>
         <div class="form-section three">

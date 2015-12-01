@@ -65,7 +65,7 @@ var listen_for_fee_check = function() {
 
 var pay_fee_amount = function() {
   var input_amount = $('input[name="amount"]').val();
-  var pay_fee_element = $('#pay-fee-amount');
+  var pay_fee_element = $('#pay-fee-amount span');
 
   // Calculate the Stripe fee per charge
   // https://stripe.com/us/pricing
@@ -78,5 +78,5 @@ var pay_fee_amount = function() {
   input_amount = input_amount.toFixed(2);
 
   // Add a dollar sign
-  pay_fee_element.prepend('$' + input_amount);
+  pay_fee_element.text('$' + input_amount);
 };
