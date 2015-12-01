@@ -2,12 +2,14 @@ from datetime import datetime
 import json
 import locale
 
+import celery
 import requests
 from pytz import timezone
 
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
 from config import TIMEZONE
+from emails import send_email
 
 zone = timezone(TIMEZONE)
 
@@ -15,38 +17,8 @@ locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 WARNINGS = dict()
 
-
-def send_email(recipient, subject, body, sender=None):
-    import smtplib
-
-    from config import MAIL_SERVER
-    from config import MAIL_PORT
-    from config import MAIL_USERNAME
-    from config import MAIL_PASSWORD
-    from config import DEFAULT_MAIL_SENDER
-
-    if sender is None:
-        FROM = DEFAULT_MAIL_SENDER
-    else:
-        FROM = sender
-
-    TO = recipient if type(recipient) is list else [recipient]
-    SUBJECT = subject
-    TEXT = body
-
-    # Prepare actual message
-    message = """\From: %s\nTo: %s\nSubject: %s\n\n%s
-    """ % (FROM, ", ".join(TO), SUBJECT, TEXT)
-    try:
-        server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
-        server.ehlo()
-        server.starttls()
-        server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.sendmail(FROM, TO, message)
-        server.close()
-        print ('successfully sent the mail')
-    except:
-        print ('failed to send mail')
+# TODO: use v35 of Salesforce API
+# TODO: use latest version of Stripe API
 
 
 def warn_multiple_accounts(email, count):
@@ -58,7 +30,7 @@ def send_multiple_account_warning():
     for email in WARNINGS:
         count = WARNINGS[email]
         body = """
-        {} accounts were found matching the email address [{}]
+        {} accounts were found matching the email address <{}>
         while inserting a Stripe transaction.
 
         The transaction was attached to the first match found. You may want to
@@ -126,18 +98,18 @@ class SalesforceConnection(object):
         check_response(response=resp, expected_status=201)
         return response
 
-    def _format_contact(self, request_form=None):
+    def _format_contact(self, form=None):
 
         try:
-            stripe_id = request_form['Stripe_Customer_Id__c']
+            stripe_id = form['Stripe_Customer_Id__c']
         except KeyError:
             stripe_id = None
 
         contact = {
-            'Email': request_form['stripeEmail'],
-            'FirstName': request_form['first_name'],
-            'LastName': request_form['last_name'],
-            'Description': request_form['description'],
+            'Email': form['stripeEmail'],
+            'FirstName': form['first_name'],
+            'LastName': form['last_name'],
+            'Description': form['description'],
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
             }
@@ -162,14 +134,14 @@ class SalesforceConnection(object):
         contact = response[0]
         return contact
 
-    def create_contact(self, request_form):
+    def create_contact(self, form):
         """
         Create and return a contact. Then fetch that created contact to get
         the associated account ID.
         """
 
         print ("----Creating contact...")
-        contact = self._format_contact(request_form=request_form)
+        contact = self._format_contact(form=form)
         path = '/services/data/v34.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
         contact_id = response['id']
@@ -191,21 +163,21 @@ class SalesforceConnection(object):
         response = self.query(query)
         return response
 
-    def get_or_create_contact(self, request_form):
+    def get_or_create_contact(self, form):
         """
         Return a contact. If one already exists it's returned. Otherwise
         a new contact is created and returned.
         """
 
         created = False
-        email = request_form['stripeEmail']
+        email = form['stripeEmail']
 
         response = self.find_contact(email=email)
 
         # if the response is empty then nothing matched and we
         # have to create a contact:
         if len(response) < 1:
-            contact = self.create_contact(request_form)
+            contact = self.create_contact(form)
             created = True
             return created, contact
 
@@ -216,11 +188,11 @@ class SalesforceConnection(object):
 
 
 def check_response(response=None, expected_status=200):
-    # TODO: look for 'success'
     code = response.status_code
     try:
         content = json.loads(response.content.decode('utf-8'))
-        print (content)
+        # TODO: look for 'success'
+        #print (content)
     except:
         print ('unable to parse response (this is probably okay)')
     if code != expected_status:
@@ -228,7 +200,7 @@ def check_response(response=None, expected_status=200):
     return True
 
 
-def upsert(customer=None, request=None):
+def upsert_customer(customer=None, form=None):
     """
     Creates the user if it doesn't exist in Salesforce. If it does exist
     the Stripe Customer ID is added to the Salesforce record.
@@ -236,12 +208,12 @@ def upsert(customer=None, request=None):
 
     if customer is None:
         raise Exception("Value for 'customer' must be specified.")
-    if request is None:
-        raise Exception("Value for 'request' must be specified.")
+    if form is None:
+        raise Exception("Value for 'form' must be specified.")
 
     update = {'Stripe_Customer_Id__c': customer.id}
     updated_request = update.copy()
-    updated_request.update(request.form.to_dict())
+    updated_request.update(form.to_dict())
 
     sf = SalesforceConnection()
     created, contact = sf.get_or_create_contact(updated_request)
@@ -257,47 +229,47 @@ def upsert(customer=None, request=None):
     return True
 
 
-def _format_opportunity(contact=None, request=None, customer=None):
+def _format_opportunity(contact=None, form=None, customer=None):
     """
     Format an opportunity for insertion.
     """
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
-    if request.form['pay_fees_value'] == 'True':
+    if form['pay_fees_value'] == 'True':
         pay_fees = True
     else:
         pay_fees = False
 
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(request.form['amount']),
+            'Amount': '{}'.format(form['amount']),
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': '{}{} ({})'.format(
-                request.form['first_name'],
-                request.form['last_name'],
-                request.form['stripeEmail'],
+                form['first_name'],
+                form['last_name'],
+                form['stripeEmail'],
                 ),
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
 #           'Stripe_Transaction_Id__c': charge.id,
 #           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
-            'Description': '{}'.format(request.form['description']),
+            'Description': '{}'.format(form['description']),
             'Agreed_to_pay_fees__c': pay_fees,
-            'Encouraged_to_contribute_by__c': '{}'.format(request.form['reason']),
+            'Encouraged_to_contribute_by__c': '{}'.format(form['reason']),
             # Co Member First name, last name, and email
             }
     return opportunity
 
 
-def add_opportunity(request=None, customer=None, charge=None):
+def add_opportunity(form=None, customer=None, charge=None):
 
     print ("----Adding opportunity...")
     sf = SalesforceConnection()
-    _, contact = sf.get_or_create_contact(request.form)
-    opportunity = _format_opportunity(contact=contact, request=request,
+    _, contact = sf.get_or_create_contact(form)
+    opportunity = _format_opportunity(contact=contact, form=form,
             customer=customer)
     path = '/services/data/v34.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
@@ -306,22 +278,22 @@ def add_opportunity(request=None, customer=None, charge=None):
     return response
 
 
-def _format_recurring_donation(contact=None, request=None, customer=None):
+def _format_recurring_donation(contact=None, form=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
-    amount = request.form['amount']
+    amount = form['amount']
     type__c = ''
     try:
-        installments = request.form['installments']
+        installments = form['installments']
     except:
         installments = 'None'
     try:
-        open_ended_status = request.form['openended_status']
+        open_ended_status = form['openended_status']
     except:
         open_ended_status = 'None'
     try:
-        installment_period = request.form['installment_period']
+        installment_period = form['installment_period']
     except:
         installment_period = 'None'
 
@@ -338,11 +310,10 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     else:
         installments = 0
 
-    if request.form['pay_fees_value'] == 'True':
+    if form['pay_fees_value'] == 'True':
         pay_fees = True
     else:
         pay_fees = False
-
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
@@ -351,15 +322,15 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'npe03__Open_Ended_Status__c': '',
             'Name': '{} for {} {}'.format(
                 now,
-                request.form['first_name'],
-                request.form['last_name'],
+                form['first_name'],
+                form['last_name'],
                 ),
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',
-            'Stripe_Description__c': '{}'.format(request.form['description']),
+            'Stripe_Description__c': '{}'.format(form['description']),
             'Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(
-                request.form['reason']),
+                form['reason']),
             'npe03__Open_Ended_Status__c': open_ended_status,
             'npe03__Installments__c': installments,
             'npe03__Installment_Period__c': installment_period,
@@ -368,15 +339,31 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
     return recurring_donation
 
 
-def add_recurring_donation(request=None, customer=None):
+def add_recurring_donation(form=None, customer=None):
 
     print ("----Adding recurring donation...")
     sf = SalesforceConnection()
-    _, contact = sf.get_or_create_contact(request.form)
+    _, contact = sf.get_or_create_contact(form)
     recurring_donation = _format_recurring_donation(contact=contact,
-            request=request, customer=customer)
+            form=form, customer=customer)
     path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
-    response = sf.post(path=path, data=recurring_donation)
+    sf.post(path=path, data=recurring_donation)
     send_multiple_account_warning()
 
+    return True
+
+
+@celery.task(name='salesforce.add_customer_and_charge')
+def add_customer_and_charge(form=None, customer=None):
+    pprint(form)
+
+    upsert_customer(form=form, customer=customer)
+
+
+    if (form['installment_period'] == 'None'):
+        print("----One time payment...")
+        add_opportunity(form=form, customer=customer)
+    else:
+        print("----Recurring payment...")
+        add_recurring_donation(form=form, customer=customer)
     return True

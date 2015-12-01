@@ -4,64 +4,92 @@ from config import STRIPE_KEYS
 import requests
 import json
 from datetime import datetime, timedelta
+import celery
+from emails import send_email
 
 stripe.api_key = STRIPE_KEYS['secret_key']
 
-# TODO: send alert for failures
-# TODO: send report at the end of each run?
 
-three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-today = datetime.now().strftime('%Y-%m-%d')
+class Log(object):
+    def __init__(self):
+        self.log = list()
 
-query = """
-    SELECT Amount, Name, Stripe_Customer_Id__c
-    FROM Opportunity
-    WHERE CloseDate <= {}
-    AND CloseDate >= {}
-    AND StageName = 'Pledged'
-    AND Stripe_Customer_Id__c != ''
-    """.format(today, three_days_ago)
+    def it(self, string):
+        print(string)
+        self.log.append(string)
 
-print(query)
-sf = SalesforceConnection()
+    def send(self):
+        body = '\n'.join(self.log)
+        recipient = 'dcraigmile@texastribune.org'
+        subject = 'Batch run'
+        send_email(body=body, recipient=recipient, subject=subject)
 
-response = sf.query(query)
-# TODO: check response code
 
-print ("---- Found {} opportunities available to process:".format(
-    len(response)))
+@celery.task()
+def charge_cards():
 
-for item in response:
-    # print (item)
-    try:
-        print ("---- Charging ${} to {} ({})".format(item['Amount'],
-            item['Stripe_Customer_ID__c'],
-            item['Name']))
-        charge = stripe.Charge.create(
-                customer=item['Stripe_Customer_ID__c'],
-                amount=int(item['Amount']) * 100,
-                currency='usd',
-                description='Change Me'  # TODO
-                )
-    except stripe.error.CardError as e:
-        print("The card has been declined: {}".format(e))
-        raise Exception('problem')
-        # TODO: send alert for failure
-    # print ('Charge: {}'.format(charge))
-    # TODO: check for success
+    log = Log()
 
-    # print ("Charge id: {}".format(charge.id))
-    update = {
-            'Stripe_Card__c': charge.id,
-            'StageName': 'Closed Won',
-            }
-    path = item['attributes']['url']
-    url = '{}{}'.format(sf.instance_url, path)
-    # print (url)
-    resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
-    # TODO: check 'errors' and 'success' too
-    # print (resp)
-    if resp.status_code == 204:
-        print ("ok")
-    else:
-        raise Exception('problem')
+    print('---Starting batch job...')
+
+    three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    query = """
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        FROM Opportunity
+        WHERE CloseDate <= {}
+        AND CloseDate >= {}
+        AND StageName = 'Pledged'
+        AND Stripe_Customer_Id__c != ''
+        """.format(today, three_days_ago)
+
+    print(query)
+    sf = SalesforceConnection()
+
+    response = sf.query(query)
+    # TODO: check response code
+
+    log.it('Found {} opportunities available to process.'.format(
+        len(response)))
+
+    for item in response:
+        # print (item)
+        try:
+            log.it("---- Charging ${} to {} ({})".format(item['Amount'],
+                item['Stripe_Customer_ID__c'],
+                item['Name']))
+            charge = stripe.Charge.create(
+                    customer=item['Stripe_Customer_ID__c'],
+                    amount=int(item['Amount']) * 100,
+                    currency='usd',
+                    description=item['Description'],
+                    )
+        except stripe.error.CardError as e:
+            log.it("The card has been declined: {}".format(e))
+            raise Exception('problem')
+        # print ('Charge: {}'.format(charge))
+        # TODO: check for success
+
+        # print ("Charge id: {}".format(charge.id))
+        # TODO: copy transaction ID too
+        update = {
+                'Stripe_Transaction_Id__c': charge.id,
+                'Stripe_Card__c': charge.source.id,
+                'StageName': 'Closed Won',
+                }
+        path = item['attributes']['url']
+        url = '{}{}'.format(sf.instance_url, path)
+        # print (url)
+        resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
+        # TODO: check 'errors' and 'success' too
+        # print (resp)
+        if resp.status_code == 204:
+            log.it("ok")
+        else:
+            raise Exception('problem')
+
+    log.send()
+
+if __name__ == '__main__':
+    charge_cards()
