@@ -3,7 +3,7 @@ import os
 import stripe
 from config import FLASK_SECRET_KEY
 from flask import Flask, render_template, request
-from forms import DonateForm
+from forms import DonateForm, TexasWeeklyForm
 from validate_email import validate_email
 
 from salesforce import add_opportunity
@@ -71,6 +71,23 @@ def circle_form():
     return render_template('circle-form.html', form=form, amount=amount, \
         installment_period=installment_period, installments=installments, \
         openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
+
+
+@app.route('/internal-texasweekly')
+def internal_texasweekly_form():
+    form = TexasWeeklyForm()
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        amount = 349
+    return render_template('internal_texasweekly_form.html', form = form, amount=amount)
+
+
+@app.route('/submit-tw', methods=['POST'])
+def submit_tw():
+    form = TexasWeeklyForm(request.form)
+    # Temporary render of charge template while integrating new TW form
+    return render_template('charge.html')
 
 
 @app.route('/error')
