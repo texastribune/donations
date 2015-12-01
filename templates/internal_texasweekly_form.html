@@ -2,11 +2,16 @@
 
 {% block content %}
   <div class="main">
-    <form action="/submit_tw" method="post">
+    <form action="/submit-tw" method="post">
       {{ form.csrf_token }}
       <div class="form-outer-section">
         <p>This page is for internal use for Texas Weekly subscriptions.</p>
-        <h2>Name</h2>
+        <h2>Texas Weekly Subscription Info</h2>
+        <div class="form-section three">
+          <label>Amount</label><br>
+            <span class="dollar">$</span>
+              {{ form.amount(value=amount, class="dollar") }}
+        </div>
         <div class="form-section three">
           {{ form.first_name.label }}<br>
             {{ form.first_name(maxlength=50) }}
@@ -17,6 +22,7 @@
         </div>
       </div>
       {{ form.description(value='Texas Weekly Subscription') }}
+      <input type="submit">
     </form>
   </div>
 {% endblock %}
