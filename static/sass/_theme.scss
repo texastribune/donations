@@ -28,6 +28,18 @@ body {
       @include span-columns(12);
     }
   }
+  .three {
+    @include span-columns(3);
+  }
+  .four {
+    @include span-columns(4);
+  }
+  .three, .four {
+    @include media($tablet) {
+      @include span-columns(12);
+      margin-top: 1em;
+    }
+  }
 }
 
 
@@ -78,29 +90,14 @@ p {
 
 // Form styles
 .form-outer-section {
-  @include outer-container;
   border-bottom: 2px solid $yellow-tribune;
   padding: 1em 0;
   &:last-of-type {
     border-bottom: none;
   }
-  .form-section {
-    &.three {
-      @include span-columns(3);
-    }
-    &.four {
-      @include span-columns(4);
-    }
-    &.three, &.four {
-      @include media($tablet) {
-        @include span-columns(12);
-        margin-top: 1em;
-      }
-    }
     &.break {
       clear: both;
     }
-  }
 }
 
 form {
@@ -201,7 +198,7 @@ input::-webkit-inner-spin-button, {
 
 // 404 and thank-you page images
 .img-wrapper {
-  text-align: center;
+  text-align: left;
   img {
     padding: 1em;
     width: 450px;

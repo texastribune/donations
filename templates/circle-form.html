@@ -4,8 +4,8 @@
   <div class="main">
     <form id="form" action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="form-outer-section">
-        <p>Thank you for becoming a Circle member of The Texas Tribune! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level.</p>
+      <div class="outer-section form-outer-section">
+        <p>Thank you for becoming a Circle member of The Texas Tribune!</p>
         <h2>Circle Membership Info</h2>
         <div class="form-section three">
           <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
@@ -16,7 +16,7 @@
           {{ form.pay_fees.label }}
             {{ form.pay_fees(checked=False) }}
           <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-          <p id="pay-fee-info">If you pay these fees, The Texas Tribune will receive your full donation amount.</p>
+          <p id="pay-fee-info">To direct more money in support of the Tribune’s mission.</p>
         </div>
         <div class="form-section three">
           <label>Length</label><br>

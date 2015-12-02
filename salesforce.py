@@ -285,7 +285,7 @@ def _format_opportunity(contact=None, request=None, customer=None):
 #           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
             'Description': '{}'.format(request.form['description']),
-            'Agreed_to_pay_fees__c': pay_fees,
+            'Stripe_Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(request.form['reason']),
             # Co Member First name, last name, and email
             }
@@ -397,7 +397,7 @@ def _format_recurring_donation(contact=None, request=None, customer=None):
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',
             'Stripe_Description__c': '{}'.format(request.form['description']),
-            'Agreed_to_pay_fees__c': pay_fees,
+            'Stripe_Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(
                 request.form['reason']),
             'npe03__Open_Ended_Status__c': open_ended_status,

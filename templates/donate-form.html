@@ -4,8 +4,8 @@
   <div class="main">
     <form id="form" action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="form-outer-section">
-        <p>Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, click <a href="http://support.texastribune.org/">here</a>.</p>
+      <div class="outer-section form-outer-section">
+        <p>Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="http://support.texastribune.org/">our donation page</a>.</p>
         <h2>Donation Info</h2>
         <div class="form-section three">
           <label>Amount</label><br>
@@ -20,7 +20,7 @@
           {{ form.pay_fees.label }}
             {{ form.pay_fees(checked=False) }}
           <p id="pay-fee-amount" class="label-info"><span></span></p>
-          <p id="pay-fee-info">If you pay these fees, The Texas Tribune will receive your full donation amount.</p>
+          <p id="pay-fee-info">To direct more money in support of the Tribune’s mission.</p>
         </div>
         <div class="form-section three">
           <label>Duration</label><br>

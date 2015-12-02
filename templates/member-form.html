@@ -4,8 +4,8 @@
   <div class="main">
     <form action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="form-outer-section">
-        <p>Thank you for supporting The Texas Tribune by becoming a member! Click <a href="http://support.texastribune.org/">here</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, click <a href="/donateform">here</a>.</p>
+      <div class="outer-section form-outer-section">
+        <p>Thank you for supporting The Texas Tribune by becoming a member! Visit <a href="http://support.texastribune.org/">our donation page</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, you can do so with <a href="/donateform">this form</a>.</p>
         <h2>Membership Info</h2>
         <div class="form-section three">
           <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
@@ -16,7 +16,7 @@
           {{ form.pay_fees.label }}
             {{ form.pay_fees(checked=False) }}
           <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-          <p id="pay-fee-info">If you pay these fees, The Texas Tribune will receive your full donation amount.</p>
+          <p id="pay-fee-info">To direct more money in support of the Tribune’s mission.</p>
         </div>
         {% if installment_period and amount %}
         <div class="form-section three">
