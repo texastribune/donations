@@ -39,8 +39,7 @@ def member_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        message = "Please select a membership level at support.texastribune.org."
-        return render_template("error.html", message=message)
+        return render_template('page_not_found.html'), 404
     installment_period = request.args.get('installmentPeriod')
     if installment_period is None:
         installment_period = 'None'
@@ -72,8 +71,7 @@ def circle_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        message = "Please select a membership level at support.texastribune.org."
-        return render_template("error.html", message=message)
+        return render_template('page_not_found.html'), 404
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')
@@ -105,7 +103,7 @@ def submit_tw():
             card=request.form['stripeToken']
         )
     else:
-        message = "Please enter a valid email address."
+        message = "There was an issue saving your email address."
         return render_template('error.html', message=message)
 
     upsert(request=request, customer=customer)
@@ -115,7 +113,7 @@ def submit_tw():
         add_tw_subscription(request=request, customer=customer)
         return render_template('charge.html')
     else:
-        message = "Sorry, there was an issue saving your form."
+        message = "There was an issue saving your form."
         return render_template('error.html', message=message)
 
 
@@ -144,7 +142,7 @@ def charge():
                 card=request.form['stripeToken']
         )
     else:
-        message = "Please enter a valid email address."
+        message = "There was an issue saving your email address."
         return render_template('error.html', message=message)
 
     if form.validate():
@@ -154,7 +152,7 @@ def charge():
         return render_template('charge.html',
                 amount=request.form['amount'])
     else:
-        message = "Sorry, there was an issue saving your form."
+        message = "There was an issue saving your form."
         return render_template('error.html', message=message)
 
 if __name__ == '__main__':
