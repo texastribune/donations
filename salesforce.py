@@ -264,7 +264,7 @@ def _format_opportunity(contact=None, form=None, customer=None):
     return opportunity
 
 
-def _format_tw_opportunity(contact=None, request=None, customer=None):
+def _format_tw_opportunity(contact=None, form=None, customer=None):
     """
     Format a Texas Weekly opportunity for insertion.
     """
@@ -273,18 +273,18 @@ def _format_tw_opportunity(contact=None, request=None, customer=None):
 
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(request.form['amount']),
+            'Amount': '{}'.format(form['amount']),
             'CloseDate': today,
             'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
             'Name': '{}{} ({})'.format(
-                request.form['first_name'],
-                request.form['last_name'],
-                request.form['stripeEmail'],
+                form['first_name'],
+                form['last_name'],
+                form['stripeEmail'],
                 ),
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
             'LeadSource': 'Stripe',
-            'Description': '{}'.format(request.form['description']),
+            'Description': '{}'.format(form['description']),
             }
     print(opportunity)
     return opportunity
