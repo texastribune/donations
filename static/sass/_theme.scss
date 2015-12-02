@@ -12,7 +12,7 @@ body {
 
 .main {
   min-height: 500px;
-  padding: 0 0 1em 0;
+  padding: 0 2em;
 }
 
 .page-wrap {
@@ -21,12 +21,12 @@ body {
 
 .outer-section {
   @include outer-container;
+  .nine {
+    @include span-columns(9);
+  }
   .six {
     @include span-columns(6);
     padding: 1em;
-    @include media($tablet) {
-      @include span-columns(12);
-    }
   }
   .three {
     @include span-columns(3);
@@ -34,7 +34,7 @@ body {
   .four {
     @include span-columns(4);
   }
-  .three, .four {
+  .three, .four, .six, .nine {
     @include media($tablet) {
       @include span-columns(12);
       margin-top: 1em;
@@ -98,10 +98,6 @@ p {
     &.break {
       clear: both;
     }
-}
-
-form {
-  padding: 0 2em;
 }
 
 .dollar {

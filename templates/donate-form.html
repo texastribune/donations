@@ -2,10 +2,12 @@
 
 {% block content %}
   <div class="main">
+    <div class="outer-section">
+      <p class="nine">Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="http://support.texastribune.org/">our donation page</a>.</p>
+    </div>
     <form id="form" action="/charge" method="post">
       {{ form.csrf_token }}
       <div class="outer-section form-outer-section">
-        <p>Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="http://support.texastribune.org/">our donation page</a>.</p>
         <h2>Donation Info</h2>
         <div class="form-section three">
           <label>Amount</label><br>

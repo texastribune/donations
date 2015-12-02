@@ -2,10 +2,12 @@
 
 {% block content %}
   <div class="main">
+    <div class="outer-section">
+      <p class="nine">Thank you for supporting The Texas Tribune by becoming a member! Visit <a href="http://support.texastribune.org/">our donation page</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, you can do so with <a href="/donateform">this form</a>.</p>
+    </div>
     <form action="/charge" method="post">
       {{ form.csrf_token }}
       <div class="outer-section form-outer-section">
-        <p>Thank you for supporting The Texas Tribune by becoming a member! Visit <a href="http://support.texastribune.org/">our donation page</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, you can do so with <a href="/donateform">this form</a>.</p>
         <h2>Membership Info</h2>
         <div class="form-section three">
           <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
