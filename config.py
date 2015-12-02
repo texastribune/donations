@@ -42,6 +42,7 @@ DEFAULT_MAIL_SENDER = os.getenv('DEFAULT_MAIL_SENDER', 'me@myplace.org')
 #
 MEMBERSHIP_RECORDTYPEID = '01216000001IhHp'
 DONATION_RECORDTYPEID = '01216000001IhI9'
+# TODO: add Texas Weekly record type
 SALESFORCE = {
     "CLIENT_ID": os.getenv('SALESFORCE_CLIENT_ID'),
     "CLIENT_SECRET": os.getenv('SALESFORCE_CLIENT_SECRET'),
@@ -64,3 +65,9 @@ STRIPE_KEYS = {
 ENABLE_SLACK = bool_env('ENABLE_SLACK')
 SLACK_CHANNEL = os.getenv('SLACK_CHANNEL', '#stripe')
 SLACK_API_KEY = os.getenv('SLACK_API_KEY')
+
+########
+# Sentry
+#
+ENABLE_SENTRY = bool_env('ENABLE_SENTRY')
+SENTRY_DSN = os.environ['SENTRY_DSN']
