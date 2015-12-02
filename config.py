@@ -19,6 +19,7 @@ FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
+# TODO: transform this to a cron format
 CELERYBEAT_SCHEDULE = {
         'every-minute': {
             'task': 'batch.charge_cards',
@@ -31,9 +32,9 @@ CELERYBEAT_SCHEDULE = {
 #
 MAIL_SERVER = os.getenv('MAIL_SERVER', 'localhost')
 MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'user')
-MAIL_PASSWORD = os.getenv('MAIL_PASSWORD' 'pass')
+MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'pass')
 MAIL_PORT = os.getenv('MAIL_PORT', '2525')
-MAIL_USE_TLS = bool_env('MAIL_USE_TLS', True)
+MAIL_USE_TLS = bool_env('MAIL_USE_TLS')
 DEFAULT_MAIL_SENDER = os.getenv('DEFAULT_MAIL_SENDER', 'me@myplace.org')
 
 ############
