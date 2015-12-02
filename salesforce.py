@@ -26,6 +26,9 @@ WARNINGS = dict()
 
 
 def notify_slack(message):
+    """
+    Send a notification about a donation to Slack.
+    """
     if ENABLE_SLACK:
         payload = {
                 'token': SLACK_API_KEY,
@@ -37,10 +40,17 @@ def notify_slack(message):
 
 
 def warn_multiple_accounts(email, count):
+    """
+    Track warnings about multiple accounts (so we don't send
+    duplicate warnings about duplicates)
+    """
     WARNINGS[email] = count
 
 
 def send_multiple_account_warning():
+    """
+    Send the warnings about multiple accounts.
+    """
 
     for email in WARNINGS:
         count = WARNINGS[email]
@@ -62,6 +72,9 @@ def send_multiple_account_warning():
 
 
 class SalesforceConnection(object):
+    """
+    Represents the Salesforce API.
+    """
 
     def __init__(self):
 
@@ -92,6 +105,9 @@ class SalesforceConnection(object):
         return None
 
     def query(self, query, path='/services/data/v34.0/query'):
+        """
+        Call the Salesforce API to do SOQL queries.
+        """
         url = '{}{}'.format(self.instance_url, path)
         if query is None:
             payload = {}
@@ -107,6 +123,9 @@ class SalesforceConnection(object):
         return response['records']
 
     def post(self, path=None, data=None):
+        """
+        Call the Salesforce API to make inserts/updates.
+        """
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
         response = json.loads(resp.text)
@@ -114,6 +133,9 @@ class SalesforceConnection(object):
         return response
 
     def _format_contact(self, form=None):
+        """
+        Format a contact for update/insert.
+        """
 
         try:
             stripe_id = form['Stripe_Customer_Id__c']
@@ -203,6 +225,10 @@ class SalesforceConnection(object):
 
 
 def check_response(response=None, expected_status=200):
+    """
+    Check the response from API calls to determine if they succeeded and
+    if not, why.
+    """
     code = response.status_code
     try:
         content = json.loads(response.content.decode('utf-8'))
@@ -295,6 +321,9 @@ def add_opportunity(form=None, customer=None, charge=None):
 
 
 def _format_recurring_donation(contact=None, form=None, customer=None):
+    """
+    Format a recurring donation for insertion into SF.
+    """
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
@@ -356,6 +385,9 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
 
 
 def add_recurring_donation(form=None, customer=None):
+    """
+    Insert a recurring donation into SF.
+    """
 
     print ("----Adding recurring donation...")
     sf = SalesforceConnection()
@@ -371,6 +403,11 @@ def add_recurring_donation(form=None, customer=None):
 
 @celery.task(name='salesforce.add_customer_and_charge')
 def add_customer_and_charge(form=None, customer=None):
+    """
+    Add a contact and their donation into SF. This is done in the background
+    because there are a lot of API calls and there's no point in making the
+    payer wait for them.
+    """
     amount = form['amount']
     name = '{} {}'.format(form['first_name'], form['last_name'])
     reason = form['reason']
