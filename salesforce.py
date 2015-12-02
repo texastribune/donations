@@ -295,8 +295,6 @@ def _format_opportunity(contact=None, form=None, customer=None):
                 ),
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
-#           'Stripe_Transaction_Id__c': charge.id,
-#           'Stripe_Card__c': charge.source.id,
             'LeadSource': 'Stripe',
             'Description': '{}'.format(form['description']),
             'Stripe_Agreed_to_pay_fees__c': pay_fees,
