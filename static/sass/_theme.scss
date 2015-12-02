@@ -143,6 +143,9 @@ input::-webkit-inner-spin-button, {
   clear: both;
   float: left;
   margin-left: -20px;
+  @include media($tablet) {
+    margin-left: 0;
+  }
 }
 
 #pay-fee-amount {
