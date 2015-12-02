@@ -14,10 +14,25 @@ run:
 	docker run --name=${APP} --detach=true --publish=5000:80 ${NS}/${APP}
 
 clean:
-	docker stop ${APP} && docker rm ${APP}
+	-docker stop ${APP} && docker rm ${APP}
+	-docker stop redis && docker rm redis
+	-docker stop rabbitmq && docker rm rabbitmq
+
+backing:
+	docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
+	docker run --detach --name redis redis
 
 interactive: build-dev
-	docker run --workdir=/flask --volume=$$(pwd):/flask --env-file=env --rm --interactive --tty --publish=80:5000 --name=${APP} ${NS}/${APP}:dev bash
+	docker run \
+		--workdir=/flask \
+		--volume=$$(pwd):/flask \
+		--env-file=env \
+		--rm --interactive --tty \
+		--publish=80:5000 \
+		--publish=5555:5555 \
+		--link=rabbitmq:rabbitmq \
+		--link=redis:redis \
+		--name=${APP} ${NS}/${APP}:dev bash
 
 test: build-dev
 	docker run \

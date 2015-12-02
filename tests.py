@@ -174,7 +174,7 @@ today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
 def test__format_opportunity():
 
-    response = _format_opportunity(contact=contact, request=request,
+    response = _format_opportunity(contact=contact, form=form,
             customer=customer)
     expected_response = {
             'AccountId': '0011700000BpR8PAAV',
@@ -182,7 +182,7 @@ def test__format_opportunity():
             'CloseDate': today,
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'LeadSource': 'Stripe',
-            'Name': 'DC (dcraigmile+test6@texastribune.org)',
+            'Name': 'D C (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhI9',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
@@ -195,7 +195,7 @@ def test__format_opportunity():
 
 def test__format_recurring_donation():
 
-    response = _format_recurring_donation(contact=contact, request=request,
+    response = _format_recurring_donation(contact=contact, form=form,
             customer=customer)
     expected_response = {
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
@@ -220,7 +220,7 @@ def test__format_recurring_donation():
 def test__format_contact():
     sf = SalesforceConnection()
 
-    response = sf._format_contact(request_form=request.form)
+    response = sf._format_contact(form=form)
 
     expected_response = {'Description': 'The Texas Tribune Membership',
             'Email': 'dcraigmile+test6@texastribune.org',
@@ -234,12 +234,12 @@ def test__format_contact():
 
 def test_upsert_empty_customer():
     with pytest.raises(Exception):
-        upsert(customer=None, request=None)
+        upsert_customer(customer=None, request=None)
 
 
 def test_upsert_empty_request():
     with pytest.raises(Exception):
-        upsert(customer=foo, request=None)
+        upsert_customer(customer=foo, request=None)
 
 
 def request_callback(request):
@@ -286,7 +286,7 @@ def test_create_contact():
             status=201,)
 
     sf = SalesforceConnection()
-    response = sf.create_contact(request_form=request.form)
+    response = sf.create_contact(form=form)
     expected_response = 'foo'
     assert response == expected_response
 
@@ -330,7 +330,7 @@ def test_get_or_create_contact_non_extant():
             )
 
     sf = SalesforceConnection()
-    response = sf.get_or_create_contact(request_form=request.form)
+    response = sf.get_or_create_contact(form=form)
     # they were created:
     expected_response = (True, 'foo')
     assert response == expected_response
@@ -350,7 +350,7 @@ def test_get_or_create_contact_extant():
             status=200)
 
     sf = SalesforceConnection()
-    response = sf.get_or_create_contact(request_form=request.form)
+    response = sf.get_or_create_contact(form=form)
     # no need to create:
     expected_response = (False, 'foo')
     assert response == expected_response
@@ -371,7 +371,7 @@ def test_get_or_create_contact_multiple():
             status=200)
 
     sf = SalesforceConnection()
-    response = sf.get_or_create_contact(request_form=request.form)
+    response = sf.get_or_create_contact(form=form)
     # no need to create:
     expected_response = (False, 'foo')
     assert response == expected_response
@@ -398,7 +398,7 @@ def test_upsert_non_extant():
             callback=request_callback,
             )
 
-    actual = upsert(customer=customer, request=request)
+    actual = upsert_customer(customer=customer, form=form)
     assert actual is True
     assert len(responses.calls) == 4
 
@@ -457,6 +457,6 @@ def test_upsert_extant():
             callback=request_upsert_extant_callback,
             )
 
-    actual = upsert(customer=customer, request=request)
+    actual = upsert_customer(customer=customer, form=form)
     assert actual is True
     assert len(responses.calls) == 3

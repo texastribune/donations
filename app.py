@@ -1,19 +1,18 @@
 import os
 
-import stripe
-from config import FLASK_SECRET_KEY
 from flask import Flask, render_template, request
 from forms import DonateForm, TexasWeeklyForm
+from sassutils.wsgi import SassMiddleware
+import stripe
 from validate_email import validate_email
 
-from salesforce import add_opportunity
-from salesforce import add_recurring_donation
-from salesforce import add_tw_subscription
-from salesforce import upsert
+from config import FLASK_SECRET_KEY
+from salesforce import add_customer_and_charge
+from app_celery import make_celery
+
+import batch
 
 from pprint import pprint
-
-from sassutils.wsgi import SassMiddleware
 
 app = Flask(__name__)
 
@@ -24,7 +23,14 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
         })
 
 app.config.from_pyfile('config.py')
+app.config.update(
+        CELERY_ALWAYS_EAGER=True,
+        CELERY_TASK_SERIALIZER="json",
+        CELERY_IMPORTS=('app', 'salesforce', 'batch'),
+        )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
+
+celery = make_celery(app)
 
 
 @app.route('/memberform')
@@ -36,6 +42,8 @@ def member_form():
         message = "Please select a membership level at support.texastribune.org."
         return render_template("error.html", message=message)
     installment_period = request.args.get('installmentPeriod')
+    if installment_period is None:
+        installment_period = 'None'
     installments = 'None'
     openended_status = 'Open'
     return render_template('member-form.html', form=form, amount=amount, \
@@ -132,25 +140,19 @@ def charge():
 
     if email_is_valid:
         customer = stripe.Customer.create(
-        email=request.form['stripeEmail'],
-        card=request.form['stripeToken']
+                email=request.form['stripeEmail'],
+                card=request.form['stripeToken']
         )
     else:
         message = "Please enter a valid email address."
         return render_template('error.html', message=message)
 
-
-    upsert(request=request, customer=customer)
-
     if form.validate():
-        if (request.form['installment_period'] == 'None'):
-            print("----One time payment...")
-            add_opportunity(request=request, customer=customer)
-            return render_template('charge.html', amount=request.form['amount'])
-        else:
-            print("----Recurring payment...")
-            add_recurring_donation(request=request, customer=customer)
-            return render_template('charge.html', amount=request.form['amount'])
+        add_customer_and_charge.delay(form=request.form,
+                customer=customer)
+
+        return render_template('charge.html',
+                amount=request.form['amount'])
     else:
         message = "Sorry, there was an issue saving your form."
         return render_template('error.html', message=message)
