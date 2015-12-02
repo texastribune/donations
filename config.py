@@ -1,7 +1,16 @@
 from datetime import timedelta
 import os
 
-TIMEZONE = "US/Central"
+
+def bool_env(val):
+    """Replaces string based environment values with Python booleans"""
+    return True if os.environ.get(val, False) == 'True' else False
+
+TIMEZONE = os.getenv('TIMEZONE', "US/Central")
+
+#######
+# Flask
+#
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 
 ########
@@ -9,7 +18,7 @@ FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 #
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
-CELERY_ALWAYS_EAGER = os.getenv('CELERY_ALWAYS_EAGER')  # TODO: handle boolean
+CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
 CELERYBEAT_SCHEDULE = {
         'every-minute': {
             'task': 'batch.charge_cards',
@@ -20,12 +29,12 @@ CELERYBEAT_SCHEDULE = {
 ######
 # SMTP
 #
-MAIL_SERVER = 'mailtrap.io'
-MAIL_USERNAME = '504457b33043741d5'
-MAIL_PASSWORD = '5484376211e6b6'
-MAIL_PORT = '2525'
-MAIL_USE_TLS = True
-DEFAULT_MAIL_SENDER = 'salesforce@texastribune.org'
+MAIL_SERVER = os.getenv('MAIL_SERVER', 'localhost')
+MAIL_USERNAME = os.getenv('MAIL_USERNAME', 'user')
+MAIL_PASSWORD = os.getenv('MAIL_PASSWORD' 'pass')
+MAIL_PORT = os.getenv('MAIL_PORT', '2525')
+MAIL_USE_TLS = bool_env('MAIL_USE_TLS', True)
+DEFAULT_MAIL_SENDER = os.getenv('DEFAULT_MAIL_SENDER', 'me@myplace.org')
 
 ############
 # Salesforce
