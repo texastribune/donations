@@ -2,10 +2,12 @@
 
 {% block content %}
   <div class="main">
+    <div class="outer-section">
+      <p class="nine">This page is for internal use for Texas Weekly subscriptions.</p>
+    </div>
     <form action="/submit-tw" method="post">
       {{ form.csrf_token }}
-      <div class="form-outer-section">
-        <p>This page is for internal use for Texas Weekly subscriptions.</p>
+      <div class="form-outer-section outer-section">
         <h2>Texas Weekly Subscription Info</h2>
         <div class="form-section three">
           <label>Amount</label><br>
@@ -20,7 +22,7 @@
           {{ form.last_name.label }}<br>
             {{ form.last_name(maxlength=50) }}
         </div>
-        <div style="clear: both;" class="form-section six">
+        <div class="form-section form-error">
           <p class="error-form-message"></p>
         </div>
       </div>

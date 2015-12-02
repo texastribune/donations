@@ -9,6 +9,8 @@ from validate_email import validate_email
 
 from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
+from salesforce import upsert_customer
+from salesforce import add_tw_subscription
 from app_celery import make_celery
 
 import batch
@@ -109,11 +111,11 @@ def submit_tw():
         message = "There was an issue saving your email address."
         return render_template('error.html', message=message)
 
-    upsert(request=request, customer=customer)
+    upsert_customer(customer=customer, form=request.form)
 
     if form.validate():
         print("----Adding TW subscription...")
-        add_tw_subscription(request=request, customer=customer)
+        add_tw_subscription(form=request.form, customer=customer)
         return render_template('charge.html')
     else:
         message = "There was an issue saving your form."

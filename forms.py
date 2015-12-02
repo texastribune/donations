@@ -26,5 +26,5 @@ class TexasWeeklyForm(Form):
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
     amount = IntegerField(u'Amount',
-        [validators.required(message="Please choose a donation amount.")])
+        [validators.required(message="Please choose an amount.")])
     description = HiddenField(u'Description')
