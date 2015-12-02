@@ -25,7 +25,7 @@ class Log(object):
         send_email(body=body, recipient=recipient, subject=subject)
 
 
-def charge(query, log):
+def process_charges(query, log):
 
     print(query)
     sf = SalesforceConnection()
@@ -81,12 +81,13 @@ def charge_cards():
 
     log = Log()
 
-    print('---Starting batch job...')
+    log.it('---Starting batch job...')
 
     three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
     today = datetime.now().strftime('%Y-%m-%d')
 
     # regular (non Circle) pledges:
+    log.it('---Processing regular charges...')
 
     query = """
         SELECT Amount, Name, Stripe_Customer_Id__c, Description
@@ -98,9 +99,18 @@ def charge_cards():
         AND Type != 'Giving Circle'
         """.format(today, three_days_ago)
 
-    charge(query, log)
+    process_charges(query, log)
 
-    # Circle pledges (use expected giving date):
+    #
+    # Circle transactions are different from the others. The Close Dates for a
+    # given Circle donation are all identical. That's so that the gift can be
+    # recognized all at once on the donor wall. So we use another field to
+    # determine when the card is actually charged:
+    # Giving_Circle_Expected_Giving_Date__c. So we process charges separately
+    # for Circles.
+    #
+
+    log.it('---Processing Circle charges...')
 
     query = """
         SELECT Amount, Name, Stripe_Customer_Id__c, Description
@@ -112,7 +122,7 @@ def charge_cards():
         AND Type = 'Giving Circle'
         """.format(today, three_days_ago)
 
-    charge(query, log)
+    process_charges(query, log)
     log.send()
 
 if __name__ == '__main__':
