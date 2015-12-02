@@ -20,29 +20,12 @@ class Log(object):
 
     def send(self):
         body = '\n'.join(self.log)
-        recipient = 'dcraigmile@texastribune.org'
+        recipient = 'dcraigmile@texastribune.org'  # TODO
         subject = 'Batch run'
         send_email(body=body, recipient=recipient, subject=subject)
 
 
-@celery.task()
-def charge_cards():
-
-    log = Log()
-
-    print('---Starting batch job...')
-
-    three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    today = datetime.now().strftime('%Y-%m-%d')
-
-    query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description
-        FROM Opportunity
-        WHERE CloseDate <= {}
-        AND CloseDate >= {}
-        AND StageName = 'Pledged'
-        AND Stripe_Customer_Id__c != ''
-        """.format(today, three_days_ago)
+def charge(query, log):
 
     print(query)
     sf = SalesforceConnection()
@@ -67,12 +50,14 @@ def charge_cards():
                     )
         except stripe.error.CardError as e:
             log.it("The card has been declined: {}".format(e))
-            raise Exception('problem')
+            continue
+        except stripe.error.InvalidRequestError as e:
+            log.it("Problem: {}".format(e))
+            continue
         # print ('Charge: {}'.format(charge))
         # TODO: check for success
 
         # print ("Charge id: {}".format(charge.id))
-        # TODO: copy transaction ID too
         update = {
                 'Stripe_Transaction_Id__c': charge.id,
                 'Stripe_Card__c': charge.source.id,
@@ -87,8 +72,47 @@ def charge_cards():
         if resp.status_code == 204:
             log.it("ok")
         else:
+            log.it("problem")
             raise Exception('problem')
 
+
+@celery.task()
+def charge_cards():
+
+    log = Log()
+
+    print('---Starting batch job...')
+
+    three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    # regular (non Circle) pledges:
+
+    query = """
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        FROM Opportunity
+        WHERE CloseDate <= {}
+        AND CloseDate >= {}
+        AND StageName = 'Pledged'
+        AND Stripe_Customer_Id__c != ''
+        AND Type != 'Giving Circle'
+        """.format(today, three_days_ago)
+
+    charge(query, log)
+
+    # Circle pledges (use expected giving date):
+
+    query = """
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        FROM Opportunity
+        WHERE Giving_Circle_Expected_Giving_Date__c <= {}
+        AND Giving_Circle_Expected_Giving_Date__c >= {}
+        AND StageName = 'Pledged'
+        AND Stripe_Customer_Id__c != ''
+        AND Type = 'Giving Circle'
+        """.format(today, three_days_ago)
+
+    charge(query, log)
     log.send()
 
 if __name__ == '__main__':
