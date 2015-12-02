@@ -2,14 +2,14 @@ from datetime import timedelta
 import os
 
 TIMEZONE = "US/Central"
-FLASK_SECRET_KEY = os.environ['FLASK_SECRET_KEY']
+FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 
 ########
 # Celery
 #
-CELERY_BROKER_URL = os.environ['CELERY_BROKER_URL']
-CELERY_RESULT_BACKEND = os.environ['CELERY_RESULT_BACKEND']
-CELERY_ALWAYS_EAGER = os.environ['CELERY_ALWAYS_EAGER']  # TODO: handle boolean
+CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
+CELERY_ALWAYS_EAGER = os.getenv('CELERY_ALWAYS_EAGER')  # TODO: handle boolean
 CELERYBEAT_SCHEDULE = {
         'every-minute': {
             'task': 'batch.charge_cards',
@@ -33,17 +33,17 @@ DEFAULT_MAIL_SENDER = 'salesforce@texastribune.org'
 MEMBERSHIP_RECORDTYPEID = '01216000001IhHp'
 DONATION_RECORDTYPEID = '01216000001IhI9'
 SALESFORCE = {
-    "CLIENT_ID": os.environ['SALESFORCE_CLIENT_ID'],
-    "CLIENT_SECRET": os.environ['SALESFORCE_CLIENT_SECRET'],
-    "USERNAME": os.environ['SALESFORCE_USERNAME'],
-    "PASSWORD": os.environ['SALESFORCE_PASSWORD'],
-    "HOST": os.environ["SALESFORCE_HOST"]
+    "CLIENT_ID": os.getenv('SALESFORCE_CLIENT_ID'),
+    "CLIENT_SECRET": os.getenv('SALESFORCE_CLIENT_SECRET'),
+    "USERNAME": os.getenv('SALESFORCE_USERNAME'),
+    "PASSWORD": os.getenv('SALESFORCE_PASSWORD'),
+    "HOST": os.getenv("SALESFORCE_HOST")
 }
 
 ########
 # Stripe
 #
 STRIPE_KEYS = {
-    'secret_key': os.environ['SECRET_KEY'],
-    'publishable_key': os.environ['PUBLISHABLE_KEY']
+    'secret_key': os.getenv('SECRET_KEY'),
+    'publishable_key': os.getenv('PUBLISHABLE_KEY')
 }
