@@ -9,6 +9,10 @@ from pytz import timezone
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
 from config import TIMEZONE
+from config import ENABLE_SLACK
+from config import SLACK_API_KEY
+from config import SLACK_CHANNEL
+
 from emails import send_email
 
 zone = timezone(TIMEZONE)
@@ -19,6 +23,17 @@ WARNINGS = dict()
 
 # TODO: use v35 of Salesforce API
 # TODO: use latest version of Stripe API
+
+
+def notify_slack(message):
+    if ENABLE_SLACK:
+        payload = {
+                'token': SLACK_API_KEY,
+                'channel': SLACK_CHANNEL,
+                'text': message,
+                }
+        url = 'https://slack.com/api/chat.postMessage'
+        requests.get(url, params=payload)
 
 
 def warn_multiple_accounts(email, count):
@@ -355,15 +370,22 @@ def add_recurring_donation(form=None, customer=None):
 
 @celery.task(name='salesforce.add_customer_and_charge')
 def add_customer_and_charge(form=None, customer=None):
-    pprint(form)
+    amount = form['amount']
+    name = '{} {}'.format(form['first_name'], form['last_name'])
+    reason = form['reason']
+    if reason != '':
+        reason = ' (encouraged by {})'.format(reason)
 
     upsert_customer(form=form, customer=customer)
 
-
     if (form['installment_period'] == 'None'):
         print("----One time payment...")
+        msg = '{} pledged ${}{}'.format(name, amount, reason)
+        notify_slack(msg)
         add_opportunity(form=form, customer=customer)
     else:
         print("----Recurring payment...")
+        msg = '{} pledged ${}{} [recurring]'.format(name, amount, reason)
+        notify_slack(msg)
         add_recurring_donation(form=form, customer=customer)
     return True

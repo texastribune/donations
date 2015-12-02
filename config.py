@@ -57,3 +57,10 @@ STRIPE_KEYS = {
     'secret_key': os.getenv('SECRET_KEY'),
     'publishable_key': os.getenv('PUBLISHABLE_KEY')
 }
+
+#######
+# Slack
+#
+ENABLE_SLACK = bool_env('ENABLE_SLACK')
+SLACK_CHANNEL = os.getenv('SLACK_CHANNEL', '#stripe')
+SLACK_API_KEY = os.getenv('SLACK_API_KEY')
