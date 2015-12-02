@@ -2,6 +2,7 @@ import os
 
 from flask import Flask, render_template, request
 from forms import DonateForm
+from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
 from validate_email import validate_email
@@ -30,7 +31,9 @@ app.config.update(
         )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
-celery = make_celery(app)
+if app.config['ENABLE_SENTRY']:
+    celery = make_celery(app)
+    sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 
 @app.route('/memberform')
