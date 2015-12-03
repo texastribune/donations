@@ -43,7 +43,8 @@ def member_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        return render_template('page_not_found.html'), 404
+        message = "The page you requested can't be found."
+        return render_template('error.html', message=message)
     installment_period = request.args.get('installmentPeriod')
     if installment_period is None:
         installment_period = 'None'
@@ -60,7 +61,7 @@ def donate_renew_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        amount=False
+        amount = False
     openended_status = 'None'
     installments = 'None'
     installment_period = 'None'
@@ -75,7 +76,8 @@ def circle_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        return render_template('page_not_found.html'), 404
+        message = "The page you requested can't be found."
+        return render_template('error.html', message=message)
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')
@@ -128,7 +130,8 @@ def error():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('error.html', message="The page you requested can't be found.")
+    message = "The page you requested can't be found."
+    return render_template('error.html')
 
 
 @app.route('/charge', methods=['POST'])
