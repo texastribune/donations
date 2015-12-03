@@ -12,11 +12,7 @@
         <div class="form-section three">
           <label>Amount</label><br>
             <span class="dollar">$</span>
-            {% if amount %}
               {{ form.amount(value=amount, class="dollar") }}
-            {% else %}
-              {{ form.amount(value=10, class="dollar") }}
-            {% endif %}
         </div>
         <div class="form-section three">
           {{ form.pay_fees.label }}

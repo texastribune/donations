@@ -61,7 +61,7 @@ def donate_renew_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        amount = False
+        amount = 50
     openended_status = 'None'
     installments = 'None'
     installment_period = 'None'
