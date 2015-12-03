@@ -66,7 +66,8 @@ def charge_cards():
     today = datetime.now().strftime('%Y-%m-%d')
 
     query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
+            Stripe_Agreed_to_pay_fees__c
         FROM Opportunity
         WHERE CloseDate <= {}
         AND CloseDate >= {}
@@ -91,7 +92,7 @@ def charge_cards():
                 item['Name']))
             charge = stripe.Charge.create(
                     customer=item['Stripe_Customer_ID__c'],
-                    amount=int(item['Amount']) * 100,
+                    amount=amount_to_charge(item),
                     currency='usd',
                     description=item['Description'],
                     )
