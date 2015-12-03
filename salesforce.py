@@ -271,7 +271,7 @@ def _format_opportunity(contact=None, form=None, customer=None):
             'Amount': '{}'.format(form['amount']),
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
-            'Name': '{}{} ({})'.format(
+            'Name': '{} {} ({})'.format(
                 form['first_name'],
                 form['last_name'],
                 form['stripeEmail'],
