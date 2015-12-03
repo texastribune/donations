@@ -30,7 +30,7 @@ class Log(object):
         Send the assembled log out as an email.
         """
         body = '\n'.join(self.log)
-        recipient = 'dcraigmile@texastribune.org'
+        recipient = 'dcraigmile@texastribune.org'   # TODO
         subject = 'Batch run'
         send_email(body=body, recipient=recipient, subject=subject)
 
