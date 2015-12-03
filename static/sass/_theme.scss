@@ -15,10 +15,6 @@ body {
   padding: 0 2em;
 }
 
-.page-wrap {
-  padding: 0 2em;
-}
-
 .outer-section {
   @include outer-container;
   .nine {
@@ -65,10 +61,9 @@ p {
 }
 
 .label-info {
-  font-family: Helvetica, sans-serif;
+  font-family: $helvetica;
   font-size: 1.2em;
   font-style: normal;
-  font-weight: 500;
   margin: 0;
   padding: 0.2em 0 0.8em 0;
 }
@@ -95,9 +90,6 @@ p {
   &:last-of-type {
     border-bottom: none;
   }
-    &.break {
-      clear: both;
-    }
 }
 
 .dollar {
@@ -187,11 +179,6 @@ input::-webkit-inner-spin-button, {
 .error-form-message {
   clear: both;
   color: red;
-}
-
-.error-page-message {
-  font-size: 1.5em;
-  padding: 0 2em;
 }
 
 

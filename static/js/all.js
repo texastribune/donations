@@ -18,11 +18,11 @@ var display_level = function() {
     } else if (input_amount > 42 && input_amount <= 83) {
       level_label.text('Benefactor');
     } else if (input_amount > 83 && input_amount <= 208) {
-      level_label.text("Editor's Circle");
+      level_label.text("Editor's Circle - $3,000 pledge");
     } else if (input_amount > 208 && input_amount <= 416) {
-      level_label.text('Leadership Circle');
+      level_label.text('Leadership Circle - $7,500 pledge');
     } else if (input_amount > 416) {
-      level_label.text("Chairman's Circle");
+      level_label.text("Chairman's Circle - $15,000 pledge");
     }
   } else {
     // detemine level and update text based on yearly frequency
@@ -39,11 +39,11 @@ var display_level = function() {
     } else if (input_amount > 499 && input_amount <= 999) {
       level_label.text('Benefactor');
     } else if (input_amount > 999 && input_amount <= 2499) {
-      level_label.text("Editor's Circle");
+      level_label.text("Editor's Circle - $3,000 pledge");
     } else if (input_amount > 2499 && input_amount <= 4999) {
-      level_label.text('Leadership Circle');
+      level_label.text('Leadership Circle - $7,500 pledge');
     } else if (input_amount > 4999) {
-      level_label.text("Chairman's Circle");
+      level_label.text("Chairman's Circle - $15,000 pledge");
     }
   }
 };
