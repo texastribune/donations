@@ -11,14 +11,24 @@ stripe.api_key = STRIPE_KEYS['secret_key']
 
 
 class Log(object):
+    """
+    This encapulates sending to the console/stdout and email all in one.
+
+    """
     def __init__(self):
         self.log = list()
 
     def it(self, string):
+        """
+        Add something to the log.
+        """
         print(string)
         self.log.append(string)
 
     def send(self):
+        """
+        Send the assembled log out as an email.
+        """
         body = '\n'.join(self.log)
         recipient = 'dcraigmile@texastribune.org'
         subject = 'Batch run'
