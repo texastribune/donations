@@ -52,7 +52,7 @@ def amount_to_charge(entry):
     total = amount + fees
     total_in_cents = total * 100
 
-    return total_in_cents
+    return int(total_in_cents)
 
 
 def process_charges(query, log):
@@ -70,7 +70,7 @@ def process_charges(query, log):
         # print (item)
         amount = amount_to_charge(item)
         try:
-            log.it("---- Charging ${} to {} ({})".format(amount,
+            log.it("---- Charging ${} to {} ({})".format(amount/100,
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
@@ -122,7 +122,7 @@ def charge_cards():
 
     query = """
         SELECT Amount, Name, Stripe_Customer_Id__c, Description,
-            Stripe_Agreed_to_pay_fees
+            Stripe_Agreed_to_pay_fees__c
         FROM Opportunity
         WHERE CloseDate <= {}
         AND CloseDate >= {}
@@ -146,7 +146,7 @@ def charge_cards():
 
     query = """
         SELECT Amount, Name, Stripe_Customer_Id__c, Description,
-            Stripe_Agreed_to_pay_fees
+            Stripe_Agreed_to_pay_fees__c
         FROM Opportunity
         WHERE Giving_Circle_Expected_Giving_Date__c <= {}
         AND Giving_Circle_Expected_Giving_Date__c >= {}
