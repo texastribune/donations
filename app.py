@@ -33,8 +33,8 @@ app.config.update(
         )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
+celery = make_celery(app)
 if app.config['ENABLE_SENTRY']:
-    celery = make_celery(app)
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 
