@@ -36,6 +36,7 @@ MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'pass')
 MAIL_PORT = os.getenv('MAIL_PORT', '2525')
 MAIL_USE_TLS = bool_env('MAIL_USE_TLS')
 DEFAULT_MAIL_SENDER = os.getenv('DEFAULT_MAIL_SENDER', 'me@myplace.org')
+DEFAULT_MAIL_RECIPIENT = os.getenv('DEFAULT_MAIL_RECIPIENT', '')
 
 ############
 # Salesforce
