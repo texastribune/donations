@@ -1,30 +1,31 @@
-from salesforce import *
+import json
 import re
-from salesforce import _format_opportunity
-from salesforce import _format_tw_opportunity
-from salesforce import _format_recurring_donation
-from unittest.mock import MagicMock
-from unittest.mock import create_autospec
-from unittest.mock import patch
-from six import wraps
-from pytz import timezone
 
+from datetime import datetime
 import pytest
+from pytz import timezone
 import responses
-import stripe
-from werkzeug.datastructures import ImmutableMultiDict, MultiDict
-from werkzeug.local import LocalProxy
+from werkzeug.datastructures import MultiDict
 
-#("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
-# "'until-cancelled'), ('Contact.LastName', 'C'), ('Contact.street', '823 "
-# "Congress Ave Ste 1400'), ('stripeEmail', "
-# "'dcraigmile+test6@texastribune.org'), ('Contact.FirstName', 'D'), "
-# "('Contact.HomePhone', '5551212'), ('stripeToken', "
-# "'tok_16u66IG8bHZDNB6TCq8l3s4p'), ('stripeTokenType', 'card'), "
-# "('Contact.postalCode', '78701')])")
+from batch import amount_to_charge
+from check_response import check_response
+from salesforce import _format_opportunity
+from salesforce import _format_recurring_donation
+from salesforce import _format_tw_opportunity
+from salesforce import SalesforceConnection
+from salesforce import upsert_customer
 
 
-#"Request: ImmutableMultiDict([('frequency', 'one-time'), "
+# ("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
+#  "'until-cancelled'), ('Contact.LastName', 'C'), ('Contact.street', '823 "
+#  "Congress Ave Ste 1400'), ('stripeEmail', "
+#  "'dcraigmile+test6@texastribune.org'), ('Contact.FirstName', 'D'), "
+#  "('Contact.HomePhone', '5551212'), ('stripeToken', "
+#  "'tok_16u66IG8bHZDNB6TCq8l3s4p'), ('stripeTokenType', 'card'), "
+#  "('Contact.postalCode', '78701')])")
+
+
+# "Request: ImmutableMultiDict([('frequency', 'one-time'), "
 # "('Contact.MailingCity', 'abc'), ('Contact.MailingPostalCode', '78701'), "
 # "('Contact.HomePhone', '5551212'), ('Contact.MailingStreet', '123'), "
 # "('Opportunity.Amount', '100'), ('stripeToken', "
@@ -40,12 +41,10 @@ zone = timezone('US/Central')
 class CustomerObject(object):
     pass
 
-customer = CustomerObject()
-customer.id='cus_78MqJSBejMN9gn'
-
 
 class RequestObject(object):
     pass
+
 
 class Customer(object):
     pass
@@ -53,7 +52,7 @@ class Customer(object):
 customer = Customer()
 customer.id = 'cus_78MqJSBejMN9gn'
 
-#customer = {
+# customer = {
 #        'account_balance': 0,
 #        'created': 1444417221,
 #        'currency': None,
@@ -110,8 +109,8 @@ customer.id = 'cus_78MqJSBejMN9gn'
 #        }
 
 
-#proxy = RequestObject()
-#proxy.form = request
+# proxy = RequestObject()
+# proxy.form = request
 
 contact = {
         'AccountId': '0011700000BpR8PAAV',
@@ -269,15 +268,14 @@ def test_upsert_empty_customer():
 
 def test_upsert_empty_request():
     with pytest.raises(Exception):
-        upsert_customer(customer=foo, request=None)
+        upsert_customer(customer=customer, request=None)
 
 
 def request_callback(request):
-#    payload = json.loads(request.body)
     if 'All_In_One_EMail__c' in request.path_url:
         resp_body = '{"done": true, "records": []}'
     else:
-        resp_body='{"done": true, "records": ["foo"]}'
+        resp_body = '{"done": true, "records": ["foo"]}'
 
     return (200, {}, resp_body)
 
@@ -285,11 +283,11 @@ def request_callback(request):
 @responses.activate
 def test__get_contact():
     url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
 
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+    responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
@@ -303,10 +301,10 @@ def test__get_contact():
 @responses.activate
 def test_create_contact():
     url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+    responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
@@ -324,10 +322,10 @@ def test_create_contact():
 @responses.activate
 def test_find_contact():
     url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+    responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
@@ -344,8 +342,8 @@ def test_get_or_create_contact_non_extant():
     # first testing for the case where the user doesn't exist and needs to be
     # created
 
-    responses.add(responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
@@ -371,10 +369,10 @@ def test_get_or_create_contact_extant():
 
     # next we test with the user already extant:
     url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+    responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
@@ -392,10 +390,10 @@ def test_get_or_create_contact_multiple():
 
     # next we test with the user already extant:
     url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo", "bar"]}')
-    responses.add(responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+    responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
@@ -410,9 +408,9 @@ def test_get_or_create_contact_multiple():
 @responses.activate
 def test_upsert_non_extant():
 
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(
-            responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+            responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200,
             )
@@ -463,6 +461,7 @@ def request_upsert_extant_callback(request):
 @responses.activate
 def test_upsert_extant():
 
+    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(
             responses.PATCH,
             'http://foo/services/data/v34.0/sobjects/Contact/0031700000BHQzBAAX',
@@ -470,8 +469,7 @@ def test_upsert_extant():
             status=204,
             )
     responses.add(
-            responses.POST,
-            'https://cs22.salesforce.com/services/oauth2/token',
+            responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200,
             )
@@ -490,3 +488,25 @@ def test_upsert_extant():
     actual = upsert_customer(customer=customer, form=form)
     assert actual is True
     assert len(responses.calls) == 3
+
+
+def test_amount_to_charge_just_fees_false():
+    foo = {}
+    foo['Amount'] = 10
+    foo['Stripe_Agreed_to_pay_fees__c'] = False
+
+    actual = amount_to_charge(foo)
+    expected = 1000
+    assert actual == expected
+
+
+def test_amount_to_charge_just_fees_true():
+    foo = {}
+    foo['Amount'] = 10
+    foo['Stripe_Agreed_to_pay_fees__c'] = True
+
+    # 10 * 2.9% + $0.30 = $0.59
+
+    actual = amount_to_charge(foo)
+    expected = 1059
+    assert actual == expected

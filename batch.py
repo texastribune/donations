@@ -11,18 +11,48 @@ stripe.api_key = STRIPE_KEYS['secret_key']
 
 
 class Log(object):
+    """
+    This encapulates sending to the console/stdout and email all in one.
+
+    """
     def __init__(self):
         self.log = list()
 
     def it(self, string):
+        """
+        Add something to the log.
+        """
         print(string)
         self.log.append(string)
 
     def send(self):
+        """
+        Send the assembled log out as an email.
+        """
         body = '\n'.join(self.log)
         recipient = 'dcraigmile@texastribune.org'  # TODO
         subject = 'Batch run'
         send_email(body=body, recipient=recipient, subject=subject)
+
+
+def amount_to_charge(entry):
+    """
+    Determine the amount to charge. This depends on whether the payer agreed
+    to pay fees or not. If they did then we add that to the amount charged.
+    Stripe charges 2.9% + $0.30.
+
+    Stripe wants the amount to charge in cents. So we multiply by 100 and
+    return that.
+    """
+    amount = int(entry['Amount'])
+    if entry['Stripe_Agreed_to_pay_fees__c']:
+        fees = amount * .029 + .30
+    else:
+        fees = 0
+    total = amount + fees
+    total_in_cents = total * 100
+
+    return int(total_in_cents)
 
 
 def process_charges(query, log):
@@ -38,13 +68,14 @@ def process_charges(query, log):
 
     for item in response:
         # print (item)
+        amount = amount_to_charge(item)
         try:
-            log.it("---- Charging ${} to {} ({})".format(item['Amount'],
+            log.it("---- Charging ${} to {} ({})".format(amount/100,
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
                     customer=item['Stripe_Customer_ID__c'],
-                    amount=int(item['Amount']) * 100,
+                    amount=amount,
                     currency='usd',
                     description=item['Description'],
                     )
@@ -90,7 +121,8 @@ def charge_cards():
     log.it('---Processing regular charges...')
 
     query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
+            Stripe_Agreed_to_pay_fees__c
         FROM Opportunity
         WHERE CloseDate <= {}
         AND CloseDate >= {}
@@ -113,7 +145,8 @@ def charge_cards():
     log.it('---Processing Circle charges...')
 
     query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
+            Stripe_Agreed_to_pay_fees__c
         FROM Opportunity
         WHERE Giving_Circle_Expected_Giving_Date__c <= {}
         AND Giving_Circle_Expected_Giving_Date__c >= {}
@@ -124,6 +157,7 @@ def charge_cards():
 
     process_charges(query, log)
     log.send()
+
 
 if __name__ == '__main__':
     charge_cards()
