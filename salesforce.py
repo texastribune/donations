@@ -8,7 +8,7 @@ import requests
 from pytz import timezone
 
 from config import SALESFORCE
-from config import DONATION_RECORDTYPEID
+from config import DONATION_RECORDTYPEID, TEXASWEEKLY_RECORDTYPEID
 from config import TIMEZONE
 from config import ENABLE_SLACK
 from config import SLACK_API_KEY
@@ -425,4 +425,54 @@ def add_customer_and_charge(form=None, customer=None):
         msg = '{} pledged ${}{} [recurring]'.format(name, amount, reason)
         notify_slack(msg)
         add_recurring_donation(form=form, customer=customer)
+    return True
+
+
+def _format_tw_opportunity(contact=None, form=None, customer=None):
+    """
+    Format a Texas Weekly opportunity for insertion.
+    """
+
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+
+    opportunity = {
+            'AccountId': '{}'.format(contact['AccountId']),
+            'Amount': '{}'.format(form['amount']),
+            'CloseDate': today,
+            'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
+            'Name': '{}{} ({})'.format(
+                form['first_name'],
+                form['last_name'],
+                form['stripeEmail'],
+                ),
+            'StageName': 'Pledged',
+            'Stripe_Customer_Id__c': customer.id,
+            'LeadSource': 'Stripe',
+            'Description': '{}'.format(form['description']),
+            }
+    print(opportunity)
+    return opportunity
+
+
+def add_tw_subscription(form=None, customer=None, charge=None):
+
+    print ("----Adding TW subscription opportunity...")
+    sf = SalesforceConnection()
+    _, contact = sf.get_or_create_contact(form)
+    opportunity = _format_tw_opportunity(contact=contact, form=form,
+            customer=customer)
+    path = '/services/data/v34.0/sobjects/Opportunity'
+    response = sf.post(path=path, data=opportunity)
+    send_multiple_account_warning()
+
+    return response
+
+
+@celery.task(name='salesforce.add_tw_customer_and_charge')
+def add_tw_customer_and_charge(form=None, customer=None):
+
+    upsert_customer(customer=customer, form=form)
+
+    add_tw_subscription(form=form, customer=customer)
+
     return True

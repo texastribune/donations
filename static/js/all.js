@@ -18,11 +18,11 @@ var display_level = function() {
     } else if (input_amount > 42 && input_amount <= 83) {
       level_label.text('Benefactor');
     } else if (input_amount > 83 && input_amount <= 208) {
-      level_label.text("Editor's Circle");
+      level_label.text("Editor's Circle - $3,000 pledge");
     } else if (input_amount > 208 && input_amount <= 416) {
-      level_label.text('Leadership Circle');
+      level_label.text('Leadership Circle - $7,500 pledge');
     } else if (input_amount > 416) {
-      level_label.text("Chairman's Circle");
+      level_label.text("Chairman's Circle - $15,000 pledge");
     }
   } else {
     // detemine level and update text based on yearly frequency
@@ -39,11 +39,11 @@ var display_level = function() {
     } else if (input_amount > 499 && input_amount <= 999) {
       level_label.text('Benefactor');
     } else if (input_amount > 999 && input_amount <= 2499) {
-      level_label.text("Editor's Circle");
+      level_label.text("Editor's Circle - $3,000 pledge");
     } else if (input_amount > 2499 && input_amount <= 4999) {
-      level_label.text('Leadership Circle');
+      level_label.text('Leadership Circle - $7,500 pledge');
     } else if (input_amount > 4999) {
-      level_label.text("Chairman's Circle");
+      level_label.text("Chairman's Circle - $15,000 pledge");
     }
   }
 };
@@ -65,7 +65,7 @@ var listen_for_fee_check = function() {
 
 var pay_fee_amount = function() {
   var input_amount = $('input[name="amount"]').val();
-  var pay_fee_element = $('#pay-fee-amount');
+  var pay_fee_element = $('#pay-fee-amount span');
 
   // Calculate the Stripe fee per charge
   // https://stripe.com/us/pricing
@@ -78,5 +78,5 @@ var pay_fee_amount = function() {
   input_amount = input_amount.toFixed(2);
 
   // Add a dollar sign
-  pay_fee_element.prepend('$' + input_amount);
+  pay_fee_element.text('$' + input_amount);
 };
