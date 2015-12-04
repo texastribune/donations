@@ -1,4 +1,6 @@
 from datetime import timedelta
+from celery.schedules import crontab
+
 import os
 
 
@@ -19,14 +21,12 @@ FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
-# TODO: transform this to a cron format
 CELERYBEAT_SCHEDULE = {
-        'every-minute': {
+        'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': timedelta(seconds=10)
+            'schedule': crontab(hour=18, minute=53)
             },
         }
-
 ######
 # SMTP
 #
