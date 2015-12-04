@@ -24,8 +24,7 @@ CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
 CELERYBEAT_SCHEDULE = {
         'every-day': {
             'task': 'batch.charge_cards',
-#            'schedule': timedelta(hours=1)
-            'schedule': timedelta(minutes=1)
+            'schedule': timedelta(minutes=60)
             },
         }
 ######
@@ -37,7 +36,8 @@ MAIL_PASSWORD = os.getenv('MAIL_PASSWORD', 'pass')
 MAIL_PORT = os.getenv('MAIL_PORT', '2525')
 MAIL_USE_TLS = bool_env('MAIL_USE_TLS')
 DEFAULT_MAIL_SENDER = os.getenv('DEFAULT_MAIL_SENDER', 'me@myplace.org')
-MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT = os.getenv('MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT', '')
+MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT = os.getenv(
+        'MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT', '')
 ACCOUNTING_MAIL_RECIPIENT = os.getenv('ACCOUNTING_MAIL_RECIPIENT', '')
 
 ############
