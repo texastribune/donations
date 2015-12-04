@@ -121,7 +121,8 @@ def charge_cards():
     log.it('---Processing regular charges...')
 
     query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
+            Stripe_Agreed_to_pay_fees
         FROM Opportunity
         WHERE CloseDate <= {}
         AND CloseDate >= {}
@@ -144,7 +145,8 @@ def charge_cards():
     log.it('---Processing Circle charges...')
 
     query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
+            Stripe_Agreed_to_pay_fees
         FROM Opportunity
         WHERE Giving_Circle_Expected_Giving_Date__c <= {}
         AND Giving_Circle_Expected_Giving_Date__c >= {}
