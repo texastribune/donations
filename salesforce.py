@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import locale
+from pprint import pprint   # TODO: remove
 
 import celery
 import requests
@@ -233,7 +234,6 @@ def check_response(response=None, expected_status=200):
     try:
         content = json.loads(response.content.decode('utf-8'))
         # TODO: look for 'success'
-        #print (content)
     except:
         print ('unable to parse response (this is probably okay)')
     if code != expected_status:
@@ -379,6 +379,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
             'npe03__Installment_Period__c': installment_period,
             'Type__c': type__c,
             }
+    pprint(recurring_donation)
     return recurring_donation
 
 
