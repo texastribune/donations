@@ -1,6 +1,7 @@
 from datetime import datetime
 import json
 import locale
+from pprint import pprint   # TODO: remove
 
 import celery
 import requests
@@ -362,6 +363,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
             'npe03__Installment_Period__c': installment_period,
             'Type__c': type__c,
             }
+    pprint(recurring_donation)
     return recurring_donation
 
 

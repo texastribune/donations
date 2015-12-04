@@ -30,7 +30,7 @@ class Log(object):
         Send the assembled log out as an email.
         """
         body = '\n'.join(self.log)
-        recipient = 'dcraigmile@texastribune.org'   # TODO
+        recipient = 'dcraigmile@texastribune.org'  # TODO
         subject = 'Batch run'
         send_email(body=body, recipient=recipient, subject=subject)
 
@@ -55,25 +55,7 @@ def amount_to_charge(entry):
     return total_in_cents
 
 
-@celery.task()
-def charge_cards():
-
-    log = Log()
-
-    print('---Starting batch job...')
-
-    three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    today = datetime.now().strftime('%Y-%m-%d')
-
-    query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
-            Stripe_Agreed_to_pay_fees__c
-        FROM Opportunity
-        WHERE CloseDate <= {}
-        AND CloseDate >= {}
-        AND StageName = 'Pledged'
-        AND Stripe_Customer_Id__c != ''
-        """.format(today, three_days_ago)
+def process_charges(query, log):
 
     print(query)
     sf = SalesforceConnection()
@@ -99,12 +81,14 @@ def charge_cards():
                     )
         except stripe.error.CardError as e:
             log.it("The card has been declined: {}".format(e))
-            raise Exception('problem')
+            continue
+        except stripe.error.InvalidRequestError as e:
+            log.it("Problem: {}".format(e))
+            continue
         # print ('Charge: {}'.format(charge))
         # TODO: check for success
 
         # print ("Charge id: {}".format(charge.id))
-        # TODO: copy transaction ID too
         update = {
                 'Stripe_Transaction_Id__c': charge.id,
                 'Stripe_Card__c': charge.source.id,
@@ -119,9 +103,59 @@ def charge_cards():
         if resp.status_code == 204:
             log.it("ok")
         else:
+            log.it("problem")
             raise Exception('problem')
 
+
+@celery.task()
+def charge_cards():
+
+    log = Log()
+
+    log.it('---Starting batch job...')
+
+    three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
+    today = datetime.now().strftime('%Y-%m-%d')
+
+    # regular (non Circle) pledges:
+    log.it('---Processing regular charges...')
+
+    query = """
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        FROM Opportunity
+        WHERE CloseDate <= {}
+        AND CloseDate >= {}
+        AND StageName = 'Pledged'
+        AND Stripe_Customer_Id__c != ''
+        AND Type != 'Giving Circle'
+        """.format(today, three_days_ago)
+
+    process_charges(query, log)
+
+    #
+    # Circle transactions are different from the others. The Close Dates for a
+    # given Circle donation are all identical. That's so that the gift can be
+    # recognized all at once on the donor wall. So we use another field to
+    # determine when the card is actually charged:
+    # Giving_Circle_Expected_Giving_Date__c. So we process charges separately
+    # for Circles.
+    #
+
+    log.it('---Processing Circle charges...')
+
+    query = """
+        SELECT Amount, Name, Stripe_Customer_Id__c, Description
+        FROM Opportunity
+        WHERE Giving_Circle_Expected_Giving_Date__c <= {}
+        AND Giving_Circle_Expected_Giving_Date__c >= {}
+        AND StageName = 'Pledged'
+        AND Stripe_Customer_Id__c != ''
+        AND Type = 'Giving Circle'
+        """.format(today, three_days_ago)
+
+    process_charges(query, log)
     log.send()
+
 
 if __name__ == '__main__':
     charge_cards()
