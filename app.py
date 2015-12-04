@@ -26,9 +26,10 @@ app.wsgi_app = SassMiddleware(app.wsgi_app, {
 
 app.config.from_pyfile('config.py')
 app.config.update(
-        CELERY_ALWAYS_EAGER=True,
+        CELERY_ALWAYS_EAGER=False,
         CELERY_TASK_SERIALIZER="json",
         CELERY_IMPORTS=('app', 'salesforce', 'batch'),
+        CELERY_ACCEPT_CONTENT=['json'],
         )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
