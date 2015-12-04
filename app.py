@@ -28,9 +28,6 @@ app.config.from_pyfile('config.py')
 app.config.update(
         CELERY_ACCEPT_CONTENT=['pickle', 'json'],
         CELERY_ALWAYS_EAGER=False,
-        CELERY_TASK_SERIALIZER='json',
-        CELERY_RESULT_SERIALIZER='json',
-        CELERY_EVENT_SERIALIZER='json',
         CELERY_IMPORTS=('app', 'salesforce', 'batch'),
         )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
@@ -53,9 +50,10 @@ def member_form():
         installment_period = 'None'
     installments = 'None'
     openended_status = 'Open'
-    return render_template('member-form.html', form=form, amount=amount, \
-        installment_period=installment_period, installments=installments, \
-        openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
+    return render_template('member-form.html', form=form, amount=amount,
+        installment_period=installment_period, installments=installments,
+        openended_status=openended_status,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/donateform')
@@ -68,9 +66,10 @@ def donate_renew_form():
     openended_status = 'None'
     installments = 'None'
     installment_period = 'None'
-    return render_template('donate-form.html', form=form, amount=amount, \
-        installment_period=installment_period, installments=installments, \
-        openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
+    return render_template('donate-form.html', form=form, amount=amount,
+        installment_period=installment_period, installments=installments,
+        openended_status=openended_status,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/circleform')
@@ -84,9 +83,10 @@ def circle_form():
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')
-    return render_template('circle-form.html', form=form, amount=amount, \
-        installment_period=installment_period, installments=installments, \
-        openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
+    return render_template('circle-form.html', form=form, amount=amount,
+        installment_period=installment_period, installments=installments,
+        openended_status=openended_status,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/internal-texasweekly')
@@ -96,8 +96,8 @@ def internal_texasweekly_form():
         amount = request.args.get('amount')
     else:
         amount = 349
-    return render_template('internal_texasweekly_form.html', form=form, amount=amount, \
-        key=app.config['STRIPE_KEYS']['publishable_key'])
+    return render_template('internal_texasweekly_form.html', form=form,
+            amount=amount, key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/submit-tw', methods=['POST'])
