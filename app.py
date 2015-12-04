@@ -28,9 +28,6 @@ app.config.from_pyfile('config.py')
 app.config.update(
         CELERY_ACCEPT_CONTENT=['pickle', 'json'],
         CELERY_ALWAYS_EAGER=False,
-        CELERY_TASK_SERIALIZER='json',
-        CELERY_RESULT_SERIALIZER='json',
-        CELERY_EVENT_SERIALIZER='json',
         CELERY_IMPORTS=('app', 'salesforce', 'batch'),
         )
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
@@ -99,9 +96,8 @@ def internal_texasweekly_form():
         amount = request.args.get('amount')
     else:
         amount = 349
-    return render_template('internal_texasweekly_form.html',
-        form=form, amount=amount,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
+    return render_template('internal_texasweekly_form.html', form=form,
+            amount=amount, key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/submit-tw', methods=['POST'])
