@@ -106,7 +106,7 @@ class SalesforceConnection(object):
 
         return None
 
-    def query(self, query, path='/services/data/v34.0/query'):
+    def query(self, query, path='/services/data/v35.0/query'):
         """
         Call the Salesforce API to do SOQL queries.
         """
@@ -181,7 +181,7 @@ class SalesforceConnection(object):
 
         print ("----Creating contact...")
         contact = self._format_contact(form=form)
-        path = '/services/data/v34.0/sobjects/Contact'
+        path = '/services/data/v35.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
         contact_id = response['id']
         contact = self._get_contact(contact_id)
@@ -247,7 +247,7 @@ def upsert_customer(customer=None, form=None):
     if not created:
         print ("----Exists, updating")
 
-        path = '/services/data/v34.0/sobjects/Contact/{}'.format(contact['Id'])
+        path = '/services/data/v35.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         check_response(response=resp, expected_status=204)
@@ -295,7 +295,7 @@ def add_opportunity(form=None, customer=None, charge=None):
     _, contact = sf.get_or_create_contact(form)
     opportunity = _format_opportunity(contact=contact, form=form,
             customer=customer)
-    path = '/services/data/v34.0/sobjects/Opportunity'
+    path = '/services/data/v35.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
     send_multiple_account_warning()
 
@@ -377,7 +377,7 @@ def add_recurring_donation(form=None, customer=None):
     _, contact = sf.get_or_create_contact(form)
     recurring_donation = _format_recurring_donation(contact=contact,
             form=form, customer=customer)
-    path = '/services/data/v34.0/sobjects/npe03__Recurring_Donation__c'
+    path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
     sf.post(path=path, data=recurring_donation)
     send_multiple_account_warning()
 
@@ -445,7 +445,7 @@ def add_tw_subscription(form=None, customer=None, charge=None):
     _, contact = sf.get_or_create_contact(form)
     opportunity = _format_tw_opportunity(contact=contact, form=form,
             customer=customer)
-    path = '/services/data/v34.0/sobjects/Opportunity'
+    path = '/services/data/v35.0/sobjects/Opportunity'
     response = sf.post(path=path, data=opportunity)
     send_multiple_account_warning()
 
