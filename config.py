@@ -1,5 +1,5 @@
+# from celery.schedules import crontab
 from datetime import timedelta
-from celery.schedules import crontab
 
 import os
 
@@ -24,7 +24,7 @@ CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
 CELERYBEAT_SCHEDULE = {
         'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': crontab(hour=18, minute=58)
+            'schedule': timedelta(hour=1)
             },
         }
 ######
