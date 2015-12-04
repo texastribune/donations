@@ -13,6 +13,7 @@ from config import TIMEZONE
 from config import ENABLE_SLACK
 from config import SLACK_API_KEY
 from config import SLACK_CHANNEL
+from config import MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT
 
 from emails import send_email
 from check_response import check_response
@@ -64,7 +65,7 @@ def send_multiple_account_warning():
         """.format(count, email)
 
         send_email(
-                recipient='dcraigmile@texastribune.org',
+                recipient=MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
                 subject="Multiple accounts found for {}".format(email),
                 body=body
                 )

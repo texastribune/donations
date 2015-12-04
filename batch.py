@@ -1,6 +1,7 @@
 from salesforce import SalesforceConnection
 import stripe
 from config import STRIPE_KEYS
+from config import ACCOUNTING_MAIL_RECIPIENT
 import requests
 import json
 from datetime import datetime, timedelta
@@ -30,7 +31,7 @@ class Log(object):
         Send the assembled log out as an email.
         """
         body = '\n'.join(self.log)
-        recipient = 'dcraigmile@texastribune.org'  # TODO
+        recipient = ACCOUNTING_MAIL_RECIPIENT
         subject = 'Batch run'
         send_email(body=body, recipient=recipient, subject=subject)
 
