@@ -23,9 +23,6 @@ locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
 
 WARNINGS = dict()
 
-# TODO: use v35 of Salesforce API
-# TODO: use latest version of Stripe API
-
 
 def notify_slack(message):
     """
@@ -363,7 +360,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
             'npe03__Installment_Period__c': installment_period,
             'Type__c': type__c,
             }
-    pprint(recurring_donation)
+    pprint(recurring_donation)   # TODO: rm
     return recurring_donation
 
 
