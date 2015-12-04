@@ -24,7 +24,8 @@ CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
 CELERYBEAT_SCHEDULE = {
         'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': timedelta(hours=1)
+#            'schedule': timedelta(hours=1)
+            'schedule': timedelta(minutes=1)
             },
         }
 ######
