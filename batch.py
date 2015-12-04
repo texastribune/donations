@@ -86,13 +86,14 @@ def charge_cards():
 
     for item in response:
         # print (item)
+        amount = amount_to_charge(item)
         try:
-            log.it("---- Charging ${} to {} ({})".format(item['Amount'],
+            log.it("---- Charging ${} to {} ({})".format(amount,
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
                     customer=item['Stripe_Customer_ID__c'],
-                    amount=amount_to_charge(item),
+                    amount=amount,
                     currency='usd',
                     description=item['Description'],
                     )
