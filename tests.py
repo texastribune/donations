@@ -11,6 +11,7 @@ from batch import amount_to_charge
 from check_response import check_response
 from salesforce import _format_opportunity
 from salesforce import _format_recurring_donation
+from salesforce import _format_tw_opportunity
 from salesforce import SalesforceConnection
 from salesforce import upsert_customer
 
@@ -148,6 +149,16 @@ form.add('description', 'The Texas Tribune Membership')
 form.add('pay_fees_value', 'True')
 request.form = form
 
+tw_form = MultiDict()
+tw_form.add('amount', '349')
+tw_form.add('last_name', 'C'),
+tw_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
+tw_form.add('first_name', 'D'),
+tw_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
+tw_form.add('stripeTokenType', 'card'),
+tw_form.add('description', 'Texas Weekly Subscription')
+request.tw_form = tw_form
+
 
 def test_check_response():
     response = Response()
@@ -181,12 +192,31 @@ def test__format_opportunity():
             'CloseDate': today,
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'LeadSource': 'Stripe',
-            'Name': 'D C (dcraigmile+test6@texastribune.org)',
+            'Name': 'DC (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhI9',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
             'Description': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
+            }
+
+    assert response == expected_response
+
+
+def test__format_tw_opportunity():
+
+    response = _format_tw_opportunity(contact=contact, form=tw_form,
+            customer=customer)
+    expected_response = {
+            'AccountId': '0011700000BpR8PAAV',
+            'Amount': '349',
+            'CloseDate': today,
+            'LeadSource': 'Stripe',
+            'Name': 'DC (dcraigmile+test6@texastribune.org)',
+            'RecordTypeId': '01216000001IhQNAA0',
+            'StageName': 'Pledged',
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'Description': 'Texas Weekly Subscription',
             }
 
     assert response == expected_response

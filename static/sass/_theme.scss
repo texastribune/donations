@@ -12,11 +12,30 @@ body {
 
 .main {
   min-height: 500px;
-  padding: 0 0 1em 0;
+  padding: 0 2em;
 }
 
-.page-wrap {
-  padding: 0 2em;
+.outer-section {
+  @include outer-container;
+  .nine {
+    @include span-columns(9);
+  }
+  .six {
+    @include span-columns(6);
+    padding: 1em;
+  }
+  .three {
+    @include span-columns(3);
+  }
+  .four {
+    @include span-columns(4);
+  }
+  .three, .four, .six, .nine {
+    @include media($tablet) {
+      @include span-columns(12);
+      margin-top: 1em;
+    }
+  }
 }
 
 
@@ -24,7 +43,7 @@ body {
 h2 {
   font-size: 1.5em;
   font-weight: bold;
-  letter-spacing: -1px;
+  letter-spacing: 0.03em;
   margin: 0 0 0.5em 0;
 }
 
@@ -36,13 +55,17 @@ a {
   }
 }
 
-.label-info {
-  font-family: Helvetica, sans-serif;
-  font-size: 1.2em;
-  font-style: normal;
-  font-weight: 500;
+p {
   margin: 0;
   padding: 1em 0;
+}
+
+.label-info {
+  font-family: $helvetica;
+  font-size: 1.2em;
+  font-style: normal;
+  margin: 0;
+  padding: 0.2em 0 0.8em 0;
 }
 
 
@@ -62,33 +85,11 @@ a {
 
 // Form styles
 .form-outer-section {
-  @include outer-container;
   border-bottom: 2px solid $yellow-tribune;
   padding: 1em 0;
   &:last-of-type {
     border-bottom: none;
   }
-  .form-section {
-    &.three {
-      @include span-columns(3);
-    }
-    &.four {
-      @include span-columns(4);
-    }
-    &.three, &.four {
-      @include media($tablet) {
-        @include span-columns(12);
-        margin-top: 1em;
-      }
-    }
-    &.break {
-      clear: both;
-    }
-  }
-}
-
-form {
-  padding: 0 2em;
 }
 
 .dollar {
@@ -96,8 +97,7 @@ form {
   font-family: $league-gothic;
   font-size: 3.5em;
   margin: 0;
-  padding: 0 0.2em;
-  width: 100px;
+  width: 150px;
   &.uneditable {
     border: none;
   }
@@ -130,17 +130,28 @@ input::-webkit-inner-spin-button, {
 #pay_fees {
   clear: both;
   float: left;
+  margin-left: -20px;
+  @include media($tablet) {
+    margin-left: 0;
+  }
 }
 
 #pay-fee-amount {
   float: left;
-  padding: 0.2em;
+  padding: 0.2em 0 0 0;
+}
+
+#pay-fee-info {
+  clear: both;
+  padding: 0;
 }
 
 // Stripe form submit button styles
 .button {
+  font-family: $helvetica;
   font-size: 1.2em;
   font-weight: bold;
+  letter-spacing: 0.03em;
   padding: 0.5em 1.8em;
   text-align: center;
   &:focus {
@@ -161,20 +172,21 @@ input::-webkit-inner-spin-button, {
 }
 
 // Error styles
+.form-error {
+  display: none;
+}
+
 .error-form-message {
+  clear: both;
   color: red;
 }
 
-.error-page-message {
-  font-size: 1.5em;
-  padding: 0 2em;
-}
 
-
-// 404 page
-.sorry-img-wrapper {
-  text-align: center;
+// 404 and thank-you page images
+.img-wrapper {
+  text-align: left;
   img {
+    padding: 1em;
     width: 450px;
     @media screen and (max-width: 480px) {
       width: 100%;

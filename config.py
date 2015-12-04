@@ -1,4 +1,6 @@
+# from celery.schedules import crontab
 from datetime import timedelta
+
 import os
 
 
@@ -19,14 +21,12 @@ FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
-# TODO: transform this to a cron format
 CELERYBEAT_SCHEDULE = {
-        'every-minute': {
+        'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': timedelta(seconds=10)
+            'schedule': timedelta(hours=1)
             },
         }
-
 ######
 # SMTP
 #
@@ -42,7 +42,7 @@ DEFAULT_MAIL_SENDER = os.getenv('DEFAULT_MAIL_SENDER', 'me@myplace.org')
 #
 MEMBERSHIP_RECORDTYPEID = '01216000001IhHp'
 DONATION_RECORDTYPEID = '01216000001IhI9'
-# TODO: add Texas Weekly record type
+TEXASWEEKLY_RECORDTYPEID = '01216000001IhQNAA0'
 SALESFORCE = {
     "CLIENT_ID": os.getenv('SALESFORCE_CLIENT_ID'),
     "CLIENT_SECRET": os.getenv('SALESFORCE_CLIENT_SECRET'),

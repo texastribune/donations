@@ -1,4 +1,4 @@
-<div class="form-outer-section">
+<div class="outer-section form-outer-section">
   <h2>Name</h2>
   <div class="form-section three">
     {{ form.first_name.label }}<br>
@@ -8,28 +8,23 @@
     {{ form.last_name.label }}<br>
       {{ form.last_name(maxlength=50) }}
   </div>
-  <div style="clear: both;" class="form-section six">
+  <div class="form-section form-error">
     <p class="error-form-message"></p>
   </div>
 </div>
-<div class="form-outer-section">
+<div class="outer-section form-outer-section">
   <h2>Additional Info</h2>
   <div class="form-section four">
     {{ form.reason.label }}
       {{ form.reason(maxlength=100) }}
-  </div>
-  <div class="form-section four">
-    {{ form.pay_fees.label }}
-      {{ form.pay_fees(checked=False) }}
-    <p id="pay-fee-amount" class="label-info">{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
   </div>
 </div>
   {{ form.pay_fees_value(value="False") }}
   {{ form.installments(value=installments) }}
   {{ form.installment_period(value=installment_period) }}
   {{ form.openended_status(value=openended_status) }}
-<div class="form-outer-section">
+<div class="outer-section form-outer-section">
   <script src="https://checkout.stripe.com/checkout.js"></script>
   <button id="customButton" class="button button-flat">Pay by Card</button>
-  <p>Prefer to mail a check? Use our <a href="http://support.texastribune.org/images/TT-member-form-2015.pdf">membership form</a>.</p>
+  <p>Prefer to mail a check? Use our <a href="https://s3.amazonaws.com/static.texastribune.org/media/marketing/TT-membership-form-2016.pdf">membership form</a>. Our mailing address is 823 Congress Avenue, Suite 1400, Austin, TX 78701.</p>
 </div>

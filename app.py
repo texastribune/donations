@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask, render_template, request
-from forms import DonateForm
+from forms import DonateForm, TexasWeeklyForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -9,6 +9,7 @@ from validate_email import validate_email
 
 from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
+from salesforce import add_tw_customer_and_charge
 from app_celery import make_celery
 
 import batch
@@ -42,8 +43,8 @@ def member_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        message = "Please select a membership level at support.texastribune.org."
-        return render_template("error.html", message=message)
+        message = "The page you requested can't be found."
+        return render_template('error.html', message=message)
     installment_period = request.args.get('installmentPeriod')
     if installment_period is None:
         installment_period = 'None'
@@ -60,7 +61,7 @@ def donate_renew_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        amount=False
+        amount = 50
     openended_status = 'None'
     installments = 'None'
     installment_period = 'None'
@@ -75,14 +76,50 @@ def circle_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        message = "Please select a membership level at support.texastribune.org."
-        return render_template("error.html", message=message)
+        message = "The page you requested can't be found."
+        return render_template('error.html', message=message)
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')
     return render_template('circle-form.html', form=form, amount=amount, \
         installment_period=installment_period, installments=installments, \
         openended_status=openended_status, key=app.config['STRIPE_KEYS']['publishable_key'])
+
+
+@app.route('/internal-texasweekly')
+def internal_texasweekly_form():
+    form = TexasWeeklyForm()
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        amount = 349
+    return render_template('internal_texasweekly_form.html', form=form, amount=amount, \
+        key=app.config['STRIPE_KEYS']['publishable_key'])
+
+
+@app.route('/submit-tw', methods=['POST'])
+def submit_tw():
+    form = TexasWeeklyForm(request.form)
+
+    email_is_valid = validate_email(request.form['stripeEmail'])
+
+    if email_is_valid:
+        customer = stripe.Customer.create(
+            email=request.form['stripeEmail'],
+            card=request.form['stripeToken']
+        )
+    else:
+        message = "There was an issue saving your email address."
+        return render_template('error.html', message=message)
+
+    if form.validate():
+        print("----Adding TW subscription...")
+        add_tw_customer_and_charge.delay(form=request.form,
+                customer=customer)
+        return render_template('charge.html')
+    else:
+        message = "There was an issue saving your form."
+        return render_template('error.html', message=message)
 
 
 @app.route('/error')
@@ -93,7 +130,8 @@ def error():
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return render_template('page_not_found.html'), 404
+    message = "The page you requested can't be found."
+    return render_template('error.html')
 
 
 @app.route('/charge', methods=['POST'])
@@ -110,7 +148,7 @@ def charge():
                 card=request.form['stripeToken']
         )
     else:
-        message = "Please enter a valid email address."
+        message = "There was an issue saving your email address."
         return render_template('error.html', message=message)
 
     if form.validate():
@@ -120,7 +158,7 @@ def charge():
         return render_template('charge.html',
                 amount=request.form['amount'])
     else:
-        message = "Sorry, there was an issue saving your form."
+        message = "There was an issue saving your form."
         return render_template('error.html', message=message)
 
 if __name__ == '__main__':
