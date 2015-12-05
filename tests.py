@@ -115,7 +115,7 @@ customer.id = 'cus_78MqJSBejMN9gn'
 contact = {
         'AccountId': '0011700000BpR8PAAV',
         'attributes': {
-            'url': '/services/data/v34.0/sobjects/Contact/0031700000BHQzBAAX',
+            'url': '/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX',
             'type': 'Contact'
             },
         'Stripe_Customer_Id__c': 'cus_78MnnsgVuQb4r6',
@@ -192,7 +192,7 @@ def test__format_opportunity():
             'CloseDate': today,
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'LeadSource': 'Stripe',
-            'Name': 'DC (dcraigmile+test6@texastribune.org)',
+            'Name': 'D C (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhI9',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
@@ -282,7 +282,7 @@ def request_callback(request):
 
 @responses.activate
 def test__get_contact():
-    url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
 
     responses.add(responses.GET, url_re,
@@ -300,7 +300,7 @@ def test__get_contact():
 
 @responses.activate
 def test_create_contact():
-    url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
@@ -309,7 +309,7 @@ def test_create_contact():
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
     responses.add(responses.POST,
-            'http://foo/services/data/v34.0/sobjects/Contact',
+            'http://foo/services/data/v35.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
             status=201,)
 
@@ -321,7 +321,7 @@ def test_create_contact():
 
 @responses.activate
 def test_find_contact():
-    url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
@@ -348,10 +348,10 @@ def test_get_or_create_contact_non_extant():
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
             status=200)
     responses.add(responses.POST,
-            'http://foo/services/data/v34.0/sobjects/Contact',
+            'http://foo/services/data/v35.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
             status=201,)
-    url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
     responses.add_callback(
             responses.GET, url_re,
             callback=request_callback,
@@ -368,7 +368,7 @@ def test_get_or_create_contact_non_extant():
 def test_get_or_create_contact_extant():
 
     # next we test with the user already extant:
-    url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
@@ -389,7 +389,7 @@ def test_get_or_create_contact_multiple():
     # TODO: check that we send an alert
 
     # next we test with the user already extant:
-    url_re = re.compile(r'http://foo/services/data/v34.0/query.*')
+    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo", "bar"]}')
@@ -416,13 +416,13 @@ def test_upsert_non_extant():
             )
     responses.add(
             responses.POST,
-            'http://foo/services/data/v34.0/sobjects/Contact',
+            'http://foo/services/data/v35.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
             status=201,
             )
     responses.add_callback(
             responses.GET,
-            'http://foo/services/data/v34.0/query',
+            'http://foo/services/data/v35.0/query',
             callback=request_callback,
             )
 
@@ -438,12 +438,12 @@ list_resp_body = {
                 'Id': '0031700000BHQzBAAX',
                 'Stripe_Customer_Id__c': 'cus_7GHFg5Dk07Loox',
                 'attributes': {'type': 'Contact',
-                    'url': '/services/data/v34.0/sobjects/Contact/0031700000BHQzBAAX'}},
+                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX'}},
             {'AccountId': '0011700000BqjZSAAZ',
                 'Id': '0031700000BM3J4AAL',
                 'Stripe_Customer_Id__c': None,
                 'attributes': {'type': 'Contact',
-                    'url': '/services/data/v34.0/sobjects/Contact/0031700000BM3J4AAL'}}
+                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BM3J4AAL'}}
                 ],
         'totalSize': 9
         }
@@ -464,7 +464,7 @@ def test_upsert_extant():
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(
             responses.PATCH,
-            'http://foo/services/data/v34.0/sobjects/Contact/0031700000BHQzBAAX',
+            'http://foo/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX',
             body='{"errors": [], "id": "a0917000002rZngAAE", "success": true}',
             status=204,
             )
@@ -475,13 +475,13 @@ def test_upsert_extant():
             )
     responses.add(
             responses.POST,
-            'http://foo/services/data/v34.0/sobjects/Contact',
+            'http://foo/services/data/v35.0/sobjects/Contact',
             body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
             status=200,
             )
     responses.add_callback(
             responses.GET,
-            'http://foo/services/data/v34.0/query',
+            'http://foo/services/data/v35.0/query',
             callback=request_upsert_extant_callback,
             )
 
