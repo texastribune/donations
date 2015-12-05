@@ -16,6 +16,12 @@ Running the Project
 Run `make interactive`. This will drop you into the Flask app.
 
 Run `python3 app.py`. You should then be able to interact with the app at `docker.local` (or whatever you set Docker to resolve to).
+```
+flower -A app.celery --port=5555 --address=0.0.0.0    # monitoring
+C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
+celery beat --app app.celery &
+gunicorn app:app --log-file=- --bind=0.0.0.0:5000 --access-logfile=-
+```
 
 ### Tests
 
