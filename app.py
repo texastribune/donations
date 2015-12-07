@@ -34,8 +34,6 @@ app.config.update(
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
 celery = make_celery(app)
-if app.config['ENABLE_SENTRY']:
-    sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 # Set up to send logging to stdout and Heroku forwards to Papertrail
 LOGGING = {
@@ -47,6 +45,9 @@ LOGGING = {
         },
     }
 }
+
+if app.config['ENABLE_SENTRY']:
+    sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 
 @app.route('/memberform')
