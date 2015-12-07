@@ -123,8 +123,9 @@ def charge_cards():
 
     log.it('---Starting batch job...')
 
-    three_days_ago = (datetime.now() - timedelta(days=3)).strftime('%Y-%m-%d')
-    today = datetime.now().strftime('%Y-%m-%d')
+    three_days_ago = (datetime.now(tz=zone) - timedelta(
+        days=3)).strftime('%Y-%m-%d')
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
     # regular (non Circle) pledges:
     log.it('---Processing regular charges...')
