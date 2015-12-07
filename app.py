@@ -1,4 +1,5 @@
 import os
+import sys
 
 from flask import Flask, render_template, request
 from forms import DonateForm, TexasWeeklyForm
@@ -33,6 +34,18 @@ app.config.update(
 stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
 
 celery = make_celery(app)
+
+# Set up to send logging to stdout and Heroku forwards to Papertrail
+LOGGING = {
+    'handlers': {
+        'console':{
+            'level':'INFO',
+            'class':'logging.StreamHandler',
+            'strm': sys.stdout
+        },
+    }
+}
+
 if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
