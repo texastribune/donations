@@ -1,6 +1,6 @@
 from flask_wtf import Form
 
-from wtforms.fields import StringField, IntegerField, HiddenField, BooleanField
+from wtforms.fields import StringField, HiddenField, BooleanField, DecimalField
 from wtforms import validators
 
 from flask import request
@@ -10,7 +10,7 @@ class DonateForm(Form):
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
-    amount = IntegerField(u'Amount',
+    amount = DecimalField(u'Amount',
         [validators.required(message="Please choose a donation amount.")])
     reason = StringField(u'Encouraged to contribute by')
     installment_period = HiddenField(u'Installment Period')
@@ -25,6 +25,6 @@ class TexasWeeklyForm(Form):
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
-    amount = IntegerField(u'Amount',
+    amount = DecimalField(u'Amount',
         [validators.required(message="Please choose an amount.")])
     description = HiddenField(u'Description')
