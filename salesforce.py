@@ -34,6 +34,9 @@ def notify_slack(message):
                 'token': SLACK_API_KEY,
                 'channel': SLACK_CHANNEL,
                 'text': message,
+                'username': 'moneybot',
+                'icon_emoji': ':moneybag:'
+
                 }
         url = 'https://slack.com/api/chat.postMessage'
         requests.get(url, params=payload)
@@ -399,12 +402,12 @@ def add_customer_and_charge(form=None, customer=None):
 
     if (form['installment_period'] == 'None'):
         print("----One time payment...")
-        msg = '{} pledged ${}{}'.format(name, amount, reason)
+        msg = '*{}* pledged *${}*{}'.format(name, amount, reason)
         notify_slack(msg)
         add_opportunity(form=form, customer=customer)
     else:
         print("----Recurring payment...")
-        msg = '{} pledged ${}{} [recurring]'.format(name, amount, reason)
+        msg = '*{}* pledged *${}*{} [recurring]'.format(name, amount, reason)
         notify_slack(msg)
         add_recurring_donation(form=form, customer=customer)
     return True
