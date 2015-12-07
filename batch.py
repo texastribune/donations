@@ -1,12 +1,18 @@
-from salesforce import SalesforceConnection
-import stripe
-from config import STRIPE_KEYS
-from config import ACCOUNTING_MAIL_RECIPIENT
-import requests
-import json
 from datetime import datetime, timedelta
+import json
+
 import celery
 from emails import send_email
+from pytz import timezone
+import requests
+import stripe
+
+from salesforce import SalesforceConnection
+from config import STRIPE_KEYS
+from config import ACCOUNTING_MAIL_RECIPIENT
+from config import TIMEZONE
+
+zone = timezone(TIMEZONE)
 
 stripe.api_key = STRIPE_KEYS['secret_key']
 
@@ -71,7 +77,7 @@ def process_charges(query, log):
         # print (item)
         amount = amount_to_charge(item)
         try:
-            log.it("---- Charging ${} to {} ({})".format(amount/100,
+            log.it("---- Charging ${} to {} ({})".format(amount / 100,
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
@@ -81,13 +87,15 @@ def process_charges(query, log):
                     description=item['Description'],
                     )
         except stripe.error.CardError as e:
-            log.it("The card has been declined: {}".format(e))
+            log.it("The card has been declined: {} ({})".format(e,
+                e.json_body['error']['decline_code']))
             continue
         except stripe.error.InvalidRequestError as e:
             log.it("Problem: {}".format(e))
             continue
         # print ('Charge: {}'.format(charge))
         # TODO: check for success
+        # TODO: catch other errors
 
         # print ("Charge id: {}".format(charge.id))
         update = {
