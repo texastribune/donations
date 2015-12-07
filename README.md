@@ -31,4 +31,3 @@ Running tests
 To run the project tests, run
 `make interactive`
 `py.test tests.py`
-
