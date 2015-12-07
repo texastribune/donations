@@ -39,7 +39,10 @@ def notify_slack(message):
 
                 }
         url = 'https://slack.com/api/chat.postMessage'
-        requests.get(url, params=payload)
+        try:
+            requests.get(url, params=payload)
+        except Exception as e:
+            print ('Failed to send Slack notification: {}'.format(e))
 
 
 def warn_multiple_accounts(email, count):
