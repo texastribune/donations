@@ -14,7 +14,7 @@ var stripe_donation = function() {
     if ($('#last_name').val()) {
       last_name_exists = true;
     }
-    if ($('#amount').val() > 1) {
+    if ($('#amount').val() >= 1) {
       amount_above_one_dollar = true;
     }
   };
