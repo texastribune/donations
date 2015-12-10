@@ -11,7 +11,8 @@ class DonateForm(Form):
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
     amount = DecimalField(u'Amount',
-        [validators.required(message="Please choose a donation amount.")])
+        [validators.required(message="Please choose a donation amount."),
+        validators.NumberRange(min=1)])
     reason = StringField(u'Encouraged to contribute by')
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
@@ -26,5 +27,6 @@ class TexasWeeklyForm(Form):
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
     amount = DecimalField(u'Amount',
-        [validators.required(message="Please choose an amount.")])
+        [validators.required(message="Please choose an amount."),
+        validators.NumberRange(min=1)])
     description = HiddenField(u'Description')

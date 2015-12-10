@@ -134,7 +134,7 @@ def submit_tw():
                 customer=customer)
         return render_template('charge.html')
     else:
-        message = "There was an issue saving your form."
+        message = "There was an issue saving your donation information."
         return render_template('error.html', message=message)
 
 
@@ -174,7 +174,7 @@ def charge():
         return render_template('charge.html',
                 amount=request.form['amount'])
     else:
-        message = "There was an issue saving your form."
+        message = "There was an issue saving your donation information."
         return render_template('error.html', message=message)
 
 if __name__ == '__main__':

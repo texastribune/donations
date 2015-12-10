@@ -2,13 +2,20 @@
 var stripe_donation = function() {
   var first_name_exists = false;
   var last_name_exists = false;
+  var amount_above_one_dollar = false;
 
   var check_required_inputs = function() {
+    first_name_exists = false;
+    last_name_exists = false;
+    amount_above_one_dollar = false;
     if ($('#first_name').val()) {
       first_name_exists = true;
     }
     if ($('#last_name').val()) {
       last_name_exists = true;
+    }
+    if ($('#amount').val() >= 1) {
+      amount_above_one_dollar = true;
     }
   };
 
@@ -32,7 +39,18 @@ var stripe_donation = function() {
 
   $('#customButton').on('click', function(e) {
       check_required_inputs();
-      if (first_name_exists & last_name_exists) {
+
+      if (!first_name_exists || !last_name_exists) {
+        $('.form-error').show();
+        $('.error-form-message').text('Please check that you entered a first and last name, and then resubmit.');
+      }
+
+      if (!amount_above_one_dollar) {
+        $('.form-error').show();
+        $('.error-form-message').text('Please check that you entered a donation amount above $1, and then resubmit.');
+      }
+
+      if (first_name_exists & last_name_exists & amount_above_one_dollar) {
         $('.form-error').hide();
         $('.error-form-message').text('');
         // If form is valid, open Checkout with further options
@@ -41,10 +59,8 @@ var stripe_donation = function() {
           description: charge_description,
           amount: donation_amount
         });
-      } else {
-        $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a first and last name, and then resubmit.');
-      };
+      }
+
       e.preventDefault();
   });
 
