@@ -429,6 +429,7 @@ def _format_tw_opportunity(contact=None, form=None, customer=None):
             'Amount': '{}'.format(form['amount']),
             'CloseDate': today,
             'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
+            'Type': 'Single',
             'Name': '{}{} ({})'.format(
                 form['first_name'],
                 form['last_name'],

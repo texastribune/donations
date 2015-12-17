@@ -198,6 +198,7 @@ def test__format_opportunity():
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
             'Description': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
+            'Type': 'Single',
             }
 
     assert response == expected_response
@@ -214,6 +215,7 @@ def test__format_tw_opportunity():
             'LeadSource': 'Stripe',
             'Name': 'DC (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhQNAA0',
+            'Type': 'Single',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
             'Description': 'Texas Weekly Subscription',
