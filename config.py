@@ -19,16 +19,18 @@ FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 # Celery
 #
 
-WHEN = '4,15,16,21'
+# default is 4am and 4pm:
+BATCH_HOURS = os.getenv('BATCH_HOURS', '4, 16')
 CELERY_TIMEZONE = TIMEZONE
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
-CHARGE_MINUTES_FREQUENCY = int(os.getenv('CHARGE_MINUTES_FREQUENCY', 1440))
+# deprecated:
+# CHARGE_MINUTES_FREQUENCY = int(os.getenv('CHARGE_MINUTES_FREQUENCY', 1440))
 CELERYBEAT_SCHEDULE = {
         'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': crontab(minute='0, 10, 15, 20', hour=WHEN)
+            'schedule': crontab(minute='0, 10, 15, 20, 30', hour=BATCH_HOURS)
             },
         }
 ######
