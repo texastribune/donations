@@ -30,7 +30,7 @@ CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
 CELERYBEAT_SCHEDULE = {
         'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': crontab(minute='0, 10, 15, 20, 30', hour=BATCH_HOURS)
+            'schedule': crontab(minute='0', hour=BATCH_HOURS)
             },
         }
 ######
