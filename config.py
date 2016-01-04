@@ -1,5 +1,5 @@
 from celery.schedules import crontab
-#from datetime import timedelta
+# from datetime import timedelta
 
 import os
 
@@ -19,7 +19,7 @@ FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
 # Celery
 #
 
-WHEN = '4,16'
+WHEN = '4,15,16'
 CELERY_BROKER_URL = os.getenv('CELERY_BROKER_URL')
 CELERY_RESULT_BACKEND = os.getenv('CELERY_RESULT_BACKEND')
 CELERY_ALWAYS_EAGER = bool_env('CELERY_ALWAYS_EAGER')
@@ -27,7 +27,7 @@ CHARGE_MINUTES_FREQUENCY = int(os.getenv('CHARGE_MINUTES_FREQUENCY', 1440))
 CELERYBEAT_SCHEDULE = {
         'every-day': {
             'task': 'batch.charge_cards',
-            'schedule': crontab(minute=0, hour=WHEN)
+            'schedule': crontab(minute='0, 10', hour=WHEN)
             },
         }
 ######
