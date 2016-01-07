@@ -153,9 +153,8 @@ def charge_cards():
     # Circle transactions are different from the others. The Close Dates for a
     # given Circle donation are all identical. That's so that the gift can be
     # recognized all at once on the donor wall. So we use another field to
-    # determine when the card is actually charged:
-    # Giving_Circle_Expected_Giving_Date__c. So we process charges separately
-    # for Circles.
+    # determine when the card is actually charged: Expected_Giving_Date__c.
+    # So we process charges separately for Circles.
     #
 
     log.it('---Processing Circle charges...')
@@ -164,8 +163,8 @@ def charge_cards():
         SELECT Amount, Name, Stripe_Customer_Id__c, Description,
             Stripe_Agreed_to_pay_fees__c
         FROM Opportunity
-        WHERE Giving_Circle_Expected_Giving_Date__c <= {}
-        AND Giving_Circle_Expected_Giving_Date__c >= {}
+        WHERE Expected_Giving_Date__c <= {}
+        AND Expected_Giving_Date__c >= {}
         AND StageName = 'Pledged'
         AND Stripe_Customer_Id__c != ''
         AND Type = 'Giving Circle'
