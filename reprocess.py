@@ -1,4 +1,4 @@
-"""Naval Fate.
+"""Reprocess (older) transactions
 
 Usage:
   reprocess.py <date>
