@@ -64,7 +64,6 @@ def amount_to_charge(entry):
 
 def process_charges(query, log):
 
-    print(query)
     sf = SalesforceConnection()
 
     response = sf.query(query)
@@ -74,7 +73,6 @@ def process_charges(query, log):
         len(response)))
 
     for item in response:
-        # print (item)
         amount = amount_to_charge(item)
         try:
             log.it("---- Charging ${} to {} ({})".format(amount / 100,
@@ -111,10 +109,8 @@ def process_charges(query, log):
                 }
         path = item['attributes']['url']
         url = '{}{}'.format(sf.instance_url, path)
-        # print (url)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
-        # print (resp)
         if resp.status_code == 204:
             log.it("ok")
         else:
