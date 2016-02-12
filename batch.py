@@ -97,11 +97,11 @@ def process_charges(query, log):
         except stripe.error.InvalidRequestError as e:
             log.it("Problem: {}".format(e))
             continue
-        # print ('Charge: {}'.format(charge))
-        # TODO: check for success
-        # TODO: catch other errors
-
-        # print ("Charge id: {}".format(charge.id))
+        except Exception as e:
+            log.it("Problem: {}".format(e))
+        if charge.status != 'succeeded':
+            log.it("Charge failed. Check Stripe logs.")
+            continue
         update = {
                 'Stripe_Transaction_Id__c': charge.id,
                 'Stripe_Card__c': charge.source.id,
