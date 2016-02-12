@@ -99,6 +99,7 @@ def process_charges(query, log):
             continue
         except Exception as e:
             log.it("Problem: {}".format(e))
+            continue
         if charge.status != 'succeeded':
             log.it("Charge failed. Check Stripe logs.")
             continue
