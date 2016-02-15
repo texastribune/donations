@@ -64,7 +64,6 @@ def amount_to_charge(entry):
 
 def process_charges(query, log):
 
-    print(query)
     sf = SalesforceConnection()
 
     response = sf.query(query)
@@ -74,7 +73,6 @@ def process_charges(query, log):
         len(response)))
 
     for item in response:
-        # print (item)
         amount = amount_to_charge(item)
         try:
             log.it("---- Charging ${} to {} ({})".format(amount / 100,
@@ -99,11 +97,12 @@ def process_charges(query, log):
         except stripe.error.InvalidRequestError as e:
             log.it("Problem: {}".format(e))
             continue
-        # print ('Charge: {}'.format(charge))
-        # TODO: check for success
-        # TODO: catch other errors
-
-        # print ("Charge id: {}".format(charge.id))
+        except Exception as e:
+            log.it("Problem: {}".format(e))
+            continue
+        if charge.status != 'succeeded':
+            log.it("Charge failed. Check Stripe logs.")
+            continue
         update = {
                 'Stripe_Transaction_Id__c': charge.id,
                 'Stripe_Card__c': charge.source.id,
@@ -111,10 +110,8 @@ def process_charges(query, log):
                 }
         path = item['attributes']['url']
         url = '{}{}'.format(sf.instance_url, path)
-        # print (url)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
-        # print (resp)
         if resp.status_code == 204:
             log.it("ok")
         else:

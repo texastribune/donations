@@ -1,6 +1,7 @@
 import json
 import re
 
+from unittest.mock import patch
 from datetime import datetime
 import pytest
 from pytz import timezone
@@ -8,6 +9,7 @@ import responses
 from werkzeug.datastructures import MultiDict
 
 from batch import amount_to_charge
+from batch import process_charges
 from check_response import check_response
 from salesforce import _format_opportunity
 from salesforce import _format_recurring_donation
@@ -512,3 +514,65 @@ def test_amount_to_charge_just_fees_true():
     actual = amount_to_charge(foo)
     expected = 1059
     assert actual == expected
+
+
+class RequestsResponse(object):
+    status_code = 204
+
+
+class SourceObject(object):
+    id = "bar"
+
+
+class ChargeReturnValue(object):
+    status = "failed"
+    id = "foo"
+    source = SourceObject()
+
+sf_response = [{'Amount': 84.0,
+    'Name': 'D C Donation (1 of 36) 2/11/2016',
+    'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
+    'Stripe_Agreed_to_pay_fees__c': False,
+    'Description': 'The Texas Tribune Circle Membership',
+    'attributes': {
+        'type': 'Opportunity',
+        'url': '/services/data/v35.0/sobjects/Opportunity/'
+        '006q0000005r5cOAAQ'
+        }}]
+
+
+@patch('batch.requests')
+@patch('batch.Log')
+@patch('batch.stripe.Charge.create')
+@patch('batch.SalesforceConnection.query')
+def test_process_failed_charges(sf_connection_query, stripe_charge, log,
+        requests_lib):
+    """
+    It looks like a Stripe charge can fail without raising an
+    exception. This tests that we'll log the error and not proceed.
+
+    """
+    stripe_charge.return_value = ChargeReturnValue()
+    sf_connection_query.return_value = sf_response
+    requests_lib.patch.return_value = RequestsResponse()
+    process_charges('whatever', log)
+    log.it.assert_called_with("Charge failed. Check Stripe logs.")
+
+
+@patch('batch.requests')
+@patch('batch.Log')
+@patch('batch.stripe.Charge.create')
+@patch('batch.SalesforceConnection.query')
+def test_process_success(sf_connection_query, stripe_charge, log,
+        requests_lib):
+    """
+    This tests the normal case where everything succeeds.
+    """
+
+    charge_return_value = ChargeReturnValue()
+    charge_return_value.status = "succeeded"
+    stripe_charge.return_value = charge_return_value
+    sf_connection_query.return_value = sf_response
+    requests_lib.patch.return_value = RequestsResponse()
+    process_charges('whatever', log)
+    log.it.assert_called_with("ok")
