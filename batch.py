@@ -75,7 +75,7 @@ def process_charges(query, log):
     for item in response:
         amount = amount_to_charge(item)
         try:
-            log.it("---- Charging ${} to {} ({})".format(amount / 100,
+            log.it('---- Charging ${} to {} ({})'.format(amount / 100,
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
@@ -95,13 +95,13 @@ def process_charges(query, log):
                 decline_code))
             continue
         except stripe.error.InvalidRequestError as e:
-            log.it("Problem: {}".format(e))
+            log.it('Problem: {}'.format(e))
             continue
         except Exception as e:
-            log.it("Problem: {}".format(e))
+            log.it('Problem: {}'.format(e))
             continue
         if charge.status != 'succeeded':
-            log.it("Charge failed. Check Stripe logs.")
+            log.it('Charge failed. Check Stripe logs.')
             continue
         update = {
                 'Stripe_Transaction_Id__c': charge.id,
@@ -113,9 +113,9 @@ def process_charges(query, log):
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
         if resp.status_code == 204:
-            log.it("ok")
+            log.it('ok')
         else:
-            log.it("problem")
+            log.it('problem')
             raise Exception('problem')
 
 
