@@ -584,3 +584,104 @@ def test_process_success(sf_connection_query, stripe_charge, log,
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
     log.it.assert_called_with("ok")
+
+sf_response_2 = [
+        {'Amount': 84.0,
+            'Name': 'D C Donation (1 of 36) 2/11/2016',
+            'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
+            'Stripe_Agreed_to_pay_fees__c': False,
+            'Description': 'The Texas Tribune Circle Membership',
+            'attributes': {
+                'type': 'Opportunity',
+                'url': '/services/data/v35.0/sobjects/Opportunity/'
+                '006q0000005r5cOAAQ'
+                }},
+        {'Amount': 36.0,
+            'Name': 'D C Donation (1 of 36) 2/11/2016',
+            'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
+            'Stripe_Agreed_to_pay_fees__c': False,
+            'Description': 'The Texas Tribune Circle Membership',
+            'attributes': {
+                'type': 'Opportunity',
+                'url': '/services/data/v35.0/sobjects/Opportunity/'
+                '006q0000005r5cOAAQ'
+                }}
+            ]
+
+
+@patch('batch.requests')
+@patch('batch.Log')
+@patch('batch.stripe.Charge.create')
+@patch('batch.SalesforceConnection.query')
+def test_fail_continues(sf_connection_query, stripe_charge, log,
+        requests_lib):
+    """
+    This shows that processing will continue even when an error is encountered.
+    """
+    expected_call_list = [
+            call('Found 2 opportunities available to process.'),
+            call('---- Charging $84.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o'
+            'f 36) 2/11/2016)'),
+            call('Problem: '),
+            call('---- Charging $36.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o'
+            'f 36) 2/11/2016)'),
+            call('ok')
+            ]
+
+    charge_return_value = ChargeReturnValue()
+    charge_return_value.status = "succeeded"
+    # stripe_charge.return_value = charge_return_value
+    stripe_charge.side_effect = [Exception, charge_return_value]
+    sf_connection_query.return_value = sf_response_2
+    requests_lib.patch.return_value = RequestsResponse()
+    process_charges('whatever', log)
+    log.it.assert_called_with("ok")
+    print(log.it.call_args_list)
+    assert len(log.it.call_args_list) == 5
+    assert log.it.call_args_list == expected_call_list
+
+
+@patch('batch.requests')
+@patch('batch.Log')
+@patch('batch.stripe.Charge.create')
+@patch('batch.SalesforceConnection.query')
+def test_card_error(sf_connection_query, stripe_charge, log,
+        requests_lib):
+    """
+    This tests CardErrors from Stripe.
+    """
+    expected_call_list = [
+            call('Found 1 opportunities available to process.'),
+            call('---- Charging $84.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o'
+            'f 36) 2/11/2016)'),
+            call('The card has been declined:'),
+            call('\tStatus: 402'),
+            call('\tType: card_error'),
+            call('\tCode: card_declined'),
+            call('\tParam: param'),
+            call('\tMessage: message'),
+            call('\tDecline code: decline_code')
+            ]
+
+    # this is confusing because it's a dict, not JSON
+    # but that's what Stripe calls it. See https://stripe.com/docs/api#errors
+    json_body = {
+            'error': {
+                'decline_code': 'decline_code',
+                'type': 'card_error',
+                'message': 'message',
+                'param': 'param',
+                'code': 'card_declined',
+                }
+            }
+    stripe_error = stripe.error.CardError(message="message", param="param",
+            code="code", json_body=json_body, http_status=402)
+    charge_return_value = ChargeReturnValue()
+    charge_return_value.status = "succeeded"
+    stripe_charge.side_effect = stripe_error
+    sf_connection_query.return_value = sf_response
+    requests_lib.patch.return_value = RequestsResponse()
+    process_charges('whatever', log)
+    print (log.it.call_args_list)
+    assert len(log.it.call_args_list) == 9
+    assert log.it.call_args_list == expected_call_list
