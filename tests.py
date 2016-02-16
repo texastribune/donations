@@ -2,8 +2,11 @@ import json
 import re
 
 from unittest.mock import patch
+from unittest.mock import call
+
 from datetime import datetime
 import pytest
+import stripe
 from pytz import timezone
 import responses
 from werkzeug.datastructures import MultiDict
@@ -415,7 +418,8 @@ def test_upsert_non_extant():
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(
             responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
+            body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
+            '002rZngAAE", "access_token": "bar", "success": true}',
             status=200,
             )
     responses.add(
@@ -442,12 +446,14 @@ list_resp_body = {
                 'Id': '0031700000BHQzBAAX',
                 'Stripe_Customer_Id__c': 'cus_7GHFg5Dk07Loox',
                 'attributes': {'type': 'Contact',
-                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX'}},
+                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BH'
+                    'QzBAAX'}},
             {'AccountId': '0011700000BqjZSAAZ',
                 'Id': '0031700000BM3J4AAL',
                 'Stripe_Customer_Id__c': None,
                 'attributes': {'type': 'Contact',
-                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BM3J4AAL'}}
+                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BM'
+                    '3J4AAL'}}
                 ],
         'totalSize': 9
         }
@@ -468,13 +474,15 @@ def test_upsert_extant():
     url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
     responses.add(
             responses.PATCH,
-            'http://foo/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX',
+            'http://foo/services/data/v35.0/sobjects/Contact/0031700000BHQzBA'
+            'AX',
             body='{"errors": [], "id": "a0917000002rZngAAE", "success": true}',
             status=204,
             )
     responses.add(
             responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id": "a0917000002rZngAAE", "access_token": "bar", "success": true}',
+            body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
+            '002rZngAAE", "access_token": "bar", "success": true}',
             status=200,
             )
     responses.add(
