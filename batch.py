@@ -75,7 +75,7 @@ def process_charges(query, log):
     for item in response:
         amount = amount_to_charge(item)
         try:
-            log.it("---- Charging ${} to {} ({})".format(amount / 100,
+            log.it('---- Charging ${} to {} ({})'.format(amount / 100,
                 item['Stripe_Customer_ID__c'],
                 item['Name']))
             charge = stripe.Charge.create(
@@ -86,22 +86,24 @@ def process_charges(query, log):
                     )
         except stripe.error.CardError as e:
             # look for decline code:
-            decline_code = ''
-            try:
-                decline_code = e.json_body['error']['decline_code']
-            except:
-                print('Unable to extract decline code')
-            log.it("The card has been declined: {} ({})".format(e,
-                decline_code))
+#           body = json.loads(e.json_body)
+            error = e.json_body['error']
+            log.it('The card has been declined:')
+            log.it('\tStatus: {}'.format(e.http_status))
+            log.it('\tType: {}'.format(error.get('type', '')))
+            log.it('\tCode: {}'.format(error.get('code', '')))
+            log.it('\tParam: {}'.format(error.get('param', '')))
+            log.it('\tMessage: {}'.format(error.get('message', '')))
+            log.it('\tDecline code: {}'.format(error.get('decline_code', '')))
             continue
         except stripe.error.InvalidRequestError as e:
-            log.it("Problem: {}".format(e))
+            log.it('Problem: {}'.format(e))
             continue
         except Exception as e:
-            log.it("Problem: {}".format(e))
+            log.it('Problem: {}'.format(e))
             continue
         if charge.status != 'succeeded':
-            log.it("Charge failed. Check Stripe logs.")
+            log.it('Charge failed. Check Stripe logs.')
             continue
         update = {
                 'Stripe_Transaction_Id__c': charge.id,
@@ -113,9 +115,9 @@ def process_charges(query, log):
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
         # TODO: check 'errors' and 'success' too
         if resp.status_code == 204:
-            log.it("ok")
+            log.it('ok')
         else:
-            log.it("problem")
+            log.it('problem')
             raise Exception('problem')
 
 
