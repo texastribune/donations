@@ -138,21 +138,37 @@ class Request(object):
 
 request = Request()
 
-form = MultiDict()
-form.add('amount', '100')
-form.add('frequency', " "'until-cancelled'),
-form.add('last_name', 'C'),
-form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-form.add('first_name', 'D'),
-form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
-form.add('stripeTokenType', 'card'),
-form.add('reason', 'Because I love the Trib!')
-form.add('installment_period', 'yearly')
-form.add('installments', '3')
-form.add('openended_status', 'None')
-form.add('description', 'The Texas Tribune Membership')
-form.add('pay_fees_value', 'True')
-request.form = form
+circle_form = MultiDict()
+circle_form.add('amount', '100')
+circle_form.add('frequency', " "'until-cancelled'),
+circle_form.add('last_name', 'C'),
+circle_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
+circle_form.add('first_name', 'D'),
+circle_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
+circle_form.add('stripeTokenType', 'card'),
+circle_form.add('reason', 'Because I love the Trib!')
+circle_form.add('installment_period', 'yearly')
+circle_form.add('installments', '3')
+circle_form.add('openended_status', 'None')
+circle_form.add('description', 'The Texas Tribune Membership')
+circle_form.add('pay_fees_value', 'True')
+request.circle_form = circle_form
+
+rdo_form = MultiDict()
+rdo_form.add('amount', '9')
+rdo_form.add('frequency', " "'until-cancelled'),
+rdo_form.add('last_name', 'C'),
+rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
+rdo_form.add('first_name', 'D'),
+rdo_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
+rdo_form.add('stripeTokenType', 'card'),
+rdo_form.add('reason', 'Because I love the Trib!')
+rdo_form.add('installment_period', 'monthly')
+rdo_form.add('installments', 'None')
+rdo_form.add('openended_status', 'None')
+rdo_form.add('description', 'The Texas Tribune Membership')
+rdo_form.add('pay_fees_value', 'True')
+request.rdo_form = rdo_form
 
 tw_form = MultiDict()
 tw_form.add('amount', '349')
@@ -189,11 +205,11 @@ today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
 def test__format_opportunity():
 
-    response = _format_opportunity(contact=contact, form=form,
+    response = _format_opportunity(contact=contact, form=rdo_form,
             customer=customer)
     expected_response = {
             'AccountId': '0011700000BpR8PAAV',
-            'Amount': '100',
+            'Amount': '9',
             'CloseDate': today,
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'LeadSource': 'Stripe',
@@ -229,9 +245,9 @@ def test__format_tw_opportunity():
     assert response == expected_response
 
 
-def test__format_recurring_donation():
+def test__format_circle_donation():
 
-    response = _format_recurring_donation(contact=contact, form=form,
+    response = _format_recurring_donation(contact=contact, form=circle_form,
             customer=customer)
     expected_response = {
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
@@ -253,10 +269,34 @@ def test__format_recurring_donation():
     assert response == expected_response
 
 
+def test__format_recurring_donation():
+
+    response = _format_recurring_donation(contact=contact, form=rdo_form,
+            customer=customer)
+    expected_response = {
+            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
+            'npe03__Date_Established__c': today,
+            'Lead_Source__c': 'Stripe',
+            'npe03__Contact__c': '0031700000BHQzBAAX',
+            'npe03__Installment_Period__c': 'monthly',
+            'npe03__Open_Ended_Status__c': 'Open',
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'npe03__Amount__c': '9',
+            'Name': 'foo',
+            'npe03__Installments__c': 0,
+            'npe03__Open_Ended_Status__c': 'None',
+            'Stripe_Description__c': 'The Texas Tribune Membership',
+            'Stripe_Agreed_to_pay_fees__c': True,
+            'Type__c': 'Recurring Donation'
+            }
+    response['Name'] = 'foo'
+    assert response == expected_response
+
+
 def test__format_contact():
     sf = SalesforceConnection()
 
-    response = sf._format_contact(form=form)
+    response = sf._format_contact(form=rdo_form)
 
     expected_response = {'Description': 'The Texas Tribune Membership',
             'Email': 'dcraigmile+test6@texastribune.org',
@@ -321,7 +361,7 @@ def test_create_contact():
             status=201,)
 
     sf = SalesforceConnection()
-    response = sf.create_contact(form=form)
+    response = sf.create_contact(form=rdo_form)
     expected_response = 'foo'
     assert response == expected_response
 
@@ -365,7 +405,7 @@ def test_get_or_create_contact_non_extant():
             )
 
     sf = SalesforceConnection()
-    response = sf.get_or_create_contact(form=form)
+    response = sf.get_or_create_contact(form=rdo_form)
     # they were created:
     expected_response = (True, 'foo')
     assert response == expected_response
@@ -385,7 +425,7 @@ def test_get_or_create_contact_extant():
             status=200)
 
     sf = SalesforceConnection()
-    response = sf.get_or_create_contact(form=form)
+    response = sf.get_or_create_contact(form=rdo_form)
     # no need to create:
     expected_response = (False, 'foo')
     assert response == expected_response
@@ -406,7 +446,7 @@ def test_get_or_create_contact_multiple():
             status=200)
 
     sf = SalesforceConnection()
-    response = sf.get_or_create_contact(form=form)
+    response = sf.get_or_create_contact(form=rdo_form)
     # no need to create:
     expected_response = (False, 'foo')
     assert response == expected_response
@@ -434,7 +474,7 @@ def test_upsert_non_extant():
             callback=request_callback,
             )
 
-    actual = upsert_customer(customer=customer, form=form)
+    actual = upsert_customer(customer=customer, form=rdo_form)
     assert actual is True
     assert len(responses.calls) == 4
 
@@ -497,7 +537,7 @@ def test_upsert_extant():
             callback=request_upsert_extant_callback,
             )
 
-    actual = upsert_customer(customer=customer, form=form)
+    actual = upsert_customer(customer=customer, form=rdo_form)
     assert actual is True
     assert len(responses.calls) == 3
 
