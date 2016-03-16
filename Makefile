@@ -19,8 +19,8 @@ clean:
 	-docker stop rabbitmq && docker rm rabbitmq
 
 backing:
-	docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
-	docker run --detach --name redis redis
+	-docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
+	-docker run --detach --name redis redis
 
 interactive: build-dev
 	docker run \
