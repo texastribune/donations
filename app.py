@@ -12,6 +12,7 @@ from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
 from salesforce import add_tw_customer_and_charge
 from app_celery import make_celery
+from batch import Log
 
 import batch
 
@@ -156,25 +157,38 @@ def charge():
     form = DonateForm(request.form)
     pprint('Request: {}'.format(request))
 
-    email_is_valid = validate_email(request.form['stripeEmail'])
+    log = Log()
+
+    customer_email = request.form['stripeEmail']
+    customer_first = request.form['first_name']
+    customer_last = request.form['last_name']
+
+    email_is_valid = validate_email(customer_email)
 
     if email_is_valid:
         customer = stripe.Customer.create(
                 email=request.form['stripeEmail'],
                 card=request.form['stripeToken']
         )
+        log.it('Create Stripe customer {} {}'.format(customer_first,
+                customer_last))
     else:
         message = "There was an issue saving your email address."
+        log.it('Issue saving customer {} {} {}; showed error'.format(customer_email,
+            customer_first, customer_last))
         return render_template('error.html', message=message)
 
     if form.validate():
         add_customer_and_charge.delay(form=request.form,
                 customer=customer)
-
+        log.it('Validated form of customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
         return render_template('charge.html',
                 amount=request.form['amount'])
     else:
         message = "There was an issue saving your donation information."
+        log.it('Did not validate form of customer {} {} {}; showed error'.format(customer_email,
+            customer_first, customer_last))
         return render_template('error.html', message=message)
 
 if __name__ == '__main__':
