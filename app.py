@@ -156,25 +156,37 @@ def charge():
     form = DonateForm(request.form)
     pprint('Request: {}'.format(request))
 
-    email_is_valid = validate_email(request.form['stripeEmail'])
+    customer_email = request.form['stripeEmail']
+    customer_first = request.form['first_name']
+    customer_last = request.form['last_name']
+
+    email_is_valid = validate_email(customer_email)
 
     if email_is_valid:
         customer = stripe.Customer.create(
                 email=request.form['stripeEmail'],
                 card=request.form['stripeToken']
         )
+        print('Create Stripe customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
     else:
         message = "There was an issue saving your email address."
+        print('Issue saving customer {} {} {}; showed error'.format(customer_email,
+            customer_first, customer_last))
         return render_template('error.html', message=message)
 
     if form.validate():
         add_customer_and_charge.delay(form=request.form,
                 customer=customer)
-
+        print('Validated form of customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
         return render_template('charge.html',
                 amount=request.form['amount'])
     else:
         message = "There was an issue saving your donation information."
+        print('Form validation errors: {}'.format(form.errors))
+        print('Did not validate form of customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
         return render_template('error.html', message=message)
 
 if __name__ == '__main__':
