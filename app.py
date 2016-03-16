@@ -170,8 +170,8 @@ def charge():
                 email=request.form['stripeEmail'],
                 card=request.form['stripeToken']
         )
-        log.it('Create Stripe customer {} {}'.format(customer_first,
-                customer_last))
+        log.it('Create Stripe customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
     else:
         message = "There was an issue saving your email address."
         log.it('Issue saving customer {} {} {}; showed error'.format(customer_email,
