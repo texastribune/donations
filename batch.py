@@ -88,7 +88,6 @@ def process_charges(query, log):
                     )
         except stripe.error.CardError as e:
             # look for decline code:
-#           body = json.loads(e.json_body)
             error = e.json_body['error']
             log.it('The card has been declined:')
             log.it('\tStatus: {}'.format(e.http_status))
