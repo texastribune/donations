@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 import json
+import redis
 
 import celery
 from emails import send_email
@@ -11,6 +12,7 @@ from salesforce import SalesforceConnection
 from config import STRIPE_KEYS
 from config import ACCOUNTING_MAIL_RECIPIENT
 from config import TIMEZONE
+from config import REDIS_URL
 
 zone = timezone(TIMEZONE)
 
@@ -86,7 +88,6 @@ def process_charges(query, log):
                     )
         except stripe.error.CardError as e:
             # look for decline code:
-#           body = json.loads(e.json_body)
             error = e.json_body['error']
             log.it('The card has been declined:')
             log.it('\tStatus: {}'.format(e.http_status))
@@ -121,8 +122,36 @@ def process_charges(query, log):
             raise Exception('problem')
 
 
+class AlreadyExecuting(Exception):
+    """
+    Here to show when more than one job of the same type is running.
+    """
+    pass
+
+
+class Lock(object):
+    """
+    Claim an exclusive lock. Using Redis.
+    """
+
+    def __init__(self, key):
+        self.key = key
+        self.connection = redis.from_url(REDIS_URL)
+
+    def acquire(self):
+        if self.connection.get(self.key):
+            raise AlreadyExecuting
+        self.connection.setex(name=self.key, value='bar', time=1200)
+
+    def release(self):
+        self.connection.delete(self.key)
+
+
 @celery.task()
 def charge_cards():
+
+    lock = Lock(key='charge-cards-lock')
+    lock.acquire()
 
     log = Log()
 
@@ -172,6 +201,7 @@ def charge_cards():
     process_charges(query, log)
     log.send()
 
+    lock.release()
 
 if __name__ == '__main__':
     charge_cards()
