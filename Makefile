@@ -44,3 +44,7 @@ test: build-dev
 
 push:
 	docker push ${NS}/${APP}
+
+reconcile-email:
+	docker build --tag=sf-py2 -f Dockerfile.py2 .
+	docker run --env-file=env --rm --interactive --tty --name=py2 sf-py2
