@@ -42,9 +42,9 @@ while not bulk.is_batch_done(job, batch):
 bulk.close_job(job)
 
 rows = bulk.get_batch_result_iter(job, batch, parse_csv=True)
-foo = list(rows)
+bulk_email = list(rows)
 email_list = []
-emails_sf = [x['All_In_One_EMail__c'] for x in foo]
+emails_sf = [x['All_In_One_EMail__c'] for x in bulk_email]
 print ("The following email addresses appear in Stripe but not Salesforce: \n")
 for field in emails_sf:
     for email in field.split(','):
