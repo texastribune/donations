@@ -13,6 +13,13 @@
           <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
             <span class="dollar">$</span>
               {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
+          {% if installment_period == 'yearly' %}
+            {{ form.openended_status }}
+            {{ form.installments(value='1') }}
+          {% else %}
+            {{ form.openended_status(value='Open', class='visually-hidden') }}
+            {{ form.installments(value=installments) }}
+          {% endif %}
         </div>
         <div class="form-section three">
           {{ form.pay_fees.label }}
@@ -20,12 +27,6 @@
           <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
           <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
         </div>
-        {% if installment_period and amount %}
-        <div class="form-section three">
-          <h3>Membership Duration</h3>
-          {{ form.openended_status }}
-        </div>
-        {% endif %}
         <div class="form-section three">
           <label>Level</label><br>
           <p class="level label-info"></p>
