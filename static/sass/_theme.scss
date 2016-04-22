@@ -38,6 +38,12 @@ body {
   }
 }
 
+ul {
+  li {
+    list-style-type: none;
+  }
+}
+
 
 // Typography
 h2 {
@@ -45,6 +51,10 @@ h2 {
   font-weight: bold;
   letter-spacing: 0.03em;
   margin: 0 0 0.5em 0;
+}
+
+h3 {
+  margin: 0;
 }
 
 a {

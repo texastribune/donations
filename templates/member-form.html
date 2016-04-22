@@ -22,12 +22,14 @@
         </div>
         {% if installment_period and amount %}
         <div class="form-section three">
-          <label>Membership</label><br>
-            <p class="label-info">{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Until Canceled</p>
+          <h3>Membership Duration</h3>
+          {{ form.openended_status }}
+        </div>
+        {% endif %}
+        <div class="form-section three">
           <label>Level</label><br>
           <p class="level label-info"></p>
         </div>
-        {% endif %}
       </div>
       {% include 'includes/form_inner.html' %}
       {{ form.description(value='The Texas Tribune Membership') }}

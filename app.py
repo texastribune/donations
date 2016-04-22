@@ -2,7 +2,7 @@ import os
 import sys
 
 from flask import Flask, render_template, request
-from forms import DonateForm, TexasWeeklyForm
+from forms import DonateForm, MemberForm, TexasWeeklyForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -52,7 +52,7 @@ if app.config['ENABLE_SENTRY']:
 
 @app.route('/memberform')
 def member_form():
-    form = DonateForm()
+    form = MemberForm()
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
