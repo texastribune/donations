@@ -155,6 +155,15 @@ input::-webkit-inner-spin-button, {
   padding: 0;
 }
 
+// styles for openended status radio buttons on yearly member form
+#openended_status {
+  padding: 0;
+}
+
+label[for='openended_status-0'], label[for='openended_status-1'] {
+  float: none;
+}
+
 // Stripe form submit button styles
 .button {
   font-family: $helvetica;
