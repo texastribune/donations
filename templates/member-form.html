@@ -15,11 +15,10 @@
               {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
           {% if installment_period == 'yearly' %}
             {{ form.openended_status }}
-            {{ form.installments(value='1') }}
           {% else %}
-            {{ form.openended_status(value='Open', class='visually-hidden') }}
-            {{ form.installments(value=installments) }}
+            {{ form.openended_status(class='visually-hidden') }}
           {% endif %}
+          {{ form.installments(value=installments) }}
         </div>
         <div class="form-section three">
           {{ form.pay_fees.label }}
@@ -39,6 +38,7 @@
   {% if installment_period and amount %}
     {% include 'includes/display_levels_js.html' %}
   {% endif %}
+  {% include 'includes/change_installments_js.html' %}
   {% include 'includes/stripe_checkout_js.html' %}
   {% include 'includes/display_pay_fees.html' %}
 {% endblock %}
