@@ -22,7 +22,6 @@ body {
   }
   .six {
     @include span-columns(6);
-    padding: 1em;
   }
   .three {
     @include span-columns(3);
@@ -210,4 +209,34 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
       width: 100%;
     }
   }
+}
+
+
+// Social share buttons
+.social-wrapper {
+  margin-bottom: 3em;
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.social {
+  color: $white;
+  font-size: 1em;
+  margin: 0.5em 0.5em 0.5em 0;
+  &:hover {
+    opacity: 0.9;
+  }
+}
+
+.facebook {
+  background: #2b4185;
+}
+
+.twitter {
+  background: #4298ed;
+}
+
+.email {
+  background: $yellow-tribune;
 }
