@@ -13,6 +13,7 @@ You'll also need to have an `env` file set up with the environment variables for
 Running the Project
 -------------------
 
+Run `make backing`. This will start RabbitMQ and Redis.
 Run `make interactive`. This will drop you into the Flask app.
 
 Run `python3 app.py`. You should then be able to interact with the app at `docker.local` (or whatever you set Docker to resolve to).
