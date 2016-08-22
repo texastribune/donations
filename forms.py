@@ -22,6 +22,7 @@ class DonateForm(Form):
     pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')
 
+
 class TexasWeeklyForm(Form):
     first_name = StringField(u'First',
         [validators.required(message="Your first name is required.")])
