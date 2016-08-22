@@ -2,7 +2,7 @@ import os
 import sys
 
 from flask import Flask, render_template, request
-from forms import DonateForm, TexasWeeklyForm
+from forms import DonateForm, TexasWeeklyForm, BlastForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -111,6 +111,22 @@ def internal_texasweekly_form():
         amount = 349
     return render_template('internal_texasweekly_form.html', form=form,
             amount=amount, key=app.config['STRIPE_KEYS']['publishable_key'])
+
+
+@app.route('/blastform')
+def the_blast_form():
+    form = BlastForm()
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        amount = 'annual'
+    openended_status = 'Open'
+    installments = request.args.get('installments')
+    installment_period = request.args.get('installmentPeriod')
+    return render_template('blast-form.html', form=form,
+        installment_period=installment_period, installments=installments,
+        openended_status=openended_status, amount=amount,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
 @app.route('/submit-tw', methods=['POST'])

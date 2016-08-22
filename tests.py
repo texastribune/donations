@@ -17,6 +17,7 @@ from check_response import check_response
 from salesforce import _format_opportunity
 from salesforce import _format_recurring_donation
 from salesforce import _format_tw_opportunity
+from salesforce import _format_blast_rdo
 from salesforce import SalesforceConnection
 from salesforce import upsert_customer
 
@@ -170,6 +171,21 @@ rdo_form.add('description', 'The Texas Tribune Membership')
 rdo_form.add('pay_fees_value', 'True')
 request.rdo_form = rdo_form
 
+blast_rdo_form = MultiDict()
+blast_rdo_form.add('amount', '40')
+blast_rdo_form.add('frequency', 'until-cancelled'),
+blast_rdo_form.add('last_name', 'C'),
+blast_rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
+blast_rdo_form.add('first_name', 'D'),
+blast_rdo_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
+blast_rdo_form.add('stripeTokenType', 'card'),
+blast_rdo_form.add('installment_period', 'monthly')
+blast_rdo_form.add('installments', 'None')
+blast_rdo_form.add('openended_status', 'None')
+blast_rdo_form.add('description', 'Monthly Blast Subscription')
+blast_rdo_form.add('pay_fees_value', 'True')
+request.blast_rdo_form = blast_rdo_form
+
 tw_form = MultiDict()
 tw_form.add('amount', '349')
 tw_form.add('last_name', 'C'),
@@ -287,6 +303,28 @@ def test__format_recurring_donation():
             'Stripe_Description__c': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
             'Type__c': 'Recurring Donation'
+            }
+    response['Name'] = 'foo'
+    assert response == expected_response
+
+
+def test__format_blast_rdo():
+
+    response = _format_blast_rdo(contact=contact, form=blast_rdo_form,
+            customer=customer)
+    expected_response = {
+            'npe03__Date_Established__c': today,
+            'Lead_Source__c': 'Stripe',
+            'npe03__Contact__c': '0031700000BHQzBAAX',
+            'npe03__Installment_Period__c': 'monthly',
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'npe03__Amount__c': '40',
+            'Name': 'foo',
+            'npe03__Installments__c': 0,
+            'npe03__Open_Ended_Status__c': 'None',
+            'Stripe_Description__c': 'Monthly Blast Subscription',
+            'Stripe_Agreed_to_pay_fees__c': True,
+            'Type__c': 'The Blast'
             }
     response['Name'] = 'foo'
     assert response == expected_response

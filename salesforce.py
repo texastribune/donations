@@ -417,6 +417,60 @@ def add_customer_and_charge(form=None, customer=None):
     return True
 
 
+def _format_blast_rdo(contact=None, form=None, customer=None):
+    """
+    Format a Blast subscription for insertion into SF.
+    """
+
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
+    amount = form['amount']
+    try:
+        installments = form['installments']
+    except:
+        installments = 'None'
+    try:
+        open_ended_status = form['openended_status']
+    except:
+        open_ended_status = 'None'
+    try:
+        installment_period = form['installment_period']
+    except:
+        installment_period = 'None'
+
+    # TODO: test this:
+    if installments != 'None':
+        amount = int(amount) * int(installments)
+    else:
+        installments = 0
+
+    if form['pay_fees_value'] == 'True':
+        pay_fees = True
+    else:
+        pay_fees = False
+
+    blast_subscription = {
+            'npe03__Contact__c': '{}'.format(contact['Id']),
+            'npe03__Amount__c': '{}'.format(amount),
+            'npe03__Date_Established__c': today,
+            'npe03__Open_Ended_Status__c': 'Open',
+            'Name': '{} for {} {}'.format(
+                now,
+                form['first_name'],
+                form['last_name'],
+                ),
+            'Stripe_Customer_Id__c': customer.id,
+            'Lead_Source__c': 'Stripe',
+            'Stripe_Description__c': '{}'.format(form['description']),
+            'Stripe_Agreed_to_pay_fees__c': pay_fees,
+            'npe03__Open_Ended_Status__c': open_ended_status,
+            'npe03__Installments__c': installments,
+            'npe03__Installment_Period__c': installment_period,
+            'Type__c': 'The Blast',
+            }
+    pprint(blast_subscription)   # TODO: rm
+    return blast_subscription
+
 def _format_tw_opportunity(contact=None, form=None, customer=None):
     """
     Format a Texas Weekly opportunity for insertion.
