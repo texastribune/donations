@@ -140,7 +140,7 @@ request = Request()
 
 circle_form = MultiDict()
 circle_form.add('amount', '100')
-circle_form.add('frequency', " "'until-cancelled'),
+circle_form.add('frequency', 'until-cancelled'),
 circle_form.add('last_name', 'C'),
 circle_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
 circle_form.add('first_name', 'D'),
@@ -156,7 +156,7 @@ request.circle_form = circle_form
 
 rdo_form = MultiDict()
 rdo_form.add('amount', '9')
-rdo_form.add('frequency', " "'until-cancelled'),
+rdo_form.add('frequency', 'until-cancelled'),
 rdo_form.add('last_name', 'C'),
 rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
 rdo_form.add('first_name', 'D'),
@@ -279,7 +279,6 @@ def test__format_recurring_donation():
             'Lead_Source__c': 'Stripe',
             'npe03__Contact__c': '0031700000BHQzBAAX',
             'npe03__Installment_Period__c': 'monthly',
-            'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
             'npe03__Amount__c': '9',
             'Name': 'foo',
