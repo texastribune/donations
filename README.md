@@ -37,4 +37,17 @@ To run the project tests, run
 ### Deploy
 
 
-If you're not invited to the Trib's Heroku group, get someone to invite you. Log in to Heroku on your console. Follow [Heroku instructions](https://devcenter.heroku.com/articles/git) for deploying. Specifically, you'll run the command `heroku git:remote -a stripe-prod` to set up your environment. Then deploy with the command `git push heroku master`.
+If you're not invited to the Trib's Heroku group, get someone to invite you. Log in to Heroku on your console. Follow [Heroku instructions](https://devcenter.heroku.com/articles/git) for deploying. Specifically, you'll run the command `heroku git:remote -a stripe-prod` to add heroku to the project.
+
+Replace the `[remote "heroku"] stanza your .git/config file with the following to tell Heroku/Git where to push your branch, production or test:
+
+```
+[remote "production"]
+  url = https://git.heroku.com/stripe-prod.git
+  fetch = +refs/heads/*:refs/remotes/production/*
+[remote "test"]
+  url = https://git.heroku.com/stripe-testing.git
+  fetch = +refs/heads/*:refs/remotes/heroku/*
+```
+
+Then deploy to test with the command `git push test master` or production with `git push production master`.
