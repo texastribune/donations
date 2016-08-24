@@ -63,6 +63,23 @@ var listen_for_fee_check = function() {
   });
 };
 
+// Used to set installments to one for yearly 1-time contributions
+var listen_for_installments = function() {
+  var openended_status_open = $('input[id="openended_status-0"]');
+  var openended_status_none = $('input[id="openended_status-1"]');
+  var installments = $('input[name="installments"]');
+
+  // When status is open, installments is always None
+  openended_status_open.click(function() {
+    installments.val("None");
+  });
+
+  // when status is none for yearly members, installments should be 1
+  openended_status_none.click(function() {
+    installments.val("1");
+  });
+};
+
 var pay_fee_amount = function() {
   var input_amount = $('input[name="amount"]').val();
   var pay_fee_element = $('#pay-fee-amount span');
