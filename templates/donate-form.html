@@ -26,6 +26,8 @@
         </div>
       </div>
       {% include 'includes/form_inner.html' %}
+      {{ form.openended_status(value=openended_status) }}
+      {{ form.installments(value=installments) }}
       {{ form.description(value='The Texas Tribune Donation') }}
     </form>
   </div>

@@ -1,12 +1,11 @@
 from flask_wtf import Form
 
 from wtforms.fields import StringField, HiddenField, BooleanField, DecimalField
-from wtforms.fields import SelectField
+from wtforms.fields import RadioField, SelectField
 from wtforms import validators
 
-from flask import request
 
-class DonateForm(Form):
+class BaseForm(Form):
     first_name = StringField(u'First',
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last',
@@ -17,10 +16,19 @@ class DonateForm(Form):
     reason = StringField(u'Encouraged to contribute by')
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
-    openended_status = HiddenField(u'Openended Status')
     description = HiddenField(u'Description')
     pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')
+
+
+class MemberForm(BaseForm):
+    openended_status = RadioField(u'Membership Duration',
+        choices=[('Open', 'Sustaining'), ('None', 'One Year')],
+        default='Open')
+
+
+class DonateForm(BaseForm):
+    openended_status = HiddenField(u'Openended Status')
 
 
 class TexasWeeklyForm(Form):
@@ -40,10 +48,9 @@ class BlastForm(Form):
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
     amount_choices = [
-        ('annual','Annual ($349)'),
-        ('annual-tax-exempt','Annual Tax-Exempt ($325)'),
+        ('annual', 'Annual ($349)'),
+        ('annual-tax-exempt', 'Annual Tax-Exempt ($325)'),
         ('monthly', 'Monthly ($40)'),
-        ('monthly-tax-exempt','Monthly Tax-Exempt ($blah)'),
         ]
     amount = SelectField(u'Amount', choices=amount_choices)
     installment_period = HiddenField(u'Installment Period')

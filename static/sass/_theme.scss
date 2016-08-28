@@ -37,6 +37,12 @@ body {
   }
 }
 
+ul {
+  li {
+    list-style-type: none;
+  }
+}
+
 
 // Typography
 h2 {
@@ -44,6 +50,10 @@ h2 {
   font-weight: bold;
   letter-spacing: 0.03em;
   margin: 0 0 0.5em 0;
+}
+
+h3 {
+  margin: 0;
 }
 
 a {
@@ -142,6 +152,15 @@ input::-webkit-inner-spin-button, {
 #pay-fee-info {
   clear: both;
   padding: 0;
+}
+
+// styles for openended status radio buttons on yearly member form
+#openended_status {
+  padding: 0;
+}
+
+label[for='openended_status-0'], label[for='openended_status-1'] {
+  float: none;
 }
 
 // Stripe form submit button styles

@@ -2,7 +2,7 @@ import os
 import sys
 
 from flask import Flask, render_template, request
-from forms import DonateForm, TexasWeeklyForm, BlastForm
+from forms import DonateForm, TexasWeeklyForm, BlastForm, MemberForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -52,7 +52,7 @@ if app.config['ENABLE_SENTRY']:
 
 @app.route('/memberform')
 def member_form():
-    form = DonateForm()
+    form = MemberForm()
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
@@ -204,6 +204,7 @@ def charge():
         print('Did not validate form of customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
         return render_template('error.html', message=message)
+
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
