@@ -10,7 +10,6 @@ from validate_email import validate_email
 
 from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
-from salesforce import add_tw_customer_and_charge
 from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
 
