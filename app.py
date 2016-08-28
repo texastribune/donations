@@ -103,17 +103,6 @@ def circle_form():
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
-@app.route('/internal-texasweekly')
-def internal_texasweekly_form():
-    form = TexasWeeklyForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        amount = 349
-    return render_template('internal_texasweekly_form.html', form=form,
-            amount=amount, key=app.config['STRIPE_KEYS']['publishable_key'])
-
-
 @app.route('/blastform')
 def the_blast_form():
     form = BlastForm()

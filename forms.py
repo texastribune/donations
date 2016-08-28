@@ -31,17 +31,6 @@ class DonateForm(BaseForm):
     openended_status = HiddenField(u'Openended Status')
 
 
-class TexasWeeklyForm(Form):
-    first_name = StringField(u'First',
-        [validators.required(message="Your first name is required.")])
-    last_name = StringField(u'Last',
-        [validators.required(message="Your last name is required.")])
-    amount = DecimalField(u'Amount',
-        [validators.required(message="Please choose an amount."),
-        validators.NumberRange(min=1)])
-    description = HiddenField(u'Description')
-
-
 class BlastForm(Form):
     first_name = StringField(u'First',
         [validators.required(message="Your first name is required.")])
