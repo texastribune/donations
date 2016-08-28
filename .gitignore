@@ -6,3 +6,5 @@ env
 .cache
 .coverage
 htmlcov
+celerybeat-schedule.db
+celerybeat.pid
