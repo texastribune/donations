@@ -425,14 +425,8 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
     amount = form['amount']
-    try:
-        installments = form['installments']
-    except:
-        installments = 'None'
-    try:
-        open_ended_status = form['openended_status']
-    except:
-        open_ended_status = 'None'
+    installments = 'None'
+    open_ended_status = 'Open'
     try:
         installment_period = form['installment_period']
     except:
@@ -444,20 +438,17 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     else:
         installments = 0
 
-    if form['pay_fees_value'] == 'True':
-        pay_fees = True
-    else:
-        pay_fees = False
+    pay_fees = False
 
     blast_subscription = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
             'npe03__Date_Established__c': today,
             'npe03__Open_Ended_Status__c': 'Open',
-            'Name': '{} for {} {}'.format(
-                now,
+            'Name': '{} {} - {} - The Blast'.format(
                 form['first_name'],
                 form['last_name'],
+                now,
                 ),
             'Stripe_Customer_Id__c': customer.id,
             'Lead_Source__c': 'Stripe',
@@ -471,45 +462,46 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     pprint(blast_subscription)   # TODO: rm
     return blast_subscription
 
-def _format_tw_opportunity(contact=None, form=None, customer=None):
-    """
-    Format a Texas Weekly opportunity for insertion.
-    """
 
-    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+#def _format_tw_opportunity(contact=None, form=None, customer=None):
+#    """
+#    Format a Texas Weekly opportunity for insertion.
+#    """
+#
+#    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+#
+#    opportunity = {
+#            'AccountId': '{}'.format(contact['AccountId']),
+#            'Amount': '{}'.format(form['amount']),
+#            'CloseDate': today,
+#            'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
+#            'Type': 'Single',
+#            'Name': '{}{} ({})'.format(
+#                form['first_name'],
+#                form['last_name'],
+#                form['stripeEmail'],
+#                ),
+#            'StageName': 'Pledged',
+#            'Stripe_Customer_Id__c': customer.id,
+#            'LeadSource': 'Stripe',
+#            'Description': '{}'.format(form['description']),
+#            }
+#    print(opportunity)
+#    return opportunity
 
-    opportunity = {
-            'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(form['amount']),
-            'CloseDate': today,
-            'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
-            'Type': 'Single',
-            'Name': '{}{} ({})'.format(
-                form['first_name'],
-                form['last_name'],
-                form['stripeEmail'],
-                ),
-            'StageName': 'Pledged',
-            'Stripe_Customer_Id__c': customer.id,
-            'LeadSource': 'Stripe',
-            'Description': '{}'.format(form['description']),
-            }
-    print(opportunity)
-    return opportunity
 
-
-def add_tw_subscription(form=None, customer=None, charge=None):
-
-    print ("----Adding TW subscription opportunity...")
-    sf = SalesforceConnection()
-    _, contact = sf.get_or_create_contact(form)
-    opportunity = _format_tw_opportunity(contact=contact, form=form,
-            customer=customer)
-    path = '/services/data/v35.0/sobjects/Opportunity'
-    response = sf.post(path=path, data=opportunity)
-    send_multiple_account_warning()
-
-    return response
+#def add_tw_subscription(form=None, customer=None, charge=None):
+#
+#    print ("----Adding TW subscription opportunity...")
+#    sf = SalesforceConnection()
+#    _, contact = sf.get_or_create_contact(form)
+#    opportunity = _format_tw_opportunity(contact=contact, form=form,
+#            customer=customer)
+#    path = '/services/data/v35.0/sobjects/Opportunity'
+#    response = sf.post(path=path, data=opportunity)
+#    send_multiple_account_warning()
+#
+#    return response
 
 
 @celery.task(name='salesforce.add_tw_customer_and_charge')
@@ -518,5 +510,29 @@ def add_tw_customer_and_charge(form=None, customer=None):
     upsert_customer(customer=customer, form=form)
 
     add_tw_subscription(form=form, customer=customer)
+
+    return True
+
+
+def add_blast_subscription(form=None, customer=None, charge=None):
+
+    print ("----Adding Blast RDO...")
+    sf = SalesforceConnection()
+    _, contact = sf.get_or_create_contact(form)
+    recurring_donation = _format_blast_rdo(contact=contact,
+            form=form, customer=customer)
+    path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
+    response = sf.post(path=path, data=recurring_donation)
+    send_multiple_account_warning()
+
+    return response
+
+
+@celery.task(name='salesforce.add_blast_customer_and_charge')
+def add_blast_customer_and_charge(form=None, customer=None):
+
+    upsert_customer(customer=customer, form=form)
+
+    add_blast_subscription(form=form, customer=customer)
 
     return True

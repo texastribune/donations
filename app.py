@@ -11,6 +11,7 @@ from validate_email import validate_email
 from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
 from salesforce import add_tw_customer_and_charge
+from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
 
 import batch
@@ -119,19 +120,17 @@ def the_blast_form():
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
-        amount = 'annual'
-    openended_status = 'Open'
-    installments = request.args.get('installments')
+        amount = 349
     installment_period = request.args.get('installmentPeriod')
     return render_template('blast-form.html', form=form,
-        installment_period=installment_period, installments=installments,
-        openended_status=openended_status, amount=amount,
+        installment_period=installment_period,
+        openended_status='Open', amount=amount,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
-@app.route('/submit-tw', methods=['POST'])
-def submit_tw():
-    form = TexasWeeklyForm(request.form)
+@app.route('/submit-blast', methods=['POST'])
+def submit_blast():
+    form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form['stripeEmail'])
 
@@ -145,8 +144,8 @@ def submit_tw():
         return render_template('error.html', message=message)
 
     if form.validate():
-        print("----Adding TW subscription...")
-        add_tw_customer_and_charge.delay(form=request.form,
+        print("----Adding Blast subscription...")
+        add_blast_customer_and_charge.delay(form=request.form,
                 customer=customer)
         return render_template('charge.html')
     else:

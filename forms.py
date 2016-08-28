@@ -48,9 +48,9 @@ class BlastForm(Form):
     last_name = StringField(u'Last',
         [validators.required(message="Your last name is required.")])
     amount_choices = [
-        ('annual', 'Annual ($349)'),
-        ('annual-tax-exempt', 'Annual Tax-Exempt ($325)'),
-        ('monthly', 'Monthly ($40)'),
+        ('349', 'Annual ($349)'),
+        ('325', 'Annual Tax-Exempt ($325)'),
+        ('40', 'Monthly ($40)'),
         ]
     amount = SelectField(u'Amount', choices=amount_choices)
     installment_period = HiddenField(u'Installment Period')
