@@ -8,7 +8,7 @@ import requests
 from pytz import timezone
 
 from config import SALESFORCE
-from config import DONATION_RECORDTYPEID, TEXASWEEKLY_RECORDTYPEID
+from config import DONATION_RECORDTYPEID
 from config import TIMEZONE
 from config import ENABLE_SLACK
 from config import SLACK_API_KEY

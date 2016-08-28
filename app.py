@@ -2,7 +2,7 @@ import os
 import sys
 
 from flask import Flask, render_template, request
-from forms import DonateForm, TexasWeeklyForm, BlastForm, MemberForm
+from forms import DonateForm, BlastForm, MemberForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
