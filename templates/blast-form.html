@@ -5,22 +5,32 @@
     <div class="outer-section">
       <p class="nine">Blast subscriptions.</p>
     </div>
-    <form action="/submit-blast" method="post">
+    <form action="/submit-blast" method="post" class="blastform">
       {{ form.csrf_token }}
       <div class="form-outer-section outer-section">
         <h2>Blast Subscription</h2>
-        <div class="form-section three">
-          <label>Amount</label><br>
-            <span class="dollar">$</span>
-              {{ form.amount(value=amount, class="dollar") }}
+        <div class="row">
+          <div class="form-section four">
+            <label class="dropdown">Amount
+            <!-- <br> -->
+              <!-- <span class="dollar">$</span> -->
+                {{ form.amount(value=amount, class="") }}
+            </label>
+          </div>
         </div>
-        <div class="form-section three">
-          {{ form.first_name.label }}<br>
-            {{ form.first_name(maxlength=50) }}
-        </div>
-        <div class="form-section three">
-          {{ form.last_name.label }}<br>
-            {{ form.last_name(maxlength=50) }}
+        <div class="row">
+          <div class="form-section four">
+            {{ form.first_name.label }}<br>
+              {{ form.first_name(maxlength=50) }}
+          </div>
+          <div class="form-section four">
+            {{ form.last_name.label }}<br>
+              {{ form.last_name(maxlength=50) }}
+          </div>
+          <div class="form-section three">
+            <label for="zip_code">Zip Code</label>
+            <input id="last_name" maxlength="50" name="last_name" type="text" value="">
+          </div>
         </div>
         <div class="form-section form-error">
           <p class="error-form-message"></p>
