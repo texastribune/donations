@@ -2,7 +2,7 @@ import os
 import sys
 
 from flask import Flask, render_template, request
-from forms import DonateForm, MemberForm, TexasWeeklyForm
+from forms import DonateForm, BlastForm, MemberForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -10,7 +10,7 @@ from validate_email import validate_email
 
 from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
-from salesforce import add_tw_customer_and_charge
+from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
 
 import batch
@@ -102,20 +102,23 @@ def circle_form():
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
-@app.route('/internal-texasweekly')
-def internal_texasweekly_form():
-    form = TexasWeeklyForm()
+@app.route('/blastform')
+def the_blast_form():
+    form = BlastForm()
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
         amount = 349
-    return render_template('internal_texasweekly_form.html', form=form,
-            amount=amount, key=app.config['STRIPE_KEYS']['publishable_key'])
+    installment_period = request.args.get('installmentPeriod')
+    return render_template('blast-form.html', form=form,
+        installment_period=installment_period,
+        openended_status='Open', amount=amount,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
-@app.route('/submit-tw', methods=['POST'])
-def submit_tw():
-    form = TexasWeeklyForm(request.form)
+@app.route('/submit-blast', methods=['POST'])
+def submit_blast():
+    form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form['stripeEmail'])
 
@@ -129,8 +132,8 @@ def submit_tw():
         return render_template('error.html', message=message)
 
     if form.validate():
-        print("----Adding TW subscription...")
-        add_tw_customer_and_charge.delay(form=request.form,
+        print("----Adding Blast subscription...")
+        add_blast_customer_and_charge.delay(form=request.form,
                 customer=customer)
         return render_template('charge.html')
     else:

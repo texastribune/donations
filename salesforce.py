@@ -8,7 +8,7 @@ import requests
 from pytz import timezone
 
 from config import SALESFORCE
-from config import DONATION_RECORDTYPEID, TEXASWEEKLY_RECORDTYPEID
+from config import DONATION_RECORDTYPEID
 from config import TIMEZONE
 from config import ENABLE_SLACK
 from config import SLACK_API_KEY
@@ -417,52 +417,71 @@ def add_customer_and_charge(form=None, customer=None):
     return True
 
 
-def _format_tw_opportunity(contact=None, form=None, customer=None):
+def _format_blast_rdo(contact=None, form=None, customer=None):
     """
-    Format a Texas Weekly opportunity for insertion.
+    Format a Blast subscription for insertion into SF.
     """
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
+    amount = form['amount']
+    installments = 'None'
+    open_ended_status = 'Open'
+    try:
+        installment_period = form['installment_period']
+    except:
+        installment_period = 'None'
 
-    opportunity = {
-            'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(form['amount']),
-            'CloseDate': today,
-            'RecordTypeId': TEXASWEEKLY_RECORDTYPEID,
-            'Type': 'Single',
-            'Name': '{}{} ({})'.format(
+    # TODO: test this:
+    if installments != 'None':
+        amount = int(amount) * int(installments)
+    else:
+        installments = 0
+
+    pay_fees = False
+
+    blast_subscription = {
+            'npe03__Contact__c': '{}'.format(contact['Id']),
+            'npe03__Amount__c': '{}'.format(amount),
+            'npe03__Date_Established__c': today,
+            'npe03__Open_Ended_Status__c': 'Open',
+            'Name': '{} {} - {} - The Blast'.format(
                 form['first_name'],
                 form['last_name'],
-                form['stripeEmail'],
+                now,
                 ),
-            'StageName': 'Pledged',
             'Stripe_Customer_Id__c': customer.id,
-            'LeadSource': 'Stripe',
-            'Description': '{}'.format(form['description']),
+            'Lead_Source__c': 'Stripe',
+            'Stripe_Description__c': '{}'.format(form['description']),
+            'Stripe_Agreed_to_pay_fees__c': pay_fees,
+            'npe03__Open_Ended_Status__c': open_ended_status,
+            'npe03__Installments__c': installments,
+            'npe03__Installment_Period__c': installment_period,
+            'Type__c': 'The Blast',
             }
-    print(opportunity)
-    return opportunity
+    pprint(blast_subscription)   # TODO: rm
+    return blast_subscription
 
 
-def add_tw_subscription(form=None, customer=None, charge=None):
+def add_blast_subscription(form=None, customer=None, charge=None):
 
-    print ("----Adding TW subscription opportunity...")
+    print ("----Adding Blast RDO...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
-    opportunity = _format_tw_opportunity(contact=contact, form=form,
-            customer=customer)
-    path = '/services/data/v35.0/sobjects/Opportunity'
-    response = sf.post(path=path, data=opportunity)
+    recurring_donation = _format_blast_rdo(contact=contact,
+            form=form, customer=customer)
+    path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
+    response = sf.post(path=path, data=recurring_donation)
     send_multiple_account_warning()
 
     return response
 
 
-@celery.task(name='salesforce.add_tw_customer_and_charge')
-def add_tw_customer_and_charge(form=None, customer=None):
+@celery.task(name='salesforce.add_blast_customer_and_charge')
+def add_blast_customer_and_charge(form=None, customer=None):
 
     upsert_customer(customer=customer, form=form)
 
-    add_tw_subscription(form=form, customer=customer)
+    add_blast_subscription(form=form, customer=customer)
 
     return True

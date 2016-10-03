@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="main">
+    <div class="outer-section">
+      <p class="nine">Blast subscriptions.</p>
+    </div>
+    <form action="/submit-blast" method="post" class="blastform">
+      {{ form.csrf_token }}
+      <div class="form-outer-section outer-section">
+        <h2>Blast Subscription</h2>
+        <div class="row">
+          <div class="form-section four">
+            <label class="dropdown">Amount
+            <!-- <br> -->
+              <!-- <span class="dollar">$</span> -->
+                {{ form.amount(value=amount, class="") }}
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-section four">
+            {{ form.first_name.label }}<br>
+              {{ form.first_name(maxlength=50) }}
+          </div>
+          <div class="form-section four">
+            {{ form.last_name.label }}<br>
+              {{ form.last_name(maxlength=50) }}
+          </div>
+        </div>
+        <div class="form-section form-error">
+          <p class="error-form-message"></p>
+        </div>
+      </div>
+      {{ form.description(value='Blast Subscription') }}
+      <div class="form-outer-section">
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <button id="customButton" class="button button-flat">Submit</button>
+      </div>
+    </form>
+    {% include 'includes/stripe_checkout_js.html' %}
+  </div>
+{% endblock %}

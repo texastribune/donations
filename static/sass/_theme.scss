@@ -17,6 +17,10 @@ body {
 
 .outer-section {
   @include outer-container;
+  .row {
+    @include row();
+    margin: 0 0 1em;
+  }
   .nine {
     @include span-columns(9);
   }

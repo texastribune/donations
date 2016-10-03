@@ -1,0 +1,39 @@
+.dropdown {
+  font-family: $helvetica;
+  position: relative;
+
+  select {
+  	-moz-appearance: none;
+  	-webkit-appearance: none;
+  	appearance: none;
+  	border-radius: 0;
+  	cursor: pointer;
+  	display: inline-block;
+    font-size: 1.1em;
+  	outline: none;
+    margin: 0.8em 0.5em 1em 0;
+  	padding: .5em 1em;
+    width: 100%;
+  }
+
+  select:-moz-focusring {
+  	color: transparent;
+  }
+
+  select::-ms-expand {
+  	display: none;
+  }
+
+  &:after {
+  	-moz-transform: rotate(90deg);
+  	-ms-transform: rotate(90deg);
+  	-webkit-transform: rotate(90deg);
+  	content: '>';
+    font: 16px Consolas, monospace;
+  	pointer-events: none;
+  	position: absolute;
+  	right: 8px;
+  	top: 29px;
+  	transform: rotate(90deg);
+  }
+}
