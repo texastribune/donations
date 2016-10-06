@@ -11,8 +11,7 @@ body {
 }
 
 .main {
-  min-height: 500px;
-  padding: 0 2em;
+  padding: 0 2em 2em;
 }
 
 .outer-section {
@@ -214,7 +213,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 
 // Social share buttons
 .social-wrapper {
-  margin-bottom: 3em;
+  margin-bottom: 1em;
   a:hover {
     text-decoration: none;
   }
