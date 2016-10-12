@@ -74,6 +74,8 @@ new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 '//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-NBBG35');</script>
+<script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
+<script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
 <script>
   (function(i, s, o, g, r, a, m) {
     i['GoogleAnalyticsObject'] = r;
@@ -87,7 +89,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     m.parentNode.insertBefore(a, m)
   })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-9827490-1', 'texastribune.org');
+  ga('create', 'UA-9827490-1', 'auto', {'allowLinker': true});
+  ga('require', 'cleanUrlTracker', {
+    stripQuery: true,
+    queryDimensionIndex: 1,
+    indexFilename: 'index.html'
+  });
+  ga('require', 'eventTracker');
+  ga('require', 'linker');
+  ga('linker:autoLink', ['texastribune.org', 'support.texastribune.org']);
   ga('require', 'displayfeatures');
   ga('send', 'pageview');
 </script>
