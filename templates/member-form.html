@@ -3,7 +3,9 @@
 {% block content %}
   <div class="main">
     <div class="outer-section">
-      <p class="nine">Thank you for supporting The Texas Tribune by becoming a sustaining member! Visit <a href="https://support.texastribune.org/levels.html">our membership page</a> if you want to choose a different membership level. If you'd prefer to make a one-time donation, you can do so on <a href="/donateform">this page</a>.</p>
+      <p class="nine">
+        Thank you for supporting The Texas Tribune by becoming a member! Sustaining membership allows you to support journalism that matters with an ongoing gift from your credit card. It auto-renews each year, and helps eliminate renewal mailings or lapses in your membership. Visit our <a href="https://support.texastribune.org/levels.html" ga-on="click" ga-event-category="Navigation" ga-event-action="view-levels-from-memberform">membership page</a> if you want to choose a different membership level.
+      </p>
     </div>
     <form action="/charge" method="post">
       {{ form.csrf_token }}
