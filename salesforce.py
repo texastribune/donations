@@ -76,6 +76,14 @@ def send_multiple_account_warning():
                 body=body
                 )
 
+def get_email(form):
+    if 'subscriber_email' in form:
+        email = form['subscriber_email']
+        print("found subscriber email: {}".format(email))
+        return email
+    else:
+        return form.get('stripeEmail')
+
 
 class SalesforceConnection(object):
     """
@@ -143,20 +151,19 @@ class SalesforceConnection(object):
         Format a contact for update/insert.
         """
 
-        try:
-            stripe_id = form['Stripe_Customer_Id__c']
-        except KeyError:
-            stripe_id = None
+        email = get_email(form)
+
+        stripe_id = form.get('Stripe_Customer_Id__c', None)
 
         contact = {
-            'Email': form['stripeEmail'],
+            'Email': email,
             'FirstName': form['first_name'],
             'LastName': form['last_name'],
             'Description': form['description'],
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
             }
-
+        print(contact)
         return contact
 
     def _get_contact(self, contact_id=None):
@@ -213,7 +220,7 @@ class SalesforceConnection(object):
         """
 
         created = False
-        email = form['stripeEmail']
+        email = get_email(form)
 
         response = self.find_contact(email=email)
 
