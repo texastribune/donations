@@ -432,20 +432,14 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
     amount = form['amount']
-    installments = 'None'
+    installments = 0
     open_ended_status = 'Open'
-    try:
-        installment_period = form['installment_period']
-    except:
-        installment_period = 'None'
-
-    # TODO: test this:
-    if installments != 'None':
-        amount = int(amount) * int(installments)
-    else:
-        installments = 0
-
     pay_fees = False
+
+    if amount == '40':
+        installment_period = 'monthly'
+    else:
+        installment_period = 'yearly'
 
     blast_subscription = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
