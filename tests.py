@@ -182,6 +182,7 @@ blast_rdo_form.add('installment_period', 'monthly')
 blast_rdo_form.add('installments', 'None')
 blast_rdo_form.add('openended_status', 'None')
 blast_rdo_form.add('description', 'Monthly Blast Subscription')
+blast_rdo_form.add('subscriber_email', 'subscriber@foo.bar')
 blast_rdo_form.add('pay_fees_value', 'True')
 request.blast_rdo_form = blast_rdo_form
 
@@ -293,8 +294,11 @@ def test__format_blast_rdo():
             'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Description__c': 'Monthly Blast Subscription',
             'Stripe_Agreed_to_pay_fees__c': False,
-            'Type__c': 'The Blast'
+            'Type__c': 'The Blast',
+            'Billing_Email__c': 'dcraigmile+test6@texastribune.org',
+            'Blast_Subscription_Email__c': 'subscriber@foo.bar',
             }
+
     response['Name'] = 'foo'
     assert response == expected_response
 
