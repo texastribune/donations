@@ -459,6 +459,9 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
             'npe03__Installments__c': installments,
             'npe03__Installment_Period__c': installment_period,
             'Type__c': 'The Blast',
+            'Billing_Email__c': '{}'.format(form['stripeEmail']),
+            'Blast_Subscription_Email__c': '{}'.format(
+                form['subscriber_email']),
             }
     pprint(blast_subscription)   # TODO: rm
     return blast_subscription
