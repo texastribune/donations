@@ -1,6 +1,8 @@
 APP=checkout
 NS=texastribune
 
+DOCKER_ENV_FILE?=env-docker
+
 build:
 	docker build --tag=${NS}/${APP} .
 
@@ -26,7 +28,7 @@ interactive: build-dev
 	docker run \
 		--workdir=/flask \
 		--volume=$$(pwd):/flask \
-		--env-file=env \
+		--env-file=${DOCKER_ENV_FILE} \
 		--rm --interactive --tty \
 		--publish=80:5000 \
 		--publish=5555:5555 \
@@ -36,7 +38,7 @@ interactive: build-dev
 
 test: build-dev
 	docker run \
-		--env-file=env \
+		--env-file=${DOCKER_ENV_FILE} \
 		--workdir=/app \
 		--rm \
 		--entrypoint=python3 \
@@ -47,4 +49,4 @@ push:
 
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .
-	docker run --env-file=env --rm --interactive --tty --name=py2 sf-py2
+	docker run --env-file=${DOCKER_ENV_FILE} --rm --interactive --tty --name=py2 sf-py2
