@@ -135,7 +135,7 @@ def submit_blast():
         print("----Adding Blast subscription...")
         add_blast_customer_and_charge.delay(form=request.form,
                 customer=customer)
-        return render_template('charge.html')
+        return render_template('blast-charge.html')
     else:
         message = "There was an issue saving your donation information."
         return render_template('error.html', message=message)
