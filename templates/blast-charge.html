@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block content %}
+  <div class="main">
+    <div class="img-wrapper">
+      <img src="https://static.texastribune.org/media/marketing/TT-support_thankyou.png" />
+    </div>
+    <div class="outer-section">
+      <div class="six">
+        <p>
+          Thank you for subscribing to The Blast!
+          You'll receive an order confirmation email shortly.
+          Should you have any questions about your subscription,
+          please email blast@texastribune.org
+        </p>
+      </div>
+    </div>
+    <div class="outer-section social-wrapper">
+      <div class="three">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.texastribune.org%2F&amp;display=popup&amp;ref=plugin&amp;src=like&amp;app_id=113869198637480" target="_blank">
+        <div class="button social facebook">
+          <i class="fa fa-facebook"></i> Share on Facebook
+        </div>
+        </a>
+      </div>
+      <div class="three">
+        <a href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&amp;ref_src=twsrc%5Etfw&amp;related=texastribune&amp;text=%23ISupportTexasTribune%20because...&amp;tw_p=tweetbutton&amp;url=https%3A%2F%2Fsupport.texastribune.org%2F" target="_blank">
+        <div class="button social twitter">
+          <i class="fa fa-twitter"></i> Tweet to your followers
+        </div>
+        </a>
+      </div>
+    </div>
+    <div class="outer-section social-wrapper">
+      <div class="six">
+        <a href="mailto:blast@texastribune.org?Subject=Why%20I%20support%20The%20Texas%20Tribune&amp;Body=Dear%20Texas%20Tribune%20team%2C%20%0A%0AThis%20is%20why%20I%20just%20made%20a%20donation%20to%20your%20newsroom%3A">
+        <div class="button social email">
+          <i class="fa fa-envelope"></i>Tell us why you support the Tribune.
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

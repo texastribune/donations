@@ -76,6 +76,14 @@ def send_multiple_account_warning():
                 body=body
                 )
 
+def get_email(form):
+    if 'subscriber_email' in form:
+        email = form['subscriber_email']
+        print("found subscriber email: {}".format(email))
+        return email
+    else:
+        return form.get('stripeEmail')
+
 
 class SalesforceConnection(object):
     """
@@ -143,20 +151,19 @@ class SalesforceConnection(object):
         Format a contact for update/insert.
         """
 
-        try:
-            stripe_id = form['Stripe_Customer_Id__c']
-        except KeyError:
-            stripe_id = None
+        email = get_email(form)
+
+        stripe_id = form.get('Stripe_Customer_Id__c', None)
 
         contact = {
-            'Email': form['stripeEmail'],
+            'Email': email,
             'FirstName': form['first_name'],
             'LastName': form['last_name'],
             'Description': form['description'],
             'LeadSource': 'Stripe',
             'Stripe_Customer_Id__c': stripe_id,
             }
-
+        print(contact)
         return contact
 
     def _get_contact(self, contact_id=None):
@@ -213,7 +220,7 @@ class SalesforceConnection(object):
         """
 
         created = False
-        email = form['stripeEmail']
+        email = get_email(form)
 
         response = self.find_contact(email=email)
 
@@ -425,20 +432,14 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
     amount = form['amount']
-    installments = 'None'
+    installments = 0
     open_ended_status = 'Open'
-    try:
-        installment_period = form['installment_period']
-    except:
-        installment_period = 'None'
-
-    # TODO: test this:
-    if installments != 'None':
-        amount = int(amount) * int(installments)
-    else:
-        installments = 0
-
     pay_fees = False
+
+    if amount == '40':
+        installment_period = 'monthly'
+    else:
+        installment_period = 'yearly'
 
     blast_subscription = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
@@ -458,6 +459,9 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
             'npe03__Installments__c': installments,
             'npe03__Installment_Period__c': installment_period,
             'Type__c': 'The Blast',
+            'Billing_Email__c': '{}'.format(form['stripeEmail']),
+            'Blast_Subscription_Email__c': '{}'.format(
+                form['subscriber_email']),
             }
     pprint(blast_subscription)   # TODO: rm
     return blast_subscription

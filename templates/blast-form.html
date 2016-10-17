@@ -27,6 +27,10 @@
             {{ form.last_name.label }}<br>
               {{ form.last_name(maxlength=50) }}
           </div>
+          <div class="form-section four">
+            {{ form.subscriber_email.label }}<br>
+              {{ form.subscriber_email(maxlength=70) }}
+          </div>
         </div>
         <div class="form-section form-error">
           <p class="error-form-message"></p>

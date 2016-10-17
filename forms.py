@@ -3,6 +3,7 @@ from flask_wtf import Form
 from wtforms.fields import StringField, HiddenField, BooleanField, DecimalField
 from wtforms.fields import RadioField, SelectField
 from wtforms import validators
+from wtforms.fields.html5 import EmailField
 
 
 class BaseForm(Form):
@@ -42,6 +43,8 @@ class BlastForm(Form):
         ('40', 'Monthly ($40)'),
         ]
     amount = SelectField(u'Amount', choices=amount_choices)
+    subscriber_email = EmailField('Subscriber Email address',
+        [validators.DataRequired(), validators.Email()])
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
     openended_status = HiddenField(u'Openended Status')
