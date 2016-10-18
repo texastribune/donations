@@ -1,6 +1,29 @@
+.blast_logo {
+  margin: 1em 0;
+}
+
 .blastform {
   label,
   input {
     width: 100%;
+  }
+
+  #pay_fees {
+    margin: 0px;
+    width: 20px;
+    height: 30px;
+    @include media($tablet) {
+      margin-left: 0;
+    }
+  }
+
+  #pay-fee-amount {
+    float: left;
+    padding: .3em 0 0 .5em;
+  }
+
+  #pay-fee-info {
+    clear: both;
+    padding: 0;
   }
 }

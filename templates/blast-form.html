@@ -1,23 +1,22 @@
 {% extends "layout.html" %}
 
+{% block extra_script %}
+<script src="{{ url_for('static', filename='js/blast.js') }}"></script>
+{% endblock %}
+
 {% block content %}
   <div class="main">
     <div class="outer-section">
-      <p class="nine">Blast subscriptions.</p>
+      <figure class="blast_logo six">
+        <img src="{{ url_for('static', filename='img/TT-Blast_logo.svg') }}" alt="The Blast logo">
+      </figure>
     </div>
     <form action="/submit-blast" method="post" class="blastform">
       {{ form.csrf_token }}
       <div class="form-outer-section outer-section">
-        <h2>Blast Subscription</h2>
-        <div class="row">
-          <div class="form-section four">
-            <label class="dropdown">Amount
-            <!-- <br> -->
-              <!-- <span class="dollar">$</span> -->
-                {{ form.amount(value=amount, class="") }}
-            </label>
-          </div>
-        </div>
+        <header>
+          <h2>Sign up for the best political newsletter in Texas.</h2>
+        </header>
         <div class="row">
           <div class="form-section four">
             {{ form.first_name.label }}<br>
@@ -27,9 +26,26 @@
             {{ form.last_name.label }}<br>
               {{ form.last_name(maxlength=50) }}
           </div>
-          <div class="form-section four">
+        </div>
+        <div class="row">
+          <div class="form-section six">
             {{ form.subscriber_email.label }}<br>
               {{ form.subscriber_email(maxlength=70) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-section six">
+            <label class="dropdown">Subscription plan
+              {{ form.amount(value=amount, class="") }}
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="form-section six">
+            {{ form.pay_fees.label }}
+              {{ form.pay_fees(checked=False) }}
+            <p id="pay-fee-amount" class="label-info"><span></span></p>
+            <p id="pay-fee-info">Paying these fees directs more money in support of the Tribune’s mission.</p>
           </div>
         </div>
         <div class="form-section form-error">
@@ -44,4 +60,5 @@
     </form>
     {% include 'includes/stripe_checkout_js.html' %}
   </div>
+  {% include 'includes/display_pay_fees.html' %}
 {% endblock %}

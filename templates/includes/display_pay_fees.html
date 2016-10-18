@@ -6,4 +6,8 @@
   $('input[name="amount"]').keyup(function() {
     pay_fee_amount();
   });
+
+  $('select[name="amount"]').change(function() {
+    pay_fee_amount();
+  })
 </script>

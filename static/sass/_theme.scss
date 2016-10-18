@@ -1,6 +1,8 @@
 // General styles
+$font-sansserif: 'Open Sans', sans-serif;
+
 html {
-  font-family: $helvetica;
+  font-family: $font-sansserif;
   font-size: 14px;
   min-height: 100%;
   position: relative;
@@ -19,9 +21,15 @@ body {
   .row {
     @include row();
     margin: 0 0 1em;
+    @include media($tablet) {
+      margin: 0;
+    }
   }
   .nine {
     @include span-columns(9);
+  }
+  .eight {
+    @include span-columns(8);
   }
   .six {
     @include span-columns(6);
@@ -73,7 +81,7 @@ p {
 }
 
 .label-info {
-  font-family: $helvetica;
+  font-family: $font-sansserif;
   font-size: 1.2em;
   font-style: normal;
   margin: 0;
@@ -168,7 +176,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 
 // Stripe form submit button styles
 .button {
-  font-family: $helvetica;
+  font-family: $font-sansserif;
   font-size: 1.2em;
   font-weight: bold;
   letter-spacing: 0.03em;
