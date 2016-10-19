@@ -7,43 +7,46 @@
 {% endblock %}
 
 {% block content %}
-  <div class="main">
-    <div class="outer-section">
+  <header class="blast_header">
+    <div class="outer-section narrow">
       <figure class="blast_logo six">
-        <img src="{{ url_for('static', filename='img/TT-Blast_logo.svg') }}" alt="The Blast logo">
+        <a href="https://www.texastribune.org/theblast/"><img src="{{ url_for('static', filename='img/TT-Blast_logo-white.svg') }}" alt="The Blast logo"></a>
+        <a href="https://www.texastribune.org/"><img src="{{ url_for('static', filename='img/TT-aprojectby-horizontal-white.svg') }}" alt="A product of The Texas Tribune" class="blast_logo--sub"></a>
       </figure>
     </div>
+  </header>
+  <div class="main">
     <form action="/submit-blast" method="post" class="blastform">
       {{ form.csrf_token }}
-      <div class="form-outer-section outer-section">
+      <div class="form-outer-section outer-section narrow">
         <header>
           <h2>Sign up for the best political newsletter in Texas.</h2>
         </header>
         <div class="row">
-          <div class="form-section four">
+          <div class="form-section six">
             {{ form.first_name.label }}<br>
               {{ form.first_name(maxlength=50) }}
           </div>
-          <div class="form-section four">
+          <div class="form-section six">
             {{ form.last_name.label }}<br>
               {{ form.last_name(maxlength=50) }}
           </div>
         </div>
         <div class="row">
-          <div class="form-section six">
+          <div class="form-section nine">
             {{ form.subscriber_email.label }}<br>
               {{ form.subscriber_email(maxlength=70) }}
           </div>
         </div>
         <div class="row">
-          <div class="form-section six">
+          <div class="form-section nine">
             <label class="dropdown">Subscription plan
               {{ form.amount(value=amount, class="") }}
             </label>
           </div>
         </div>
         <div class="row">
-          <div class="form-section six">
+          <div class="form-section nine">
             {{ form.pay_fees.label }}
               {{ form.pay_fees(checked=False) }}
             <p id="pay-fee-amount" class="label-info"><span></span></p>
@@ -53,9 +56,7 @@
         <div class="form-section form-error">
           <p class="error-form-message"></p>
         </div>
-      </div>
-      {{ form.description(value='Blast Subscription') }}
-      <div class="form-outer-section">
+        {{ form.description(value='Blast Subscription') }}
         <script src="https://checkout.stripe.com/checkout.js"></script>
         <button id="customButton" class="button button-flat">Submit</button>
       </div>

@@ -1,5 +1,18 @@
+.blast_header {
+  background-color: $black;
+  padding: 0 2em;
+}
+
 .blast_logo {
   margin: 1em 0;
+  &--sub {
+    float: right;
+    margin: 1em 2.5em .5em .5em;
+    width: 50%;
+    @include media($mobile) {
+      width: 75%;
+    }
+  }
 }
 
 .blastform {
@@ -25,5 +38,6 @@
   #pay-fee-info {
     clear: both;
     padding: 0;
+    margin-bottom: 1em;
   }
 }

@@ -7,23 +7,26 @@
 {% endblock %}
 
 {% block content %}
-  <div class="main">
-    <div class="img-wrapper">
+  <header class="blast_header">
+    <div class="outer-section narrow">
       <figure class="blast_logo six">
-        <img src="{{ url_for('static', filename='img/TT-Blast_logo.svg') }}" alt="The Blast logo">
+        <a href="https://www.texastribune.org/theblast/"><img src="{{ url_for('static', filename='img/TT-Blast_logo-white.svg') }}" alt="The Blast logo"></a>
+        <a href="https://www.texastribune.org/"><img src="{{ url_for('static', filename='img/TT-aprojectby-horizontal-white.svg') }}" alt="A product of The Texas Tribune" class="blast_logo--sub"></a>
       </figure>
     </div>
-    <div class="outer-section">
-      <div class="six">
+  </header>
+  <div class="main">
+    <div class="outer-section narrow">
+      <div class="nine">
         <p>
           Thank you for subscribing to The Blast!
           You'll receive an order confirmation email shortly.
           Should you have any questions about your subscription,
-          please email blast@texastribune.org
+          please email <a href="mailto:blast@texastribune.org">blast@texastribune.org</a>.
         </p>
       </div>
     </div>
-    <div class="outer-section social-wrapper">
+    <div class="outer-section narrow social-wrapper">
       <div class="six">
         <a href="mailto:blast@texastribune.org?Subject=Check%20out%20The%20Blast&amp;Body=https://www.texastribune.org/theblast/">
         <div class="button social email">

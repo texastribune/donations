@@ -18,6 +18,9 @@ body {
 
 .outer-section {
   @include outer-container;
+  &.narrow {
+    max-width: 800px;
+  }
   .row {
     @include row();
     margin: 0 0 1em;
@@ -54,13 +57,12 @@ ul {
   }
 }
 
-
 // Typography
 h2 {
   font-size: 1.5em;
   font-weight: bold;
   letter-spacing: 0.03em;
-  margin: 0 0 0.5em 0;
+  margin: 0 0 1em 0;
 }
 
 h3 {
@@ -78,6 +80,37 @@ a {
 p {
   margin: 0;
   padding: 1em 0;
+}
+
+label {
+  color: #7f7f7f;
+  cursor: pointer;
+  float: left;
+  font-size: .9em;
+  font-weight: bold;
+  letter-spacing: 2px;
+  min-width: 150px;
+  text-transform: uppercase;
+}
+
+input {
+  font-size: 1em;
+  margin: 0.5em 0.5em 1em 0;
+  padding: .5em .25em;
+}
+
+input[type='text'] {
+  width: 100%;
+  &.dollar {
+    width: 150px;
+  }
+}
+
+// For hiding number input spinner on webkit browsers
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button, {
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 .label-info {
@@ -105,7 +138,6 @@ p {
 
 // Form styles
 .form-outer-section {
-  border-bottom: 2px solid $yellow-tribune;
   padding: 1em 0;
   &:last-of-type {
     border-bottom: none;
@@ -117,33 +149,9 @@ p {
   font-family: $league-gothic;
   font-size: 3.5em;
   margin: 0;
-  width: 150px;
   &.uneditable {
     border: none;
   }
-}
-
-label {
-  color: #7f7f7f;
-  cursor: pointer;
-  float: left;
-  font-size: 0.8em;
-  font-weight: bold;
-  letter-spacing: 2px;
-  min-width: 150px;
-  text-transform: uppercase;
-}
-
-input {
-  font-size: 1em;
-  margin: 0.5em 0.5em 1em 0;
-}
-
-// For hiding number input spinner on webkit browsers
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button, {
-    -webkit-appearance: none;
-    margin: 0;
 }
 
 #pay_fees {
@@ -176,6 +184,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 
 // Stripe form submit button styles
 .button {
+  color: $black;
   font-family: $font-sansserif;
   font-size: 1.2em;
   font-weight: bold;
