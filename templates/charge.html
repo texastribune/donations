@@ -1,9 +1,15 @@
 {% extends "layout.html" %}
 
+{% block title %}
+  {{ super() }}
+{% endblock %}
+
 {% block extra_script %}
   {{ super() }}
 {% endblock %}
+
 {% block content %}
+  {{ super() }}
   <div class="main">
     <div class="img-wrapper">
       <img src="https://static.texastribune.org/media/marketing/TT-support_thankyou.png" />

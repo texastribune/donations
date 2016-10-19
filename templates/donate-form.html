@@ -1,10 +1,13 @@
 {% extends "layout.html" %}
-
+{% block title %}
+  {{ super() }}
+{% endblock %}
 {% block extra_script %}
   {{ super() }}
 {% endblock %}
 
 {% block content %}
+  {{ super() }}
   <div class="main">
     <div class="outer-section">
       <p class="nine">Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="https://support.texastribune.org/levels.html">our membership page</a>.</p>
