@@ -434,6 +434,7 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     amount = form['amount']
     installments = 0
     open_ended_status = 'Open'
+    print form
 
     if form['pay_fees_value'] == 'True':
         pay_fees = True
