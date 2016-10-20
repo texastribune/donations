@@ -434,7 +434,12 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     amount = form['amount']
     installments = 0
     open_ended_status = 'Open'
-    pay_fees = False
+    pprint(form)
+
+    if form['pay_fees_value'] == 'True':
+        pay_fees = True
+    else:
+        pay_fees = False
 
     if amount == '40':
         installment_period = 'monthly'
