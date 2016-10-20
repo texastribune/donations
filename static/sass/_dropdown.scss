@@ -9,10 +9,10 @@
   	border-radius: 0;
   	cursor: pointer;
   	display: inline-block;
-    font-size: 1.1em;
+    font-size: 1.2em;
   	outline: none;
     margin: 0.8em 0.5em 1em 0;
-  	padding: .5em 1em;
+  	padding: .5em 1.6em .5em 1em;
     width: 100%;
   }
 
@@ -29,11 +29,11 @@
   	-ms-transform: rotate(90deg);
   	-webkit-transform: rotate(90deg);
   	content: '>';
-    font: 16px Consolas, monospace;
+    font: 18px Consolas, monospace;
   	pointer-events: none;
   	position: absolute;
-  	right: 8px;
-  	top: 29px;
+  	right: 10px;
+  	top: 36px;
   	transform: rotate(90deg);
   }
 }

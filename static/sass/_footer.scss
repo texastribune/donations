@@ -43,7 +43,15 @@
       }
       a {
         color: $white;
-        padding: 0.5em;
+        border: 0;
+        box-shadow: none;
+        padding: .5em;
+        text-decoration: none;
+        &:hover,
+        &:active {
+          border: 0;
+          text-decoration: none;
+        }
       }
     }
   }

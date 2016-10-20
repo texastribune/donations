@@ -39,7 +39,7 @@ class BlastForm(Form):
         [validators.required(message="Your last name is required.")])
     amount_choices = [
         ('349', 'Annual ($349)'),
-        ('325', 'Annual Tax-Exempt ($325)'),
+        ('325', 'Annual Tax-Exempt ($325 — For government agencies and nonprofit organizations)'),
         ('40', 'Monthly ($40)'),
         ]
     amount = SelectField(u'Amount', choices=amount_choices)
