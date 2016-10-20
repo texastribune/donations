@@ -14,7 +14,6 @@ var listen_for_fee_check = function() {
   });
 };
 
-
 // Used to set installments to one for yearly 1-time contributions
 var listen_for_installments = function() {
   var openended_status_open = $('input[id="openended_status-0"]');
