@@ -43,7 +43,6 @@ body {
   .three, .four, .six, .nine {
     @include media($tablet) {
       @include span-columns(12);
-      margin-top: 1em;
     }
   }
 }
@@ -150,10 +149,8 @@ input::-webkit-inner-spin-button, {
   }
 }
 
-
 // Form styles
 .form-outer-section {
-  padding: 1em 0;
   &:last-of-type {
     border-bottom: none;
   }
@@ -186,10 +183,12 @@ input::-webkit-inner-spin-button, {
 #pay-fee-info {
   clear: both;
   padding: 0;
+  margin-bottom: 1em;
 }
 
 // styles for openended status radio buttons on yearly member form
 #openended_status {
+  margin: 0 0 1em;
   padding: 0;
 }
 
@@ -213,12 +212,16 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 
 .button-flat {
   background-color: $yellow-tribune;
-  border: none;
-  color: $black;
+  border: 2px solid $yellow-tribune;
+  color: #222222;
+  font-weight: 700;
+  height: 30px;
+  line-height: 0;
+  padding: 1em;
+  text-align: center;
   &:hover {
-    @include fast-transition(background-color);
-    background-color: $teal-tribune;
-    color: $white;
+    background-color: $white;
+    color: #222222;
     cursor: pointer;
   }
 }

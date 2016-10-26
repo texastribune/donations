@@ -7,9 +7,9 @@ from wtforms.fields.html5 import EmailField
 
 
 class BaseForm(Form):
-    first_name = StringField(u'First',
+    first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
-    last_name = StringField(u'Last',
+    last_name = StringField(u'Last name',
         [validators.required(message="Your last name is required.")])
     amount = DecimalField(u'Amount',
         [validators.required(message="Please choose a donation amount."),
@@ -33,9 +33,9 @@ class DonateForm(BaseForm):
 
 
 class BlastForm(Form):
-    first_name = StringField(u'First',
+    first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
-    last_name = StringField(u'Last',
+    last_name = StringField(u'Last name',
         [validators.required(message="Your last name is required.")])
     amount_choices = [
         ('349', 'Annual ($349)'),
