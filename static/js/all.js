@@ -68,6 +68,7 @@ var listen_for_installments = function() {
   var openended_status_open = $('input[id="openended_status-0"]');
   var openended_status_none = $('input[id="openended_status-1"]');
   var installments = $('input[name="installments"]');
+  var installment_period = $('input[name="installment_period"]');
 
   // When status is open, installments is always None
   openended_status_open.click(function() {
@@ -75,8 +76,10 @@ var listen_for_installments = function() {
   });
 
   // when status is none for yearly members, installments should be 1
+  // and installment_period should be None
   openended_status_none.click(function() {
     installments.val("1");
+    installment_period.val("None");
   });
 };
 
