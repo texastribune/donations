@@ -116,7 +116,9 @@ input {
 input[type='text'] {
   width: 100%;
   &.dollar {
-    width: 150px;
+    margin: .1em 0;
+    padding: 0 .1em;
+    width: 100px;
   }
 }
 
