@@ -1,4 +1,4 @@
-from flask_wtf import Form
+from flask_wtf import FlaskForm
 
 from wtforms.fields import StringField, HiddenField, BooleanField, DecimalField
 from wtforms.fields import RadioField, SelectField
@@ -6,7 +6,7 @@ from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
 
-class BaseForm(Form):
+class BaseForm(FlaskForm):
     first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last name',
@@ -32,7 +32,7 @@ class DonateForm(BaseForm):
     openended_status = HiddenField(u'Openended Status')
 
 
-class BlastForm(Form):
+class BlastForm(FlaskForm):
     first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last name',
