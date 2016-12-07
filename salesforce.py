@@ -406,6 +406,8 @@ def add_customer_and_charge(form=None, customer=None):
     amount = form['amount']
     name = '{} {}'.format(form['first_name'], form['last_name'])
     reason = form['reason']
+    period = form['installment_period']
+    email = form['stripeEmail']
     if reason != '':
         reason = ' (encouraged by {})'.format(reason)
 
@@ -413,12 +415,13 @@ def add_customer_and_charge(form=None, customer=None):
 
     if (form['installment_period'] == 'None'):
         print("----One time payment...")
-        msg = '*{}* pledged *${}*{}'.format(name, amount, reason)
+        msg = '*{}* ({}) pledged *${}*{}'.format(name, email, amount, reason)
         notify_slack(msg)
         add_opportunity(form=form, customer=customer)
     else:
         print("----Recurring payment...")
-        msg = '*{}* pledged *${}*{} [recurring]'.format(name, amount, reason)
+        msg = '*{}* ({}) pledged *${}*{} [{}]'.format(name, email, amount,
+                reason, period)
         notify_slack(msg)
         add_recurring_donation(form=form, customer=customer)
     return True
