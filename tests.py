@@ -19,6 +19,7 @@ from salesforce import _format_recurring_donation
 from salesforce import _format_blast_rdo
 from salesforce import SalesforceConnection
 from salesforce import upsert_customer
+from salesforce import _format_amount
 
 
 # ("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
@@ -154,6 +155,22 @@ circle_form.add('description', 'The Texas Tribune Membership')
 circle_form.add('pay_fees_value', 'True')
 request.circle_form = circle_form
 
+another_circle_form = MultiDict()
+another_circle_form.add('amount', '1500.01')
+another_circle_form.add('frequency', 'until-cancelled'),
+another_circle_form.add('last_name', 'C'),
+another_circle_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
+another_circle_form.add('first_name', 'D'),
+another_circle_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
+another_circle_form.add('stripeTokenType', 'card'),
+another_circle_form.add('reason', 'Because I love the Trib!')
+another_circle_form.add('installment_period', 'yearly')
+another_circle_form.add('installments', '3')
+another_circle_form.add('openended_status', 'None')
+another_circle_form.add('description', 'The Texas Tribune Membership')
+another_circle_form.add('pay_fees_value', 'True')
+request.another_circle_form = another_circle_form
+
 rdo_form = MultiDict()
 rdo_form.add('amount', '9')
 rdo_form.add('frequency', 'until-cancelled'),
@@ -170,6 +187,22 @@ rdo_form.add('description', 'The Texas Tribune Membership')
 rdo_form.add('pay_fees_value', 'True')
 request.rdo_form = rdo_form
 
+another_rdo_form = MultiDict()
+another_rdo_form.add('amount', '9.15')
+another_rdo_form.add('frequency', 'until-cancelled'),
+another_rdo_form.add('last_name', 'C'),
+another_rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
+another_rdo_form.add('first_name', 'D'),
+another_rdo_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
+another_rdo_form.add('stripeTokenType', 'card'),
+another_rdo_form.add('reason', 'Because I love the Trib!')
+another_rdo_form.add('installment_period', 'monthly')
+another_rdo_form.add('installments', 'None')
+another_rdo_form.add('openended_status', 'None')
+another_rdo_form.add('description', 'The Texas Tribune Membership')
+another_rdo_form.add('pay_fees_value', 'True')
+request.another_rdo_form = another_rdo_form
+
 blast_rdo_form = MultiDict()
 blast_rdo_form.add('amount', '40')
 blast_rdo_form.add('frequency', 'until-cancelled'),
@@ -185,6 +218,24 @@ blast_rdo_form.add('description', 'Monthly Blast Subscription')
 blast_rdo_form.add('subscriber_email', 'subscriber@foo.bar')
 blast_rdo_form.add('pay_fees_value', 'True')
 request.blast_rdo_form = blast_rdo_form
+
+
+def test__format_amount():
+    actual = _format_amount('1500.123')
+    expected = '1500.12'
+    assert actual == expected
+
+    actual = _format_amount('1500')
+    expected = '1500.00'
+    assert actual == expected
+
+    actual = _format_amount('1500.00')
+    expected = '1500.00'
+    assert actual == expected
+
+    actual = _format_amount('1500.126')
+    expected = '1500.13'
+    assert actual == expected
 
 
 def test_check_response():
@@ -215,7 +266,7 @@ def test__format_opportunity():
             customer=customer)
     expected_response = {
             'AccountId': '0011700000BpR8PAAV',
-            'Amount': '9',
+            'Amount': '9.00',
             'CloseDate': today,
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'LeadSource': 'Stripe',
@@ -243,7 +294,31 @@ def test__format_circle_donation():
             'npe03__Installment_Period__c': 'yearly',
             'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '300',   # 3 * 100
+            'npe03__Amount__c': '300.00',   # 3 * 100
+            'Name': 'foo',
+            'npe03__Installments__c': '3',
+            'npe03__Open_Ended_Status__c': 'None',
+            'Stripe_Description__c': 'The Texas Tribune Membership',
+            'Stripe_Agreed_to_pay_fees__c': True,
+            'Type__c': 'Giving Circle'
+            }
+    response['Name'] = 'foo'
+    assert response == expected_response
+
+
+def test__format_cent_circle_donation():
+
+    response = _format_recurring_donation(contact=contact,
+            form=another_circle_form, customer=customer)
+    expected_response = {
+            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
+            'npe03__Date_Established__c': today,
+            'Lead_Source__c': 'Stripe',
+            'npe03__Contact__c': '0031700000BHQzBAAX',
+            'npe03__Installment_Period__c': 'yearly',
+            'npe03__Open_Ended_Status__c': 'Open',
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'npe03__Amount__c': '4500.03',   # 3 * 1501.01
             'Name': 'foo',
             'npe03__Installments__c': '3',
             'npe03__Open_Ended_Status__c': 'None',
@@ -266,7 +341,30 @@ def test__format_recurring_donation():
             'npe03__Contact__c': '0031700000BHQzBAAX',
             'npe03__Installment_Period__c': 'monthly',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '9',
+            'npe03__Amount__c': '9.00',
+            'Name': 'foo',
+            'npe03__Installments__c': 0,
+            'npe03__Open_Ended_Status__c': 'None',
+            'Stripe_Description__c': 'The Texas Tribune Membership',
+            'Stripe_Agreed_to_pay_fees__c': True,
+            'Type__c': 'Recurring Donation'
+            }
+    response['Name'] = 'foo'
+    assert response == expected_response
+
+
+def test__format_recurring_donation_decimal():
+
+    response = _format_recurring_donation(contact=contact,
+            form=another_rdo_form, customer=customer)
+    expected_response = {
+            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
+            'npe03__Date_Established__c': today,
+            'Lead_Source__c': 'Stripe',
+            'npe03__Contact__c': '0031700000BHQzBAAX',
+            'npe03__Installment_Period__c': 'monthly',
+            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'npe03__Amount__c': '9.15',
             'Name': 'foo',
             'npe03__Installments__c': 0,
             'npe03__Open_Ended_Status__c': 'None',
@@ -293,7 +391,7 @@ def test__format_blast_rdo():
             'npe03__Installments__c': 0,
             'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Description__c': 'Monthly Blast Subscription',
-            'Stripe_Agreed_to_pay_fees__c': False,
+            'Stripe_Agreed_to_pay_fees__c': True,
             'Type__c': 'The Blast',
             'Billing_Email__c': 'dcraigmile+test6@texastribune.org',
             'Blast_Subscription_Email__c': 'subscriber@foo.bar',
