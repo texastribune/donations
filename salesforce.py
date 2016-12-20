@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 import json
 import locale
 from pprint import pprint   # TODO: remove
@@ -21,6 +22,8 @@ from check_response import check_response
 zone = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
+
+TWOPLACES = Decimal(10) ** -2       # same as Decimal('0.01')
 
 WARNINGS = dict()
 
@@ -75,6 +78,7 @@ def send_multiple_account_warning():
                 subject="Multiple accounts found for {}".format(email),
                 body=body
                 )
+
 
 def get_email(form):
     if 'subscriber_email' in form:
@@ -237,6 +241,10 @@ class SalesforceConnection(object):
         return created, response[0]
 
 
+def _format_amount(number):
+    return str(Decimal(number).quantize(TWOPLACES))
+
+
 def upsert_customer(customer=None, form=None):
     """
     Creates the user if it doesn't exist in Salesforce. If it does exist
@@ -278,9 +286,11 @@ def _format_opportunity(contact=None, form=None, customer=None):
     else:
         pay_fees = False
 
+    amount = _format_amount(form['amount'])
+
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
-            'Amount': '{}'.format(form['amount']),
+            'Amount': '{}'.format(amount),
             'CloseDate': today,
             'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': '{} {} ({})'.format(
@@ -345,7 +355,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
 
     # TODO: test this:
     if installments != 'None':
-        amount = int(amount) * int(installments)
+        amount = float(amount) * int(installments)
     else:
         installments = 0
 
@@ -356,7 +366,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
 
     recurring_donation = {
             'npe03__Contact__c': '{}'.format(contact['Id']),
-            'npe03__Amount__c': '{}'.format(amount),
+            'npe03__Amount__c': '{}'.format(_format_amount(amount)),
             'npe03__Date_Established__c': today,
             'npe03__Open_Ended_Status__c': '',
             'Name': '{} for {} {}'.format(
@@ -403,7 +413,7 @@ def add_customer_and_charge(form=None, customer=None):
     because there are a lot of API calls and there's no point in making the
     payer wait for them.
     """
-    amount = form['amount']
+    amount = _format_amount(form['amount'])
     name = '{} {}'.format(form['first_name'], form['last_name'])
     reason = form['reason']
     period = form['installment_period']
