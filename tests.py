@@ -438,7 +438,7 @@ def request_callback(request):
 @responses.activate
 def test__get_contact():
     url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
 
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
@@ -456,7 +456,7 @@ def test__get_contact():
 @responses.activate
 def test_create_contact():
     url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
     responses.add(responses.POST, url_re2,
@@ -477,7 +477,7 @@ def test_create_contact():
 @responses.activate
 def test_find_contact():
     url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
     responses.add(responses.POST, url_re2,
@@ -497,7 +497,7 @@ def test_get_or_create_contact_non_extant():
     # first testing for the case where the user doesn't exist and needs to be
     # created
 
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id":'
             '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
@@ -524,7 +524,7 @@ def test_get_or_create_contact_extant():
 
     # next we test with the user already extant:
     url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo"]}')
     responses.add(responses.POST, url_re2,
@@ -545,7 +545,7 @@ def test_get_or_create_contact_multiple():
 
     # next we test with the user already extant:
     url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(responses.GET, url_re,
             body='{"done": true, "records": ["foo", "bar"]}')
     responses.add(responses.POST, url_re2,
@@ -563,7 +563,7 @@ def test_get_or_create_contact_multiple():
 @responses.activate
 def test_upsert_non_extant():
 
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(
             responses.POST, url_re2,
             body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
@@ -619,7 +619,7 @@ def request_upsert_extant_callback(request):
 @responses.activate
 def test_upsert_extant():
 
-    url_re2 = re.compile(r'https://.*salesforce.com/services/oauth2/token')
+    url_re2 = re.compile(r'https://.*/services/oauth2/token')
     responses.add(
             responses.PATCH,
             'http://foo/services/data/v35.0/sobjects/Contact/0031700000BHQzBA'
