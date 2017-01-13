@@ -11,5 +11,3 @@ dependencies:
 test:
   override:
     - docker run -it --rm --workdir=/app --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test tests.py --cov=.
-  post:
-    - cp htmlcov/* $CIRCLE_ARTIFACTS
