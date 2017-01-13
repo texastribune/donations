@@ -38,7 +38,6 @@ interactive: build-dev
 
 test: build-dev
 	docker run \
-		--env-file=${DOCKER_ENV_FILE} \
 		--workdir=/app \
 		--rm \
 		--entrypoint=python3 \
