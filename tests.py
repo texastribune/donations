@@ -701,8 +701,9 @@ sf_response = [{'Amount': 84.0,
 @patch('batch.Log')
 @patch('batch.stripe.Charge.create')
 @patch('batch.SalesforceConnection.query')
-def test_process_failed_charges(sf_connection_query, stripe_charge, log,
-        requests_lib):
+@patch('salesforce.SalesforceConnection.__init__')
+def test_process_failed_charges(sf_connection, sf_connection_query,
+        stripe_charge, log, requests_lib):
     """
     It looks like a Stripe charge can fail without raising an
     exception. This tests that we'll log the error and not proceed.
@@ -710,6 +711,7 @@ def test_process_failed_charges(sf_connection_query, stripe_charge, log,
     """
     stripe_charge.return_value = ChargeReturnValue()
     sf_connection_query.return_value = sf_response
+    sf_connection.return_value = None
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
     log.it.assert_called_with("Charge failed. Check Stripe logs.")
@@ -719,8 +721,10 @@ def test_process_failed_charges(sf_connection_query, stripe_charge, log,
 @patch('batch.Log')
 @patch('batch.stripe.Charge.create')
 @patch('batch.SalesforceConnection.query')
-def test_process_success(sf_connection_query, stripe_charge, log,
-        requests_lib):
+@patch('batch.SalesforceConnection.patch')
+@patch('salesforce.SalesforceConnection.__init__')
+def test_process_success(sf_connection, sf_patch, sf_connection_query,
+        stripe_charge, log, requests_lib):
     """
     This tests the normal case where everything succeeds.
     """
@@ -729,6 +733,8 @@ def test_process_success(sf_connection_query, stripe_charge, log,
     charge_return_value.status = "succeeded"
     stripe_charge.return_value = charge_return_value
     sf_connection_query.return_value = sf_response
+    sf_patch.return_value = None
+    sf_connection.return_value = None
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
     log.it.assert_called_with("ok")
@@ -761,8 +767,10 @@ sf_response_2 = [
 @patch('batch.Log')
 @patch('batch.stripe.Charge.create')
 @patch('batch.SalesforceConnection.query')
-def test_fail_continues(sf_connection_query, stripe_charge, log,
-        requests_lib):
+@patch('batch.SalesforceConnection.patch')
+@patch('salesforce.SalesforceConnection.__init__')
+def test_fail_continues(sf_connection, sf_patch, sf_connection_query,
+        stripe_charge, log, requests_lib):
     """
     This shows that processing will continue even when an error is encountered.
     """
@@ -782,9 +790,9 @@ def test_fail_continues(sf_connection_query, stripe_charge, log,
     stripe_charge.side_effect = [Exception, charge_return_value]
     sf_connection_query.return_value = sf_response_2
     requests_lib.patch.return_value = RequestsResponse()
+    sf_connection.return_value = None
     process_charges('whatever', log)
     log.it.assert_called_with("ok")
-    print(log.it.call_args_list)
     assert len(log.it.call_args_list) == 5
     assert log.it.call_args_list == expected_call_list
 
@@ -793,7 +801,8 @@ def test_fail_continues(sf_connection_query, stripe_charge, log,
 @patch('batch.Log')
 @patch('batch.stripe.Charge.create')
 @patch('batch.SalesforceConnection.query')
-def test_card_error(sf_connection_query, stripe_charge, log,
+@patch('salesforce.SalesforceConnection.__init__')
+def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
         requests_lib):
     """
     This tests CardErrors from Stripe.
@@ -827,6 +836,7 @@ def test_card_error(sf_connection_query, stripe_charge, log,
     charge_return_value = ChargeReturnValue()
     charge_return_value.status = "succeeded"
     stripe_charge.side_effect = stripe_error
+    sf_connection.return_value = None
     sf_connection_query.return_value = sf_response
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
