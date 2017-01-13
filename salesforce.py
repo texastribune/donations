@@ -172,6 +172,9 @@ class SalesforceConnection(object):
         return response
 
     def patch(self, path=None, data=None):
+        """
+        Call the Saleforce API to make PATCH requests
+        """
 
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.patch(url, headers=self.headers,
