@@ -20,6 +20,7 @@ from salesforce import _format_blast_rdo
 from salesforce import SalesforceConnection
 from salesforce import upsert_customer
 from salesforce import _format_amount
+from salesforce import _format_contact
 
 
 # ("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
@@ -402,9 +403,8 @@ def test__format_blast_rdo():
 
 
 def test__format_contact():
-    sf = SalesforceConnection()
 
-    response = sf._format_contact(form=rdo_form)
+    response = _format_contact(form=rdo_form)
 
     expected_response = {'Description': 'The Texas Tribune Membership',
             'Email': 'dcraigmile+test6@texastribune.org',
