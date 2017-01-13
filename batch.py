@@ -112,14 +112,16 @@ def process_charges(query, log):
                 'StageName': 'Closed Won',
                 }
         path = item['attributes']['url']
-        url = '{}{}'.format(sf.instance_url, path)
-        resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
-        # TODO: check 'errors' and 'success' too
-        if resp.status_code == 204:
-            log.it('ok')
-        else:
-            log.it('problem')
-            raise Exception('problem')
+        sf.patch(path=path, data=update)
+        log.it('ok')
+#        url = '{}{}'.format(sf.instance_url, path)
+#        resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
+#        # TODO: check 'errors' and 'success' too
+#        if resp.status_code == 204:
+#            log.it('ok')
+#        else:
+#            log.it('problem')
+#            raise Exception('problem')
 
 
 class AlreadyExecuting(Exception):

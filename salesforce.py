@@ -89,6 +89,27 @@ def get_email(form):
         return form.get('stripeEmail')
 
 
+def _format_contact(form=None):
+    """
+    Format a contact for update/insert.
+    """
+
+    email = get_email(form)
+
+    stripe_id = form.get('Stripe_Customer_Id__c', None)
+
+    contact = {
+        'Email': email,
+        'FirstName': form['first_name'],
+        'LastName': form['last_name'],
+        'Description': form['description'],
+        'LeadSource': 'Stripe',
+        'Stripe_Customer_Id__c': stripe_id,
+        }
+    print(contact)
+    return contact
+
+
 class SalesforceConnection(object):
     """
     Represents the Salesforce API.
@@ -150,25 +171,13 @@ class SalesforceConnection(object):
         check_response(response=resp, expected_status=201)
         return response
 
-    def _format_contact(self, form=None):
-        """
-        Format a contact for update/insert.
-        """
+    def patch(self, path=None, data=None):
 
-        email = get_email(form)
-
-        stripe_id = form.get('Stripe_Customer_Id__c', None)
-
-        contact = {
-            'Email': email,
-            'FirstName': form['first_name'],
-            'LastName': form['last_name'],
-            'Description': form['description'],
-            'LeadSource': 'Stripe',
-            'Stripe_Customer_Id__c': stripe_id,
-            }
-        print(contact)
-        return contact
+        url = '{}{}'.format(self.instance_url, path)
+        resp = requests.patch(url, headers=self.headers,
+            data=json.dumps(data))
+        check_response(response=resp, expected_status=204)
+        return resp
 
     def _get_contact(self, contact_id=None):
         """
@@ -195,7 +204,7 @@ class SalesforceConnection(object):
         """
 
         print ("----Creating contact...")
-        contact = self._format_contact(form=form)
+        contact = _format_contact(form=form)
         path = '/services/data/v35.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
         contact_id = response['id']
