@@ -650,6 +650,16 @@ def test_upsert_extant():
     assert len(responses.calls) == 3
 
 
+def test_amount_to_charge_cents_just_fees_false():
+    foo = {}
+    foo['Amount'] = 10.50
+    foo['Stripe_Agreed_to_pay_fees__c'] = False
+
+    actual = amount_to_charge(foo)
+    expected = 1050
+    assert actual == expected
+
+
 def test_amount_to_charge_just_fees_false():
     foo = {}
     foo['Amount'] = 10
@@ -657,6 +667,16 @@ def test_amount_to_charge_just_fees_false():
 
     actual = amount_to_charge(foo)
     expected = 1000
+    assert actual == expected
+
+
+def test_amount_to_charge_cents_and_fees_true():
+    foo = {}
+    foo['Amount'] = 10.50
+    foo['Stripe_Agreed_to_pay_fees__c'] = True
+
+    actual = amount_to_charge(foo)
+    expected = 1110
     assert actual == expected
 
 
