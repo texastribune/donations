@@ -7,43 +7,35 @@ var display_level = function() {
 
   if (frequency == 'monthly') {
     // detemine level and update text based on monthly frequency
-    if (input_amount > 3 && input_amount <= 5) {
-      level_label.text('Enthusiast');
-    } else if (input_amount > 5 && input_amount <= 12) {
-      level_label.text('Activist');
-    } else if (input_amount > 12 && input_amount <= 21) {
-      level_label.text('Advocate');
-    } else if (input_amount > 21 && input_amount <= 42) {
-      level_label.text('Diplomat');
-    } else if (input_amount > 42 && input_amount <= 83) {
-      level_label.text('Benefactor');
-    } else if (input_amount > 83 && input_amount <= 208) {
-      level_label.text("Editor's Circle");
-    } else if (input_amount > 208 && input_amount <= 416) {
+    if (input_amount >= 3 && input_amount <= 8) {
+      level_label.text('Informed');
+    } else if (input_amount >= 9 && input_amount <= 41) {
+      level_label.text('Engaged');
+    } else if (input_amount >= 42 && input_amount <= 83) {
+      level_label.text('Involved');
+    } else if (input_amount >= 84 && input_amount <= 208) {
+      level_label.text('Editor\'s Circle');
+    } else if (input_amount >= 209 && input_amount <= 416) {
       level_label.text('Leadership Circle');
-    } else if (input_amount > 416) {
-      level_label.text("Chairman's Circle");
+    } else if (input_amount >= 417) {
+      level_label.text('Chairman\'s Circle');
     }
   } else {
     // detemine level and update text based on yearly frequency
     if (input_amount == 10) {
       level_label.text('Student');
-    } else if (input_amount > 35 && input_amount <= 59) {
-      level_label.text('Enthusiast');
-    } else if (input_amount > 59 && input_amount <= 149) {
-      level_label.text('Activist');
-    } else if (input_amount > 149 && input_amount <= 249) {
-      level_label.text('Advocate');
-    } else if (input_amount > 249 && input_amount <= 499) {
-      level_label.text('Diplomat');
-    } else if (input_amount > 499 && input_amount <= 999) {
-      level_label.text('Benefactor');
-    } else if (input_amount > 999 && input_amount <= 2499) {
-      level_label.text("Editor's Circle");
-    } else if (input_amount > 2499 && input_amount <= 4999) {
+    } else if (input_amount >= 35 && input_amount <= 100) {
+      level_label.text('Informed');
+    } else if (input_amount >= 101 && input_amount <= 500) {
+      level_label.text('Engaged');
+    } else if (input_amount >= 501 && input_amount <= 999) {
+      level_label.text('Involved');
+    } else if (input_amount >= 1000 && input_amount <= 2499) {
+      level_label.text('Editor\'s Circle');
+    } else if (input_amount >= 2500 && input_amount <= 4999) {
       level_label.text('Leadership Circle');
-    } else if (input_amount > 4999) {
-      level_label.text("Chairman's Circle");
+    } else if (input_amount >= 5000) {
+      level_label.text('Chairman\'s Circle');
     }
   }
 };
