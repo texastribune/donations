@@ -293,7 +293,7 @@ def test__format_blast_rdo():
             'npe03__Installments__c': 0,
             'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Description__c': 'Monthly Blast Subscription',
-            'Stripe_Agreed_to_pay_fees__c': False,
+            'Stripe_Agreed_to_pay_fees__c': True,
             'Type__c': 'The Blast',
             'Billing_Email__c': 'dcraigmile+test6@texastribune.org',
             'Blast_Subscription_Email__c': 'subscriber@foo.bar',
