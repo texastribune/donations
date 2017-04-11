@@ -24,11 +24,11 @@ var display_level = function() {
     // detemine level and update text based on yearly frequency
     if (input_amount == 10) {
       level_label.text('Student');
-    } else if (input_amount >= 35 && input_amount <= 100) {
+    } else if (input_amount >= 35 && input_amount <= 99) {
       level_label.text('Informed');
-    } else if (input_amount >= 101 && input_amount <= 500) {
+    } else if (input_amount >= 100 && input_amount <= 499) {
       level_label.text('Engaged');
-    } else if (input_amount >= 501 && input_amount <= 999) {
+    } else if (input_amount >= 500 && input_amount <= 999) {
       level_label.text('Involved');
     } else if (input_amount >= 1000 && input_amount <= 2499) {
       level_label.text('Editor\'s Circle');
