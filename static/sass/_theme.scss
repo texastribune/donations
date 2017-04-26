@@ -198,6 +198,23 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   float: none;
 }
 
+.payment-buttons {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: 1em;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin-top: 1em;
+    vertical-align: middle;
+
+    &:first-child {
+      margin-right: 1em;
+    }
+  }
+}
+
 // Stripe form submit button styles
 .button {
   color: $black;
@@ -205,8 +222,8 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   font-size: 1.2em;
   font-weight: bold;
   letter-spacing: 0.03em;
-  padding: 0.5em 1.8em;
   text-align: center;
+
   &:focus {
     outline: none;
   }
@@ -217,15 +234,30 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   border: 2px solid $yellow-tribune;
   color: #222222;
   font-weight: 700;
-  height: 30px;
+  height: 45px;
   line-height: 0;
-  padding: 1em;
   text-align: center;
+  width: 150px;
+
   &:hover {
     background-color: $white;
     color: #222222;
     cursor: pointer;
   }
+}
+
+.button-applePay {
+  -webkit-appearance: none;
+  background-color: black;
+  background-image: -webkit-named-image(apple-pay-logo-white);
+  background-origin: content-box;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 60%;
+  cursor: pointer;
+  border: none;
+  height: 45px;
+  width: 150px;
 }
 
 // Error styles
