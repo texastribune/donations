@@ -1,74 +1,131 @@
 <script>
-var stripe_donation = function() {
-  var first_name_exists = false;
-  var last_name_exists = false;
-  var amount_above_one_dollar = false;
+  var stripeDonation = function() {
+    var first_name_exists = false;
+    var last_name_exists = false;
+    var amount_above_one_dollar = false;
 
-  var check_required_inputs = function() {
-    first_name_exists = false;
-    last_name_exists = false;
-    amount_above_one_dollar = false;
-    if ($('#first_name').val()) {
-      first_name_exists = true;
-    }
-    if ($('#last_name').val()) {
-      last_name_exists = true;
-    }
-    if ($('#amount').val() >= 1) {
-      amount_above_one_dollar = true;
-    }
+    var check_required_inputs = function() {
+      first_name_exists = false;
+      last_name_exists = false;
+      amount_above_one_dollar = false;
+      if ($('#first_name').val()) {
+        first_name_exists = true;
+      }
+      if ($('#last_name').val()) {
+        last_name_exists = true;
+      }
+      if ($('#amount').val() >= 1) {
+        amount_above_one_dollar = true;
+      }
+    };
+
+    var donation_amount = $('#amount').val();
+    donation_amount *= 100;
+    var charge_description = $('#description').val();
+
+    var handler = StripeCheckout.configure({
+      key: '{{ key }}',
+      image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
+      locale: 'auto',
+      token: function(token) {
+        // Use the token to create the charge with a server-side script.
+        // Uses `token.id` to access the Stripe token ID
+        var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
+        $('form').append($emailInput);
+        var $input = $('<input type=hidden name=stripeToken />').val(token.id);
+        $('form').append($input).submit();
+      }
+    });
+
+    $('#customButton').on('click', function(e) {
+        check_required_inputs();
+
+        if (!first_name_exists || !last_name_exists) {
+          $('.form-error').show();
+          $('.error-form-message').text('Please check that you entered a first and last name, and then resubmit.');
+        }
+
+        if (!amount_above_one_dollar) {
+          $('.form-error').show();
+          $('.error-form-message').text('Please check that you entered a donation amount above $1, and then resubmit.');
+        }
+
+        if (first_name_exists & last_name_exists & amount_above_one_dollar) {
+          $('.form-error').hide();
+          $('.error-form-message').text('');
+          // If form is valid, open Checkout with further options
+          handler.open({
+            name: 'The Texas Tribune',
+            description: charge_description,
+            amount: donation_amount
+          });
+        }
+
+        e.preventDefault();
+    });
+
+    // Close Checkout on page navigation
+    $(window).on('popstate', function() {
+      handler.close();
+    });
   };
 
-  var donation_amount = $('.dollar').val();
-  donation_amount *= 100;
-  var charge_description = $('#description').val();
+  function setPublishableKey() {
+    Stripe.setPublishableKey('{{ key }}');
+  }
 
-  var handler = StripeCheckout.configure({
-    key: '{{ key }}',
-    image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
-    locale: 'auto',
-    token: function(token) {
-      // Use the token to create the charge with a server-side script.
-      // Uses `token.id` to access the Stripe token ID
-      var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
-      $('form').append($emailInput);
-      var $input = $('<input type=hidden name=stripeToken />').val(token.id);
-      $('form').append($input).submit();
-    }
-  });
-
-  $('#customButton').on('click', function(e) {
-      check_required_inputs();
-
-      if (!first_name_exists || !last_name_exists) {
-        $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a first and last name, and then resubmit.');
+  function beginApplePay() {
+    var paymentRequest = {
+      countryCode: 'US',
+      currencyCode: 'USD',
+      total: {
+        label: 'texastribune.org',
+        amount: $('#amount').val()
       }
+    };
 
-      if (!amount_above_one_dollar) {
-        $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a donation amount above $1, and then resubmit.');
-      }
+    var session = Stripe.applePay.buildSession(paymentRequest,
+      function(result, completion) {
+        var $tokenInput = $('<input />')
+          .attr('type', 'hidden')
+          .attr('name', 'stripeToken')
+          .val(result.token.id);
 
-      if (first_name_exists & last_name_exists & amount_above_one_dollar) {
-        $('.form-error').hide();
-        $('.error-form-message').text('');
-        // If form is valid, open Checkout with further options
-        handler.open({
-          name: 'The Texas Tribune',
-          description: charge_description,
-          amount: donation_amount
+        var $emailInput = $('<input />')
+          .attr('type', 'hidden')
+          .attr('name', 'stripeEmail')
+          .val(result.token.email);
+
+        var $form = $('form');
+
+        $form.append($tokenInput);
+        $form.append($emailInput);
+
+        setTimeout(function() {
+          $form.submit();
+        }, 1000);
+
+    }, function(error) {
+      window.location.href = '/error';
+    });
+
+    session.begin();
+  }
+
+  function checkForApplePay() {
+    Stripe.applePay.checkAvailability(function(available) {
+      if (available) {
+        var applePayButton = $('#applePayButton');
+
+        applePayButton.removeClass('hidden');
+        applePayButton.click(function() {
+          beginApplePay();
         });
       }
+    });
+  }
 
-      e.preventDefault();
-  });
-
-  // Close Checkout on page navigation
-  $(window).on('popstate', function() {
-    handler.close();
-  });
-};
-
-window.onload = stripe_donation();
+  stripeDonation();
+  setPublishableKey();
+  checkForApplePay();
 </script>
