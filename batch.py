@@ -48,17 +48,16 @@ def amount_to_charge(entry):
     """
     Determine the amount to charge. This depends on whether the payer agreed
     to pay fees or not. If they did then we add that to the amount charged.
-    Stripe charges 2.9% + $0.30.
+    Stripe charges 2.2% + $0.30.
 
     Stripe wants the amount to charge in cents. So we multiply by 100 and
     return that.
     """
     amount = float(entry['Amount'])
     if entry['Stripe_Agreed_to_pay_fees__c']:
-        fees = amount * .029 + .30
+        total = (amount + .30) / (1 - 0.022)
     else:
-        fees = 0
-    total = amount + fees
+        total = amount
     total_in_cents = total * 100
 
     return int(total_in_cents)
