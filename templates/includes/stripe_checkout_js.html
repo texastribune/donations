@@ -102,6 +102,7 @@
       var paymentRequest = {
         countryCode: 'US',
         currencyCode: 'USD',
+        requiredShippingContactFields: ['email'],
         total: {
           label: 'texastribune.org',
           amount: $amount.val()
@@ -110,7 +111,7 @@
 
       var session = Stripe.applePay.buildSession(paymentRequest,
         function(result, completion) {
-          appendFormInputs(result.token.id, result.token.email);
+          appendFormInputs(result.token.id, result.shippingContact.emailAddress);
           $form.submit();
       }, function(error) {
         window.location.href = '/error';
