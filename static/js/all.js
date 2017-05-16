@@ -19,6 +19,8 @@ var display_level = function() {
       level_label.text('Leadership Circle');
     } else if (input_amount >= 417) {
       level_label.text('Chairman\'s Circle');
+    } else {
+      level_label.text('');
     }
   } else {
     // detemine level and update text based on yearly frequency
@@ -36,6 +38,8 @@ var display_level = function() {
       level_label.text('Leadership Circle');
     } else if (input_amount >= 5000) {
       level_label.text('Chairman\'s Circle');
+    } else {
+      level_label.text('');
     }
   }
 };
