@@ -75,20 +75,18 @@ var listen_for_installments = function() {
   });
 };
 
-var pay_fee_amount = function() {
-  var input_amount = $('input[name="amount"]').val();
-  var pay_fee_element = $('#pay-fee-amount span');
+var payFeeAmount = function() {
+  var inputAmount = $('input[name="amount"]').val(),
+      payFeeElement = $('#pay-fee-amount span');
 
-  // Calculate the Stripe fee per charge
-  // https://stripe.com/us/pricing
-  input_amount *= 0.029;
-  input_amount += 0.30;
-
-  input_amount = Math.round(input_amount * 100) / 100;
+  // https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
+  inputAmount *= 0.022;
+  inputAmount += 0.30;
+  inputAmount = Math.ceil(inputAmount * 100) / 100;
 
   // Make sure to always get two decimal places
-  input_amount = input_amount.toFixed(2);
+  inputAmount = inputAmount.toFixed(2);
 
   // Add a dollar sign
-  pay_fee_element.text('$' + input_amount);
+  payFeeElement.text('$' + inputAmount);
 };
