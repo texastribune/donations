@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from forms import DonateForm, BlastForm, MemberForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -191,6 +191,14 @@ def charge():
         print('Did not validate form of customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
         return render_template('error.html', message=message)
+
+
+@app.route('/.well-known/apple-developer-merchantid-domain-association')
+def merchantid():
+    root_dir = os.path.dirname(os.getcwd())
+    print (root_dir)
+    return send_from_directory(os.path.join(root_dir, ''),
+            'apple-developer-merchantid-domain-association')
 
 
 if __name__ == '__main__':
