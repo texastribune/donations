@@ -196,7 +196,7 @@ def charge():
 @app.route('/.well-known/apple-developer-merchantid-domain-association')
 def merchantid():
     root_dir = os.path.dirname(os.getcwd())
-    return send_from_directory(os.path.join(root_dir, 'app')
+    return send_from_directory(os.path.join(root_dir, 'app'),
             'apple-developer-merchantid-domain-association')
 
 
