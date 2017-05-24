@@ -13,8 +13,6 @@ from salesforce import add_customer_and_charge
 from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
 
-import batch
-
 from pprint import pprint
 
 app = Flask(__name__)
