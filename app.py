@@ -148,7 +148,7 @@ def error():
 @app.errorhandler(404)
 def page_not_found(error):
     message = "The page you requested can't be found."
-    return render_template('error.html', message=message)
+    return render_template('error.html', message=message), 404
 
 
 @app.route('/charge', methods=['POST'])
