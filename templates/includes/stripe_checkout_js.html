@@ -1,74 +1,161 @@
 <script>
-var stripe_donation = function() {
-  var first_name_exists = false;
-  var last_name_exists = false;
-  var amount_above_one_dollar = false;
+  (function() {
 
-  var check_required_inputs = function() {
-    first_name_exists = false;
-    last_name_exists = false;
-    amount_above_one_dollar = false;
-    if ($('#first_name').val()) {
-      first_name_exists = true;
+    var $firstName = $('#first_name'),
+        $lastName = $('#last_name'),
+        $amount = $('#amount'),
+        $form = $('form'),
+        $formError = $('.form-error'),
+        $formErrorMessage = $('.error-form-message'),
+        $chargeDescription = $('#description'),
+        handler;
+
+    function bothNamesExist() {
+      return $firstName.val() !== '' && $lastName.val() !== '';
     }
-    if ($('#last_name').val()) {
-      last_name_exists = true;
+
+    function isValidDollarAmount() {
+      return !isNaN($amount.val()) && $amount.val() >= 1;
     }
-    if ($('#amount').val() >= 1) {
-      amount_above_one_dollar = true;
+
+    function formIsValid() {
+      return bothNamesExist() && isValidDollarAmount();
     }
-  };
 
-  var donation_amount = $('.dollar').val();
-  donation_amount *= 100;
-  var charge_description = $('#description').val();
+    function checkFormValidity() {
+      var errorMessageText = '',
+          isValid = true;
 
-  var handler = StripeCheckout.configure({
-    key: '{{ key }}',
-    image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
-    locale: 'auto',
-    token: function(token) {
-      // Use the token to create the charge with a server-side script.
-      // Uses `token.id` to access the Stripe token ID
-      var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
-      $('form').append($emailInput);
-      var $input = $('<input type=hidden name=stripeToken />').val(token.id);
-      $('form').append($input).submit();
-    }
-  });
-
-  $('#customButton').on('click', function(e) {
-      check_required_inputs();
-
-      if (!first_name_exists || !last_name_exists) {
-        $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a first and last name, and then resubmit.');
+      if (!bothNamesExist()) {
+        errorMessageText = 'Please check that you entered a donation amount above $1, and then resubmit.';
+        isValid = false;
+      }
+      if (!isValidDollarAmount()) {
+        errorMessageText = 'Please check that you entered a first and last name, and then resubmit.';
+        isValid = false;
       }
 
-      if (!amount_above_one_dollar) {
-        $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a donation amount above $1, and then resubmit.');
+      if (isValid) {
+        $formError.hide();
+      } else {
+        $formErrorMessage.text(errorMessageText);
+        $formError.show();
       }
+    }
 
-      if (first_name_exists & last_name_exists & amount_above_one_dollar) {
-        $('.form-error').hide();
-        $('.error-form-message').text('');
-        // If form is valid, open Checkout with further options
-        handler.open({
-          name: 'The Texas Tribune',
-          description: charge_description,
-          amount: donation_amount
-        });
-      }
+    function bindEvents() {
+      $('#customButton').click(function(e) {
+        e.preventDefault();
 
-      e.preventDefault();
-  });
+        checkFormValidity();
 
-  // Close Checkout on page navigation
-  $(window).on('popstate', function() {
-    handler.close();
-  });
-};
+        if (formIsValid()) {
+          $formError.hide();
+          $formErrorMessage.text('');
 
-window.onload = stripe_donation();
+          handler.open({
+            name: 'The Texas Tribune',
+            description: $chargeDescription.val(),
+            amount: $amount.val() * 100
+          });
+        }
+      });
+
+      $(window).on('popstate', function() {
+        handler.close();
+      });
+    }
+
+    function buildStripeHandler() {
+      handler = StripeCheckout.configure({
+        key: '{{ key }}',
+        image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
+        locale: 'auto',
+        token: function(token) {
+          appendFormInputs(token.id, token.email);
+          $form.submit();
+        },
+        closed: function() {
+          removeFormInputs();
+        }
+      });
+    }
+
+    function appendFormInputs(id, email) {
+      var $tokenInput = $('<input />')
+        .attr('type', 'hidden')
+        .attr('id', 'formToken')
+        .attr('name', 'stripeToken')
+        .val(id);
+
+      var $emailInput = $('<input />')
+        .attr('type', 'hidden')
+        .attr('id', 'formEmail')
+        .attr('name', 'stripeEmail')
+        .val(email);
+
+      $form.append($tokenInput);
+      $form.append($emailInput);
+    }
+
+    function removeFormInputs() {
+      $('#formEmail').remove();
+      $('#formToken').remove();
+    }
+
+    function setPublishableKey() {
+      Stripe.setPublishableKey('{{ key }}');
+    }
+
+    function beginApplePay() {
+      var paymentRequest = {
+        countryCode: 'US',
+        currencyCode: 'USD',
+        requiredShippingContactFields: ['email'],
+        total: {
+          label: 'texastribune.org',
+          amount: $amount.val()
+        }
+      };
+
+      var session = Stripe.applePay.buildSession(paymentRequest,
+        function(result, completion) {
+          appendFormInputs(result.token.id, result.shippingContact.emailAddress);
+          $form.submit();
+      }, function(error) {
+        window.location.href = '/error';
+      });
+
+      session.oncancel = function() {
+        removeFormInputs();
+      };
+
+      session.begin();
+    }
+
+    function checkForApplePay() {
+      Stripe.applePay.checkAvailability(function(available) {
+        if (available) {
+          var applePayButton = $('#applePayButton');
+
+          applePayButton.removeClass('hidden');
+          applePayButton.click(function(e) {
+            e.preventDefault();
+
+            checkFormValidity();
+
+            if (formIsValid()) {
+              beginApplePay();
+            }
+          });
+        }
+      });
+    }
+
+    buildStripeHandler();
+    bindEvents();
+    setPublishableKey();
+    checkForApplePay();
+
+  })();
 </script>

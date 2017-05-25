@@ -11,4 +11,5 @@ RUN pip3 install -r /app/requirements.txt
 
 EXPOSE 80
 COPY *.py /app/
+COPY apple-developer-merchantid-domain-association /app/
 ENTRYPOINT /bin/bash

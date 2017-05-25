@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_from_directory
 from forms import DonateForm, BlastForm, MemberForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -12,8 +12,6 @@ from config import FLASK_SECRET_KEY
 from salesforce import add_customer_and_charge
 from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
-
-import batch
 
 from pprint import pprint
 
@@ -150,7 +148,7 @@ def error():
 @app.errorhandler(404)
 def page_not_found(error):
     message = "The page you requested can't be found."
-    return render_template('error.html', message=message)
+    return render_template('error.html', message=message), 404
 
 
 @app.route('/charge', methods=['POST'])
@@ -191,6 +189,13 @@ def charge():
         print('Did not validate form of customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
         return render_template('error.html', message=message)
+
+
+@app.route('/.well-known/apple-developer-merchantid-domain-association')
+def merchantid():
+    root_dir = os.path.dirname(os.getcwd())
+    return send_from_directory(os.path.join(root_dir, 'app'),
+            'apple-developer-merchantid-domain-association')
 
 
 if __name__ == '__main__':
