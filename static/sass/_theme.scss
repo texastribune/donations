@@ -255,6 +255,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   background-repeat: no-repeat;
   background-size: 100% 60%;
   cursor: pointer;
+  display: none !important;
   border: none;
   height: 45px;
   width: 150px;
