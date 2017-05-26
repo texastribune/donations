@@ -121,8 +121,10 @@
       var session = Stripe.applePay.buildSession(paymentRequest,
         function(result, completion) {
           appendFormInputs(result.token.id, result.shippingContact.emailAddress);
+          completion(ApplePaySession.STATUS_SUCCESS);
           $form.submit();
       }, function(error) {
+        completion(ApplePaySession.STATUS_FAILURE);
         window.location.href = '/error';
       });
 
