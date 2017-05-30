@@ -124,7 +124,6 @@
           completion(ApplePaySession.STATUS_SUCCESS);
           $form.submit();
       }, function(error) {
-        completion(ApplePaySession.STATUS_FAILURE);
         window.location.href = '/error';
       });
 
