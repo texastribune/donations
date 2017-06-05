@@ -676,7 +676,7 @@ def test_amount_to_charge_cents_and_fees_true():
     foo['Stripe_Agreed_to_pay_fees__c'] = True
 
     actual = amount_to_charge(foo)
-    expected = 1110
+    expected = 1104
     assert actual == expected
 
 
@@ -685,10 +685,8 @@ def test_amount_to_charge_just_fees_true():
     foo['Amount'] = 10
     foo['Stripe_Agreed_to_pay_fees__c'] = True
 
-    # 10 * 2.9% + $0.30 = $0.59
-
     actual = amount_to_charge(foo)
-    expected = 1059
+    expected = 1053
     assert actual == expected
 
 
