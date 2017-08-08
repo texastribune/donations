@@ -10,14 +10,14 @@
   &__links {
     text-align: right;
     li {
-      border-right: 1px solid $white;
+      border-right: 1px solid $color-white-pure;
       display: inline-block;
       &:last-child {
         border: none;
       }
     }
     a {
-      color: $white;
+      color: $color-white-pure;
       border: 0;
       box-shadow: none;
       padding: $size-b/2;
@@ -32,9 +32,9 @@
   &__copyright {
     border: none;
     box-shadow: none;
-    color: $gray-medium;
+    color: $color-gray-medium;
     a {
-      color: $gray-medium;
+      color: $color-gray-medium;
     }
   }
 }

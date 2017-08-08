@@ -1,6 +1,6 @@
 html {
-  font-family: $font-sansserif;
-  font-size: 14px;
+  @extend .font-sansserif;
+  font-size: $size-s;
   min-height: 100%;
   position: relative;
 }
@@ -10,7 +10,7 @@ body {
 }
 
 .main {
-  padding: 0 2em 2em;
+  padding: 0 $size-xxl $size-xxl;
 }
 
 .outer-section {
@@ -20,7 +20,7 @@ body {
   }
   .row {
     @include row();
-    margin: 0 0 1em;
+    margin: 0 0 $size-b;
     @include media($tablet) {
       margin: 0;
     }
@@ -58,7 +58,7 @@ h2 {
   font-size: 1.5em;
   font-weight: bold;
   letter-spacing: 0.03em;
-  margin: 0 0 1em 0;
+  margin: 0 0 $size-b 0;
 }
 
 h3 {
@@ -93,14 +93,14 @@ a {
 
 p {
   margin: 0;
-  padding: 1em 0;
+  padding: $size-b 0;
 }
 
 label {
   color: #7f7f7f;
   cursor: pointer;
   float: left;
-  font-size: .9em;
+  font-size: $size-s;
   font-weight: bold;
   letter-spacing: 2px;
   min-width: 150px;
@@ -108,16 +108,16 @@ label {
 }
 
 input {
-  font-size: 1em;
-  margin: 0.5em 0.5em 1em 0;
+  font-size: $size-b;
+  margin: $size-b/2 $size-b/2 $size-b 0;
   padding: .5em .25em;
 }
 
 input[type='text'] {
   width: 100%;
   &.dollar {
-    margin: .1em 0;
-    padding: 0 .1em;
+    margin: $size-b 0;
+    padding: 0 $size-b;
     width: 100px;
   }
 }
@@ -130,20 +130,20 @@ input::-webkit-inner-spin-button, {
 }
 
 .label-info {
-  font-family: $font-sansserif;
-  font-size: 1.2em;
+  @extend .font-sansserif;
+  font-size: $size-l;
   font-style: normal;
   margin: 0;
-  padding: 0.2em 0 0.8em 0;
+  padding: $size-b/4 0 $size-s 0;
 }
 
 
 // Masthead with logo
 .masthead {
   @include outer-container;
-  border-bottom: 2px solid $yellow-tribune;
+  border-bottom: 2px solid $color-yellow-tribune;
   img {
-    padding: 1em 2em;
+    padding: $size-b $size-xxl;
     @include span-columns(4);
     @include media($mobile) {
       @include span-columns(8);
@@ -179,18 +179,18 @@ input::-webkit-inner-spin-button, {
 
 #pay-fee-amount {
   float: left;
-  padding: 0.2em 0 0 0;
+  padding: $size-b/4 0 0 0;
 }
 
 #pay-fee-info {
   clear: both;
   padding: 0;
-  margin-bottom: 1em;
+  margin-bottom: $size-b;
 }
 
 // styles for openended status radio buttons on yearly member form
 #openended_status {
-  margin: 0 0 1em;
+  margin: 0 0 $size-b;
   padding: 0;
 }
 
@@ -201,16 +201,16 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 .payment-buttons {
   display: inline-block;
   list-style: none;
-  margin-bottom: 1em;
+  margin-bottom: $size-b;
   padding: 0;
 
   li {
     display: inline-block;
-    margin-top: 1em;
+    margin-top: $size-b;
     vertical-align: middle;
 
     &:first-child {
-      margin-right: 1em;
+      margin-right: $size-b;
     }
   }
 }
@@ -218,8 +218,8 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 // Stripe form submit button styles
 .button {
   color: $color-black-pure;
-  font-family: $font-sansserif;
-  font-size: 1.2em;
+  @extend .font-sansserif;
+  font-size: $size-l;
   font-weight: bold;
   letter-spacing: 0.03em;
   text-align: center;
@@ -230,9 +230,9 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 }
 
 .button-flat {
-  background-color: $yellow-tribune;
-  border: 2px solid $yellow-tribune;
-  color: #222222;
+  background-color: $color-yellow-tribune;
+  border: 2px solid $color-yellow-tribune;
+  color: $color-black-off;
   font-weight: 700;
   height: 45px;
   line-height: 0;
@@ -240,7 +240,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   width: 150px;
 
   &:hover {
-    background-color: $white;
+    background-color: $color-white-pure;
     color: #222222;
     cursor: pointer;
   }
@@ -275,7 +275,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 .img-wrapper {
   text-align: left;
   img {
-    padding: 1em;
+    padding: $size-b;
     width: 450px;
     @media screen and (max-width: 480px) {
       width: 100%;
@@ -286,29 +286,29 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 
 // Social share buttons
 .social-wrapper {
-  margin-bottom: 1em;
+  margin-bottom: $size-b;
   a:hover {
     text-decoration: none;
   }
 }
 
 .social {
-  color: $white;
-  font-size: 1em;
-  margin: 0.5em 0.5em 0.5em 0;
+  color: $color-white-pure;
+  font-size: $size-b;
+  margin: $size-b/2 $size-b/2 $size-b/2 0;
   &:hover {
-    opacity: 0.9;
+    opacity: .9;
   }
 }
 
 .facebook {
-  background: #2b4185;
+  background: $color-facebook;
 }
 
 .twitter {
-  background: #4298ed;
+  background: $color-twitter;
 }
 
 .email {
-  background: $yellow-tribune;
+  background: $color-yellow-tribune;
 }
