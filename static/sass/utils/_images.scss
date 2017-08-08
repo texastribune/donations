@@ -1,0 +1,86 @@
+// <figure>
+.image_default {
+  margin: 0;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}
+
+.image_stretch {
+  width: 100%;
+
+  img {
+    display: block;
+    flex-shrink:0;
+    min-height:100%;
+    min-width:100%;
+  }
+}
+
+// <figcaption>
+.image_default--caption {
+  @extend .font-sansserif;
+  @extend %link--blue;
+  background-color: $color-white-off;
+  color: $color-gray-dark;
+  font-size: $size-xs;
+  margin-top: -5px;
+  padding: $size-xs;
+
+  p {
+    @extend .font-sansserif;
+    font-size: $size-xs;
+    margin: 0;
+    i {
+      color: lighten($color-gray-medium, 20%);
+    }
+  }
+}
+
+.photo_caption--small {
+  @extend .font-sansserif;
+  color: $color-gray-dark;
+  font-size: $size-xxs;
+
+  cite {
+    display: block;
+    font-size: $size-xxs;
+    margin-bottom: $size-b/4;
+
+    @include mq($from: bp-m) {
+      margin-top: $size-b/4;
+    }
+  }
+
+  cite p {
+    display: none;
+  }
+
+  i {
+    color: lighten($color-gray-medium, 20%);
+  }
+}
+
+.js-lazy-image {
+  .no-js & {
+    display: none;
+  }
+
+  &,
+  &--loading {
+    opacity: .1;
+
+    @supports(filter: blur(50px)) {
+      filter: blur(50px);
+      opacity: .5;
+    }
+  }
+
+  &--loaded {
+    filter: none;
+    opacity: 1;
+    transition: opacity .5s;
+  }
+}

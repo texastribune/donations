@@ -1,18 +1,22 @@
 .blast_header {
-  background-color: $black;
-  margin-bottom: 1em;
-  padding: 0 2em;
+  background-color: $color-black-pure;
+  margin-bottom: $size-b;
+  padding: 0 $size-xxl;
 }
 
 .blast_logo {
-  margin: 1em 0;
+  margin: $size-b 0;
   &--sub {
     float: right;
-    margin: 1em 2.5em .5em .5em;
+    margin: $size-b $size-giant $size-b/2 $size-b/2;
     width: 50%;
-    @include media($mobile) {
+    @include mq($until: bp-s) {
       width: 75%;
     }
+  }
+
+  img {
+    max-width: 100%;
   }
 }
 
@@ -28,15 +32,15 @@
 
   .form-subtext {
     font-size: .85em;
-    margin-bottom: 1em;
-    padding: .25em 0 0;
+    margin-bottom: $size-b;
+    padding: $size-b/4 0 0;
   }
 
   #pay_fees {
     margin: 0px;
     width: 20px;
     height: 30px;
-    @include media($tablet) {
+    @include mq($until: bp-l) {
       margin-left: 0;
     }
   }
@@ -49,6 +53,6 @@
   #pay-fee-info {
     clear: both;
     padding: 0;
-    margin-bottom: 1em;
+    margin-bottom: $size-b;
   }
 }
