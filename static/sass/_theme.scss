@@ -54,11 +54,11 @@ ul {
 }
 
 // Typography
-h2 {
-  font-size: 1.5em;
+h1 {
+  font-size: $size-xl;
   font-weight: bold;
   letter-spacing: 0.03em;
-  margin: 0 0 $size-b 0;
+  margin-top: $size-b;
 }
 
 h3 {
@@ -140,58 +140,55 @@ input::-webkit-inner-spin-button, {
 
 // Masthead with logo
 .masthead {
-  @include outer-container;
   border-bottom: 2px solid $color-yellow-tribune;
   img {
     padding: $size-b $size-xxl;
-    @include span-columns(4);
-    @include media($mobile) {
-      @include span-columns(8);
-    }
+    max-width: 100%;
   }
 }
 
 // Form styles
-.form-outer-section {
-  &:last-of-type {
-    border-bottom: none;
-  }
-}
 
 .dollar {
+  @extend .font-sansserif;
   color: $color-black-pure;
-  font-family: $league-gothic;
-  font-size: 3.5em;
+  font-size: $size-giant;
   margin: 0;
   &.uneditable {
     border: none;
   }
 }
 
+.form__box {
+  background-color: $color-white-off;
+  padding: $size-b;
+}
+
 #pay_fees {
   clear: both;
   float: left;
-  margin-left: -20px;
-  @include media($tablet) {
-    margin-left: 0;
-  }
+  margin-left: $size-b/2;
 }
 
 #pay-fee-amount {
   float: left;
+  font-size: $size-b;
   padding: $size-b/4 0 0 0;
 }
 
 #pay-fee-info {
   clear: both;
+  font-size: $size-s;
   padding: 0;
   margin-bottom: $size-b;
 }
 
 // styles for openended status radio buttons on yearly member form
 #openended_status {
-  margin: 0 0 $size-b;
   padding: 0;
+  li {
+    padding-left: $size-b/2;
+  }
 }
 
 label[for='openended_status-0'], label[for='openended_status-1'] {
@@ -237,7 +234,7 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   height: 45px;
   line-height: 0;
   text-align: center;
-  width: 150px;
+  width: 250px;
 
   &:hover {
     background-color: $color-white-pure;

@@ -8,28 +8,30 @@
 
 {% block content %}
   {{ super() }}
-  <div class="main">
-    <div class="outer-section">
-      <p class="nine">Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="https://support.texastribune.org/levels.html">our membership page</a>.</p>
+  <div class="main grid_container--xl">
+    <div class="grid_row grid_wrap--m">
+      <p class="col_12 col_9--l">Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="https://support.texastribune.org/levels.html">our membership page</a>.</p>
     </div>
     <form id="form" action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="outer-section form-outer-section">
+      <div class="form-outer-section">
         <h2>Donation Info</h2>
-        <div class="form-section three">
-          <label>Amount</label><br>
-            <span class="dollar">$</span>
-              {{ form.amount(value=amount, class="dollar") }}
-        </div>
-        <div class="form-section three">
-          {{ form.pay_fees.label }}
-            {{ form.pay_fees(checked=False) }}
-          <p id="pay-fee-amount" class="label-info"><span></span></p>
-          <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
-        </div>
-        <div class="form-section three">
-          <label>Duration</label><br>
-            <p class="label-info">One-Time Donation</p>
+        <div class="grid_row grid_wrap--m">
+          <div class="form-section col">
+            <label>Amount</label><br>
+              <span class="dollar">$</span>
+                {{ form.amount(value=amount, class="dollar") }}
+          </div>
+          <div class="form-section col">
+            {{ form.pay_fees.label }}
+              {{ form.pay_fees(checked=False) }}
+            <p id="pay-fee-amount" class="label-info"><span></span></p>
+            <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
+          </div>
+          <div class="form-section col">
+            <label>Duration</label><br>
+              <p class="label-info">One-Time Donation</p>
+          </div>
         </div>
       </div>
       {% include 'includes/form_inner.html' %}

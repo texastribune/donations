@@ -8,34 +8,36 @@
 
 {% block content %}
   {{ super() }}
-  <div class="main">
-    <div class="outer-section">
-      <p class="nine">Thank you for becoming a Circle member of The Texas Tribune!</p>
+  <div class="main grid_container--xl">
+    <div class="grid_row grid_wrap--m">
+      <p class="col_12 col_9--l">Thank you for becoming a Circle member of The Texas Tribune!</p>
     </div>
     <form id="form" action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="outer-section form-outer-section">
+      <div class="form-outer-section">
         <h2>Circle Membership Info</h2>
-        <div class="form-section three">
-          <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
-            <span class="dollar">$</span>
-              {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
-        </div>
-        <div class="form-section three">
-          {{ form.pay_fees.label }}
-            {{ form.pay_fees(checked=False) }}
-          <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-          <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
-        </div>
-        <div class="form-section three">
-          <label>Length</label><br>
-            {% if installments == '3' %}
-              <p class="label-info">3 years</p>
-            {% else %}
-              <p class="label-info">36 months</p>
-            {% endif %}
-          <label>Level</label><br>
-          <p class="level label-info"></p>
+        <div class="grid_row grid_wrap--m">
+          <div class="form-section col">
+            <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
+              <span class="dollar">$</span>
+                {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
+          </div>
+          <div class="form-section col">
+            {{ form.pay_fees.label }}
+              {{ form.pay_fees(checked=False) }}
+            <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
+            <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
+          </div>
+          <div class="form-section col">
+            <label>Length</label><br>
+              {% if installments == '3' %}
+                <p class="label-info">3 years</p>
+              {% else %}
+                <p class="label-info">36 months</p>
+              {% endif %}
+            <label>Level</label><br>
+            <p class="level label-info"></p>
+          </div>
         </div>
       </div>
       {% include 'includes/form_inner.html' %}

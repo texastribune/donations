@@ -197,6 +197,10 @@ $column-slug: col !default;
     }
   }
 
+  .grid_wrap--reverse {
+    flex-wrap: wrap-reverse;
+  }
+
   .grid_row--until_#{$size} {
     @include mq($until: $bp) {
       display: flex;
