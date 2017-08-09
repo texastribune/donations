@@ -1,11 +1,12 @@
 .dropdown {
-  font-family: $helvetica;
+  @extend .font-sansserif;
   position: relative;
 
   select {
   	-moz-appearance: none;
   	-webkit-appearance: none;
   	appearance: none;
+    background-color: $color-white-pure;
   	border-radius: 0;
   	cursor: pointer;
   	display: inline-block;
@@ -33,7 +34,7 @@
   	pointer-events: none;
   	position: absolute;
   	right: 10px;
-  	top: 36px;
+  	top: 42px;
   	transform: rotate(90deg);
   }
 }

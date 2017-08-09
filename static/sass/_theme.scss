@@ -13,40 +13,6 @@ body {
   padding: 0 $size-xxl $size-xxl;
 }
 
-.outer-section {
-  @include outer-container;
-  &.narrow {
-    max-width: 800px;
-  }
-  .row {
-    @include row();
-    margin: 0 0 $size-b;
-    @include media($tablet) {
-      margin: 0;
-    }
-  }
-  .nine {
-    @include span-columns(9);
-  }
-  .eight {
-    @include span-columns(8);
-  }
-  .six {
-    @include span-columns(6);
-  }
-  .three {
-    @include span-columns(3);
-  }
-  .four {
-    @include span-columns(4);
-  }
-  .three, .four, .six, .nine {
-    @include media($tablet) {
-      @include span-columns(12);
-    }
-  }
-}
-
 ul {
   li {
     list-style-type: none;
