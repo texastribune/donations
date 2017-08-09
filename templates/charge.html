@@ -10,13 +10,16 @@
 
 {% block content %}
   {{ super() }}
-  <div class="main grid_container--xl">
-    <div class="img-wrapper">
-      <img src="https://static.texastribune.org/media/marketing/TT-support_thankyou.png" />
+  <div class="main grid_container--m">
+    <div class="grid_row">
+      <figure class="image_default">
+        <img src="https://static.texastribune.org/media/marketing/TT-support_thankyou.png" />
+      </figure>
     </div>
     <div class="grid_row grid_wrap--m">
-      <div class="col col_6--l">
-        <p>Thanks for supporting The Texas Tribune! Members like you help make our journalism free for all. You can help ensure the rest of Texas knows about our mission to inform and engage the public in politics and policy news by sharing your membership story now. What's your Texas Tribune story?</p>
+      <div class="col">
+        <p>Members like you help make our journalism free for all. You can help ensure the rest of Texas knows about our mission to inform and engage the public in politics and policy news by sharing your membership story now.</p>
+        <p>What's your Texas Tribune story?</p>
       </div>
     </div>
     <div class="grid_row grid_wrap--m social-wrapper">
@@ -35,13 +38,12 @@
         </a>
       </div>
     </div>
-    <div class="grid_row grid_wrap--m social-wrapper">
-      <div class="col_6">
-        <a href="mailto:membership@texastribune.org?Subject=Why%20I%20support%20The%20Texas%20Tribune&amp;Body=Dear%20Texas%20Tribune%20team%2C%20%0A%0AThis%20is%20why%20I%20just%20made%20a%20donation%20to%20your%20newsroom%3A" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-email">
+    <div class="social-wrapper">
+      <a href="mailto:membership@texastribune.org?Subject=Why%20I%20support%20The%20Texas%20Tribune&amp;Body=Dear%20Texas%20Tribune%20team%2C%20%0A%0AThis%20is%20why%20I%20just%20made%20a%20donation%20to%20your%20newsroom%3A" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-email">
         <div class="button social email">
           <i class="fa fa-envelope"></i>Tell us why you support the Tribune.
         </div>
-      </div>
+      </a>
     </div>
   </div>
 {% endblock %}

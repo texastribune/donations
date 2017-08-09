@@ -119,6 +119,13 @@ input[type='text'] {
     padding: 0 $size-b;
     width: 100px;
   }
+
+  &.uneditable {
+    background-color: $color-white-off;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
 }
 
 // For hiding number input spinner on webkit browsers
@@ -154,9 +161,6 @@ input::-webkit-inner-spin-button, {
   font-size: $size-giant;
   font-weight: 700;
   margin: 0;
-  &.uneditable {
-    border: none;
-  }
 }
 
 .form__box {
@@ -269,20 +273,6 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   color: red;
 }
 
-
-// 404 and thank-you page images
-.img-wrapper {
-  text-align: left;
-  img {
-    padding: $size-b;
-    width: 450px;
-    @media screen and (max-width: 480px) {
-      width: 100%;
-    }
-  }
-}
-
-
 // Social share buttons
 .social-wrapper {
   margin-bottom: $size-b;
@@ -295,6 +285,8 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   color: $color-white-pure;
   font-size: $size-b;
   margin: $size-b/2 $size-b/2 $size-b/2 0;
+  padding: $size-b 0;
+
   &:hover {
     opacity: .9;
   }

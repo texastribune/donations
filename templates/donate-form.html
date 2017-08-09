@@ -8,36 +8,38 @@
 
 {% block content %}
   {{ super() }}
+
   <div class="main grid_container--xl">
-    <div class="grid_row grid_wrap--m">
-      <p class="col_12 col_9--l">Thank you for donating to The Texas Tribune! If you'd prefer to become a member instead, you can select that option on <a href="https://support.texastribune.org/levels.html">our membership page</a>.</p>
-    </div>
-    <form id="form" action="/charge" method="post">
+    <form action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="form-outer-section">
-        <h2>Donation Info</h2>
-        <div class="grid_row grid_wrap--m">
-          <div class="form-section col">
-            <label>Amount</label><br>
-              <span class="dollar">$</span>
-                {{ form.amount(value=amount, class="dollar") }}
+      <header class="grid_separator--l">
+        <h1>Confirm your donation</h1>
+        <p>Thank you for supporting The Texas Tribune! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you. If you'd prefer to become a member, you can set up a recurring <a href="/memberform?installmentPeriod=monthly&amount={{ amount }}">monthly</a> or <a href="/memberform?installmentPeriod=yearly&amount={{ amount }}">annual</a> donation.</p>
+      </header>
+      <div class="grid_row grid_wrap--l grid_wrap--reverse">
+        <div class="col_6">
+          {% include 'includes/form_inner.html' %}
+          {{ form.description(value='The Texas Tribune Membership') }}
+        </div>
+        <div class="col_1">&nbsp;</div>
+        <div class="col_5 form__box grid_separator">
+          <div class="grid_row grid_wrap--m grid_separator--l">
+            <div class="col">
+              <label>Amount</label><br>
+                <span class="dollar">$</span>
+                  {{ form.amount(value=amount, class="dollar") }}
+            </div>
           </div>
-          <div class="form-section col">
-            {{ form.pay_fees.label }}
-              {{ form.pay_fees(checked=False) }}
-            <p id="pay-fee-amount" class="label-info"><span></span></p>
-            <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
+          <div class="grid_row grid_wrap--m">
+            <div class="col">
+              {{ form.pay_fees.label }}
+                {{ form.pay_fees(checked=False) }}
+              <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
+            </div>
           </div>
-          <div class="form-section col">
-            <label>Duration</label><br>
-              <p class="label-info">One-Time Donation</p>
-          </div>
+          <p class="subtext grid_separator">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
         </div>
       </div>
-      {% include 'includes/form_inner.html' %}
-      {{ form.openended_status(value=openended_status) }}
-      {{ form.installments(value=installments) }}
-      {{ form.description(value='The Texas Tribune Donation') }}
     </form>
   </div>
   {% include 'includes/stripe_checkout_js.html' %}
