@@ -12,14 +12,15 @@
     <form action="/charge" method="post">
       {{ form.csrf_token }}
       <header class="grid_separator--l">
-        <h1>Thank you for supporting The Texas Tribune by becoming a member!</h1>
-        <p>As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.<br /><a href="https://www.texastribune.org/about/">Learn more</a> about the Tribune's mission.</p>
+        <h1>Confirm your donation</h1>
+        <p>Thank you for supporting The Texas Tribune by becoming a member! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.</p>
       </header>
       <div class="grid_row grid_wrap--l grid_wrap--reverse">
-        <div class="col_7">
+        <div class="col_6">
           {% include 'includes/form_inner.html' %}
           {{ form.description(value='The Texas Tribune Membership') }}
         </div>
+        <div class="col_1">&nbsp;</div>
         <div class="col_5 form__box grid_separator">
           <div class="grid_separator--l">
             <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>

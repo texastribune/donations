@@ -1,10 +1,9 @@
 .footer {
   background: $color-black-pure;
   bottom: 0;
-  height: 60px;
   left: 0;
   max-width: none;
-  padding: $size-b/2 0;
+  padding: $size-s;
   position: absolute;
   width: 100%;
   &__links {
@@ -25,6 +24,8 @@
       &:hover,
       &:active {
         border: 0;
+        color: $color-yellow-tribune;
+        cursor: pointer;
         text-decoration: none;
       }
     }

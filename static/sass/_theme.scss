@@ -55,9 +55,8 @@ ul {
 
 // Typography
 h1 {
-  font-size: $size-xl;
+  font-size: $size-xxl;
   font-weight: bold;
-  letter-spacing: 0.03em;
   margin-top: $size-b;
 }
 
@@ -131,7 +130,7 @@ input::-webkit-inner-spin-button, {
 
 .label-info {
   @extend .font-sansserif;
-  font-size: $size-l;
+  font-size: $size-b;
   font-style: normal;
   margin: 0;
   padding: $size-b/4 0 $size-s 0;
@@ -142,8 +141,8 @@ input::-webkit-inner-spin-button, {
 .masthead {
   border-bottom: 2px solid $color-yellow-tribune;
   img {
-    padding: $size-b $size-xxl;
-    max-width: 100%;
+    padding: $size-s $size-xxl;
+    max-width: 360px;
   }
 }
 
@@ -153,6 +152,7 @@ input::-webkit-inner-spin-button, {
   @extend .font-sansserif;
   color: $color-black-pure;
   font-size: $size-giant;
+  font-weight: 700;
   margin: 0;
   &.uneditable {
     border: none;
@@ -161,13 +161,12 @@ input::-webkit-inner-spin-button, {
 
 .form__box {
   background-color: $color-white-off;
-  padding: $size-b;
+  padding: $size-l;
 }
 
 #pay_fees {
   clear: both;
   float: left;
-  margin-left: $size-b/2;
 }
 
 #pay-fee-amount {
@@ -185,9 +184,12 @@ input::-webkit-inner-spin-button, {
 
 // styles for openended status radio buttons on yearly member form
 #openended_status {
-  padding: 0;
+  padding: $size-b 0;
   li {
     padding-left: $size-b/2;
+  }
+  input {
+    margin: 0 $size-b/4 $size-b 0;
   }
 }
 
