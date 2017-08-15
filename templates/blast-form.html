@@ -68,12 +68,13 @@
     {% include 'includes/blast_stripe_checkout_js.html' %}
   </div>
   <script>
-    window.onload = pay_fee_amount();
-
-    window.onload = listen_for_fee_check();
+    window.onload = function() {
+      payFeeAmount();
+      listen_for_fee_check();
+    };
 
     $('select[name="amount"]').change(function() {
-      pay_fee_amount();
+      payFeeAmount();
     });
   </script>
 {% endblock %}
