@@ -1,0 +1,272 @@
+$grid-columns: 12;
+$grid-gutter: $size-b;
+$grid-gutter-px: 17.6;
+$grid-size-list: (
+  (s, bp-s, $bp-s),
+  (m, bp-m, $bp-m),
+  (l, bp-l, $bp-l),
+  (xl, bp-xl,$bp-xl),
+  (xxl, bp-xxl, $bp-xxl)
+);
+$column-slug: col !default;
+
+@function get-col-percent($column-num) {
+  @return percentage($column-num / $grid-columns);
+}
+
+@function omega($column-num) {
+  @return $grid-gutter-px - ($grid-gutter-px / ($grid-columns/$column-num)) + 'px';
+}
+
+%flex-grid {
+  display: flex;
+
+  > :last-child {
+    margin-right: 0;
+  }
+}
+
+%flex-col {
+  flex: 0 1 100%;
+  margin-right: $grid-gutter;
+  max-width: 100%;
+}
+
+.col {
+  @extend %flex-col;
+
+  // .col_inline
+  // allow flex items to auto-size rather than fill available width
+  &_inline {
+    flex: 0 1 auto;
+    margin-right: $grid-gutter;
+  }
+}
+
+// .col_{$i}
+@for $i from 1 through $grid-columns {
+  // Create extension for column sizes 1-12
+  // It would be ideal to put the width as the third value in the flex property
+  // but IE 10 and 11 don't like that if it involves calc():
+  // https://github.com/philipwalton/flexbugs#8-flex-basis-doesnt-support-calc
+  %#{$column-slug}_#{$i} {
+    flex: 0 1 auto;
+    margin-right: $grid-gutter;
+    overflow: hidden;
+    width: calc(#{get-col-percent($i)} - #{omega($i)});
+  }
+
+  // Create column class that resets to full width at bp-l
+  .#{$column-slug}_#{$i} {
+    @extend %#{$column-slug}_#{$i};
+  }
+}
+
+// Custom colum sizing for layout_main_siderail.html
+// includes left padding on large screens
+// width set to include .col_siderail
+.col_main {
+  flex: 0 0 100%;
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 100%;
+
+  @include mq($from: bp-l) {
+    margin-right: $size-xl;
+    max-width: calc(100% - 338px);
+  }
+}
+
+.col_siderail {
+  flex: 0 0 100%;
+  margin-left: 0;
+  margin-right: 0;
+  max-width: 100%;
+
+  @include mq($from: bp-l) {
+    flex: 0 0 42%;
+    max-width: 310px;
+  }
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+
+  &_container {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $bp-default;
+  }
+
+  // .grid_row
+  // force flex items into a row
+  &_row {
+    @extend %flex-grid;
+    flex-wrap: nowrap;
+  }
+
+  // .grid_padded -- DEFAULT
+  // adds left/right padding on small screens
+  &_padded {
+    padding: 0 $size-xs;
+
+    @include mq($from: bp-m, $until: bp-xl) {
+      padding: 0 $size-b;
+    }
+
+    @include mq($from: bp-xl) {
+      padding: 0
+    }
+  }
+
+  // Custom setting for story page lead art
+  // adds left/right padding on middle-size screens
+  &_padded--temp {
+    padding: 0;
+
+    @include mq($from: bp-l, $until: bp-xl) {
+      padding: 0 $size-b;
+    }
+  }
+
+  // .grid_separator
+  // adds margin-bottom to separate elements
+  &_separator {
+    margin-bottom: $grid-gutter;
+  }
+
+  &_separator--xs {
+    margin-bottom: $grid-gutter/4;
+  }
+
+  &_separator--s {
+    margin-bottom: $grid-gutter/2;
+  }
+
+  &_separator--l {
+    margin-bottom: $size-xl;
+  }
+
+  &_order {
+    &--primary {
+      order: -1;
+    }
+
+    &--secondary {
+      order: 1;
+    }
+  }
+}
+
+@each $size, $bp, $width in $grid-size-list {
+  // Set column size from a breakpoint
+  // .small--6 sets 6/12 columns from bp-s onward
+  @for $i from 1 through $grid-columns {
+    .col_#{$i}--#{$size} {
+      @include mq($from: $bp) {
+        flex: 0 1 auto;
+        margin-right: $grid-gutter;
+        overflow: hidden;
+        width: calc(#{get-col-percent($i)} - #{omega($i)});
+      }
+    }
+  }
+
+  // Set max container width based on breakpoint sizes
+  .grid_container--#{$size} {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: $width;
+  }
+
+  // .grid_wrap
+  // allow items in a grid_row to wrap until a breakpoint
+  .grid_wrap--#{$size} {
+    @include mq($until: $bp) {
+      flex-wrap: wrap;
+
+      @for $i from 1 through $grid-columns {
+        > .#{$column-slug}_#{$i},
+        > .col {
+          flex: 0 1 100%;
+          margin-right: 0;
+          max-width: 100%;
+        }
+      }
+    }
+  }
+
+  .grid_wrap--reverse {
+    flex-wrap: wrap-reverse;
+  }
+
+  .grid_row--until_#{$size} {
+    @include mq($until: $bp) {
+      display: flex;
+      flex-wrap: nowrap;
+
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .grid_row--from_#{$size} {
+    @include mq($from: $bp) {
+      display: flex;
+      flex-wrap: nowrap;
+
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  // Set left/right padded until a breakpoint
+  // grid_padded--m = 1.1rem padding until bp-m
+  .grid_padded--#{$size} {
+    @include mq($until: $bp-xs) {
+      padding: 0 $size-xs;
+    }
+
+    @include mq($until: $bp) {
+      padding: 0 $size-b;
+    }
+  }
+
+  // Hide element screens > $bp
+  // i.e. display until $bp
+  .hide_from {
+    &--#{$size} {
+      @include mq($from: $bp) {
+        display: none !important;
+      }
+    }
+  }
+
+  // Hide element screens < $bp
+  // i.e. display from $bp
+  .hide_until {
+    &--#{$size} {
+      @include mq($until: $bp) {
+        display: none !important;
+      }
+    }
+  }
+
+  &--left_until--#{$size} {
+    @include mq($from: $bp) {
+      order: -2;
+    }
+  }
+}
+
+.col_omega {
+  margin-right: 0;
+}
+
+// General body class to prevent horizontal scrolling
+.tt_body {
+  overflow-x: hidden;
+}

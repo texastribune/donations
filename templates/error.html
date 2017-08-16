@@ -8,9 +8,11 @@
 
 {% block content %}
 {{ super() }}
-<div class="main">
-  <div class="img-wrapper">
-    <img src="https://static.texastribune.org/media/marketing/tt-404_sorry.png" />
+<div class="main grid_container--m">
+  <div class="grid_row">
+    <figure class="image_default">
+      <img src="https://static.texastribune.org/media/marketing/tt-404_sorry.png" />
+    </figure>
   </div>
   <h2>{{ message }}</h2>
   <p>If you're trying to become a member or make a donation, you can go to <a href="//support.texastribune.org/">our membership and donation page</a> for more info on how to support us or contact us at <a href="mailto:membership@texastribune.org">membership@texastribune.org</a>.</p>

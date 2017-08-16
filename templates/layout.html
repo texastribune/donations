@@ -84,29 +84,31 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
   {% block content %}
   <section class="masthead">
-    <a href="http://www.texastribune.org/">
-      <img src="{{ url_for('static', filename='img/logo.png') }}">
-    </a>
+    <div class="grid_container--xl grid_row">
+      <a href="http://www.texastribune.org/" class="unlink">
+        <img src="{{ url_for('static', filename='img/logo.png') }}">
+      </a>
+    </div>
   </section>
 
   {% endblock %}
-  <footer class="footer">
-  <nav class="left-nav">
-    <ul>
-      <li class="copyright">© 2016 <a href="//www.texastribune.org/">The Texas Tribune</a></li>
-    </ul>
-  </nav>
-  <nav class="right-nav">
-    <ul>
-      <li><a href="https://www.texastribune.org/about/">About Us</a></li>
-      <li><a href="https://www.texastribune.org/contact/">Contact Us</a></li>
-      <li><a href="https://www.texastribune.org/support-us/donors-and-members/">Who Funds Us?</a></li>
-      <li><a href="https://www.texastribune.org/terms-of-service/">Terms of Service</a></li>
-      <li><a href="https://www.texastribune.org/ethics/">Code of Ethics</a></li>
-      <li><a href="https://www.texastribune.org/privacy/">Privacy Policy</a></li>
-    </ul>
-  </nav>
-</footer>
+  <footer class="footer grid_container--l grid_padding grid_row grid_wrap--l">
+    <nav class="col_3 grid_separator--s">
+      <ul>
+        <li class="footer__copyright">© 2016 <a href="//www.texastribune.org/" class="unlink">The Texas Tribune</a></li>
+      </ul>
+    </nav>
+    <nav class="col_9 hide_until--m">
+      <ul class="footer__links">
+        <li><a href="https://www.texastribune.org/about/">About Us</a></li>
+        <li><a href="https://www.texastribune.org/contact/">Contact Us</a></li>
+        <li><a href="https://www.texastribune.org/support-us/donors-and-members/">Who Funds Us?</a></li>
+        <li><a href="https://www.texastribune.org/terms-of-service/">Terms of Service</a></li>
+        <li><a href="https://www.texastribune.org/ethics/">Code of Ethics</a></li>
+        <li><a href="https://www.texastribune.org/privacy/">Privacy Policy</a></li>
+      </ul>
+    </nav>
+  </footer>
 <script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
 <script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
 <script>

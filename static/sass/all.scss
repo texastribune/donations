@@ -1,5 +1,15 @@
-@import 'bourbon/bourbon';
-@import 'neat/neat';
+@import "vendor/normalize";
+@import "vendor/mq";
+
+// general styles for reuse by all
+@import "utils/variables";
+@import "utils/colors";
+@import "utils/links";
+@import "utils/typography";
+@import "utils/grid";
+@import "utils/layout";
+// @import "utils/buttons";
+@import "utils/images";
 
 // general
 @import 'settings';

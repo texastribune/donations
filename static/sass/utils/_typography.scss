@@ -1,0 +1,158 @@
+// This isn't actually being used or loaded, leaving for reference.
+// .font-serif {
+//   font-family: 'PT Serif', Georgia, serif;
+// }
+
+.font-sansserif {
+  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+// font root sizes
+$font-root: 16px;
+$font-root-tablet: 16px;
+$font-root-mobile: 15px;
+
+// Some resets
+* {
+  box-sizing: border-box;
+}
+
+// set font root sizes for desktop, tablet, mobile
+html {
+  font-size: $font-root;
+
+  @include mq($until: bp-s) {
+    font-size: $font-root-mobile;
+  }
+}
+
+// strip margin and padding from all headers
+html,
+body,
+dd,
+dl,
+div,
+dt,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+// Set base typography proportions for headers, paragraphs, etc.
+// sizing variables in util/_variables.scss
+h1 {
+  font-size: $size-xxl;
+  line-height: 1.2;
+
+  @include mq($until: bp-s) {
+    font-size: $size-xl;
+  }
+}
+
+h2 {
+  @extend .font-sansserif;
+  font-size: $size-l;
+}
+
+h3 {
+  @extend .font-sansserif;
+  font-size: $size-m;
+}
+
+h4 {
+  @extend .font-sansserif;
+  font-size: $size-s;
+}
+
+h5 {
+  @extend .font-sansserif;
+  font-size: $size-xs;
+}
+
+p {
+  font-size: $size-b;
+}
+
+// we want all of our cite elements to not be italicized
+cite {
+  font-style: normal;
+}
+
+// Smallhead: <h5>
+// Examples: Mini-headers, byline & button text
+.smallcaps {
+  @extend .font-sansserif;
+  color: $color-black-pure;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding: .2em 0;
+  text-transform: uppercase;
+
+  // Byline
+  &--light {
+    @extend .font-sansserif;
+    color: $color-gray-medium;
+    font-size: $size-xs;
+    font-weight: 400;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+
+    @include mq($until: bp-l) {
+      font-size: $size-s;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+
+      &:active,
+      &:hover {
+        color: $color-teal-gray;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &--teal {
+    @extend .smallcaps;
+    color: $color-teal-gray;
+  }
+
+  &--white {
+    @extend .smallcaps;
+    color: $color-white-pure;
+    letter-spacing: .05em;
+  }
+
+  &--section {
+    @extend .smallcaps--light;
+    font-size: $size-s;
+    margin-bottom: $size-b/4;
+  }
+
+  &--section__header {
+    @extend .smallcaps--light;
+    border-top: 2px solid $color-black-off;
+    color: $color-gray-dark;
+    font-size: $size-s;
+    padding-top: $size-b/4;
+  }
+}
+
+// Subtext: <p>
+// Examples: Grayed text below smallcaps, comment policy
+.subtext {
+  @extend .font-sansserif;
+  @extend %link--blue;
+  color: $color-gray-medium;
+  font-size: $size-xs;
+  font-weight: 400;
+  padding: 0;
+}

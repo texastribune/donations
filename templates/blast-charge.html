@@ -7,16 +7,17 @@
 {% endblock %}
 
 {% block content %}
-  <header class="blast_header">
-    <div class="outer-section narrow">
-      <figure class="blast_logo six">
-        <a href="https://www.texastribune.org/theblast/" class="unlink"><img src="{{ url_for('static', filename='img/TT-blast_logo-product-only.svg') }}" alt="The Blast logo, a product of The Texas Tribune"></a>
-      </figure>
-    </div>
-  </header>
-  <div class="main">
-    <div class="outer-section narrow">
-      <div class="nine">
+<header class="blast_header">
+  <div class="grid_container grid_row grid_padded">
+    <figure class="blast_logo col col_6--m col_5--l">
+      <a href="https://www.texastribune.org/theblast/" class="unlink"><img src="{{ url_for('static', filename='img/TT-TheBlast-logo_PSvitek.png') }}" alt="The Blast logo, a product of The Texas Tribune"></a>
+      <!-- <a href="https://www.texastribune.org/" class="unlink"><img src="{{ url_for('static', filename='img/TT-aprojectby-horizontal-white.svg') }}" alt="A product of The Texas Tribune" class="blast_logo--sub"></a> -->
+    </figure>
+  </div>
+</header>
+  <div class="grid_container main">
+    <div class="grid_row">
+      <div class="col col_9--l">
         <p>
           Thank you for subscribing to The Blast!
           You'll receive an order confirmation email shortly.
@@ -25,8 +26,8 @@
         </p>
       </div>
     </div>
-    <div class="outer-section narrow social-wrapper">
-      <div class="six">
+    <div class="grid_row social-wrapper">
+      <div class="col col_9--l">
         <a href="mailto:?Subject=Check%20out%20The%20Blast&amp;Body=https://www.texastribune.org/theblast/">
         <div class="button social email">
           <i class="fa fa-envelope"></i>Enjoy The Blast? Suggest it to a friend

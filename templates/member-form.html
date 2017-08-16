@@ -8,40 +8,52 @@
 
 {% block content %}
   {{ super() }}
-  <div class="main">
-    <div class="outer-section">
-      <p class="nine">
-        Thank you for supporting The Texas Tribune by becoming a member! Sustaining membership allows you to support journalism that matters with an ongoing gift from your credit card. It auto-renews each year, and helps eliminate renewal mailings or lapses in your membership. Visit our <a href="https://support.texastribune.org/levels.html" ga-on="click" ga-event-category="Navigation" ga-event-action="view-levels-from-memberform">membership page</a> if you want to choose a different membership level.
-      </p>
-    </div>
+  <div class="main grid_container--xl">
     <form action="/charge" method="post">
       {{ form.csrf_token }}
-      <div class="outer-section form-outer-section">
-        <h2>Membership Info</h2>
-        <div class="form-section three">
-          <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
-            <span class="dollar">$</span>
-              {{ form.amount(value=amount, class="dollar") }}
-          {% if installment_period == 'yearly' %}
-            {{ form.openended_status }}
-          {% else %}
-            {{ form.openended_status(class='visually-hidden') }}
-          {% endif %}
-          {{ form.installments(value=installments) }}
+      <header class="grid_separator--l">
+        <h1>Confirm your donation</h1>
+        <p>Thank you for supporting The Texas Tribune by becoming a member! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.</p>
+      </header>
+      <div class="grid_row grid_wrap--l grid_wrap--reverse">
+        <div class="col_6">
+          {% include 'includes/form_inner.html' %}
+          {{ form.description(value='The Texas Tribune Membership') }}
         </div>
-        <div class="form-section three">
-          {{ form.pay_fees.label }}
-            {{ form.pay_fees(checked=False) }}
-          <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-          <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
-        </div>
-        <div class="form-section three">
-          <label>Level</label><br>
-          <p class="level label-info"></p>
+        <div class="col_1">&nbsp;</div>
+        <div class="col_5 form__box grid_separator">
+          <div class="grid_separator--l">
+            <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
+            <div class="grid_row grid_wrap--m">
+              <div class="col">
+                <span class="dollar">$</span>
+                {{ form.amount(value=amount, class="dollar") }}
+              </div>
+            {% if installment_period == 'yearly' %}
+              <div class="col">
+              {{ form.openended_status }}
+              </div>
+            {% else %}
+              {{ form.openended_status(class='visually-hidden') }}
+            {% endif %}
+            {{ form.installments(value=installments) }}
+            </div>
+            <p class="subtext grid_separator">Sustaining membership allows you to support journalism that matters with an ongoing gift from your credit card. It auto-renews each {% if installment_period == 'yearly' %}year{% else %}month{% endif %}, and helps eliminate renewal mailings or lapses in your membership.</p>
+          </div>
+          <div class="grid_row grid_wrap--m">
+            <div class="col">
+              {{ form.pay_fees.label }}
+                {{ form.pay_fees(checked=False) }}
+              <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
+            </div>
+            <div class="col">
+              <label>Level</label><br>
+              <p class="level label-info"></p>
+            </div>
+          </div>
+          <p class="subtext grid_separator">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
         </div>
       </div>
-      {% include 'includes/form_inner.html' %}
-      {{ form.description(value='The Texas Tribune Membership') }}
     </form>
   </div>
   {% if installment_period and amount %}
