@@ -40,7 +40,7 @@ class BlastForm(FlaskForm):
     amount_choices = [
         ('349', 'Annual'),
         ('40', 'Monthly'),
-        ('325', 'Tax-Exempt'),
+        ('325', 'Annual Tax-Exempt'),
         ]
     amount = RadioField(u'Amount', choices=amount_choices, default='349')
     subscriber_email = EmailField('Subscriber Email address',

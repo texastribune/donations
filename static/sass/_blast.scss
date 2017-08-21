@@ -63,25 +63,26 @@
 .subscription li {
 	box-sizing: border-box;
 	display: inline-block;
-	height: 120px;
+	height: 130px;
 	margin: 0 $size-s $size-b 0;
-	text-align: center;
-	vertical-align: top;
   position: relative;
+  text-align: center;
+	vertical-align: top;
 
   label {
-  	box-sizing: border-box;
-  	cursor: pointer;
-  	display: block;
-  	height: 100%;
-  	padding: $size-s;
-  	transition: all .5s ease-in-out;
-    background-color: $color-white-off;
     border: 2px solid $color-white-off;
+    box-sizing: border-box;
+    background-color: $color-white-pure;
+    color: $color-black-off;
+    cursor: pointer;
+    display: block;
+    height: 100%;
     hyphens: none;
     letter-spacing: .01em;
     line-height: 1;
     min-width: 0;
+    padding: $size-s;
+    transition: all .5s ease-in-out;
   	&:hover, &:focus {
       color: $color-black-off;
   	}
@@ -93,7 +94,7 @@
 
   label:after {
     display: block;
-    font-size: 1.8em;
+    font-size: 2.5em;
     left: $size-s;
     line-height: 1.8;
     position: absolute;
@@ -124,11 +125,13 @@
 
   label[for='amount-2']:after {
     content: '$325';
+    @include mq($from: bp-l) {
+      font-size: 1.8em;
+    }
   }
 
   label[for='amount-2']:before {
-    color: #7f7f7f;
-    content: 'Annual rate for government agencies, nonprofits';
+    content: 'For government agencies, nonprofits';
     font-size: $size-b/4;
     padding: 0 .25rem;
     bottom: .55rem;
