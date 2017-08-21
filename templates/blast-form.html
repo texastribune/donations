@@ -15,15 +15,16 @@
       </figure>
     </div>
   </header>
-  <div class="grid_container main">
-    <form action="/submit-blast" method="post" class="blastform">
+  <div class="grid_container blast_main">
+    <form action="/submit-blast" method="post" class="blastform grid_separator--l">
       {{ form.csrf_token }}
       <div class="form-outer-section outer-section narrow">
-        <header class="grid_separator">
-          <h2>Sign up for the best political newsletter in Texas.</h2>
+
+        <header class="grid_separator--l">
+          <h1>Sign up for the best political newsletter in Texas.</h1>
         </header>
-        <div class="grid_row grid_wrap--l">
-          <div class="col_6">
+        <div class="grid_row grid_wrap--l grid_wrap--reverse">
+          <div class="col col_7--xl">
             <div class="grid_row grid_separator grid_wrap--m">
               <div class="col_6">
                 {{ form.first_name.label }}<br>
@@ -41,19 +42,6 @@
                   <p class="form-subtext">&raquo; You will be prompted for the billing email address at checkout.</p>
               </div>
             </div>
-            <div class="form-section form-error">
-              <p class="error-form-message"></p>
-            </div>
-          </div>
-          <div class="col_1">&nbsp;</div>
-          <div class="form__box col_5 grid_separator">
-            <div class="grid_row">
-              <div class="col col_9--l">
-                <label class="dropdown">Subscription plan
-                  {{ form.amount(value=amount, class="") }}
-                </label>
-              </div>
-            </div>
             <div class="grid_row">
               <div class="col col_9--l">
                 {{ form.pay_fees.label }}
@@ -64,6 +52,25 @@
             </div>
             {{ form.pay_fees_value(value="False") }}
             {{ form.installment_period(value=installment_period) }}
+            <div class="form-section form-error">
+              <p class="error-form-message"></p>
+            </div>
+          </div>
+          <div class="col col_5--xl">
+            <ul class="subscription grid_row grid_wrap--s">
+              {% for subfield in form.amount %}
+              <li class="col grid_separator">
+              <tr>
+                  <td>{{ subfield }}</td>
+                  <td>{{ subfield.label }}</td>
+              </tr>
+              </li>
+              {% endfor %}
+            </ul>
+            <div class="grid_separator--l">
+              <h4 class="grid_separator--s">Would multiple people at your organization like to receive The Blast? Good news! We offer group rates.</h4>
+              <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168686">512-716-8686</a> for more information.</p>
+            </div>
           </div>
         </div>
         {{ form.description(value='Blast Subscription') }}
@@ -71,6 +78,7 @@
         <button id="customButton" class="button button-flat">Submit</button>
       </div>
     </form>
+
 
     {% include 'includes/blast_stripe_checkout_js.html' %}
   </div>
@@ -80,8 +88,16 @@
       listen_for_fee_check();
     };
 
-    $('select[name="amount"]').change(function() {
+    $('input[name="amount"]').click(function() {
       payFeeAmount();
+      $('input[name="amount"]').each(function() {
+        this.setAttribute("checked", ""); // For IE
+        this.removeAttribute("checked"); // For other browsers
+        this.checked = false;
+      });
+      this.setAttribute("checked", "checked");
+      this.checked = true;
     });
+
   </script>
 {% endblock %}

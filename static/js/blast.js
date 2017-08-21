@@ -33,10 +33,14 @@ var listen_for_installments = function() {
 
 // https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
 var payFeeAmount = function() {
-  var goalAmount = parseFloat($('select[name="amount"]').val()),
+  var goalAmount = parseFloat($('input[name="amount"]:checked').val()),
       totalAmount = (goalAmount + .30) / (1 - 0.022);
       feeAmount = Math.floor((totalAmount - goalAmount) * 100) / 100,
       payFeeElement = $('#pay-fee-amount span');
 
   payFeeElement.text('$' + feeAmount.toFixed(2));
 };
+
+$('.subscription > :radio').off('click').on('click', function (e) {
+    e.stopPropagation();
+});

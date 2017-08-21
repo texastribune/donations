@@ -1,3 +1,6 @@
+.blast_main {
+  padding: 0 $size-b 2rem;
+}
 .blast_header {
   background-color: $color-black-pure;
   margin-bottom: $size-b;
@@ -54,5 +57,101 @@
     clear: both;
     padding: 0;
     margin-bottom: $size-b;
+  }
+}
+
+.subscription li {
+	box-sizing: border-box;
+	display: inline-block;
+	height: 120px;
+	margin: 0 $size-s $size-b 0;
+	text-align: center;
+	vertical-align: top;
+  position: relative;
+
+  label {
+  	box-sizing: border-box;
+  	cursor: pointer;
+  	display: block;
+  	height: 100%;
+  	padding: $size-s;
+  	transition: all .5s ease-in-out;
+    background-color: $color-white-off;
+    border: 2px solid $color-white-off;
+    hyphens: none;
+    letter-spacing: .01em;
+    line-height: 1;
+    min-width: 0;
+  	&:hover, &:focus {
+      color: $color-black-off;
+  	}
+    &:active {
+      background-color: transparentize($color-yellow-tribune, .8);
+      color: $color-black-off;
+  	}
+  }
+
+  label:after {
+    display: block;
+    font-size: 1.8em;
+    left: $size-s;
+    line-height: 1.8;
+    position: absolute;
+    width: calc(100% - 2.2rem);
+  }
+
+  label:before {
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  label[for='amount-0']:after {
+    content: '$349';
+  }
+
+  label[for='amount-0']:before {
+    content: '27% Savings';
+    font-size: $size-xs;
+    background-color: $color-yellow-tribune;
+    bottom: 0;
+    padding: $size-s 0;
+  }
+
+  label[for='amount-1']:after {
+    content: '$40';
+  }
+
+  label[for='amount-2']:after {
+    content: '$325';
+  }
+
+  label[for='amount-2']:before {
+    color: #7f7f7f;
+    content: 'Annual rate for government agencies, nonprofits';
+    font-size: $size-b/4;
+    padding: 0 .25rem;
+    bottom: .55rem;
+    line-height: 1.1;
+    letter-spacing: normal;
+  }
+  /* Input style */
+
+  input[type="radio"] {
+  	opacity: 0;
+  	width: 0;
+    height: 0;
+    margin: 0;
+  }
+
+  input[type="radio"]:active ~ label {
+    opacity: 1;
+  }
+
+  input[type="radio"]:checked ~ label {
+    border-color: $color-yellow-tribune;
+    background-color: transparentize($color-yellow-tribune, .8);
+    color: $color-black-off;
+    opacity: 1;
   }
 }

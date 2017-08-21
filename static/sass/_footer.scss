@@ -24,6 +24,7 @@
       &:hover,
       &:active {
         border: 0;
+        box-shadow: none;
         color: $color-yellow-tribune;
         cursor: pointer;
         text-decoration: none;
