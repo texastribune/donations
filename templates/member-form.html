@@ -10,6 +10,7 @@
   {{ super() }}
   <div class="main grid_container--xl">
     <form action="/charge" method="post">
+      <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
       {{ form.csrf_token }}
       <header class="grid_separator--l">
         <h1>Confirm your donation</h1>

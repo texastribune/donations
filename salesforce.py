@@ -45,7 +45,7 @@ def notify_slack(message):
         try:
             requests.get(url, params=payload)
         except Exception as e:
-            print ('Failed to send Slack notification: {}'.format(e))
+            print('Failed to send Slack notification: {}'.format(e))
 
 
 def warn_multiple_accounts(email, count):
@@ -206,7 +206,7 @@ class SalesforceConnection(object):
         the associated account ID.
         """
 
-        print ("----Creating contact...")
+        print("----Creating contact...")
         contact = _format_contact(form=form)
         path = '/services/data/v35.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
@@ -276,7 +276,7 @@ def upsert_customer(customer=None, form=None):
     created, contact = sf.get_or_create_contact(updated_request)
 
     if not created:
-        print ("----Exists, updating")
+        print("----Exists, updating")
 
         path = '/services/data/v35.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
@@ -293,6 +293,8 @@ def _format_opportunity(contact=None, form=None, customer=None):
 
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
+    campaign_id = form.get('campaign_id', default='')
+
     if form['pay_fees_value'] == 'True':
         pay_fees = True
     else:
@@ -304,6 +306,7 @@ def _format_opportunity(contact=None, form=None, customer=None):
             'AccountId': '{}'.format(contact['AccountId']),
             'Amount': '{}'.format(amount),
             'CloseDate': today,
+            'Campaignid': campaign_id,
             'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': '{} {} ({})'.format(
                 form['first_name'],
@@ -319,12 +322,13 @@ def _format_opportunity(contact=None, form=None, customer=None):
             'Encouraged_to_contribute_by__c': '{}'.format(form['reason']),
             # Co Member First name, last name, and email
             }
+    pprint(opportunity)
     return opportunity
 
 
 def add_opportunity(form=None, customer=None, charge=None):
 
-    print ("----Adding opportunity...")
+    print("----Adding opportunity...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     opportunity = _format_opportunity(contact=contact, form=form,
@@ -380,7 +384,6 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(_format_amount(amount)),
             'npe03__Date_Established__c': today,
-            'npe03__Open_Ended_Status__c': '',
             'Name': '{} for {} {}'.format(
                 now,
                 form['first_name'],
@@ -406,7 +409,7 @@ def add_recurring_donation(form=None, customer=None):
     Insert a recurring donation into SF.
     """
 
-    print ("----Adding recurring donation...")
+    print("----Adding recurring donation...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     recurring_donation = _format_recurring_donation(contact=contact,
@@ -475,7 +478,6 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
             'npe03__Date_Established__c': today,
-            'npe03__Open_Ended_Status__c': 'Open',
             'Name': '{} {} - {} - The Blast'.format(
                 form['first_name'],
                 form['last_name'],
@@ -499,7 +501,7 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
 
 def add_blast_subscription(form=None, customer=None, charge=None):
 
-    print ("----Adding Blast RDO...")
+    print("----Adding Blast RDO...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     recurring_donation = _format_blast_rdo(contact=contact,
