@@ -56,6 +56,7 @@ class RequestObject(object):
 class Customer(object):
     pass
 
+
 customer = Customer()
 customer.id = 'cus_78MqJSBejMN9gn'
 
@@ -123,6 +124,7 @@ contact = {
         'AccountId': '0011700000BpR8PAAV',
         'attributes': {
             'url': '/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX',
+
             'type': 'Contact'
             },
         'Stripe_Customer_Id__c': 'cus_78MnnsgVuQb4r6',
@@ -267,6 +269,7 @@ def test__format_opportunity():
             customer=customer)
     expected_response = {
             'AccountId': '0011700000BpR8PAAV',
+            'Campaignid': '',
             'Amount': '9.00',
             'CloseDate': today,
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
@@ -293,7 +296,6 @@ def test__format_circle_donation():
             'Lead_Source__c': 'Stripe',
             'npe03__Contact__c': '0031700000BHQzBAAX',
             'npe03__Installment_Period__c': 'yearly',
-            'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
             'npe03__Amount__c': '300.00',   # 3 * 100
             'Name': 'foo',
@@ -317,7 +319,6 @@ def test__format_cent_circle_donation():
             'Lead_Source__c': 'Stripe',
             'npe03__Contact__c': '0031700000BHQzBAAX',
             'npe03__Installment_Period__c': 'yearly',
-            'npe03__Open_Ended_Status__c': 'Open',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
             'npe03__Amount__c': '4500.03',   # 3 * 1501.01
             'Name': 'foo',
@@ -703,6 +704,7 @@ class ChargeReturnValue(object):
     id = "foo"
     source = SourceObject()
 
+
 sf_response = [{'Amount': 84.0,
     'Name': 'D C Donation (1 of 36) 2/11/2016',
     'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
@@ -756,6 +758,7 @@ def test_process_success(sf_connection, sf_patch, sf_connection_query,
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
     log.it.assert_called_with("ok")
+
 
 sf_response_2 = [
         {'Amount': 84.0,
@@ -858,6 +861,6 @@ def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
     sf_connection_query.return_value = sf_response
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
-    print (log.it.call_args_list)
+    print(log.it.call_args_list)
     assert len(log.it.call_args_list) == 9
     assert log.it.call_args_list == expected_call_list
