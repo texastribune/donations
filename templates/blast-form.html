@@ -56,8 +56,8 @@
               <p class="error-form-message"></p>
             </div>
           </div>
-          <div class="col col_5--xl form__box">
-            <ul class="subscription grid_row grid_wrap--s">
+          <div class="col col_5--xl form__box grid_separator">
+            <ul class="subscription grid_row ">
               {% for subfield in form.amount %}
               <li class="col grid_separator">
               <tr>
@@ -67,10 +67,8 @@
               </li>
               {% endfor %}
             </ul>
-            <div class="grid_separator--l">
-              <h4 class="grid_separator--s">Would multiple people at your organization like to receive The Blast? Good news! We offer group rates.</h4>
-              <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168686">512-716-8686</a> for more information.</p>
-            </div>
+            <h4 class="grid_separator--s">Would multiple people at your organization like to receive The Blast? Good news! We offer group rates.</h4>
+            <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168686">512-716-8686</a> for more information.</p>
           </div>
         </div>
         {{ form.description(value='Blast Subscription') }}

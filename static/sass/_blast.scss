@@ -99,6 +99,9 @@
     line-height: 1.8;
     position: absolute;
     width: calc(100% - 2.2rem);
+    @include mq($until: bp-s) {
+      font-size: 1.5em;
+    }
   }
 
   label:before {
