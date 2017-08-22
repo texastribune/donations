@@ -55,3 +55,5 @@ Replace the `[remote "heroku"] stanza in your .git/config file with the followin
 Then deploy to test with the command `git push test master` or production with `git push production master`.
 
 If you need to deploy a branch other than master to the test server, use the command `git push <server> <branch>:master`. For example `git push test your-branch-name:master`.
+
+Test URL: http://stripe-testing.texastribune.org/
