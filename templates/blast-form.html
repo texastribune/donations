@@ -57,7 +57,7 @@
             </div>
           </div>
           <div class="col col_5--xl form__box grid_separator">
-            <ul class="subscription grid_row ">
+            <ul class="subscription grid_row">
               {% for subfield in form.amount %}
               <li class="col grid_separator">
               <tr>
@@ -86,15 +86,13 @@
       listen_for_fee_check();
     };
 
-    $('input[name="amount"]').click(function() {
+    $('input[name="amount"]').change(function() {
       payFeeAmount();
       $('input[name="amount"]').each(function() {
-        this.setAttribute("checked", ""); // For IE
-        this.removeAttribute("checked"); // For other browsers
-        this.checked = false;
+        $(this).attr("checked", false);
       });
-      this.setAttribute("checked", "checked");
-      this.checked = true;
+      $(this).attr("checked", "checked");
+      $(this).prop("checked", true);
     });
 
   </script>
