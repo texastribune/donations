@@ -1,14 +1,15 @@
 .blast_main {
-  padding: 0 $size-b 2rem;
+  padding: 0 $size-b $size-b;
 }
+
 .blast_header {
   background-color: $color-black-pure;
   margin-bottom: $size-b;
-  padding: 0 $size-xxl;
+  padding: 0 $size-b;
 }
 
 .blast_logo {
-  margin: $size-b 0;
+  margin: $size-b 0 0;
   &--sub {
     float: right;
     margin: $size-b $size-giant $size-b/2 $size-b/2;
@@ -20,6 +21,17 @@
 
   img {
     max-width: 100%;
+  }
+}
+
+.ttproduct {
+  max-width: 250px;
+  align-self: flex-end;
+  margin: 0;
+
+  figure {
+    margin: 0;
+    max-width: 250px;
   }
 }
 
