@@ -94,13 +94,13 @@
 
   label:after {
     display: block;
-    font-size: 2.5em;
+    font-size: 1.5em;
     left: $size-s;
     line-height: 1.8;
     position: absolute;
     width: calc(100% - 2.2rem);
-    @include mq($until: bp-s) {
-      font-size: 1.5em;
+    @include mq($from: bp-s) {
+      font-size: 2.5em;
     }
   }
 
