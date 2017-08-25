@@ -80,6 +80,7 @@ input {
 
 input[type='text'] {
   width: 100%;
+  border: 1px solid $color-gray-light;
   &.dollar {
     margin: $size-b 0;
     padding: 0 $size-b/2;
