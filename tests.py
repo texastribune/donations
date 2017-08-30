@@ -303,7 +303,8 @@ def test__format_circle_donation():
             'npe03__Open_Ended_Status__c': 'None',
             'Stripe_Description__c': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Giving Circle'
+            'Type__c': 'Giving Circle',
+            'npe03__Recurring_Donation_Campaign__c': ''
             }
     response['Name'] = 'foo'
     assert response == expected_response
@@ -326,7 +327,8 @@ def test__format_cent_circle_donation():
             'npe03__Open_Ended_Status__c': 'None',
             'Stripe_Description__c': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Giving Circle'
+            'Type__c': 'Giving Circle',
+            'npe03__Recurring_Donation_Campaign__c': '',
             }
     response['Name'] = 'foo'
     assert response == expected_response
@@ -349,7 +351,8 @@ def test__format_recurring_donation():
             'npe03__Open_Ended_Status__c': 'None',
             'Stripe_Description__c': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Recurring Donation'
+            'Type__c': 'Recurring Donation',
+            'npe03__Recurring_Donation_Campaign__c': ''
             }
     response['Name'] = 'foo'
     assert response == expected_response
@@ -372,7 +375,8 @@ def test__format_recurring_donation_decimal():
             'npe03__Open_Ended_Status__c': 'None',
             'Stripe_Description__c': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Recurring Donation'
+            'Type__c': 'Recurring Donation',
+            'npe03__Recurring_Donation_Campaign__c': ''
             }
     response['Name'] = 'foo'
     assert response == expected_response
@@ -397,6 +401,7 @@ def test__format_blast_rdo():
             'Type__c': 'The Blast',
             'Billing_Email__c': 'dcraigmile+test6@texastribune.org',
             'Blast_Subscription_Email__c': 'subscriber@foo.bar',
+            'npe03__Recurring_Donation_Campaign__c': '',
             }
 
     response['Name'] = 'foo'
