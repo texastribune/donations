@@ -8,12 +8,14 @@ def bool_env(val):
     """Replaces string based environment values with Python booleans"""
     return True if os.environ.get(val, False) == 'True' else False
 
+
 TIMEZONE = os.getenv('TIMEZONE', "US/Central")
 
 #######
 # Flask
 #
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
+WTF_CSRF_ENABLED = False
 
 ########
 # Celery
