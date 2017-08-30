@@ -24,13 +24,11 @@ var stripe_donation = function() {
     if (validateEmail($('#subscriber_email').val())) {
       valid_email = true;
     }
-    if ($('#amount').val() >= 1) {
+    if ($('input[name="amount"]:checked').val() >= 1) {
       amount_above_one_dollar = true;
     }
   };
 
-  var donation_amount = $('.dollar').val();
-  donation_amount *= 100;
   var charge_description = $('#description').val();
 
   var handler = StripeCheckout.configure({
@@ -49,6 +47,9 @@ var stripe_donation = function() {
 
   $('#customButton').on('click', function(e) {
       check_required_inputs();
+
+      var donation_amount = $('input[name="amount"]:checked').val();
+      donation_amount *= 100;
 
       if (!first_name_exists || !last_name_exists || !valid_email) {
         $('.form-error').show();

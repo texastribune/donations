@@ -39,11 +39,11 @@ class BlastForm(FlaskForm):
     last_name = StringField(u'Last name',
         [validators.required(message="Your last name is required.")])
     amount_choices = [
-        ('349', 'Annual ($349)'),
-        ('325', 'Annual Tax-Exempt ($325 — For government agencies and nonprofit organizations)'),
-        ('40', 'Monthly ($40)'),
+        ('349', 'Annual'),
+        ('40', 'Monthly'),
+        ('325', 'Annual Tax-Exempt'),
         ]
-    amount = SelectField(u'Amount', choices=amount_choices)
+    amount = RadioField(u'Amount', choices=amount_choices, default='349')
     subscriber_email = EmailField('Subscriber Email address',
         [validators.DataRequired(), validators.Email()])
     installment_period = HiddenField(u'Installment Period')
