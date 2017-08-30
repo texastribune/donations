@@ -57,10 +57,7 @@ def member_form():
         message = "The page you requested can't be found."
         return render_template('error.html', message=message)
 
-    if request.args.get('campaignId'):
-        campaign_id = request.args.get('campaignId')
-    else:
-        campaign_id = ''
+    campaign_id = request.args.get('campaignId', default='')
 
     installment_period = request.args.get('installmentPeriod')
     if installment_period is None:
@@ -84,10 +81,7 @@ def donate_renew_form():
     installments = 'None'
     installment_period = 'None'
 
-    if request.args.get('campaignId'):
-        campaign_id = request.args.get('campaignId')
-    else:
-        campaign_id = ''
+    campaign_id = request.args.get('campaignId', default='')
 
     return render_template('donate-form.html', form=form, amount=amount,
         campaign_id=campaign_id, installment_period=installment_period,
@@ -107,10 +101,7 @@ def circle_form():
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')
-    if request.args.get('campaignId'):
-        campaign_id = request.args.get('campaignId')
-    else:
-        campaign_id = ''
+    campaign_id = request.args.get('campaignId', default='')
     return render_template('circle-form.html', form=form, amount=amount,
             campaign_id=campaign_id, installment_period=installment_period,
             installments=installments, openended_status=openended_status,
@@ -126,10 +117,7 @@ def the_blast_form():
         amount = 349
     installment_period = request.args.get('installmentPeriod')
 
-    if request.args.get('campaignId'):
-        campaign_id = request.args.get('campaignId')
-    else:
-        campaign_id = ''
+    campaign_id = request.args.get('campaignId', default='')
 
     return render_template('blast-form.html', form=form,
             campaign_id=campaign_id, installment_period=installment_period,
