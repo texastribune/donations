@@ -538,7 +538,18 @@ def add_blast_subscription(form=None, customer=None, charge=None):
     recurring_donation = _format_blast_rdo(contact=contact,
             form=form, customer=customer)
     path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
-    response = sf.post(path=path, data=recurring_donation)
+    try:
+        response = sf.post(path=path, data=recurring_donation)
+    except Exception as e:
+        content = json.loads(e.response.content.decode('utf-8'))
+        # retry without a campaign if it gives an error
+        if 'Campaign: id' in content[0]['message']:
+            print('bad campaign ID; retrying...')
+            recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
+            pprint(recurring_donation)
+            response = sf.post(path=path, data=recurring_donation)
+            pprint(response)
+
     send_multiple_account_warning()
 
     return response
