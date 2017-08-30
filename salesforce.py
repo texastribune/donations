@@ -129,7 +129,7 @@ class SalesforceConnection(object):
                 token_path)
 
         r = requests.post(self.url, data=self.payload)
-        # check_response(r)
+        check_response(r)
         response = json.loads(r.text)
 
         self.instance_url = response['instance_url']
@@ -153,7 +153,7 @@ class SalesforceConnection(object):
         else:
             payload = {'q': query}
         r = requests.get(url, headers=self.headers, params=payload)
-        # check_response(r)
+        check_response(r)
         response = json.loads(r.text)
         # recursively get the rest of the records:
         if response['done'] is False:
@@ -179,7 +179,7 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.patch(url, headers=self.headers,
             data=json.dumps(data))
-        # check_response(response=resp, expected_status=204)
+        check_response(response=resp, expected_status=204)
         return resp
 
     def _get_contact(self, contact_id=None):
