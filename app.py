@@ -131,8 +131,6 @@ def the_blast_form():
     else:
         campaign_id = ''
 
-    print('in the_blast_form, campaign_id = {}'.format(campaign_id))
-
     return render_template('blast-form.html', form=form,
             campaign_id=campaign_id, installment_period=installment_period,
         openended_status='Open', amount=amount,
