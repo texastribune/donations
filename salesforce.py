@@ -129,7 +129,7 @@ class SalesforceConnection(object):
                 token_path)
 
         r = requests.post(self.url, data=self.payload)
-        check_response(r)
+        # check_response(r)
         response = json.loads(r.text)
 
         self.instance_url = response['instance_url']
@@ -153,7 +153,7 @@ class SalesforceConnection(object):
         else:
             payload = {'q': query}
         r = requests.get(url, headers=self.headers, params=payload)
-        check_response(r)
+        # check_response(r)
         response = json.loads(r.text)
         # recursively get the rest of the records:
         if response['done'] is False:
@@ -179,7 +179,7 @@ class SalesforceConnection(object):
         url = '{}{}'.format(self.instance_url, path)
         resp = requests.patch(url, headers=self.headers,
             data=json.dumps(data))
-        check_response(response=resp, expected_status=204)
+        # check_response(response=resp, expected_status=204)
         return resp
 
     def _get_contact(self, contact_id=None):
@@ -328,13 +328,24 @@ def _format_opportunity(contact=None, form=None, customer=None):
 
 def add_opportunity(form=None, customer=None, charge=None):
 
+    response = None
     print("----Adding opportunity...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     opportunity = _format_opportunity(contact=contact, form=form,
             customer=customer)
     path = '/services/data/v35.0/sobjects/Opportunity'
-    response = sf.post(path=path, data=opportunity)
+    try:
+        response = sf.post(path=path, data=opportunity)
+    except Exception as e:
+        content = json.loads(e.response.content.decode('utf-8'))
+        # retry without a campaign if it gives an error
+        if 'Campaign ID' in content[0]['message']:
+            print('bad campaign ID; retrying...')
+            opportunity['Campaignid'] = ''
+            pprint(opportunity)
+            response = sf.post(path=path, data=opportunity)
+            pprint(response)
     send_multiple_account_warning()
 
     return response
@@ -362,6 +373,8 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     except:
         installment_period = 'None'
 
+    campaign_id = form.get('campaign_id', default='')
+
     # TODO: test this
     if open_ended_status == 'None' and (
             installments == '3' or installments == '36') and (
@@ -381,6 +394,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
         pay_fees = False
 
     recurring_donation = {
+            'npe03__Recurring_Donation_Campaign__c': campaign_id,
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(_format_amount(amount)),
             'npe03__Date_Established__c': today,
@@ -415,7 +429,18 @@ def add_recurring_donation(form=None, customer=None):
     recurring_donation = _format_recurring_donation(contact=contact,
             form=form, customer=customer)
     path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
-    sf.post(path=path, data=recurring_donation)
+    try:
+        response = sf.post(path=path, data=recurring_donation)
+    except Exception as e:
+        content = json.loads(e.response.content.decode('utf-8'))
+        # retry without a campaign if it gives an error
+        if 'Campaign: id' in content[0]['message']:
+            print('bad campaign ID; retrying...')
+            recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
+            pprint(recurring_donation)
+            response = sf.post(path=path, data=recurring_donation)
+            pprint(response)
+
     send_multiple_account_warning()
 
     return True
@@ -462,6 +487,7 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     amount = form['amount']
     installments = 0
     open_ended_status = 'Open'
+    pprint('Form:')
     pprint(form)
 
     if form['pay_fees_value'] == 'True':
@@ -474,7 +500,12 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     else:
         installment_period = 'yearly'
 
+    campaign_id = form.get('campaign_id', default='')
+
+    print('in _format_blast_rdo, campaign_id = {}'.format(campaign_id))
+
     blast_subscription = {
+            'npe03__Recurring_Donation_Campaign__c': campaign_id,
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
             'npe03__Date_Established__c': today,

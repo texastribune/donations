@@ -83,8 +83,15 @@ def donate_renew_form():
     openended_status = 'None'
     installments = 'None'
     installment_period = 'None'
+
+    if request.args.get('campaignId'):
+        campaign_id = request.args.get('campaignId')
+    else:
+        campaign_id = ''
+
     return render_template('donate-form.html', form=form, amount=amount,
-        installment_period=installment_period, installments=installments,
+        campaign_id=campaign_id, installment_period=installment_period,
+        installments=installments,
         openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
@@ -100,9 +107,13 @@ def circle_form():
     openended_status = 'None'
     installments = request.args.get('installments')
     installment_period = request.args.get('installmentPeriod')
+    if request.args.get('campaignId'):
+        campaign_id = request.args.get('campaignId')
+    else:
+        campaign_id = ''
     return render_template('circle-form.html', form=form, amount=amount,
-        installment_period=installment_period, installments=installments,
-        openended_status=openended_status,
+            campaign_id=campaign_id, installment_period=installment_period,
+            installments=installments, openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
 
@@ -114,8 +125,16 @@ def the_blast_form():
     else:
         amount = 349
     installment_period = request.args.get('installmentPeriod')
+
+    if request.args.get('campaignId'):
+        campaign_id = request.args.get('campaignId')
+    else:
+        campaign_id = ''
+
+    print('in the_blast_form, campaign_id = {}'.format(campaign_id))
+
     return render_template('blast-form.html', form=form,
-        installment_period=installment_period,
+            campaign_id=campaign_id, installment_period=installment_period,
         openended_status='Open', amount=amount,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
