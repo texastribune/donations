@@ -82,8 +82,8 @@ input[type='text'] {
   width: 100%;
   &.dollar {
     margin: $size-b 0;
-    padding: 0 $size-b;
-    width: 150px;
+    padding: 0 $size-b/2;
+    width: 140px;
   }
 
   &.uneditable {
