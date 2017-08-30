@@ -328,7 +328,6 @@ def _format_opportunity(contact=None, form=None, customer=None):
 
 def add_opportunity(form=None, customer=None, charge=None):
 
-    response = None
     print("----Adding opportunity...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
@@ -499,8 +498,6 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
         installment_period = 'yearly'
 
     campaign_id = form.get('campaign_id', default='')
-
-    print('in _format_blast_rdo, campaign_id = {}'.format(campaign_id))
 
     blast_subscription = {
             'npe03__Recurring_Donation_Campaign__c': campaign_id,
