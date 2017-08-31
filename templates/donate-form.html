@@ -11,7 +11,6 @@
 
   <div class="main grid_container--xl">
     <form action="/charge" method="post">
-      {{ form.csrf_token }}
       <header class="grid_separator--l">
         <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
         <h1>Confirm your donation</h1>
