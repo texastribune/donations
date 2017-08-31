@@ -15,6 +15,7 @@ class BaseForm(FlaskForm):
         [validators.required(message="Please choose a donation amount."),
         validators.NumberRange(min=1)])
     reason = StringField(u'Encouraged to contribute by')
+    campaign_id = HiddenField('Campaign ID')
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
     description = HiddenField(u'Description')
@@ -48,6 +49,7 @@ class BlastForm(FlaskForm):
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
     openended_status = HiddenField(u'Openended Status')
+    campaign_id = HiddenField('Campaign ID')
     description = HiddenField(u'Description')
     pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')

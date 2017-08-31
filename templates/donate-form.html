@@ -12,6 +12,7 @@
   <div class="main grid_container--xl">
     <form action="/charge" method="post">
       <header class="grid_separator--l">
+        <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
         <h1>Confirm your donation</h1>
         <p>Thank you for supporting The Texas Tribune! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you. If you'd prefer to become a member, you can set up a recurring <a href="/memberform?installmentPeriod=monthly&amount={{ amount }}">monthly</a> or <a href="/memberform?installmentPeriod=yearly&amount={{ amount }}">annual</a> donation.</p>
       </header>

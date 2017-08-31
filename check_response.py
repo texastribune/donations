@@ -10,10 +10,11 @@ def check_response(response=None, expected_status=200):
     try:
         content = json.loads(response.content.decode('utf-8'))
         # TODO: look for 'success'
-        #print (content)
     except:
-        print ('unable to parse response (this is probably okay)')
+        print('unable to parse response (this is probably okay)')
     if code != expected_status:
-        print (content)
-        raise Exception('Expected {} but got {}'.format(expected_status, code))
+        print(content)
+        e = Exception('Expected {} but got {}'.format(expected_status, code))
+        e.response = response
+        raise e
     return True
