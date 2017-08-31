@@ -14,7 +14,6 @@
       <p>Thank you for supporting The Texas Tribune by becoming a circle member! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.</p>
     </header>
     <form id="form" action="/charge" method="post">
-      {{ form.csrf_token }}
       <div class="grid_row grid_wrap--l grid_wrap--reverse">
         <div class="col_6">
           {% include 'includes/form_inner.html' %}
