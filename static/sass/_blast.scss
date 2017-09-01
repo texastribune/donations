@@ -133,11 +133,11 @@
     content: '$349';
   }
 
-  label[for='amount-vip']:after {
+  label.for-vip:after {
     content: '$275';
   }
 
-  label[for='amount-vip']:before {
+  label.for-vip:before {
     content: 'Save $74';
     font-size: $size-xs;
     background-color: $color-yellow-tribune;

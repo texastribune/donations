@@ -42,7 +42,7 @@ class BlastForm(FlaskForm):
         ('349', 'Annual'),
         ('40', 'Monthly'),
         ('325', 'Annual Tax-Exempt'),
-        ]
+    ]
     amount = RadioField(u'Amount', choices=amount_choices, default='349')
     subscriber_email = EmailField('Subscriber Email address',
         [validators.DataRequired(), validators.Email()])
@@ -53,3 +53,6 @@ class BlastForm(FlaskForm):
     description = HiddenField(u'Description')
     pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')
+
+class BlastVIPForm(BlastForm):
+    amount = RadioField(u'Amount', choices=[('275', 'Save $74')], default='349')
