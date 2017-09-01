@@ -124,6 +124,21 @@ def the_blast_form():
         openended_status='Open', amount=amount,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
+@app.route('/blast-vip')
+def the_blastvip_form():
+    form = BlastForm()
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        amount = 349
+    installment_period = request.args.get('installmentPeriod')
+
+    campaign_id = request.args.get('campaignId', default='')
+
+    return render_template('blast-vip.html', form=form,
+            campaign_id=campaign_id, installment_period=installment_period,
+        openended_status='Open', amount=amount,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 @app.route('/submit-blast', methods=['POST'])
 def submit_blast():
