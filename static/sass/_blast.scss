@@ -102,6 +102,13 @@
       background-color: transparentize($color-yellow-tribune, .8);
       color: $color-black-off;
   	}
+
+    &.fake_option {
+      cursor: default;
+      &:active {
+        background-color: $color-white-pure;
+      }
+    }
   }
 
   label:after {
@@ -124,6 +131,18 @@
 
   label[for='amount-0']:after {
     content: '$349';
+  }
+
+  label[for='amount-vip']:after {
+    content: '$275';
+  }
+
+  label[for='amount-vip']:before {
+    content: 'Save $74';
+    font-size: $size-xs;
+    background-color: $color-yellow-tribune;
+    bottom: 0;
+    padding: $size-s 0;
   }
 
   label[for='amount-0']:before {
@@ -153,6 +172,21 @@
     line-height: 1.1;
     letter-spacing: normal;
   }
+
+  label[for='amount-reg']:after {
+    content: url(../img/slash_price.svg);
+    margin: $size-b/2 0;
+  }
+
+  label[for='amount-reg']:before {
+    content: 'Regular Price';
+    font-size: $size-b/4;
+    padding: 0 .25rem;
+    bottom: .55rem;
+    line-height: 1.1;
+    letter-spacing: normal;
+  }
+
   /* Input style */
 
   input[type="radio"] {
@@ -172,4 +206,9 @@
     color: $color-black-off;
     opacity: 1;
   }
+}
+
+.discount {
+  color: #D0021B;
+  font-size: $size-m;
 }

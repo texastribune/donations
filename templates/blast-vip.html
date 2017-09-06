@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block title %}
+  The Blast | The Texas Tribune
+{% endblock %}
+{% block extra_script %}
+<script src="{{ url_for('static', filename='js/blast.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+  <header class="blast_header">
+    <div class="grid_container grid_row grid_padded blast_main grid_wrap--m">
+      <figure class="blast_logo col col_6--m col_5--l">
+        <a href="https://www.texastribune.org/theblast/" class="unlink"><img src="{{ url_for('static', filename='img/TT-TheBlast-logo_PSvitek.png') }}" alt="The Blast logo, a product of The Texas Tribune"></a>
+        <!-- <a href="https://www.texastribune.org/" class="unlink"><img src="{{ url_for('static', filename='img/TT-aprojectby-horizontal-white.svg') }}" alt="A product of The Texas Tribune" class="blast_logo--sub"></a> -->
+      </figure>
+      <div class="col col_2--m col_4--l">&nbsp;</div>
+      <div class="col ttproduct">
+        <figure>
+          <img src="{{ url_for('static', filename='img/TT-aprojectby.svg')}}" alt="A project by The Texas Tribune">
+        </figure>
+      </div>
+    </div>
+  </header>
+  <div class="grid_container blast_main">
+    <form action="/submit-blast-vip" method="post" class="blastform grid_separator--l">
+      <input name="campaign_id" id="campaign_id" value="{{ campaign_id  }}" type="hidden">
+      <div class="form-outer-section outer-section narrow">
+
+        <header class="grid_separator--l">
+          <h1>Sign up for the best political newsletter in Texas.</h1>
+          <p class="discount">VIP Discount: Subscribe by Nov. 10 and save $74 for your first year</p>
+        </header>
+        <div class="grid_row grid_wrap--l grid_wrap--reverse">
+          <div class="col col_7--xl">
+            <div class="grid_row grid_separator grid_wrap--m">
+              <div class="col_6">
+                {{ form.first_name.label }}<br>
+                  {{ form.first_name(maxlength=50) }}
+              </div>
+              <div class="col_6">
+                {{ form.last_name.label }}<br>
+                  {{ form.last_name(maxlength=50) }}
+              </div>
+            </div>
+            <div class="grid_row">
+              <div class="col">
+                {{ form.subscriber_email.label }}
+                  {{ form.subscriber_email(maxlength=70) }}
+                  <p class="form-subtext">&raquo; You will be prompted for the billing email address at checkout.</p>
+              </div>
+            </div>
+            <div class="grid_row">
+              <div class="col col_9--l">
+                {{ form.pay_fees.label }}
+                  {{ form.pay_fees(checked=False) }}
+                <p id="pay-fee-amount" class="label-info"><span></span></p>
+                <p id="pay-fee-info">Paying these fees directs more money in support of the Tribune’s mission.</p>
+              </div>
+            </div>
+            {{ form.pay_fees_value(value="False") }}
+            {{ form.installment_period(value=installment_period) }}
+            <div class="form-section form-error">
+              <p class="error-form-message"></p>
+            </div>
+          </div>
+          <div class="col col_5--xl form__box grid_separator">
+            <ul class="subscription grid_row">
+              <li class="col grid_separator">
+                <tr>
+                  <td><input checked id="amount-vip" name="amount" type="radio" value="275"></td>
+                  <td><label for="amount-vip">VIP Discount</label></td>
+                </tr>
+              </li>
+              <li class="col grid_separator">
+                <tr>
+                  <td><label class="fake_option" for="amount-reg">Annual</label></td>
+                </tr>
+              </li>
+            </ul>
+            <h4 class="grid_separator--s">Would multiple people at your organization like to receive The Blast? Good news! We offer group rates.</h4>
+            <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168686">512-716-8686</a> for more information.</p>
+          </div>
+        </div>
+        {{ form.description(value='Blast Subscription') }}
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <button id="customButton" class="button button-flat">Submit</button>
+      </div>
+    </form>
+
+
+    {% include 'includes/blast_stripe_checkout_js.html' %}
+  </div>
+  <script>
+    window.onload = function() {
+      payFeeAmount();
+      listen_for_fee_check();
+    };
+  </script>
+{% endblock %}
