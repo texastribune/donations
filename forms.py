@@ -25,7 +25,7 @@ class BaseForm(FlaskForm):
 
 class MemberForm(BaseForm):
     openended_status = RadioField(u'Membership Duration',
-        choices=[('Open', 'Sustaining'), ('None', 'One Year')],
+        choices=[('Open', 'Sustaining'), ('None', 'One Time')],
         default='Open')
 
 

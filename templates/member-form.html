@@ -29,13 +29,9 @@
                 <span class="dollar">$</span>
                 {{ form.amount(value=amount, class="dollar") }}
               </div>
-            {% if installment_period == 'yearly' %}
               <div class="col">
               {{ form.openended_status }}
               </div>
-            {% else %}
-              {{ form.openended_status(class='visually-hidden') }}
-            {% endif %}
             {{ form.installments(value=installments) }}
             </div>
             <p class="subtext grid_separator">Sustaining membership allows you to support journalism that matters with an ongoing gift from your credit card. It auto-renews each {% if installment_period == 'yearly' %}year{% else %}month{% endif %}, and helps eliminate renewal mailings or lapses in your membership.</p>

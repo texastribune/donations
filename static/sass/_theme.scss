@@ -81,10 +81,12 @@ input {
 input[type='text'] {
   width: 100%;
   border: 1px solid $color-gray-light;
+
   &.dollar {
-    margin: $size-b 0;
-    padding: 0 $size-b/2;
-    width: 140px;
+    margin: 0 0 $size-b/2;
+    padding: 0 $size-b/2 0 2rem;
+    position: inherit;
+    width: 100%;
   }
 
   &.uneditable {
@@ -127,7 +129,8 @@ input::-webkit-inner-spin-button, {
   color: $color-black-pure;
   font-size: $size-giant;
   font-weight: 700;
-  margin: 0;
+  margin: 0 0 0 $size-b/2;
+  position: absolute;
 }
 
 .form__box {
@@ -155,7 +158,6 @@ input::-webkit-inner-spin-button, {
 
 // styles for openended status radio buttons on yearly member form
 #openended_status {
-  padding: $size-b 0;
   li {
     padding-left: $size-b/2;
   }
