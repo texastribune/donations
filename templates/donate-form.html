@@ -27,13 +27,13 @@
             <div class="col">
               <label>Amount</label><br>
                 <span class="dollar">$</span>
-                  {{ form.amount(value=amount, class="dollar") }}
+                  {{ form.amount(value=amount, autocomplete="off", class="dollar") }}
             </div>
           </div>
           <div class="grid_row grid_wrap--m">
             <div class="col">
               {{ form.pay_fees.label }}
-                {{ form.pay_fees(checked=False) }}
+                {{ form.pay_fees(checked=False, autocomplete="off") }}
               <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
             </div>
           </div>

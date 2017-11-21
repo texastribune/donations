@@ -8,7 +8,7 @@
 
 {% block content %}
   {{ super() }}
-  <div class="main grid_container--xl">
+  <div id="circle" class="main grid_container--xl">
     <header class="grid_separator--l">
       <h1>Confirm your circle membership</h1>
       <p>Thank you for supporting The Texas Tribune by becoming a circle member! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.</p>
@@ -28,7 +28,7 @@
             <div class="col grid_separator">
               <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
               <span class="dollar">$</span>
-                {{ form.amount(readonly=true, value=amount, class="dollar uneditable") }}
+                {{ form.amount(readonly=true, autocomplete="off", value=amount, class="dollar") }}
             </div>
             <div class="col">
               <label>Length</label><br>
@@ -43,7 +43,7 @@
           <div class="grid_row grid_wrap--m">
             <div class="col">
               {{ form.pay_fees.label }}
-                {{ form.pay_fees(checked=False) }}
+                {{ form.pay_fees(checked=False, autocomplete="off") }}
               <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
               <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
             </div>
