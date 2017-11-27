@@ -8,6 +8,8 @@
         $formError = $('.form-error'),
         $formErrorMessage = $('.error-form-message'),
         $chargeDescription = $('#description'),
+        isCircleForm = document.querySelector('#circle'),
+        isBlastForm = document.querySelector('#blast') || document.querySelector('#blast-vip'),
         handler;
 
     function bothNamesExist() {
@@ -43,6 +45,14 @@
       }
     }
 
+    function makeAmountReadOnly() {
+      $amount.prop('readonly', true);
+    }
+
+    function makeAmountEditable() {
+      $amount.prop('readonly', false);
+    }
+
     function bindEvents() {
       $('#customButton').click(function(e) {
         e.preventDefault();
@@ -52,6 +62,10 @@
         if (formIsValid()) {
           $formError.hide();
           $formErrorMessage.text('');
+
+          if (!isCircleForm && !isBlastForm) {
+            makeAmountReadOnly();
+          }
 
           handler.open({
             name: 'The Texas Tribune',
@@ -76,6 +90,10 @@
           $form.submit();
         },
         closed: function() {
+          if (!isCircleForm && !isBlastForm) {
+            makeAmountEditable();
+          }
+
           removeFormInputs();
         }
       });
