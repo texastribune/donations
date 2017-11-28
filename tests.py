@@ -21,7 +21,8 @@ from salesforce import SalesforceConnection
 from salesforce import upsert_customer
 from salesforce import _format_amount
 from salesforce import _format_contact
-
+from salesforce import send_multiple_account_warning
+from salesforce import WARNINGS
 
 # ("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
 #  "'until-cancelled'), ('Contact.LastName', 'C'), ('Contact.street', '823 "
@@ -869,3 +870,10 @@ def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
     print(log.it.call_args_list)
     assert len(log.it.call_args_list) == 9
     assert log.it.call_args_list == expected_call_list
+
+
+@patch('salesforce.send_email')
+def test_multiple_account_warnings(send_email_mock):
+    WARNINGS['foo@bar'] = 2
+    send_multiple_account_warning()
+    assert len(WARNINGS) == 0

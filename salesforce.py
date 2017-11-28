@@ -61,7 +61,7 @@ def send_multiple_account_warning():
     Send the warnings about multiple accounts.
     """
 
-    for email in WARNINGS:
+    for email in list(WARNINGS.keys()):
         count = WARNINGS[email]
         body = """
         {} accounts were found matching the email address <{}>
@@ -78,6 +78,8 @@ def send_multiple_account_warning():
                 subject="Multiple accounts found for {}".format(email),
                 body=body
                 )
+
+        del WARNINGS[email]
 
 
 def get_email(form):
