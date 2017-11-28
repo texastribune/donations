@@ -875,5 +875,6 @@ def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
 @patch('salesforce.send_email')
 def test_multiple_account_warnings(send_email_mock):
     WARNINGS['foo@bar'] = 2
+    WARNINGS['foo@baz'] = 2
     send_multiple_account_warning()
     assert len(WARNINGS) == 0
