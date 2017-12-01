@@ -2,8 +2,19 @@
 {% block title %}
   The Blast | The Texas Tribune
 {% endblock %}
+
 {% block extra_script %}
   {{ super() }}
+{% endblock %}
+
+{% block adwords_conversion_code %}
+<!-- Event snippet for The Blast purchases conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-1018212315/4d93CMfBwnkQ29_C5QM',
+      'transaction_id': ''
+  });
+</script>
 {% endblock %}
 
 {% block content %}
