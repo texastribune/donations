@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import DonateForm, BlastForm, BlastVIPForm, MemberForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -150,19 +150,22 @@ def submit_blast():
 
 @app.route('/blast-vip')
 def the_blastvip_form():
-    form = BlastVIPForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        amount = 275
-    installment_period = request.args.get('installmentPeriod')
-
-    campaign_id = request.args.get('campaignId', default='')
-
-    return render_template('blast-vip.html', form=form,
-            campaign_id=campaign_id, installment_period=installment_period,
-        openended_status='Open', amount=amount,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
+    return redirect("https://checkout.texastribune.org/blastform", code=302)
+    # This promotion has expired, so we are redirecting it to the regular Blast Checkout
+    # Leaving this code for when we need to reactivate this page for another promo.
+    # form = BlastVIPForm()
+    # if request.args.get('amount'):
+    #     amount = request.args.get('amount')
+    # else:
+    #     amount = 275
+    # installment_period = request.args.get('installmentPeriod')
+    #
+    # campaign_id = request.args.get('campaignId', default='')
+    #
+    # return render_template('blast-vip.html', form=form,
+    #         campaign_id=campaign_id, installment_period=installment_period,
+    #     openended_status='Open', amount=amount,
+    #     key=app.config['STRIPE_KEYS']['publishable_key'])
 
 @app.route('/submit-blast-vip', methods=['POST'])
 def submit_blast_vip():
