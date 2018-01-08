@@ -233,9 +233,8 @@ def charge():
                 customer=customer)
         print('Validated form of customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
+        # give the frequency and amount to template for GA tracking
         ga = {
-            'event_category': 'Support Us',
-            'event_action': 'donation-success',
             'event_label': request.form['installment_period'] if request.form['installment_period'] != 'None' else 'one-time',
             'event_value': request.form['amount'],
         }
