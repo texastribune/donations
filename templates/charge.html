@@ -47,3 +47,15 @@
     </div>
   </div>
 {% endblock %}
+
+{% block bottom_script %}
+  <script>
+    ga('send', {
+      hitType: 'event',
+      eventCategory: '{{ ga.event_category }}',
+      eventAction: '{{ ga.event_action }}',
+      eventLabel: '{{ ga.event_label }}',
+      eventValue: parseInt('{{ ga.event_value }}')
+    });
+  </script>
+{% endblock %}
