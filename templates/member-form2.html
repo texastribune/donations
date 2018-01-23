@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+{% block title %}
+  {{ super() }}
+{% endblock %}
+{% block extra_script %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  {{ super() }}
+  <div class="main grid_container--xl">
+    <header class="grid_separator--l">
+      <h1>Support independent, fact-based journalism</h1>
+      <p>As a nonprofit organization, our work is made possible through the generosity of members and donors. <a href="https://www.texastribune.org/about/">Learn more</a> about the Tribune's mission.</p>
+    </header>
+
+    <div class="grid_row grid_wrap--l">
+      <div class="col_5">
+        <form action="/charge" method="post">
+          <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
+            <h2 class="grid_separator">I'm ready to give...</h2>
+            <div class="grid_separator--l">
+              <div class="grid_row grid_separator">
+                <div class="col">
+                  <span class="dollar">$</span>
+                  {{ form.amount(value=amount, autocomplete="off", class="dollar") }}
+                </div>
+              </div>
+              <div class="radio_toggle grid_separator">
+                {{ form.openended_status }}
+              </div>
+            </div>
+            {% include 'includes/form_inner2.html' %}
+            {{ form.description(value='The Texas Tribune Membership') }}
+        </form>
+      </div>
+      <div class="col_1">&nbsp;</div>
+      <div class="col_6">
+        <div class="grid_separator--l">
+          <h3>All members enjoy the following benefits:</h3>
+          <ul class="info-list">
+            <li>Recognition on our <a href="https://www.texastribune.org/support-us/donors-and-members/">Donor Wall</a></li>
+            <li>Discounted tickets to the annual <a href="https://www.texastribune.org/festival/">Texas Tribune Festival</a></li>
+            <li>Exclusive, quarterly e-newsletter, where members get a behind-the-scenes look at the Tribune’s latest projects and initiatives</li>
+          </ul>
+        </div>
+
+        <div class="grid_separator--l">
+          <h3>Sustaining or one-time membership?</h3>
+          <ul class="info-list">
+            <li>We think it's important that you get to support and consume the news on your own time and on your own terms. All donations are greatly appreciated.</li>
+            <li>A sustaining membership means your donation recurs automatically on a monthly or yearly basis via credit card. This provides the Tribune with the sort of predictable revenue that allows us to plan budgets a few years at a time, and it helps eliminate renewal mailings or lapses in your membership.</li>
+          </ul>
+        </div>
+
+        <div class="grid_separator--l">
+          <h3>Circle Membership</h3>
+          <ul class="info-list">
+            <li>Circle Membership is a three-year commitment that backs the vital work of our journalists. <a href="/circle.html">Circle members</a> believe in supporting our public service mission so that all Texans can access our nonpartisan news, data and events at no cost.</li>
+            <li>Circle Members enjoy invitations to exclusive events and special updates from CEO Evan Smith.</li>
+          </ul>
+        </div>
+
+        <div class="grid_separator--l">
+          <h3>Have a question?</h3>
+          <div class="contact-info">
+            <h4>Rebecca Quarls</h4>
+            <p class="italic">Membership and Marketing Manager</p>
+            <p>512-716-8686</p>
+            <p><a href="mailto:rquarls@texastribune.org">rquarls@texastribune.org</a></p>
+          </div>
+        </div>
+
+        <div class="grid_separator--l">
+          <h3>Want to give more?</h3>
+
+          <div class="give-more">
+            <h5>Major gifts or grants</h5>
+            <h4>Terry Quinn</h4>
+            <p class="italic">Chief Development Officer</p>
+            <p>512-716-8613</p>
+            <p><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></p>
+          </div>
+
+          <div class="give-more">
+            <h5>Corporate sponsorships</h5>
+            <h4>April Hinkle</h4>
+            <p class="italic">Chief Revenue Officer</p>
+            <p>512-716-8634</p>
+            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include 'includes/change_installments_js.html' %}
+  {% include 'includes/stripe_checkout_js.html' %}
+  {% include 'includes/display_pay_fees.html' %}
+{% endblock %}

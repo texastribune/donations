@@ -2,7 +2,7 @@ import os
 import sys
 
 from flask import Flask, redirect, render_template, request, send_from_directory
-from forms import DonateForm, BlastForm, BlastVIPForm, MemberForm
+from forms import DonateForm, BlastForm, BlastVIPForm, MemberForm, MemberForm2
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -69,6 +69,26 @@ def member_form():
         installments=installments, openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
+@app.route('/donate')
+def member2_form():
+    form = MemberForm2()
+    if request.args.get('amount'):
+        amount = request.args.get('amount')
+    else:
+        message = "The page you requested can't be found."
+        return render_template('error.html', message=message)
+
+    campaign_id = request.args.get('campaignId', default='')
+
+    installment_period = request.args.get('installmentPeriod')
+    if installment_period is None:
+        installment_period = 'None'
+    installments = 'None'
+    openended_status = 'yearly'
+    return render_template('member-form2.html', form=form, amount=amount,
+        campaign_id=campaign_id, installment_period=installment_period,
+        installments=installments, openended_status=openended_status,
+        key=app.config['STRIPE_KEYS']['publishable_key'])
 
 @app.route('/donateform')
 def donate_renew_form():

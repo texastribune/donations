@@ -1,0 +1,44 @@
+<div class="grid_row grid_wrap--m form-outer-section">
+  <div class="form-section col">
+    {{ form.first_name.label }}<br>
+      {{ form.first_name(maxlength=50) }}
+  </div>
+  <div class="form-section col">
+    {{ form.last_name.label }}<br>
+      {{ form.last_name(maxlength=50) }}
+  </div>
+</div>
+<div class="grid_row grid_wrap--m form-outer-section">
+  <div class="form-section col">
+    {{ form.reason.label }}
+      {{ form.reason(maxlength=100) }}
+  </div>
+</div>
+<div class="grid_row">
+  <div class="col col_9--l">
+    {{ form.pay_fees.label }}
+      {{ form.pay_fees(checked=False) }}
+    <p id="pay-fee-amount" class="label-info"><span></span></p>
+    <p id="pay-fee-info">Paying these fees directs more money in support of the Tribune’s mission.</p>
+  </div>
+</div>
+{{ form.pay_fees_value(value="False") }}
+{{ form.installment_period(value=installment_period) }}
+<div class="form-outer-section">
+  <div class="form-section form-error">
+    <p class="error-form-message"></p>
+  </div>
+  <script src="https://checkout.stripe.com/checkout.js"></script>
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+
+  <ul class="payment-buttons">
+    <li>
+      <button id="customButton" class="button button-flat">Pay by Card</button>
+    </li>
+    <li>
+      <button id="applePayButton" class="button-applePay hidden">&nbsp;</button>
+    </li>
+  </ul>
+
+  <p>Prefer to mail a check? Use our <a href="https://static.texastribune.org/media/marketing/TT-919-Membership_Contribution_Form.pdf">membership form</a>. Our mailing address is 919 Congress Avenue, Sixth Floor, Austin, TX 78701.</p>
+</div>

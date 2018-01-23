@@ -272,3 +272,76 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
 .email {
   background: $color-yellow-tribune;
 }
+
+
+.radio_toggle {
+  overflow: hidden;
+
+  // override bad styles
+  #openended_status {
+    li {
+      padding-left: 0;
+    }
+
+    input {
+      margin: 0;
+    }
+  }
+
+  label[for='openended_status-0'],
+  label[for='openended_status-1'] {
+    float: left;
+  }
+
+  label {
+
+  }
+  // end of override
+
+  ul {
+    display: flex;
+  	list-style-type: none;
+
+    > :last-child {
+      margin-right: 0;
+    }
+  }
+
+  li {
+    flex: 0 1 33.33333%;
+    margin-right: $size-b/2;
+    max-width: 100%;
+  }
+
+  input {
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+  }
+
+  label {
+    background-color: $color-gray-background;
+    border-radius: 4px;
+    color: $color-black-off;
+    font-size: $size-xs;
+    font-weight: normal;
+    padding: $size-b/2;
+    text-align: center;
+    text-shadow: none;
+    transition: all 0.1s ease-in-out;
+    min-width: 100%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:checked + label {
+    background-color: $color-yellow-tribune;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
