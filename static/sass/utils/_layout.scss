@@ -95,8 +95,14 @@
   display: none !important;
 }
 
-.hide_until--m {
-  @include mq($until: bp-m) {
+.hide_until--l {
+  @include mq($until: bp-l) {
+    display: none !important;
+  }
+}
+
+.hide_from--l {
+  @include mq($from: bp-l) {
     display: none !important;
   }
 }

@@ -11,6 +11,32 @@ body {
 
 .main {
   padding: 0 $size-xxl $size-xxl;
+
+  a {
+    border-bottom: 1px solid $color-blue-light;
+    box-shadow: inset 0 -1px 0 0 $color-blue-light;
+    color: inherit;
+    text-decoration: none;
+
+    &:hover,
+    &:active {
+      border-bottom: 1px solid $color-teal-gray;
+      box-shadow: inset 0 -2px 0 0 $color-teal-gray;
+      color: inherit;
+      transition: all 0.8s ease;
+    }
+
+    &.unlink {
+      border: 0;
+      box-shadow: none;
+      text-decoration: none;
+      &:hover,
+      &:active {
+        border: 0;
+        text-decoration: none;
+      }
+    }
+  }
 }
 
 // Masthead with logo
@@ -23,19 +49,73 @@ body {
 
 // Splash background
 .splash {
-  background-color: lighten($color-black-pure, 20%);
-  background-position-x: 50%;
-  background-image: url('../img/bg_image.jpg');
+
+  @include mq($from: bp-l) {
+    background-color: lighten($color-black-pure, 20%);
+    background-position-x: 50%;
+    background-image: url('../img/bg_image.jpg');
+    background-size: cover;
+  }
 
   &_header {
     color: $color-white-pure;
     padding: $size-xl;
+
+    header {
+      margin: $size-b 0;
+
+      @include mq($from: bp-l) {
+        margin: 3rem 0;
+      }
+    }
+
+    a {
+      color: $color-yellow-tribune;
+      text-decoration: underline;
+
+      &:hover {
+        color: lighten($color-yellow-tribune, 10%);
+      }
+    }
+
+    @include mq($until: bp-l) {
+      background-color: lighten($color-black-pure, 20%);
+      background-image: url('../img/bg_image.jpg');
+      background-size: cover;
+    }
+
+    @include mq($from: bp-l) {
+      flex: 0 1 auto;
+      overflow: hidden;
+      padding: $size-xl 3rem;
+      width: 55%
+    }
+
+    @include mq($from: bp-xl) {
+      flex: 0 1 auto;
+      overflow: hidden;
+      padding: $size-xl 3rem;
+      width: 60%
+    }
+
   }
 
   &_box {
-    background-color: transparentize($color-white-pure, .3);
+    background-color: transparentize($color-white-pure, .7);
+    border-radius: 10px;
     padding: $size-b $size-l;
-    margin: $size-xl $size-b;
+    margin: $size-xl 0;
+
+    @include mq($from: bp-l) {
+      flex: 0 1 auto;
+      margin-right: $size-b;
+      overflow: hidden;
+      width: calc(45% - 1.1rem);
+    }
+
+    @include mq($from: bp-xl) {
+      width: calc(40% - 1.1rem);
+    }
   }
 
   label {
@@ -47,39 +127,21 @@ body {
 // Typography
 h1 {
   border-bottom: 3px solid $color-yellow-tribune;
-  font-size: 3rem;
+  font-size: $size-xl;
   font-weight: bold;
   padding-bottom: $size-l;
+
+  @include mq($from: bp-l) {
+    font-size: 2.5rem;
+  }
+  
+  @include mq($from: bp-xl) {
+    font-size: 3.1rem;
+  }
 }
 
 h3 {
   margin: 0 0 $size-b/2;
-}
-
-a {
-  border-bottom: 1px solid $color-blue-light;
-  box-shadow: inset 0 -1px 0 0 $color-blue-light;
-  color: inherit;
-  text-decoration: none;
-
-  &:hover,
-  &:active {
-    border-bottom: 1px solid $color-teal-gray;
-    box-shadow: inset 0 -2px 0 0 $color-teal-gray;
-    color: inherit;
-    transition: all 0.8s ease;
-  }
-
-  &.unlink {
-    border: 0;
-    box-shadow: none;
-    text-decoration: none;
-    &:hover,
-    &:active {
-      border: 0;
-      text-decoration: none;
-    }
-  }
 }
 
 p {
@@ -248,6 +310,31 @@ input::-webkit-inner-spin-button, {
   }
 }
 
+.contact {
+  .smallcaps--light {
+    font-size: $size-xxs;
+    margin-bottom: $size-b/4;
+  }
+
+  p {
+    margin-bottom: $size-b/4;
+  }
+
+  &-list {
+    list-style-type: none;
+
+    li {
+      @extend .unlink;
+      font-size: $size-xs;
+      margin: 0;
+
+      a {
+        color: $color-teal-gray;
+      }
+    }
+  }
+}
+
 .radio_toggle {
   overflow: hidden;
 
@@ -276,7 +363,8 @@ input::-webkit-inner-spin-button, {
   }
 
   label {
-    background-color: $color-gray-background;
+    background-color: $color-white-pure;
+    border: 2px solid $color-yellow-tribune;
     border-radius: 4px;
     color: $color-black-off;
     font-size: $size-xs;
