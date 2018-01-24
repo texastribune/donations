@@ -30,7 +30,7 @@ class MemberForm(BaseForm):
 
 class MemberForm2(BaseForm):
     openended_status = RadioField(u'Membership Duration',
-        choices=[('yearly', 'Annually'), ('monthly', 'Monthly'), ('None', 'One Time')],
+        choices=[('yearly', 'Annual'), ('monthly', 'Monthly'), ('None', 'One Time')],
         default='yearly')
 
 class DonateForm(BaseForm):

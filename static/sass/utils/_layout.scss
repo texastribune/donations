@@ -95,6 +95,12 @@
   display: none !important;
 }
 
+.hide_until--m {
+  @include mq($until: bp-m) {
+    display: none !important;
+  }
+}
+
 .print {
   &__hide {
     @media print {

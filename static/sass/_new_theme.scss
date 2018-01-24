@@ -13,21 +13,47 @@ body {
   padding: 0 $size-xxl $size-xxl;
 }
 
-ul {
-  li {
-    list-style-type: none;
+// Masthead with logo
+.masthead {
+  img {
+    padding: $size-s $size-xxl;
+    max-width: 360px;
   }
 }
 
+// Splash background
+.splash {
+  background-color: lighten($color-black-pure, 20%);
+  background-position-x: 50%;
+  background-image: url('../img/bg_image.jpg');
+
+  &_header {
+    color: $color-white-pure;
+    padding: $size-xl;
+  }
+
+  &_box {
+    background-color: transparentize($color-white-pure, .3);
+    padding: $size-b $size-l;
+    margin: $size-xl $size-b;
+  }
+
+  label {
+    color: $color-black-off;
+  }
+}
+
+
 // Typography
 h1 {
-  font-size: $size-xxl;
+  border-bottom: 3px solid $color-yellow-tribune;
+  font-size: 3rem;
   font-weight: bold;
-  margin-top: $size-b;
+  padding-bottom: $size-l;
 }
 
 h3 {
-  margin: 0;
+  margin: 0 0 $size-b/2;
 }
 
 a {
@@ -57,8 +83,7 @@ a {
 }
 
 p {
-  margin: 0;
-  padding: $size-b 0;
+  margin: 0 0 $size-b;
 }
 
 label {
@@ -112,18 +137,7 @@ input::-webkit-inner-spin-button, {
   padding: $size-b/4 0 $size-s 0;
 }
 
-
-// Masthead with logo
-.masthead {
-  border-bottom: 2px solid $color-yellow-tribune;
-  img {
-    padding: $size-s $size-xxl;
-    max-width: 360px;
-  }
-}
-
 // Form styles
-
 .dollar {
   @extend .font-sansserif;
   color: $color-black-pure;
@@ -153,21 +167,7 @@ input::-webkit-inner-spin-button, {
   clear: both;
   font-size: $size-s;
   padding: 0;
-  margin-bottom: $size-b;
-}
-
-// styles for openended status radio buttons on yearly member form
-#openended_status {
-  li {
-    padding-left: $size-b/2;
-  }
-  input {
-    margin: 0 $size-b/4 $size-b 0;
-  }
-}
-
-label[for='openended_status-0'], label[for='openended_status-1'] {
-  float: none;
+  margin-bottom: 0;
 }
 
 .payment-buttons {
@@ -242,33 +242,59 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   color: red;
 }
 
-// Social share buttons
-.social-wrapper {
-  margin-bottom: $size-b;
-  a:hover {
-    text-decoration: none;
+.info-list {
+  li {
+    margin: 0 0 $size-b $size-b;
   }
 }
 
-.social {
-  color: $color-white-pure;
-  font-size: $size-b;
-  margin: $size-b/2 $size-b/2 $size-b/2 0;
-  padding: $size-b 0;
+.radio_toggle {
+  overflow: hidden;
 
-  &:hover {
-    opacity: .9;
+  ul {
+    display: flex;
+  	list-style-type: none;
+
+    > :last-child {
+      margin-right: 0;
+    }
   }
-}
 
-.facebook {
-  background: $color-facebook;
-}
+  li {
+    flex: 0 1 33.33333%;
+    margin-right: $size-b/2;
+    max-width: 100%;
+  }
 
-.twitter {
-  background: $color-twitter;
-}
+  input {
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+  }
 
-.email {
-  background: $color-yellow-tribune;
+  label {
+    background-color: $color-gray-background;
+    border-radius: 4px;
+    color: $color-black-off;
+    font-size: $size-xs;
+    font-weight: normal;
+    padding: $size-b/2;
+    text-align: center;
+    text-shadow: none;
+    transition: all 0.1s ease-in-out;
+    min-width: 100%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:checked + label {
+    background-color: $color-yellow-tribune;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
 }

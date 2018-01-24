@@ -12,14 +12,10 @@
   <div class="form-section col">
     {{ form.reason.label }}
       {{ form.reason(maxlength=100) }}
-  </div>
-</div>
-<div class="grid_row">
-  <div class="col col_9--l">
-    {{ form.pay_fees.label }}
-      {{ form.pay_fees(checked=False) }}
-    <p id="pay-fee-amount" class="label-info"><span></span></p>
-    <p id="pay-fee-info">Paying these fees directs more money in support of the Tribune’s mission.</p>
+      {{ form.pay_fees.label }}
+        {{ form.pay_fees(checked=False) }}
+      <p id="pay-fee-amount" class="label-info"><span></span></p>
+      <p id="pay-fee-info">Paying these fees directs more money in support of the Tribune’s mission.</p>
   </div>
 </div>
 {{ form.pay_fees_value(value="False") }}
@@ -39,6 +35,4 @@
       <button id="applePayButton" class="button-applePay hidden">&nbsp;</button>
     </li>
   </ul>
-
-  <p>Prefer to mail a check? Use our <a href="https://static.texastribune.org/media/marketing/TT-919-Membership_Contribution_Form.pdf">membership form</a>. Our mailing address is 919 Congress Avenue, Sixth Floor, Austin, TX 78701.</p>
 </div>
