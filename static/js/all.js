@@ -22,7 +22,7 @@ var display_level = function() {
     } else {
       level_label.text('');
     }
-  } else {
+  } else if (frequency == 'yearly') {
     // detemine level and update text based on yearly frequency
     if (input_amount == 10) {
       level_label.text('Student');
@@ -41,6 +41,9 @@ var display_level = function() {
     } else {
       level_label.text('');
     }
+  } else {
+    level_label.text('');
+    level_label.parent().hide();
   }
 };
 
