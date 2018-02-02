@@ -87,14 +87,13 @@ body {
     @include mq($from: bp-l) {
       flex: 0 1 auto;
       overflow: hidden;
-      padding: $size-xl 3rem;
+      padding: $size-xl 6rem $size-xl $size-xl;
       width: 55%
     }
 
     @include mq($from: bp-xl) {
       flex: 0 1 auto;
       overflow: hidden;
-      padding: $size-xl 3rem;
       width: 60%
     }
 
@@ -102,14 +101,16 @@ body {
 
   &_box {
     background-color: transparentize($color-white-pure, .5);
-    border-radius: 10px;
-    padding: $size-b $size-l;
-    margin: $size-xl 0;
+    border-radius: 2px;
+    padding: 0 $size-l;
+    margin-top: $size-b;
 
     @include mq($from: bp-l) {
       flex: 0 1 auto;
       margin-right: $size-b;
       overflow: hidden;
+      padding: $size-b $size-l;
+      margin: $size-xl 0;
       width: calc(45% - 1.1rem);
     }
 
@@ -251,8 +252,8 @@ input::-webkit-inner-spin-button, {
 
 // Stripe form submit button styles
 .button {
-  color: $color-black-pure;
   @extend .font-sansserif;
+  color: $color-black-pure;
   font-size: $size-l;
   font-weight: bold;
   letter-spacing: 0.03em;
@@ -384,5 +385,40 @@ input::-webkit-inner-spin-button, {
     background-color: $color-yellow-tribune;
     -webkit-box-shadow: none;
     box-shadow: none;
+  }
+}
+
+.widget_nav {
+  @extend %link--teal;
+  list-style: none;
+
+  a {
+    font-weight: 400;
+  }
+
+  a:hover {
+    font-weight: 400;
+    text-decoration: none;
+  }
+
+  &--list {
+    @extend .font-sansserif;
+    background-color: $color-white-pure;
+    border-top: 1px solid $color-gray-light;
+    border-left: 5px solid $color-white-pure;
+    color: $color-black-off;
+    letter-spacing: .03em;
+    margin-bottom: 0;
+    padding: $size-b/2 $size-b;
+    text-transform: uppercase;
+
+    &:hover {
+      border-left: 5px solid $color-yellow-tribune;
+      color: $color-black-pure;
+    }
+  }
+
+  &:last-child {
+    border-bottom: 1px solid $color-gray-light;
   }
 }
