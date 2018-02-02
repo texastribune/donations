@@ -101,7 +101,7 @@ body {
   }
 
   &_box {
-    background-color: transparentize($color-white-pure, .7);
+    background-color: transparentize($color-white-pure, .5);
     border-radius: 10px;
     padding: $size-b $size-l;
     margin: $size-xl 0;
@@ -134,7 +134,7 @@ h1 {
   @include mq($from: bp-l) {
     font-size: 2.5rem;
   }
-  
+
   @include mq($from: bp-xl) {
     font-size: 3.1rem;
   }
