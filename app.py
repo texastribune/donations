@@ -81,10 +81,12 @@ def member2_form():
     campaign_id = request.args.get('campaignId', default='')
 
     installment_period = request.args.get('installmentPeriod')
-    if installment_period is None:
-        installment_period = 'None'
+    if installment_period is 'None':
+        openended_status = 'None'
+    else:
+        openended_status = 'Open'
     installments = 'None'
-    openended_status = 'yearly'
+
     return render_template('member-form2.html', form=form, amount=amount,
         campaign_id=campaign_id, installment_period=installment_period,
         installments=installments, openended_status=openended_status,
