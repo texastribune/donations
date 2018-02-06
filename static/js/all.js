@@ -82,6 +82,13 @@ var listen_for_installments = function() {
   });
 };
 
+var listen_for_installment_period = function() {
+  var yearly_button = $('input[id="installment_period-0"]');
+
+  yearly_button.click(function() {
+    console.log('yearly');
+  });
+}
 
 // https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
 var payFeeAmount = function() {
