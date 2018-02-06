@@ -216,9 +216,9 @@ input::-webkit-inner-spin-button, {
 }
 
 // Secret hidden field that sets recurring or one-time payment
-// #openended_status {
-//   display: none;
-// }
+#openended_status {
+  display: none;
+}
 
 #pay_fees {
   clear: both;
