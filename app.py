@@ -80,19 +80,22 @@ def member2_form():
 
     campaign_id = request.args.get('campaignId', default='')
     installments = 'None'
-    installment_period = request.args.get('installmentPeriod').lower()
+    installment_period = request.args.get('installmentPeriod')
 
     if installment_period is None:
         installment_period = 'yearly'
         openended_status = 'Open'
-    elif installment_period == 'yearly' or installment_period == 'monthly':
-        openended_status = 'Open'
-    elif installment_period == 'once':
-        installment_period = 'None'
-        openended_status = 'None'
     else:
-        installment_period = 'yearly'
-        openended_status = 'Open'
+        installment_period = installment_period.lower()
+
+        if installment_period == 'yearly' or installment_period == 'monthly':
+            openended_status = 'Open'
+        elif installment_period == 'once':
+            installment_period = 'None'
+            openended_status = 'None'
+        else:
+            installment_period = 'yearly'
+            openended_status = 'Open'
 
     form.installment_period.default = installment_period
     form.openended_status.default = openended_status
