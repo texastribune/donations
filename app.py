@@ -79,13 +79,24 @@ def member2_form():
         return render_template('error.html', message=message)
 
     campaign_id = request.args.get('campaignId', default='')
+    installments = 'None'
+    installment_period = request.args.get('installmentPeriod').lower()
 
-    installment_period = request.args.get('installmentPeriod')
-    if installment_period is 'None':
+    if installment_period is None:
+        installment_period = 'yearly'
+        openended_status = 'Open'
+    elif installment_period == 'yearly' or installment_period == 'monthly':
+        openended_status = 'Open'
+    elif installment_period == 'once':
+        installment_period = 'None'
         openended_status = 'None'
     else:
+        installment_period = 'yearly'
         openended_status = 'Open'
-    installments = 'None'
+
+    form.installment_period.default = installment_period
+    form.openended_status.default = openended_status
+    form.process()
 
     return render_template('member-form2.html', form=form, amount=amount,
         campaign_id=campaign_id, installment_period=installment_period,
@@ -236,6 +247,8 @@ def charge():
     customer_last = request.form['last_name']
 
     email_is_valid = validate_email(customer_email)
+
+    print(request.form)
 
     if email_is_valid:
         customer = stripe.Customer.create(
