@@ -312,7 +312,8 @@ input::-webkit-inner-spin-button, {
 
 .info-list {
   li {
-    margin: 0 0 $size-b $size-b;
+    font-size: $size-b;
+    margin: 0 0 $size-b $size-m;
   }
 }
 
