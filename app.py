@@ -251,8 +251,6 @@ def charge():
 
     email_is_valid = validate_email(customer_email)
 
-    print(request.form)
-
     if email_is_valid:
         customer = stripe.Customer.create(
                 email=request.form['stripeEmail'],
