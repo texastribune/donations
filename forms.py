@@ -28,6 +28,11 @@ class MemberForm(BaseForm):
         choices=[('Open', 'Sustaining'), ('None', 'One Time')],
         default='Open')
 
+class MemberForm2(BaseForm):
+    installment_period = RadioField(u'Installment Period',
+        choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
+    openended_status = RadioField(u'Membership Duration',
+        choices=[('Open', 'Sustaining'), ('None', 'One Time')])
 
 class DonateForm(BaseForm):
     openended_status = HiddenField(u'Openended Status')

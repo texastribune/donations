@@ -95,6 +95,18 @@
   display: none !important;
 }
 
+.hide_until--l {
+  @include mq($until: bp-l) {
+    display: none !important;
+  }
+}
+
+.hide_from--l {
+  @include mq($from: bp-l) {
+    display: none !important;
+  }
+}
+
 .print {
   &__hide {
     @media print {

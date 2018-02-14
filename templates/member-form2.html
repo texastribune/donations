@@ -1,0 +1,123 @@
+{% extends "new_layout.html" %}
+{% block title %}
+  {{ super() }}
+{% endblock %}
+{% block extra_script %}
+  {{ super() }}
+{% endblock %}
+
+{% block content %}
+  <section class="masthead">
+    <div class="grid_container grid_row">
+      <a href="http://www.texastribune.org/" class="unlink">
+        <img src="{{ url_for('static', filename='img/logo.png') }}">
+      </a>
+    </div>
+  </section>
+  <section class="splash grid_separator">
+    <div class="grid_container">
+      <div class="grid">
+        <div class="splash_header">
+          <header class=" grid_separator--l">
+            <h1 class="grid_separator--l">Support independent, fact-based journalism</h1>
+            <p>As a nonprofit organization, our work is made possible through the generosity of members and donors. <a href="https://www.texastribune.org/about/">Learn more</a> about the Tribune's mission.</p>
+          </header>
+        </div>
+        <div class="splash_box">
+          <form action="/charge" method="post">
+            <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
+              <h2 class="grid_separator">I'm ready to give...</h2>
+              <div class="grid_separator--l">
+                <div class="grid_row grid_separator">
+                  <div class="col">
+                    <span class="dollar">$</span>
+                    {{ form.amount(value=amount, autocomplete="off", class="dollar") }}
+                  </div>
+                </div>
+                <div class="form-section grid_row">
+                  <label for="installment_period">Membership Type</label>
+                  <br>
+                </div>
+                <div class="radio_toggle grid_separator">
+                  {{ form.installment_period }}
+                </div>
+              </div>
+              {% include 'includes/form_inner2.html' %}
+              {{ form.description(value='The Texas Tribune Membership') }}
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <section class="main grid_container grid_row grid_wrap--l">
+    <div class="col_9">
+      <div class="grid_separator--l">
+        <h3>All members enjoy the following benefits:</h3>
+        <ul class="info-list">
+          <li>Recognition on our <a href="https://www.texastribune.org/support-us/donors-and-members/">Donor Wall</a>.</li>
+          <li>Discounted tickets to the annual <a href="https://www.texastribune.org/festival/">Texas Tribune Festival</a>.</li>
+          <li>Exclusive, quarterly e-newsletter, where members get a behind-the-scenes look at the Tribune’s latest projects and initiatives.</li>
+        </ul>
+      </div>
+
+      <div class="grid_separator--l">
+        <h3>Prefer to mail a check?</h3>
+        <p>Use our <a href="https://static.texastribune.org/media/marketing/TT-919-Membership_Contribution_Form.pdf">membership form</a>. Our mailing address is 919 Congress Avenue, Sixth Floor, Austin, TX 78701.</p>
+      </div>
+
+      <div class="grid_separator--l">
+        <h3>Sustaining or one-time membership?</h3>
+        <p>We think it's important that you get to support and consume the news on your own time and on your own terms. All donations are greatly appreciated.</p>
+        <p>A sustaining membership means your donation recurs automatically on a monthly or yearly basis via credit card. This provides the Tribune with the sort of predictable revenue that allows us to plan budgets a few years at a time, and it helps eliminate renewal mailings or lapses in your membership.</p>
+      </div>
+
+      <div class="grid_separator--l">
+        <h3>Circle Membership</h3>
+        <p>Circle Membership is a three-year commitment that backs the vital work of our journalists. <a href="https://support.texastribune.org/circle.html">Circle members</a> believe in supporting our public service mission so that all Texans can access our nonpartisan news, data and events at no cost.</p>
+        <p>Circle Members enjoy invitations to exclusive events and special updates from CEO Evan Smith.</p>
+      </div>
+
+      <div class="grid_separator--l">
+        <h3>Have a question?</h3>
+        <p>Rebecca Quarls, <em>Membership and Marketing Manager</em></p>
+        <ul class="contact-list">
+          <li>512-716-8686</li>
+          <li><a href="mailto:rquarls@texastribune.org">rquarls@texastribune.org</a></li>
+        </ul>
+      </div>
+
+      <div class="contact grid_separator--l">
+        <h3>Want to give more?</h3>
+        <div class="grid_separator">
+          <h4 class="smallcaps--light">Major Gifts and Grants</h4>
+          <p>Terry Quinn, <em>Chief Development Officer</em></p>
+          <ul class="contact-list">
+            <li>512-716-8613</li>
+            <li><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="smallcaps--light">Corporate Sponsorships</h4>
+          <p>April Hinkle, <em>Chief Revenue Officer</em></p>
+          <ul class="contact-list">
+            <li>512-716-8634</li>
+            <li><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <nav class="col_3">
+      <ul class="widget_nav grid_separator">
+        <a href="https://support.texastribune.org/levels.html"><li class="widget_nav--list">Explore Levels</li></a>
+        <a href="https://support.texastribune.org/circle.html"><li class="widget_nav--list">Circle Membership</li></a>
+        <a href="https://www.texastribune.org/support-us/donors-and-members/"><li class="widget_nav--list">Donor and Member Wall</li></a>
+        <a href="https://www.texastribune.org/support-us/corporate-sponsors/"><li class="widget_nav--list">Corporate Sponsors</li></a>
+        <a href="https://support.texastribune.org/faq.html"><li class="widget_nav--list">Frequently Asked Questions</li></a>
+      </ul>
+    </nav>
+  </section>
+  {% include 'includes/change_installment_period_js.html' %}
+  {% include 'includes/stripe_checkout_js.html' %}
+  {% include 'includes/display_pay_fees.html' %}
+{% endblock %}

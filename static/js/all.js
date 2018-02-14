@@ -82,7 +82,6 @@ var listen_for_installments = function() {
   });
 };
 
-
 // https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
 var payFeeAmount = function() {
   var goalAmount = parseFloat($('input[name="amount"]').val());
