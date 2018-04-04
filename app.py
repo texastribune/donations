@@ -101,7 +101,7 @@ def member2_form():
     form.openended_status.default = openended_status
     form.process()
 
-    return render_template('member-form2.html', form=form, amount=amount,
+    return render_template('member-smd.html', form=form, amount=amount,
         campaign_id=campaign_id, installment_period=installment_period,
         installments=installments, openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
