@@ -1,6 +1,8 @@
 html {
-  @extend .font-sansserif;
-  font-size: $size-s;
+  //@extend .font-sansserif;
+  //font-size: $size-s;
+
+  //This keeps the footer bar in place
   min-height: 100%;
   position: relative;
 }
