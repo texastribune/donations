@@ -1,0 +1,275 @@
+$size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
+%section-padding {
+  padding-top: $size-xxxl;
+  padding-bottom: $size-xxxl;
+}
+%button { //Replace this later with _buttons.scss reference
+  color: $color-black-pure;
+  background-color: $color-white-pure;
+  border: 1px solid $color-yellow-tribune;
+  font-size: $size-xs;
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: $size-xxs;
+  cursor: pointer;
+}
+%button--yellow {
+  @extend %button;
+  background-color: $color-yellow-tribune;
+}
+%button_toggle {
+  @extend %button;
+  text-shadow: none;
+  transition: all 0.1s ease-in-out;
+  min-width: 100%;
+  float: left;
+}
+%button_toggle--selected {
+  @extend %button_toggle;
+  @extend %button--yellow;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+%input_text { // Can I use what I wrote from subscribe page instead?
+  @extend .font-sansserif;
+  width: 100%;
+  padding: $size-xxs;
+  border: 1px solid $color-gray-light;
+  font-size: $size-b;
+  color: $color-black-pure;
+}
+%input_text--placeholder {
+  color: $color-gray-light;
+}
+
+html {
+  @extend .font-sansserif;
+
+  //This keeps the footer bar in place
+  min-height: 100%;
+  position: relative;
+}
+body {
+  margin: 0 0 60px;
+}
+
+// Masthead
+.masthead {
+  position: relative;
+  padding-top: $size-s;
+  padding-bottom: $size-xxs;
+  img { height: 30px; }
+}
+
+// Header
+.splash {
+  @extend %section-padding;
+  background-color: $color-sand;
+
+  .grid_row {
+    align-items: center;
+  }
+}
+.splash_header {
+  &--headline {
+    padding-bottom: $size-l;
+    border-bottom: 3px solid $color-yellow-tribune;
+    @include mq($from: bp-l) {
+      font-size: 2.5rem;
+    }
+    @include mq($from: bp-xl) {
+      font-size: 3rem;
+    }
+  }
+  &--description a {
+    @extend %link--blue;
+  }
+}
+.splash_box {
+  background-color: transparentize($color-white-pure, .5);
+  padding: $size-s;
+}
+
+// Form
+.form_membership {
+  .tt_input {
+    @extend %input_text;
+    &::placeholder {
+      @extend %input_text--placeholder;
+    }
+  }
+  // Hides number input spinner on webkit browsers
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button, {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+
+  .donation {
+    font-weight: bold;
+    font-size: $size-l;
+    padding-bottom: $size-b;
+    border-bottom: 1px solid $color-gray-light;
+    &--input {
+      position: relative;
+    }
+    &--dollar {
+      position: absolute;
+      left: $size-xxs;
+      top: $size-xxs;
+    }
+    &--amount {
+      font-size: $size-l;
+      padding-left: $size-xl;
+    }
+  }
+
+  .radio_toggle {
+    overflow: hidden;
+    list-style-type: none;
+    li {
+      flex: 0 1 33.33333%;
+      margin-right: $size-b/2;
+      max-width: 100%;
+      &:last-child { margin-right: 0; }
+    }
+    input { //Feels like this could be a utility class
+      position: absolute !important;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      width: 1px;
+      border: 0;
+      overflow: hidden;
+    }
+    label {
+      @extend %button_toggle;
+    }
+    input:checked + label {
+      @extend %button_toggle--selected;
+    }
+  }
+
+  .pay_fee {
+    align-items: flex-start;
+    &--checkbox {
+      margin-right: $size-xxs;
+      margin-top: 2px;
+    }
+    &--amount {
+      font-weight: bold;
+    }
+    &--description {
+      @extend .font-sansserif;
+      font-size: $size-xs;
+      color: $color-gray-medium;
+    }
+  }
+
+  .submit {
+    text-align: center;
+    &--button {
+      @extend %button--yellow;
+    }
+    &--button-applePay {
+      background-color: $color-black-pure;
+      border-color: $color-black-pure;
+      background-image: -webkit-named-image(apple-pay-logo-white);
+      background-origin: content-box;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 100% 60%;
+      width: 150px;
+    }
+  }
+
+  .form-error { //I'd like to rename these classes, but will need to update the JS
+    display: none;
+    .error-form-message {
+      clear: both;
+      @extend .font-sansserif;
+      font-size: $size-xs;
+      color: $color-red;
+      text-align: center;
+    }
+  }
+}
+
+// Secret hidden field that sets recurring or one-time payment
+#openended_status {
+  display: none;
+}
+
+// Content
+.main {
+  @extend %section-padding;
+}
+
+.contact {
+  .smallcaps--light {
+    font-size: $size-xxs;
+    margin-bottom: $size-b/4;
+  }
+
+  p {
+    margin-bottom: $size-b/4;
+  }
+
+  &-list {
+    list-style-type: none;
+
+    li {
+      @extend .unlink;
+      font-size: $size-xs;
+      margin: 0;
+
+      a {
+        color: $color-teal-gray;
+      }
+    }
+  }
+}
+
+.info-list {
+  li {
+    font-size: $size-b;
+    margin: 0 0 $size-b $size-m;
+  }
+}
+
+// Anchor Links
+.widget_nav {
+  @extend %link--teal;
+  list-style: none;
+
+  a {
+    font-weight: 400;
+  }
+
+  a:hover {
+    font-weight: 400;
+    text-decoration: none;
+  }
+
+  &--list {
+    @extend .font-sansserif;
+    background-color: $color-white-pure;
+    border-top: 1px solid $color-gray-light;
+    border-left: 5px solid $color-white-pure;
+    color: $color-black-off;
+    letter-spacing: .03em;
+    margin-bottom: 0;
+    padding: $size-b/2 $size-b;
+    text-transform: uppercase;
+
+    &:hover {
+      border-left: 5px solid $color-yellow-tribune;
+      color: $color-black-pure;
+    }
+  }
+
+  &:last-child {
+    border-bottom: 1px solid $color-gray-light;
+  }
+}

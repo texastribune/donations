@@ -1,199 +1,218 @@
-$size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
-%section-padding {
-  padding-top: $size-xxxl;
-  padding-bottom: $size-xxxl;
-}
-%button { //Replace this later with _buttons.scss reference
-  color: $color-black-pure;
-  background-color: $color-white-pure;
-  border: 1px solid $color-yellow-tribune;
-  font-size: $size-xs;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: $size-xxs;
-  cursor: pointer;
-}
-%button--yellow {
-  @extend %button;
-  background-color: $color-yellow-tribune;
-}
-%button_toggle {
-  @extend %button;
-  text-shadow: none;
-  transition: all 0.1s ease-in-out;
-  min-width: 100%;
-  float: left;
-}
-%button_toggle--selected {
-  @extend %button_toggle;
-  @extend %button--yellow;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-}
-%input_text { // Can I use what I wrote from subscribe page instead?
-  @extend .font-sansserif;
-  width: 100%;
-  padding: $size-xxs;
-  border: 1px solid $color-gray-light;
-  font-size: $size-b;
-  color: $color-black-pure;
-}
-%input_text--placeholder {
-  color: $color-gray-light;
-}
-
 html {
   @extend .font-sansserif;
-
-  //This keeps the footer bar in place
+  font-size: $size-s;
   min-height: 100%;
   position: relative;
 }
+
 body {
   margin: 0 0 60px;
 }
 
-// Masthead
-.masthead {
-  position: relative;
-  padding-top: $size-s;
-  padding-bottom: $size-xxs;
-  img { height: 30px; }
-}
+.main {
+  padding: 0 $size-xxl $size-xxl;
 
-// Header
-.splash {
-  @extend %section-padding;
-  background-color: $color-sand;
+  a {
+    border-bottom: 1px solid $color-blue-light;
+    box-shadow: inset 0 -1px 0 0 $color-blue-light;
+    color: inherit;
+    text-decoration: none;
 
-  .grid_row {
-    align-items: center;
-  }
-}
-.splash_header {
-  &--headline {
-    padding-bottom: $size-l;
-    border-bottom: 3px solid $color-yellow-tribune;
-    @include mq($from: bp-l) {
-      font-size: 2.5rem;
+    &:hover,
+    &:active {
+      border-bottom: 1px solid $color-teal-gray;
+      box-shadow: inset 0 -2px 0 0 $color-teal-gray;
+      color: inherit;
+      transition: all 0.8s ease;
     }
-    @include mq($from: bp-xl) {
-      font-size: 3rem;
-    }
-  }
-  &--description a {
-    @extend %link--blue;
-  }
-}
-.splash_box {
-  background-color: transparentize($color-white-pure, .5);
-  padding: $size-s;
-}
 
-// Form
-.form_membership {
-  .tt_input {
-    @extend %input_text;
-    &::placeholder {
-      @extend %input_text--placeholder;
-    }
-  }
-  // Hides number input spinner on webkit browsers
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button, {
-      -webkit-appearance: none;
-      margin: 0;
-  }
-
-  .donation {
-    font-weight: bold;
-    font-size: $size-l;
-    padding-bottom: $size-b;
-    border-bottom: 1px solid $color-gray-light;
-    &--input {
-      position: relative;
-    }
-    &--dollar {
-      position: absolute;
-      left: $size-xxs;
-      top: $size-xxs;
-    }
-    &--amount {
-      font-size: $size-l;
-      padding-left: $size-xl;
-    }
-  }
-
-  .radio_toggle {
-    overflow: hidden;
-    list-style-type: none;
-    li {
-      flex: 0 1 33.33333%;
-      margin-right: $size-b/2;
-      max-width: 100%;
-      &:last-child { margin-right: 0; }
-    }
-    input { //Feels like this could be a utility class
-      position: absolute !important;
-      clip: rect(0, 0, 0, 0);
-      height: 1px;
-      width: 1px;
+    &.unlink {
       border: 0;
+      box-shadow: none;
+      text-decoration: none;
+      &:hover,
+      &:active {
+        border: 0;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+// Masthead with logo
+.masthead {
+  img {
+    padding: $size-s $size-xxl;
+    max-width: 360px;
+  }
+}
+
+// Splash background
+.splash {
+
+  @include mq($from: bp-l) {
+    background-color: lighten($color-black-pure, 20%);
+    background-position-x: 50%;
+    background-image: url('../img/bg_image.jpg');
+    background-size: cover;
+  }
+
+  &_header {
+    color: $color-white-pure;
+    padding: $size-xl;
+
+    header {
+      margin: $size-b 0;
+
+      @include mq($from: bp-l) {
+        margin: 3rem 0;
+      }
+    }
+
+    a {
+      color: $color-yellow-tribune;
+      text-decoration: underline;
+
+      &:hover {
+        color: lighten($color-yellow-tribune, 10%);
+      }
+    }
+
+    @include mq($until: bp-l) {
+      background-color: lighten($color-black-pure, 20%);
+      background-image: url('../img/bg_image.jpg');
+      background-size: cover;
+    }
+
+    @include mq($from: bp-l) {
+      flex: 0 1 auto;
       overflow: hidden;
+      padding: $size-xl 6rem $size-xl $size-xl;
+      width: 55%
     }
-    label {
-      @extend %button_toggle;
+
+    @include mq($from: bp-xl) {
+      flex: 0 1 auto;
+      overflow: hidden;
+      width: 60%
     }
-    input:checked + label {
-      @extend %button_toggle--selected;
+
+  }
+
+  &_box {
+    background-color: transparentize($color-white-pure, .5);
+    border-radius: 2px;
+    padding: 0 $size-l;
+    margin-top: $size-b;
+
+    @include mq($from: bp-l) {
+      flex: 0 1 auto;
+      margin-right: $size-b;
+      overflow: hidden;
+      padding: $size-b $size-l;
+      margin: $size-xl 0;
+      width: calc(45% - 1.1rem);
+    }
+
+    @include mq($from: bp-xl) {
+      width: calc(40% - 1.1rem);
     }
   }
 
-  .pay_fee {
-    align-items: flex-start;
-    &--checkbox {
-      margin-right: $size-xxs;
-      margin-top: 2px;
-    }
-    &--amount {
-      font-weight: bold;
-    }
-    &--description {
-      @extend .font-sansserif;
-      font-size: $size-xs;
-      color: $color-gray-medium;
-    }
+  label {
+    color: $color-black-off;
+  }
+}
+
+
+// Typography
+h1 {
+  border-bottom: 3px solid $color-yellow-tribune;
+  font-size: $size-xl;
+  font-weight: bold;
+  padding-bottom: $size-l;
+
+  @include mq($from: bp-l) {
+    font-size: 2.5rem;
   }
 
-  .submit {
-    text-align: center;
-    &--button {
-      @extend %button--yellow;
-    }
-    &--button-applePay {
-      background-color: $color-black-pure;
-      border-color: $color-black-pure;
-      background-image: -webkit-named-image(apple-pay-logo-white);
-      background-origin: content-box;
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-      background-size: 100% 60%;
-      width: 150px;
-    }
+  @include mq($from: bp-xl) {
+    font-size: 3.1rem;
+  }
+}
+
+h3 {
+  margin: 0 0 $size-b/2;
+}
+
+p {
+  margin: 0 0 $size-b;
+}
+
+label {
+  color: #7f7f7f;
+  cursor: pointer;
+  float: left;
+  font-size: $size-s;
+  font-weight: bold;
+  letter-spacing: 2px;
+  min-width: 150px;
+  text-transform: uppercase;
+}
+
+input {
+  font-size: $size-b;
+  margin: $size-b/2 $size-b/2 $size-b 0;
+  padding: .5em .25em;
+}
+
+input[type='text'] {
+  width: 100%;
+  border: 1px solid $color-gray-light;
+
+  &.dollar {
+    margin: 0 0 $size-b/2;
+    padding: 0 $size-b/2 0 2rem;
+    position: inherit;
+    width: 100%;
   }
 
-  .form-error { //I'd like to rename these classes, but will need to update the JS
-    display: none;
-    .error-form-message {
-      clear: both;
-      @extend .font-sansserif;
-      font-size: $size-xs;
-      color: $color-red;
-      text-align: center;
-    }
+  &.uneditable {
+    background-color: $color-white-off;
+    border: none;
+    padding: 0;
+    margin: 0;
   }
+}
+
+// For hiding number input spinner on webkit browsers
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button, {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.label-info {
+  @extend .font-sansserif;
+  font-size: $size-b;
+  font-style: normal;
+  margin: 0;
+  padding: $size-b/4 0 $size-s 0;
+}
+
+// Form styles
+.dollar {
+  @extend .font-sansserif;
+  color: $color-black-pure;
+  font-size: $size-giant;
+  font-weight: 700;
+  margin: 0 0 0 $size-b/2;
+  position: absolute;
+}
+
+.form__box {
+  background-color: $color-white-off;
+  padding: $size-l;
 }
 
 // Secret hidden field that sets recurring or one-time payment
@@ -201,9 +220,101 @@ body {
   display: none;
 }
 
-// Content
-.main {
-  @extend %section-padding;
+#pay_fees {
+  clear: both;
+  float: left;
+}
+
+#pay-fee-amount {
+  float: left;
+  font-size: $size-b;
+  padding: $size-b/4 0 0 0;
+}
+
+#pay-fee-info {
+  clear: both;
+  font-size: $size-s;
+  padding: 0;
+  margin-bottom: 0;
+}
+
+.payment-buttons {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: $size-b;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin-top: $size-b;
+    vertical-align: middle;
+
+    &:first-child {
+      margin-right: $size-b;
+    }
+  }
+}
+
+// Stripe form submit button styles
+.button {
+  @extend .font-sansserif;
+  color: $color-black-pure;
+  font-size: $size-l;
+  font-weight: bold;
+  letter-spacing: 0.03em;
+  text-align: center;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.button-flat {
+  background-color: $color-yellow-tribune;
+  border: 2px solid $color-yellow-tribune;
+  color: $color-black-off;
+  font-weight: 700;
+  height: 45px;
+  line-height: 0;
+  text-align: center;
+  width: 250px;
+
+  &:hover {
+    background-color: $color-white-pure;
+    color: #222222;
+    cursor: pointer;
+  }
+}
+
+.button-applePay {
+  -webkit-appearance: none;
+  background-color: black;
+  background-image: -webkit-named-image(apple-pay-logo-white);
+  background-origin: content-box;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: 100% 60%;
+  cursor: pointer;
+  border: none;
+  height: 45px;
+  width: 150px;
+}
+
+// Error styles
+.form-error {
+  display: none;
+}
+
+.error-form-message {
+  clear: both;
+  color: red;
+}
+
+.info-list {
+  li {
+    font-size: $size-b;
+    margin: 0 0 $size-b $size-m;
+  }
 }
 
 .contact {
@@ -231,14 +342,58 @@ body {
   }
 }
 
-.info-list {
+.radio_toggle {
+  overflow: hidden;
+
+  ul {
+    display: flex;
+  	list-style-type: none;
+
+    > :last-child {
+      margin-right: 0;
+    }
+  }
+
   li {
-    font-size: $size-b;
-    margin: 0 0 $size-b $size-m;
+    flex: 0 1 33.33333%;
+    margin-right: $size-b/2;
+    max-width: 100%;
+  }
+
+  input {
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+  }
+
+  label {
+    background-color: $color-white-pure;
+    border: 2px solid $color-yellow-tribune;
+    border-radius: 4px;
+    color: $color-black-off;
+    font-size: $size-xs;
+    font-weight: normal;
+    padding: $size-b/2;
+    text-align: center;
+    text-shadow: none;
+    transition: all 0.1s ease-in-out;
+    min-width: 100%;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+
+  input:checked + label {
+    background-color: $color-yellow-tribune;
+    -webkit-box-shadow: none;
+    box-shadow: none;
   }
 }
 
-// Anchor Links
 .widget_nav {
   @extend %link--teal;
   list-style: none;
