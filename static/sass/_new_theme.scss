@@ -18,10 +18,10 @@ body {
 
 // Masthead
 .masthead {
-  img {
-    padding: $size-s $size-xxl;
-    max-width: 360px;
-  }
+  position: relative;
+  padding-top: $size-s;
+  padding-bottom: $size-xxs;
+  img { height: 30px; }
 }
 
 // Header
