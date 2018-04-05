@@ -12,7 +12,8 @@ body {
 }
 
 .main {
-  padding: 0 $size-xxl $size-xxl;
+  //Replaced this padding with .grid_padded--xl on the element
+  //padding: 0 $size-xxl $size-xxl;
 
   a {
     border-bottom: 1px solid $color-blue-light;
