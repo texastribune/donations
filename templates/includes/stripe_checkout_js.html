@@ -29,11 +29,11 @@
           isValid = true;
 
       if (!bothNamesExist()) {
-        errorMessageText = 'Please check that you entered a first and last name, and then resubmit.';
+        errorMessageText = 'Please enter a first and last name.';
         isValid = false;
       }
       if (!isValidDollarAmount()) {
-        errorMessageText += ' Please check that you entered a donation amount above $1, and then resubmit.';
+        errorMessageText += ' Please enter a donation above $1.';
         isValid = false;
       }
 
