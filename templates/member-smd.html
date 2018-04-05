@@ -14,16 +14,17 @@
       </a>
     </div>
   </section>
-  <section class="splash grid_separator--l">
+  <section class="splash">
     <div class="grid_container">
-      <div class="grid">
-        <div class="splash_header">
-          <header class=" grid_separator--l">
-            <h1 class="grid_separator--l">Texas Tribune members help make our elections coverage possible.</h1>
-            <p>It’s our <a href="https://www.texastribune.org/about/">mission</a> to create a more engaged and informed Texas. Join our cause by becoming a Texas Tribune <nobr>member today.</nobr></p>
-          </header>
+      <div class="grid_row">
+        
+        <div class="splash_header col_6 grid_separator--l">
+          <h1 class="splash_header--headline grid_separator--l">Texas Tribune members help make our elections coverage possible.</h1>
+          <p class="splash_header--description">It’s our <a href="https://www.texastribune.org/about/">mission</a> to create a more engaged and informed Texas. Join our cause by becoming a Texas Tribune <nobr>member today.</nobr></p>
         </div>
-        <div class="splash_box">
+        <!-- Is it kosher to use a col to spread out columns? -->
+        <div class="col_1"></div>
+        <div class="splash_box col_5">
           <form action="/charge" method="post">
             <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
               <h2 class="grid_separator">I'm ready to give...</h2>
@@ -46,6 +47,7 @@
               {{ form.description(value='The Texas Tribune Membership') }}
           </form>
         </div>
+
       </div>
 
     </div>

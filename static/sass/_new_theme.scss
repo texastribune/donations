@@ -1,6 +1,11 @@
+$size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
+%section-padding {
+  padding-top: $size-xxxl;
+  padding-bottom: $size-xxxl;
+}
+
 html {
-  //@extend .font-sansserif;
-  //font-size: $size-s;
+  @extend .font-sansserif;
 
   //This keeps the footer bar in place
   min-height: 100%;
@@ -11,38 +16,7 @@ body {
   margin: 0 0 60px;
 }
 
-.main {
-  //Replaced this padding with .grid_padded--xl on the element
-  //padding: 0 $size-xxl $size-xxl;
-
-  a {
-    border-bottom: 1px solid $color-blue-light;
-    box-shadow: inset 0 -1px 0 0 $color-blue-light;
-    color: inherit;
-    text-decoration: none;
-
-    &:hover,
-    &:active {
-      border-bottom: 1px solid $color-teal-gray;
-      box-shadow: inset 0 -2px 0 0 $color-teal-gray;
-      color: inherit;
-      transition: all 0.8s ease;
-    }
-
-    &.unlink {
-      border: 0;
-      box-shadow: none;
-      text-decoration: none;
-      &:hover,
-      &:active {
-        border: 0;
-        text-decoration: none;
-      }
-    }
-  }
-}
-
-// Masthead with logo
+// Masthead
 .masthead {
   img {
     padding: $size-s $size-xxl;
@@ -50,98 +24,38 @@ body {
   }
 }
 
-// Splash background
+// Header
 .splash {
+  @extend %section-padding;
+  background-color: $color-sand;
 
-  @include mq($from: bp-l) {
-    background-color: lighten($color-black-pure, 20%);
-    background-position-x: 50%;
-    background-image: url('../img/bg_image.jpg');
-    background-size: cover;
-  }
-
-  &_header {
-    color: $color-white-pure;
-    padding: $size-xl;
-
-    header {
-      margin: $size-b 0;
-
-      @include mq($from: bp-l) {
-        margin: 3rem 0;
-      }
-    }
-
-    a {
-      color: $color-yellow-tribune;
-      text-decoration: underline;
-
-      &:hover {
-        color: lighten($color-yellow-tribune, 10%);
-      }
-    }
-
-    @include mq($until: bp-l) {
-      background-color: lighten($color-black-pure, 20%);
-      background-image: url('../img/bg_image.jpg');
-      background-size: cover;
-    }
-
-    @include mq($from: bp-l) {
-      flex: 0 1 auto;
-      overflow: hidden;
-      padding: $size-xl 6rem $size-xl $size-xl;
-      width: 55%
-    }
-
-    @include mq($from: bp-xl) {
-      flex: 0 1 auto;
-      overflow: hidden;
-      width: 60%
-    }
-
-  }
-
-  &_box {
-    background-color: transparentize($color-white-pure, .5);
-    border-radius: 2px;
-    padding: 0 $size-l;
-    margin-top: $size-b;
-
-    @include mq($from: bp-l) {
-      flex: 0 1 auto;
-      margin-right: $size-b;
-      overflow: hidden;
-      padding: $size-b $size-l;
-      margin: $size-xl 0;
-      width: calc(45% - 1.1rem);
-    }
-
-    @include mq($from: bp-xl) {
-      width: calc(40% - 1.1rem);
-    }
-  }
-
-  label {
-    color: $color-black-off;
+  .grid_row {
+    align-items: center;
   }
 }
-
-
-// Typography
-h1 {
-  border-bottom: 3px solid $color-yellow-tribune;
-  font-size: $size-xl;
-  font-weight: bold;
-  padding-bottom: $size-l;
-
-  @include mq($from: bp-l) {
-    font-size: 2.5rem;
+.splash_header {
+  &--headline {
+    padding-bottom: $size-l;
+    border-bottom: 3px solid $color-yellow-tribune;
+    @include mq($from: bp-l) {
+      font-size: 2.5rem;
+    }
+    @include mq($from: bp-xl) {
+      font-size: 3rem;
+    }
   }
-
-  @include mq($from: bp-xl) {
-    font-size: 3.1rem;
+  &--description a {
+    @extend %link--blue;
   }
+}
+.splash_box {
+  background-color: transparentize($color-white-pure, .5);
+  padding: $size-s;
+}
+
+// Content
+.main {
+  @extend %section-padding;
 }
 
 h3 {
