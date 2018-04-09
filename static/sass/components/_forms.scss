@@ -1,10 +1,19 @@
-%input--text {
+%input_text {
   @extend .sansserif;
   border: 1px solid $color-gray-light;
   height: 27px;
   padding: 0 $size-xxs;
-  color: $color-gray-medium;
+  color: $color-black-pure;
   font-size: $size-xs;
+}
+%input_text--l {
+  @extend %input_text;
+  height: 44px;
+  padding: $size-xxs;
+  font-size: $size-b;
+}
+%input_text--placeholder {
+  color: $color-gray-light;
 }
 
 .form {
@@ -49,7 +58,7 @@
   }
 
   input[type="text"] {
-    @extend %input--text;
+    @extend %input_text;
   }
 
   fieldset {

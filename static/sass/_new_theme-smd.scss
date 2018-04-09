@@ -11,17 +11,6 @@ $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
   min-width: 100%;
   float: left;
 }
-%input_text { // Can I use what I wrote from subscribe page instead?
-  @extend .font-sansserif;
-  width: 100%;
-  padding: $size-xxs;
-  border: 1px solid $color-gray-light;
-  font-size: $size-b;
-  color: $color-black-pure;
-}
-%input_text--placeholder {
-  color: $color-gray-light;
-}
 
 html {
   @extend .font-sansserif;
@@ -74,7 +63,8 @@ body {
 // Form
 .form_membership {
   .tt_input {
-    @extend %input_text;
+    @extend %input_text--l;
+    width: 100%;
     &::placeholder {
       @extend %input_text--placeholder;
     }
@@ -97,7 +87,7 @@ body {
     &--dollar {
       position: absolute;
       left: $size-xxs;
-      top: $size-xxs;
+      top: 0.5rem;
     }
     &--amount {
       font-size: $size-l;
