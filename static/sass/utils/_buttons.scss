@@ -263,6 +263,6 @@ $curve-standard: cubic-bezier(.4, .0, .2, 1);
     font-size: $size-xs;
     padding: $size-xxs;
     height: $button-large-height;
-    line-height: normal;
+    line-height: 20px;
   }
 }

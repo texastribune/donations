@@ -3,34 +3,13 @@ $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
   padding-top: $size-xxxl;
   padding-bottom: $size-xxxl;
 }
-%button { //Replace this later with _buttons.scss reference
-  color: $color-black-pure;
+%button_toggle {
+  @extend .button;
+  @extend .button--l;
   background-color: $color-white-pure;
   border: 1px solid $color-yellow-tribune;
-  font-size: $size-xs;
-  font-weight: bold;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  padding: $size-xxs;
-  cursor: pointer;
-}
-%button--yellow {
-  @extend %button;
-  background-color: $color-yellow-tribune;
-}
-%button_toggle {
-  @extend %button;
-  text-shadow: none;
-  transition: all 0.1s ease-in-out;
   min-width: 100%;
   float: left;
-}
-%button_toggle--selected {
-  @extend %button_toggle;
-  @extend %button--yellow;
-  -webkit-box-shadow: none;
-  box-shadow: none;
 }
 %input_text { // Can I use what I wrote from subscribe page instead?
   @extend .font-sansserif;
@@ -147,7 +126,8 @@ body {
       @extend %button_toggle;
     }
     input:checked + label {
-      @extend %button_toggle--selected;
+      @extend %button_toggle;
+      background-color: $color-yellow-tribune;
     }
   }
 
@@ -169,9 +149,6 @@ body {
 
   .submit {
     text-align: center;
-    // &--button {
-    //   @extend %button--yellow;
-    // }
     &--button-applePay {
       background-color: $color-black-pure;
       border-color: $color-black-pure;
