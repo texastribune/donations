@@ -196,7 +196,6 @@ body {
 .main {
   @extend %section-padding;
 }
-
 .list--bulleted {
   @extend .font-serif;
   li {
@@ -205,28 +204,10 @@ body {
     @extend %link--blue;
   }
 }
-
 .contact {
-  .smallcaps--light {
-    font-size: $size-xxs;
-    margin-bottom: $size-b/4;
-  }
-
+  @extend %link--blue;
   p {
-    margin-bottom: $size-b/4;
-  }
-
-  &-list {
-    list-style-type: none;
-
-    li {
-      @extend .unlink;
-      font-size: $size-xs;
-      margin: 0;
-
-      a {
-        color: $color-teal-gray;
-      }
-    }
+    @extend .font-sansserif;
+    font-size: $size-s;
   }
 }
