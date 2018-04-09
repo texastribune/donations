@@ -169,9 +169,9 @@ body {
 
   .submit {
     text-align: center;
-    &--button {
-      @extend %button--yellow;
-    }
+    // &--button {
+    //   @extend %button--yellow;
+    // }
     &--button-applePay {
       background-color: $color-black-pure;
       border-color: $color-black-pure;

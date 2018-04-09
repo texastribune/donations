@@ -71,6 +71,7 @@
 // dark buttons in mobile nav are a bit shorter so nav doesn't change height on scroll
 $button-nav-height: 24px;
 $button-default-height: 26px;
+$button-large-height: 44px;
 $button-border-width: 2px;
 
 // FYI: Some "links" are styled to look like buttons
@@ -252,5 +253,16 @@ $curve-standard: cubic-bezier(.4, .0, .2, 1);
     height: 40px;
     line-height: normal;
     padding: $size-b/2 $size-s;
+  }
+
+  // Display options
+  &--titlecase {
+    text-transform: none;
+  }
+  &--l {
+    font-size: $size-xs;
+    padding: $size-xxs;
+    height: $button-large-height;
+    line-height: normal;
   }
 }
