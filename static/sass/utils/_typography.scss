@@ -1,10 +1,74 @@
-// This isn't actually being used or loaded, leaving for reference.
+@font-face {
+  font-family: 'PT Serif';
+  src: url('https://cdn.texastribune.org/fonts/ptserif-regular.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/ptserif-regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'PT Serif';
+  src: url('https://cdn.texastribune.org/fonts/ptserif-bold.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/ptserif-bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'PT Serif';
+  src: url('https://cdn.texastribune.org/fonts/ptserif-italic.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/ptserif-italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'PT Serif';
+  src: url('https://cdn.texastribune.org/fonts/ptserif-bolditalic.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/ptserif-bolditalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('https://cdn.texastribune.org/fonts/opensans-regular.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/opensans-regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('https://cdn.texastribune.org/fonts/opensans-bold.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/opensans-bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('https://cdn.texastribune.org/fonts/opensans-italic.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/opensans-italic.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('https://cdn.texastribune.org/fonts/opensans-bolditalic.woff2') format('woff2'),
+       url('https://cdn.texastribune.org/fonts/opensans-bolditalic.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+
 .font-serif {
-  font-family: 'PT Serif', Georgia, serif;
+  font-family: Georgia, serif;
+
+  .fonts-loaded & {
+    font-family: 'PT Serif', Georgia, serif;
+  }
 }
 
 .font-sansserif {
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  .fonts-loaded & {
+    font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  }
 }
 
 // font root sizes
@@ -48,6 +112,7 @@ p {
 // Set base typography proportions for headers, paragraphs, etc.
 // sizing variables in util/_variables.scss
 h1 {
+  @extend .font-sansserif;
   font-size: $size-xxl;
   line-height: 1.2;
 
@@ -76,6 +141,11 @@ h5 {
   font-size: $size-xs;
 }
 
+h6 {
+  @extend .font-sansserif;
+  font-size: $size-xxs;
+}
+
 p {
   font-size: $size-b;
 }
@@ -99,6 +169,57 @@ cite {
   }
 }
 
+.sansserif {
+  @extend .font-sansserif;
+}
+
+// Standard headline: <h1>
+.headline {
+  @extend .font-serif;
+  @extend %link--blue_subtle;
+  color: $color-black-off;
+  font-weight: 700;
+}
+
+// Section header: <h3>
+// Example: 'Related Stories' Header
+.sectionhead {
+  @extend .font-sansserif;
+  border-bottom: 2px solid $color-gray-medium;
+  font-weight: 700;
+  letter-spacing: .03em;
+  padding-bottom: $size-b/4;
+  text-transform: uppercase;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+// Widget header: <h4>
+// Example: 'In this issue' Header on newsletters
+.widgethead {
+  @extend .font-sansserif;
+  background-color: $color-white-off;
+  letter-spacing: .03em;
+  padding: $size-b/2 $size-b;
+  text-transform: uppercase;
+
+  &.inverse {
+    background-color: $color-black-off;
+    color: $color-white-pure;
+  }
+
+  &--yellow {
+    background-color: $color-yellow-tribune;
+  }
+
+  &--blue {
+    background-color: $color-blue-light;
+  }
+}
+
 // Smallhead: <h5>
 // Examples: Mini-headers, byline & button text
 .smallcaps {
@@ -106,32 +227,16 @@ cite {
   color: $color-black-pure;
   font-weight: 700;
   letter-spacing: .03em;
-  padding: .2em 0;
+  line-height: 1;
   text-transform: uppercase;
 
   // Byline
   &--light {
     @extend .font-sansserif;
     color: $color-gray-medium;
-    font-size: $size-xs;
     font-weight: 400;
     letter-spacing: .05em;
     text-transform: uppercase;
-
-    @include mq($until: bp-l) {
-      font-size: $size-s;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-
-      &:active,
-      &:hover {
-        color: $color-teal-gray;
-        text-decoration: none;
-      }
-    }
   }
 
   &--teal {
@@ -145,18 +250,42 @@ cite {
     letter-spacing: .05em;
   }
 
-  &--section {
-    @extend .smallcaps--light;
-    font-size: $size-s;
-    margin-bottom: $size-b/4;
+  &--yellow {
+    @extend .smallcaps;
+    color: $color-yellow-tribune;
+    letter-spacing: .1em;
   }
 
-  &--section__header {
-    @extend .smallcaps--light;
-    border-top: 2px solid $color-black-off;
-    color: $color-gray-dark;
-    font-size: $size-s;
-    padding-top: $size-b/4;
+  &--nospacing {
+    line-height: 1;
+    margin-bottom: $size-b/4;
+    padding: 0;
+  }
+}
+
+.byline {
+  @extend .smallcaps--light;
+  @extend %link--teal;
+  font-size: $size-xs;
+  margin: $size-b/2 0 0;
+
+  &--item {
+    display: inline-block;
+    padding-right: $size-b;
+  }
+}
+
+// Description fields, like on series pages
+.description {
+  @extend .font-sansserif;
+  @extend %link--blue;
+  font-size: $size-xs;
+
+  // for templates that render safe HTML text
+  p {
+    @extend .font-sansserif;
+    @extend %link--blue;
+    font-size: $size-xs;
   }
 }
 
@@ -164,9 +293,105 @@ cite {
 // Examples: Grayed text below smallcaps, comment policy
 .subtext {
   @extend .font-sansserif;
-  @extend %link--blue;
-  color: $color-gray-medium;
-  font-size: $size-xs;
-  font-weight: 400;
-  padding: 0;
+  color: darken($color-gray-light, 20%);
+  font-size: $size-xxs;
+
+  a {
+    border: 0;
+    box-shadow: none;
+    color: $color-teal-gray;
+
+    &:hover {
+      border: 0;
+      box-shadow: none;
+      text-decoration: underline;
+    }
+  }
+}
+
+// Matches code grabber pullquote embed
+.story_quote {
+  &--pull {
+    @extend .font-sansserif;
+    color: $color-black-pure;
+    font-size: $size-m;
+    font-style: italic;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: $size-b 0;
+  }
+
+  &--cite {
+    @extend .font-sansserif;
+    display: block;
+    font-size: $size-b;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.3;
+    margin: $size-b/2 0 0;
+  }
+}
+
+// Caret bullet list for multiple headlines
+.headline_list {
+  list-style-type: none;
+  position: relative;
+
+  li {
+    @extend .grid_separator--s;
+    @extend .font-serif;
+    font-size: $size-s;
+    font-weight: 400;
+    padding: 0 $size-b;
+    position: relative;
+    margin-left: 0;
+    overflow: visible;
+
+    @include mq($until: bp-s) {
+      padding: $size-b/4 $size-b;
+    }
+
+    &:before {
+      color: $color-gray-light;
+      font: normal normal normal 14px/1 FontAwesome;
+      position: absolute;
+      left: 0;
+      margin-top: 3px;
+      content: '\f0da';
+    }
+
+    &:hover {
+      &:before {
+        color: $color-yellow-tribune;
+      }
+    }
+
+    a {
+      color: $color-gray-dark;
+      text-decoration: none;
+
+      &:hover {
+        color: $color-black-off;
+      }
+    }
+
+    .byline {
+      @extend %link--teal;
+      font-size: $size-xxs;
+    }
+  }
+
+  li.headline_list--data {
+    margin-bottom: $size-b/4;
+
+    &:before {
+      margin-top: 5px;
+    }
+
+    .subtext {
+      font-size: $size-xxs;
+      line-height: 1.5;
+    }
+  }
+
 }

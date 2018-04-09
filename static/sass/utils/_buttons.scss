@@ -3,7 +3,7 @@
 // if it's a link, you'll need to put a span element with class "vertical_center" inside it
 // that span element should contain any icons, text, etc.
 
-@mixin button($bg-color, $icon-color: $color-white-pure, $icon-size: $size-s, $inverse-text: white, $toggle: false, $mobile-only: false) {
+@mixin button($bg-color, $icon-color: $color-white-pure, $icon-size: $size-s, $inverse-text: white, $toggle: false, $mobile-only: false, $inverse: false) {
   background-color: $bg-color;
   border: $button-border-width solid $bg-color;
   color: $color-white-pure;
@@ -28,10 +28,21 @@
         }
       }
 
+    } @else if $inverse {
+      &:hover,
+      &:active {
+        background-color: transparent;
+        color: $color-white-pure;
+
+        i {
+          color: $bg-color;
+        }
+      }
+
     } @else {
       &:hover,
       &:active {
-        background-color: $color-white-pure;
+        background-color: transparent;
         color: $bg-color;
 
         i {
@@ -87,7 +98,9 @@ $curve-standard: cubic-bezier(.4, .0, .2, 1);
   // For user-input actions, i.e. "submit" or "search"
   &--yellow {
     @include button($color-yellow-tribune, $inverse-text: black);
+    display: inline-block;
     height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
   }
 
   // Default "Link" Button styles
@@ -108,6 +121,13 @@ $curve-standard: cubic-bezier(.4, .0, .2, 1);
 
   &--light_gray {
     @include button($color-gray-light);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--white_off {
+    @include button($bg-color: $color-white-off, $icon-color: $color-black-pure, $inverse-text: black);
     display: block;
     height: $button-default-height;
     line-height: $button-default-height - $button-border-width;
@@ -225,5 +245,12 @@ $curve-standard: cubic-bezier(.4, .0, .2, 1);
   // in that case, vertical centering happens by default, so we override line-height
   &.button--natural {
     line-height: normal;
+  }
+
+  &.button--s {
+    font-size: $size-s;
+    height: 40px;
+    line-height: normal;
+    padding: $size-b/2 $size-s;
   }
 }
