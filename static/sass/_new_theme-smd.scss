@@ -47,6 +47,8 @@ body {
 }
 .splash_header {
   &--headline {
+    @extend h1;
+    font-weight: bold;
     padding-bottom: $size-l;
     border-bottom: 3px solid $color-yellow-tribune;
     @include mq($from: bp-l) {
