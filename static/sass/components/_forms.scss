@@ -1,0 +1,207 @@
+%input--text {
+  @extend .sansserif;
+  border: 1px solid $color-gray-light;
+  height: 27px;
+  padding: 0 $size-xxs;
+  color: $color-gray-medium;
+  font-size: $size-xs;
+}
+
+.form {
+  &_instory {
+    border-top: 1px solid $color-gray-light;
+    border-bottom: 1px solid $color-gray-light;
+    margin: $size-b 0;
+    padding: $size-s $size-b $size-b;
+  }
+
+  &_padded {
+    padding: 0 $size-b;
+  }
+
+  ol,
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  li {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: $size-b/2;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    flex: none;
+    margin-right: $size-b/2;
+  }
+
+  input[type="email"]::placeholder {
+    font-size: $size-xs;
+  }
+
+  input[type="email"]:focus,
+  input[type="email"]:valid {
+    background-color: $color-white-pure;
+  }
+
+  input[type="text"] {
+    @extend %input--text;
+  }
+
+  fieldset {
+    border: 0;
+  }
+
+  &_labels {
+    padding-top: $size-b;
+
+    li {
+      margin-bottom: $size-s;
+    }
+
+    label,
+    input {
+      @extend .font-sansserif;
+    }
+
+    label {
+      font-weight: 700;
+      margin-right: $size-b/2;
+      font-size: $size-b;
+    }
+
+    input,
+    select {
+      flex: 1;
+    }
+
+    input[type="submit"] {
+      font-size: $size-xxs;
+    }
+
+    input[type="text"] {
+      font-size: $size-b;
+    }
+  }
+
+  &_labels--right {
+    text-align: right;
+
+    label {
+      flex: 0 0 auto;
+      margin-right: $size-b/2;
+      min-width: 35%;
+
+      @include mq($until: bp-s) {
+        flex: 0 0 100%;
+        margin-bottom: $size-b/2;
+        text-align: left;
+      }
+    }
+
+    select {
+      max-width: 100%;
+
+      @include mq($from: bp-s) {
+        max-width: calc(65% - .55rem);
+      }
+    }
+  }
+
+  // Used for inline checkboxes on mailchimp_subscribe form
+  &_labels--inline {
+    li {
+      @extend .font-sansserif;
+      font-size: $size-xs;
+      margin-bottom: 0;
+      padding: 0 0 $size-b/2;
+    }
+  }
+
+  &_list--hidden {
+    margin-top: $size-b/-2;
+    li {
+      margin: 0;
+    }
+  }
+
+  &_links {
+    @extend %link--teal;
+    a {
+      @extend .font-sansserif;
+      font-size: $size-xs;
+      margin: $size-s $size-s $size-s 0;
+    }
+  }
+
+  // for a text input and button/submit that should be side by side at all widths
+  // example usage in templates/search/search_results.html
+  // they should be wrapped by <div class="grid_row">
+  &_side {
+    &--button {
+      flex: 0 1 90px;
+    }
+
+    &--input {
+      //Consider having this extend .form_input--text instead of being so specific to form_side
+      //form_side--input could ocver the flex and margin, instead of the styles for the input itself.
+      border: 1px solid $color-gray-light;
+      display: block;
+      flex: 0 1 calc(100% - 90px - #{$size-xs});
+      height: 27px;
+      margin-right: $size-xs;
+      margin-right: $size-xs;
+      text-indent: $size-xxs;
+    }
+  }
+
+  &_dropdown {
+    display: inline-block;
+    position: relative;
+
+    select {
+      @extend .smallcaps;
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: $color-white-off;
+      border-radius: 0;
+      border: 2px solid $color-white-off;
+      cursor: pointer;
+      font-size: $size-xxs;
+      padding: $size-xxs/2 $size-m $size-xxs/2 $size-xxs/2;
+
+      &::-ms-expand {
+        display: none;
+      }
+    }
+
+    i {
+      font-size: $size-xxs;
+      position: absolute;
+      right: 6px;
+      top: 9px;
+    }
+  }
+
+  .errorlist {
+    color: red;
+    list-style-type: none;
+
+    li {
+      @extend .font-sansserif;
+      font-size: $size-s;
+    }
+  }
+
+  .form--small_txt {
+    @extend %link--blue;
+    font-size: $size-s;
+    font-style: italic;
+    font-weight: 400;
+  }
+}
