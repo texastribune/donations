@@ -197,6 +197,15 @@ body {
   @extend %section-padding;
 }
 
+.list--bulleted {
+  @extend .font-serif;
+  li {
+    font-size: $size-b;
+    margin: 0 0 $size-b $size-m;
+    @extend %link--blue;
+  }
+}
+
 .contact {
   .smallcaps--light {
     font-size: $size-xxs;
@@ -219,48 +228,5 @@ body {
         color: $color-teal-gray;
       }
     }
-  }
-}
-
-.info-list {
-  li {
-    font-size: $size-b;
-    margin: 0 0 $size-b $size-m;
-  }
-}
-
-// Anchor Links
-.widget_nav {
-  @extend %link--teal;
-  list-style: none;
-
-  a {
-    font-weight: 400;
-  }
-
-  a:hover {
-    font-weight: 400;
-    text-decoration: none;
-  }
-
-  &--list {
-    @extend .font-sansserif;
-    background-color: $color-white-pure;
-    border-top: 1px solid $color-gray-light;
-    border-left: 5px solid $color-white-pure;
-    color: $color-black-off;
-    letter-spacing: .03em;
-    margin-bottom: 0;
-    padding: $size-b/2 $size-b;
-    text-transform: uppercase;
-
-    &:hover {
-      border-left: 5px solid $color-yellow-tribune;
-      color: $color-black-pure;
-    }
-  }
-
-  &:last-child {
-    border-bottom: 1px solid $color-gray-light;
   }
 }
