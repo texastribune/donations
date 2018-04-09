@@ -9,9 +9,9 @@
   {{ form.installment_period(class="radio_toggle grid_row") }}
 </div>
 
-<div class="grid_row grid_wrap--m grid_separator--s">
-  {{ form.first_name(maxlength=50, placeholder="First name", class="col tt_input") }}
-  {{ form.last_name(maxlength=50, placeholder="Last name", class="col tt_input") }}
+<div class="grid_row grid_wrap--s">
+  {{ form.first_name(maxlength=50, placeholder="First name", class="col tt_input grid_separator--s") }}
+  {{ form.last_name(maxlength=50, placeholder="Last name", class="col tt_input grid_separator--s") }}
 </div>
 {{ form.reason(maxlength=100, placeholder="Encouraged to contribute by", class="col grid_separator tt_input") }}
 
@@ -31,5 +31,5 @@
 
 <div class="submit grid_separator--s">
   <button id="customButton" class="button button--yellow button--l">Pay by card</button>
-  <button id="applePayButton" class="submit--button submit--button-applePay hidden">&nbsp;</button>
+  <button id="applePayButton" class="button button--l button--applePay hidden">&nbsp;</button>
 </div>

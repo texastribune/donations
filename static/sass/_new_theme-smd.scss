@@ -36,6 +36,11 @@ body {
   @extend %section-padding;
   background-color: $color-sand;
 
+  @include mq($until: bp-l) {
+    padding-top: $size-xl;
+    padding-bottom: $size-xl;
+  }
+
   .grid_row {
     align-items: center;
   }
@@ -114,10 +119,17 @@ body {
     }
     label {
       @extend %button_toggle;
+
+      @include mq($until: bp-s) {
+        font-size: $size-xxs;
+      }
     }
     input:checked + label {
       @extend %button_toggle;
       background-color: $color-yellow-tribune;
+      @include mq($until: bp-s) {
+        font-size: $size-xxs;
+      }
     }
   }
 
@@ -126,6 +138,11 @@ body {
     &--checkbox {
       margin-right: $size-xxs;
       margin-top: 2px;
+
+      @include mq($until: bp-l) {
+        width: auto;
+        margin-right: 5px;
+      }
     }
     &--amount {
       font-weight: bold;
@@ -139,7 +156,12 @@ body {
 
   .submit {
     text-align: center;
-    &--button-applePay {
+    .button {
+      display: inline-block;
+      margin-right: 1%;
+      width: 48%;
+    }
+    .button--applePay {
       background-color: $color-black-pure;
       border-color: $color-black-pure;
       background-image: -webkit-named-image(apple-pay-logo-white);
@@ -147,7 +169,7 @@ body {
       background-position: 50% 50%;
       background-repeat: no-repeat;
       background-size: 100% 60%;
-      width: 150px;
+      margin-right: 0;
     }
   }
 
