@@ -1,0 +1,37 @@
+.grid_separator--xl {
+  margin-bottom: $size-xxl;
+}
+
+.smd_buckets {
+  @extend %section-padding;
+  border-bottom: 1px solid $color-gray-light;
+}
+
+.bucket_card {
+  border: 1px solid $color-blue-light;
+  padding: $size-xl $size-l $size-l;
+  position: relative;
+
+  @include mq($until: bp-s) {
+    &:first-child {
+      margin-bottom: $size-l;
+    }
+  }
+
+  &--amount {
+    @extend .smallcaps;
+    font-size: $size-s;
+    position: absolute;
+    top: -14px;
+    left: $size-l;
+    background-color: $color-blue-light;
+    border: 1px solid $color-blue-light;
+    border-radius: 50px;
+    padding: 2px $size-xxs;
+  }
+
+  &--description {
+    @extend .font-sansserif;
+    font-size: $size-s;
+  }
+}

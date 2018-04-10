@@ -2,6 +2,11 @@ $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
 %section-padding {
   padding-top: $size-xxxl;
   padding-bottom: $size-xxxl;
+
+  @include mq($until: bp-l) {
+    padding-top: $size-xl;
+    padding-bottom: $size-xl;
+  }
 }
 %button_toggle {
   @extend .button;
@@ -22,6 +27,13 @@ html {
 body {
   margin: 0 0 60px;
 }
+.highlight {
+  background-color: $color-yellow-tribune;
+  width: auto;
+  display: inline-block;
+  padding-left: $size-xxs;
+  padding-right: $size-xxs;
+}
 
 // Masthead
 .masthead {
@@ -35,11 +47,6 @@ body {
 .splash {
   @extend %section-padding;
   background-color: $color-sand;
-
-  @include mq($until: bp-l) {
-    padding-top: $size-xl;
-    padding-bottom: $size-xl;
-  }
 
   .grid_row {
     align-items: center;
@@ -193,7 +200,11 @@ body {
 }
 
 // Content
-.main {
+.member_benefits {
+  @extend %section-padding;
+  border-bottom: 1px solid $color-gray-light;
+}
+.faq {
   @extend %section-padding;
 }
 .list--bulleted {
@@ -202,6 +213,10 @@ body {
     font-size: $size-b;
     margin: 0 0 $size-b $size-m;
     @extend %link--blue;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
 .contact {
