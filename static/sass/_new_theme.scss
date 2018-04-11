@@ -239,6 +239,20 @@ body {
   @extend %section-padding;
   border-bottom: 1px solid $color-gray-light;
 }
+.member_quotes {
+  @extend %link--blue;
+
+  &--quote {
+      font-size: $size-b;
+      color: $color-gray-medium;
+  }
+  &--attribution {
+      font-size: $size-xs;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: $color-teal-gray;
+  }
+}
 .faq {
   @extend %section-padding;
 }
