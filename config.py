@@ -15,7 +15,7 @@ TIMEZONE = os.getenv('TIMEZONE', "US/Central")
 # Flask
 #
 FLASK_SECRET_KEY = os.getenv('FLASK_SECRET_KEY')
-FLASK_DEBUG = os.getenv('FLASK_DEBUG', 1)
+FLASK_DEBUG = os.getenv('FLASK_DEBUG', 0)
 WTF_CSRF_ENABLED = False
 
 ########
