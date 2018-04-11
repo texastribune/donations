@@ -104,7 +104,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
   {% endblock %}
-  <footer class="footer grid_container--l grid_padding grid_row grid_wrap--l">
+
+  {% include 'includes/footer.html' %}
+  
+  <!-- <footer class="footer grid_container--l grid_padding grid_row grid_wrap--l">
     <nav class="col_3 grid_separator--s">
       <ul>
         <li class="footer__copyright">© 2017 <a href="//www.texastribune.org/" class="unlink">The Texas Tribune</a></li>
@@ -120,7 +123,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li><a href="https://www.texastribune.org/privacy/">Privacy Policy</a></li>
       </ul>
     </nav>
-  </footer>
+  </footer> -->
 <script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
 <script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
 <script>
