@@ -25,10 +25,13 @@ backing:
 	-docker run --detach --name redis redis
 
 interactive: build-dev
+	-docker volume rm ${NS}_node_modules-vol
+	-docker volume create --name ${NS}_node_modules-vol
 	docker run \
 		--workdir=/flask \
-		--volume=$$(pwd):/flask \
 		--env-file=${DOCKER_ENV_FILE} \
+		--volume=${NS}_node_modules-vol:/flask/node_modules \
+		--volume=$$(pwd):/flask \
 		--rm --interactive --tty \
 		--publish=80:5000 \
 		--publish=5555:5555 \
