@@ -49,8 +49,16 @@ if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 def get_bundles(entry):
+    root_dir = os.path.dirname(os.getcwd())
     bundles = []
-    manifest_path = os.path.join('static', 'js', 'build', 'assets.json')
+    manifest_path = os.path.join(
+        root_dir,
+        'app',
+        'static',
+        'js',
+        'build',
+        'assets.json'
+    )
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets['entrypoints'][entry]['js']
@@ -60,8 +68,8 @@ def get_bundles(entry):
 
 @app.route('/devdonate')
 def dev_donate():
-    # bundles = get_bundles('donate')
-    return render_template('devdonate.html')
+    bundles = get_bundles('donate')
+    return render_template('devdonate.html', bundles=bundles)
 
 @app.route('/memberform')
 def member_form():
