@@ -58,11 +58,10 @@ def get_bundles(entry):
         bundles.append('%s%s' % ('/static/js/build/', bundle))
     return bundles
 
-if FLASK_DEBUG:
-    @app.route('/devdonate')
-    def dev_donate():
-        bundles = get_bundles('donate')
-        return render_template('devdonate.html', bundles=bundles)
+@app.route('/devdonate')
+def dev_donate():
+    bundles = get_bundles('donate')
+    return render_template('devdonate.html', bundles=bundles)
 
 @app.route('/memberform')
 def member_form():
