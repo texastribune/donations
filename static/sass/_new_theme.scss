@@ -35,12 +35,9 @@ body {
   padding-right: $size-xxs;
 }
 
-// Masthead
-.masthead {
-  position: relative;
-  padding-top: $size-s;
-  padding-bottom: $size-xxs;
-  img { height: 30px; }
+// Nav bar
+.navbar__logo img {
+  height: 23px;
 }
 
 // Header

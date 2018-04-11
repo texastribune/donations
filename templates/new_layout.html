@@ -24,6 +24,7 @@
   url_for('static', filename='js/jquery.min.js') }}">\x3C/script>')</script>
   {% block extra_script %}
     <script src="{{ url_for('static', filename='js/all.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/menu_navbar.js') }}"></script>
   {% endblock %}
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -94,19 +95,11 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-  {% block content %}
-  <section class="masthead">
-    <div class="grid_container--xl grid_row">
-      <a href="http://www.texastribune.org/" class="unlink">
-        <img src="{{ url_for('static', filename='img/logo.png') }}">
-      </a>
-    </div>
-  </section>
 
-  {% endblock %}
+  {% block content %}{% endblock %}
 
   {% include 'includes/footer.html' %}
-  
+
 <script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
 <script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
 <script>

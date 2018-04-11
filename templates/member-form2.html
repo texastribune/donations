@@ -7,11 +7,7 @@
 {% endblock %}
 
 {% block content %}
-  <section class="masthead grid_container grid_row grid_padded--xl">
-    <a href="http://www.texastribune.org/" class="unlink">
-      <img src="{{ url_for('static', filename='img/logo.png') }}">
-    </a>
-  </section>
+  {% include 'includes/navbar_thin.html' %}
   <section class="splash">
     <div class="grid_container grid_padded--xl">
       <div class="grid_row grid_wrap--l">
@@ -32,16 +28,6 @@
             <br>
             possible.
           </div>
-          <!-- <div class="splash_header--headline grid_separator--l">
-            You
-            <span class="rotate_words">
-              <span>show up</span>
-              <span>vote</span>
-              <span>give</span>
-            </span>
-            <br>
-            because this is your Texas.
-          </div> -->
           <p class="splash_header--description">It’s our <a href="https://www.texastribune.org/about/">mission</a> to create a more engaged and informed Texas. Join our cause by becoming a Texas Tribune <nobr>member today.</nobr></p>
         </div>
 
