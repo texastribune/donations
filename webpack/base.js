@@ -1,6 +1,13 @@
 const path = require('path');
 
-const entryDir = path.join(__dirname, '..', 'static', 'js', 'entry');
-const buildDir = path.join(__dirname, '..', 'static', 'js', 'build');
+let buildDir;
+const entryDir = path.join(process.cwd(), 'static', 'js', 'entry');
+const env = process.env.NODE_ENV;
+
+if (env === 'production') {
+  buildDir = path.join(process.cwd(), 'static', 'js', 'prod');
+} else {
+  buildDir = path.join(process.cwd(), 'static', 'js', 'build');
+}
 
 module.exports = { entryDir, buildDir };

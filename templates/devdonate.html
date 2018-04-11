@@ -8,5 +8,7 @@
     This is the body.
   </body>
 
-  <p>{{ bundles }}</p>
+  {% for bundle in bundles %}
+    <script src="{{ bundle }}"></script>
+  {% endfor %}
 </html>
