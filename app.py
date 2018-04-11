@@ -60,8 +60,8 @@ def get_bundles(entry):
 
 @app.route('/devdonate')
 def dev_donate():
-    bundles = get_bundles('donate')
-    return render_template('devdonate.html', bundles=bundles)
+    # bundles = get_bundles('donate')
+    return render_template('devdonate.html')
 
 @app.route('/memberform')
 def member_form():
