@@ -1,0 +1,12 @@
+{
+  "donate.js": "donate.chunk.ac3c9de35b5895a7fd91.js",
+  "entrypoints": {
+    "donate": {
+      "js": [
+        "runtime.04ad3a75549ecd13316d.js",
+        "donate.chunk.ac3c9de35b5895a7fd91.js"
+      ]
+    }
+  },
+  "runtime.js": "runtime.04ad3a75549ecd13316d.js"
+}
