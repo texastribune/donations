@@ -1,1 +1,0 @@
-!function(e,o){"object"==typeof exports&&"object"==typeof module?module.exports=o():"function"==typeof define&&define.amd?define([],o):"object"==typeof exports?exports.jsBundle=o():e.jsBundle=o()}(window,function(){return(window.webpackJsonpjsBundle=window.webpackJsonpjsBundle||[]).push([[1],{f1mg:function(e,o,n){"use strict";n.r(o),console.log("it worked!")}},[["f1mg",0]]])});
