@@ -1,0 +1,29 @@
+{
+  "name": "salesforce-stripe",
+  "description": "Salesforce - Stripe connector",
+  "scripts": {},
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/texastribune/salesforce-stripe"
+  },
+  "bugs": {
+    "url": "https://github.com/texastribune/salesforce-stripe/issues"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-vue": "^4.2.0",
+    "webpack": "^4.5.0",
+    "webpack-assets-manifest": "^3.0.1",
+    "webpack-cli": "^2.0.14",
+    "webpack-merge": "^4.1.2"
+  },
+  "license": "MIT"
+}
