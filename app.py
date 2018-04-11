@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import DonateForm, BlastForm, BlastVIPForm, MemberForm, MemberForm2
@@ -47,10 +48,21 @@ LOGGING = {
 if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
+def get_bundles(entry):
+    bundles = []
+    manifest_path = os.path.join('static', 'js', 'build', 'assets.json')
+    with open(manifest_path) as manifest:
+        assets = json.load(manifest)
+    entrypoint = assets['entrypoints'][entry]['js']
+    for bundle in entrypoint:
+        bundles.append('%s%s' % ('/static/js/build/', bundle))
+    return bundles
+
 if FLASK_DEBUG:
     @app.route('/devdonate')
     def dev_donate():
-        return render_template('devdonate.html')
+        bundles = get_bundles('donate')
+        return render_template('devdonate.html', bundles=bundles)
 
 @app.route('/memberform')
 def member_form():
