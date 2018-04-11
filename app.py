@@ -8,7 +8,7 @@ from sassutils.wsgi import SassMiddleware
 import stripe
 from validate_email import validate_email
 
-from config import FLASK_SECRET_KEY
+from config import FLASK_SECRET_KEY, FLASK_DEBUG
 from salesforce import add_customer_and_charge
 from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
@@ -47,6 +47,10 @@ LOGGING = {
 if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
+if FLASK_DEBUG:
+    @app.route('/devdonate')
+    def dev_donate():
+        return render_template('devdonate.html')
 
 @app.route('/memberform')
 def member_form():
