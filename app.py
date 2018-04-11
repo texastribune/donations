@@ -56,14 +56,14 @@ def get_bundles(entry):
         'app',
         'static',
         'js',
-        'build',
+        'prod',
         'assets.json'
     )
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets['entrypoints'][entry]['js']
     for bundle in entrypoint:
-        bundles.append('%s%s' % ('/static/js/build/', bundle))
+        bundles.append('%s%s' % ('/static/js/prod/', bundle))
     return bundles
 
 @app.route('/devdonate')
