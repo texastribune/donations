@@ -1,3 +1,3 @@
 export default function foo() {
-  console.log('it worked!');
+  console.log('heroku is building this!');
 }
