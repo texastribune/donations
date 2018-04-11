@@ -4,7 +4,8 @@
   "scripts": {
     "js:prod": "NODE_ENV=production webpack --config ./webpack/config.prod.js",
     "js:dev": "NODE_ENV=development webpack --config ./webpack/config.dev.js",
-    "dev": "python3 app.py & yarn run js:dev"
+    "dev": "python3 app.py & yarn run js:dev",
+    "postinstall": "yarn run js:prod"
   },
   "private": false,
   "repository": {
