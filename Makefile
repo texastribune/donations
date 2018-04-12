@@ -25,14 +25,13 @@ backing:
 	-docker run --detach --name redis redis
 
 interactive: build-dev
-	-docker volume rm ${NS}_node_modules-vol
-	-docker volume create --name ${NS}_node_modules-vol
+	-docker volume rm ${APP}_node_modules-vol
+	-docker volume create --name ${APP}_node_modules-vol
 	docker run \
-		--workdir=/flask \
-		--env-file=${DOCKER_ENV_FILE} \
-		--volume=${NS}_node_modules-vol:/flask/node_modules \
-		--volume=$$(pwd):/flask \
+		--volume=${APP}_node_modules-vol:/app/node_modules \
+		--volume=$$(pwd):/app \
 		--rm --interactive --tty \
+		--env-file=${DOCKER_ENV_FILE} \
 		--publish=80:5000 \
 		--publish=5555:5555 \
 		--link=rabbitmq:rabbitmq \

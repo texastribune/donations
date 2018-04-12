@@ -1,6 +1,4 @@
-const webpack = require('webpack'); // eslint-disable-line
-const WebpackAssetsManifest = require('webpack-assets-manifest'); // eslint-disable-line
-const CleanWebpackPlugin = require('clean-webpack-plugin'); // eslint-disable-line
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 
 const { entryDir, buildDir } = require('./base');
 
@@ -24,10 +22,6 @@ module.exports = {
       output: 'assets.json',
       entrypoints: true,
     }),
-    new CleanWebpackPlugin([buildDir], {
-      root: process.cwd(),
-      verbose: false,
-    }),
   ],
 
   optimization: {
@@ -50,6 +44,12 @@ module.exports = {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
+      },
+
+      {
+        test: /\.vue$/,
+        exclude: /node_modules/,
+        loader: 'vue-loader',
       },
     ],
   },
