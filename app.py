@@ -50,23 +50,22 @@ if app.config['ENABLE_SENTRY']:
 
 def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
+    if FLASK_DEBUG:
+        build_dir = os.path.join('static', 'js', 'build')
+        asset_path = '/static/js/build/'
+    else:
+        build_dir = os.path.join(root_dir, 'static', 'js', 'prod')
+        asset_path = '/static/js/prod/'
     bundles = []
-    manifest_path = os.path.join(
-        root_dir,
-        'app',
-        'static',
-        'js',
-        'prod',
-        'assets.json'
-    )
+    manifest_path = os.path.join(build_dir, 'assets.json')
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets['entrypoints'][entry]['js']
     for bundle in entrypoint:
-        bundles.append('%s%s' % ('/static/js/prod/', bundle))
+        bundles.append(asset_path + bundle)
     return bundles
 
-if FLASK_DEBUG:
+if not FLASK_DEBUG:
     @app.route('/devdonate')
     def dev_donate():
         bundles = get_bundles('donate')
