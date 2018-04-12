@@ -59,7 +59,6 @@ COPY package.json /flask/
 COPY yarn.lock /flask/
 COPY .babelrc /flask/
 RUN yarn
-RUN yarn run js:prod
 
 COPY requirements.txt /flask/
 RUN pip3 install -r /flask/requirements.txt
