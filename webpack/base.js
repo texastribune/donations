@@ -1,7 +1,7 @@
 const path = require('path');
 
 let buildDir;
-const entryDir = path.join(process.cwd(), 'static', 'js', 'entry');
+const entryDir = path.join(process.cwd(), 'static', 'js', 'src', 'entry');
 const env = process.env.NODE_ENV;
 
 if (env === 'production') {
