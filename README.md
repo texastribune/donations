@@ -15,8 +15,7 @@ Running the Project
 
 Run `make backing`. This will start RabbitMQ and Redis.
 Run `make interactive`. This will drop you into the Flask app.
-
-Run `python3 app.py`. You should then be able to interact with the app at `local.texastribune.org:80`
+Run `yarn run dev`. You should then be able to interact with the app at `local.texastribune.org:80`
 ```
 # flower -A app.celery --port=5555 --address=0.0.0.0    # monitoring
 C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
