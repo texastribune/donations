@@ -55,15 +55,26 @@ body {
     font-weight: bold;
     padding-bottom: $size-l;
     border-bottom: 3px solid $color-yellow-tribune;
+
+    @include mq($from: bp-m) {
+      font-size: $size-xl;
+      padding-bottom: $size-m;
+      margin-bottom: $size-m;
+    }
     @include mq($from: bp-l) {
-      font-size: 2.5rem;
+      font-size: 2.3rem;
+      line-height: 1.25em;
     }
     @include mq($from: bp-xl) {
-      font-size: 2.85rem;
+      font-size: 2.75rem;
     }
   }
   &--description {
     @extend %link--blue;
+
+    @include mq($from: bp-m, $until: bp-l) {
+      font-size: $size-s;
+    }
   }
 }
 .splash_box {
@@ -77,7 +88,7 @@ body {
     position: absolute;
     opacity: 0;
     overflow: hidden;
-    animation: rotateWord 12s linear 0s 2;
+    animation: rotateWord 15s linear 0s 2;
 
     &:nth-child(2) {
       animation-delay: 3s;
@@ -86,7 +97,11 @@ body {
       animation-delay: 6s;
     }
     &:nth-child(4) {
-      animation: rotateWord 12s linear 9s 1, rotateLastWord 3s linear 21s 1 forwards;
+      //animation: rotateWord 12s linear 9s 1, rotateLastWord 3s linear 21s 1 forwards;
+      animation-delay: 9s;
+    }
+    &:nth-child(5) {
+      animation: rotateWord 15s linear 12s 1, rotateLastWord 3s linear 27s 1 forwards;
     }
   }
 }
@@ -111,8 +126,10 @@ body {
   .tt_input {
     @extend %input_text--l;
     width: 100%;
+
     &::placeholder {
       @extend %input_text--placeholder;
+      font-size: $size-s;
     }
   }
   // Hides number input spinner on webkit browsers
@@ -127,6 +144,11 @@ body {
     font-size: $size-l;
     padding-bottom: $size-b;
     border-bottom: 1px solid $color-gray-light;
+
+    @include mq($until: bp-l) {
+      font-size: $size-m;
+    }
+
     &--input {
       position: relative;
     }
@@ -161,14 +183,14 @@ body {
     label {
       @extend %button_toggle;
 
-      @include mq($until: bp-s) {
+      @include mq($until: bp-l) {
         font-size: $size-xxs;
       }
     }
     input:checked + label {
       @extend %button_toggle;
       background-color: $color-yellow-tribune;
-      @include mq($until: bp-s) {
+      @include mq($until: bp-l) {
         font-size: $size-xxs;
       }
     }
@@ -182,7 +204,7 @@ body {
 
       @include mq($until: bp-l) {
         width: auto;
-        margin-right: 5px;
+        margin-right: 8px;
       }
     }
     &--amount {
