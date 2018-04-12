@@ -126,6 +126,9 @@ $column-slug: col !default;
   &_separator--l {
     margin-bottom: $size-xl;
   }
+  &_separator--xl {
+    margin-bottom: $size-xxl;
+  }
 
   &_order {
     &--primary {
