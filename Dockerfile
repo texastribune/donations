@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 MAINTAINER @x110dc
 
-WORKDIR /flask
+WORKDIR /app
 
 RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
 RUN apt-get update -qq && apt-get install -yq curl
@@ -53,16 +53,16 @@ RUN set -ex \
   && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz
 
-COPY static /flask/static
-COPY webpack /flask/webpack
-COPY package.json /flask/
-COPY yarn.lock /flask/
-COPY .babelrc /flask/
+COPY static /app/static
+COPY webpack /app/webpack
+COPY package.json /app/
+COPY yarn.lock /app/
+COPY .babelrc /app/
 RUN yarn
 
-COPY requirements.txt /flask/
-RUN pip3 install -r /flask/requirements.txt
+COPY requirements.txt /app/
+RUN pip3 install -r /app/requirements.txt
 
-COPY . /flask/
+COPY . /app/
 EXPOSE 80
 ENTRYPOINT /bin/bash

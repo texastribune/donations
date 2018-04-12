@@ -10,4 +10,4 @@ dependencies:
 
 test:
   override:
-    - docker run -it --rm --workdir=/flask --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test tests.py --cov=.
+    - docker run -it --rm --workdir=/app --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test tests.py --cov=.
