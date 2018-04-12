@@ -29,6 +29,8 @@ Front-end commands:
 + `yarn run dev`: Start Flask development server and watch for JS changes
 + `yarn run js:dev`: Just watch for JS changes
 
+**Important note**: To build our JS on deployment, Heroku needs to run a `postinstall` script in `package.json`. This also means every time you run `yarn` or `yarn add <package>`, it's going to trigger that build and generate a bunch of files in `static/js/prod/`. Don't commit these!
+
 Running tests
 -------------
 
