@@ -54,9 +54,10 @@ def get_bundles(entry):
         build_dir = os.path.join('static', 'js', 'build')
         asset_path = '/static/js/build/'
     else:
-        build_dir = os.path.join(root_dir, 'static', 'js', 'prod')
+        build_dir = os.path.join(root_dir, 'app', 'static', 'js', 'prod')
         asset_path = '/static/js/prod/'
     bundles = []
+    print(os.path.join(build_dir, 'assets.json'))
     manifest_path = os.path.join(build_dir, 'assets.json')
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
