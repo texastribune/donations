@@ -48,6 +48,15 @@ LOGGING = {
 if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
+"""
+Read the Webpack assets manifest and then provide the
+scripts, including cache-busting hache, as template context.
+
+For Heroku to compile assets on deploy, the directory it
+builds to needs to already exist. Hence /static/js/prod/.gitkeep.
+We don't want to version control development builds, which is
+why they're compiled to /static/js/build/ instead.
+"""
 def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
     if FLASK_DEBUG:
@@ -66,7 +75,7 @@ def get_bundles(entry):
         bundles.append(asset_path + bundle)
     return bundles
 
-if not FLASK_DEBUG:
+if FLASK_DEBUG:
     @app.route('/devdonate')
     def dev_donate():
         bundles = get_bundles('donate')

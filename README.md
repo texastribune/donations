@@ -26,7 +26,9 @@ celery beat --app app.celery &
 
 Blastform: http://local.texastribune.org/blastform
 
-### Tests
+Front-end commands:
++ `yarn run dev`: Start Flask development server and watch for JS changes
++ `yarn run js:dev`: Just watch for JS changes
 
 Running tests
 -------------
@@ -36,8 +38,8 @@ To run the project tests, run
 `py.test tests.py`
 
 
-### Deploy
-
+Deploy
+-------------------
 
 If you're not invited to the Trib's Heroku group, get someone to invite you. Log in to Heroku on your console. Follow [Heroku instructions](https://devcenter.heroku.com/articles/git) for deploying. Specifically, you'll run the command `heroku git:remote -a stripe-prod` to add heroku to the project.
 
