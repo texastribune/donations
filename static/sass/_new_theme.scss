@@ -219,11 +219,6 @@ body {
 
   .submit {
     text-align: center;
-    .button {
-      display: inline-block;
-      margin-right: 1%;
-      width: 48%;
-    }
     .button--applePay {
       background-color: $color-black-pure;
       background-image: -webkit-named-image(apple-pay-logo-white);

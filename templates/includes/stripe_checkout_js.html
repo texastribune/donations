@@ -156,8 +156,11 @@
       Stripe.applePay.checkAvailability(function(available) {
         if (available) {
           var applePayButton = $('#applePayButton');
+          var withoutApple = $('.submit--woApple');
+          var withApple = $('.submit--wApple');
 
-          applePayButton.removeClass('hidden');
+          withApple.removeClass('hidden');
+          withoutApple.addClass('hidden');
           applePayButton.click(function(e) {
             e.preventDefault();
 
