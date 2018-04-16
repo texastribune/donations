@@ -251,7 +251,7 @@ body {
 // Content
 .member_benefits {
   @extend %section-padding;
-  border-bottom: 1px solid $color-gray-light;
+  //border-bottom: 1px solid $color-gray-light;
 }
 .member_quotes {
   @extend %link--blue;
