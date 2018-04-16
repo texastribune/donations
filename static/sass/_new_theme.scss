@@ -257,6 +257,7 @@ body {
   @extend %link--blue;
 
   &--quote {
+      @extend .font-serif;
       color: $color-gray-medium;
       font-size: $size-b;
   }
