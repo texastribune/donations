@@ -15,6 +15,8 @@ from app_celery import make_celery
 
 from pprint import pprint
 
+smd_redirect_url = '/donate'
+
 app = Flask(__name__)
 
 app.secret_key = FLASK_SECRET_KEY
@@ -50,6 +52,8 @@ if app.config['ENABLE_SENTRY']:
 
 @app.route('/memberform')
 def member_form():
+    return redirect(smd_redirect_url, code=302)
+    """
     form = MemberForm()
     if request.args.get('amount'):
         amount = request.args.get('amount')
@@ -68,6 +72,7 @@ def member_form():
         campaign_id=campaign_id, installment_period=installment_period,
         installments=installments, openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
+    """
 
 @app.route('/donate')
 def member2_form():
@@ -108,6 +113,8 @@ def member2_form():
 
 @app.route('/donateform')
 def donate_renew_form():
+    return redirect(smd_redirect_url, code=302)
+    """
     form = DonateForm()
     if request.args.get('amount'):
         amount = request.args.get('amount')
@@ -124,6 +131,7 @@ def donate_renew_form():
         installments=installments,
         openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
+    """
 
 
 @app.route('/circleform')
