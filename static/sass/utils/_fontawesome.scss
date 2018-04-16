@@ -164,6 +164,10 @@
   content: "\f08e";
 }
 
+.fa-check:before {
+  content: "\f00c";
+}
+
 
 /* Icons we do not use */
 /*
@@ -247,9 +251,7 @@
   content: "\f004";
 }
 
-.fa-check:before {
-  content: "\f00c";
-}
+
 
 .fa-camera-retro:before {
   content: "\f083";

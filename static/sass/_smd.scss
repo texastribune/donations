@@ -16,16 +16,22 @@
     }
   }
 
-  &--amount {
+  &--goal {
     @extend .smallcaps;
-    background-color: $color-blue-light;
+    background-color: $color-sand;
     border-radius: 50px;
-    border: 1px solid $color-blue-light;
+    border: 1px solid $color-sand;
     font-size: $size-xs;
     left: $size-l;
     padding: 2px $size-xxs;
     text-align: center;
     width: 130px;
+  }
+
+  &--complete {
+    background-color: $color-blue-light;
+    border-color: $color-blue-light;
+    width: 180px;
   }
 
   &--description {
