@@ -101,7 +101,7 @@ body {
       animation-delay: 9s;
     }
     &:nth-child(5) {
-      animation: rotateWord 15s linear 12s 1, rotateLastWord 3s linear 27s 1 forwards;
+      animation: rotateWord 15s linear 12s 1, rotateLastWord 15s linear 27s 1 forwards;
     }
   }
 }
