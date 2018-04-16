@@ -16,14 +16,14 @@
 
   &--amount {
     @extend .smallcaps;
+    background-color: $color-blue-light;
+    border-radius: 50px;
+    border: 1px solid $color-blue-light;
     font-size: $size-s;
+    left: $size-l;
+    padding: 2px $size-xxs;
     position: absolute;
     top: -14px;
-    left: $size-l;
-    background-color: $color-blue-light;
-    border: 1px solid $color-blue-light;
-    border-radius: 50px;
-    padding: 2px $size-xxs;
   }
 
   &--description {

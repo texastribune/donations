@@ -4,16 +4,16 @@ $input_height--l: 44px;
 %input_text {
   @extend .font-sansserif;
   border: 1px solid $color-gray-light;
-  height: $input_height;
-  padding: 0 $size-xxs;
   color: $color-black-pure;
   font-size: $size-xs;
+  height: $input_height;
+  padding: 0 $size-xxs;
 }
 %input_text--l {
   @extend %input_text;
+  font-size: $size-b;
   height: $input_height--l;
   padding: $size-xxs;
-  font-size: $size-b;
 }
 %input_text--placeholder {
   color: $color-gray-light;
@@ -21,8 +21,8 @@ $input_height--l: 44px;
 
 .form {
   &_instory {
-    border-top: 1px solid $color-gray-light;
     border-bottom: 1px solid $color-gray-light;
+    border-top: 1px solid $color-gray-light;
     margin: $size-b 0;
     padding: $size-s $size-b $size-b;
   }
@@ -81,9 +81,9 @@ $input_height--l: 44px;
     }
 
     label {
+      font-size: $size-b;
       font-weight: 700;
       margin-right: $size-b/2;
-      font-size: $size-b;
     }
 
     input,

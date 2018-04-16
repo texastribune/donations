@@ -52,8 +52,8 @@
     }
 
     &--img {
-      width: 100%;
       max-width: 210px;
+      width: 100%;
     }
   }
 
@@ -94,10 +94,10 @@
       color: $color-white-pure;
 
       &:after {
-        display: block;
-        content: '';
-        padding-bottom: $size-b/2;
         border-bottom: solid 3px $color-yellow-tribune;
+        content: '';
+        display: block;
+        padding-bottom: $size-b/2;
         transform: scaleX(1);
       }
     }
@@ -105,10 +105,10 @@
 
   &__item {
     &:after {
-      display: block;
-      content: '';
-      padding-bottom: $size-b/2;
       border-bottom: solid 3px $color-yellow-tribune;
+      content: '';
+      display: block;
+      padding-bottom: $size-b/2;
       transform: scaleX(0);
       transition: transform 150ms ease-in-out;
     }
@@ -192,9 +192,9 @@
 
     &--form {
       background-color: $color-black-off;
+      left: 0;
       position: absolute;
       width: 100%;
-      left: 0;
 
       @include mq($until: bp-l) {
         padding: 0 $size-s;
@@ -207,8 +207,8 @@
 
     // Unique styles for navbar_thin
     &.thin {
-      position: initial;
       margin-right: 0;
+      position: initial;
 
       @include mq($until: bp-l) {
         order: -2;

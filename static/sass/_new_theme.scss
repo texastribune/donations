@@ -1,11 +1,11 @@
 $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
 %section-padding {
-  padding-top: $size-xxxl;
   padding-bottom: $size-xxxl;
+  padding-top: $size-xxxl;
 
   @include mq($until: bp-l) {
-    padding-top: $size-xl;
     padding-bottom: $size-xl;
+    padding-top: $size-xl;
   }
 }
 %button_toggle {
@@ -13,8 +13,8 @@ $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
   @extend .button--l;
   background-color: $color-white-pure;
   border: 1px solid $color-yellow-tribune;
-  min-width: 100%;
   float: left;
+  min-width: 100%;
 }
 
 html {
@@ -29,10 +29,10 @@ body {
 }
 .highlight {
   background-color: $color-yellow-tribune;
-  width: auto;
   display: inline-block;
   padding-left: $size-xxs;
   padding-right: $size-xxs;
+  width: auto;
 }
 
 // Nav bar
@@ -52,14 +52,14 @@ body {
 .splash_header {
   &--headline {
     @extend h1;
+    border-bottom: 3px solid $color-yellow-tribune;
     font-weight: bold;
     padding-bottom: $size-l;
-    border-bottom: 3px solid $color-yellow-tribune;
 
     @include mq($from: bp-m) {
       font-size: $size-xl;
-      padding-bottom: $size-m;
       margin-bottom: $size-m;
+      padding-bottom: $size-m;
     }
     @include mq($from: bp-l) {
       font-size: 2.3rem;
@@ -84,11 +84,11 @@ body {
 .rotate_words {
   display: inline;
   span {
+    animation: rotateWord 15s linear 0s 2;
     color: $color-yellow-tribune;
-    position: absolute;
     opacity: 0;
     overflow: hidden;
-    animation: rotateWord 15s linear 0s 2;
+    position: absolute;
 
     &:nth-child(2) {
       animation-delay: 3s;
@@ -140,10 +140,10 @@ body {
   }
 
   .donation {
-    font-weight: bold;
-    font-size: $size-l;
-    padding-bottom: $size-b;
     border-bottom: 1px solid $color-gray-light;
+    font-size: $size-l;
+    font-weight: bold;
+    padding-bottom: $size-b;
 
     @include mq($until: bp-l) {
       font-size: $size-m;
@@ -153,8 +153,8 @@ body {
       position: relative;
     }
     &--dollar {
-      position: absolute;
       left: $size-xxs;
+      position: absolute;
       top: 0.35rem;
     }
     &--amount {
@@ -164,8 +164,8 @@ body {
   }
 
   .radio_toggle {
-    overflow: hidden;
     list-style-type: none;
+    overflow: hidden;
     li {
       flex: 0 1 33.33333%;
       margin-right: $size-b/2;
@@ -173,12 +173,12 @@ body {
       &:last-child { margin-right: 0; }
     }
     input { //Feels like this could be a utility class
-      position: absolute !important;
+      border: 0;
       clip: rect(0, 0, 0, 0);
       height: 1px;
-      width: 1px;
-      border: 0;
       overflow: hidden;
+      position: absolute !important;
+      width: 1px;
     }
     label {
       @extend %button_toggle;
@@ -203,8 +203,8 @@ body {
       margin-top: 2px;
 
       @include mq($until: bp-l) {
-        width: auto;
         margin-right: 8px;
+        width: auto;
       }
     }
     &--amount {
@@ -212,8 +212,8 @@ body {
     }
     &--description {
       @extend .font-sansserif;
-      font-size: $size-xs;
       color: $color-gray-medium;
+      font-size: $size-xs;
     }
   }
 
@@ -226,12 +226,12 @@ body {
     }
     .button--applePay {
       background-color: $color-black-pure;
-      border-color: $color-black-pure;
       background-image: -webkit-named-image(apple-pay-logo-white);
       background-origin: content-box;
       background-position: 50% 50%;
       background-repeat: no-repeat;
       background-size: 100% 60%;
+      border-color: $color-black-pure;
       margin-right: 0;
     }
   }
@@ -239,10 +239,10 @@ body {
   .form-error { //I'd like to rename these classes, but will need to update the JS
     display: none;
     .error-form-message {
-      clear: both;
       @extend .font-sansserif;
-      font-size: $size-xs;
+      clear: both;
       color: $color-red;
+      font-size: $size-xs;
       text-align: center;
     }
   }
@@ -262,14 +262,14 @@ body {
   @extend %link--blue;
 
   &--quote {
-      font-size: $size-b;
       color: $color-gray-medium;
+      font-size: $size-b;
   }
   &--attribution {
-      font-size: $size-xs;
-      text-transform: uppercase;
-      font-weight: 700;
       color: $color-teal-gray;
+      font-size: $size-xs;
+      font-weight: 700;
+      text-transform: uppercase;
   }
 }
 .faq {
