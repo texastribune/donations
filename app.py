@@ -77,31 +77,34 @@ def member_form():
 @app.route('/donate')
 def member2_form():
     form = MemberForm2()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        message = "The page you requested can't be found."
-        return render_template('error.html', message=message)
-
-    campaign_id = request.args.get('campaignId', default='')
     installments = 'None'
+    campaign_id = request.args.get('campaignId', default='')
     installment_period = request.args.get('installmentPeriod')
+    amount = request.args.get('amount')
 
     if installment_period is None:
-        installment_period = 'yearly'
+        installment_period = 'monthly'
+    
+    installment_period = installment_period.lower()
+    if installment_period == 'monthly':
         openended_status = 'Open'
+        if amount is None:
+            amount = 10
+    elif installment_period == 'yearly':
+        openended_status = 'Open'
+        if amount is None:
+            amount = 50
+    elif installment_period == 'once':
+        installment_period = 'None'
+        openended_status = 'None'
+        if amount is None:
+            amount = 20
     else:
-        installment_period = installment_period.lower()
-
-        if installment_period == 'yearly' or installment_period == 'monthly':
-            openended_status = 'Open'
-        elif installment_period == 'once':
-            installment_period = 'None'
-            openended_status = 'None'
-        else:
-            installment_period = 'yearly'
-            openended_status = 'Open'
-
+        installment_period = 'monthly'
+        openended_status = 'Open'
+        if amount is None:
+            amount = 10
+    
     form.installment_period.default = installment_period
     form.openended_status.default = openended_status
     form.process()
