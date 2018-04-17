@@ -256,8 +256,6 @@ def charge():
     form = DonateForm(request.form)
     pprint('Request: {}'.format(request))
 
-    print(request.form)
-
     customer_email = request.form['stripeEmail']
     customer_first = request.form['first_name']
     customer_last = request.form['last_name']
