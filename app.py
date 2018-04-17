@@ -15,7 +15,7 @@ from app_celery import make_celery
 
 from pprint import pprint
 
-smd_redirect_url = '/donate'
+smd_redirect_url = '/donate?campaignId=70146000000M0pM'
 
 app = Flask(__name__)
 
