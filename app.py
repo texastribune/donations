@@ -89,21 +89,21 @@ def member2_form():
     if installment_period == 'monthly':
         openended_status = 'Open'
         if amount is None:
-            amount = 10
+            amount = '10'
     elif installment_period == 'yearly':
         openended_status = 'Open'
         if amount is None:
-            amount = 50
+            amount = '50'
     elif installment_period == 'once':
         installment_period = 'None'
         openended_status = 'None'
         if amount is None:
-            amount = 20
+            amount = '20'
     else:
         installment_period = 'monthly'
         openended_status = 'Open'
         if amount is None:
-            amount = 10
+            amount = '10'
     
     form.installment_period.default = installment_period
     form.openended_status.default = openended_status
