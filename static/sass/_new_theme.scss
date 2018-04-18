@@ -45,6 +45,9 @@ body {
 .splash {
   @extend %section-padding;
   background-color: $color-sand;
+  background-position-x: 50%;
+  background-image: url('../img/bg_image--smd.png');
+  background-size: cover;
 
   .grid_row {
     align-items: center;
@@ -53,6 +56,7 @@ body {
 .splash_header {
   &--headline {
     @extend h1;
+    color: $color-white-pure;
     border-bottom: 3px solid $color-yellow-tribune;
     font-weight: bold;
     padding-bottom: $size-l;
@@ -72,7 +76,7 @@ body {
   }
   &--description {
     @extend %link--blue;
-
+    color: $color-white-pure;
     @include mq($from: bp-m, $until: bp-l) {
       font-size: $size-s;
     }
@@ -220,7 +224,8 @@ body {
     }
     &--description {
       @extend .font-sansserif;
-      color: $color-gray-medium;
+      //color: $color-gray-medium;
+      color: $color-white-pure;
       font-size: $size-xs;
     }
   }
