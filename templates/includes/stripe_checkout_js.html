@@ -29,11 +29,11 @@
           isValid = true;
 
       if (!bothNamesExist()) {
-        errorMessageText = 'Please enter a first and last name.';
+        errorMessageText = 'Please enter a first and last name. This information helps us maintain tranparency about our financial supporters.';
         isValid = false;
       }
       if (!isValidDollarAmount()) {
-        errorMessageText += ' Please enter a donation above $1.';
+        errorMessageText += 'Please enter a donation above $1.';
         isValid = false;
       }
 
