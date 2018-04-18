@@ -13,6 +13,7 @@ $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
   @extend .button--l;
   background-color: $color-white-pure;
   border: 1px solid $color-yellow-tribune;
+  border-right-width: 0px;
   float: left;
   min-width: 100%;
 }
@@ -125,7 +126,7 @@ body {
 .form_membership {
   .tt_input {
     @extend %input_text--l;
-    width: 100%;
+    //width: 100%;
 
     &::placeholder {
       @extend %input_text--placeholder;
@@ -140,7 +141,8 @@ body {
   }
 
   .donation {
-    border-bottom: 1px solid $color-gray-light;
+    // border-bottom: 1px solid $color-gray-light;
+    border-bottom: 1px solid $color-yellow-tribune;
     font-size: $size-l;
     font-weight: bold;
     padding-bottom: $size-b;
@@ -168,9 +170,15 @@ body {
     overflow: hidden;
     li {
       flex: 0 1 33.33333%;
-      margin-right: $size-b/2;
+      //margin-right: $size-b/2;
       max-width: 100%;
-      &:last-child { margin-right: 0; }
+      &:last-child {
+        margin-right: 0;
+
+        label {
+          border-right-width: 1px;
+        }
+      }
     }
     input { //Feels like this could be a utility class
       border: 0;

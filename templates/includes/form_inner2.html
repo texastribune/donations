@@ -1,19 +1,23 @@
 <div id="checkout_anchor" class="donation grid_separator">
   <div class="grid_separator--s">
     <div class="donation--prompt grid_separator--s">I'm ready to give ...</div>
-    <div class="donation--input">
+    <div class="grid_row donation--input">
       <span class="donation--dollar">$</span>
-      {{ form.amount(value=amount, autocomplete="off", class="tt_input donation--amount") }}
+      {{ form.amount(value=amount, autocomplete="off", class="col tt_input donation--amount") }}
     </div>
   </div>
   {{ form.installment_period(class="radio_toggle grid_row") }}
 </div>
 
 <div class="grid_row grid_wrap--s">
-  {{ form.first_name(maxlength=50, placeholder="First name", class="col tt_input grid_separator--s") }}
-  {{ form.last_name(maxlength=50, placeholder="Last name", class="col tt_input grid_separator--s") }}
+  {{ form.first_name(maxlength=50, placeholder="First name", class="col_6 tt_input grid_separator--s") }}
+  {{ form.last_name(maxlength=50, placeholder="Last name", class="col_6 tt_input grid_separator--s") }}
 </div>
-{{ form.reason(maxlength=100, placeholder="Encouraged to contribute by", class="col grid_separator tt_input") }}
+<div class="grid_row grid_wrap--s">
+  {{ form.reason(maxlength=100, placeholder="Encouraged to give by", class="col_8 grid_separator--s tt_input") }}
+  {{ form.zipcode(maxlength=5, placeholder="Zip code", class="col_4 grid_separator--s tt_input") }}
+</div>
+
 
 <div class="pay_fee grid_row grid_separator">
   {{ form.pay_fees(checked=False, class="col_1 pay_fee--checkbox") }}

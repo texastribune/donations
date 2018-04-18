@@ -14,7 +14,8 @@ class BaseForm(FlaskForm):
     amount = DecimalField(u'Amount',
         [validators.required(message="Please choose a donation amount."),
         validators.NumberRange(min=1)])
-    reason = StringField(u'Encouraged to contribute by')
+    reason = StringField(u'Encouraged to give by')
+    zipcode = StringField(u'Zip code');
     campaign_id = HiddenField('Campaign ID')
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
