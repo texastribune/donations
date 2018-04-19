@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dev Donation</title>
+  </head>
+
+  <body>
+    <div id="app"></div>
+  </body>
+
+  {% for bundle in bundles %}
+    <script src="{{ bundle }}"></script>
+  {% endfor %}
+</html>

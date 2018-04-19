@@ -15,8 +15,7 @@ Running the Project
 
 Run `make backing`. This will start RabbitMQ and Redis.
 Run `make interactive`. This will drop you into the Flask app.
-
-Run `python3 app.py`. You should then be able to interact with the app at `local.texastribune.org:80`
+Run `yarn run dev`. You should then be able to interact with the app at `local.texastribune.org:80`
 ```
 # flower -A app.celery --port=5555 --address=0.0.0.0    # monitoring
 C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
@@ -26,7 +25,16 @@ celery beat --app app.celery &
 
 Blastform: http://local.texastribune.org/blastform
 
-### Tests
+Front-end commands:
++ `yarn run dev`: Start Flask development server and watch for JS changes
++ `yarn run js:dev`: Just watch for JS changes
+
+Front-end weirdness:
++ On `yarn run dev`, all files are built to `/static/js/build`, which **is** ignored from version control. That way you can make as many changes as you want when developing, Webpack will recompile the files, and they'll never show up in VC.
++ On deploy, all files are built to `/static/js/prod/`. This is **not** ignored from VC because Heroku cannot create directories and thus needs it to exist in the repo. That's why there's a `.gitkeep` file inside of it.
++ On deploy, the production JS has to be built via the `postinstall` script. This means that, if you run `yarn` or `yarn add <package>` locally inside Docker, you'll get some compiled files in `/static/js/prod/` that show up in version control. **Delete them!**
+
+**Important note**: To build our JS on deployment, Heroku needs to run a `postinstall` script in `package.json`. This also means every time you run `yarn` or `yarn add <package>`, it's going to trigger that build and generate a bunch of files in `static/js/prod/`. Don't commit these!
 
 Running tests
 -------------
@@ -36,8 +44,8 @@ To run the project tests, run
 `py.test tests.py`
 
 
-### Deploy
-
+Deploy
+-------------------
 
 If you're not invited to the Trib's Heroku group, get someone to invite you. Log in to Heroku on your console. Follow [Heroku instructions](https://devcenter.heroku.com/articles/git) for deploying. Specifically, you'll run the command `heroku git:remote -a stripe-prod` to add heroku to the project.
 
