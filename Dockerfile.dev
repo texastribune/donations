@@ -1,3 +1,5 @@
 FROM texastribune/checkout
 
+ENV FLASK_DEBUG 1
+
 RUN pip3 install pytest pytest-cov ipdb==0.10.2 six==1.10.0 responses

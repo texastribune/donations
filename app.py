@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import DonateForm, BlastForm, BlastVIPForm, MemberForm, MemberForm2
@@ -8,7 +9,7 @@ from sassutils.wsgi import SassMiddleware
 import stripe
 from validate_email import validate_email
 
-from config import FLASK_SECRET_KEY
+from config import FLASK_SECRET_KEY, FLASK_DEBUG
 from salesforce import add_customer_and_charge
 from salesforce import add_blast_customer_and_charge
 from app_celery import make_celery
@@ -47,6 +48,37 @@ LOGGING = {
 if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
+"""
+Read the Webpack assets manifest and then provide the
+scripts, including cache-busting hache, as template context.
+
+For Heroku to compile assets on deploy, the directory it
+builds to needs to already exist. Hence /static/js/prod/.gitkeep.
+We don't want to version control development builds, which is
+why they're compiled to /static/js/build/ instead.
+"""
+def get_bundles(entry):
+    root_dir = os.path.dirname(os.getcwd())
+    if FLASK_DEBUG:
+        build_dir = os.path.join('static', 'js', 'build')
+        asset_path = '/static/js/build/'
+    else:
+        build_dir = os.path.join(root_dir, 'app', 'static', 'js', 'prod')
+        asset_path = '/static/js/prod/'
+    bundles = []
+    manifest_path = os.path.join(build_dir, 'assets.json')
+    with open(manifest_path) as manifest:
+        assets = json.load(manifest)
+    entrypoint = assets['entrypoints'][entry]['js']
+    for bundle in entrypoint:
+        bundles.append(asset_path + bundle)
+    return bundles
+
+if FLASK_DEBUG:
+    @app.route('/devdonate')
+    def dev_donate():
+        bundles = get_bundles('donate')
+        return render_template('devdonate.html', bundles=bundles)
 
 @app.route('/memberform')
 def member_form():
