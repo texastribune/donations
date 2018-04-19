@@ -12,8 +12,8 @@ $size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
   @extend .button;
   @extend .button--l;
   background-color: $color-white-pure;
-  border: 1px solid $color-yellow-tribune;
-  border-right-width: 0px;
+  border: 2px solid $color-yellow-tribune;
+  border-right-width: 1px;
   float: left;
   min-width: 100%;
 }
@@ -83,7 +83,7 @@ body {
   }
 }
 .splash_box {
-  background-color: transparentize($color-white-pure, .5);
+  background-color: transparentize($color-white-pure, .35);
   padding: $size-s;
 }
 .rotate_words {
@@ -145,8 +145,8 @@ body {
   }
 
   .donation {
-    // border-bottom: 1px solid $color-gray-light;
-    border-bottom: 1px solid $color-yellow-tribune;
+    border-bottom: 1px solid $color-white-off;
+    // border-bottom: 1px solid $color-yellow-tribune;
     font-size: $size-l;
     font-weight: bold;
     padding-bottom: $size-b;
@@ -180,7 +180,7 @@ body {
         margin-right: 0;
 
         label {
-          border-right-width: 1px;
+          border-right-width: 2px;
         }
       }
     }
@@ -195,16 +195,16 @@ body {
     label {
       @extend %button_toggle;
 
-      @include mq($until: bp-l) {
-        font-size: $size-xxs;
-      }
+      // @include mq($until: bp-l) {
+      //   font-size: $size-xxs;
+      // }
     }
     input:checked + label {
       @extend %button_toggle;
       background-color: $color-yellow-tribune;
-      @include mq($until: bp-l) {
-        font-size: $size-xxs;
-      }
+      // @include mq($until: bp-l) {
+      //   font-size: $size-xxs;
+      // }
     }
   }
 
@@ -224,8 +224,9 @@ body {
     }
     &--description {
       @extend .font-sansserif;
-      //color: $color-gray-medium;
-      color: $color-white-pure;
+      color: $color-gray-dark;
+      // color: $color-white-pure;
+      // color: $color-black-off;
       font-size: $size-xs;
     }
   }
