@@ -107,6 +107,7 @@ def _format_contact(form=None):
         'Description': form['description'],
         'LeadSource': 'Stripe',
         'Stripe_Customer_Id__c': stripe_id,
+        'MailingPostalCode': form['zipcode'],
         }
     print(contact)
     return contact
@@ -279,6 +280,7 @@ def upsert_customer(customer=None, form=None):
 
     if not created:
         print("----Exists, updating")
+        pprint(update)
 
         path = '/services/data/v35.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
