@@ -1,0 +1,16 @@
+#charge {
+  @extend %section-padding;
+
+  .share {
+    a {
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: none;
+    }
+  }
+
+  .member_quotes {
+    flex-direction: column;
+  }
+}
