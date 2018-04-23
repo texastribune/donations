@@ -79,12 +79,9 @@ def member2_form():
     form = MemberForm2()
     installments = 'None'
     campaign_id = request.args.get('campaignId', default='')
-    installment_period = request.args.get('installmentPeriod')
+    installment_period = request.args.get('installmentPeriod', 'monthly')
     amount = request.args.get('amount')
 
-    if installment_period is None:
-        installment_period = 'monthly'
-    
     installment_period = installment_period.lower()
     if installment_period == 'monthly':
         openended_status = 'Open'
