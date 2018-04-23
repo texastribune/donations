@@ -304,3 +304,35 @@ body {
     font-size: $size-s;
   }
 }
+
+// Thank you page (/charge)
+
+.social-wrapper {
+  margin-bottom: $size-b;
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.social {
+  color: $color-white-pure;
+  font-size: $size-b;
+  margin: $size-b/2 $size-b/2 $size-b/2 0;
+  padding: $size-b 0;
+
+  &:hover {
+    opacity: .9;
+  }
+}
+
+.facebook {
+  background: $color-facebook;
+}
+
+.twitter {
+  background: $color-twitter;
+}
+
+.email {
+  background: $color-yellow-tribune;
+}
