@@ -233,13 +233,16 @@ body {
 
   .submit {
     text-align: center;
+    &.submit--wApple .text_separator{
+      font-size: $size-xxs;
+    }
     .button--applePay {
       background-color: $color-black-pure;
       background-image: -webkit-named-image(apple-pay-logo-white);
       background-origin: content-box;
       background-position: 50% 50%;
       background-repeat: no-repeat;
-      background-size: 100% 60%;
+      background-size: 100% 90%;
       border-color: $color-black-pure;
       margin-right: 0;
     }
