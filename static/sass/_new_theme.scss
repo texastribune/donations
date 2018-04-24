@@ -252,9 +252,11 @@ body {
     display: none;
     .error-form-message {
       @extend .font-sansserif;
+      background-color: $color-red;
       clear: both;
-      color: $color-red;
+      color: $color-white-pure;
       font-size: $size-xs;
+      padding: $size-xxs;
       text-align: center;
     }
   }
