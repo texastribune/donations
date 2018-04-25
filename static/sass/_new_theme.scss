@@ -46,8 +46,9 @@ body {
   @extend %section-padding;
   background-color: $color-sand;
   background-position-x: 50%;
-  background-image: url('../img/bg_image--smd.png');
-  background-size: cover;
+  background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
+  background-repeat: repeat;
+  // background-size: cover;
 
   .grid_row {
     align-items: center;
@@ -233,13 +234,16 @@ body {
 
   .submit {
     text-align: center;
+    &.submit--wApple .text_separator{
+      font-size: $size-xxs;
+    }
     .button--applePay {
       background-color: $color-black-pure;
       background-image: -webkit-named-image(apple-pay-logo-white);
       background-origin: content-box;
       background-position: 50% 50%;
       background-repeat: no-repeat;
-      background-size: 100% 60%;
+      background-size: 100% 90%;
       border-color: $color-black-pure;
       margin-right: 0;
     }
@@ -250,8 +254,9 @@ body {
     .error-form-message {
       @extend .font-sansserif;
       clear: both;
-      color: $color-red;
+      color: $color-gray-dark;
       font-size: $size-xs;
+      font-weight: 700;
       text-align: center;
     }
   }

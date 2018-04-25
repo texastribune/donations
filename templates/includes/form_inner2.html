@@ -27,18 +27,19 @@
 {{ form.openended_status(value=openended_status) }}
 {{ form.installments(value=installments) }}
 
-<div class="form-error grid_separator">
-  <p class="error-form-message"></p>
-</div>
 <script src="https://checkout.stripe.com/checkout.js"></script>
 <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 
-<div class="submit submit--woApple grid_separator--s grid_row">
+<div class="submit submit--woApple grid_row grid_separator--s">
   <button id="donations-form-checkout-btn" class="col button button--yellow button--l button--donate">Donate</button>
 </div>
 
-<div class="submit submit--wApple grid_separator--s grid_row hidden">
+<div class="submit submit--wApple grid_row grid_separator--s hidden">
   <button class="col_6 button button--yellow button--l button--donate">Pay by card</button>
-  <span class="col_1">or</span>
+  <span class="col_1 text_separator">or</span>
   <button id="applePayButton" class="col_6 button button--l button--applePay">&nbsp;</button>
+</div>
+
+<div class="form-error grid_separator--s">
+  <p class="error-form-message"></p>
 </div>
