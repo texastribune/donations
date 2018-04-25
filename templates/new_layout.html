@@ -8,7 +8,7 @@
   <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
   <meta property="og:url" content="https://checkout.texastribune.org/">
   <!-- This is the same image used by our donations app -->
-  <meta property="og:image" content="https://static.texastribune.org/media/membership/FMD16/26234447754_dc97a48275_b.jpg">
+  <meta property="og:image" content="https://static.texastribune.org/media/membership/SMD18-FB-share1200x630.jpg">
   <meta property="og:title" content="Support Us | The Texas Tribune">
   <meta property="og:type" content="website">
   <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
@@ -84,7 +84,7 @@
   <script>
     WebFont.load({
       google: {
-        families: ['Open Sans:400,700']
+        families: ['Open Sans:400,700', 'PT Serif:400,700']
       }
     });
   </script>
@@ -94,33 +94,13 @@
   <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
-  {% block content %}
-  <section class="masthead">
-    <div class="grid_container--xl grid_row">
-      <a href="http://www.texastribune.org/" class="unlink">
-        <img src="{{ url_for('static', filename='img/logo.png') }}">
-      </a>
-    </div>
-  </section>
 
-  {% endblock %}
-  <footer class="footer grid_container--l grid_padding grid_row grid_wrap--l">
-    <nav class="col_3 grid_separator--s">
-      <ul>
-        <li class="footer__copyright">© 2017 <a href="//www.texastribune.org/" class="unlink">The Texas Tribune</a></li>
-      </ul>
-    </nav>
-    <nav class="col_9 hide_until--m">
-      <ul class="footer__links">
-        <li><a href="https://www.texastribune.org/about/">About Us</a></li>
-        <li><a href="https://www.texastribune.org/contact/">Contact Us</a></li>
-        <li><a href="https://www.texastribune.org/support-us/donors-and-members/">Who Funds Us?</a></li>
-        <li><a href="https://www.texastribune.org/terms-of-service/">Terms of Service</a></li>
-        <li><a href="https://www.texastribune.org/ethics/">Code of Ethics</a></li>
-        <li><a href="https://www.texastribune.org/privacy/">Privacy Policy</a></li>
-      </ul>
-    </nav>
-  </footer>
+  {% include 'includes/navbar_thin.html' %}
+
+  {% block content %}{% endblock %}
+
+  {% include 'includes/footer.html' %}
+
 <script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
 <script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
 <script>

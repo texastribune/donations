@@ -1,218 +1,265 @@
+$size-xxxl: 3rem; //Space between sections. Is there a better way to do this?
+%section-padding {
+  padding-bottom: $size-xxxl;
+  padding-top: $size-xxxl;
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-xl;
+    padding-top: $size-xl;
+  }
+}
+%button_toggle {
+  @extend .button;
+  @extend .button--l;
+  background-color: $color-white-pure;
+  border: 2px solid $color-yellow-tribune;
+  border-right-width: 1px;
+  float: left;
+  min-width: 100%;
+}
+
 html {
   @extend .font-sansserif;
-  font-size: $size-s;
+
+  //This keeps the footer bar in place
   min-height: 100%;
   position: relative;
 }
-
 body {
-  margin: 0 0 60px;
+  margin: 0;
+}
+.highlight {
+  background-color: $color-yellow-tribune;
+  display: inline-block;
+  padding-left: $size-xxs;
+  padding-right: $size-xxs;
+  width: auto;
 }
 
-.main {
-  padding: 0 $size-xxl $size-xxl;
-
-  a {
-    border-bottom: 1px solid $color-blue-light;
-    box-shadow: inset 0 -1px 0 0 $color-blue-light;
-    color: inherit;
-    text-decoration: none;
-
-    &:hover,
-    &:active {
-      border-bottom: 1px solid $color-teal-gray;
-      box-shadow: inset 0 -2px 0 0 $color-teal-gray;
-      color: inherit;
-      transition: all 0.8s ease;
-    }
-
-    &.unlink {
-      border: 0;
-      box-shadow: none;
-      text-decoration: none;
-      &:hover,
-      &:active {
-        border: 0;
-        text-decoration: none;
-      }
-    }
-  }
+// Nav bar
+.navbar__logo img {
+  height: 23px;
 }
 
-// Masthead with logo
-.masthead {
-  img {
-    padding: $size-s $size-xxl;
-    max-width: 360px;
-  }
-}
-
-// Splash background
+// Header
 .splash {
+  @extend %section-padding;
+  background-color: $color-sand;
+  background-position-x: 50%;
+  background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
+  background-repeat: repeat;
+  // background-size: cover;
 
-  @include mq($from: bp-l) {
-    background-color: lighten($color-black-pure, 20%);
-    background-position-x: 50%;
-    background-image: url('../img/bg_image.jpg');
-    background-size: cover;
+  .grid_row {
+    align-items: center;
+  }
+}
+.splash_header {
+  &--headline {
+    @extend h1;
+    color: $color-white-pure;
+    border-bottom: 3px solid $color-yellow-tribune;
+    font-weight: bold;
+    padding-bottom: $size-l;
+
+    @include mq($from: bp-m) {
+      font-size: $size-xl;
+      margin-bottom: $size-m;
+      padding-bottom: $size-m;
+    }
+    @include mq($from: bp-l) {
+      font-size: 2.3rem;
+      line-height: 1.25em;
+    }
+    @include mq($from: bp-xl) {
+      font-size: 2.75rem;
+    }
+  }
+  &--description {
+    @extend %link--blue;
+    color: $color-white-pure;
+    @include mq($from: bp-m, $until: bp-l) {
+      font-size: $size-s;
+    }
+  }
+}
+.splash_box {
+  background-color: transparentize($color-white-pure, .35);
+  padding: $size-s;
+}
+.rotate_words {
+  display: inline;
+  span {
+    animation: rotateWord 15s linear 0s 2;
+    color: $color-yellow-tribune;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+
+    &:nth-child(2) {
+      animation-delay: 3s;
+    }
+    &:nth-child(3) {
+      animation-delay: 6s;
+    }
+    &:nth-child(4) {
+      //animation: rotateWord 12s linear 9s 1, rotateLastWord 3s linear 21s 1 forwards;
+      animation-delay: 9s;
+    }
+    &:nth-child(5) {
+      animation: rotateWord 15s linear 12s 1, rotateLastWord 15s linear 27s 1 forwards;
+    }
+  }
+}
+@keyframes rotateWord {
+    0%   { opacity: 0; }
+    2%   { opacity: 0; -webkit-transform: translateY(-30px); transform: translateY(-30px);}
+	  5%   { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
+    17%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
+	  20%  { opacity: 0; -webkit-transform: translateY(30px); transform: translateY(30px);}
+	  80%  { opacity: 0; }
+    100% { opacity: 0; }
+}
+@keyframes rotateLastWord {
+    0%   { opacity: 0; }
+    2%   { opacity: 0; -webkit-transform: translateY(-30px); transform: translateY(-30px);}
+	  5%   { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
+    100%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
+}
+
+// Form
+.form_membership {
+  .tt_input {
+    @extend %input_text--l;
+    //width: 100%;
+
+    &::placeholder {
+      @extend %input_text--placeholder;
+      font-size: $size-s;
+    }
+  }
+  // Hides number input spinner on webkit browsers
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button, {
+      -webkit-appearance: none;
+      margin: 0;
   }
 
-  &_header {
-    color: $color-white-pure;
-    padding: $size-xl;
-
-    header {
-      margin: $size-b 0;
-
-      @include mq($from: bp-l) {
-        margin: 3rem 0;
-      }
-    }
-
-    a {
-      color: $color-yellow-tribune;
-      text-decoration: underline;
-
-      &:hover {
-        color: lighten($color-yellow-tribune, 10%);
-      }
-    }
+  .donation {
+    border-bottom: 1px solid $color-white-off;
+    // border-bottom: 1px solid $color-yellow-tribune;
+    font-size: $size-l;
+    font-weight: bold;
+    padding-bottom: $size-b;
 
     @include mq($until: bp-l) {
-      background-color: lighten($color-black-pure, 20%);
-      background-image: url('../img/bg_image.jpg');
-      background-size: cover;
+      font-size: $size-m;
     }
 
-    @include mq($from: bp-l) {
-      flex: 0 1 auto;
+    &--input {
+      position: relative;
+    }
+    &--dollar {
+      left: $size-xxs;
+      position: absolute;
+      top: 0.35rem;
+    }
+    &--amount {
+      font-size: $size-l;
+      padding-left: $size-xl;
+    }
+  }
+
+  .radio_toggle {
+    list-style-type: none;
+    overflow: hidden;
+    li {
+      flex: 0 1 33.33333%;
+      //margin-right: $size-b/2;
+      max-width: 100%;
+      &:last-child {
+        margin-right: 0;
+
+        label {
+          border-right-width: 2px;
+        }
+      }
+    }
+    input { //Feels like this could be a utility class
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
       overflow: hidden;
-      padding: $size-xl 6rem $size-xl $size-xl;
-      width: 55%
+      position: absolute !important;
+      width: 1px;
     }
+    label {
+      @extend %button_toggle;
 
-    @include mq($from: bp-xl) {
-      flex: 0 1 auto;
-      overflow: hidden;
-      width: 60%
+      // @include mq($until: bp-l) {
+      //   font-size: $size-xxs;
+      // }
     }
-
-  }
-
-  &_box {
-    background-color: transparentize($color-white-pure, .5);
-    border-radius: 2px;
-    padding: 0 $size-l;
-    margin-top: $size-b;
-
-    @include mq($from: bp-l) {
-      flex: 0 1 auto;
-      margin-right: $size-b;
-      overflow: hidden;
-      padding: $size-b $size-l;
-      margin: $size-xl 0;
-      width: calc(45% - 1.1rem);
-    }
-
-    @include mq($from: bp-xl) {
-      width: calc(40% - 1.1rem);
+    input:checked + label {
+      @extend %button_toggle;
+      background-color: $color-yellow-tribune;
+      // @include mq($until: bp-l) {
+      //   font-size: $size-xxs;
+      // }
     }
   }
 
-  label {
-    color: $color-black-off;
-  }
-}
+  .pay_fee {
+    align-items: flex-start;
+    &--checkbox {
+      margin-right: $size-xxs;
+      margin-top: 2px;
 
-
-// Typography
-h1 {
-  border-bottom: 3px solid $color-yellow-tribune;
-  font-size: $size-xl;
-  font-weight: bold;
-  padding-bottom: $size-l;
-
-  @include mq($from: bp-l) {
-    font-size: 2.5rem;
-  }
-
-  @include mq($from: bp-xl) {
-    font-size: 3.1rem;
-  }
-}
-
-h3 {
-  margin: 0 0 $size-b/2;
-}
-
-p {
-  margin: 0 0 $size-b;
-}
-
-label {
-  color: #7f7f7f;
-  cursor: pointer;
-  float: left;
-  font-size: $size-s;
-  font-weight: bold;
-  letter-spacing: 2px;
-  min-width: 150px;
-  text-transform: uppercase;
-}
-
-input {
-  font-size: $size-b;
-  margin: $size-b/2 $size-b/2 $size-b 0;
-  padding: .5em .25em;
-}
-
-input[type='text'] {
-  width: 100%;
-  border: 1px solid $color-gray-light;
-
-  &.dollar {
-    margin: 0 0 $size-b/2;
-    padding: 0 $size-b/2 0 2rem;
-    position: inherit;
-    width: 100%;
+      @include mq($until: bp-l) {
+        margin-right: 8px;
+        width: auto;
+      }
+    }
+    &--amount {
+      font-weight: bold;
+    }
+    &--description {
+      @extend .font-sansserif;
+      color: $color-gray-dark;
+      // color: $color-white-pure;
+      // color: $color-black-off;
+      font-size: $size-xs;
+    }
   }
 
-  &.uneditable {
-    background-color: $color-white-off;
-    border: none;
-    padding: 0;
-    margin: 0;
+  .submit {
+    text-align: center;
+    &.submit--wApple .text_separator{
+      font-size: $size-xxs;
+    }
+    .button--applePay {
+      background-color: $color-black-pure;
+      background-image: -webkit-named-image(apple-pay-logo-white);
+      background-origin: content-box;
+      background-position: 50% 50%;
+      background-repeat: no-repeat;
+      background-size: 100% 90%;
+      border-color: $color-black-pure;
+      margin-right: 0;
+    }
   }
-}
 
-// For hiding number input spinner on webkit browsers
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button, {
-    -webkit-appearance: none;
-    margin: 0;
-}
-
-.label-info {
-  @extend .font-sansserif;
-  font-size: $size-b;
-  font-style: normal;
-  margin: 0;
-  padding: $size-b/4 0 $size-s 0;
-}
-
-// Form styles
-.dollar {
-  @extend .font-sansserif;
-  color: $color-black-pure;
-  font-size: $size-giant;
-  font-weight: 700;
-  margin: 0 0 0 $size-b/2;
-  position: absolute;
-}
-
-.form__box {
-  background-color: $color-white-off;
-  padding: $size-l;
+  .form-error { //I'd like to rename these classes, but will need to update the JS
+    display: none;
+    .error-form-message {
+      @extend .font-sansserif;
+      clear: both;
+      color: $color-gray-dark;
+      font-size: $size-xs;
+      font-weight: 700;
+      text-align: center;
+    }
+  }
 }
 
 // Secret hidden field that sets recurring or one-time payment
@@ -220,211 +267,46 @@ input::-webkit-inner-spin-button, {
   display: none;
 }
 
-#pay_fees {
-  clear: both;
-  float: left;
+// Content
+.member_benefits {
+  @extend %section-padding;
+  //border-bottom: 1px solid $color-gray-light;
 }
+.member_quotes {
+  @extend %link--blue;
 
-#pay-fee-amount {
-  float: left;
-  font-size: $size-b;
-  padding: $size-b/4 0 0 0;
-}
-
-#pay-fee-info {
-  clear: both;
-  font-size: $size-s;
-  padding: 0;
-  margin-bottom: 0;
-}
-
-.payment-buttons {
-  display: inline-block;
-  list-style: none;
-  margin-bottom: $size-b;
-  padding: 0;
-
-  li {
-    display: inline-block;
-    margin-top: $size-b;
-    vertical-align: middle;
-
-    &:first-child {
-      margin-right: $size-b;
-    }
+  &--quote {
+      @extend .font-serif;
+      color: $color-gray-medium;
+      font-size: $size-b;
+  }
+  &--attribution {
+      @extend .font-sansserif;
+      color: $color-teal-gray;
+      font-size: $size-xs;
+      font-weight: 700;
+      text-transform: uppercase;
   }
 }
-
-// Stripe form submit button styles
-.button {
-  @extend .font-sansserif;
-  color: $color-black-pure;
-  font-size: $size-l;
-  font-weight: bold;
-  letter-spacing: 0.03em;
-  text-align: center;
-
-  &:focus {
-    outline: none;
-  }
+.faq {
+  @extend %section-padding;
 }
-
-.button-flat {
-  background-color: $color-yellow-tribune;
-  border: 2px solid $color-yellow-tribune;
-  color: $color-black-off;
-  font-weight: 700;
-  height: 45px;
-  line-height: 0;
-  text-align: center;
-  width: 250px;
-
-  &:hover {
-    background-color: $color-white-pure;
-    color: #222222;
-    cursor: pointer;
-  }
-}
-
-.button-applePay {
-  -webkit-appearance: none;
-  background-color: black;
-  background-image: -webkit-named-image(apple-pay-logo-white);
-  background-origin: content-box;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: 100% 60%;
-  cursor: pointer;
-  border: none;
-  height: 45px;
-  width: 150px;
-}
-
-// Error styles
-.form-error {
-  display: none;
-}
-
-.error-form-message {
-  clear: both;
-  color: red;
-}
-
-.info-list {
+.list--bulleted {
+  @extend .font-serif;
   li {
     font-size: $size-b;
     margin: 0 0 $size-b $size-m;
+    @extend %link--blue;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 }
-
 .contact {
-  .smallcaps--light {
-    font-size: $size-xxs;
-    margin-bottom: $size-b/4;
-  }
-
+  @extend %link--blue;
   p {
-    margin-bottom: $size-b/4;
-  }
-
-  &-list {
-    list-style-type: none;
-
-    li {
-      @extend .unlink;
-      font-size: $size-xs;
-      margin: 0;
-
-      a {
-        color: $color-teal-gray;
-      }
-    }
-  }
-}
-
-.radio_toggle {
-  overflow: hidden;
-
-  ul {
-    display: flex;
-  	list-style-type: none;
-
-    > :last-child {
-      margin-right: 0;
-    }
-  }
-
-  li {
-    flex: 0 1 33.33333%;
-    margin-right: $size-b/2;
-    max-width: 100%;
-  }
-
-  input {
-    position: absolute !important;
-    clip: rect(0, 0, 0, 0);
-    height: 1px;
-    width: 1px;
-    border: 0;
-    overflow: hidden;
-  }
-
-  label {
-    background-color: $color-white-pure;
-    border: 2px solid $color-yellow-tribune;
-    border-radius: 4px;
-    color: $color-black-off;
-    font-size: $size-xs;
-    font-weight: normal;
-    padding: $size-b/2;
-    text-align: center;
-    text-shadow: none;
-    transition: all 0.1s ease-in-out;
-    min-width: 100%;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-
-  input:checked + label {
-    background-color: $color-yellow-tribune;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-  }
-}
-
-.widget_nav {
-  @extend %link--teal;
-  list-style: none;
-
-  a {
-    font-weight: 400;
-  }
-
-  a:hover {
-    font-weight: 400;
-    text-decoration: none;
-  }
-
-  &--list {
     @extend .font-sansserif;
-    background-color: $color-white-pure;
-    border-top: 1px solid $color-gray-light;
-    border-left: 5px solid $color-white-pure;
-    color: $color-black-off;
-    letter-spacing: .03em;
-    margin-bottom: 0;
-    padding: $size-b/2 $size-b;
-    text-transform: uppercase;
-
-    &:hover {
-      border-left: 5px solid $color-yellow-tribune;
-      color: $color-black-pure;
-    }
-  }
-
-  &:last-child {
-    border-bottom: 1px solid $color-gray-light;
+    font-size: $size-s;
   }
 }

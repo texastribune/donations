@@ -418,6 +418,7 @@ def test__format_contact():
             'FirstName': 'D',
             'LastName': 'C',
             'LeadSource': 'Stripe',
+            'MailingPostalCode': None,
             'Stripe_Customer_Id__c': None}
 
     assert response == expected_response

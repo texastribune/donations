@@ -1,121 +1,130 @@
 {% extends "new_layout.html" %}
+
 {% block title %}
   {{ super() }}
 {% endblock %}
+
 {% block extra_script %}
   {{ super() }}
 {% endblock %}
 
 {% block content %}
-  <section class="masthead">
-    <div class="grid_container grid_row">
-      <a href="http://www.texastribune.org/" class="unlink">
-        <img src="{{ url_for('static', filename='img/logo.png') }}">
-      </a>
-    </div>
-  </section>
-  <section class="splash grid_separator">
-    <div class="grid_container">
-      <div class="grid">
-        <div class="splash_header">
-          <header class=" grid_separator--l">
-            <h1 class="grid_separator--l">Support independent, fact-based journalism</h1>
-            <p>As a nonprofit organization, our work is made possible through the generosity of members and donors. <a href="https://www.texastribune.org/about/">Learn more</a> about the Tribune's mission.</p>
-          </header>
+  <section class="splash">
+    <div class="grid_container grid_padded--xl">
+      <div class="grid_row grid_wrap--m">
+
+        <div class="splash_header col_6 grid_separator--l">
+          <div class="splash_header--headline grid_separator--l">
+            Texas Tribune <nobr>members make our</nobr>
+            <br>
+            <span class="rotate_words">
+              <span>journalism</span>
+              <span>events</span>
+              <span>community</span>
+              <span>mission</span>
+              <span>elections coverage</span>
+            </span>
+            <br>
+            possible.
+          </div>
+          <p class="splash_header--description">It’s our <a href="https://www.texastribune.org/about/">mission</a> to create a more engaged and informed Texas. Join us by becoming a Texas Tribune <nobr>member today.</nobr></p>
         </div>
-        <div class="splash_box">
-          <form action="/charge" method="post">
+
+        <div class="col_1 hide_until--l"></div>
+
+        <div class="splash_box col_6">
+          <form class="form_membership" action="/charge" method="post">
             <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
-              <h2 class="grid_separator">I'm ready to give...</h2>
-              <div class="grid_separator--l">
-                <div class="grid_row grid_separator">
-                  <div class="col">
-                    <span class="dollar">$</span>
-                    {{ form.amount(value=amount, autocomplete="off", class="dollar") }}
-                  </div>
-                </div>
-                <div class="form-section grid_row">
-                  <label for="installment_period">Membership Type</label>
-                  <br>
-                </div>
-                <div class="radio_toggle grid_separator">
-                  {{ form.installment_period }}
-                </div>
-              </div>
               {% include 'includes/form_inner2.html' %}
               {{ form.description(value='The Texas Tribune Membership') }}
           </form>
         </div>
+
       </div>
 
     </div>
   </section>
-  <section class="main grid_container grid_row grid_wrap--l">
-    <div class="col_9">
-      <div class="grid_separator--l">
-        <h3>All members enjoy the following benefits:</h3>
-        <ul class="info-list">
-          <li>Recognition on our <a href="https://www.texastribune.org/support-us/donors-and-members/">Donor Wall</a>.</li>
-          <li>Discounted tickets to the annual <a href="https://www.texastribune.org/festival/">Texas Tribune Festival</a>.</li>
-          <li>Exclusive, quarterly e-newsletter, where members get a behind-the-scenes look at the Tribune’s latest projects and initiatives.</li>
-        </ul>
-      </div>
+  <section class="main grid_container grid_padded--xl">
 
-      <div class="grid_separator--l">
-        <h3>Prefer to mail a check?</h3>
-        <p>Use our <a href="https://static.texastribune.org/media/marketing/TT-919-Membership_Contribution_Form.pdf">membership form</a>. Our mailing address is 919 Congress Avenue, Sixth Floor, Austin, TX 78701.</p>
-      </div>
+    {% include 'includes/smd-buckets.html' %}
 
-      <div class="grid_separator--l">
-        <h3>Sustaining or one-time membership?</h3>
-        <p>We think it's important that you get to support and consume the news on your own time and on your own terms. All donations are greatly appreciated.</p>
-        <p>A sustaining membership means your donation recurs automatically on a monthly or yearly basis via credit card. This provides the Tribune with the sort of predictable revenue that allows us to plan budgets a few years at a time, and it helps eliminate renewal mailings or lapses in your membership.</p>
-      </div>
-
-      <div class="grid_separator--l">
-        <h3>Circle Membership</h3>
-        <p>Circle Membership is a three-year commitment that backs the vital work of our journalists. <a href="https://support.texastribune.org/circle.html">Circle members</a> believe in supporting our public service mission so that all Texans can access our nonpartisan news, data and events at no cost.</p>
-        <p>Circle Members enjoy invitations to exclusive events and special updates from CEO Evan Smith.</p>
-      </div>
-
-      <div class="grid_separator--l">
-        <h3>Have a question?</h3>
-        <p>Rebecca Quarls, <em>Membership and Marketing Manager</em></p>
-        <ul class="contact-list">
-          <li>512-716-8686</li>
-          <li><a href="mailto:rquarls@texastribune.org">rquarls@texastribune.org</a></li>
-        </ul>
-      </div>
-
-      <div class="contact grid_separator--l">
-        <h3>Want to give more?</h3>
-        <div class="grid_separator">
-          <h4 class="smallcaps--light">Major Gifts and Grants</h4>
-          <p>Terry Quinn, <em>Chief Development Officer</em></p>
-          <ul class="contact-list">
-            <li>512-716-8613</li>
-            <li><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></li>
+    <div class="member_benefits grid_row grid_wrap--l">
+      <div class="col_8">
+          <div class="border--yellow_notch"></div>
+          <h2 class="grid_separator">Our members are part of a growing community of civically engaged Texans.</h2>
+          <div class="prose"><p>Join <a href="https://www.texastribune.org/support-us/donors-and-members/">thousands</a> who already support The Texas Tribune with <nobr>their donations.</nobr> Help us meet our goal of <strong>325 new members</strong> by <nobr>giving today.</nobr></p>
+          </div>
+          <div class="smallcaps highlight grid_separator">Members receive ...</div>
+          <!-- <p class="smallcaps grid_separator--s">Members receive ...</p> -->
+          <ul class="list--bulleted">
+            <li>Exclusive discounts to our annual <a href="https://www.texastribune.org/festival/">Texas Tribune Festival</a>, a three-day meeting of the brightest minds in politics and policy.</li>
+            <li>Behind-the-scenes access to the Texas Tribune newsroom, including Q&As with our reporters and sneak peeks at special projects.</li>
+            <li>Our utmost gratitude and a special place on our <a href="https://www.texastribune.org/support-us/donors-and-members/#2018">growing donor wall</a>.</li>
           </ul>
-        </div>
-        <div>
-          <h4 class="smallcaps--light">Corporate Sponsorships</h4>
-          <p>April Hinkle, <em>Chief Revenue Officer</em></p>
-          <ul class="contact-list">
-            <li>512-716-8634</li>
-            <li><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></li>
-          </ul>
-        </div>
+      </div>
+      <div class="col_1 grid_separator--l"></div>
+      <div class="col_3">
+          {% include 'includes/member-quotes.html' %}
       </div>
     </div>
-    <nav class="col_3">
-      <ul class="widget_nav grid_separator">
-        <a href="https://support.texastribune.org/levels.html"><li class="widget_nav--list">Explore Levels</li></a>
-        <a href="https://support.texastribune.org/circle.html"><li class="widget_nav--list">Circle Membership</li></a>
-        <a href="https://www.texastribune.org/support-us/donors-and-members/"><li class="widget_nav--list">Donor and Member Wall</li></a>
-        <a href="https://www.texastribune.org/support-us/corporate-sponsors/"><li class="widget_nav--list">Corporate Sponsors</li></a>
-        <a href="https://support.texastribune.org/faq.html"><li class="widget_nav--list">Frequently Asked Questions</li></a>
-      </ul>
-    </nav>
+
+    <div class="faq grid_row grid_wrap--l grid_separator--l">
+      <div class="col_8">
+        <div class="border--yellow_notch"></div>
+        <h2 class="grid_separator">Frequently Asked Questions</h2>
+        <h3 class="grid_separator--s">What is a sustaining membership?</h3>
+        <div class="prose grid_separator--l"><p>A sustaining membership means your donation recurs automatically on a monthly or yearly basis via credit card. This provides the Tribune with the sort of predictable revenue that allows us to plan budgets a few years at a time, and it helps eliminate renewal mailings or lapses in your membership.</p></div>
+
+        <h3 class="grid_separator--s">How can I renew my membership?</h3>
+        <div class="prose grid_separator--l"><p>Sustaining memberships automatically renew on a monthly or yearly basis. If you need to update your billing information, or your membership is up for renewal soon, please contact <a href="mailto:membership@texastribune.org">membership@texastribune.org</a>.</p></div>
+
+        <h3 class="grid_separator--s">Can I send my donation by mail?</h3>
+        <div class="prose grid_separator"><p>Yes! Simply fill out <a href="https://static.texastribune.org/media/marketing/TT-919-Membership_Contribution_Form.pdf">this donation form</a> and mail it to: </p></div>
+
+        <div class="contact grid_row grid_separator--l">
+          <div class="col">
+            <p><strong>Texas Tribune Membership</strong></p>
+            <p>919 Congress Avenue</p>
+            <p>Sixth Floor</p>
+            <p>Austin, Texas 78701</p>
+          </div>
+        </div>
+
+        <h3 class="grid_separator--s">What if I want to give more?</h3>
+        <div class="prose grid_separator"><p>For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership</a> program. To make a tax-deductible gift in the name of a business, contact April Hinkle to join our Business Membership program.</p></div>
+
+        <div class="contact grid_row grid_wrap--l grid_separator--l">
+          <div class="col">
+            <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
+            <p><strong>April Hinkle</strong></p>
+            <p>Chief Revenue Officer</p>
+            <p>512-716-8634</p>
+            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
+          </div>
+          <div class="col">
+            <p class="grid_separator--l">For major gifts or grants, contact:</p>
+            <p><strong>Terry Quinn</strong></p>
+            <p>Chief Development Officer</p>
+            <p>512-716-8613</p>
+            <p><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></p>
+          </div>
+        </div>
+
+        <h3 class="grid_separator--s">Still have questions?</h3>
+        <div class="contact grid_row grid_wrap--l grid_separator--l">
+          <div class="col">
+            <p class="grid_separator--s">For questions about your current membership, contact:</p>
+            <p><strong>Peter Hunt</strong></p>
+            <p>Member Relations</p>
+            <p>512-716-8695</p>
+            <p class="grid_separator"><a href="mailto:phunt@texastribune.org">phunt@texastribune.org</a></p>
+
+            <p class="">Or see our <a href="https://support.texastribune.org/faq.html">full FAQ</a>.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col_4"></div>
+    </div>
   </section>
   {% include 'includes/change_installment_period_js.html' %}
   {% include 'includes/stripe_checkout_js.html' %}

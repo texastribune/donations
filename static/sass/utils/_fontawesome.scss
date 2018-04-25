@@ -27,6 +27,10 @@
   vertical-align: -15%;
 }
 
+.fa-bars:before {
+  content: "\f0c9";
+}
+
 /* Icons we use */
 /* Move icons up here and uncomment as they're used */
 .fa-mail-forward:before,
@@ -53,6 +57,15 @@
 }
 .fa-google-plus:before {
   content: "\f0d5";
+}
+.fa-reddit:before {
+  content: "\f1a1";
+}
+.fa-apple:before {
+  content: "\f179";
+}
+.fa-google:before {
+  content: "\f1a0";
 }
 
 // Related Documents
@@ -96,6 +109,10 @@
   content: "\f078";
 }
 
+.fa-angle-double-right:before {
+  content: "\f101";
+}
+
 // Back to top
 .fa-arrow-up:before {
   content: "\f062";
@@ -130,35 +147,27 @@
   content: "\f041";
 }
 
-.fa-angle-double-right:before {
-  content: "\f101";
+.fa-user:before {
+  content: "\f007";
 }
 
-.fa-circle-thin:before {
-  content: "\f1db";
+// Account Link
+.fa-user:before {
+  content: "\f007";
 }
 
-.fa-stack {
-  position: relative;
-  display: inline-block;
-  width: 2em;
-  height: 2em;
-  line-height: 2em;
-  vertical-align: middle;
+//Subscribe page
+.fa-reddit:before {
+  content: "\f1a1";
 }
-.fa-stack-1x,
-.fa-stack-2x {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  text-align: center;
+.fa-external-link:before {
+  content: "\f08e";
 }
-.fa-stack-1x {
-  line-height: inherit;
+
+.fa-check:before {
+  content: "\f00c";
 }
-.fa-stack-2x {
-  font-size: 2em;
-}
+
 
 /* Icons we do not use */
 /*
@@ -219,9 +228,7 @@
     transform: rotate(359deg);
   }
 }
-.fa-external-link:before {
-  content: "\f08e";
-}
+
 .fa-plus-square:before {
   content: "\f0fe";
 }
@@ -244,9 +251,7 @@
   content: "\f004";
 }
 
-.fa-check:before {
-  content: "\f00c";
-}
+
 
 .fa-camera-retro:before {
   content: "\f083";
@@ -371,6 +376,27 @@
 :root .fa-flip-vertical {
   filter: none;
 }
+.fa-stack {
+  position: relative;
+  display: inline-block;
+  width: 2em;
+  height: 2em;
+  line-height: 2em;
+  vertical-align: middle;
+}
+.fa-stack-1x,
+.fa-stack-2x {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+.fa-stack-1x {
+  line-height: inherit;
+}
+.fa-stack-2x {
+  font-size: 2em;
+}
 .fa-inverse {
   color: #ffffff;
 }*/
@@ -387,9 +413,6 @@
 }
 .fa-star-o:before {
   content: "\f006";
-}
-.fa-user:before {
-  content: "\f007";
 }
 .fa-film:before {
   content: "\f008";
@@ -1304,9 +1327,7 @@
 .fa-long-arrow-up:before {
   content: "\f176";
 }
-.fa-apple:before {
-  content: "\f179";
-}
+
 .fa-windows:before {
   content: "\f17a";
 }
@@ -1415,12 +1436,8 @@
 .fa-yahoo:before {
   content: "\f19e";
 }
-.fa-google:before {
-  content: "\f1a0";
-}
-.fa-reddit:before {
-  content: "\f1a1";
-}
+
+
 .fa-reddit-square:before {
   content: "\f1a2";
 }
@@ -1600,6 +1617,9 @@
 }
 .fa-history:before {
   content: "\f1da";
+}
+.fa-circle-thin:before {
+  content: "\f1db";
 }
 .fa-header:before {
   content: "\f1dc";

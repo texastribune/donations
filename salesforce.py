@@ -100,6 +100,8 @@ def _format_contact(form=None):
 
     stripe_id = form.get('Stripe_Customer_Id__c', None)
 
+    zipcode = form.get('zipcode', None)
+
     contact = {
         'Email': email,
         'FirstName': form['first_name'],
@@ -107,6 +109,7 @@ def _format_contact(form=None):
         'Description': form['description'],
         'LeadSource': 'Stripe',
         'Stripe_Customer_Id__c': stripe_id,
+        'MailingPostalCode': zipcode,
         }
     print(contact)
     return contact
@@ -270,19 +273,31 @@ def upsert_customer(customer=None, form=None):
     if form is None:
         raise Exception("Value for 'form' must be specified.")
 
+    pprint('form: {}'.format(form))
+
     update = {'Stripe_Customer_Id__c': customer.id}
+
+    if 'zipcode' in form and form['zipcode'] not in [None, '']:
+        update['MailingPostalCode'] = form['zipcode']
+
+    pprint('update: {}'.format(update))
+
     updated_request = update.copy()
     updated_request.update(form.to_dict())
+
+    pprint('updated_request: {}'.format(updated_request))
 
     sf = SalesforceConnection()
     created, contact = sf.get_or_create_contact(updated_request)
 
     if not created:
         print("----Exists, updating")
+        pprint(update)
 
         path = '/services/data/v35.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
+        print(resp)
         check_response(response=resp, expected_status=204)
 
     return True

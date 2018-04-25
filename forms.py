@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 
 from wtforms.fields import StringField, HiddenField, BooleanField, DecimalField
-from wtforms.fields import RadioField, SelectField
+from wtforms.fields import RadioField
 from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
@@ -14,7 +14,8 @@ class BaseForm(FlaskForm):
     amount = DecimalField(u'Amount',
         [validators.required(message="Please choose a donation amount."),
         validators.NumberRange(min=1)])
-    reason = StringField(u'Encouraged to contribute by')
+    reason = StringField(u'Encouraged to give by')
+    zipcode = StringField(u'ZIP Code', [validators.Length(max=5)])
     campaign_id = HiddenField('Campaign ID')
     installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')

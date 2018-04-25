@@ -29,11 +29,11 @@
           isValid = true;
 
       if (!bothNamesExist()) {
-        errorMessageText = 'Please check that you entered a first and last name, and then resubmit.';
+        errorMessageText = 'Please enter a first and last name. This information helps us maintain tranparency about our financial supporters.';
         isValid = false;
       }
       if (!isValidDollarAmount()) {
-        errorMessageText += ' Please check that you entered a donation amount above $1, and then resubmit.';
+        errorMessageText += 'Please enter a donation above $1.';
         isValid = false;
       }
 
@@ -54,7 +54,7 @@
     }
 
     function bindEvents() {
-      $('#customButton').click(function(e) {
+      $('.button--donate').click(function(e) {
         e.preventDefault();
 
         checkFormValidity();
@@ -156,8 +156,11 @@
       Stripe.applePay.checkAvailability(function(available) {
         if (available) {
           var applePayButton = $('#applePayButton');
+          var withoutApple = $('.submit--woApple');
+          var withApple = $('.submit--wApple');
 
-          applePayButton.removeClass('hidden');
+          withApple.removeClass('hidden');
+          withoutApple.addClass('hidden');
           applePayButton.click(function(e) {
             e.preventDefault();
 
