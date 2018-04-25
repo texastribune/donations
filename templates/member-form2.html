@@ -33,7 +33,7 @@
         <div class="col_1 hide_until--l"></div>
 
         <div class="splash_box col_6">
-          <form class="form_membership" action="/charge" method="post">
+          <form id="form_membership" class="form_membership" action="/charge" method="post">
             <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
               {% include 'includes/form_inner2.html' %}
               {{ form.description(value='The Texas Tribune Membership') }}
