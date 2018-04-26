@@ -1,5 +1,8 @@
 <template>
-  <router-view />
+  <div>
+    <router-view />
+    <router-link :to="'?amount=58'">Test</router-link>
+  </div>
 </template>
 
 <script>

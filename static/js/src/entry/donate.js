@@ -3,7 +3,8 @@ import VueRouter from 'vue-router';
 import Vuex from 'vuex';
 
 import App from '../App.vue';
-import Form from '../containers/Form.vue';
+import DonateForm from '../containers/DonateForm.vue';
+import FormModule from '../store/modules/form';
 
 Vue.use(VueRouter);
 Vue.use(Vuex);
@@ -12,15 +13,20 @@ const router = new VueRouter({
   base: '/devdonate',
   mode: 'history',
   routes: [
-    { path: '/', component: Form },
+    { path: '/', component: DonateForm },
   ],
 });
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  components: { App },
-  template: '<App/>',
-  router,
-  render: h => h(App),
+const store = new Vuex.Store({
+  modules: {
+    form: FormModule,
+  },
+});
+
+const app = new Vue({ ...App, router, store });
+
+router.onReady(() => {
+  const { currentRoute } = router;
+  store.dispatch('form/createInitialState', { amount: currentRoute.query.amount });
+  app.$mount('#app');
 });
