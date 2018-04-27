@@ -53,7 +53,11 @@ export default {
 
   watch: {
     paramAmount(newAmount, oldAmount) {
-      if (oldAmount !== newAmount) {
+      const shouldUpdate =
+        (oldAmount !== newAmount) &&
+        this.useQueryParam;
+
+      if (shouldUpdate) {
         this.updateAmount(newAmount);
       }
     },

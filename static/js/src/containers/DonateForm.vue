@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Amount from '../components/Amount.vue';
+import Amount from '../containers/Amount.vue';
 
 export default {
   name: 'DonateForm',
