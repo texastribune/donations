@@ -1,7 +1,7 @@
 <template>
   <div>
     <router-view />
-    <router-link :to="'?amount=58'">Test</router-link>
+    <router-link :to="'?amount=23&installmentPeriod=yearly'">Foo</router-link>
   </div>
 </template>
 

@@ -3,7 +3,10 @@
     action="/charge"
     method="post"
   >
-    <amount identifier="amount" />
+    <amount
+      identifier="amount"
+      store-module="baseForm"
+    />
   </form>
 </template>
 
@@ -11,7 +14,7 @@
 import Amount from '../containers/Amount.vue';
 
 export default {
-  name: 'DonateForm',
+  name: 'TopForm',
 
   components: {
     Amount,

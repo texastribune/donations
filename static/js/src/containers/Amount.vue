@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import formStoreOrLocal from '../mixins/formStoreOrLocal';
+import connectedFormElement from '../mixins/connectedFormElement';
 
 export default {
   name: 'Amount',
 
-  mixins: [formStoreOrLocal],
+  mixins: [connectedFormElement],
 };
 </script>
