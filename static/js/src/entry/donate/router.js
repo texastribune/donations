@@ -1,8 +1,8 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
-import RouteHandler from '../../components/RouteHandler.vue';
-import TopForm from '../../containers/TopForm.vue';
+import RouteHandler from '../../RouteHandler.vue';
+import TopForm from './TopForm.vue';
 
 Vue.use(VueRouter);
 

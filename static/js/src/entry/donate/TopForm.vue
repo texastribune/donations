@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Amount from '../containers/Amount.vue';
+import Amount from '../../elements/Amount.vue';
 
 export default {
   name: 'TopForm',
