@@ -25,8 +25,43 @@ const store = new Vuex.Store({
 
 const app = new Vue({ ...App, router, store });
 
+function createInitialState(queryParams) {
+  let openEndedStatus;
+  let { amount, installmentPeriod = 'monthly' } = queryParams;
+  const { campaignId = '' } = queryParams;
+
+  switch (installmentPeriod.toLowerCase()) {
+    case 'monthly':
+      openEndedStatus = 'Open';
+      amount = amount || '10';
+      break;
+    case 'yearly':
+      openEndedStatus = 'Open';
+      amount = amount || '75';
+      break;
+    case 'once':
+      openEndedStatus = 'None';
+      installmentPeriod = 'None';
+      amount = amount || '75';
+      break;
+    default:
+      installmentPeriod = 'monthly';
+      openEndedStatus = 'Open';
+      amount = amount || '10';
+  }
+
+  return {
+    amount,
+    campaignId,
+    installmentPeriod,
+    openEndedStatus,
+  };
+}
+
 router.onReady(() => {
-  const { currentRoute } = router;
-  store.dispatch('form/createInitialState', { amount: currentRoute.query.amount });
+  store.dispatch(
+    'form/createInitialState',
+    createInitialState(router.currentRoute.query),
+  );
   app.$mount('#app');
 });

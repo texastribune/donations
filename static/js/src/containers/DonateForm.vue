@@ -3,12 +3,7 @@
     action="/charge"
     method="post"
   >
-    <amount
-      :param-value="paramAmount"
-      use-store
-      react-to-param
-      identifier="amount"
-    />
+    <amount identifier="amount" />
   </form>
 </template>
 
@@ -20,12 +15,6 @@ export default {
 
   components: {
     Amount,
-  },
-
-  computed: {
-    paramAmount() {
-      return this.$route.query.amount;
-    },
   },
 };
 </script>
