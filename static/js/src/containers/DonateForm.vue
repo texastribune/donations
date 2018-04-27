@@ -4,9 +4,10 @@
     method="post"
   >
     <amount
-      :param-amount="paramAmount"
+      :param-value="paramAmount"
       use-store
-      use-query-param
+      react-to-param
+      identifier="amount"
     />
   </form>
 </template>
