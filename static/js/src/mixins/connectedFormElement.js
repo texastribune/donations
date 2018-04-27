@@ -20,12 +20,10 @@ export default {
 
   methods: {
     updateValue(newValue) {
-      const action = this.$store.actions[`${this.storeModule}/updateValue`];
-      
-      action({
-        key: this.identifier,
-        value: newValue,
-      });
+      this.$store.dispatch(
+        `${this.storeModule}/updateValue`,
+        { key: this.identifier, value: newValue },
+      );
     },
   },
 };
