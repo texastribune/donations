@@ -6,7 +6,17 @@ import TopForm from '../../containers/TopForm.vue';
 
 Vue.use(VueRouter);
 
-function baseFormQueryChanges(queryParams) {
+function createBaseFormState(queryParams) {
+  const baseState = {
+    firstName: '',
+    lastName: '',
+    description: 'The Texas Tribune Membership',
+    reason: '',
+    zip: '',
+    installments: 'None',
+    payFeesValue: false,
+  };
+
   let openEndedStatus;
   let { amount, installmentPeriod = 'monthly' } = queryParams;
   const { campaignId = '' } = queryParams;
@@ -36,6 +46,7 @@ function baseFormQueryChanges(queryParams) {
     campaignId,
     installmentPeriod,
     openEndedStatus,
+    ...baseState,
   };
 }
 
@@ -56,22 +67,11 @@ function bindRouterEvents(router, routeHandler, store) {
 
     store.dispatch(
       'baseForm/createInitialState',
-      {
-        ...{ foo: 'bar' },
-        ...baseFormQueryChanges(query),
-      },
+      createBaseFormState(query),
     );
 
     routeHandler.$mount('#app');
     topForm.$mount('#top-form');
-
-    router.beforeEach((to, from, next) => {
-      store.dispatch(
-        'baseForm/updateValues',
-        baseFormQueryChanges(to.query),
-      );
-      next();
-    });
   });
 }
 
