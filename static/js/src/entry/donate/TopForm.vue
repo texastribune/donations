@@ -29,14 +29,20 @@
       name="pay_fees_value"
       store-module="baseForm"
     />
+
+    <level
+      amount-store-module="baseForm"
+      installment-period-store-module="baseForm"
+    />
   </form>
 </template>
 
 <script>
 import HiddenInput from '../../elements/HiddenInput.vue';
-import TextInput from '../../elements/TextInput.vue';
 import Frequency from '../../elements/Frequency.vue';
+import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
+import TextInput from '../../elements/TextInput.vue';
 
 export default {
   name: 'TopForm',
@@ -46,6 +52,7 @@ export default {
     TextInput,
     Frequency,
     PayFees,
+    Level,
   },
 };
 </script>
