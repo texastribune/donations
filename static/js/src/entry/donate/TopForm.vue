@@ -4,18 +4,18 @@
     method="post"
   >
     <text-input
-      identifier="amount"
+      name="amount"
       store-module="baseForm"
     />
 
     <frequency
-      identifier="installment_period"
+      name="installment_period"
       store-module="baseForm"
       open-ended-store-module="baseForm"
     />
 
     <hidden-input
-      identifier="openended_status"
+      name="openended_status"
       store-module="baseForm"
     />
 
@@ -25,7 +25,7 @@
     />
 
     <hidden-input
-      identifier="pay_fees_value"
+      name="pay_fees_value"
       store-module="baseForm"
     />
   </form>

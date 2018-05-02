@@ -1,6 +1,6 @@
 export default {
   props: {
-    identifier: {
+    name: {
       type: String,
       required: true,
     },
@@ -14,7 +14,7 @@ export default {
   computed: {
     value() {
       const getter = this.$store.getters[`${this.storeModule}/valueByKey`];
-      return getter(this.identifier);
+      return getter(this.name);
     },
   },
 
@@ -22,7 +22,7 @@ export default {
     updateValue(newValue) {
       this.$store.dispatch(
         `${this.storeModule}/updateValue`,
-        { key: this.identifier, value: newValue },
+        { key: this.name, value: newValue },
       );
     },
   },

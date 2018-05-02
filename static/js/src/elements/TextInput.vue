@@ -1,7 +1,7 @@
 <template>
   <input
     :value="value"
-    :name="identifier"
+    :name="name"
     type="text"
     @input="updateValue($event.target.value)"
   >

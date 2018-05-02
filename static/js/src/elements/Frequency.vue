@@ -4,7 +4,7 @@
       v-for="option in options"
       :key="option.id"
       :value="option.value"
-      :name="identifier"
+      :name="name"
       :checked="value === option.value"
       type="radio"
       @input="onInput($event.target.value)"
