@@ -10,7 +10,7 @@
 import connectedFormElement from '../mixins/connectedFormElement';
 
 export default {
-  name: 'OpenEnded',
+  name: 'HiddenInput',
 
   mixins: [connectedFormElement],
 };

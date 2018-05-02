@@ -3,7 +3,7 @@
     action="/charge"
     method="post"
   >
-    <amount
+    <text-input
       identifier="amount"
       store-module="baseForm"
     />
@@ -14,7 +14,7 @@
       open-ended-store-module="baseForm"
     />
 
-    <open-ended
+    <hidden-input
       identifier="openended_status"
       store-module="baseForm"
     />
@@ -23,22 +23,27 @@
       store-module="baseForm"
       pay-fees-value-store-module="baseForm"
     />
+
+    <hidden-input
+      identifier="pay_fees_value"
+      store-module="baseForm"
+    />
   </form>
 </template>
 
 <script>
-import Amount from '../../elements/Amount.vue';
+import HiddenInput from '../../elements/HiddenInput.vue';
+import TextInput from '../../elements/TextInput.vue';
 import Frequency from '../../elements/Frequency.vue';
-import OpenEnded from '../../elements/OpenEnded.vue';
 import PayFees from '../../elements/PayFees.vue';
 
 export default {
   name: 'TopForm',
 
   components: {
-    Amount,
+    HiddenInput,
+    TextInput,
     Frequency,
-    OpenEnded,
     PayFees,
   },
 };

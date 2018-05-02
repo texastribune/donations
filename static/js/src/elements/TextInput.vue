@@ -11,7 +11,7 @@
 import connectedFormElement from '../mixins/connectedFormElement';
 
 export default {
-  name: 'Amount',
+  name: 'TextInput',
 
   mixins: [connectedFormElement],
 };
