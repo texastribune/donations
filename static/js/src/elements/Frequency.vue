@@ -7,7 +7,7 @@
       :name="identifier"
       :checked="value === option.value"
       type="radio"
-      @input="updateValue($event.target.value)"
+      @input="onInput($event.target.value)"
     >
   </fieldset>
 </template>
@@ -28,6 +28,29 @@ export default {
         { id: 2, text: 'one time', value: 'None' },
       ],
     };
+  },
+
+  methods: {
+    onInput(newValue) {
+      this.updateValue(newValue);
+      this.updateOpenEnded();
+    },
+
+    updateOpenEnded() {
+      const { value: freqValue } = this;
+      let openEndedVal;
+
+      if (freqValue === 'yearly' || freqValue === 'monthly') {
+        openEndedVal = 'Open';
+      } else if (freqValue === 'None') {
+        openEndedVal = 'None';
+      }
+
+      this.$store.dispatch(
+        `${this.storeModule}/updateValue`,
+        { key: 'openended_status', value: openEndedVal },
+      );
+    },
   },
 };
 </script>
