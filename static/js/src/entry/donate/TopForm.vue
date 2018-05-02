@@ -7,29 +7,24 @@
       name="amount"
       store-module="baseForm"
     />
-
     <frequency
       name="installment_period"
       store-module="baseForm"
       open-ended-store-module="baseForm"
     />
-
     <hidden-input
       name="openended_status"
       store-module="baseForm"
     />
-
+    <hidden-input
+      name="pay_fees_value"
+      store-module="baseForm"
+    />
     <pay-fees
       store-module="baseForm"
       pay-fees-value-store-module="baseForm"
       amount-store-module="baseForm"
     />
-
-    <hidden-input
-      name="pay_fees_value"
-      store-module="baseForm"
-    />
-
     <level
       amount-store-module="baseForm"
       installment-period-store-module="baseForm"
