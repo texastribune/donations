@@ -4,7 +4,7 @@
       type="checkbox"
       @input="onInput"
     >
-    <span>${{ fee }}</span>
+    <span>{{ fee }}</span>
   </fieldset>
 </template>
 
@@ -34,7 +34,7 @@ export default {
       const total = (amount + 0.30) / (1 - 0.022);
       const fee = Math.floor((total - amount) * 100) / 100;
 
-      return fee.toFixed(2);
+      return `$${fee.toFixed(2)}`;
     },
   },
 
