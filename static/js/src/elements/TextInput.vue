@@ -2,6 +2,7 @@
   <input
     :value="value"
     :name="name"
+    :readonly="readonly"
     type="text"
     @input="updateValue($event.target.value)"
   >
@@ -14,5 +15,12 @@ export default {
   name: 'TextInput',
 
   mixins: [connectedFormElement],
+
+  props: {
+    readonly: {
+      type: Boolean,
+      default: false,
+    },
+  },
 };
 </script>
