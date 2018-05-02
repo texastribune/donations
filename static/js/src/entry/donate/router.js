@@ -8,13 +8,13 @@ Vue.use(VueRouter);
 
 function createBaseFormState(queryParams) {
   const baseState = {
-    firstName: '',
-    lastName: '',
+    first_name: '',
+    last_name: '',
     description: 'The Texas Tribune Membership',
     reason: '',
-    zip: '',
+    zipcode: '',
     installments: 'None',
-    payFeesValue: false,
+    pay_fees_value: 'False',
   };
 
   let openEndedStatus;
@@ -42,11 +42,11 @@ function createBaseFormState(queryParams) {
   }
 
   return {
-    amount,
-    campaignId,
-    installmentPeriod,
-    openEndedStatus,
     ...baseState,
+    amount,
+    campaign_id: campaignId,
+    installment_period: installmentPeriod,
+    openended_status: openEndedStatus,
   };
 }
 
