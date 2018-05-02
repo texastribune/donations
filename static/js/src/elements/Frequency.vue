@@ -20,6 +20,13 @@ export default {
 
   mixins: [connectedFormElement],
 
+  props: {
+    openEndedStoreModule: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
     return {
       options: [
@@ -47,7 +54,7 @@ export default {
       }
 
       this.$store.dispatch(
-        `${this.storeModule}/updateValue`,
+        `${this.openEndedStoreModule}/updateValue`,
         { key: 'openended_status', value: openEndedVal },
       );
     },

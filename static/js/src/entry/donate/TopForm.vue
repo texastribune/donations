@@ -11,11 +11,17 @@
     <frequency
       identifier="installment_period"
       store-module="baseForm"
+      open-ended-store-module="baseForm"
     />
 
     <open-ended
       identifier="openended_status"
       store-module="baseForm"
+    />
+
+    <pay-fees
+      store-module="baseForm"
+      pay-fees-value-store-module="baseForm"
     />
   </form>
 </template>
@@ -24,6 +30,7 @@
 import Amount from '../../elements/Amount.vue';
 import Frequency from '../../elements/Frequency.vue';
 import OpenEnded from '../../elements/OpenEnded.vue';
+import PayFees from '../../elements/PayFees.vue';
 
 export default {
   name: 'TopForm',
@@ -32,6 +39,7 @@ export default {
     Amount,
     Frequency,
     OpenEnded,
+    PayFees,
   },
 };
 </script>
