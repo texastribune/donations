@@ -22,6 +22,7 @@
     <pay-fees
       store-module="baseForm"
       pay-fees-value-store-module="baseForm"
+      amount-store-module="baseForm"
     />
 
     <hidden-input
