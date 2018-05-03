@@ -17,13 +17,4 @@ export default {
       return getter(this.name);
     },
   },
-
-  methods: {
-    updateValue(newValue) {
-      this.$store.dispatch(
-        `${this.storeModule}/updateValue`,
-        { key: this.name, value: newValue },
-      );
-    },
-  },
 };

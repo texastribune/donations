@@ -26,7 +26,8 @@ export default {
 
   computed: {
     fee() {
-      const getter = this.$store.getters[`${this.amountStoreModule}/valueByKey`];
+      const getter =
+        this.$store.getters[`${this.amountStoreModule}/valueByKey`];
       const amount = parseFloat(getter('amount'));
 
       if (Number.isNaN(amount) || !amount) return '';
