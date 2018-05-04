@@ -103,12 +103,12 @@ body {
       animation-delay: 6s;
     }
     &:nth-child(4) {
-      //animation: rotateWord 12s linear 9s 1, rotateLastWord 3s linear 21s 1 forwards;
-      animation-delay: 9s;
+      animation: rotateWord 12s linear 9s 1, rotateLastWord 12s linear 24s 1 forwards;
+      // animation-delay: 9s;
     }
-    &:nth-child(5) {
-      animation: rotateWord 15s linear 12s 1, rotateLastWord 15s linear 27s 1 forwards;
-    }
+    // &:nth-child(5) {
+    //   animation: rotateWord 15s linear 12s 1, rotateLastWord 15s linear 27s 1 forwards;
+    // }
   }
 }
 @keyframes rotateWord {
