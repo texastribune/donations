@@ -7,11 +7,11 @@
 </template>
 
 <script>
-import connectedFormElement from '../mixins/connectedFormElement';
+import mapValueToElement from '../mixins/mapValueToElement';
 
 export default {
   name: 'HiddenInput',
 
-  mixins: [connectedFormElement],
+  mixins: [mapValueToElement],
 };
 </script>

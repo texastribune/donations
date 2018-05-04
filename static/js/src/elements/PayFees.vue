@@ -2,22 +2,21 @@
   <fieldset>
     <input
       type="checkbox"
-      @input="onInput"
+      @input="onInput($event.target.checked)"
     >
     <span>{{ fee }}</span>
   </fieldset>
 </template>
 
 <script>
+import updateCallbackOnly from '../mixins/updateCallbackOnly';
+
 export default {
   name: 'PayFees',
 
-  props: {
-    payFeesValueStoreModule: {
-      type: String,
-      required: true,
-    },
+  mixins: [updateCallbackOnly],
 
+  props: {
     amountStoreModule: {
       type: String,
       required: true,
@@ -36,18 +35,6 @@ export default {
       const fee = Math.floor((total - amount) * 100) / 100;
 
       return `$${fee.toFixed(2)}`;
-    },
-  },
-
-  methods: {
-    onInput(event) {
-      const { checked } = event.target;
-      const payFeesVal = checked ? 'True' : 'False';
-
-      this.$store.dispatch(
-        `${this.payFeesValueStoreModule}/updateValue`,
-        { key: 'pay_fees_value', value: payFeesVal },
-      );
     },
   },
 };

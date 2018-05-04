@@ -3,32 +3,60 @@
     action="/charge"
     method="post"
   >
+    <text-input
+      name="amount"
+      store-module="baseForm"
+    />
     <radios
-      :on-update="onFrequencyUpdate"
+      :update-callback="onFrequencyUpdate"
       :options="frequencyOptions"
       name="installment_period"
+      store-module="baseForm"
+    />
+    <hidden
+      name="openended_status"
+      store-module="baseForm"
+    />
+    <hidden
+      name="pay_fees_value"
+      store-module="baseForm"
+    />
+    <pay-fees
+      :update-callback="onFeeChange"
+      store-module="baseForm"
+      amount-store-module="baseForm"
+    />
+    <level
+      amount-store-module="baseForm"
+      installment-period-store-module="baseForm"
+    />
+    <hidden
+      name="openended_status"
       store-module="baseForm"
     />
   </form>
 </template>
 
 <script>
-// import HiddenInput from '../../elements/HiddenInput.vue';
+import Hidden from '../../elements/Hidden.vue';
 import Radios from '../../elements/Radios.vue';
-// import Level from '../../elements/Level.vue';
-// import PayFees from '../../elements/PayFees.vue';
-// import TextInput from '../../elements/TextInput.vue';
+import Level from '../../elements/Level.vue';
+import PayFees from '../../elements/PayFees.vue';
+import TextInput from '../../elements/TextInput.vue';
+import replaceSingleValue from '../../mixins/replaceSingleValue';
 
 export default {
   name: 'TopForm',
 
   components: {
-    // HiddenInput,
-    // TextInput,
+    Hidden,
+    TextInput,
     Radios,
-    // PayFees,
-    // Level,
+    PayFees,
+    Level,
   },
+
+  mixins: [replaceSingleValue],
 
   data() {
     return {
@@ -41,19 +69,30 @@ export default {
   },
 
   methods: {
-    onFrequencyUpdate(newVal) {
-      let openEndedVal;
+    onFrequencyUpdate(newValue) {
+      let openEndedVal = '';
 
-      if (newVal === 'yearly' || newVal === 'monthly') {
+      if (newValue === 'yearly' ||
+          newValue === 'monthly'
+      ) {
         openEndedVal = 'Open';
-      } else if (newVal === 'None') {
+      } else if (newValue === 'None') {
         openEndedVal = 'None';
       }
 
-      this.$store.dispatch(
-        'baseForm/updateValue',
-        { key: 'openended_status', value: openEndedVal },
-      );
+      this.replaceSingleValue({
+        storeModule: 'baseForm',
+        name: 'openended_status',
+        newValue: openEndedVal,
+      });
+    },
+
+    onFeeChange(checked) {
+      this.replaceSingleValue({
+        storeModule: 'baseForm',
+        name: 'pay_fees_value',
+        newValue: checked ? 'True' : 'False',
+      });
     },
   },
 };
