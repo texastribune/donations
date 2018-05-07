@@ -3,6 +3,8 @@
     :value="value"
     :name="name"
     :required="required"
+    :maxlength="maxlength"
+    :pattern="pattern"
     type="text"
     @input="onInput($event.target.value)"
   >
@@ -21,6 +23,16 @@ export default {
   ],
 
   props: {
+    maxlength: {
+      type: [Boolean, String],
+      default: false,
+    },
+
+    pattern: {
+      type: [Boolean, String],
+      default: false,
+    },
+
     required: {
       type: Boolean,
       default: true,

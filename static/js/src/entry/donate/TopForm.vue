@@ -32,8 +32,10 @@
       name="installment_period"
       store-module="baseForm"
     />
-    <zip
+    <text-input
       :required="false"
+      maxlength="5"
+      pattern="[0-9]"
       name="zipcode"
       store-module="baseForm"
     />
@@ -66,7 +68,7 @@
       name="description"
       store-module="baseForm"
     />
-    <card
+    <basic-pay
       @setToken="setToken"
     />
   </form>
@@ -79,10 +81,9 @@ import Level from '../../connected/Level.vue';
 import PayFees from '../../connected/PayFees.vue';
 import TextInput from '../../connected/TextInput.vue';
 import Email from '../../connected/Email.vue';
-import Zip from '../../connected/Zip.vue';
 
 import LocalHidden from '../../local/Hidden.vue';
-import Card from '../../local/Card.vue';
+import BasicPay from '../../local/BasicPay.vue';
 
 import replaceSingleValue from '../../mixins/replaceSingleValue';
 
@@ -97,8 +98,7 @@ export default {
     PayFees,
     Level,
     Email,
-    Zip,
-    Card,
+    BasicPay,
   },
 
   mixins: [replaceSingleValue],

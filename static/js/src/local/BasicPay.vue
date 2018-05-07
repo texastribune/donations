@@ -17,7 +17,7 @@
 import { Card, createToken } from 'vue-stripe-elements-plus';
 
 export default {
-  name: 'Card',
+  name: 'BasicPay',
 
   components: {
     Card,
