@@ -80,7 +80,7 @@ if FLASK_DEBUG:
     @app.route('/devdonate')
     def dev_donate():
         bundles = get_bundles('donate')
-        return render_template('devdonate.html', bundles=bundles)
+        return render_template('devdonate.html', bundles=bundles, key=app.config['STRIPE_KEYS']['publishable_key'])
 
 @app.route('/memberform')
 def member_form():

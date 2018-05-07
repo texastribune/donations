@@ -1,7 +1,9 @@
 <template>
   <form
+    ref="form"
     action="/charge"
     method="post"
+    @submit="onSubmit"
   >
     <text-input
       name="amount"
@@ -34,6 +36,12 @@
       name="openended_status"
       store-module="baseForm"
     />
+    <token
+      :token="token"
+    />
+    <stripe
+      @setToken="setToken"
+    />
   </form>
 </template>
 
@@ -43,6 +51,8 @@ import Radios from '../../elements/Radios.vue';
 import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
+import Token from '../../elements/Token.vue';
+import Stripe from '../../elements/Stripe.vue';
 import replaceSingleValue from '../../mixins/replaceSingleValue';
 
 export default {
@@ -54,6 +64,8 @@ export default {
     Radios,
     PayFees,
     Level,
+    Stripe,
+    Token,
   },
 
   mixins: [replaceSingleValue],
@@ -65,6 +77,8 @@ export default {
         { id: 1, text: 'yearly', value: 'yearly' },
         { id: 2, text: 'one time', value: 'None' },
       ],
+
+      token: '',
     };
   },
 
@@ -93,6 +107,14 @@ export default {
         name: 'pay_fees_value',
         newValue: checked ? 'True' : 'False',
       });
+    },
+
+    onSubmit(event) {
+      event.preventDefault();
+    },
+
+    setToken(newToken) {
+      this.token = newToken;
     },
   },
 };
