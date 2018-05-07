@@ -31,7 +31,7 @@ export default {
     pay() {
       createToken().then(({ token: { id } }) => {
         this.$emit('setToken', id);
-        this.$parent.$refs.form.submit();
+        // this.$parent.$refs.form.submit();
       }).catch(() => {
         window.location.href = '/error';
       });

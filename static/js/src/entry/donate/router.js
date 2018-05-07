@@ -8,6 +8,7 @@ Vue.use(VueRouter);
 
 function createBaseFormState(queryParams) {
   const baseState = {
+    stripeEmail: '',
     first_name: '',
     last_name: '',
     description: 'The Texas Tribune Membership',

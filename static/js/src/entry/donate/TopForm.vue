@@ -5,6 +5,23 @@
     method="post"
     @submit="onSubmit"
   >
+    <email
+      name="stripeEmail"
+      store-module="baseForm"
+    />
+    <text-input
+      name="first_name"
+      store-module="baseForm"
+    />
+    <text-input
+      name="last_name"
+      store-module="baseForm"
+    />
+    <text-input
+      :required="false"
+      name="reason"
+      store-module="baseForm"
+    />
     <text-input
       name="amount"
       store-module="baseForm"
@@ -15,11 +32,16 @@
       name="installment_period"
       store-module="baseForm"
     />
-    <hidden
+    <zip
+      :required="false"
+      name="zipcode"
+      store-module="baseForm"
+    />
+    <connected-hidden
       name="openended_status"
       store-module="baseForm"
     />
-    <hidden
+    <connected-hidden
       name="pay_fees_value"
       store-module="baseForm"
     />
@@ -32,12 +54,17 @@
       amount-store-module="baseForm"
       installment-period-store-module="baseForm"
     />
-    <hidden
+    <connected-hidden
       name="openended_status"
       store-module="baseForm"
     />
-    <token
-      :token="token"
+    <local-hidden
+      :value="token"
+      name="stripeToken"
+    />
+    <connected-hidden
+      name="description"
+      store-module="baseForm"
     />
     <stripe
       @setToken="setToken"
@@ -46,26 +73,32 @@
 </template>
 
 <script>
-import Hidden from '../../elements/Hidden.vue';
-import Radios from '../../elements/Radios.vue';
-import Level from '../../elements/Level.vue';
-import PayFees from '../../elements/PayFees.vue';
-import TextInput from '../../elements/TextInput.vue';
-import Token from '../../elements/Token.vue';
-import Stripe from '../../elements/Stripe.vue';
+import ConnectedHidden from '../../connected/Hidden.vue';
+import Radios from '../../connected/Radios.vue';
+import Level from '../../connected/Level.vue';
+import PayFees from '../../connected/PayFees.vue';
+import TextInput from '../../connected/TextInput.vue';
+import Email from '../../connected/Email.vue';
+import Zip from '../../connected/Zip.vue';
+
+import LocalHidden from '../../local/Hidden.vue';
+import Stripe from '../../local/Stripe.vue';
+
 import replaceSingleValue from '../../mixins/replaceSingleValue';
 
 export default {
   name: 'TopForm',
 
   components: {
-    Hidden,
+    ConnectedHidden,
+    LocalHidden,
     TextInput,
     Radios,
     PayFees,
     Level,
+    Email,
+    Zip,
     Stripe,
-    Token,
   },
 
   mixins: [replaceSingleValue],

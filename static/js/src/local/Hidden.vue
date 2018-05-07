@@ -1,17 +1,22 @@
 <template>
   <input
-    :value="token"
-    name="stripeToken"
+    :value="value"
+    :name="name"
     type="hidden"
   >
 </template>
 
 <script>
 export default {
-  name: 'Token',
+  name: 'Hidden',
 
   props: {
-    token: {
+    value: {
+      type: String,
+      required: true,
+    },
+
+    name: {
       type: String,
       required: true,
     },

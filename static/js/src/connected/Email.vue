@@ -2,7 +2,8 @@
   <input
     :value="value"
     :name="name"
-    type="text"
+    :required="required"
+    type="email"
     @input="onInput($event.target.value)"
   >
 </template>
@@ -12,11 +13,18 @@ import mapValueToElement from '../mixins/mapValueToElement';
 import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
 
 export default {
-  name: 'TextInput',
+  name: 'Email',
 
   mixins: [
     mapValueToElement,
     replaceSingleValueOnInput,
   ],
+
+  props: {
+    required: {
+      type: Boolean,
+      default: true,
+    },
+  },
 };
 </script>
