@@ -5,7 +5,7 @@
     <li
       v-for="(option, index) in options"
       :key="option.id"
-      :class="getClasses(option, 'li')"
+      :class="getClasses('li', option)"
     >
       <input
         :value="option.value"
@@ -18,7 +18,7 @@
       >
       <label
         :for="getLabelConnector(index)"
-        :class="getClasses(option, 'label')"
+        :class="getClasses('label', option)"
       >
         {{ option.text }}
       </label>
@@ -53,19 +53,6 @@ export default {
   methods: {
     getLabelConnector(index) {
       return `${this.name}-${index}`;
-    },
-
-    getClasses(option, elName) {
-      const { [`${elName}Classes`]: classes } = option;
-
-      if (classes) {
-        if (typeof classes === 'string') {
-          return classes;
-        } else if (Array.isArray(classes)) {
-          return classes.join(' ');
-        }
-      }
-      return '';
     },
   },
 };

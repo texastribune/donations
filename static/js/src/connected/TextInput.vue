@@ -5,6 +5,7 @@
     :required="required"
     :maxlength="maxlength"
     :pattern="pattern"
+    :class="getClasses()"
     type="text"
     @input="onInput($event.target.value)"
   >

@@ -39,14 +39,6 @@
       name="zipcode"
       store-module="baseForm"
     />
-    <connected-hidden
-      name="openended_status"
-      store-module="baseForm"
-    />
-    <connected-hidden
-      name="pay_fees_value"
-      store-module="baseForm"
-    />
     <pay-fees
       :update-callback="onFeeChange"
       store-module="baseForm"
@@ -56,20 +48,32 @@
       amount-store-module="baseForm"
       installment-period-store-module="baseForm"
     />
-    <connected-hidden
-      name="openended_status"
-      store-module="baseForm"
+    <basic-pay
+      @setToken="setToken"
     />
     <local-hidden
       :value="token"
       name="stripeToken"
     />
     <connected-hidden
+      name="openended_status"
+      store-module="baseForm"
+    />
+    <connected-hidden
       name="description"
       store-module="baseForm"
     />
-    <basic-pay
-      @setToken="setToken"
+    <connected-hidden
+      name="campaign_id"
+      store-module="baseForm"
+    />
+    <connected-hidden
+      name="openended_status"
+      store-module="baseForm"
+    />
+    <connected-hidden
+      name="pay_fees_value"
+      store-module="baseForm"
     />
   </form>
 </template>
