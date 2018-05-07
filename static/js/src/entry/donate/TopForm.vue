@@ -66,7 +66,7 @@
       name="description"
       store-module="baseForm"
     />
-    <stripe
+    <card
       @setToken="setToken"
     />
   </form>
@@ -82,7 +82,7 @@ import Email from '../../connected/Email.vue';
 import Zip from '../../connected/Zip.vue';
 
 import LocalHidden from '../../local/Hidden.vue';
-import Stripe from '../../local/Stripe.vue';
+import Card from '../../local/Card.vue';
 
 import replaceSingleValue from '../../mixins/replaceSingleValue';
 
@@ -98,7 +98,7 @@ export default {
     Level,
     Email,
     Zip,
-    Stripe,
+    Card,
   },
 
   mixins: [replaceSingleValue],
