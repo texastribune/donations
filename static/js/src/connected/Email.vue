@@ -11,20 +11,15 @@
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
 import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
+import requiredField from '../mixins/requiredField';
 
 export default {
   name: 'Email',
 
   mixins: [
+    requiredField,
     mapValueToElement,
     replaceSingleValueOnInput,
   ],
-
-  props: {
-    required: {
-      type: Boolean,
-      default: true,
-    },
-  },
 };
 </script>

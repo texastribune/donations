@@ -2,6 +2,7 @@
   <input
     :value="value"
     :name="name"
+    :required="required"
     readonly
     type="text"
   >
@@ -9,10 +10,14 @@
 
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
+import requiredField from '../mixins/requiredField';
 
 export default {
   name: 'TextInput',
 
-  mixins: [mapValueToElement],
+  mixins: [
+    requiredField,
+    mapValueToElement,
+  ],
 };
 </script>

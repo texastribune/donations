@@ -34,8 +34,7 @@
     />
     <text-input
       :required="false"
-      maxlength="5"
-      pattern="[0-9]"
+      pattern="[0-9]{5}"
       name="zipcode"
       store-module="baseForm"
     />
@@ -56,14 +55,11 @@
       name="stripeToken"
     />
     <connected-hidden
-      name="openended_status"
-      store-module="baseForm"
-    />
-    <connected-hidden
       name="description"
       store-module="baseForm"
     />
     <connected-hidden
+      :required="false"
       name="campaign_id"
       store-module="baseForm"
     />

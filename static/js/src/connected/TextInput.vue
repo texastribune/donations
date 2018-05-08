@@ -3,7 +3,6 @@
     :value="value"
     :name="name"
     :required="required"
-    :maxlength="maxlength"
     :pattern="pattern"
     :class="getClasses()"
     type="text"
@@ -14,29 +13,21 @@
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
 import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
+import requiredField from '../mixins/requiredField';
 
 export default {
   name: 'TextInput',
 
   mixins: [
+    requiredField,
     mapValueToElement,
     replaceSingleValueOnInput,
   ],
 
   props: {
-    maxlength: {
-      type: [Boolean, String],
-      default: false,
-    },
-
     pattern: {
       type: [Boolean, String],
       default: false,
-    },
-
-    required: {
-      type: Boolean,
-      default: true,
     },
   },
 };
