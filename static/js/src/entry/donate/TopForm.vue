@@ -43,12 +43,12 @@
       store-module="baseForm"
       amount-store-module="baseForm"
     />
+    <basic-pay
+      @setToken="setToken"
+    />
     <level
       amount-store-module="baseForm"
       installment-period-store-module="baseForm"
-    />
-    <basic-pay
-      @setToken="setToken"
     />
     <local-hidden
       :value="token"
@@ -59,7 +59,6 @@
       store-module="baseForm"
     />
     <connected-hidden
-      :required="false"
       name="campaign_id"
       store-module="baseForm"
     />

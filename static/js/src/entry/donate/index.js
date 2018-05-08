@@ -4,10 +4,10 @@ import Vuex from 'vuex';
 import App from '../../App.vue';
 import FormModule from '../../store/modules/form';
 import { createRouter, bindRouterEvents } from './router';
-import getClasses from '../../mixins/getClasses';
+import cssClasses from '../../mixins/cssClasses';
 
 Vue.use(Vuex);
-Vue.mixin(getClasses);
+Vue.mixin(cssClasses);
 
 const store = new Vuex.Store({
   modules: {

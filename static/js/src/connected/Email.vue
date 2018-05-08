@@ -3,6 +3,7 @@
     :value="value"
     :name="name"
     :required="required"
+    :class="classes"
     type="email"
     @input="onInput($event.target.value)"
   >

@@ -1,5 +1,9 @@
 <template>
-  <span>{{ level }}</span>
+  <p
+    :class="classes"
+  >
+    Level: {{ level }}
+  </p>
 </template>
 
 <script>

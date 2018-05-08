@@ -29,12 +29,14 @@
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
 import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
+import iterativeCssClasses from '../mixins/iterativeCssClasses';
 
 export default {
   name: 'Frequency',
 
   mixins: [
     mapValueToElement,
+    iterativeCssClasses,
     replaceSingleValueOnInput,
   ],
 

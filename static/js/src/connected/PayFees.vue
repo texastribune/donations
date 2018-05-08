@@ -1,25 +1,53 @@
 <template>
   <fieldset>
     <input
+      :class="getClasses('input', this)"
       type="checkbox"
       @input="onInput($event.target.checked)"
     >
-    <span>{{ fee }}</span>
+    <p
+      :class="getClasses('para', this)"
+    >
+      <span
+        :class="getClasses('span', this)"
+      >
+        {{ fee }}
+      </span>
+    </p>
   </fieldset>
 </template>
 
 <script>
 import updateCallbackOnly from '../mixins/updateCallbackOnly';
+import iterativeCssClasses from '../mixins/iterativeCssClasses';
 
 export default {
   name: 'PayFees',
 
-  mixins: [updateCallbackOnly],
+  mixins: [
+    iterativeCssClasses,
+    updateCallbackOnly,
+  ],
 
   props: {
     amountStoreModule: {
       type: String,
       required: true,
+    },
+
+    inputCssClasses: {
+      type: [String, Array],
+      default: '',
+    },
+
+    spanCssClasses: {
+      type: [String, Array],
+      default: '',
+    },
+
+    paraCssClasses: {
+      type: [String, Array],
+      default: '',
     },
   },
 

@@ -1,14 +1,7 @@
 export default {
-  props: {
-    baseClasses: {
-      type: [String, Array],
-      default: '',
-    },
-  },
-
   methods: {
-    getClasses(prefix = 'base', obj = this) {
-      const { [`${prefix}Classes`]: classes } = obj;
+    getClasses(elType, obj) {
+      const { [`${elType}CssClasses`]: classes } = obj;
 
       if (classes) {
         if (typeof classes === 'string') {

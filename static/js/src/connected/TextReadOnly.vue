@@ -3,6 +3,7 @@
     :value="value"
     :name="name"
     :required="required"
+    :class="classes"
     readonly
     type="text"
   >

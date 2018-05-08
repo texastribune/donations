@@ -4,7 +4,7 @@
     :name="name"
     :required="required"
     :pattern="pattern"
-    :class="getClasses()"
+    :class="classes"
     type="text"
     @input="onInput($event.target.value)"
   >
