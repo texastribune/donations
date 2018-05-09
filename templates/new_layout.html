@@ -1,133 +1,126 @@
 <!DOCTYPE html>
-<head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta charset="utf-8">
-  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>{% block title %}Support Us | The Texas Tribune{% endblock %}</title>
-  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-  <meta property="og:url" content="https://checkout.texastribune.org/">
-  <!-- This is the same image used by our donations app -->
-  <meta property="og:image" content="https://static.texastribune.org/media/membership/SMD18-FB-share1200x630.jpg">
-  <meta property="og:title" content="Support Us | The Texas Tribune">
-  <meta property="og:type" content="website">
-  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
-  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="http://static.texastribune.org/media/icons/iPhone_Icon_60x60.png">
-  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="http://static.texastribune.org/media/icons/iPad_Icon_76x76.png">
-  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://static.texastribune.org/media/icons/iPhone_Icon_120x120.png">
-  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://static.texastribune.org/media/icons/iPad_Icon_152x152.png">
-  <link href="{{ url_for('static', filename='css/new_all.scss.css') }}" rel="stylesheet" type="text/css">
-  <script src="//use.typekit.net/ngv2xmw.js"></script>
-  <script>try{Typekit.load();}catch(e){}</script>
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script>window.jQuery || document.write('<script src="{{
-  url_for('static', filename='js/jquery.min.js') }}">\x3C/script>')</script>
-  {% block extra_script %}
-    <script src="{{ url_for('static', filename='js/all.js') }}"></script>
-  {% endblock %}
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-P5L2Z5Z');</script>
-  <!-- End Google Tag Manager -->
+<html lang="en-US">
+  <head>
+    <title>{% block title %}Support Us | The Texas Tribune{% endblock %}</title>
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+    <meta property="og:url" content="https://checkout.texastribune.org/">
+    <!-- This is the same image used by our donations app -->
+    <meta property="og:image" content="https://static.texastribune.org/media/membership/membership-share.png">
+    <meta property="og:title" content="Support Us | The Texas Tribune">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
+    <link rel="apple-touch-icon-precomposed" sizes="60x60" href="http://static.texastribune.org/media/icons/iPhone_Icon_60x60.png">
+    <link rel="apple-touch-icon-precomposed" sizes="76x76" href="http://static.texastribune.org/media/icons/iPad_Icon_76x76.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="http://static.texastribune.org/media/icons/iPhone_Icon_120x120.png">
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="http://static.texastribune.org/media/icons/iPad_Icon_152x152.png">
+    <link href="{{ url_for('static', filename='css/new_all.scss.css') }}" rel="stylesheet" type="text/css">
+    
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P5L2Z5Z');</script>
 
-  <!-- Global site tag (gtag.js) - Google AdWords: 1018212315 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-1018212315"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-1018212315');
-</script>
+    <!-- Global site tag (gtag.js) - Google AdWords: 1018212315 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-1018212315"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'AW-1018212315');
+    </script>
 
-{% block adwords_conversion_code %}{% endblock %}
+    {% block adwords_conversion_code %}{% endblock %}
 
-  <script>
-    (function() {
-      var _fbq = window._fbq || (window._fbq = []);
-      if (!_fbq.loaded) {
-        var fbds = document.createElement('script');
-        fbds.async = true;
-        fbds.src = '//connect.facebook.net/en_US/fbds.js';
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(fbds, s);
-        _fbq.loaded = true;
-      }
-    })();
-    window._fbq = window._fbq || [];
-    window._fbq.push(['track', '6025650813658', {
-      'value': '0.00',
-      'currency': 'USD'
-    }]);
-  </script>
-  <!-- Facebook Pixel Code -->
-  <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-    document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    <script>
+      (function() {
+        var _fbq = window._fbq || (window._fbq = []);
+        if (!_fbq.loaded) {
+          var fbds = document.createElement('script');
+          fbds.async = true;
+          fbds.src = '//connect.facebook.net/en_US/fbds.js';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(fbds, s);
+          _fbq.loaded = true;
+        }
+      })();
+      window._fbq = window._fbq || [];
+      window._fbq.push(['track', '6025650813658', {
+        'value': '0.00',
+        'currency': 'USD'
+      }]);
+    </script>
+    
+    <!-- Facebook Pixel Code -->
+    <script>
+      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+      document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-    fbq('init', '1570461443220689');
-    fbq('track', "PageView");
-    fbq('track', 'ViewContent');
-    fbq('track', 'Search');
-  </script>
-  <noscript>
-    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1570461443220689&ev=PageView&noscript=1"/>
-  </noscript>
-  <!-- End Facebook Pixel Code -->
-  <noscript>&lt;img height=1 width=1 alt="" style="display:none" src="https://www.facebook.com/tr?ev=6025650813658&amp;amp;cd[value]=0.00&amp;amp;cd[currency]=USD&amp;amp;noscript=1"/&gt;</noscript>
-  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ['Open Sans:400,700', 'PT Serif:400,700']
-      }
-    });
-  </script>
-</head>
-<body>
-  <!-- Google Tag Manager (noscript) -->
-  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+      fbq('init', '1570461443220689');
+      fbq('track', "PageView");
+      fbq('track', 'ViewContent');
+      fbq('track', 'Search');
+    </script>
+    <!-- End Facebook Pixel Code -->
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <script>
+      WebFont.load({
+        google: {
+          families: ['Open Sans:400,700', 'PT Serif:400,700']
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <noscript>&lt;img height=1 width=1 alt="" style="display:none" src="https://www.facebook.com/tr?ev=6025650813658&amp;amp;cd[value]=0.00&amp;amp;cd[currency]=USD&amp;amp;noscript=1"/&gt;</noscript>
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1570461443220689&ev=PageView&noscript=1" />
+    </noscript>
 
-  {% include 'includes/navbar_thin.html' %}
+    {% include 'includes/navbar_thin.html' %}
 
-  {% block content %}{% endblock %}
+    {% block content %}{% endblock %}
 
-  {% include 'includes/footer.html' %}
+    {% include 'includes/footer.html' %}
 
-<script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
-<script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
-<script>
-  (function(i, s, o, g, r, a, m) {
-    i['GoogleAnalyticsObject'] = r;
-    i[r] = i[r] || function() {
-      (i[r].q = i[r].q || []).push(arguments)
-    }, i[r].l = 1 * new Date();
-    a = s.createElement(o),
-      m = s.getElementsByTagName(o)[0];
-    a.async = 1;
-    a.src = g;
-    m.parentNode.insertBefore(a, m)
-  })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    <script async src="{{ url_for('static', filename='js/autotrack.map.js') }}"></script>
+    <script async src="{{ url_for('static', filename='js/autotrack.js') }}"></script>
+    <script>
+      (function(i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function() {
+          (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-  ga('create', 'UA-9827490-1', 'auto', {'allowLinker': true});
-  ga('require', 'cleanUrlTracker', {
-    stripQuery: true,
-    queryDimensionIndex: 1,
-    indexFilename: 'index.html'
-  });
-  ga('require', 'eventTracker');
-  ga('require', 'linker');
-  ga('linker:autoLink', ['texastribune.org', 'support.texastribune.org']);
-  ga('require', 'displayfeatures');
-  ga('send', 'pageview');
-</script>
-{% block bottom_script %}{% endblock %}
-</body>
+      ga('create', 'UA-9827490-1', 'auto', {'allowLinker': true});
+      ga('require', 'cleanUrlTracker', {
+        stripQuery: true,
+        queryDimensionIndex: 1,
+        indexFilename: 'index.html'
+      });
+      ga('require', 'eventTracker');
+      ga('require', 'linker');
+      ga('linker:autoLink', ['texastribune.org', 'support.texastribune.org']);
+      ga('require', 'displayfeatures');
+      ga('send', 'pageview');
+    </script>
+    
+    {% block bottom_script %}{% endblock %}
+  </body>
 </html>
