@@ -1,20 +1,20 @@
 export default {
   props: {
-    cssClasses: {
+    baseCssClasses: {
       type: [String, Array],
       default: '',
     },
   },
 
-  computed: {
-    classes() {
-      const { cssClasses } = this;
+  methods: {
+    getCssClasses(elName = 'base', obj = this) {
+      const { [`${elName}CssClasses`]: classes } = obj;
 
-      if (cssClasses) {
+      if (classes) {
         if (typeof classes === 'string') {
-          return cssClasses;
-        } else if (Array.isArray(cssClasses)) {
-          return cssClasses.join(' ');
+          return classes;
+        } else if (Array.isArray(classes)) {
+          return classes.join(' ');
         }
       }
       return '';
