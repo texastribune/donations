@@ -3,7 +3,7 @@
     :value="value"
     :name="name"
     :required="required"
-    :class="classes"
+    :class="getCssClasses()"
     readonly
     type="text"
   >

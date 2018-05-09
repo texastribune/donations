@@ -1,11 +1,11 @@
 <template>
   <ul
-    :class="ulClass"
+    :class="getCssClasses('ul')"
   >
     <li
       v-for="(option, index) in options"
       :key="option.id"
-      :class="getClasses('li', option)"
+      :class="getCssClasses('li', option)"
     >
       <input
         :value="option.value"
@@ -18,7 +18,7 @@
       >
       <label
         :for="getLabelConnector(index)"
-        :class="getClasses('label', option)"
+        :class="getCssClasses('label', option)"
       >
         {{ option.text }}
       </label>
@@ -29,14 +29,12 @@
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
 import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
-import iterativeCssClasses from '../mixins/iterativeCssClasses';
 
 export default {
   name: 'Frequency',
 
   mixins: [
     mapValueToElement,
-    iterativeCssClasses,
     replaceSingleValueOnInput,
   ],
 
@@ -46,7 +44,7 @@ export default {
       required: true,
     },
 
-    ulClass: {
+    ulCssClasses: {
       type: String,
       default: '',
     },

@@ -1,33 +1,33 @@
 <template>
-  <fieldset>
+  <div
+    :class="getCssClasses('div')"
+  >
     <input
-      :class="getClasses('input', this)"
+      :class="getCssClasses('input')"
       type="checkbox"
       @input="onInput($event.target.checked)"
     >
     <p
-      :class="getClasses('para', this)"
+      :class="getCssClasses('para')"
     >
+      I agree to pay
       <span
-        :class="getClasses('span', this)"
+        :class="getCssClasses('span')"
       >
         {{ fee }}
       </span>
+      for processing fees. Paying fees directs more money to our mission.
     </p>
-  </fieldset>
+  </div>
 </template>
 
 <script>
 import updateCallbackOnly from '../mixins/updateCallbackOnly';
-import iterativeCssClasses from '../mixins/iterativeCssClasses';
 
 export default {
   name: 'PayFees',
 
-  mixins: [
-    iterativeCssClasses,
-    updateCallbackOnly,
-  ],
+  mixins: [updateCallbackOnly],
 
   props: {
     amountStoreModule: {
@@ -46,6 +46,11 @@ export default {
     },
 
     paraCssClasses: {
+      type: [String, Array],
+      default: '',
+    },
+
+    divCssClasses: {
       type: [String, Array],
       default: '',
     },

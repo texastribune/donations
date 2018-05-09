@@ -4,7 +4,8 @@
     :name="name"
     :required="required"
     :pattern="pattern"
-    :class="classes"
+    :placeholder="placeholder"
+    :class="getCssClasses()"
     type="text"
     @input="onInput($event.target.value)"
   >
@@ -14,6 +15,7 @@
 import mapValueToElement from '../mixins/mapValueToElement';
 import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
 import requiredField from '../mixins/requiredField';
+import fieldWithPlaceholder from '../mixins/fieldWithPlaceholder';
 
 export default {
   name: 'TextInput',
@@ -21,6 +23,7 @@ export default {
   mixins: [
     requiredField,
     mapValueToElement,
+    fieldWithPlaceholder,
     replaceSingleValueOnInput,
   ],
 

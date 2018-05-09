@@ -1,8 +1,14 @@
 <template>
   <p
-    :class="classes"
+    v-if="level"
+    :class="getCssClasses('para')"
   >
-    Level: {{ level }}
+    Your giving level is:
+    <span
+      :class="getCssClasses('span')"
+    >
+      {{ level }}
+    </span>
   </p>
 </template>
 
@@ -19,6 +25,16 @@ export default {
     installmentPeriodStoreModule: {
       type: String,
       required: true,
+    },
+
+    paraCssClasses: {
+      type: [String, Array],
+      default: '',
+    },
+
+    spanCssClasses: {
+      type: [String, Array],
+      default: '',
     },
   },
 

@@ -1,15 +1,28 @@
 <template>
-  <div>
+  <div
+    :class="`grid_row grid_wrap--${wrapBreakPoint}`"
+  >
     <card
+      :options="options"
+      class="donation--card col_8"
       stripe="pk_test_sSUhBbATSHteQVZZvz6R5aYe"
       @change="complete = $event.complete"
     />
-    <button
-      :disabled="!complete"
-      @click="pay"
+    <div
+      class="col_4"
     >
-      Donate
-    </button>
+      <div
+        class="grid_row"
+      >
+        <input
+          :disabled="!complete"
+          class="col button button--yellow button--l button--donate"
+          type="submit"
+          value="Donate"
+          @click="pay"
+        >
+      </div>
+    </div>
   </div>
 </template>
 
@@ -23,15 +36,27 @@ export default {
     Card,
   },
 
+  props: {
+    wrapBreakPoint: {
+      type: String,
+      default: 's',
+    },
+  },
+
   data() {
-    return { complete: false };
+    return {
+      complete: false,
+      options: {
+        hidePostalCode: true,
+        iconStyle: 'solid',
+      },
+    };
   },
 
   methods: {
     pay() {
       createToken().then(({ token: { id } }) => {
         this.$emit('setToken', id);
-        // this.$parent.$refs.form.submit();
       }).catch(() => {
         window.location.href = '/error';
       });

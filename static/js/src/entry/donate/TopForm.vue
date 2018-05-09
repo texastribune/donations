@@ -3,53 +3,113 @@
     ref="form"
     action="/charge"
     method="post"
+    class="form_membership"
     @submit="onSubmit"
   >
-    <email
-      name="stripeEmail"
-      store-module="baseForm"
-    />
-    <text-input
-      name="first_name"
-      store-module="baseForm"
-    />
-    <text-input
-      name="last_name"
-      store-module="baseForm"
-    />
-    <text-input
-      :required="false"
-      name="reason"
-      store-module="baseForm"
-    />
-    <text-input
-      name="amount"
-      store-module="baseForm"
-    />
-    <radios
-      :update-callback="onFrequencyUpdate"
-      :options="frequencyOptions"
-      name="installment_period"
-      store-module="baseForm"
-    />
-    <text-input
-      :required="false"
-      pattern="[0-9]{5}"
-      name="zipcode"
-      store-module="baseForm"
-    />
-    <pay-fees
-      :update-callback="onFeeChange"
-      store-module="baseForm"
-      amount-store-module="baseForm"
-    />
-    <basic-pay
-      @setToken="setToken"
-    />
-    <level
-      amount-store-module="baseForm"
-      installment-period-store-module="baseForm"
-    />
+    <fieldset
+      class="donation grid_separator"
+    >
+      <div class="grid_separator--s">
+        <legend
+          class="donation--prompt grid_separator--s"
+        >
+          I'm ready to give ...
+        </legend>
+        <div
+          class="grid_row donation--input"
+        >
+          <span
+            class="donation--dollar"
+          >
+            $
+          </span>
+          <text-input
+            base-css-classes="col tt_input donation--amount"
+            name="amount"
+            store-module="baseForm"
+          />
+        </div>
+      </div>
+      <radios
+        :update-callback="onFrequencyUpdate"
+        :options="frequencyOptions"
+        ul-css-classes="radio_toggle grid_row grid_separator--s"
+        name="installment_period"
+        store-module="baseForm"
+      />
+      <level
+        amount-store-module="baseForm"
+        installment-period-store-module="baseForm"
+        para-css-classes="donation--level"
+        span-css-classes="donation--level_name"
+      />
+    </fieldset>
+
+    <fieldset
+      class="details grid_separator"
+    >
+      <div
+        class="grid_row grid_separator--s"
+      >
+        <email
+          base-css-classes="col_12 tt_input"
+          name="stripeEmail"
+          placeholder="Email address"
+          store-module="baseForm"
+        />
+      </div>
+      <div
+        class="grid_row grid_wrap--s"
+      >
+        <text-input
+          base-css-classes="col_6 tt_input grid_separator--s"
+          name="first_name"
+          placeholder="First name"
+          store-module="baseForm"
+        />
+        <text-input
+          base-css-classes="col_6 tt_input grid_separator--s"
+          name="last_name"
+          placeholder="Last name"
+          store-module="baseForm"
+        />
+      </div>
+      <div
+        class="grid_row grid_wrap--s"
+      >
+        <text-input
+          :required="false"
+          base-css-classes="col_8 tt_input grid_separator--s"
+          name="reason"
+          placeholder="Encouraged to give by ..."
+          store-module="baseForm"
+        />
+        <text-input
+          :required="false"
+          base-css-classes="col_4 tt_input grid_separator--s"
+          pattern="[0-9]{5}"
+          name="zipcode"
+          placeholder="Zip code"
+          store-module="baseForm"
+        />
+      </div>
+      <pay-fees
+        :update-callback="onFeeChange"
+        div-css-classes="pay_fee grid_row"
+        input-css-classes="col_1 pay_fee--checkbox"
+        span-css-classes="pay_fee--amount"
+        para-css-classes="pay_fee--description col_11"
+        amount-store-module="baseForm"
+      />
+    </fieldset>
+
+    <fieldset>
+      <basic-pay
+        :token="token"
+        @setToken="setToken"
+      />
+    </fieldset>
+
     <local-hidden
       :value="token"
       name="stripeToken"
@@ -145,8 +205,9 @@ export default {
       event.preventDefault();
     },
 
-    setToken(newToken) {
+    setToken(newToken, cb) {
       this.token = newToken;
+      cb();
     },
   },
 };

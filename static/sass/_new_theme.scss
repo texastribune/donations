@@ -84,7 +84,7 @@ body {
   }
 }
 .splash_box {
-  background-color: transparentize($color-white-pure, .35);
+  background-color: $color-white-pure;
   padding: $size-s;
 }
 .rotate_words {
@@ -131,7 +131,6 @@ body {
 .form_membership {
   .tt_input {
     @extend %input_text--l;
-    //width: 100%;
 
     &::placeholder {
       @extend %input_text--placeholder;
@@ -145,28 +144,53 @@ body {
       margin: 0;
   }
 
+  fieldset {
+    border: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+  }
+
   .donation {
-    border-bottom: 1px solid $color-white-off;
-    // border-bottom: 1px solid $color-yellow-tribune;
     font-size: $size-l;
-    font-weight: bold;
-    padding-bottom: $size-b;
 
     @include mq($until: bp-l) {
       font-size: $size-m;
     }
 
+    &--prompt {
+      font-weight: bold;
+    }
     &--input {
       position: relative;
     }
     &--dollar {
+      font-weight: bold;
       left: $size-xxs;
       position: absolute;
       top: 0.35rem;
     }
     &--amount {
       font-size: $size-l;
+      font-weight: bold;
       padding-left: $size-xl;
+    }
+    &--level {
+      color: $color-gray-medium;
+      font-size: $size-xs;
+      text-align: center;
+    }
+    &--level_name {
+      font-weight: bold;
+    }
+    &--card {
+      background-color: #f7f7f7;
+      border: 1px solid #DCDCDC;
+      padding: $size-xxs;
+      
+      @include mq($until: bp-m) {
+        margin-bottom: $grid-gutter/2;
+      }
     }
   }
 
@@ -175,7 +199,6 @@ body {
     overflow: hidden;
     li {
       flex: 0 1 33.33333%;
-      //margin-right: $size-b/2;
       max-width: 100%;
       &:last-child {
         margin-right: 0;
@@ -185,7 +208,7 @@ body {
         }
       }
     }
-    input { //Feels like this could be a utility class
+    input {
       border: 0;
       clip: rect(0, 0, 0, 0);
       height: 1px;
@@ -195,17 +218,10 @@ body {
     }
     label {
       @extend %button_toggle;
-
-      // @include mq($until: bp-l) {
-      //   font-size: $size-xxs;
-      // }
     }
     input:checked + label {
       @extend %button_toggle;
       background-color: $color-yellow-tribune;
-      // @include mq($until: bp-l) {
-      //   font-size: $size-xxs;
-      // }
     }
   }
 
@@ -226,39 +242,14 @@ body {
     &--description {
       @extend .font-sansserif;
       color: $color-gray-dark;
-      // color: $color-white-pure;
-      // color: $color-black-off;
       font-size: $size-xs;
     }
   }
 
   .submit {
+    display: block;
     text-align: center;
-    &.submit--wApple .text_separator{
-      font-size: $size-xxs;
-    }
-    .button--applePay {
-      background-color: $color-black-pure;
-      background-image: -webkit-named-image(apple-pay-logo-white);
-      background-origin: content-box;
-      background-position: 50% 50%;
-      background-repeat: no-repeat;
-      background-size: 100% 90%;
-      border-color: $color-black-pure;
-      margin-right: 0;
-    }
-  }
-
-  .form-error { //I'd like to rename these classes, but will need to update the JS
-    display: none;
-    .error-form-message {
-      @extend .font-sansserif;
-      clear: both;
-      color: $color-gray-dark;
-      font-size: $size-xs;
-      font-weight: 700;
-      text-align: center;
-    }
+    width: 100%;
   }
 }
 
@@ -270,7 +261,6 @@ body {
 // Content
 .member_benefits {
   @extend %section-padding;
-  //border-bottom: 1px solid $color-gray-light;
 }
 .member_quotes {
   @extend %link--blue;

@@ -3,7 +3,8 @@ $input_height--l: 44px;
 
 %input_text {
   @extend .font-sansserif;
-  border: 1px solid $color-gray-light;
+  background-color: #f7f7f7;
+  border: 1px solid #DCDCDC;
   color: $color-black-pure;
   font-size: $size-xs;
   height: $input_height;
