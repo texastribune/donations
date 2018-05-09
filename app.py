@@ -76,12 +76,6 @@ def get_bundles(entry):
         bundles.append(asset_path + bundle)
     return bundles
 
-if FLASK_DEBUG:
-    @app.route('/devdonate')
-    def dev_donate():
-        bundles = get_bundles('donate')
-        return render_template('devdonate.html', bundles=bundles, key=app.config['STRIPE_KEYS']['publishable_key'])
-
 @app.route('/memberform')
 def member_form():
     return redirect(smd_redirect_url, code=302)
@@ -108,40 +102,11 @@ def member_form():
 
 @app.route('/donate')
 def member2_form():
-    form = MemberForm2()
-    installments = 'None'
-    campaign_id = request.args.get('campaignId', default='')
-    installment_period = request.args.get('installmentPeriod', 'monthly')
-    amount = request.args.get('amount')
-
-    installment_period = installment_period.lower()
-    if installment_period == 'monthly':
-        openended_status = 'Open'
-        if amount is None:
-            amount = '10'
-    elif installment_period == 'yearly':
-        openended_status = 'Open'
-        if amount is None:
-            amount = '75'
-    elif installment_period == 'once':
-        installment_period = 'None'
-        openended_status = 'None'
-        if amount is None:
-            amount = '60'
-    else:
-        installment_period = 'monthly'
-        openended_status = 'Open'
-        if amount is None:
-            amount = '10'
-    
-    form.installment_period.default = installment_period
-    form.openended_status.default = openended_status
-    form.process()
-
-    return render_template('member-form2.html', form=form, amount=amount,
-        campaign_id=campaign_id, installment_period=installment_period,
-        installments=installments, openended_status=openended_status,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
+    bundles = get_bundles('donate')
+    return render_template('member-form2.html',
+        bundles=bundles,
+        key=app.config['STRIPE_KEYS']['publishable_key']
+    )
 
 @app.route('/donateform')
 def donate_renew_form():
