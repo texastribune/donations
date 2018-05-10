@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import mapValueToElement from '../mixins/mapValueToElement';
+import mapValueToElement from './mixins/mapValueToElement';
 
 export default {
   name: 'HiddenInput',

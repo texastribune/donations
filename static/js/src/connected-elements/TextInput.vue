@@ -12,15 +12,17 @@
 </template>
 
 <script>
-import mapValueToElement from '../mixins/mapValueToElement';
-import updateSingleStoreValue from '../mixins/updateSingleStoreValue';
+import mapValueToElement from './mixins/mapValueToElement';
+import updateSingleValueOnInput from './mixins/updateSingleValueOnInput';
+import validateOnInput from '../mixins/form/validateOnInput';
 
 export default {
   name: 'TextInput',
 
   mixins: [
+    validateOnInput,
     mapValueToElement,
-    updateSingleStoreValue,
+    updateSingleValueOnInput,
   ],
 
   props: {

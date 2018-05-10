@@ -162,18 +162,18 @@
 </template>
 
 <script>
-import ConnectedHidden from '../../connected/Hidden.vue';
-import Radios from '../../connected/Radios.vue';
-import Level from '../../connected/Level.vue';
-import PayFees from '../../connected/PayFees.vue';
-import TextInput from '../../connected/TextInput.vue';
-import Email from '../../connected/Email.vue';
+import ConnectedHidden from '../../connected-elements/Hidden.vue';
+import Radios from '../../connected-elements/Radios.vue';
+import Level from '../../connected-elements/Level.vue';
+import PayFees from '../../connected-elements/PayFees.vue';
+import TextInput from '../../connected-elements/TextInput.vue';
+import Email from '../../connected-elements/Email.vue';
 
-import LocalHidden from '../../local/Hidden.vue';
-import CardPay from '../../local/CardPay.vue';
-import CardSubmit from '../../local/CardSubmit.vue';
+import LocalHidden from '../../local-elements/Hidden.vue';
+import CardPay from '../../local-elements/CardPay.vue';
+import CardSubmit from '../../local-elements/CardSubmit.vue';
 
-import validators from '../../mixins/validators';
+import validators from '../../mixins/form/validators';
 
 export default {
   name: 'TopForm',

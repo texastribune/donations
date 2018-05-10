@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import updateCallback from '../mixins/updateCallback';
+import fireCallbackOnInput from '../mixins/form/fireCallbackOnInput';
 
 export default {
   name: 'PayFees',
 
-  mixins: [updateCallback],
+  mixins: [fireCallbackOnInput],
 
   props: {
     amountStoreModule: {

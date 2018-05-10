@@ -27,15 +27,15 @@
 </template>
 
 <script>
-import mapValueToElement from '../mixins/mapValueToElement';
-import updateSingleStoreValue from '../mixins/updateSingleStoreValue';
+import mapValueToElement from './mixins/mapValueToElement';
+import updateSingleValueOnInput from './mixins/updateSingleValueOnInput';
 
 export default {
   name: 'Frequency',
 
   mixins: [
     mapValueToElement,
-    updateSingleStoreValue,
+    updateSingleValueOnInput,
   ],
 
   props: {
