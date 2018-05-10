@@ -205,9 +205,8 @@ export default {
       event.preventDefault();
     },
 
-    setToken(newToken, cb) {
+    setToken(newToken) {
       this.token = newToken;
-      cb();
     },
   },
 };
