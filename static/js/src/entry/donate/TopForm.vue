@@ -4,7 +4,7 @@
     action="/charge"
     method="post"
     class="form_membership"
-    @submit="onSubmit"
+    @submit="$event.preventDefault()"
   >
     <fieldset
       class="donation grid_separator"
@@ -52,10 +52,13 @@
         class="grid_row grid_separator--s"
       >
         <email
+          :validator="isValidEmail"
           base-css-classes="col_12 tt_input"
           name="stripeEmail"
           placeholder="Email address"
           store-module="baseForm"
+          error-message="Please enter a valid email address"
+          @addError="addError"
         />
       </div>
       <div
@@ -104,10 +107,23 @@
     </fieldset>
 
     <fieldset>
-      <basic-pay
+      <card-pay
         :token="token"
         @setToken="setToken"
       />
+      <card-submit
+        :token="token"
+        value="Donate"
+        @onSubmit="onSubmit"
+      />
+    </fieldset>
+
+    <fieldset>
+      <p
+        v-if="showErrors"
+      >
+        {{ errorMessage }}
+      </p>
     </fieldset>
 
     <local-hidden
@@ -142,9 +158,10 @@ import TextInput from '../../connected/TextInput.vue';
 import Email from '../../connected/Email.vue';
 
 import LocalHidden from '../../local/Hidden.vue';
-import BasicPay from '../../local/BasicPay.vue';
+import CardPay from '../../local/CardPay.vue';
+import CardSubmit from '../../local/CardSubmit.vue';
 
-import replaceSingleValue from '../../mixins/replaceSingleValue';
+import isValidEmail from '../../mixins/isValidEmail';
 
 export default {
   name: 'TopForm',
@@ -157,10 +174,11 @@ export default {
     PayFees,
     Level,
     Email,
-    BasicPay,
+    CardPay,
+    CardSubmit,
   },
 
-  mixins: [replaceSingleValue],
+  mixins: [isValidEmail],
 
   data() {
     return {
@@ -169,9 +187,28 @@ export default {
         { id: 1, text: 'yearly', value: 'yearly' },
         { id: 2, text: 'one time', value: 'None' },
       ],
-
+      errors: {
+        stripeEmail: '',
+        first_name: '',
+        last_name: '',
+        amount: '',
+      },
       token: '',
+      showErrors: false,
     };
+  },
+
+  computed: {
+    errorMessage() {
+      let message = '';
+
+      Object.keys(this.errors).forEach((key) => {
+        const curr = this.errors[key];
+        if (curr) message += ` ${curr}`;
+      });
+
+      return message;
+    },
   },
 
   methods: {
@@ -186,27 +223,36 @@ export default {
         openEndedVal = 'None';
       }
 
-      this.replaceSingleValue({
-        storeModule: 'baseForm',
-        name: 'openended_status',
-        newValue: openEndedVal,
-      });
+      this.$store.dispatch(
+        'baseForm/updateValue',
+        {
+          key: 'openended_status',
+          value: openEndedVal,
+        },
+      );
     },
 
     onFeeChange(checked) {
-      this.replaceSingleValue({
-        storeModule: 'baseForm',
-        name: 'pay_fees_value',
-        newValue: checked ? 'True' : 'False',
-      });
+      this.$store.dispatch(
+        'baseForm/updateValue',
+        {
+          key: 'pay_fees_value',
+          value: checked ? 'True' : 'False',
+        },
+      );
     },
 
-    onSubmit(event) {
-      event.preventDefault();
+    onSubmit() {
+      this.showErrors = true;
+      if (!this.errorMessage) this.$refs.form.submit();
     },
 
     setToken(newToken) {
       this.token = newToken;
+    },
+
+    addError(key, message) {
+      this.errors[key] = message;
     },
   },
 };
