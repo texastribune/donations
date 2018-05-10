@@ -1,10 +1,5 @@
 export default {
   props: {
-    updateCallback: {
-      type: Function,
-      default: null,
-    },
-
     validator: {
       type: Function,
       default: null,
@@ -27,8 +22,7 @@ export default {
         { key: this.name, value: newValue },
       );
 
-      if (this.updateCallback) this.updateCallback(newValue);
-
+      this.$emit('updateCallback', newValue);
       this.validate(newValue);
     },
 

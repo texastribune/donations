@@ -31,11 +31,11 @@
         </div>
       </div>
       <radios
-        :update-callback="onFrequencyUpdate"
         :options="frequencyOptions"
         ul-css-classes="radio_toggle grid_row grid_separator--s"
         name="installment_period"
         store-module="baseForm"
+        @updateCallback="onFrequencyUpdate"
       />
       <level
         amount-store-module="baseForm"
@@ -97,12 +97,12 @@
         />
       </div>
       <pay-fees
-        :update-callback="onFeeChange"
         div-css-classes="pay_fee grid_row"
         input-css-classes="col_1 pay_fee--checkbox"
         span-css-classes="pay_fee--amount"
         para-css-classes="pay_fee--description col_11"
         amount-store-module="baseForm"
+        @updateCallback="onFeeChange"
       />
     </fieldset>
 
