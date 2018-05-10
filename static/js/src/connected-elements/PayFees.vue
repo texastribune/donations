@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import validate from 'validate.js';
+
 import fireCallbackOnInput from '../mixins/form/fireCallbackOnInput';
 
 export default {
@@ -62,9 +64,9 @@ export default {
     fee() {
       const getter =
         this.$store.getters[`${this.amountStoreModule}/valueByKey`];
-      const amount = parseFloat(getter('amount'));
+      const amount = parseFloat(getter('amount').trim());
 
-      if (Number.isNaN(amount) || !amount) return '';
+      if (!validate.isNumber(amount)) return '';
 
       const total = (amount + 0.30) / (1 - 0.022);
       const fee = Math.floor((total - amount) * 100) / 100;

@@ -90,16 +90,16 @@
         class="grid_row grid_wrap--s"
       >
         <text-input
-          base-css-classes="col_8 tt_input grid_separator--s"
+          base-css-classes="col_7 tt_input grid_separator--s"
           name="reason"
           placeholder="Encouraged to give by ..."
           store-module="baseForm"
         />
         <text-input
           :validator="isEmptyOrZip"
-          base-css-classes="col_4 tt_input grid_separator--s"
+          base-css-classes="col_5 tt_input grid_separator--s"
           name="zipcode"
-          placeholder="Zip code"
+          placeholder="5-digit zip code"
           store-module="baseForm"
           error-message="Please enter a 5-digit zip code"
           @addError="addError"

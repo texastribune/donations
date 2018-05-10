@@ -13,6 +13,8 @@
 </template>
 
 <script>
+import validate from 'validate.js';
+
 export default {
   name: 'Level',
 
@@ -45,10 +47,12 @@ export default {
       const installmentPeriodGetter =
         this.$store.getters[`${this.installmentPeriodStoreModule}/valueByKey`];
 
-      const amount = parseFloat(amountGetter('amount'));
-      const installmentPeriod = installmentPeriodGetter('installment_period');
+      const amount =
+        parseFloat(amountGetter('amount').trim());
+      const installmentPeriod =
+        installmentPeriodGetter('installment_period').trim();
 
-      if (Number.isNaN(amount) || !amount) return '';
+      if (!validate.isNumber(amount)) return '';
 
       if (installmentPeriod === 'monthly') {
         if (amount >= 3 && amount <= 8) {
