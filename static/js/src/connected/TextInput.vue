@@ -13,24 +13,30 @@
 
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
-import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
-import requiredField from '../mixins/requiredField';
-import fieldWithPlaceholder from '../mixins/fieldWithPlaceholder';
+import updateSingleStoreValue from '../mixins/updateSingleStoreValue';
 
 export default {
   name: 'TextInput',
 
   mixins: [
-    requiredField,
     mapValueToElement,
-    fieldWithPlaceholder,
-    replaceSingleValueOnInput,
+    updateSingleStoreValue,
   ],
 
   props: {
     pattern: {
       type: [Boolean, String],
       default: false,
+    },
+
+    placeholder: {
+      type: String,
+      default: '',
+    },
+
+    required: {
+      type: Boolean,
+      default: true,
     },
   },
 };

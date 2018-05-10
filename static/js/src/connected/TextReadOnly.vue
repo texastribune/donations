@@ -11,14 +11,19 @@
 
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
-import requiredField from '../mixins/requiredField';
 
 export default {
   name: 'TextInput',
 
   mixins: [
-    requiredField,
     mapValueToElement,
   ],
+
+  props: {
+    required: {
+      type: Boolean,
+      default: true,
+    },
+  },
 };
 </script>

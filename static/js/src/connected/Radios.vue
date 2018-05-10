@@ -28,14 +28,14 @@
 
 <script>
 import mapValueToElement from '../mixins/mapValueToElement';
-import replaceSingleValueOnInput from '../mixins/replaceSingleValueOnInput';
+import updateSingleStoreValue from '../mixins/updateSingleStoreValue';
 
 export default {
   name: 'Frequency',
 
   mixins: [
     mapValueToElement,
-    replaceSingleValueOnInput,
+    updateSingleStoreValue,
   ],
 
   props: {

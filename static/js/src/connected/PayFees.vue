@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import updateCallbackOnly from '../mixins/updateCallbackOnly';
+import updateCallback from '../mixins/updateCallback';
 
 export default {
   name: 'PayFees',
 
-  mixins: [updateCallbackOnly],
+  mixins: [updateCallback],
 
   props: {
     amountStoreModule: {
