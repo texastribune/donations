@@ -24,9 +24,12 @@
             $
           </span>
           <text-input
+            :validator="isNumeric"
             base-css-classes="col tt_input donation--amount"
             name="amount"
             store-module="baseForm"
+            error-message="Please enter a numeric amount."
+            @addError="addError"
           />
         </div>
       </div>
@@ -52,12 +55,12 @@
         class="grid_row grid_separator--s"
       >
         <email
-          :validator="isValidEmail"
+          :validator="isEmail"
           base-css-classes="col_12 tt_input"
           name="stripeEmail"
           placeholder="Email address"
           store-module="baseForm"
-          error-message="Please enter a valid email address"
+          error-message="Please enter a valid email address."
           @addError="addError"
         />
       </div>
@@ -65,16 +68,22 @@
         class="grid_row grid_wrap--s"
       >
         <text-input
+          :validator="isNotEmpty"
           base-css-classes="col_6 tt_input grid_separator--s"
           name="first_name"
           placeholder="First name"
           store-module="baseForm"
+          error-message="Please enter your first name."
+          @addError="addError"
         />
         <text-input
+          :validator="isNotEmpty"
           base-css-classes="col_6 tt_input grid_separator--s"
           name="last_name"
           placeholder="Last name"
           store-module="baseForm"
+          error-message="Please enter your last name."
+          @addError="addError"
         />
       </div>
       <div
@@ -88,12 +97,15 @@
           store-module="baseForm"
         />
         <text-input
+          :validator="isEmptyOrZip"
           :required="false"
           base-css-classes="col_4 tt_input grid_separator--s"
           pattern="[0-9]{5}"
           name="zipcode"
           placeholder="Zip code"
           store-module="baseForm"
+          error-message="Please enter a 5-digit zip code"
+          @addError="addError"
         />
       </div>
       <pay-fees
@@ -161,7 +173,7 @@ import LocalHidden from '../../local/Hidden.vue';
 import CardPay from '../../local/CardPay.vue';
 import CardSubmit from '../../local/CardSubmit.vue';
 
-import isValidEmail from '../../mixins/isValidEmail';
+import validators from '../../mixins/validators';
 
 export default {
   name: 'TopForm',
@@ -178,7 +190,7 @@ export default {
     CardSubmit,
   },
 
-  mixins: [isValidEmail],
+  mixins: [validators],
 
   data() {
     return {
@@ -192,6 +204,7 @@ export default {
         first_name: '',
         last_name: '',
         amount: '',
+        zipcode: '',
       },
       token: '',
       showErrors: false,

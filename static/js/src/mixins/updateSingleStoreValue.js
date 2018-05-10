@@ -12,7 +12,7 @@ export default {
   },
 
   mounted() {
-    this.validate(this.value);
+    if (this.validator) this.validate(this.value);
   },
 
   methods: {
@@ -23,17 +23,17 @@ export default {
       );
 
       this.$emit('updateCallback', newValue);
-      this.validate(newValue);
+      if (this.validator) this.validate(newValue);
     },
 
     validate(value) {
-      if (this.validator) {
-        if (!this.validator(value)) {
-          this.$emit('addError', this.name, this.errorMessage);
-        } else {
-          this.$emit('addError', this.name, '');
-        }
+      let message = '';
+
+      if (!this.validator(value)) {
+        message = this.errorMessage;
       }
+
+      this.$emit('addError', this.name, message);
     },
   },
 };
