@@ -3,12 +3,14 @@
     :class="getCssClasses('div')"
   >
     <input
+      id="pay-fees"
       :class="getCssClasses('input')"
       type="checkbox"
       @input="onInput($event.target.checked)"
     >
-    <p
+    <label
       :class="getCssClasses('para')"
+      for="pay-fees"
     >
       I agree to pay
       <span
@@ -17,7 +19,7 @@
         {{ fee }}
       </span>
       for processing fees. Paying fees directs more money to our mission.
-    </p>
+    </label>
   </div>
 </template>
 
