@@ -192,6 +192,11 @@ body {
         margin-bottom: $grid-gutter/2;
       }
     }
+    &--submit {
+      &:disabled {
+        opacity: .5;
+      }
+    }
   }
 
   .radio_toggle {

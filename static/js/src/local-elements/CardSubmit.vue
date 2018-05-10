@@ -1,5 +1,6 @@
 <template>
   <input
+    :class="getCssClasses()"
     :disabled="!token"
     :value="value"
     type="submit"

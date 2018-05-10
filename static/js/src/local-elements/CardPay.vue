@@ -1,7 +1,7 @@
 <template>
   <card
     :options="options"
-    class="donation--card"
+    :class="getCssClasses()"
     stripe="pk_test_sSUhBbATSHteQVZZvz6R5aYe"
     @change="onChange($event.complete)"
   />

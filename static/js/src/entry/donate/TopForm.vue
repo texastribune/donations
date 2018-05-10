@@ -115,24 +115,34 @@
       />
     </fieldset>
 
-    <fieldset>
-      <card-pay
-        :token="token"
-        @setToken="setToken"
-      />
-      <card-submit
-        :token="token"
-        value="Donate"
-        @onSubmit="onSubmit"
-      />
+    <fieldset
+      class="grid_separator"
+    >
+      <div
+        class="grid_separator"
+      >
+        <card-pay
+          :token="token"
+          base-css-classes="donation--card"
+          @setToken="setToken"
+        />
+      </div>
+      <div
+        class="grid_row"
+      >
+        <card-submit
+          :token="token"
+          base-css-classes="col button button--yellow button--l donation--submit"
+          value="Donate"
+          @onSubmit="onSubmit"
+        />
+      </div>
     </fieldset>
 
-    <fieldset>
-      <p
-        v-if="showErrors"
-      >
-        {{ errorMessage }}
-      </p>
+    <fieldset
+      v-if="showErrors"
+    >
+      <p>{{ errorMessage }}</p>
     </fieldset>
 
     <local-hidden
