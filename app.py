@@ -16,7 +16,7 @@ from app_celery import make_celery
 
 from pprint import pprint
 
-smd_redirect_url = '/donate?campaignId=70146000000M0pM'
+redirect_url = '/donate'
 
 app = Flask(__name__)
 
@@ -84,7 +84,7 @@ if FLASK_DEBUG:
 
 @app.route('/memberform')
 def member_form():
-    return redirect(smd_redirect_url, code=302)
+    return redirect(redirect_url, code=302)
     """
     form = MemberForm()
     if request.args.get('amount'):
@@ -145,7 +145,7 @@ def member2_form():
 
 @app.route('/donateform')
 def donate_renew_form():
-    return redirect(smd_redirect_url, code=302)
+    return redirect(redirect_url, code=302)
     """
     form = DonateForm()
     if request.args.get('amount'):
