@@ -2,7 +2,6 @@
   <input
     :value="value"
     :name="name"
-    :required="required"
     :class="getCssClasses()"
     readonly
     type="text"
@@ -18,12 +17,5 @@ export default {
   mixins: [
     mapValueToElement,
   ],
-
-  props: {
-    required: {
-      type: Boolean,
-      default: true,
-    },
-  },
 };
 </script>

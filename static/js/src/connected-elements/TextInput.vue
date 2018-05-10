@@ -2,8 +2,6 @@
   <input
     :value="value"
     :name="name"
-    :required="required"
-    :pattern="pattern"
     :placeholder="placeholder"
     :class="getCssClasses()"
     type="text"
@@ -26,19 +24,9 @@ export default {
   ],
 
   props: {
-    pattern: {
-      type: [Boolean, String],
-      default: false,
-    },
-
     placeholder: {
       type: String,
       default: '',
-    },
-
-    required: {
-      type: Boolean,
-      default: true,
     },
   },
 };

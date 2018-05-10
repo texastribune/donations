@@ -2,7 +2,6 @@
   <input
     :value="value"
     :name="name"
-    :required="required"
     :placeholder="placeholder"
     :class="getCssClasses()"
     type="email"
@@ -28,11 +27,6 @@ export default {
     placeholder: {
       type: String,
       default: '',
-    },
-
-    required: {
-      type: Boolean,
-      default: true,
     },
   },
 };

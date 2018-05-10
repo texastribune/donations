@@ -90,7 +90,6 @@
         class="grid_row grid_wrap--s"
       >
         <text-input
-          :required="false"
           base-css-classes="col_8 tt_input grid_separator--s"
           name="reason"
           placeholder="Encouraged to give by ..."
@@ -98,9 +97,7 @@
         />
         <text-input
           :validator="isEmptyOrZip"
-          :required="false"
           base-css-classes="col_4 tt_input grid_separator--s"
-          pattern="[0-9]{5}"
           name="zipcode"
           placeholder="Zip code"
           store-module="baseForm"
