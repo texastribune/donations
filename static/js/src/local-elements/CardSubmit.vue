@@ -16,11 +16,18 @@ export default {
       type: String,
       default: 'Submit',
     },
+
+    valid: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   methods: {
     onClick() {
-      this.$emit('onSubmit');
+      this.$emit('toggleError', 'stripeToken', true);
+      this.$emit('setValue', 'showErrors', true);
+      if (this.valid) this.$emit('onSubmit');
     },
   },
 };

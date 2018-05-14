@@ -28,7 +28,7 @@
             base-css-classes="col tt_input donation--amount"
             name="amount"
             store-module="baseForm"
-            @markValidity="markValidity"
+            @markErrorValidity="markErrorValidity"
           />
         </div>
       </div>
@@ -59,7 +59,7 @@
           name="stripeEmail"
           placeholder="Email address"
           store-module="baseForm"
-          @markValidity="markValidity"
+          @markErrorValidity="markErrorValidity"
         />
       </div>
       <div
@@ -71,7 +71,7 @@
           name="first_name"
           placeholder="First name"
           store-module="baseForm"
-          @markValidity="markValidity"
+          @markErrorValidity="markErrorValidity"
         />
         <text-input
           :validator="isNotEmpty"
@@ -79,7 +79,7 @@
           name="last_name"
           placeholder="Last name"
           store-module="baseForm"
-          @markValidity="markValidity"
+          @markErrorValidity="markErrorValidity"
         />
       </div>
       <div
@@ -97,7 +97,7 @@
           name="zipcode"
           placeholder="5-digit zip code"
           store-module="baseForm"
-          @markValidity="markValidity"
+          @markErrorValidity="markErrorValidity"
         />
       </div>
       <pay-fees
@@ -116,22 +116,33 @@
       <div
         class="grid_separator"
       >
-        <card-pay
-          :token="token"
-          token-field-name="stripeToken"
-          base-css-classes="donation--card"
+        <native-pay
+          amount-store-module="baseForm"
+          token-store-module="baseForm"
+          @toggleError="toggleError"
           @setValue="setValue"
-          @markValidity="markValidity"
+          @onSubmit="onSubmit"
+        />
+      </div>
+      <div
+        class="grid_separator"
+      >
+        <card-pay
+          token-store-module="baseForm"
+          base-css-classes="donation--card"
+          @markErrorValidity="markErrorValidity"
         />
       </div>
       <div
         class="grid_row"
       >
         <card-submit
-          :token="token"
+          :valid="valid"
           base-css-classes="col button button--yellow button--l donation--submit"
           value="Donate"
           @onSubmit="onSubmit"
+          @setValue="setValue"
+          @toggleError="toggleError"
         />
       </div>
     </fieldset>
@@ -142,23 +153,23 @@
       <p>{{ errorMessage }}</p>
     </fieldset>
 
-    <local-hidden
-      :value="token"
+    <hidden
       name="stripeToken"
+      store-module="baseForm"
     />
-    <connected-hidden
+    <hidden
       name="description"
       store-module="baseForm"
     />
-    <connected-hidden
+    <hidden
       name="campaign_id"
       store-module="baseForm"
     />
-    <connected-hidden
+    <hidden
       name="openended_status"
       store-module="baseForm"
     />
-    <connected-hidden
+    <hidden
       name="pay_fees_value"
       store-module="baseForm"
     />
@@ -166,16 +177,16 @@
 </template>
 
 <script>
-import ConnectedHidden from '../../connected-elements/Hidden.vue';
+import Hidden from '../../connected-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
 import Level from '../../connected-elements/Level.vue';
 import PayFees from '../../connected-elements/PayFees.vue';
 import TextInput from '../../connected-elements/TextInput.vue';
 import Email from '../../connected-elements/Email.vue';
 
-import LocalHidden from '../../local-elements/Hidden.vue';
 import CardPay from '../../local-elements/CardPay.vue';
 import CardSubmit from '../../local-elements/CardSubmit.vue';
+import NativePay from '../../local-elements/NativePay.vue';
 
 import validators from '../../mixins/form/validators';
 
@@ -183,8 +194,7 @@ export default {
   name: 'TopForm',
 
   components: {
-    ConnectedHidden,
-    LocalHidden,
+    Hidden,
     TextInput,
     Radios,
     PayFees,
@@ -192,6 +202,7 @@ export default {
     Email,
     CardPay,
     CardSubmit,
+    NativePay,
   },
 
   mixins: [validators],
@@ -207,29 +218,34 @@ export default {
         stripeEmail: {
           message: 'Please enter valid email address.',
           valid: false,
+          include: true,
         },
         first_name: {
           message: 'Please enter your first name.',
           valid: false,
+          include: true,
         },
         last_name: {
           message: 'Please enter your last name.',
           valid: false,
+          include: true,
         },
         amount: {
           message: 'Please enter an amount above $1.',
           valid: false,
+          include: true,
         },
         zipcode: {
           message: 'Please enter a 5-digit zip code.',
           valid: false,
+          include: true,
         },
         stripeToken: {
           message: 'Please enter your card information.',
           valid: false,
+          include: true,
         },
       },
-      token: '',
       showErrors: false,
     };
   },
@@ -246,6 +262,17 @@ export default {
       });
 
       return message;
+    },
+
+    valid() {
+      let valid = true;
+
+      Object.keys(this.errors).forEach((key) => {
+        const curr = this.errors[key];
+        if (curr.include && !curr.valid) valid = false;
+      });
+
+      return valid;
     },
   },
 
@@ -271,16 +298,19 @@ export default {
     },
 
     onSubmit() {
-      this.showErrors = true;
-      if (!this.errorMessage) this.$refs.form.submit();
+      this.$refs.form.submit();
     },
 
     setValue(key, value) {
       this[key] = value;
     },
 
-    markValidity(key, bool) {
+    markErrorValidity(key, bool) {
       this.errors[key].valid = bool;
+    },
+
+    toggleError(key, bool) {
+      this.errors[key].include = bool;
     },
   },
 };

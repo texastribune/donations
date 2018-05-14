@@ -10,6 +10,14 @@ export default {
       return typeof isValid === 'undefined';
     },
 
+    isNumeric(value) {
+      const isValid = validate(
+        { value: value.trim() },
+        { value: { numericality: true } },
+      );
+      return typeof isValid === 'undefined';
+    },
+
     isZip(value) {
       return this.isNumeric(value) && value.trim().length === 5;
     },

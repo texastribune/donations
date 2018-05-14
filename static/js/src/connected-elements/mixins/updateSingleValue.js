@@ -36,11 +36,11 @@ export default {
     },
 
     markValid() {
-      this.$emit('markValidity', this.name, true);
+      this.$emit('markErrorValidity', this.name, true);
     },
 
     markInvalid() {
-      this.$emit('markValidity', this.name, false);
+      this.$emit('markErrorValidity', this.name, false);
     },
   },
 };

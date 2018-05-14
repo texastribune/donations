@@ -18,7 +18,7 @@ export default {
   },
 
   props: {
-    tokenFieldName: {
+    tokenStoreModule: {
       type: String,
       required: true,
     },
@@ -38,14 +38,20 @@ export default {
     onChange(isComplete) {
       if (isComplete) {
         createToken().then(({ token: { id } }) => {
-          this.$emit('setValue', 'token', id);
-          this.$emit('markValidity', this.tokenFieldName, true);
+          this.$store.dispatch(
+            `${this.tokenStoreModule}/updateValue`,
+            { key: 'stripeToken', value: id },
+          );
+          this.$emit('markErrorValidity', 'stripeToken', true);
         }).catch(() => {
           window.location.href = '/error';
         });
       } else {
-        this.$emit('setValue', 'token', '');
-        this.$emit('markValidity', this.tokenFieldName, false);
+        this.$store.dispatch(
+          `${this.tokenStoreModule}/updateValue`,
+          { key: 'stripeToken', value: '' },
+        );
+        this.$emit('markErrorValidity', 'stripeToken', false);
       }
     },
   },

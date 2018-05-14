@@ -13,7 +13,8 @@ export default {
 
   computed: {
     value() {
-      const getter = this.$store.getters[`${this.storeModule}/valueByKey`];
+      const getter =
+        this.$store.getters[`${this.storeModule}/valueByKey`];
       return getter(this.name);
     },
   },
