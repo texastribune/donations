@@ -118,8 +118,10 @@
       >
         <card-pay
           :token="token"
+          token-field-name="stripeToken"
           base-css-classes="donation--card"
-          @setToken="setToken"
+          @setValue="setValue"
+          @markValidity="markValidity"
         />
       </div>
       <div
@@ -222,6 +224,10 @@ export default {
           message: 'Please enter a 5-digit zip code.',
           valid: false,
         },
+        stripeToken: {
+          message: 'Please enter your card information.',
+          valid: false,
+        },
       },
       token: '',
       showErrors: false,
@@ -269,8 +275,8 @@ export default {
       if (!this.errorMessage) this.$refs.form.submit();
     },
 
-    setToken(newToken) {
-      this.token = newToken;
+    setValue(key, value) {
+      this[key] = value;
     },
 
     markValidity(key, bool) {

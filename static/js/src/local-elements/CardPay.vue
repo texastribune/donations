@@ -17,6 +17,13 @@ export default {
     Card,
   },
 
+  props: {
+    tokenFieldName: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
     return {
       complete: false,
@@ -31,12 +38,14 @@ export default {
     onChange(isComplete) {
       if (isComplete) {
         createToken().then(({ token: { id } }) => {
-          this.$emit('setToken', id);
+          this.$emit('setValue', 'token', id);
+          this.$emit('markValidity', this.tokenFieldName, true);
         }).catch(() => {
           window.location.href = '/error';
         });
       } else {
-        this.$emit('setToken', '');
+        this.$emit('setValue', 'token', '');
+        this.$emit('markValidity', this.tokenFieldName, false);
       }
     },
   },

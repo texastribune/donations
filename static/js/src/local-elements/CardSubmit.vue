@@ -1,7 +1,6 @@
 <template>
   <input
     :class="getCssClasses()"
-    :disabled="!token"
     :value="value"
     type="submit"
     @click="onClick"
@@ -16,11 +15,6 @@ export default {
     value: {
       type: String,
       default: 'Submit',
-    },
-
-    token: {
-      type: String,
-      required: true,
     },
   },
 
