@@ -139,9 +139,7 @@
       </div>
     </fieldset>
 
-    <fieldset
-      v-if="showErrors"
-    >
+    <fieldset>
       <p>{{ errorMessage }}</p>
     </fieldset>
 
@@ -214,7 +212,6 @@ export default {
         zipcode: '',
       },
       token: '',
-      showErrors: false,
     };
   },
 
@@ -263,7 +260,6 @@ export default {
     },
 
     onSubmit() {
-      this.showErrors = true;
       if (!this.errorMessage) this.$refs.form.submit();
     },
 

@@ -11,17 +11,11 @@ export default {
     },
   },
 
-  mounted() {
-    if (this.validator) this.validate(this.value);
-  },
-
   methods: {
     validate(value) {
       let message = '';
 
-      if (!this.validator(value)) {
-        message = this.errorMessage;
-      }
+      if (!this.validator(value)) message = this.errorMessage;
 
       this.$emit('addError', this.name, message);
     },

@@ -5,13 +5,14 @@
     :placeholder="placeholder"
     :class="getCssClasses()"
     type="email"
-    @input="onInput($event.target.value)"
+    @input="updateSingleValue($event.target.value)"
+    @blur="validate($event.target.value)"
   >
 </template>
 
 <script>
 import mapValueToElement from './mixins/mapValueToElement';
-import updateSingleValueOnInput from './mixins/updateSingleValueOnInput';
+import updateSingleValue from './mixins/updateSingleValue';
 import validateOnInput from '../mixins/form/validateOnInput';
 
 export default {
@@ -20,7 +21,7 @@ export default {
   mixins: [
     validateOnInput,
     mapValueToElement,
-    updateSingleValueOnInput,
+    updateSingleValue,
   ],
 
   props: {

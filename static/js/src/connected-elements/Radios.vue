@@ -14,7 +14,7 @@
         :id="getLabelConnector(index)"
         class="hidden"
         type="radio"
-        @input="onInput($event.target.value)"
+        @input="updateSingleValue($event.target.value)"
       >
       <label
         :for="getLabelConnector(index)"
@@ -28,14 +28,14 @@
 
 <script>
 import mapValueToElement from './mixins/mapValueToElement';
-import updateSingleValueOnInput from './mixins/updateSingleValueOnInput';
+import updateSingleValue from './mixins/updateSingleValue';
 
 export default {
   name: 'Frequency',
 
   mixins: [
     mapValueToElement,
-    updateSingleValueOnInput,
+    updateSingleValue,
   ],
 
   props: {
