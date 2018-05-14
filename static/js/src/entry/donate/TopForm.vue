@@ -24,12 +24,11 @@
             $
           </span>
           <text-input
-            :validator="isNumeric"
+            :validator="isValidDonationAmount"
             base-css-classes="col tt_input donation--amount"
             name="amount"
             store-module="baseForm"
-            error-message="Please enter a numeric amount."
-            @addError="addError"
+            @markValidity="markValidity"
           />
         </div>
       </div>
@@ -60,8 +59,7 @@
           name="stripeEmail"
           placeholder="Email address"
           store-module="baseForm"
-          error-message="Please enter a valid email address."
-          @addError="addError"
+          @markValidity="markValidity"
         />
       </div>
       <div
@@ -73,8 +71,7 @@
           name="first_name"
           placeholder="First name"
           store-module="baseForm"
-          error-message="Please enter your first name."
-          @addError="addError"
+          @markValidity="markValidity"
         />
         <text-input
           :validator="isNotEmpty"
@@ -82,8 +79,7 @@
           name="last_name"
           placeholder="Last name"
           store-module="baseForm"
-          error-message="Please enter your last name."
-          @addError="addError"
+          @markValidity="markValidity"
         />
       </div>
       <div
@@ -101,8 +97,7 @@
           name="zipcode"
           placeholder="5-digit zip code"
           store-module="baseForm"
-          error-message="Please enter a 5-digit zip code"
-          @addError="addError"
+          @markValidity="markValidity"
         />
       </div>
       <pay-fees
@@ -139,7 +134,9 @@
       </div>
     </fieldset>
 
-    <fieldset>
+    <fieldset
+      v-if="showErrors"
+    >
       <p>{{ errorMessage }}</p>
     </fieldset>
 
@@ -205,13 +202,29 @@ export default {
         { id: 2, text: 'one time', value: 'None' },
       ],
       errors: {
-        stripeEmail: '',
-        first_name: '',
-        last_name: '',
-        amount: '',
-        zipcode: '',
+        stripeEmail: {
+          message: 'Please enter valid email address.',
+          valid: false,
+        },
+        first_name: {
+          message: 'Please enter your first name.',
+          valid: false,
+        },
+        last_name: {
+          message: 'Please enter your last name.',
+          valid: false,
+        },
+        amount: {
+          message: 'Please enter an amount above $1.',
+          valid: false,
+        },
+        zipcode: {
+          message: 'Please enter a 5-digit zip code.',
+          valid: false,
+        },
       },
       token: '',
+      showErrors: false,
     };
   },
 
@@ -221,7 +234,9 @@ export default {
 
       Object.keys(this.errors).forEach((key) => {
         const curr = this.errors[key];
-        if (curr) message += ` ${curr}`;
+        if (!curr.valid) {
+          message += ` ${curr.message}`;
+        }
       });
 
       return message;
@@ -260,6 +275,7 @@ export default {
     },
 
     onSubmit() {
+      this.showErrors = true;
       if (!this.errorMessage) this.$refs.form.submit();
     },
 
@@ -267,8 +283,8 @@ export default {
       this.token = newToken;
     },
 
-    addError(key, message) {
-      this.errors[key] = message;
+    markValidity(key, bool) {
+      this.errors[key].valid = bool;
     },
   },
 };
