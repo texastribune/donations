@@ -27,16 +27,12 @@
 </template>
 
 <script>
-import mapValueToElement from './mixins/mapValueToElement';
-import updateSingleValue from './mixins/updateSingleValue';
+import connectedElement from './mixins/connectedElement';
 
 export default {
   name: 'Frequency',
 
-  mixins: [
-    mapValueToElement,
-    updateSingleValue,
-  ],
+  mixins: [connectedElement],
 
   props: {
     options: {

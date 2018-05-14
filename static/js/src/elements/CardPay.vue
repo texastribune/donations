@@ -10,12 +10,16 @@
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus';
 
+import updateStoreValue from './mixins/updateStoreValue';
+
 export default {
   name: 'CardPay',
 
   components: {
     Card,
   },
+
+  mixins: [updateStoreValue],
 
   props: {
     tokenStoreModule: {
@@ -38,19 +42,16 @@ export default {
     onChange(isComplete) {
       if (isComplete) {
         createToken().then(({ token: { id } }) => {
-          this.$store.dispatch(
-            `${this.tokenStoreModule}/updateValue`,
-            { key: 'stripeToken', value: id },
-          );
+          this.updateStoreValue({
+            storeModule: this.tokenStoreModule,
+            key: 'stripeToken',
+            value: id,
+          });
           this.$emit('markErrorValidity', 'stripeToken', true);
         }).catch(() => {
           window.location.href = '/error';
         });
       } else {
-        this.$store.dispatch(
-          `${this.tokenStoreModule}/updateValue`,
-          { key: 'stripeToken', value: '' },
-        );
         this.$emit('markErrorValidity', 'stripeToken', false);
       }
     },

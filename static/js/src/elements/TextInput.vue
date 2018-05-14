@@ -4,22 +4,18 @@
     :name="name"
     :placeholder="placeholder"
     :class="getCssClasses()"
-    type="email"
+    type="text"
     @input="updateSingleValue($event.target.value)"
   >
 </template>
 
 <script>
-import mapValueToElement from './mixins/mapValueToElement';
-import updateSingleValue from './mixins/updateSingleValue';
+import connectedElement from './mixins/connectedElement';
 
 export default {
-  name: 'Email',
+  name: 'TextInput',
 
-  mixins: [
-    mapValueToElement,
-    updateSingleValue,
-  ],
+  mixins: [connectedElement],
 
   props: {
     placeholder: {

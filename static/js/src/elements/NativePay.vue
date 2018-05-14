@@ -12,8 +12,12 @@
 
 import Vue from 'vue';
 
+import updateStoreValue from './mixins/updateStoreValue';
+
 export default {
   name: 'NativePay',
+
+  mixins: [updateStoreValue],
 
   props: {
     amountStoreModule: {
@@ -84,10 +88,11 @@ export default {
         .catch(() => {});
 
       paymentRequest.on('token', (event) => {
-        this.$store.dispatch(
-          `${this.tokenStoreModule}/updateValue`,
-          { key: 'stripeToken', value: event.token.id },
-        );
+        this.updateStoreValue({
+          storeModule: this.tokenStoreModule,
+          key: 'stripeToken',
+          value: event.token.id,
+        });
         event.complete('success');
         Vue.nextTick(() => { this.$emit('onSubmit'); });
       });

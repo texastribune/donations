@@ -1,13 +1,33 @@
 export default {
   props: {
+    name: {
+      type: String,
+      required: true,
+    },
+
+    storeModule: {
+      type: String,
+      required: true,
+    },
+
     validator: {
       type: Function,
       default: null,
     },
   },
 
+  computed: {
+    value() {
+      const getter =
+        this.$store.getters[`${this.storeModule}/valueByKey`];
+      return getter(this.name);
+    },
+  },
+
   mounted() {
-    this.updateSingleValue(this.value);
+    if (this.validator && this.validator(this.value)) {
+      this.markValid();
+    }
   },
 
   methods: {

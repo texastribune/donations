@@ -149,8 +149,13 @@
 
     <fieldset
       v-if="showErrors"
+      class="form-error"
     >
-      <p>{{ errorMessage }}</p>
+      <p
+        class="error-form-message"
+      >
+        {{ errorMessage }}
+      </p>
     </fieldset>
 
     <hidden
@@ -177,16 +182,17 @@
 </template>
 
 <script>
-import Hidden from '../../connected-elements/Hidden.vue';
-import Radios from '../../connected-elements/Radios.vue';
-import Level from '../../connected-elements/Level.vue';
-import PayFees from '../../connected-elements/PayFees.vue';
-import TextInput from '../../connected-elements/TextInput.vue';
-import Email from '../../connected-elements/Email.vue';
+import Hidden from '../../elements/Hidden.vue';
+import Radios from '../../elements/Radios.vue';
+import Level from '../../elements/Level.vue';
+import PayFees from '../../elements/PayFees.vue';
+import TextInput from '../../elements/TextInput.vue';
+import Email from '../../elements/Email.vue';
+import CardPay from '../../elements/CardPay.vue';
+import CardSubmit from '../../elements/CardSubmit.vue';
+import NativePay from '../../elements/NativePay.vue';
 
-import CardPay from '../../local-elements/CardPay.vue';
-import CardSubmit from '../../local-elements/CardSubmit.vue';
-import NativePay from '../../local-elements/NativePay.vue';
+import updateStoreValue from '../../elements/mixins/updateStoreValue';
 
 import validators from '../../mixins/form/validators';
 
@@ -205,7 +211,10 @@ export default {
     NativePay,
   },
 
-  mixins: [validators],
+  mixins: [
+    validators,
+    updateStoreValue,
+  ],
 
   data() {
     return {
@@ -288,13 +297,11 @@ export default {
         openEndedVal = 'None';
       }
 
-      this.$store.dispatch(
-        'baseForm/updateValue',
-        {
-          key: 'openended_status',
-          value: openEndedVal,
-        },
-      );
+      this.updateStoreValue({
+        storeModule: 'baseForm',
+        key: 'openended_status',
+        value: openEndedVal,
+      });
     },
 
     onSubmit() {

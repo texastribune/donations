@@ -24,8 +24,12 @@
 </template>
 
 <script>
+import updateStoreValue from './mixins/updateStoreValue';
+
 export default {
   name: 'PayFees',
+
+  mixins: [updateStoreValue],
 
   props: {
     amountStoreModule: {
@@ -74,13 +78,11 @@ export default {
 
   methods: {
     onInput(checked) {
-      this.$store.dispatch(
-        `${this.payFeesValueStoreModule}/updateValue`,
-        {
-          key: 'pay_fees_value',
-          value: checked ? 'True' : 'False',
-        },
-      );
+      this.updateStoreValue({
+        storeModule: this.payFeesValueStoreModule,
+        key: 'pay_fees_value',
+        value: checked ? 'True' : 'False',
+      });
     },
   },
 };

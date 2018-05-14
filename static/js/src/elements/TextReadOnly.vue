@@ -9,13 +9,11 @@
 </template>
 
 <script>
-import mapValueToElement from './mixins/mapValueToElement';
+import connectedElement from './mixins/connectedElement';
 
 export default {
   name: 'TextInput',
 
-  mixins: [
-    mapValueToElement,
-  ],
+  mixins: [connectedElement],
 };
 </script>
