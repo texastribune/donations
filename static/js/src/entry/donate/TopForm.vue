@@ -106,7 +106,7 @@
         span-css-classes="pay_fee--amount"
         para-css-classes="pay_fee--description col_11"
         amount-store-module="baseForm"
-        @updateCallback="onFeeChange"
+        pay-fees-value-store-module="baseForm"
       />
     </fieldset>
 
@@ -260,16 +260,6 @@ export default {
         {
           key: 'openended_status',
           value: openEndedVal,
-        },
-      );
-    },
-
-    onFeeChange(checked) {
-      this.$store.dispatch(
-        'baseForm/updateValue',
-        {
-          key: 'pay_fees_value',
-          value: checked ? 'True' : 'False',
         },
       );
     },

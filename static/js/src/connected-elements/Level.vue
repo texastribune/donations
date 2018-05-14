@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import validate from 'validate.js';
-
 export default {
   name: 'Level',
 
@@ -51,8 +49,6 @@ export default {
         parseFloat(amountGetter('amount').trim());
       const installmentPeriod =
         installmentPeriodGetter('installment_period').trim();
-
-      if (!validate.isNumber(amount)) return '';
 
       if (installmentPeriod === 'monthly') {
         if (amount >= 3 && amount <= 8) {

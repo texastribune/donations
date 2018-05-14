@@ -24,17 +24,16 @@
 </template>
 
 <script>
-import validate from 'validate.js';
-
-import fireCallbackOnInput from '../mixins/form/fireCallbackOnInput';
-
 export default {
   name: 'PayFees',
 
-  mixins: [fireCallbackOnInput],
-
   props: {
     amountStoreModule: {
+      type: String,
+      required: true,
+    },
+
+    payFeesValueStoreModule: {
       type: String,
       required: true,
     },
@@ -66,12 +65,22 @@ export default {
         this.$store.getters[`${this.amountStoreModule}/valueByKey`];
       const amount = parseFloat(getter('amount').trim());
 
-      if (!validate.isNumber(amount)) return '';
-
       const total = (amount + 0.30) / (1 - 0.022);
       const fee = Math.floor((total - amount) * 100) / 100;
 
       return `$${fee.toFixed(2)}`;
+    },
+  },
+
+  methods: {
+    onInput(checked) {
+      this.$store.dispatch(
+        `${this.payFeesValueStoreModule}/updateValue`,
+        {
+          key: 'pay_fees_value',
+          value: checked ? 'True' : 'False',
+        },
+      );
     },
   },
 };
