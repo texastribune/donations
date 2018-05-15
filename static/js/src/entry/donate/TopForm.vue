@@ -139,7 +139,7 @@
         <card-submit
           :valid="!errorMessageCard"
           base-css-classes="col button button--yellow button--l donation--submit"
-          value="Donate"
+          value="Pay by card"
           @onSubmit="onSubmit"
           @setValue="setValue"
         />
