@@ -8,6 +8,8 @@
 </template>
 
 <script>
+import Vue from 'vue';
+
 export default {
   name: 'CardSubmit',
 
@@ -25,9 +27,9 @@ export default {
 
   methods: {
     onClick() {
-      this.$emit('toggleError', 'stripeToken', true);
-      this.$emit('setValue', 'showErrors', true);
-      if (this.valid) this.$emit('onSubmit');
+      this.$emit('setValue', { key: 'showCardErrors', value: true });
+      this.$emit('setValue', { key: 'showNativeErrors', value: false });
+      Vue.nextTick(() => { if (this.valid) this.$emit('onSubmit'); });
     },
   },
 };

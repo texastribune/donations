@@ -56,11 +56,11 @@ export default {
     },
 
     markValid() {
-      this.$emit('markErrorValidity', this.name, true);
+      this.$emit('markErrorValidity', { key: this.name, isValid: true });
     },
 
     markInvalid() {
-      this.$emit('markErrorValidity', this.name, false);
+      this.$emit('markErrorValidity', { key: this.name, isValid: false });
     },
   },
 };

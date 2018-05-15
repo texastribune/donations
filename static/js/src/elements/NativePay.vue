@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <div
-      v-show="supported"
-      ref="native"
-    />
-  </div>
+  <div
+    v-show="supported"
+    ref="native"
+  />
 </template>
 
 <script>
@@ -27,6 +25,11 @@ export default {
 
     tokenStoreModule: {
       type: String,
+      required: true,
+    },
+
+    valid: {
+      type: Boolean,
       required: true,
     },
   },
@@ -73,7 +76,14 @@ export default {
         },
       });
       const button =
-        stripe.elements().create('paymentRequestButton', { paymentRequest });
+        stripe.elements().create('paymentRequestButton', {
+          paymentRequest,
+          style: {
+            paymentRequestButton: {
+              type: 'donate',
+            },
+          },
+        });
 
       this.paymentRequest = paymentRequest;
 
@@ -86,6 +96,12 @@ export default {
           }
         })
         .catch(() => {});
+
+      button.on('click', (event) => {
+        this.$emit('setValue', { key: 'showCardErrors', value: false });
+        this.$emit('setValue', { key: 'showNativeErrors', value: true });
+        if (!this.valid) event.preventDefault();
+      });
 
       paymentRequest.on('token', (event) => {
         this.updateStoreValue({

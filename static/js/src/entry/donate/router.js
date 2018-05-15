@@ -54,7 +54,7 @@ function createBaseFormState(queryParams) {
 
 function createRouter() {
   return new VueRouter({
-    base: '/devdonate',
+    base: '/donate',
     mode: 'history',
     routes: [
       { path: '/', component: RouteHandler },

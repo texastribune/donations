@@ -47,12 +47,13 @@ export default {
             key: 'stripeToken',
             value: id,
           });
-          this.$emit('markErrorValidity', 'stripeToken', true);
+
+          this.$emit('markErrorValidity', { key: 'card', isValid: true });
         }).catch(() => {
           window.location.href = '/error';
         });
       } else {
-        this.$emit('markErrorValidity', 'stripeToken', false);
+        this.$emit('markErrorValidity', { key: 'card', isValid: false });
       }
     },
   },

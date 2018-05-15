@@ -117,9 +117,9 @@
         class="grid_separator"
       >
         <native-pay
+          :valid="!errorMessageNative"
           amount-store-module="baseForm"
           token-store-module="baseForm"
-          @toggleError="toggleError"
           @setValue="setValue"
           @onSubmit="onSubmit"
         />
@@ -137,12 +137,11 @@
         class="grid_row"
       >
         <card-submit
-          :valid="valid"
+          :valid="!errorMessageCard"
           base-css-classes="col button button--yellow button--l donation--submit"
           value="Donate"
           @onSubmit="onSubmit"
           @setValue="setValue"
-          @toggleError="toggleError"
         />
       </div>
     </fieldset>
@@ -154,7 +153,12 @@
       <p
         class="error-form-message"
       >
-        {{ errorMessage }}
+        <template v-if="showCardErrors">
+          {{ errorMessageCard }}
+        </template>
+        <template v-else>
+          {{ errorMessageNative }}
+        </template>
       </p>
     </fieldset>
 
@@ -191,10 +195,8 @@ import Email from '../../elements/Email.vue';
 import CardPay from '../../elements/CardPay.vue';
 import CardSubmit from '../../elements/CardSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
-
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
-
-import validators from '../../mixins/form/validators';
+import formStarter from '../../mixins/form/starter';
 
 export default {
   name: 'TopForm',
@@ -212,7 +214,7 @@ export default {
   },
 
   mixins: [
-    validators,
+    formStarter,
     updateStoreValue,
   ],
 
@@ -227,62 +229,25 @@ export default {
         stripeEmail: {
           message: 'Please enter valid email address.',
           valid: false,
-          include: true,
         },
         first_name: {
           message: 'Please enter your first name.',
           valid: false,
-          include: true,
         },
         last_name: {
           message: 'Please enter your last name.',
           valid: false,
-          include: true,
         },
         amount: {
           message: 'Please enter an amount above $1.',
           valid: false,
-          include: true,
         },
         zipcode: {
           message: 'Please enter a 5-digit zip code.',
           valid: false,
-          include: true,
-        },
-        stripeToken: {
-          message: 'Please enter your card information.',
-          valid: false,
-          include: true,
         },
       },
-      showErrors: false,
     };
-  },
-
-  computed: {
-    errorMessage() {
-      let message = '';
-
-      Object.keys(this.errors).forEach((key) => {
-        const curr = this.errors[key];
-        if (!curr.valid) {
-          message += ` ${curr.message}`;
-        }
-      });
-
-      return message;
-    },
-
-    valid() {
-      let valid = true;
-
-      Object.keys(this.errors).forEach((key) => {
-        const curr = this.errors[key];
-        if (curr.include && !curr.valid) valid = false;
-      });
-
-      return valid;
-    },
   },
 
   methods: {
@@ -302,22 +267,6 @@ export default {
         key: 'openended_status',
         value: openEndedVal,
       });
-    },
-
-    onSubmit() {
-      this.$refs.form.submit();
-    },
-
-    setValue(key, value) {
-      this[key] = value;
-    },
-
-    markErrorValidity(key, bool) {
-      this.errors[key].valid = bool;
-    },
-
-    toggleError(key, bool) {
-      this.errors[key].include = bool;
     },
   },
 };
