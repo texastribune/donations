@@ -66,7 +66,8 @@ export default {
 
   methods: {
     buildNativePayment() {
-      const stripe = new Stripe('pk_test_sSUhBbATSHteQVZZvz6R5aYe');
+      // eslint-disable-next-line no-underscore-dangle
+      const stripe = new Stripe(window.__STRIPE_KEY__);
       const paymentRequest = stripe.paymentRequest({
         country: 'US',
         currency: 'usd',

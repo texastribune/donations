@@ -120,6 +120,9 @@
       ga('require', 'displayfeatures');
       ga('send', 'pageview');
     </script>
+    <script>
+      window.__STRIPE_KEY__ = '{{ key }}';
+    </script>
     
     {% block bottom_script %}{% endblock %}
   </body>

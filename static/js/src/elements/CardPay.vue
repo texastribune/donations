@@ -2,7 +2,7 @@
   <card
     :options="options"
     :class="getCssClasses()"
-    stripe="pk_test_sSUhBbATSHteQVZZvz6R5aYe"
+    :stripe="stripeKey"
     @change="onChange($event.complete)"
   />
 </template>
@@ -36,6 +36,13 @@ export default {
         iconStyle: 'solid',
       },
     };
+  },
+
+  computed: {
+    stripeKey() {
+      // eslint-disable-next-line no-underscore-dangle
+      return window.__STRIPE_KEY__;
+    },
   },
 
   methods: {
