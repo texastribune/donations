@@ -5,7 +5,7 @@ export default {
     return {
       errors: {
         card: {
-          message: 'Please enter your card information.',
+          message: 'Please enter valid payment card information.',
           valid: false,
         },
       },
@@ -40,7 +40,10 @@ export default {
     },
 
     showErrors() {
-      return this.showCardErrors || this.showNativeErrors;
+      return (
+        (this.showCardErrors && this.errorMessageCard) ||
+        (this.showNativeErrors && this.errorMessageNative)
+      );
     },
   },
 

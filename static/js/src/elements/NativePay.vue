@@ -44,7 +44,7 @@ export default {
     amount() {
       const getter =
         this.$store.getters[`${this.amountStoreModule}/valueByKey`];
-      return getter('amount');
+      return parseFloat(getter('amount')).toFixed(2) * 100;
     },
   },
 
@@ -53,7 +53,7 @@ export default {
       if (newAmount !== oldAmount) {
         const total = {
           label: 'Texas Tribune Donation',
-          amount: this.amount * 100,
+          amount: this.amount,
         };
         this.paymentRequest.update({ total });
       }
@@ -72,18 +72,11 @@ export default {
         currency: 'usd',
         total: {
           label: 'Texas Tribune Donation',
-          amount: this.amount * 100,
+          amount: this.amount,
         },
       });
       const button =
-        stripe.elements().create('paymentRequestButton', {
-          paymentRequest,
-          style: {
-            paymentRequestButton: {
-              type: 'donate',
-            },
-          },
-        });
+        stripe.elements().create('paymentRequestButton', { paymentRequest });
 
       this.paymentRequest = paymentRequest;
 
