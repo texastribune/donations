@@ -57,7 +57,7 @@ export default {
       default: '',
     },
 
-    divCssClasses: {
+    divClasses: {
       type: [String, Array],
       default: '',
     },
