@@ -2,6 +2,7 @@
   <input
     :value="value"
     :name="name"
+    :maxlength="maxlength"
     :placeholder="placeholder"
     :class="getCssClasses()"
     type="text"
@@ -21,6 +22,11 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+
+    maxlength: {
+      type: [String, Boolean],
+      default: false,
     },
   },
 };

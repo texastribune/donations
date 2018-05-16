@@ -77,7 +77,7 @@ export default {
     },
 
     isZip(value) {
-      return this.isNumeric(value) && value.trim().length === 5;
+      return this.isNumeric(value) && value.trim().length <= 5;
     },
 
     isNotEmpty(value) {

@@ -93,9 +93,10 @@
         />
         <text-input
           :validator="isEmptyOrZip"
+          maxlength="5"
           base-css-classes="col_5 tt_input grid_separator--s"
           name="zipcode"
-          placeholder="5-digit zip code"
+          placeholder="Zip code"
           store-module="baseForm"
           @markErrorValidity="markErrorValidity"
         />
