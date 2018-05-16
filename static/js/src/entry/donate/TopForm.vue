@@ -113,17 +113,13 @@
     <fieldset
       class="grid_separator"
     >
-      <div
-        class="grid_separator"
-      >
-        <native-pay
-          :valid="!errorMessageNative"
-          amount-store-module="baseForm"
-          token-store-module="baseForm"
-          @setValue="setValue"
-          @onSubmit="onSubmit"
-        />
-      </div>
+      <native-pay
+        :valid="!errorMessageNative"
+        amount-store-module="baseForm"
+        token-store-module="baseForm"
+        @setValue="setValue"
+        @onSubmit="onSubmit"
+      />
       <div
         class="grid_separator"
       >

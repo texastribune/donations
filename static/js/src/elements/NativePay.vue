@@ -2,6 +2,7 @@
   <div
     v-show="supported"
     ref="native"
+    class="grid_separator"
   />
 </template>
 
