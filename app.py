@@ -3,7 +3,7 @@ import sys
 import json
 
 from flask import Flask, redirect, render_template, request, send_from_directory
-from forms import DonateForm, BlastForm, BlastVIPForm, MemberForm, MemberForm2
+from forms import DonateForm, BlastForm, CircleForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -79,26 +79,6 @@ def get_bundles(entry):
 @app.route('/memberform')
 def member_form():
     return redirect(smd_redirect_url, code=302)
-    """
-    form = MemberForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        message = "The page you requested can't be found."
-        return render_template('error.html', message=message)
-
-    campaign_id = request.args.get('campaignId', default='')
-
-    installment_period = request.args.get('installmentPeriod')
-    if installment_period is None:
-        installment_period = 'None'
-    installments = 'None'
-    openended_status = 'Open'
-    return render_template('member-form.html', form=form, amount=amount,
-        campaign_id=campaign_id, installment_period=installment_period,
-        installments=installments, openended_status=openended_status,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
-    """
 
 @app.route('/donate')
 def member2_form():
@@ -111,29 +91,10 @@ def member2_form():
 @app.route('/donateform')
 def donate_renew_form():
     return redirect(smd_redirect_url, code=302)
-    """
-    form = DonateForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        amount = 50
-    openended_status = 'None'
-    installments = 'None'
-    installment_period = 'None'
-
-    campaign_id = request.args.get('campaignId', default='')
-
-    return render_template('donate-form.html', form=form, amount=amount,
-        campaign_id=campaign_id, installment_period=installment_period,
-        installments=installments,
-        openended_status=openended_status,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
-    """
-
 
 @app.route('/circleform')
 def circle_form():
-    form = DonateForm()
+    form = CircleForm()
     if request.args.get('amount'):
         amount = request.args.get('amount')
     else:
@@ -191,46 +152,7 @@ def submit_blast():
 
 @app.route('/blast-vip')
 def the_blastvip_form():
-    return redirect("https://checkout.texastribune.org/blastform", code=302)
-    # This promotion has expired, so we are redirecting it to the regular Blast Checkout
-    # Leaving this code for when we need to reactivate this page for another promo.
-    # form = BlastVIPForm()
-    # if request.args.get('amount'):
-    #     amount = request.args.get('amount')
-    # else:
-    #     amount = 275
-    # installment_period = request.args.get('installmentPeriod')
-    #
-    # campaign_id = request.args.get('campaignId', default='')
-    #
-    # return render_template('blast-vip.html', form=form,
-    #         campaign_id=campaign_id, installment_period=installment_period,
-    #     openended_status='Open', amount=amount,
-    #     key=app.config['STRIPE_KEYS']['publishable_key'])
-
-@app.route('/submit-blast-vip', methods=['POST'])
-def submit_blast_vip():
-    form = BlastVIPForm(request.form)
-
-    email_is_valid = validate_email(request.form['stripeEmail'])
-
-    if email_is_valid:
-        customer = stripe.Customer.create(
-            email=request.form['stripeEmail'],
-            card=request.form['stripeToken']
-        )
-    else:
-        message = "There was an issue saving your email address."
-        return render_template('error.html', message=message)
-
-    if form.validate():
-        print("----Adding Blast subscription...")
-        add_blast_customer_and_charge.delay(form=request.form,
-                customer=customer)
-        return render_template('blast-charge.html')
-    else:
-        message = "There was an issue saving your donation information."
-        return render_template('error.html', message=message)
+    return redirect('/blastform', code=302)
 
 @app.route('/error')
 def error():
