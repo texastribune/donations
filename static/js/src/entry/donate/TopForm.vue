@@ -163,6 +163,10 @@
     </fieldset>
 
     <hidden
+      name="installments"
+      store-module="baseForm"
+    />
+    <hidden
       name="stripeToken"
       store-module="baseForm"
     />
