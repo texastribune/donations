@@ -1,11 +1,11 @@
 <template>
   <ul
-    :class="getCssClasses('ul')"
+    :class="getClasses({ elName: 'ul' })"
   >
     <li
       v-for="(option, index) in options"
       :key="option.id"
-      :class="getCssClasses('li', option)"
+      :class="getClasses({ elName: 'li', obj: option })"
     >
       <input
         :value="option.value"
@@ -18,7 +18,7 @@
       >
       <label
         :for="getLabelConnector(index)"
-        :class="getCssClasses('label', option)"
+        :class="getClasses({ elName: 'label', obj: option })"
       >
         {{ option.text }}
       </label>
@@ -40,7 +40,7 @@ export default {
       required: true,
     },
 
-    ulCssClasses: {
+    ulClasses: {
       type: String,
       default: '',
     },

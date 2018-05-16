@@ -1,14 +1,28 @@
 export default {
   props: {
-    baseCssClasses: {
+    baseClasses: {
       type: [String, Array],
       default: '',
     },
   },
 
+  computed: {
+    classes() {
+      const { baseClasses } = this;
+      if (!baseClasses) return false;
+
+      if (typeof baseClasses === 'string') {
+        return baseClasses;
+      } else if (Array.isArray(baseClasses)) {
+        return baseClasses.join(' ');
+      }
+      return '';
+    },
+  },
+
   methods: {
-    getCssClasses(elName = 'base', obj = this) {
-      const { [`${elName}CssClasses`]: classes } = obj;
+    getClasses({ obj = this, elName = 'base' } = {}) {
+      const { [`${elName}Classes`]: classes } = obj;
 
       if (classes) {
         if (typeof classes === 'string') {

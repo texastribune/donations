@@ -25,7 +25,7 @@
           </span>
           <text-input
             :validator="isValidDonationAmount"
-            base-css-classes="col tt_input donation--amount"
+            base-classes="col tt_input donation--amount"
             name="amount"
             store-module="baseForm"
             @markErrorValidity="markErrorValidity"
@@ -34,7 +34,7 @@
       </div>
       <radios
         :options="frequencyOptions"
-        ul-css-classes="radio_toggle grid_row grid_separator--s"
+        ul-classes="radio_toggle grid_row grid_separator--s"
         name="installment_period"
         store-module="baseForm"
         @updateCallback="onFrequencyUpdate"
@@ -42,8 +42,8 @@
       <level
         amount-store-module="baseForm"
         installment-period-store-module="baseForm"
-        para-css-classes="donation--level"
-        span-css-classes="donation--level_name"
+        para-classes="donation--level"
+        span-classes="donation--level_name"
       />
     </fieldset>
 
@@ -55,7 +55,7 @@
       >
         <email
           :validator="isEmail"
-          base-css-classes="col_12 tt_input"
+          base-classes="col_12 tt_input"
           name="stripeEmail"
           placeholder="Email address"
           store-module="baseForm"
@@ -67,7 +67,7 @@
       >
         <text-input
           :validator="isNotEmpty"
-          base-css-classes="col_6 tt_input grid_separator--s"
+          base-classes="col_6 tt_input grid_separator--s"
           name="first_name"
           placeholder="First name"
           store-module="baseForm"
@@ -75,7 +75,7 @@
         />
         <text-input
           :validator="isNotEmpty"
-          base-css-classes="col_6 tt_input grid_separator--s"
+          base-classes="col_6 tt_input grid_separator--s"
           name="last_name"
           placeholder="Last name"
           store-module="baseForm"
@@ -86,7 +86,7 @@
         class="grid_row grid_wrap--s"
       >
         <text-input
-          base-css-classes="col_7 tt_input grid_separator--s"
+          base-classes="col_7 tt_input grid_separator--s"
           name="reason"
           placeholder="Encouraged to give by ..."
           store-module="baseForm"
@@ -94,7 +94,7 @@
         <text-input
           :validator="isEmptyOrZip"
           maxlength="5"
-          base-css-classes="col_5 tt_input grid_separator--s"
+          base-classes="col_5 tt_input grid_separator--s"
           name="zipcode"
           placeholder="Zip code"
           store-module="baseForm"
@@ -102,10 +102,10 @@
         />
       </div>
       <pay-fees
-        div-css-classes="pay_fee grid_row"
-        input-css-classes="col_1 pay_fee--checkbox"
-        span-css-classes="pay_fee--amount"
-        para-css-classes="pay_fee--description col_11"
+        div-classes="pay_fee grid_row"
+        input-classes="col_1 pay_fee--checkbox"
+        span-classes="pay_fee--amount"
+        para-classes="pay_fee--description col_11"
         amount-store-module="baseForm"
         pay-fees-value-store-module="baseForm"
       />
@@ -126,7 +126,7 @@
       >
         <card-pay
           token-store-module="baseForm"
-          base-css-classes="donation--card"
+          base-classes="donation--card"
           @markErrorValidity="markErrorValidity"
         />
       </div>
@@ -135,7 +135,7 @@
       >
         <card-submit
           :valid="!errorMessageCard"
-          base-css-classes="col button button--yellow button--l donation--submit"
+          base-classes="col button button--yellow button--l donation--submit"
           value="Pay by card"
           @onSubmit="onSubmit"
           @setValue="setValue"

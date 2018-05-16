@@ -1,11 +1,11 @@
 <template>
   <p
     v-if="level"
-    :class="getCssClasses('para')"
+    :class="getClasses({ elName: 'para' })"
   >
     Your giving level is:
     <span
-      :class="getCssClasses('span')"
+      :class="getClasses({ elName: 'span' })"
     >
       {{ level }}
     </span>
@@ -27,12 +27,12 @@ export default {
       required: true,
     },
 
-    paraCssClasses: {
+    paraClasses: {
       type: [String, Array],
       default: '',
     },
 
-    spanCssClasses: {
+    spanClasses: {
       type: [String, Array],
       default: '',
     },

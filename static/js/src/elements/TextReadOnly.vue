@@ -2,7 +2,7 @@
   <input
     :value="value"
     :name="name"
-    :class="getCssClasses()"
+    :class="classes"
     readonly
     type="text"
   >

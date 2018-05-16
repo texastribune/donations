@@ -4,7 +4,7 @@
     :name="name"
     :maxlength="maxlength"
     :placeholder="placeholder"
-    :class="getCssClasses()"
+    :class="classes"
     type="text"
     @input="updateSingleValue($event.target.value)"
   >

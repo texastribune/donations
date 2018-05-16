@@ -1,6 +1,6 @@
 <template>
   <input
-    :class="getCssClasses()"
+    :class="classes"
     :value="value"
     type="submit"
     @click="onClick"

@@ -1,20 +1,20 @@
 <template>
   <div
-    :class="getCssClasses('div')"
+    :class="getClasses({ elName: 'div' })"
   >
     <input
       id="pay-fees"
-      :class="getCssClasses('input')"
+      :class="getClasses({ elName: 'input' })"
       type="checkbox"
       @input="onInput($event.target.checked)"
     >
     <label
-      :class="getCssClasses('para')"
+      :class="getClasses({ elName: 'para' })"
       for="pay-fees"
     >
       I agree to pay
       <span
-        :class="getCssClasses('span')"
+        :class="getClasses({ elName: 'span' })"
       >
         {{ fee }}
       </span>
@@ -42,17 +42,17 @@ export default {
       required: true,
     },
 
-    inputCssClasses: {
+    inputClasses: {
       type: [String, Array],
       default: '',
     },
 
-    spanCssClasses: {
+    spanClasses: {
       type: [String, Array],
       default: '',
     },
 
-    paraCssClasses: {
+    paraClasses: {
       type: [String, Array],
       default: '',
     },

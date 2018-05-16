@@ -3,7 +3,7 @@
     :value="value"
     :name="name"
     :placeholder="placeholder"
-    :class="getCssClasses()"
+    :class="classes"
     type="email"
     @input="updateSingleValue($event.target.value)"
   >

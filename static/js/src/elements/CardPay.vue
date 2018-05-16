@@ -1,7 +1,7 @@
 <template>
   <card
     :options="options"
-    :class="getCssClasses()"
+    :class="classes"
     :stripe="stripeKey"
     @change="onChange($event.complete)"
   />
