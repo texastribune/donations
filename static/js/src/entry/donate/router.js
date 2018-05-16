@@ -35,7 +35,7 @@ function createBaseFormState(queryParams) {
     case 'once':
       openEndedStatus = 'None';
       installmentPeriod = 'None';
-      amount = amount || '75';
+      amount = amount || '60';
       break;
     default:
       installmentPeriod = 'monthly';
