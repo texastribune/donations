@@ -81,6 +81,11 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'vue-loader',
       },
+
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'file-loader',
+      },
     ],
   },
 

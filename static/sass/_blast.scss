@@ -174,7 +174,7 @@
   }
 
   label[for='amount-reg']:after {
-    content: url('/static/img/slash_price.svg');
+    content: url(../img/slash_price.svg);
     margin: $size-b/2 0;
   }
 
