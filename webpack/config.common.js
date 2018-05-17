@@ -1,4 +1,5 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const { entryDir, buildDir } = require('./base');
 
@@ -22,6 +23,9 @@ module.exports = {
       output: 'assets.json',
       entrypoints: true,
     }),
+    new MiniCssExtractPlugin({
+      filename: 'styles.[chunkhash].css',
+    }),
   ],
 
   optimization: {
@@ -40,6 +44,15 @@ module.exports = {
 
   module: {
     rules: [
+      {
+        test: /\.(scss|sass)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
+        ],
+      },
+
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
