@@ -26,12 +26,12 @@ celery beat --app app.celery &
 Blastform: http://local.texastribune.org/blastform
 
 Front-end commands:
-+ `yarn run dev`: Start Flask development server and watch for JS changes
-+ `yarn run js:dev`: Just watch for JS changes
++ `yarn run dev`: Start Flask development server and watch for JS and CSS changes
++ `yarn run js:dev`: Just watch for JS and CSS changes
 
-Front-end weirdness:
+Front-end notes:
 + On `yarn run dev`, all files are built to `/static/js/build`, which **is** ignored from version control. That way you can make as many changes as you want when developing, Webpack will recompile the files, and they'll never show up in VC.
-+ On deploy, all files are built to `/static/js/prod/`. This is **not** ignored from VC because Heroku cannot create directories and thus needs it to exist in the repo. That's why there's a `.gitkeep` file inside of it.
++ On deploy, all files are built to `/static/js/prod/`. This is **not** ignored from VC because Heroku cannot create directories and thus needs it to exist in the repo. That's why it contains a `.gitkeep` file.
 + On deploy, the production JS has to be built via the `postinstall` script. This means that, if you run `yarn` or `yarn add <package>` locally inside Docker, you'll get some compiled files in `/static/js/prod/` that show up in version control. **Delete them!**
 
 **Important note**: To build our JS on deployment, Heroku needs to run a `postinstall` script in `package.json`. This also means every time you run `yarn` or `yarn add <package>`, it's going to trigger that build and generate a bunch of files in `static/js/prod/`. Don't commit these!

@@ -5,6 +5,8 @@ import Vuex from 'vuex';
 import App from '../App.vue';
 import Form from '../containers/Form.vue';
 
+import '../../../sass/new_all.scss';
+
 Vue.use(VueRouter);
 Vue.use(Vuex);
 
