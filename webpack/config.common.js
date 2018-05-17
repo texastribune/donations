@@ -1,5 +1,6 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Autoprefixer = require('autoprefixer');
 
 const { entryDir, buildDir } = require('./base');
 
@@ -48,7 +49,23 @@ module.exports = {
         test: /\.(scss|sass)$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
+          'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                Autoprefixer({
+                  browsers: [
+                    '> 0.5%',
+                    'last 2 versions',
+                    'Firefox ESR',
+                    'iOS >= 10',
+                    'Safari >= 11',
+                    'not dead',
+                  ],
+                }),
+              ],
+            },
+          },
           'sass-loader',
         ],
       },

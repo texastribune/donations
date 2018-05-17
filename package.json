@@ -15,6 +15,7 @@
     "url": "https://github.com/texastribune/salesforce-stripe/issues"
   },
   "dependencies": {
+    "autoprefixer": "^8.5.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
@@ -45,5 +46,6 @@
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-vue": "^4.2.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "browserslist": ["last 4 versions"]
 }
