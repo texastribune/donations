@@ -78,7 +78,7 @@ def get_bundles(entry):
         bundles['css'].append(asset_path + bundle)
     return bundles
 
-if not FLASK_DEBUG:
+if FLASK_DEBUG:
     @app.route('/devdonate')
     def dev_donate():
         bundles = get_bundles('donate')
