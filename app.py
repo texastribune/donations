@@ -180,6 +180,8 @@ def charge():
 
     email_is_valid = validate_email(customer_email)
 
+    bundles = get_bundles('charge')
+
     if email_is_valid:
         customer = stripe.Customer.create(
                 email=request.form['stripeEmail'],
@@ -204,7 +206,7 @@ def charge():
             'event_value': request.form['amount'],
         }
         return render_template('charge.html',
-                amount=request.form['amount'], ga=ga)
+                amount=request.form['amount'], ga=ga, bundles=bundles)
     else:
         message = "There was an issue saving your donation information."
         print('Form validation errors: {}'.format(form.errors))
