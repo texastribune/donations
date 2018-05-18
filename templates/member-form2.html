@@ -1,11 +1,9 @@
 {% extends "new_layout.html" %}
 
-{% block title %}
-  {{ super() }}
-{% endblock %}
-
-{% block extra_script %}
-  {{ super() }}
+{% block stylesheets %}
+  {% for stylesheet in bundles['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+  {% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -124,9 +122,7 @@
         </div>
       </div>
       <div class="col_1"></div>
-      <div class="col_3">
-
-      </div>
+      <div class="col_3"></div>
     </div>
   </section>
 {% endblock %}
@@ -134,7 +130,7 @@
 {% block bottom_script %}
   <script src="https://js.stripe.com/v3/"></script>
   
-  {% for bundle in bundles %}
-    <script src="{{ bundle }}"></script>
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
   {% endfor %}
 {% endblock %}
