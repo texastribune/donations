@@ -3,7 +3,7 @@
     ref="form"
     action="/charge"
     method="post"
-    class="form_membership"
+    class="form_membership splash_box col_5"
     @submit="$event.preventDefault()"
   >
     <fieldset
