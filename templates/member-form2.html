@@ -20,7 +20,6 @@
               <span>events</span>
               <span>community</span>
               <span>mission</span>
-              <!-- <span>elections coverage</span> -->
             </span>
             <br>
             possible.
@@ -129,7 +128,7 @@
 
 {% block bottom_script %}
   <script src="https://js.stripe.com/v3/"></script>
-  
+
   {% for script in bundles['js'] %}
     <script src="{{ script }}"></script>
   {% endfor %}
