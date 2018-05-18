@@ -1,4 +1,6 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Autoprefixer = require('autoprefixer');
 
 const { entryDir, buildDir } = require('./base');
 
@@ -22,6 +24,9 @@ module.exports = {
       output: 'assets.json',
       entrypoints: true,
     }),
+    new MiniCssExtractPlugin({
+      filename: 'styles.[chunkhash].css',
+    }),
   ],
 
   optimization: {
@@ -41,6 +46,31 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(scss|sass)$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader', {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [
+                Autoprefixer({
+                  browsers: [
+                    '> 0.5%',
+                    'last 2 versions',
+                    'Firefox ESR',
+                    'iOS >= 10',
+                    'Safari >= 11',
+                    'not dead',
+                  ],
+                }),
+              ],
+            },
+          },
+          'sass-loader',
+        ],
+      },
+
+      {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
@@ -50,6 +80,11 @@ module.exports = {
         test: /\.vue$/,
         exclude: /node_modules/,
         loader: 'vue-loader',
+      },
+
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'file-loader',
       },
     ],
   },

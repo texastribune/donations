@@ -5,9 +5,9 @@ const entryDir = path.join(process.cwd(), 'static', 'js', 'src', 'entry');
 const env = process.env.NODE_ENV;
 
 if (env === 'production') {
-  buildDir = path.join(process.cwd(), 'static', 'js', 'prod');
+  buildDir = path.join(process.cwd(), 'static', 'prod');
 } else {
-  buildDir = path.join(process.cwd(), 'static', 'js', 'build');
+  buildDir = path.join(process.cwd(), 'static', 'build');
 }
 
 module.exports = { entryDir, buildDir };

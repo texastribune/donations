@@ -16,7 +16,7 @@ from app_celery import make_celery
 
 from pprint import pprint
 
-smd_redirect_url = '/donate?campaignId=70146000000M0pM'
+redirect_url = '/donate'
 
 app = Flask(__name__)
 
@@ -62,18 +62,20 @@ why they're compiled to /static/js/build/ instead.
 def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
     if FLASK_DEBUG:
-        build_dir = os.path.join('static', 'js', 'build')
-        asset_path = '/static/js/build/'
+        build_dir = os.path.join('static', 'build')
+        asset_path = '/static/build/'
     else:
-        build_dir = os.path.join(root_dir, 'app', 'static', 'js', 'prod')
-        asset_path = '/static/js/prod/'
-    bundles = []
+        build_dir = os.path.join(root_dir, 'app', 'static', 'prod')
+        asset_path = '/static/prod/'
+    bundles = {'css': [], 'js': []}
     manifest_path = os.path.join(build_dir, 'assets.json')
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
-    entrypoint = assets['entrypoints'][entry]['js']
-    for bundle in entrypoint:
-        bundles.append(asset_path + bundle)
+    entrypoint = assets['entrypoints'][entry]
+    for bundle in entrypoint['js']:
+        bundles['js'].append(asset_path + bundle)
+    for bundle in entrypoint['css']:
+        bundles['css'].append(asset_path + bundle)
     return bundles
 
 @app.route('/memberform')
