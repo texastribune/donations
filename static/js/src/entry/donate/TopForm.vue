@@ -223,14 +223,14 @@ export default {
           manual: true,
           native: true,
           valid: false,
-          message: 'First name not given',
+          message: 'Enter your first name',
           validator: this.isNotEmpty,
         },
         last_name: {
           manual: true,
           native: true,
           valid: false,
-          message: 'Last name not given',
+          message: 'Enter your last name',
           validator: this.isNotEmpty,
         },
         amount: {
