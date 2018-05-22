@@ -29,7 +29,7 @@ export default {
       required: true,
     },
 
-    valid: {
+    formIsValid: {
       type: Boolean,
       required: true,
     },
@@ -93,9 +93,9 @@ export default {
         .catch(() => {});
 
       button.on('click', (event) => {
-        this.$emit('setValue', { key: 'showCardErrors', value: false });
+        this.$emit('setValue', { key: 'showManualErrors', value: false });
         this.$emit('setValue', { key: 'showNativeErrors', value: true });
-        if (!this.valid) event.preventDefault();
+        if (!this.formIsValid) event.preventDefault();
       });
 
       paymentRequest.on('token', (event) => {

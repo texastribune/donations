@@ -24,7 +24,8 @@
             $
           </span>
           <text-input
-            :validator="isValidDonationAmount"
+            :show-error="showAllErrors"
+            :validation="validation.amount"
             base-classes="col tt_input donation--amount"
             name="amount"
             store-module="baseForm"
@@ -39,12 +40,6 @@
         store-module="baseForm"
         @updateCallback="onFrequencyUpdate"
       />
-      <level
-        amount-store-module="baseForm"
-        installment-period-store-module="baseForm"
-        para-classes="donation--level"
-        span-classes="donation--level_name"
-      />
     </fieldset>
 
     <fieldset
@@ -54,7 +49,8 @@
         class="grid_row grid_separator--s"
       >
         <email
-          :validator="isEmail"
+          :show-error="showAllErrors"
+          :validation="validation.stripeEmail"
           base-classes="col_12 tt_input"
           name="stripeEmail"
           placeholder="Email address"
@@ -66,7 +62,8 @@
         class="grid_row grid_wrap--s"
       >
         <text-input
-          :validator="isNotEmpty"
+          :show-error="showAllErrors"
+          :validation="validation.first_name"
           base-classes="col_6 tt_input grid_separator--s"
           name="first_name"
           placeholder="First name"
@@ -74,7 +71,8 @@
           @markErrorValidity="markErrorValidity"
         />
         <text-input
-          :validator="isNotEmpty"
+          :show-error="showAllErrors"
+          :validation="validation.last_name"
           base-classes="col_6 tt_input grid_separator--s"
           name="last_name"
           placeholder="Last name"
@@ -92,7 +90,8 @@
           store-module="baseForm"
         />
         <text-input
-          :validator="isEmptyOrZip"
+          :show-error="showAllErrors"
+          :validation="validation.zipcode"
           maxlength="5"
           base-classes="col_5 tt_input grid_separator--s"
           name="zipcode"
@@ -115,7 +114,7 @@
       class="grid_separator"
     >
       <native-pay
-        :valid="!errorMessageNative"
+        :form-is-valid="nativeIsValid"
         amount-store-module="baseForm"
         token-store-module="baseForm"
         @setValue="setValue"
@@ -124,7 +123,9 @@
       <div
         class="grid_separator"
       >
-        <card-pay
+        <manual-pay
+          :show-error="showManualErrors"
+          :validation="validation.card"
           token-store-module="baseForm"
           base-classes="donation--card"
           @markErrorValidity="markErrorValidity"
@@ -133,30 +134,14 @@
       <div
         class="grid_row"
       >
-        <card-submit
-          :valid="!errorMessageCard"
+        <manual-submit
+          :form-is-valid="manualIsValid"
           base-classes="col button button--yellow button--l donation--submit"
           value="Pay by card"
           @onSubmit="onSubmit"
           @setValue="setValue"
         />
       </div>
-    </fieldset>
-
-    <fieldset
-      v-if="showErrors"
-      class="form-error"
-    >
-      <p
-        class="error-form-message"
-      >
-        <template v-if="showCardErrors">
-          {{ errorMessageCard }}
-        </template>
-        <template v-else>
-          {{ errorMessageNative }}
-        </template>
-      </p>
     </fieldset>
 
     <hidden
@@ -193,8 +178,8 @@ import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
 import Email from '../../elements/Email.vue';
-import CardPay from '../../elements/CardPay.vue';
-import CardSubmit from '../../elements/CardSubmit.vue';
+import ManualPay from '../../elements/ManualPay.vue';
+import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
@@ -209,8 +194,8 @@ export default {
     PayFees,
     Level,
     Email,
-    CardPay,
-    CardSubmit,
+    ManualPay,
+    ManualSubmit,
     NativePay,
   },
 
@@ -226,26 +211,41 @@ export default {
         { id: 1, text: 'yearly', value: 'yearly' },
         { id: 2, text: 'one time', value: 'None' },
       ],
-      errors: {
+      validation: {
         stripeEmail: {
-          message: 'Please enter valid email address.',
+          manual: true,
+          native: true,
           valid: false,
+          message: 'Invalid email address',
+          validator: this.isEmail,
         },
         first_name: {
-          message: 'Please enter your first name.',
+          manual: true,
+          native: true,
           valid: false,
+          message: 'First name not given',
+          validator: this.isNotEmpty,
         },
         last_name: {
-          message: 'Please enter your last name.',
+          manual: true,
+          native: true,
           valid: false,
+          message: 'Last name not given',
+          validator: this.isNotEmpty,
         },
         amount: {
-          message: 'Please enter an amount above $1.',
+          manual: true,
+          native: true,
           valid: false,
+          message: 'Enter numeric amount above $1',
+          validator: this.isValidDonationAmount,
         },
         zipcode: {
-          message: 'Please enter a 5-digit zip code.',
+          manual: true,
+          native: true,
           valid: false,
+          message: 'Enter a 5-digit zip code',
+          validator: this.isEmptyOrZip,
         },
       },
     };

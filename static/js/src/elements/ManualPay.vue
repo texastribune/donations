@@ -1,10 +1,17 @@
 <template>
-  <card
-    :options="options"
-    :class="classes"
-    :stripe="stripeKey"
-    @change="onChange($event.complete)"
-  />
+  <div>
+    <card
+      :options="options"
+      :class="classes"
+      :stripe="stripeKey"
+      @change="onChange($event.complete)"
+    />
+    <p
+      v-if="showError && !valid"
+    >
+      {{ errorMessage }}
+    </p>
+  </div>
 </template>
 
 <script>
@@ -13,7 +20,7 @@ import { Card, createToken } from 'vue-stripe-elements-plus';
 import updateStoreValue from './mixins/updateStoreValue';
 
 export default {
-  name: 'CardPay',
+  name: 'ManualPay',
 
   components: {
     Card,
@@ -22,8 +29,18 @@ export default {
   mixins: [updateStoreValue],
 
   props: {
+    showError: {
+      type: Boolean,
+      default: false,
+    },
+
     tokenStoreModule: {
       type: String,
+      required: true,
+    },
+
+    validation: {
+      type: Object,
       required: true,
     },
   },
@@ -42,6 +59,14 @@ export default {
     stripeKey() {
       // eslint-disable-next-line no-underscore-dangle
       return window.__STRIPE_KEY__;
+    },
+
+    valid() {
+      return this.validation.valid;
+    },
+
+    errorMessage() {
+      return this.validation.message;
     },
   },
 

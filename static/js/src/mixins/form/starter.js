@@ -3,47 +3,40 @@ import validate from 'validate.js';
 export default {
   data() {
     return {
-      errors: {
+      validation: {
         card: {
-          message: 'Please enter valid payment card information.',
+          manual: true,
+          native: false,
           valid: false,
+          message: 'Invalid card information',
         },
       },
-      showCardErrors: false,
+      showManualErrors: false,
       showNativeErrors: false,
     };
   },
 
   computed: {
-    errorMessageCard() {
-      let message = '';
-
-      Object.keys(this.errors).forEach((key) => {
-        const curr = this.errors[key];
-        if (!curr.valid) message += ` ${curr.message}`;
-      });
-
-      return message;
+    manualIsValid() {
+      const manualErrors =
+        Object.keys(this.validation).filter((key) => {
+          const curr = this.validation[key];
+          return !curr.valid && curr.manual;
+        });
+      return manualErrors.length === 0;
     },
 
-    errorMessageNative() {
-      let message = '';
-
-      Object.keys(this.errors).forEach((key) => {
-        const curr = this.errors[key];
-        if (!curr.valid && key !== 'card') {
-          message += ` ${curr.message}`;
-        }
-      });
-
-      return message;
+    nativeIsValid() {
+      const nativeErrors =
+        Object.keys(this.validation).filter((key) => {
+          const curr = this.validation[key];
+          return !curr.valid && curr.native;
+        });
+      return nativeErrors.length === 0;
     },
 
-    showErrors() {
-      return (
-        (this.showCardErrors && this.errorMessageCard) ||
-        (this.showNativeErrors && this.errorMessageNative)
-      );
+    showAllErrors() {
+      return this.showManualErrors || this.showNativeErrors;
     },
   },
 
@@ -52,12 +45,12 @@ export default {
       this.$refs.form.submit();
     },
 
-    setValue({ key, value }) {
-      this[key] = value;
+    markErrorValidity({ key, isValid }) {
+      this.validation[key].valid = isValid;
     },
 
-    markErrorValidity({ key, isValid }) {
-      this.errors[key].valid = isValid;
+    setValue({ key, value }) {
+      this[key] = value;
     },
 
     isEmail(value) {
@@ -77,7 +70,7 @@ export default {
     },
 
     isZip(value) {
-      return this.isNumeric(value) && value.trim().length <= 5;
+      return this.isNumeric(value) && value.trim().length === 5;
     },
 
     isNotEmpty(value) {

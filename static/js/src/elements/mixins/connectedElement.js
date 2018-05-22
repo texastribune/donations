@@ -10,8 +10,13 @@ export default {
       required: true,
     },
 
-    validator: {
-      type: Function,
+    showError: {
+      type: Boolean,
+      default: false,
+    },
+
+    validation: {
+      type: Object,
       default: null,
     },
   },
@@ -22,25 +27,37 @@ export default {
         this.$store.getters[`${this.storeModule}/valueByKey`];
       return getter(this.name);
     },
+
+    valid() {
+      if (!this.validation) return true;
+      return this.validation.valid;
+    },
+
+    errorMessage() {
+      if (!this.validation) return '';
+      return this.validation.message;
+    },
   },
 
   mounted() {
-    if (this.validator && this.validator(this.value)) {
-      this.markValid();
-    }
+    if (!this.validation) return;
+    if (this.validation.validator(this.value)) this.markValid();
   },
 
   methods: {
     updateSingleValue(newValue) {
-      if (this.validator && this.validator(newValue)) {
+      if (!this.validation) {
         this.fireDispatch(newValue);
-        this.fireUpdateCallback();
-        this.markValid();
-      } else if (this.validator && !this.validator(newValue)) {
-        this.markInvalid();
+        this.fireUpdateCallback(newValue);
       } else {
+        if (this.validation.validator(newValue)) {
+          this.markValid();
+          this.fireUpdateCallback(newValue);
+        } else {
+          this.markInvalid();
+        }
+
         this.fireDispatch(newValue);
-        this.fireUpdateCallback();
       }
     },
 
@@ -51,8 +68,8 @@ export default {
       );
     },
 
-    fireUpdateCallback() {
-      this.$emit('updateCallback', this.value);
+    fireUpdateCallback(value) {
+      this.$emit('updateCallback', value);
     },
 
     markValid() {

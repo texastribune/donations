@@ -11,7 +11,7 @@
 import Vue from 'vue';
 
 export default {
-  name: 'CardSubmit',
+  name: 'ManualSubmit',
 
   props: {
     value: {
@@ -19,7 +19,7 @@ export default {
       default: 'Submit',
     },
 
-    valid: {
+    formIsValid: {
       type: Boolean,
       required: true,
     },
@@ -27,9 +27,9 @@ export default {
 
   methods: {
     onClick() {
-      this.$emit('setValue', { key: 'showCardErrors', value: true });
+      this.$emit('setValue', { key: 'showManualErrors', value: true });
       this.$emit('setValue', { key: 'showNativeErrors', value: false });
-      Vue.nextTick(() => { if (this.valid) this.$emit('onSubmit'); });
+      if (this.formIsValid) Vue.nextTick(() => { this.$emit('onSubmit'); });
     },
   },
 };

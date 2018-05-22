@@ -1,13 +1,20 @@
 <template>
-  <input
-    :value="value"
-    :name="name"
-    :maxlength="maxlength"
-    :placeholder="placeholder"
-    :class="classes"
-    type="text"
-    @input="updateSingleValue($event.target.value)"
-  >
+  <div>
+    <input
+      :value="value"
+      :name="name"
+      :maxlength="maxlength"
+      :placeholder="placeholder"
+      :class="classes"
+      type="text"
+      @input="updateSingleValue($event.target.value)"
+    >
+    <p
+      v-if="showError && !valid"
+    >
+      {{ errorMessage }}
+    </p>
+  </div>
 </template>
 
 <script>
