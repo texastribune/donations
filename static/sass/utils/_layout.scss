@@ -1,3 +1,15 @@
+$size-xxxl: 3rem;
+
+%section-padding {
+  padding-bottom: $size-xxxl;
+  padding-top: $size-xxxl;
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-xl;
+    padding-top: $size-xl;
+  }
+}
+
 // Standard clearfix to clear floats/grid
 .clearfix,
 .clear {
@@ -60,11 +72,6 @@
   }
 }
 
-
-
-// NOTE: all classes below are likely to be placed directly on elements for use with JS use caution when modifying these
-
-// Hidden display styles
 .hidden {
   display: none !important;
 }

@@ -48,7 +48,11 @@
       display: inline-block;
       line-height: 1.85;
       padding: $size-xxs 0 0;
-      width: 210px; // Need defined width for svg container in Firefox
+      width: 210px;
+
+      img {
+        height: 23px;
+      }
     }
 
     &--img {
@@ -225,7 +229,6 @@
         float: none;
       }
     }
-
 
   }
 }

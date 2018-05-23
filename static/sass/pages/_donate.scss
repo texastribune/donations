@@ -1,4 +1,21 @@
-$size-xxxl: 3rem;
+@import "../vendor/normalize";
+@import "../vendor/mq";
+
+@import "../utils/variables";
+@import "../utils/colors";
+@import "../utils/links";
+@import "../utils/typography";
+@import "../utils/grid";
+@import "../utils/layout";
+@import "../utils/buttons";
+@import "../utils/images";
+@import "../utils/fontawesome";
+@import "../utils/lines";
+@import "../components/forms";
+@import "../components/footer";
+@import "../components/navbar";
+
+@import '../promo/festival';
 
 html {
   @extend .font-sansserif;
@@ -8,16 +25,6 @@ html {
 
 body {
   margin: 0;
-}
-
-%section-padding {
-  padding-bottom: $size-xxxl;
-  padding-top: $size-xxxl;
-
-  @include mq($until: bp-l) {
-    padding-bottom: $size-xl;
-    padding-top: $size-xl;
-  }
 }
 
 %button_toggle {
@@ -36,10 +43,6 @@ body {
   padding-left: $size-xxs;
   padding-right: $size-xxs;
   width: auto;
-}
-
-.navbar__logo img {
-  height: 23px;
 }
 
 .splash {
