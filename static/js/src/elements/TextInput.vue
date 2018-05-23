@@ -1,12 +1,19 @@
 <template>
   <div>
+    <label
+      v-if="hasLabel"
+      :for="connector"
+    >
+      {{ labelText }}
+    </label>
     <input
+      :id="connector"
+      :aria-label="ariaLabel"
       :value="value"
       :name="name"
-      :maxlength="maxlength"
       :placeholder="placeholder"
       :class="classes"
-      type="text"
+      :type="type"
       @input="updateSingleValue($event.target.value)"
     >
     <p
@@ -26,14 +33,19 @@ export default {
   mixins: [connectedElement],
 
   props: {
+    maxlength: {
+      type: [String, Boolean],
+      default: false,
+    },
+
     placeholder: {
       type: String,
       default: '',
     },
 
-    maxlength: {
-      type: [String, Boolean],
-      default: false,
+    type: {
+      type: String,
+      default: 'text',
     },
   },
 };

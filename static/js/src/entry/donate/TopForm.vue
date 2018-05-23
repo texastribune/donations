@@ -18,11 +18,6 @@
         <div
           class="grid_row donation--input"
         >
-          <span
-            class="donation--dollar"
-          >
-            $
-          </span>
           <text-input
             :show-error="showAllErrors"
             :validation="validation.amount"
@@ -48,9 +43,10 @@
       <div
         class="grid_row grid_separator--s"
       >
-        <email
+        <text-input
           :show-error="showAllErrors"
           :validation="validation.stripeEmail"
+          type="email"
           base-classes="col_12 tt_input"
           name="stripeEmail"
           placeholder="Email address"
@@ -177,7 +173,6 @@ import Radios from '../../elements/Radios.vue';
 import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
-import Email from '../../elements/Email.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
@@ -193,7 +188,6 @@ export default {
     Radios,
     PayFees,
     Level,
-    Email,
     ManualPay,
     ManualSubmit,
     NativePay,

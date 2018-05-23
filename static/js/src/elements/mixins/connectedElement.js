@@ -1,11 +1,16 @@
 export default {
   props: {
-    name: {
-      type: String,
-      required: true,
+    hasLabel: {
+      type: Boolean,
+      default: false,
     },
 
-    storeModule: {
+    labelText: {
+      type: String,
+      default: '',
+    },
+
+    name: {
       type: String,
       required: true,
     },
@@ -13,6 +18,11 @@ export default {
     showError: {
       type: Boolean,
       default: false,
+    },
+
+    storeModule: {
+      type: String,
+      required: true,
     },
 
     validation: {
@@ -36,6 +46,16 @@ export default {
     errorMessage() {
       if (!this.validation) return '';
       return this.validation.message;
+    },
+
+    connector() {
+      if (!this.hasLabel) return false;
+      return this.name;
+    },
+
+    ariaLabel() {
+      if (this.hasLabel) return false;
+      return this.name;
     },
   },
 
