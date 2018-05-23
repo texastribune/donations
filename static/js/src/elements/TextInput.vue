@@ -1,8 +1,11 @@
 <template>
-  <div>
+  <div
+    :class="getClasses({ elName: 'container' })"
+  >
     <label
       v-if="hasLabel"
       :for="connector"
+      :class="getClasses({ elName: 'label' })"
     >
       {{ labelText }}
     </label>
@@ -12,12 +15,13 @@
       :value="value"
       :name="name"
       :placeholder="placeholder"
-      :class="classes"
+      :class="inputClassesWithValidation"
       :type="type"
       @input="updateSingleValue($event.target.value)"
     >
     <p
       v-if="showError && !valid"
+      :class="getClasses({ elName: 'error' })"
     >
       {{ errorMessage }}
     </p>
@@ -33,6 +37,36 @@ export default {
   mixins: [connectedElement],
 
   props: {
+    containerClasses: {
+      type: String,
+      default: '',
+    },
+
+    errorClasses: {
+      type: String,
+      default: '',
+    },
+
+    hasLabel: {
+      type: Boolean,
+      default: false,
+    },
+
+    inputClasses: {
+      type: String,
+      default: '',
+    },
+
+    labelClasses: {
+      type: String,
+      default: '',
+    },
+
+    labelText: {
+      type: String,
+      default: '',
+    },
+
     maxlength: {
       type: [String, Boolean],
       default: false,
@@ -46,6 +80,24 @@ export default {
     type: {
       type: String,
       default: 'text',
+    },
+  },
+
+  computed: {
+    connector() {
+      if (!this.hasLabel) return false;
+      return this.name;
+    },
+
+    ariaLabel() {
+      if (this.hasLabel) return false;
+      return this.name;
+    },
+
+    inputClassesWithValidation() {
+      const classes = this.getClasses({ elName: 'input' });
+      if (!this.showError || this.valid) return classes;
+      return `invalid ${classes}`;
     },
   },
 };

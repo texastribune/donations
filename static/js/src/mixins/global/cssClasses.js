@@ -21,7 +21,7 @@ export default {
   },
 
   methods: {
-    getClasses({ obj = this, elName = 'base' } = {}) {
+    getClasses({ obj = this, elName = 'base' }) {
       const { [`${elName}Classes`]: classes } = obj;
 
       if (classes) {

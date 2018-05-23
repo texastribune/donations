@@ -26,22 +26,22 @@ export default {
   },
 
   methods: {
-    getGtmOn({ obj = this, elName } = {}) {
+    getGtmOn({ obj = this, elName }) {
       const key = elName ? `${elName}Gtm` : 'gtm';
       return obj[key].on;
     },
 
-    getGtmLabel({ obj = this, elName } = {}) {
+    getGtmLabel({ obj = this, elName }) {
       const key = elName ? `${elName}Gtm` : 'gtm';
       return obj[key].label;
     },
 
-    getGtmAction({ obj = this, elName } = {}) {
+    getGtmAction({ obj = this, elName }) {
       const key = elName ? `${elName}Gtm` : 'gtm';
       return obj[key].action;
     },
 
-    getGtmValue({ obj = this, elName } = {}) {
+    getGtmValue({ obj = this, elName }) {
       const key = elName ? `${elName}Gtm` : 'gtm';
       return obj[key].value || false;
     },

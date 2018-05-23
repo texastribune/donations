@@ -1,20 +1,20 @@
 <template>
   <div
-    :class="getClasses({ elName: 'div' })"
+    :class="getClasses({ elName: 'container' })"
   >
     <input
       id="pay-fees"
-      :class="getClasses({ elName: 'input' })"
+      :class="getClasses({ elName: 'checkbox' })"
       type="checkbox"
       @input="onInput($event.target.checked)"
     >
     <label
-      :class="getClasses({ elName: 'para' })"
+      :class="getClasses({ elName: 'text' })"
       for="pay-fees"
     >
       I agree to pay
       <span
-        :class="getClasses({ elName: 'span' })"
+        :class="getClasses({ elName: 'fee' })"
       >
         {{ fee }}
       </span>
@@ -42,22 +42,22 @@ export default {
       required: true,
     },
 
-    inputClasses: {
+    checkboxClasses: {
       type: [String, Array],
       default: '',
     },
 
-    spanClasses: {
+    feeClasses: {
       type: [String, Array],
       default: '',
     },
 
-    paraClasses: {
+    textClasses: {
       type: [String, Array],
       default: '',
     },
 
-    divClasses: {
+    containerClasses: {
       type: [String, Array],
       default: '',
     },

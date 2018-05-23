@@ -1,9 +1,12 @@
 <template>
   <div
-    v-show="supported"
-    ref="native"
-    class="grid_separator"
-  />
+    :class="classes"
+  >
+    <div
+      v-show="supported"
+      ref="native"
+    />
+  </div>
 </template>
 
 <script>

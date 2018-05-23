@@ -3,142 +3,170 @@
     ref="form"
     action="/charge"
     method="post"
-    class="form_membership splash_box col_5"
+    class="form splash_box"
     @submit="$event.preventDefault()"
   >
-    <fieldset
-      class="donation grid_separator"
-    >
-      <div class="grid_separator--s">
-        <legend
-          class="donation--prompt grid_separator--s"
-        >
-          I'm ready to give ...
-        </legend>
-        <div
-          class="grid_row donation--input"
-        >
-          <text-input
-            :show-error="showAllErrors"
-            :validation="validation.amount"
-            base-classes="col tt_input donation--amount"
-            name="amount"
-            store-module="baseForm"
-            @markErrorValidity="markErrorValidity"
-          />
-        </div>
-      </div>
-      <radios
-        :options="frequencyOptions"
-        ul-classes="radio_toggle grid_row grid_separator--s"
-        name="installment_period"
-        store-module="baseForm"
-        @updateCallback="onFrequencyUpdate"
-      />
-    </fieldset>
+    <div class="grid_row grid_separator">
+      <p class="col form__prompt">
+        I'm ready to give.
+      </p>
+    </div>
 
-    <fieldset
-      class="details grid_separator"
-    >
-      <div
-        class="grid_row grid_separator--s"
-      >
-        <text-input
-          :show-error="showAllErrors"
-          :validation="validation.stripeEmail"
-          type="email"
-          base-classes="col_12 tt_input"
-          name="stripeEmail"
-          placeholder="Email address"
-          store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
-        />
-      </div>
-      <div
-        class="grid_row grid_wrap--s"
-      >
-        <text-input
-          :show-error="showAllErrors"
-          :validation="validation.first_name"
-          base-classes="col_6 tt_input grid_separator--s"
-          name="first_name"
-          placeholder="First name"
-          store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
-        />
-        <text-input
-          :show-error="showAllErrors"
-          :validation="validation.last_name"
-          base-classes="col_6 tt_input grid_separator--s"
-          name="last_name"
-          placeholder="Last name"
-          store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
-        />
-      </div>
-      <div
-        class="grid_row grid_wrap--s"
-      >
-        <text-input
-          base-classes="col_7 tt_input grid_separator--s"
-          name="reason"
-          placeholder="Encouraged to give by ..."
-          store-module="baseForm"
-        />
-        <text-input
-          :show-error="showAllErrors"
-          :validation="validation.zipcode"
-          maxlength="5"
-          base-classes="col_5 tt_input grid_separator--s"
-          name="zipcode"
-          placeholder="Zip code"
-          store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
-        />
-      </div>
-      <pay-fees
-        div-classes="pay_fee grid_row"
-        input-classes="col_1 pay_fee--checkbox"
-        span-classes="pay_fee--amount"
-        para-classes="pay_fee--description col_11"
-        amount-store-module="baseForm"
-        pay-fees-value-store-module="baseForm"
-      />
-    </fieldset>
+    <div class="grid_row grid_wrap--l">
+      <div class="col_7">
+        <fieldset class="form__fieldset grid_separator">
+          <div class="grid_row">
+            <div class="col grid_separator--xs">
+              <text-input
+                :show-error="showAllErrors"
+                :validation="validation.amount"
+                has-label
+                label-text="amount ($)"
+                input-classes="form__text form__amount"
+                error-classes="form__error"
+                label-classes="form__label grid_separator--xs"
+                name="amount"
+                store-module="baseForm"
+                @markErrorValidity="markErrorValidity"
+              />
+            </div>
+          </div>
+          <div class="grid_row">
+            <div class="col">
+              <radios
+                :options="frequencyOptions"
+                list-classes="grid_row form__frequency"
+                name="installment_period"
+                store-module="baseForm"
+                @updateCallback="onFrequencyUpdate"
+              />
+            </div>
+          </div>
+        </fieldset>
 
-    <fieldset
-      class="grid_separator"
-    >
-      <native-pay
-        :form-is-valid="nativeIsValid"
-        amount-store-module="baseForm"
-        token-store-module="baseForm"
-        @setValue="setValue"
-        @onSubmit="onSubmit"
-      />
-      <div
-        class="grid_separator"
-      >
-        <manual-pay
-          :show-error="showManualErrors"
-          :validation="validation.card"
-          token-store-module="baseForm"
-          base-classes="donation--card"
-          @markErrorValidity="markErrorValidity"
-        />
+        <fieldset class="form__fieldset">
+          <div class="grid_row grid_separator">
+            <div class="col">
+              <text-input
+                :show-error="showAllErrors"
+                :validation="validation.stripeEmail"
+                has-label
+                label-text="email address"
+                type="email"
+                input-classes="form__text"
+                error-classes="form__error"
+                label-classes="form__label grid_separator--xs"
+                name="stripeEmail"
+                store-module="baseForm"
+                @markErrorValidity="markErrorValidity"
+              />
+            </div>
+          </div>
+          <div class="grid_row grid_wrap--s grid_separator">
+            <div class="col_6">
+              <text-input
+                :show-error="showAllErrors"
+                :validation="validation.first_name"
+                has-label
+                label-text="first name"
+                input-classes="form__text"
+                error-classes="form__error"
+                label-classes="form__label grid_separator--xs"
+                name="first_name"
+                store-module="baseForm"
+                @markErrorValidity="markErrorValidity"
+              />
+            </div>
+            <div class="col_6">
+              <text-input
+                :show-error="showAllErrors"
+                :validation="validation.last_name"
+                has-label
+                label-text="last name"
+                input-classes="form__text"
+                error-classes="form__error"
+                label-classes="form__label grid_separator--xs"
+                name="last_name"
+                store-module="baseForm"
+                @markErrorValidity="markErrorValidity"
+              />
+            </div>
+          </div>
+
+          <div class="grid_row grid_wrap--s">
+            <div class="col_6">
+              <text-input
+                has-label
+                label-text="encouraged to give by"
+                input-classes="form__text"
+                error-classes="form__error"
+                label-classes="form__label grid_separator--xs"
+                name="reason"
+                store-module="baseForm"
+              />
+            </div>
+            <div class="col_6">
+              <text-input
+                :show-error="showAllErrors"
+                :validation="validation.zipcode"
+                has-label
+                label-text="zip code"
+                maxlength="5"
+                input-classes="form__text"
+                error-classes="form__error"
+                label-classes="form__label grid_separator--xs"
+                name="zipcode"
+                store-module="baseForm"
+                @markErrorValidity="markErrorValidity"
+              />
+            </div>
+          </div>
+        </fieldset>
       </div>
-      <div
-        class="grid_row"
-      >
-        <manual-submit
-          :form-is-valid="manualIsValid"
-          base-classes="col button button--yellow button--l donation--submit"
-          value="Pay by card"
-          @onSubmit="onSubmit"
-          @setValue="setValue"
-        />
+
+      <div class="col_5 form__payment">
+        <fieldset class="form__payment-box">
+          <div class="grid_separator">
+            <pay-fees
+              container-classes="form__fees grid_row"
+              checkbox-classes="col_1"
+              fee-classes="pay_fee--amount"
+              text-classes="form__fees-graf col_11"
+              amount-store-module="baseForm"
+              pay-fees-value-store-module="baseForm"
+            />
+          </div>
+          <div class="grid_separator--l">
+            <native-pay
+              :form-is-valid="nativeIsValid"
+              amount-store-module="baseForm"
+              token-store-module="baseForm"
+              @setValue="setValue"
+              @onSubmit="onSubmit"
+            />
+          </div>
+          <div class="grid_separator--s">
+            <manual-pay
+              :show-error="showManualErrors"
+              :validation="validation.card"
+              token-store-module="baseForm"
+              card-classes="form__card"
+              error-classes="form__error"
+              @markErrorValidity="markErrorValidity"
+            />
+          </div>
+          <div class="grid_row">
+            <manual-submit
+              :form-is-valid="manualIsValid"
+              base-classes="col button button--yellow button--l"
+              value="Pay by card"
+              @onSubmit="onSubmit"
+              @setValue="setValue"
+            />
+          </div>
+        </fieldset>
       </div>
-    </fieldset>
+    </div>
 
     <hidden
       name="installments"
@@ -201,9 +229,27 @@ export default {
   data() {
     return {
       frequencyOptions: [
-        { id: 0, text: 'monthly', value: 'monthly' },
-        { id: 1, text: 'yearly', value: 'yearly' },
-        { id: 2, text: 'one time', value: 'None' },
+        {
+          id: 0,
+          text: 'Monthly',
+          value: 'monthly',
+          liClasses: 'col_4 form__frequency-item',
+          inputClasses: 'form__frequency-radio',
+        },
+        {
+          id: 1,
+          text: 'Yearly',
+          value: 'yearly',
+          liClasses: 'col_4 form__frequency-item',
+          inputClasses: 'form__frequency-radio',
+        },
+        {
+          id: 2,
+          text: 'One time',
+          value: 'None',
+          liClasses: 'col_4 form__frequency-item',
+          inputClasses: 'form__frequency-radio',
+        },
       ],
       validation: {
         stripeEmail: {

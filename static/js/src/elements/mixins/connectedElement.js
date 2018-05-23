@@ -1,15 +1,5 @@
 export default {
   props: {
-    hasLabel: {
-      type: Boolean,
-      default: false,
-    },
-
-    labelText: {
-      type: String,
-      default: '',
-    },
-
     name: {
       type: String,
       required: true,
@@ -46,16 +36,6 @@ export default {
     errorMessage() {
       if (!this.validation) return '';
       return this.validation.message;
-    },
-
-    connector() {
-      if (!this.hasLabel) return false;
-      return this.name;
-    },
-
-    ariaLabel() {
-      if (this.hasLabel) return false;
-      return this.name;
     },
   },
 

@@ -1,13 +1,16 @@
 <template>
-  <div>
+  <div
+    :class="getClasses({ elName: 'container' })"
+  >
     <card
       :options="options"
-      :class="classes"
+      :class="cardClassesWithValidation"
       :stripe="stripeKey"
       @change="onChange($event.complete)"
     />
     <p
       v-if="showError && !valid"
+      :class="getClasses({ elName: 'error' })"
     >
       {{ errorMessage }}
     </p>
@@ -29,6 +32,21 @@ export default {
   mixins: [updateStoreValue],
 
   props: {
+    containerClasses: {
+      type: String,
+      default: '',
+    },
+
+    cardClasses: {
+      type: String,
+      default: '',
+    },
+
+    errorClasses: {
+      type: String,
+      default: '',
+    },
+
     showError: {
       type: Boolean,
       default: false,
@@ -67,6 +85,12 @@ export default {
 
     errorMessage() {
       return this.validation.message;
+    },
+
+    cardClassesWithValidation() {
+      const classes = this.getClasses({ elName: 'card' });
+      if (!this.showError || this.valid) return classes;
+      return `invalid ${classes}`;
     },
   },
 

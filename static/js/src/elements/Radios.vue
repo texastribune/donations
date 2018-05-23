@@ -1,6 +1,6 @@
 <template>
   <ul
-    :class="getClasses({ elName: 'ul' })"
+    :class="getClasses({ elName: 'list' })"
   >
     <li
       v-for="(option, index) in options"
@@ -12,7 +12,7 @@
         :name="name"
         :checked="value === option.value"
         :id="getLabelConnector(index)"
-        class="hidden"
+        :class="getClasses({ elName: 'input', obj: option })"
         type="radio"
         @input="updateSingleValue($event.target.value)"
       >
@@ -40,7 +40,7 @@ export default {
       required: true,
     },
 
-    ulClasses: {
+    listClasses: {
       type: String,
       default: '',
     },

@@ -11,7 +11,6 @@
 @import "../utils/images";
 @import "../utils/fontawesome";
 @import "../utils/lines";
-@import "../components/forms";
 @import "../components/footer";
 @import "../components/navbar";
 
@@ -51,10 +50,6 @@ body {
   background-position-x: 50%;
   background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
   background-repeat: repeat;
-
-  .grid_row {
-    align-items: center;
-  }
 
   &_header {
     &--headline {
@@ -126,99 +121,108 @@ body {
   100%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
 }
 
-.form_membership {
-  .tt_input {
-    @extend %input_text--l;
+.form {
+  $error-color: #f51c1c;
 
-    &::placeholder {
-      @extend %input_text--placeholder;
-      font-size: $size-s;
+  &__prompt {
+    border-bottom: 1px solid $color-yellow-tribune;
+    font-size: $size-xl;
+    font-weight: bold;
+    padding-bottom: $size-b;
+    text-align: center;
+  }
+  
+  &__text {
+    @extend .font-sansserif;
+    background-color: #fbfbfb;
+    border: 1px solid $color-gray-light;
+    color: $color-black-pure;
+    display: block;
+    font-size: $size-b;
+    height: 27px;
+    padding: $size-b;
+    width: 100%;
+
+    &.invalid {
+      border-color: $error-color;
     }
   }
 
-  fieldset {
+  &__amount-box {
+    position: relative;
+  }
+
+  &__amount {
+    font-weight: bold;
+  }
+
+  &__error {
+    color: $error-color;
+    font-size: $size-xs;
+  }
+
+  &__fieldset {
     border: none;
     margin-left: 0;
     margin-right: 0;
     padding: 0;
   }
 
-  .donation {
-    font-size: $size-l;
-
-    @include mq($until: bp-l) {
-      font-size: $size-m;
-    }
-
-    &--prompt {
-      font-weight: bold;
-    }
-    &--input {
-      position: relative;
-    }
-    &--dollar {
-      font-weight: bold;
-      left: $size-xxs;
-      position: absolute;
-      top: 0.35rem;
-    }
-    &--amount {
-      font-size: $size-l;
-      font-weight: bold;
-      padding-left: $size-xl;
-    }
-    &--level {
-      color: $color-gray-medium;
-      font-size: $size-xs;
-      text-align: center;
-    }
-    &--level_name {
-      font-weight: bold;
-    }
-    &--card {
-      background-color: #f7f7f7;
-      border: 1px solid #DCDCDC;
-      padding: $size-xxs;
-      
-      @include mq($until: bp-m) {
-        margin-bottom: $grid-gutter/2;
-      }
-    }
-    &--submit {
-      &:disabled {
-        opacity: .5;
-      }
-    }
-  }
-
-  .pay_fee {
-    align-items: flex-start;
-    
-    &--checkbox {
-      margin-right: $size-xxs;
-      margin-top: 2px;
-
-      @include mq($until: bp-l) {
-        margin-right: 8px;
-        width: auto;
-      }
-    }
-    
-    &--amount {
-      font-weight: bold;
-    }
-    
-    &--description {
-      @extend .font-sansserif;
-      color: $color-gray-dark;
-      font-size: $size-xs;
-    }
-  }
-
-  .submit {
+  &__label {
+    color: $color-gray-dark;
     display: block;
-    text-align: center;
+    font-size: $size-xs;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
     width: 100%;
+  }
+
+  &__frequency {
+    list-style: none;
+    justify-content: center;
+  }
+
+  &__frequency-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__frequency-radio {
+    margin-right: 5px;
+  }
+
+  &__fees {
+    align-items: center;
+  }
+
+  &__fees-graf {
+    font-size: $size-s;
+  }
+
+  &__payment {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: $size-b;
+  }
+
+  &__payment-box {
+    background-color: #fbfbfb;
+    border: 1px solid $color-gray-light;
+    padding: $size-b;
+    margin: 0;
+  }
+
+  &__card {
+    background-color: $color-white-pure;
+    border: 1px solid $color-gray-light;
+    padding: $size-xxs;
+
+    &.invalid {
+      border-color: $error-color;
+    }
   }
 }
 
