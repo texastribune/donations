@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="getClasses({ elName: 'container' })"
+    :class="classes"
   >
     <label
       v-if="hasLabel"
@@ -37,11 +37,6 @@ export default {
   mixins: [connectedElement],
 
   props: {
-    containerClasses: {
-      type: String,
-      default: '',
-    },
-
     errorClasses: {
       type: String,
       default: '',
@@ -50,11 +45,6 @@ export default {
     hasLabel: {
       type: Boolean,
       default: false,
-    },
-
-    inputClasses: {
-      type: String,
-      default: '',
     },
 
     labelClasses: {

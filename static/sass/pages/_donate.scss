@@ -13,8 +13,10 @@
 @import "../utils/lines";
 @import "../components/footer";
 @import "../components/navbar";
+@import "../components/forms";
 
 @import '../promo/festival';
+@import "../promo/quotes";
 
 html {
   @extend .font-sansserif;
@@ -26,26 +28,8 @@ body {
   margin: 0;
 }
 
-%button_toggle {
-  @extend .button;
-  @extend .button--l;
-  background-color: $color-white-pure;
-  border: 2px solid $color-yellow-tribune;
-  border-right-width: 1px;
-  float: left;
-  min-width: 100%;
-}
-
-.highlight {
-  background-color: $color-yellow-tribune;
-  display: inline-block;
-  padding-left: $size-xxs;
-  padding-right: $size-xxs;
-  width: auto;
-}
-
 .splash {
-  @extend %section-padding;
+  @extend .section-padding;
   background-color: $color-sand;
   background-position-x: 50%;
   background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
@@ -114,81 +98,7 @@ body {
   100%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
 }
 
-.form {
-  $error-color: #f51c1c;
-  
-  @extend %section-padding;
-
-  &__text {
-    @extend .font-sansserif;
-    background-color: #fbfbfb;
-    border: 1px solid $color-gray-light;
-    color: $color-black-pure;
-    display: block;
-    font-size: $size-b;
-    height: 27px;
-    padding: $size-b;
-    width: 100%;
-
-    &.invalid {
-      border-color: $error-color;
-    }
-  }
-
-  &__amount-box {
-    position: relative;
-  }
-
-  &__amount {
-    font-weight: bold;
-    font-size: $size-l;
-  }
-
-  &__error {
-    color: $error-color;
-    font-size: $size-xs;
-  }
-
-  &__group {
-    border: none;
-    margin-left: 0;
-    margin-right: 0;
-    padding: 0;
-  }
-
-  &__label {
-    color: $color-gray-dark;
-    display: block;
-    font-size: $size-xs;
-    font-weight: bold;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    width: 100%;
-  }
-
-  &__frequency {
-    list-style: none;
-    justify-content: center;
-  }
-
-  &__frequency-item {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  &__frequency-radio {
-    margin-right: 5px;
-  }
-
-  &__fees {
-    align-items: center;
-  }
-
-  &__fees-graf {
-    font-size: $size-xs;
-  }
-
+.donate-form {
   &__payment {
     display: flex;
     flex-direction: column;
@@ -210,52 +120,19 @@ body {
       padding: $size-l;
     }
   }
-
-  &__card {
-    background-color: #fbfbfb;
-    border: 1px solid $color-gray-light;
-    padding: $size-xxs;
-
-    &.invalid {
-      border-color: $error-color;
-    }
-  }
-
-  &__pay-by-card {
-    @extend %link--teal;
-    font-size: $size-s;
-    text-align: center;
-  }
 }
 
 .member_benefits {
-  @extend %section-padding;
-}
-
-.member_quotes {
-  @extend %link--blue;
-
-  &--quote {
-    @extend .font-serif;
-    color: $color-gray-medium;
-    font-size: $size-b;
-  }
-  
-  &--attribution {
-    @extend .font-sansserif;
-    color: $color-teal-gray;
-    font-size: $size-xs;
-    font-weight: 700;
-    text-transform: uppercase;
-  }
+  @extend .section-padding;
 }
 
 .faq {
-  @extend %section-padding;
+  @extend .section-padding;
 }
 
 .list--bulleted {
   @extend .font-serif;
+  
   li {
     font-size: $size-b;
     margin: 0 0 $size-b $size-m;
@@ -269,6 +146,7 @@ body {
 
 .contact {
   @extend %link--blue;
+  
   p {
     @extend .font-sansserif;
     font-size: $size-s;

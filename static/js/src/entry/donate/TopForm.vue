@@ -6,8 +6,6 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <h1 class="grid_separator">I'm ready to give</h1>
-
     <div class="grid_row grid_wrap--l">
       <div class="col_7">
         <fieldset class="form__group">
@@ -18,7 +16,7 @@
                 :validation="validation.amount"
                 has-label
                 label-text="amount ($)"
-                input-classes="form__text form__amount"
+                base-classes="form__text form__text--heavy"
                 error-classes="form__error"
                 label-classes="form__label grid_separator--xs"
                 name="amount"
@@ -31,7 +29,7 @@
             <div class="col">
               <radios
                 :options="frequencyOptions"
-                list-classes="grid_row form__frequency"
+                base-classes="grid_row form__radios"
                 name="installment_period"
                 store-module="baseForm"
                 @updateCallback="onFrequencyUpdate"
@@ -49,7 +47,7 @@
                 has-label
                 label-text="email address"
                 type="email"
-                input-classes="form__text"
+                base-classes="form__text form__text--standard"
                 error-classes="form__error"
                 label-classes="form__label grid_separator--xs"
                 name="stripeEmail"
@@ -65,7 +63,7 @@
                 :validation="validation.first_name"
                 has-label
                 label-text="first name"
-                input-classes="form__text"
+                base-classes="form__text form__text--standard"
                 error-classes="form__error"
                 label-classes="form__label grid_separator--xs"
                 name="first_name"
@@ -79,7 +77,7 @@
                 :validation="validation.last_name"
                 has-label
                 label-text="last name"
-                input-classes="form__text"
+                base-classes="form__text form__text--standard"
                 error-classes="form__error"
                 label-classes="form__label grid_separator--xs"
                 name="last_name"
@@ -94,7 +92,7 @@
               <text-input
                 has-label
                 label-text="encouraged to give by"
-                input-classes="form__text"
+                base-classes="form__text form__text--standard"
                 error-classes="form__error"
                 label-classes="form__label grid_separator--xs"
                 name="reason"
@@ -108,7 +106,7 @@
                 has-label
                 label-text="zip code"
                 maxlength="5"
-                input-classes="form__text"
+                base-classes="form__text form__text--standard"
                 error-classes="form__error"
                 label-classes="form__label grid_separator--xs"
                 name="zipcode"
@@ -120,14 +118,11 @@
         </fieldset>
       </div>
 
-      <div class="col_5 form__payment">
-        <fieldset class="form__payment-box">
+      <div class="col_5 donate-form__payment">
+        <fieldset class="donate-form__payment-box">
           <div class="grid_separator--l">
             <pay-fees
-              container-classes="form__fees grid_row"
-              checkbox-classes="col_1"
-              fee-classes="pay_fee--amount"
-              text-classes="form__fees-graf col_11"
+              base-classes="form__fees"
               amount-store-module="baseForm"
               pay-fees-value-store-module="baseForm"
             />
@@ -136,8 +131,7 @@
             <native-pay
               :form-is-valid="nativeIsValid"
               :supported="nativeIsSupported"
-              separator-classes="grid_separator--xs"
-              text-classes="form__pay-by-card"
+              base-classes="form__native"
               amount-store-module="baseForm"
               token-store-module="baseForm"
               @setValue="setValue"
@@ -149,8 +143,8 @@
               <manual-pay
                 :show-error="showManualErrors"
                 :validation="validation.card"
+                base-classes="form__manual"
                 token-store-module="baseForm"
-                card-classes="form__card"
                 error-classes="form__error"
                 @markErrorValidity="markErrorValidity"
               />
@@ -234,22 +228,19 @@ export default {
           id: 0,
           text: 'Monthly',
           value: 'monthly',
-          liClasses: 'col_4 form__frequency-item',
-          inputClasses: 'form__frequency-radio',
+          liClasses: 'col_4',
         },
         {
           id: 1,
           text: 'Yearly',
           value: 'yearly',
-          liClasses: 'col_4 form__frequency-item',
-          inputClasses: 'form__frequency-radio',
+          liClasses: 'col_4',
         },
         {
           id: 2,
           text: 'Once',
           value: 'None',
-          liClasses: 'col_4 form__frequency-item',
-          inputClasses: 'form__frequency-radio',
+          liClasses: 'col_4',
         },
       ],
       validation: {

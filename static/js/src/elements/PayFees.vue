@@ -1,23 +1,17 @@
 <template>
   <div
-    :class="getClasses({ elName: 'container' })"
+    :class="classes"
   >
     <input
       id="pay-fees"
-      :class="getClasses({ elName: 'checkbox' })"
       type="checkbox"
       @input="onInput($event.target.checked)"
     >
     <label
-      :class="getClasses({ elName: 'text' })"
       for="pay-fees"
     >
       I agree to pay
-      <span
-        :class="getClasses({ elName: 'fee' })"
-      >
-        {{ fee }}
-      </span>
+      <span>{{ fee }}</span>
       for processing fees. Paying fees directs more money to our mission.
     </label>
   </div>
@@ -40,21 +34,6 @@ export default {
     payFeesValueStoreModule: {
       type: String,
       required: true,
-    },
-
-    checkboxClasses: {
-      type: [String, Array],
-      default: '',
-    },
-
-    feeClasses: {
-      type: [String, Array],
-      default: '',
-    },
-
-    textClasses: {
-      type: [String, Array],
-      default: '',
     },
 
     containerClasses: {

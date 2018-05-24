@@ -1,0 +1,17 @@
+.member_quotes {
+  @extend %link--blue;
+
+  &--quote {
+    @extend .font-serif;
+    color: $color-gray-medium;
+    font-size: $size-b;
+  }
+  
+  &--attribution {
+    @extend .font-sansserif;
+    color: $color-teal-gray;
+    font-size: $size-xs;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}

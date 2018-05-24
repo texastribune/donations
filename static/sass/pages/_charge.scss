@@ -11,11 +11,14 @@
 @import "../utils/images";
 @import "../utils/fontawesome";
 @import "../utils/lines";
+
 @import "../components/footer";
 @import "../components/navbar";
 
+@import "../promo/quotes";
+
 #charge {
-  @extend %section-padding;
+  @extend .section-padding;
 
   .share {
     a {

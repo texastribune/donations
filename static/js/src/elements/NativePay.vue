@@ -1,18 +1,13 @@
 <template>
   <div
     v-show="supported"
-    :class="getClasses({ elName: 'container' })"
+    :class="classes"
   >
     <div
       ref="native"
     />
-    <div
-      v-if="showManualOption"
-      :class="getClasses({ elName: 'separator' })"
-    />
     <p
-      v-if="showManualOption"
-      :class="getClasses({ elName: 'text' })"
+      v-if="showOption"
     >
       <a
         href
@@ -42,11 +37,6 @@ export default {
       required: true,
     },
 
-    showManualOption: {
-      type: Boolean,
-      default: true,
-    },
-
     amountStoreModule: {
       type: String,
       required: true,
@@ -66,16 +56,10 @@ export default {
       type: String,
       default: '',
     },
+  },
 
-    separatorClasses: {
-      type: String,
-      default: '',
-    },
-
-    textClasses: {
-      type: String,
-      default: '',
-    },
+  data() {
+    return { showOption: true };
   },
 
   computed: {
@@ -152,6 +136,7 @@ export default {
 
     showManualPay(event) {
       event.preventDefault();
+      this.showOption = false;
       this.$emit('setValue', { key: 'showManualPay', value: true });
     },
   },

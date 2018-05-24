@@ -3,12 +3,10 @@ $color-navy-medium: #404b56;
 $color-navy-light: #515f6b;
 
 .smd_buckets {
-  @extend %section-padding;
-  //border-bottom: 1px solid $color-gray-light;
+  @extend .section-padding;
 }
 
 .bucket_card {
-  //border: 1px solid $color-blue-light;
   border: 1px solid $color-yellow-tribune;
   display: flex;
   flex-direction: column;
@@ -23,9 +21,7 @@ $color-navy-light: #515f6b;
 
   &--goal {
     @extend .smallcaps;
-    //background-color: $color-sand;
     border-radius: 50px;
-    //border: 1px solid $color-sand;
     border: 1px solid $color-navy-light;
     font-size: $size-xs;
     left: $size-l;
@@ -35,8 +31,6 @@ $color-navy-light: #515f6b;
   }
 
   &--complete {
-    // background-color: $color-blue-light;
-    // border-color: $color-blue-light;
     background-color: $color-navy-light;
     border-color: $color-navy-light;
     color: $color-white-pure;

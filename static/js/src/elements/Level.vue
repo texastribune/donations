@@ -1,14 +1,10 @@
 <template>
   <p
     v-if="level"
-    :class="getClasses({ elName: 'text' })"
+    :class="classes"
   >
     Your giving level is:
-    <span
-      :class="getClasses({ elName: 'level' })"
-    >
-      {{ level }}
-    </span>
+    <span>{{ level }}</span>
   </p>
 </template>
 
@@ -25,16 +21,6 @@ export default {
     installmentPeriodStoreModule: {
       type: String,
       required: true,
-    },
-
-    textClasses: {
-      type: [String, Array],
-      default: '',
-    },
-
-    levelClasses: {
-      type: [String, Array],
-      default: '',
     },
   },
 
