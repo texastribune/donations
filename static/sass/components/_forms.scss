@@ -17,19 +17,21 @@
       padding: $size-b;
       width: 100%;
 
-      &--standard {
+       &.invalid {
+        border-color: $color-error;
+      }
+    }
+    
+    &--standard {
+      input {
         font-size: $size-b;
         font-weight: normal;
       }
+    }
 
-      &--heavy {
-        font-weight: bold;
-        font-size: $size-l; 
-      }
-      
-      &.invalid {
-        border-color: $color-error;
-      }
+    &--heavy {
+      font-weight: bold;
+      font-size: $size-l;
     }
   }
 
