@@ -81,11 +81,6 @@ body {
       }
     }
   }
-
-  &_box {
-    background-color: rgba(255,255,255,.85);
-    padding: $size-s;
-  }
 }
 
 .rotate_words {
@@ -124,11 +119,15 @@ body {
 .form {
   $error-color: #f51c1c;
 
+  background-color: rgba(255,255,255,.95);
+  border-radius: 5px;
+  padding: $size-b;
+
   &__prompt {
     border-bottom: 2px solid $color-yellow-tribune;
     font-size: $size-xl;
     font-weight: bold;
-    padding-bottom: $size-b;
+    padding-bottom: $size-xs;
     text-align: center;
   }
   
@@ -209,13 +208,6 @@ body {
     padding-left: $size-b;
   }
 
-  &__payment-box {
-    background-color: #fbfbfb;
-    border: 1px solid $color-gray-light;
-    padding: $size-b;
-    margin: 0;
-  }
-
   &__card {
     background-color: $color-white-pure;
     border: 1px solid $color-gray-light;
@@ -224,6 +216,12 @@ body {
     &.invalid {
       border-color: $error-color;
     }
+  }
+
+  &__pay-by-card {
+    @extend %link--teal;
+    font-size: $size-s;
+    text-align: center;
   }
 }
 

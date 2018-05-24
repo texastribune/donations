@@ -13,6 +13,8 @@ export default {
       },
       showManualErrors: false,
       showNativeErrors: false,
+      showManualPay: false,
+      nativeIsSupported: false,
     };
   },
 

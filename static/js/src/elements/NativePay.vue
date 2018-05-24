@@ -1,11 +1,26 @@
 <template>
   <div
-    :class="classes"
+    v-show="supported"
+    :class="getClasses({ elName: 'container' })"
   >
     <div
-      v-show="supported"
       ref="native"
     />
+    <div
+      v-if="showManualOption"
+      :class="getClasses({ elName: 'separator' })"
+    />
+    <p
+      v-if="showManualOption"
+      :class="getClasses({ elName: 'text' })"
+    >
+      <a
+        href
+        @click="showManualPay"
+      >
+        Or pay by card
+      </a>
+    </p>
   </div>
 </template>
 
@@ -22,6 +37,16 @@ export default {
   mixins: [updateStoreValue],
 
   props: {
+    supported: {
+      type: Boolean,
+      required: true,
+    },
+
+    showManualOption: {
+      type: Boolean,
+      default: true,
+    },
+
     amountStoreModule: {
       type: String,
       required: true,
@@ -36,12 +61,21 @@ export default {
       type: Boolean,
       required: true,
     },
-  },
 
-  data() {
-    return {
-      supported: false,
-    };
+    containerClasses: {
+      type: String,
+      default: '',
+    },
+
+    separatorClasses: {
+      type: String,
+      default: '',
+    },
+
+    textClasses: {
+      type: String,
+      default: '',
+    },
   },
 
   computed: {
@@ -89,11 +123,15 @@ export default {
         .canMakePayment()
         .then((result) => {
           if (result) {
-            this.supported = true;
+            this.$emit('setValue', { key: 'nativeIsSupported', value: true });
             button.mount(this.$refs.native);
+          } else {
+            throw new Error();
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          this.$emit('setValue', { key: 'showManualPay', value: true });
+        });
 
       button.on('click', (event) => {
         this.$emit('setValue', { key: 'showManualErrors', value: false });
@@ -110,6 +148,11 @@ export default {
         event.complete('success');
         Vue.nextTick(() => { this.$emit('onSubmit'); });
       });
+    },
+
+    showManualPay(event) {
+      event.preventDefault();
+      this.$emit('setValue', { key: 'showManualPay', value: true });
     },
   },
 };

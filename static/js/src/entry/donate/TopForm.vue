@@ -3,7 +3,7 @@
     ref="form"
     action="/charge"
     method="post"
-    class="form splash_box"
+    class="form"
     @submit="$event.preventDefault()"
   >
     <div class="grid_row grid_separator">
@@ -125,8 +125,8 @@
       </div>
 
       <div class="col_5 form__payment">
-        <fieldset class="form__payment-box">
-          <div class="grid_separator">
+        <fieldset class="form__fieldset">
+          <div class="grid_separator--l">
             <pay-fees
               container-classes="form__fees grid_row"
               checkbox-classes="col_1"
@@ -136,33 +136,38 @@
               pay-fees-value-store-module="baseForm"
             />
           </div>
-          <div class="grid_separator--l">
+          <div :class="showManualPay ? 'grid_separator--l' : ''">
             <native-pay
               :form-is-valid="nativeIsValid"
+              :supported="nativeIsSupported"
+              separator-classes="grid_separator--xs"
+              text-classes="form__pay-by-card"
               amount-store-module="baseForm"
               token-store-module="baseForm"
               @setValue="setValue"
               @onSubmit="onSubmit"
             />
           </div>
-          <div class="grid_separator--s">
-            <manual-pay
-              :show-error="showManualErrors"
-              :validation="validation.card"
-              token-store-module="baseForm"
-              card-classes="form__card"
-              error-classes="form__error"
-              @markErrorValidity="markErrorValidity"
-            />
-          </div>
-          <div class="grid_row">
-            <manual-submit
-              :form-is-valid="manualIsValid"
-              base-classes="col button button--yellow button--l"
-              value="Pay by card"
-              @onSubmit="onSubmit"
-              @setValue="setValue"
-            />
+          <div v-if="showManualPay">
+            <div class="grid_separator--s">
+              <manual-pay
+                :show-error="showManualErrors"
+                :validation="validation.card"
+                token-store-module="baseForm"
+                card-classes="form__card"
+                error-classes="form__error"
+                @markErrorValidity="markErrorValidity"
+              />
+            </div>
+            <div class="grid_row">
+              <manual-submit
+                :form-is-valid="manualIsValid"
+                base-classes="col button button--yellow button--l"
+                value="Pay by card"
+                @onSubmit="onSubmit"
+                @setValue="setValue"
+              />
+            </div>
           </div>
         </fieldset>
       </div>
