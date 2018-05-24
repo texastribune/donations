@@ -8,7 +8,7 @@
   >
     <div class="grid_row grid_separator">
       <p class="col form__prompt">
-        I'm ready to give.
+        I'm ready to give
       </p>
     </div>
 

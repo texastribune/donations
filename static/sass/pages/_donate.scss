@@ -83,7 +83,7 @@ body {
   }
 
   &_box {
-    background-color: $color-white-pure;
+    background-color: rgba(255,255,255,.85);
     padding: $size-s;
   }
 }
@@ -125,7 +125,7 @@ body {
   $error-color: #f51c1c;
 
   &__prompt {
-    border-bottom: 1px solid $color-yellow-tribune;
+    border-bottom: 2px solid $color-yellow-tribune;
     font-size: $size-xl;
     font-weight: bold;
     padding-bottom: $size-b;
@@ -154,6 +154,7 @@ body {
 
   &__amount {
     font-weight: bold;
+    font-size: $size-l;
   }
 
   &__error {
@@ -198,14 +199,14 @@ body {
   }
 
   &__fees-graf {
-    font-size: $size-s;
+    font-size: $size-xs;
   }
 
   &__payment {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: $size-b;
+    padding-left: $size-b;
   }
 
   &__payment-box {
