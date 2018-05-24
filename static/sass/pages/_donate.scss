@@ -76,9 +76,7 @@ body {
     &--description {
       @extend %link--blue;
       color: $color-white-pure;
-      @include mq($from: bp-m, $until: bp-l) {
-        font-size: $size-s;
-      }
+      font-size: $size-m;
     }
   }
 }
@@ -118,19 +116,9 @@ body {
 
 .form {
   $error-color: #f51c1c;
-
-  background-color: rgba(255,255,255,.95);
-  border-radius: 5px;
-  padding: $size-b;
-
-  &__prompt {
-    border-bottom: 2px solid $color-yellow-tribune;
-    font-size: $size-xl;
-    font-weight: bold;
-    padding-bottom: $size-xs;
-    text-align: center;
-  }
   
+  @extend %section-padding;
+
   &__text {
     @extend .font-sansserif;
     background-color: #fbfbfb;
@@ -161,7 +149,7 @@ body {
     font-size: $size-xs;
   }
 
-  &__fieldset {
+  &__group {
     border: none;
     margin-left: 0;
     margin-right: 0;
@@ -205,11 +193,26 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-left: $size-b;
+
+    @include mq($from: bp-l) {
+      padding-left: $size-b;
+    }
+  }
+
+  &__payment-box {
+    border: none;
+    padding: 0;
+    margin-left: 0;
+    margin-right: 0;
+    
+    @include mq($from: bp-l) {
+      border: 1px solid $color-yellow-tribune;
+      padding: $size-l;
+    }
   }
 
   &__card {
-    background-color: $color-white-pure;
+    background-color: #fbfbfb;
     border: 1px solid $color-gray-light;
     padding: $size-xxs;
 

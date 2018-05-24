@@ -6,17 +6,13 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div class="grid_row grid_separator">
-      <p class="col form__prompt">
-        I'm ready to give
-      </p>
-    </div>
+    <h1 class="grid_separator">I'm ready to give</h1>
 
     <div class="grid_row grid_wrap--l">
       <div class="col_7">
-        <fieldset class="form__fieldset grid_separator">
-          <div class="grid_row">
-            <div class="col grid_separator--xs">
+        <fieldset class="form__group">
+          <div class="grid_row grid_separator--xs">
+            <div class="col">
               <text-input
                 :show-error="showAllErrors"
                 :validation="validation.amount"
@@ -31,7 +27,7 @@
               />
             </div>
           </div>
-          <div class="grid_row">
+          <div class="grid_row grid_separator">
             <div class="col">
               <radios
                 :options="frequencyOptions"
@@ -44,7 +40,7 @@
           </div>
         </fieldset>
 
-        <fieldset class="form__fieldset">
+        <fieldset class="form__group">
           <div class="grid_row grid_separator">
             <div class="col">
               <text-input
@@ -62,8 +58,8 @@
               />
             </div>
           </div>
-          <div class="grid_row grid_wrap--s grid_separator">
-            <div class="col_6">
+          <div class="grid_row grid_wrap--s">
+            <div class="col_6 grid_separator">
               <text-input
                 :show-error="showAllErrors"
                 :validation="validation.first_name"
@@ -77,7 +73,7 @@
                 @markErrorValidity="markErrorValidity"
               />
             </div>
-            <div class="col_6">
+            <div class="col_6 grid_separator">
               <text-input
                 :show-error="showAllErrors"
                 :validation="validation.last_name"
@@ -94,7 +90,7 @@
           </div>
 
           <div class="grid_row grid_wrap--s">
-            <div class="col_6">
+            <div class="col_6 grid_separator">
               <text-input
                 has-label
                 label-text="encouraged to give by"
@@ -105,7 +101,7 @@
                 store-module="baseForm"
               />
             </div>
-            <div class="col_6">
+            <div class="col_6 grid_separator">
               <text-input
                 :show-error="showAllErrors"
                 :validation="validation.zipcode"
@@ -125,7 +121,7 @@
       </div>
 
       <div class="col_5 form__payment">
-        <fieldset class="form__fieldset">
+        <fieldset class="form__payment-box">
           <div class="grid_separator--l">
             <pay-fees
               container-classes="form__fees grid_row"
@@ -250,7 +246,7 @@ export default {
         },
         {
           id: 2,
-          text: 'One time',
+          text: 'Once',
           value: 'None',
           liClasses: 'col_4 form__frequency-item',
           inputClasses: 'form__frequency-radio',
