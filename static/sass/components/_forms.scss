@@ -1,0 +1,105 @@
+.form {
+  &__group {
+    border: none;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 0;
+  }
+  
+  &__text {
+    input {
+      @extend .font-sansserif;
+      background-color: #fbfbfb;
+      border: 1px solid $color-gray-light;
+      color: $color-black-pure;
+      display: block;
+      height: 27px;
+      padding: $size-b;
+      width: 100%;
+
+      &--standard {
+        font-size: $size-b;
+        font-weight: normal;
+      }
+
+      &--heavy {
+        font-weight: bold;
+        font-size: $size-l; 
+      }
+      
+      &.invalid {
+        border-color: $color-error;
+      }
+    }
+  }
+
+  &__error {
+    color: $color-error;
+    font-size: $size-xs;
+  }
+
+  &__label {
+    color: $color-gray-dark;
+    display: block;
+    font-size: $size-xs;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  &__radios {
+    list-style: none;
+    justify-content: center;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    input {
+      margin-right: 5px;
+    }
+  }
+
+  &__fees {
+    @extend .grid_row;
+    align-items: center;
+
+    input {
+      @extend .col_1;
+    }
+
+    label {
+      @extend .col_11;
+      font-size: $size-xs;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  &__native {
+    div {
+      @extend .grid_separator--xs;
+    }
+
+    p {
+      @extend %link--teal;
+      font-size: $size-s;
+      text-align: center;
+    }
+  }
+
+  &__manual {
+    background-color: #fbfbfb;
+    border: 1px solid $color-gray-light;
+    padding: $size-xxs;
+
+    &.invalid {
+      border-color: $color-error;
+    }
+  }
+}
