@@ -8,7 +8,7 @@
   >
     <div class="grid_row grid_wrap--l">
       <div class="col_7">
-        <fieldset class="form__group">
+        <div class="form__group">
           <div class="grid_row grid_separator--xs">
             <div class="col">
               <text-input
@@ -36,9 +36,9 @@
               />
             </div>
           </div>
-        </fieldset>
+        </div>
 
-        <fieldset class="form__group">
+        <div class="form__group">
           <div class="grid_row grid_separator">
             <div class="col">
               <text-input
@@ -115,11 +115,11 @@
               />
             </div>
           </div>
-        </fieldset>
+        </div>
       </div>
 
       <div class="col_5 donate-form__payment">
-        <fieldset class="donate-form__payment-box">
+        <div class="donate-form__payment-box">
           <div class="grid_separator--l">
             <pay-fees
               base-classes="form__fees"
@@ -159,7 +159,7 @@
               />
             </div>
           </div>
-        </fieldset>
+        </div>
       </div>
     </div>
 
