@@ -13,6 +13,7 @@
       :id="connector"
       :aria-label="ariaLabel"
       :aria-invalid="!valid ? true : false"
+      :aria-required="required"
       :value="value"
       :name="name"
       :placeholder="placeholder"
@@ -67,6 +68,11 @@ export default {
     placeholder: {
       type: String,
       default: '',
+    },
+
+    required: {
+      type: Boolean,
+      default: true,
     },
 
     type: {

@@ -90,6 +90,7 @@
           <div class="grid_row grid_wrap--s">
             <div class="col_6 grid_separator">
               <text-input
+                :required="false"
                 has-label
                 label-text="encouraged to give by"
                 base-classes="form__text form__text--standard"
@@ -101,6 +102,7 @@
             </div>
             <div class="col_6 grid_separator">
               <text-input
+                :required="false"
                 :show-error="showAllErrors"
                 :validation="validation.zipcode"
                 has-label
