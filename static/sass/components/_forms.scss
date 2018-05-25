@@ -98,6 +98,7 @@
   &__manual {
     background-color: #fbfbfb;
     border: 1px solid $color-gray-light;
+    border-bottom: none;
     padding: $size-xxs;
 
     &.invalid {
