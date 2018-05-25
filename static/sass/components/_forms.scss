@@ -30,8 +30,10 @@
     }
 
     &--heavy {
-      font-weight: bold;
-      font-size: $size-l;
+      input {
+        font-weight: bold;
+        font-size: $size-l;
+      }
     }
   }
 
