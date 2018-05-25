@@ -6,9 +6,7 @@
     <div
       ref="native"
     />
-    <p
-      v-if="showLink"
-    >
+    <p>
       <a
         href
         role="button"
@@ -59,10 +57,6 @@ export default {
       type: String,
       default: '',
     },
-  },
-
-  data() {
-    return { showLink: true };
   },
 
   computed: {
@@ -139,7 +133,6 @@ export default {
 
     showManual(event) {
       event.preventDefault();
-      this.showLink = false;
       this.$emit('setValue', { key: 'showManualPay', value: true });
     },
   },

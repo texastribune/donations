@@ -138,8 +138,10 @@
               @onSubmit="onSubmit"
             />
           </div>
-          <div v-if="showManualPay">
-            <div class="grid_separator--s">
+          <div
+            :aria-live="nativeIsSupported ? 'polite' : false"
+          >
+            <div v-if="showManualPay">
               <manual-pay
                 :show-error="showManualErrors"
                 :validation="validation.card"
@@ -148,15 +150,15 @@
                 error-classes="form__error"
                 @markErrorValidity="markErrorValidity"
               />
-            </div>
-            <div class="grid_row">
-              <manual-submit
-                :form-is-valid="manualIsValid"
-                base-classes="col button button--yellow button--l"
-                value="Pay by card"
-                @onSubmit="onSubmit"
-                @setValue="setValue"
-              />
+              <div class="grid_row">
+                <manual-submit
+                  :form-is-valid="manualIsValid"
+                  base-classes="col button button--yellow button--l"
+                  value="Pay by card"
+                  @onSubmit="onSubmit"
+                  @setValue="setValue"
+                />
+              </div>
             </div>
           </div>
         </div>
