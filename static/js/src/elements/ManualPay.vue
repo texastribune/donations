@@ -9,6 +9,7 @@
     <p
       v-if="showError && !valid"
       :class="getClasses({ elName: 'error' })"
+      role="alert"
     >
       {{ errorMessage }}
     </p>

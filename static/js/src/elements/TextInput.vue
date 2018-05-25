@@ -12,6 +12,7 @@
     <input
       :id="connector"
       :aria-label="ariaLabel"
+      :aria-invalid="!valid ? true : false"
       :value="value"
       :name="name"
       :placeholder="placeholder"
@@ -22,6 +23,7 @@
     <p
       v-if="showError && !valid"
       :class="getClasses({ elName: 'error' })"
+      role="alert"
     >
       {{ errorMessage }}
     </p>
