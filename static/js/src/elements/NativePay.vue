@@ -7,11 +7,14 @@
       ref="native"
     />
     <p
-      v-if="showOption"
+      v-if="showLink"
     >
       <a
         href
-        @click="showManualPay"
+        role="button"
+        @keypress.space="$event.preventDefault"
+        @click="showManual"
+        @keyup.space="showManual"
       >
         Or pay by card
       </a>
@@ -59,7 +62,7 @@ export default {
   },
 
   data() {
-    return { showOption: true };
+    return { showLink: true };
   },
 
   computed: {
@@ -134,9 +137,9 @@ export default {
       });
     },
 
-    showManualPay(event) {
+    showManual(event) {
       event.preventDefault();
-      this.showOption = false;
+      this.showLink = false;
       this.$emit('setValue', { key: 'showManualPay', value: true });
     },
   },
