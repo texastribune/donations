@@ -37,10 +37,6 @@ export default {
       return nativeErrors.length === 0;
     },
 
-    showAllErrors() {
-      return this.showManualErrors || this.showNativeErrors;
-    },
-
     showErrorClue() {
       if (this.showManualErrors && !this.manualIsValid) return true;
       if (this.showNativeErrors && !this.nativeIsValid) return true;

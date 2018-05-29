@@ -21,7 +21,7 @@
     <div class="grid_row grid_separator--xs">
       <div class="col">
         <text-input
-          :show-error="showAllErrors"
+          :show-error="showManualErrors || showNativeErrors"
           :validation="validation.amount"
           has-label
           label-text="amount ($)"
@@ -44,7 +44,7 @@
     <div class="grid_row grid_separator">
       <div class="col">
         <text-input
-          :show-error="showAllErrors"
+          :show-error="showManualErrors || showNativeErrors"
           :validation="validation.stripeEmail"
           has-label
           label-text="email address"
@@ -62,7 +62,7 @@
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
-          :show-error="showAllErrors"
+          :show-error="showManualErrors || showNativeErrors"
           :validation="validation.first_name"
           has-label
           label-text="first name"
@@ -76,7 +76,7 @@
       </div>
       <div class="col_6 grid_separator">
         <text-input
-          :show-error="showAllErrors"
+          :show-error="showManualErrors || showNativeErrors"
           :validation="validation.last_name"
           has-label
           label-text="last name"
@@ -106,7 +106,7 @@
       <div class="col_6 grid_separator">
         <text-input
           :required="false"
-          :show-error="showAllErrors"
+          :show-error="showManualErrors || showNativeErrors"
           :validation="validation.zipcode"
           has-label
           label-text="zip code"
