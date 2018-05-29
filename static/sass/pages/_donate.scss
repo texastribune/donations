@@ -98,26 +98,6 @@ body {
   100%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
 }
 
-.donate-form {
-  &__payment {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  &__payment-box {
-    border: none;
-    padding: 0;
-    margin-left: 0;
-    margin-right: 0;
-
-    @include mq($from: bp-l) {
-      border: 1px solid $color-yellow-tribune;
-      padding: $size-l;
-    }
-  }
-}
-
 .member_benefits {
   @extend .section-padding;
 }
