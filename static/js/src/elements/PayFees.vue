@@ -1,23 +1,30 @@
 <template>
   <div
-    :class="classes"
+    aria-live="polite"
   >
-    <input
-      id="pay-fees"
-      type="checkbox"
-      @input="onInput($event.target.checked)"
+    <div
+      v-if="fee"
+      :class="classes"
     >
-    <label
-      for="pay-fees"
-    >
-      I agree to pay
-      <span>{{ fee }}</span>
-      for processing fees. Paying fees directs more money to our mission.
-    </label>
+      <input
+        id="pay-fees"
+        type="checkbox"
+        @input="onInput($event.target.checked)"
+      >
+      <label
+        for="pay-fees"
+      >
+        I agree to pay
+        <span>{{ fee }}</span>
+        for processing fees. Paying fees directs more money to our mission.
+      </label>
+    </div>
   </div>
 </template>
 
 <script>
+import validate from 'validate.js';
+
 import updateStoreValue from './mixins/updateStoreValue';
 
 export default {
@@ -46,7 +53,11 @@ export default {
     fee() {
       const getter =
         this.$store.getters[`${this.amountStoreModule}/valueByKey`];
-      const amount = parseFloat(getter('amount').trim());
+      let amount = getter('amount');
+
+      if (!this.isValidAmount(amount)) return false;
+
+      amount = parseFloat(amount.trim());
 
       const total = (amount + 0.30) / (1 - 0.022);
       const fee = Math.floor((total - amount) * 100) / 100;
@@ -62,6 +73,14 @@ export default {
         key: 'pay_fees_value',
         value: checked ? 'True' : 'False',
       });
+    },
+
+    isValidAmount(amount) {
+      const isValid = validate(
+        { value: amount.trim() },
+        { value: { numericality: { greaterThanOrEqualTo: 1 } } },
+      );
+      return typeof isValid === 'undefined';
     },
   },
 };
