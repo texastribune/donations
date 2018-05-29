@@ -40,6 +40,12 @@ export default {
     showAllErrors() {
       return this.showManualErrors || this.showNativeErrors;
     },
+
+    showErrorClue() {
+      if (this.showManualErrors && !this.manualIsValid) return true;
+      if (this.showNativeErrors && !this.nativeIsValid) return true;
+      return false;
+    },
   },
 
   methods: {

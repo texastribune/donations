@@ -40,6 +40,10 @@
   &__error {
     color: $color-error;
     font-size: $size-xs;
+
+    &--centered {
+      text-align: center;
+    }
   }
 
   &__label {

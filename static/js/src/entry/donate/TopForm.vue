@@ -131,21 +131,25 @@
       </div>
     </div>
 
-    <div :class="nativeIsSupported ? 'grid_separator--l' : ''">
-      <div class="grid_row">
-        <div class="col">
-          <native-pay
-            :form-is-valid="nativeIsValid"
-            :supported="nativeIsSupported"
-            base-classes="form__native"
-            amount-store-module="baseForm"
-            token-store-module="baseForm"
-            @setValue="setValue"
-            @onSubmit="onSubmit"
-          />
-        </div>
+    <div class="grid_row">
+      <div class="col">
+        <native-pay
+          :form-is-valid="nativeIsValid"
+          :supported="nativeIsSupported"
+          base-classes="form__native"
+          amount-store-module="baseForm"
+          token-store-module="baseForm"
+          @setValue="setValue"
+          @onSubmit="onSubmit"
+        />
       </div>
     </div>
+
+    <div
+      v-if="nativeIsSupported"
+      class="grid_separator--l"
+      aria-hidden="true"
+    />
 
     <div :aria-live="nativeIsSupported ? 'polite' : false">
       <div v-if="showManualPay">
@@ -173,6 +177,22 @@
             />
           </div>
         </div>
+      </div>
+    </div>
+
+    <div
+      v-if="showErrorClue"
+      class="grid_separator--l"
+      aria-hidden="true"
+    />
+
+    <div
+      v-if="showErrorClue"
+      class="grid_row hide_from--m"
+      aria-hidden="true"
+    >
+      <div class="col">
+        <p class="form__error form__error--centered">Please correct errors above</p>
       </div>
     </div>
 
