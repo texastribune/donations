@@ -6,9 +6,20 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div class="grid_row grid_wrap--l">
-      <div class="col_7">
+    <div>
+      <div>
         <div class="form__group">
+          <div class="grid_row grid_separator">
+            <div class="col">
+              <radios
+                :options="frequencyOptions"
+                base-classes="grid_row form__radios"
+                name="installment_period"
+                store-module="baseForm"
+                @updateCallback="onFrequencyUpdate"
+              />
+            </div>
+          </div>
           <div class="grid_row grid_separator--xs">
             <div class="col">
               <text-input
@@ -25,16 +36,8 @@
               />
             </div>
           </div>
-          <div class="grid_row grid_separator">
-            <div class="col">
-              <radios
-                :options="frequencyOptions"
-                base-classes="grid_row form__radios"
-                name="installment_period"
-                store-module="baseForm"
-                @updateCallback="onFrequencyUpdate"
-              />
-            </div>
+          <div class="grid_separator">
+            <p class="subtext">For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership program</a>.</p>
           </div>
         </div>
 
@@ -120,8 +123,8 @@
         </div>
       </div>
 
-      <div class="col_5 donate-form__payment">
-        <div class="donate-form__payment-box">
+      <div class="donate-form__payment">
+        <div>
           <div class="grid_separator--l">
             <pay-fees
               base-classes="form__fees"
@@ -230,19 +233,19 @@ export default {
       frequencyOptions: [
         {
           id: 0,
-          text: 'Monthly',
+          text: 'Monthly donation',
           value: 'monthly',
           liClasses: 'col_4',
         },
         {
           id: 1,
-          text: 'Yearly',
+          text: 'Yearly donation',
           value: 'yearly',
           liClasses: 'col_4',
         },
         {
           id: 2,
-          text: 'Once',
+          text: 'One-time donation',
           value: 'None',
           liClasses: 'col_4',
         },

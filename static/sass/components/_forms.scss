@@ -5,7 +5,7 @@
     margin-right: 0;
     padding: 0;
   }
-  
+
   &__text {
     input {
       @extend .font-sansserif;
@@ -21,7 +21,7 @@
         border-color: $color-error;
       }
     }
-    
+
     &--standard {
       input {
         font-size: $size-b;
@@ -64,6 +64,7 @@
 
     input {
       margin-right: 5px;
+      margin-left: 1px;
     }
   }
 
@@ -72,7 +73,7 @@
     align-items: center;
 
     input {
-      @extend .col_1;
+      margin-right: $size-b/2;
     }
 
     label {

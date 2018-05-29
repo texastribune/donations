@@ -67,7 +67,7 @@ body {
 
 .rotate_words {
   display: inline;
-  
+
   span {
     animation: rotateWord 12s linear 0s 2;
     color: $color-yellow-tribune;
@@ -103,10 +103,6 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    @include mq($from: bp-l) {
-      padding-left: $size-b;
-    }
   }
 
   &__payment-box {
@@ -114,7 +110,7 @@ body {
     padding: 0;
     margin-left: 0;
     margin-right: 0;
-    
+
     @include mq($from: bp-l) {
       border: 1px solid $color-yellow-tribune;
       padding: $size-l;
@@ -132,7 +128,7 @@ body {
 
 .list--bulleted {
   @extend .font-serif;
-  
+
   li {
     font-size: $size-b;
     margin: 0 0 $size-b $size-m;
@@ -146,7 +142,7 @@ body {
 
 .contact {
   @extend %link--blue;
-  
+
   p {
     @extend .font-sansserif;
     font-size: $size-s;
