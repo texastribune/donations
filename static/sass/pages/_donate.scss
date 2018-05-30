@@ -18,6 +18,8 @@
 @import '../promo/festival';
 @import "../promo/quotes";
 
+$animation-single-line-bp: 400px;
+
 html {
   @extend .font-sansserif;
   min-height: 100%;
@@ -48,12 +50,18 @@ body {
         margin-bottom: $size-m;
         padding-bottom: $size-m;
       }
+      
       @include mq($from: bp-l) {
         font-size: 2.3rem;
         line-height: 1.25em;
       }
+      
       @include mq($from: bp-xl) {
         font-size: 2.75rem;
+      }
+
+      @include mq($until: $animation-single-line-bp) {
+        padding-bottom: 3.5rem;
       }
     }
 
@@ -66,8 +74,6 @@ body {
 }
 
 .rotate_words {
-  display: inline;
-
   span {
     animation: rotateWord 12s linear 0s 2;
     color: $color-yellow-tribune;
@@ -78,6 +84,10 @@ body {
     &:nth-child(2) { animation-delay: 3s; }
     &:nth-child(3) { animation-delay: 6s; }
     &:nth-child(4) { animation: rotateWord 12s linear 9s 1, rotateLastWord 12s linear 21s 1 forwards; }
+  }
+
+  @include mq($until: $animation-single-line-bp) {
+    display: block;
   }
 }
 
