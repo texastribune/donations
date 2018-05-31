@@ -63,7 +63,10 @@ export default {
     amount() {
       const getter =
         this.$store.getters[`${this.amountStoreModule}/valueByKey`];
-      return parseFloat(getter('amount')).toFixed(2) * 100;
+      const amountInDollars = parseFloat(getter('amount'));
+      const roundedAmountInCents = (amountInDollars * 100).toFixed();
+
+      return Number(roundedAmountInCents);
     },
   },
 
