@@ -17,26 +17,19 @@ class BaseForm(FlaskForm):
     reason = StringField(u'Encouraged to give by')
     zipcode = StringField(u'ZIP Code', [validators.Length(max=5)])
     campaign_id = HiddenField('Campaign ID')
-    installment_period = HiddenField(u'Installment Period')
     installments = HiddenField(u'Installments')
     description = HiddenField(u'Description')
     pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')
+    openended_status = HiddenField(u'Openended Status')
 
-
-class MemberForm(BaseForm):
-    openended_status = RadioField(u'Membership Duration',
-        choices=[('Open', 'Sustaining'), ('None', 'One Time')],
-        default='Open')
-
-class MemberForm2(BaseForm):
-    installment_period = RadioField(u'Installment Period',
-        choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
-    openended_status = RadioField(u'Membership Duration',
-        choices=[('Open', 'Sustaining'), ('None', 'One Time')])
+# temporary until the circle page is refactored with Vue
+class CircleForm(BaseForm):
+    installment_period = HiddenField(u'Installment Period')
 
 class DonateForm(BaseForm):
-    openended_status = HiddenField(u'Openended Status')
+    installment_period = RadioField(u'Installment Period',
+        choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
 
 
 class BlastForm(FlaskForm):
@@ -59,6 +52,3 @@ class BlastForm(FlaskForm):
     description = HiddenField(u'Description')
     pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')
-
-class BlastVIPForm(BlastForm):
-    amount = RadioField(u'Amount', choices=[('275', 'Save $74')], default='349')

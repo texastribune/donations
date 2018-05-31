@@ -50,30 +50,26 @@ p {
 h1 {
   font-size: $size-xxl;
   line-height: 1.2;
-
-  @include mq($until: bp-s) {
-    font-size: $size-xl;
-  }
 }
 
 h2 {
   @extend .font-sansserif;
-  font-size: $size-l;
+  font-size: $size-xl;
 }
 
 h3 {
   @extend .font-sansserif;
-  font-size: $size-m;
+  font-size: $size-l;
 }
 
 h4 {
   @extend .font-sansserif;
-  font-size: $size-s;
+  font-size: $size-m;
 }
 
 h5 {
   @extend .font-sansserif;
-  font-size: $size-xs;
+  font-size: $size-s;
 }
 
 p {

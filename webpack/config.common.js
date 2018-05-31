@@ -8,7 +8,8 @@ module.exports = {
   context: process.cwd(),
 
   entry: {
-    donate: `${entryDir}/donate`,
+    donate: `${entryDir}/donate/index`,
+    charge: `${entryDir}/charge/index`,
   },
 
   output: {

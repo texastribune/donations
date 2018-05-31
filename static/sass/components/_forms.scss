@@ -1,219 +1,158 @@
-$input_height: 27px;
-$input_height--l: 44px;
-
-%input_text {
-  @extend .font-sansserif;
-  border: 1px solid $color-gray-light;
-  color: $color-black-pure;
-  font-size: $size-xs;
-  height: $input_height;
-  padding: 0 $size-xxs;
-}
-%input_text--l {
-  @extend %input_text;
-  font-size: $size-b;
-  height: $input_height--l;
-  padding: $size-xxs;
-}
-%input_text--placeholder {
-  color: $color-gray-light;
-}
+$color-error: #f51c1c;
 
 .form {
-  &_instory {
-    border-bottom: 1px solid $color-gray-light;
-    border-top: 1px solid $color-gray-light;
-    margin: $size-b 0;
-    padding: $size-s $size-b $size-b;
-  }
-
-  &_padded {
-    padding: 0 $size-b;
-  }
-
-  ol,
-  ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-  }
-
-  li {
-    align-items: center;
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: $size-b/2;
-  }
-
-  input[type="checkbox"],
-  input[type="radio"] {
-    flex: none;
-    margin-right: $size-b/2;
-  }
-
-  input[type="email"]::placeholder {
-    font-size: $size-xs;
-  }
-
-  input[type="email"]:focus,
-  input[type="email"]:valid {
-    background-color: $color-white-pure;
-  }
-
-  input[type="text"] {
-    @extend %input_text;
-  }
-
-  fieldset {
-    border: 0;
-  }
-
-  &_labels {
-    padding-top: $size-b;
-
-    li {
-      margin-bottom: $size-s;
+  // text/email inputs
+  &__text {
+    &.invalid {
+      input {
+        border-color: $color-error;
+      }
     }
-
-    label,
+    
     input {
       @extend .font-sansserif;
-    }
-
-    label {
-      font-size: $size-b;
-      font-weight: 700;
-      margin-right: $size-b/2;
-    }
-
-    input,
-    select {
-      flex: 1;
-    }
-
-    input[type="submit"] {
-      font-size: $size-xxs;
-    }
-
-    input[type="text"] {
-      font-size: $size-b;
-    }
-  }
-
-  &_labels--right {
-    text-align: right;
-
-    label {
-      flex: 0 0 auto;
-      margin-right: $size-b/2;
-      min-width: 35%;
-
-      @include mq($until: bp-s) {
-        flex: 0 0 100%;
-        margin-bottom: $size-b/2;
-        text-align: left;
-      }
-    }
-
-    select {
-      max-width: 100%;
-
-      @include mq($from: bp-s) {
-        max-width: calc(65% - .55rem);
-      }
-    }
-  }
-
-  // Used for inline checkboxes on mailchimp_subscribe form
-  &_labels--inline {
-    li {
-      @extend .font-sansserif;
-      font-size: $size-xs;
-      margin-bottom: 0;
-      padding: 0 0 $size-b/2;
-    }
-  }
-
-  &_list--hidden {
-    margin-top: $size-b/-2;
-    li {
-      margin: 0;
-    }
-  }
-
-  &_links {
-    @extend %link--teal;
-    a {
-      @extend .font-sansserif;
-      font-size: $size-xs;
-      margin: $size-s $size-s $size-s 0;
-    }
-  }
-
-  // for a text input and button/submit that should be side by side at all widths
-  // example usage in templates/search/search_results.html
-  // they should be wrapped by <div class="grid_row">
-  &_side {
-    &--button {
-      flex: 0 1 90px;
-    }
-
-    &--input {
-      //Consider having this extend .form_input--text instead of being so specific to form_side
-      //form_side--input could ocver the flex and margin, instead of the styles for the input itself.
+      background-color: #fbfbfb;
       border: 1px solid $color-gray-light;
+      color: $color-black-pure;
       display: block;
-      flex: 0 1 calc(100% - 90px - #{$size-xs});
-      height: $input_height;
-      margin-right: $size-xs;
-      margin-right: $size-xs;
-      text-indent: $size-xxs;
+      height: 45px;
+      padding: 0 0 0 $size-b;
+      width: 100%;
     }
-  }
 
-  &_dropdown {
-    display: inline-block;
-    position: relative;
+    label {
+      @extend .form__label;
+      @extend .grid_separator--xs;
+    }
 
-    select {
-      @extend .smallcaps;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      appearance: none;
-      background-color: $color-white-off;
-      border-radius: 0;
-      border: 2px solid $color-white-off;
-      cursor: pointer;
-      font-size: $size-xxs;
-      padding: $size-xxs/2 $size-m $size-xxs/2 $size-xxs/2;
+    // error message
+    p {
+      @extend .form__error;
+    }
 
-      &::-ms-expand {
-        display: none;
+    &--standard {
+      input {
+        font-size: $size-b;
+        font-weight: normal;
       }
     }
 
-    i {
-      font-size: $size-xxs;
-      position: absolute;
-      right: 6px;
-      top: 9px;
+    &--heavy {
+      input {
+        font-size: $size-l;
+        font-weight: bold;
+      }
     }
   }
 
-  .errorlist {
-    color: red;
-    list-style-type: none;
+  // error message
+  &__error {
+    color: $color-error;
+    font-size: $size-xs;
+
+    &--centered {
+      text-align: center;
+    }
+  }
+
+  // generic label
+  &__label {
+    color: $color-gray-dark;
+    display: block;
+    font-size: $size-xs;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 100%;
+  }
+
+  // radio buttons (it's assumed they're inside an ordered list)
+  &__radios {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    list-style: none;
 
     li {
-      @extend .font-sansserif;
-      font-size: $size-s;
+      align-items: center;
+      display: flex;
+      margin-bottom: $size-b;
+    }
+
+    label {
+      font-size: $size-b;
+    }
+
+    input {
+      margin-right: 5px;
+      margin-left: 1px;
+    }
+
+    &--stack-at-medium {
+      @include mq($until: bp-m) {
+        li {
+          flex: 0 1 100%;
+        }
+      }
     }
   }
 
-  .form--small_txt {
-    @extend %link--blue;
-    font-size: $size-s;
-    font-style: italic;
-    font-weight: 400;
+  // fees checkbox and label
+  &__fees {
+    @extend .grid_row;
+    align-items: center;
+
+    input {
+      margin-right: $size-b/2;
+    }
+
+    label {
+      @extend .col_11;
+      font-size: $size-xs;
+    }
+
+    span {
+      font-weight: bold;
+    }
+  }
+
+  // Stripe native payment button
+  &__native {
+    div {
+      @extend .grid_separator--xs;
+    }
+
+    // link for going to manual pay
+    p {
+      @extend %link--teal;
+      font-size: $size-b;
+      text-align: center;
+    }
+  }
+
+  // Stripe card input
+  &__manual {
+    & > div {
+      background-color: #fbfbfb;
+      border: 1px solid $color-gray-light;
+      border-bottom-color: $color-yellow-tribune;
+      padding: $size-xxs;
+    }
+
+    &.invalid {
+      & > div {
+        border-color: $color-error;
+      }
+    }
+
+    // error message
+    & > p {
+      @extend .form__error;
+    }
+  }
+
+  // form submit button
+  &__submit {
+    width: 100%;
   }
 }
