@@ -1,12 +1,12 @@
 $size-xxxl: 3rem;
 
 .section-padding {
-  padding-bottom: $size-xxxl;
-  padding-top: $size-xxxl;
+  padding-bottom: $size-xl;
+  padding-top: $size-xl;
 
   @include mq($until: bp-l) {
-    padding-bottom: $size-xl;
-    padding-top: $size-xl;
+    padding-bottom: $size-b;
+    padding-top: $size-b;
   }
 }
 

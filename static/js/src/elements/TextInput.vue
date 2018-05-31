@@ -1,11 +1,10 @@
 <template>
   <div
-    :class="classes"
+    :class="classesWithValidation"
   >
     <label
       v-if="hasLabel"
       :for="connector"
-      :class="getClasses({ elName: 'label' })"
     >
       {{ labelText }}
     </label>
@@ -17,13 +16,11 @@
       :value="value"
       :name="name"
       :placeholder="placeholder"
-      :class="inputClassesWithValidation"
       :type="type"
       @input="updateSingleValue($event.target.value)"
     >
     <p
       v-if="showError && !valid"
-      :class="getClasses({ elName: 'error' })"
       role="alert"
     >
       {{ errorMessage }}
@@ -40,19 +37,9 @@ export default {
   mixins: [connectedElement],
 
   props: {
-    errorClasses: {
-      type: String,
-      default: '',
-    },
-
     hasLabel: {
       type: Boolean,
       default: false,
-    },
-
-    labelClasses: {
-      type: String,
-      default: '',
     },
 
     labelText: {
@@ -92,8 +79,8 @@ export default {
       return this.name;
     },
 
-    inputClassesWithValidation() {
-      const classes = this.getClasses({ elName: 'input' });
+    classesWithValidation() {
+      const { classes } = this;
       if (!this.showError || this.valid) return classes;
       return `invalid ${classes}`;
     },

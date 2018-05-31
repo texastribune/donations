@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div
+    :class="classesWithValidation"
+  >
     <card
       :options="options"
-      :class="classesWithValidation"
       :stripe="stripeKey"
       @change="onChange($event.complete)"
     />
     <p
       v-if="showError && !valid"
-      :class="getClasses({ elName: 'error' })"
       role="alert"
     >
       {{ errorMessage }}

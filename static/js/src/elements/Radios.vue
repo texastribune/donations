@@ -5,7 +5,6 @@
     <li
       v-for="(option, index) in options"
       :key="option.id"
-      :class="getClasses({ elName: 'li', obj: option })"
     >
       <input
         :value="option.value"
@@ -36,11 +35,6 @@ export default {
     options: {
       type: Array,
       required: true,
-    },
-
-    listClasses: {
-      type: String,
-      default: '',
     },
   },
 

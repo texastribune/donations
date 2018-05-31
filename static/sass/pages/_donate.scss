@@ -30,12 +30,24 @@ body {
   margin: 0;
 }
 
+h2 {
+  @include mq($until: bp-m) {
+    font-size: 1.3rem;
+  }
+}
+
 .splash {
-  @extend .section-padding;
   background-color: $color-sand;
   background-position-x: 50%;
   background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
   background-repeat: repeat;
+  padding-bottom: $size-giant;
+  padding-top: $size-giant;
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-b;
+    padding-top: $size-b;
+  }
 
   &_header {
     &--headline {
@@ -68,7 +80,7 @@ body {
     &--description {
       @extend %link--blue;
       color: $color-white-pure;
-      font-size: $size-m;
+      font-size: $size-b;
     }
   }
 }

@@ -6,11 +6,11 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div class="grid_row grid_separator">
+    <div class="grid_row">
       <div class="col">
         <radios
           :options="frequencyOptions"
-          base-classes="grid_row form__radios"
+          base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
           store-module="baseForm"
           @updateCallback="onFrequencyUpdate"
@@ -26,8 +26,6 @@
           has-label
           label-text="amount ($)"
           base-classes="form__text form__text--heavy"
-          error-classes="form__error"
-          label-classes="form__label grid_separator--xs"
           name="amount"
           store-module="baseForm"
           @markErrorValidity="markErrorValidity"
@@ -50,8 +48,6 @@
           label-text="email address"
           type="email"
           base-classes="form__text form__text--standard"
-          error-classes="form__error"
-          label-classes="form__label grid_separator--xs"
           name="stripeEmail"
           store-module="baseForm"
           @markErrorValidity="markErrorValidity"
@@ -67,8 +63,6 @@
           has-label
           label-text="first name"
           base-classes="form__text form__text--standard"
-          error-classes="form__error"
-          label-classes="form__label grid_separator--xs"
           name="first_name"
           store-module="baseForm"
           @markErrorValidity="markErrorValidity"
@@ -81,8 +75,6 @@
           has-label
           label-text="last name"
           base-classes="form__text form__text--standard"
-          error-classes="form__error"
-          label-classes="form__label grid_separator--xs"
           name="last_name"
           store-module="baseForm"
           @markErrorValidity="markErrorValidity"
@@ -97,8 +89,6 @@
           has-label
           label-text="encouraged to give by"
           base-classes="form__text form__text--standard"
-          error-classes="form__error"
-          label-classes="form__label grid_separator--xs"
           name="reason"
           store-module="baseForm"
         />
@@ -112,8 +102,6 @@
           label-text="zip code"
           maxlength="5"
           base-classes="form__text form__text--standard"
-          error-classes="form__error"
-          label-classes="form__label grid_separator--xs"
           name="zipcode"
           store-module="baseForm"
           @markErrorValidity="markErrorValidity"
@@ -146,7 +134,7 @@
     </div>
 
     <div
-      v-if="nativeIsSupported"
+      v-if="nativeIsSupported && showManualPay"
       class="grid_separator--l"
       aria-hidden="true"
     />
@@ -171,7 +159,7 @@
             <manual-submit
               :form-is-valid="manualIsValid"
               base-classes="form__submit button button--yellow button--l"
-              value="Pay by card"
+              value="Donate"
               @onSubmit="onSubmit"
               @setValue="setValue"
             />
@@ -257,24 +245,9 @@ export default {
   data() {
     return {
       frequencyOptions: [
-        {
-          id: 0,
-          text: 'Monthly donation',
-          value: 'monthly',
-          liClasses: 'col_4',
-        },
-        {
-          id: 1,
-          text: 'Yearly donation',
-          value: 'yearly',
-          liClasses: 'col_4',
-        },
-        {
-          id: 2,
-          text: 'One-time donation',
-          value: 'None',
-          liClasses: 'col_4',
-        },
+        { id: 0, text: 'Monthly donation', value: 'monthly' },
+        { id: 1, text: 'Yearly donation', value: 'yearly' },
+        { id: 2, text: 'One-time donation', value: 'None' },
       ],
       validation: {
         stripeEmail: {

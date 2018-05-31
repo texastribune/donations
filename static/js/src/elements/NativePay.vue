@@ -14,7 +14,7 @@
         @click="showManual"
         @keyup.space="showManual"
       >
-        Or pay by card
+        Or enter credit card manually
       </a>
     </p>
   </div>
@@ -96,7 +96,14 @@ export default {
         },
       });
       const button =
-        stripe.elements().create('paymentRequestButton', { paymentRequest });
+        stripe.elements().create('paymentRequestButton', {
+          paymentRequest,
+          style: {
+            paymentRequestButton: {
+              type: 'donate',
+            },
+          },
+        });
 
       this.paymentRequest = paymentRequest;
 
