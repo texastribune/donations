@@ -80,7 +80,7 @@ def get_bundles(entry):
 
 @app.route('/memberform')
 def member_form():
-    return redirect(smd_redirect_url, code=302)
+    return redirect(redirect_url, code=302)
 
 @app.route('/donate')
 def member2_form():
@@ -92,7 +92,7 @@ def member2_form():
 
 @app.route('/donateform')
 def donate_renew_form():
-    return redirect(smd_redirect_url, code=302)
+    return redirect(redirect_url, code=302)
 
 @app.route('/circleform')
 def circle_form():
