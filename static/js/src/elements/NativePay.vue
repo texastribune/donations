@@ -71,11 +71,14 @@ export default {
   },
 
   watch: {
-    amount(newAmount, oldAmount) {
-      if (newAmount !== oldAmount) {
+    amount(newAmount) {
+      // eslint-disable-next-line no-restricted-globals
+      const isNumeric = !isNaN(parseFloat(newAmount));
+
+      if (isNumeric) {
         const total = {
           label: 'Texas Tribune Donation',
-          amount: this.amount,
+          amount: newAmount,
         };
         this.paymentRequest.update({ total });
       }
