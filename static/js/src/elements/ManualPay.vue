@@ -86,14 +86,17 @@ export default {
   methods: {
     onChange(isComplete) {
       if (isComplete) {
-        createToken().then(({ token: { id } }) => {
-          this.updateStoreValue({
-            storeModule: this.tokenStoreModule,
-            key: 'stripeToken',
-            value: id,
-          });
+        createToken().then((result) => {
+          console.log(result);
 
-          this.$emit('markErrorValidity', { key: 'card', isValid: true });
+          if (!result.error) {
+            this.updateStoreValue({
+              storeModule: this.tokenStoreModule,
+              key: 'stripeToken',
+              value: result.token.id,
+            });
+            this.$emit('markErrorValidity', { key: 'card', isValid: true });
+          }
         }).catch(() => {
           window.location.href = '/error';
         });
