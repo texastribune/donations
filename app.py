@@ -183,10 +183,15 @@ def charge():
     bundles = get_bundles('charge')
 
     if email_is_valid:
-        customer = stripe.Customer.create(
-                email=request.form['stripeEmail'],
-                card=request.form['stripeToken']
-        )
+        try:
+            customer = stripe.Customer.create(
+                    email=request.form['stripeEmail'],
+                    card=request.form['stripeToken']
+            )
+        except stripe.error.CardError as e:
+            body = e.json_body
+            err = body.get('error', {})
+            return render_template('error.html', message=err.get('message'))
         print('Create Stripe customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
     else:
