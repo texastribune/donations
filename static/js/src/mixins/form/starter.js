@@ -8,13 +8,14 @@ export default {
           manual: true,
           native: false,
           valid: false,
-          message: 'Invalid card information',
+          message: 'Incomplete card input',
         },
       },
       showManualErrors: false,
       showNativeErrors: false,
       showManualPay: false,
       nativeIsSupported: false,
+      isFetchingToken: false,
     };
   },
 
@@ -55,6 +56,10 @@ export default {
 
     setValue({ key, value }) {
       this[key] = value;
+    },
+
+    updateErrorMessage({ key, message }) {
+      this.validation[key].message = message;
     },
 
     isEmail(value) {

@@ -2,6 +2,7 @@
   <input
     :class="classes"
     :value="value"
+    :disabled="isFetchingToken"
     type="submit"
     @click="onClick"
   >
@@ -20,6 +21,11 @@ export default {
     },
 
     formIsValid: {
+      type: Boolean,
+      required: true,
+    },
+
+    isFetchingToken: {
       type: Boolean,
       required: true,
     },

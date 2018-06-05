@@ -179,7 +179,7 @@ def create_customer():
     except stripe.error.CardError as e:
         body = e.json_body
         err = body.get('error', {})
-        return jsonify({'error': err}), 400
+        return jsonify({'error': err.get('message', '')}), 400
 
 
 @app.route('/charge', methods=['POST'])

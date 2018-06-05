@@ -152,6 +152,8 @@
               customer-id-store-module="baseForm"
               error-classes="form__error"
               @markErrorValidity="markErrorValidity"
+              @updateErrorMessage="updateErrorMessage"
+              @setValue="setValue"
             />
           </div>
         </div>
@@ -160,6 +162,7 @@
           <div class="col">
             <manual-submit
               :form-is-valid="manualIsValid"
+              :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
               value="Donate"
               @onSubmit="onSubmit"

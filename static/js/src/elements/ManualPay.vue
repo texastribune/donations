@@ -97,6 +97,8 @@ export default {
   methods: {
     onChange(isComplete) {
       if (isComplete) {
+        this.$emit('setValue', { key: 'isFetchingToken', value: true });
+
         createToken().then((result) => {
           if (!result.error) {
             const { token: { id: token } } = result;
@@ -114,17 +116,23 @@ export default {
                 });
 
                 this.$emit('markErrorValidity', { key: 'card', isValid: true });
-              }).catch((err) => {
-                // set error message from object
+              }).catch(({ response: { data: { error: message } } }) => {
                 this.$emit('markErrorValidity', { key: 'card', isValid: false });
+                this.$emit('updateErrorMessage', { key: 'card', message });
+              })
+              .then(() => {
+                this.$emit('setValue', { key: 'isFetchingToken', value: false });
               });
           } else {
-            console.log(result);
+            this.$emit('setValue', { key: 'isFetchingToken', value: false });
+            this.$emit('markErrorValidity', { key: 'card', isValid: false });
+            this.$emit('updateErrorMessage', { key: 'card', message: result.error.message });
           }
         });
       } else {
-        // "incomplete card information"
+        const message = 'Incomplete card input';
         this.$emit('markErrorValidity', { key: 'card', isValid: false });
+        this.$emit('updateErrorMessage', { key: 'card', message });
       }
     },
   },
