@@ -26,11 +26,17 @@
 import Vue from 'vue';
 
 import updateStoreValue from './mixins/updateStoreValue';
+import getStoreValue from './mixins/getStoreValue';
+import createCustomerOnServer from './mixins/createCustomerOnServer';
 
 export default {
   name: 'NativePay',
 
-  mixins: [updateStoreValue],
+  mixins: [
+    updateStoreValue,
+    getStoreValue,
+    createCustomerOnServer,
+  ],
 
   props: {
     supported: {
@@ -43,7 +49,12 @@ export default {
       required: true,
     },
 
-    tokenStoreModule: {
+    customerIdStoreModule: {
+      type: String,
+      required: true,
+    },
+
+    emailStoreModule: {
       type: String,
       required: true,
     },
@@ -134,13 +145,25 @@ export default {
       });
 
       paymentRequest.on('token', (event) => {
-        this.updateStoreValue({
-          storeModule: this.tokenStoreModule,
-          key: 'stripeToken',
-          value: event.token.id,
+        const { token: { id: token } } = event;
+        const email = this.getStoreValue({
+          storeModule: this.emailStoreModule,
+          key: 'stripeEmail',
         });
-        event.complete('success');
-        Vue.nextTick(() => { this.$emit('onSubmit'); });
+
+        this.createCustomerOnServer({ token, email })
+          .then(({ data: { customer_id: customerId } }) => {
+            this.updateStoreValue({
+              storeModule: this.customerIdStoreModule,
+              key: 'customerId',
+              value: customerId,
+            });
+            event.complete('success');
+            Vue.nextTick(() => { this.$emit('onSubmit'); });
+          })
+          .catch(() => {
+            event.complete('fail');
+          });
       });
     },
 

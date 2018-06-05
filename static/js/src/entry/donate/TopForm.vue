@@ -126,7 +126,8 @@
           :supported="nativeIsSupported"
           base-classes="form__native"
           amount-store-module="baseForm"
-          token-store-module="baseForm"
+          email-store-module="baseForm"
+          customer-id-store-module="baseForm"
           @setValue="setValue"
           @onSubmit="onSubmit"
         />
@@ -147,7 +148,8 @@
               :show-error="showManualErrors"
               :validation="validation.card"
               base-classes="form__manual"
-              token-store-module="baseForm"
+              email-store-module="baseForm"
+              customer-id-store-module="baseForm"
               error-classes="form__error"
               @markErrorValidity="markErrorValidity"
             />
@@ -189,7 +191,7 @@
       store-module="baseForm"
     />
     <hidden
-      name="stripeToken"
+      name="customerId"
       store-module="baseForm"
     />
     <hidden

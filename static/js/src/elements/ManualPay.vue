@@ -20,6 +20,8 @@
 import { Card, createToken } from 'vue-stripe-elements-plus';
 
 import updateStoreValue from './mixins/updateStoreValue';
+import getStoreValue from './mixins/getStoreValue';
+import createCustomerOnServer from './mixins/createCustomerOnServer';
 
 export default {
   name: 'ManualPay',
@@ -28,7 +30,11 @@ export default {
     Card,
   },
 
-  mixins: [updateStoreValue],
+  mixins: [
+    updateStoreValue,
+    getStoreValue,
+    createCustomerOnServer,
+  ],
 
   props: {
     errorClasses: {
@@ -41,7 +47,12 @@ export default {
       default: false,
     },
 
-    tokenStoreModule: {
+    customerIdStoreModule: {
+      type: String,
+      required: true,
+    },
+
+    emailStoreModule: {
       type: String,
       required: true,
     },
@@ -88,17 +99,31 @@ export default {
       if (isComplete) {
         createToken().then((result) => {
           if (!result.error) {
-            this.updateStoreValue({
-              storeModule: this.tokenStoreModule,
-              key: 'stripeToken',
-              value: result.token.id,
+            const { token: { id: token } } = result;
+            const email = this.getStoreValue({
+              storeModule: this.emailStoreModule,
+              key: 'stripeEmail',
             });
-            this.$emit('markErrorValidity', { key: 'card', isValid: true });
+
+            this.createCustomerOnServer({ token, email })
+              .then(({ data: { customer_id: customerId } }) => {
+                this.updateStoreValue({
+                  storeModule: this.customerIdStoreModule,
+                  key: 'customerId',
+                  value: customerId,
+                });
+
+                this.$emit('markErrorValidity', { key: 'card', isValid: true });
+              }).catch((err) => {
+                // set error message from object
+                this.$emit('markErrorValidity', { key: 'card', isValid: false });
+              });
+          } else {
+            console.log(result);
           }
-        }).catch(() => {
-          window.location.href = '/error';
         });
       } else {
+        // "incomplete card information"
         this.$emit('markErrorValidity', { key: 'card', isValid: false });
       }
     },

@@ -2,7 +2,7 @@ import os
 import sys
 import json
 
-from flask import Flask, redirect, render_template, request, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory, jsonify
 from forms import DonateForm, BlastForm, CircleForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -168,15 +168,14 @@ def page_not_found(error):
     return render_template('error.html', message=message), 404
 
 
-@app.route('/verify-charge', methods=['POST'])
-def verify_charge():
+@app.route('/create-customer', methods=['POST'])
+def create_customer():
     try:
         customer = stripe.Customer.create(
-            email='bogus@foo.com',
+            email=request.json['stripeEmail'],
             card=request.json['stripeToken']
         )
-        customer.delete()
-        return jsonify({'success': True})
+        return jsonify({'customer_id': customer.id})
     except stripe.error.CardError as e:
         body = e.json_body
         err = body.get('error', {})
@@ -193,24 +192,10 @@ def charge():
     customer_first = request.form['first_name']
     customer_last = request.form['last_name']
 
-    email_is_valid = validate_email(customer_email)
-
     bundles = get_bundles('charge')
 
-    if email_is_valid:
-        customer = stripe.Customer.create(
-                email=request.form['stripeEmail'],
-                card=request.form['stripeToken']
-        )
-        print('Create Stripe customer {} {} {}'.format(customer_email,
-            customer_first, customer_last))
-    else:
-        message = "There was an issue saving your email address."
-        print('Issue saving customer {} {} {}; showed error'.format(
-            customer_email, customer_first, customer_last))
-        return render_template('error.html', message=message)
-
     if form.validate():
+        customer = stripe.Customer.retrieve(request.form['customerId'])
         add_customer_and_charge.delay(form=request.form,
                 customer=customer)
         print('Validated form of customer {} {} {}'.format(customer_email,
