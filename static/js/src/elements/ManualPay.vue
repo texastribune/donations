@@ -127,6 +127,12 @@ export default {
               key: 'stripeEmail',
             });
 
+            /**
+             Because Stripe 3 does not validate CVC client side,
+             we have to create the customer on the server and
+             check for errors returned there. If they exist,
+             we display them. If not, we store the returned customer ID.
+            */
             createCustomer({ token, email })
               .then(({ data: { customer_id: customerId } }) => {
                 this.markValid();
