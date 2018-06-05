@@ -27,7 +27,7 @@ import Vue from 'vue';
 
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
-import createCustomerOnServer from './mixins/createCustomerOnServer';
+import createCustomer from '../utils/createCustomer';
 
 export default {
   name: 'NativePay',
@@ -35,7 +35,6 @@ export default {
   mixins: [
     updateStoreValue,
     getStoreValue,
-    createCustomerOnServer,
   ],
 
   props: {
@@ -155,7 +154,7 @@ export default {
           key: 'stripeEmail',
         });
 
-        this.createCustomerOnServer({ token, email })
+        createCustomer({ token, email })
           .then(({ data: { customer_id: customerId } }) => {
             this.updateStoreValue({
               storeModule: this.customerIdStoreModule,

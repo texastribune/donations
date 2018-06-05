@@ -21,7 +21,7 @@ import { Card, createToken } from 'vue-stripe-elements-plus';
 
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
-import createCustomerOnServer from './mixins/createCustomerOnServer';
+import createCustomer from '../utils/createCustomer';
 
 export default {
   name: 'ManualPay',
@@ -33,7 +33,6 @@ export default {
   mixins: [
     updateStoreValue,
     getStoreValue,
-    createCustomerOnServer,
   ],
 
   props: {
@@ -128,7 +127,7 @@ export default {
               key: 'stripeEmail',
             });
 
-            this.createCustomerOnServer({ token, email })
+            createCustomer({ token, email })
               .then(({ data: { customer_id: customerId } }) => {
                 this.markValid();
                 this.updateStoreValue({
