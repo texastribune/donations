@@ -139,8 +139,12 @@ export default {
         });
 
       button.on('click', (event) => {
-        this.$emit('setValue', { key: 'showManualErrors', value: false });
-        this.$emit('setValue', { key: 'showNativeErrors', value: true });
+        const updates = [
+          { key: 'showManualErrors', value: false },
+          { key: 'showNativeErrors', value: true },
+        ];
+
+        this.$emit('setValue', updates);
         if (!this.formIsValid) event.preventDefault();
       });
 

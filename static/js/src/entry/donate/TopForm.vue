@@ -28,7 +28,7 @@
           base-classes="form__text form__text--heavy"
           name="amount"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -50,7 +50,7 @@
           base-classes="form__text form__text--standard"
           name="stripeEmail"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -65,7 +65,7 @@
           base-classes="form__text form__text--standard"
           name="first_name"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
       <div class="col_6 grid_separator">
@@ -77,7 +77,7 @@
           base-classes="form__text form__text--standard"
           name="last_name"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -104,7 +104,7 @@
           base-classes="form__text form__text--standard"
           name="zipcode"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -151,8 +151,7 @@
               email-store-module="baseForm"
               customer-id-store-module="baseForm"
               error-classes="form__error"
-              @markErrorValidity="markErrorValidity"
-              @updateErrorMessage="updateErrorMessage"
+              @setValidationValue="setValidationValue"
               @setValue="setValue"
             />
           </div>

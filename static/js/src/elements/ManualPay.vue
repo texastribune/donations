@@ -95,9 +95,30 @@ export default {
   },
 
   methods: {
+    markFetchingToken() {
+      this.$emit('setValue', { key: 'isFetchingToken', value: true });
+    },
+
+    markNotFetchingToken() {
+      this.$emit('setValue', { key: 'isFetchingToken', value: false });
+    },
+
+    markValid() {
+      this.$emit('setValidationValue', { element: 'card', key: 'valid', value: true });
+    },
+
+    markErrorAndInvalid(message) {
+      const updates = [
+        { element: 'card', key: 'valid', value: false },
+        { element: 'card', key: 'message', value: message },
+      ];
+
+      this.$emit('setValidationValue', updates);
+    },
+
     onChange(isComplete) {
       if (isComplete) {
-        this.$emit('setValue', { key: 'isFetchingToken', value: true });
+        this.markFetchingToken();
 
         createToken().then((result) => {
           if (!result.error) {
@@ -109,30 +130,26 @@ export default {
 
             this.createCustomerOnServer({ token, email })
               .then(({ data: { customer_id: customerId } }) => {
+                this.markValid();
                 this.updateStoreValue({
                   storeModule: this.customerIdStoreModule,
                   key: 'customerId',
                   value: customerId,
                 });
-
-                this.$emit('markErrorValidity', { key: 'card', isValid: true });
               }).catch(({ response: { data: { error: message } } }) => {
-                this.$emit('markErrorValidity', { key: 'card', isValid: false });
-                this.$emit('updateErrorMessage', { key: 'card', message });
+                this.markErrorAndInvalid(message);
               })
               .then(() => {
-                this.$emit('setValue', { key: 'isFetchingToken', value: false });
+                this.markNotFetchingToken();
               });
           } else {
-            this.$emit('setValue', { key: 'isFetchingToken', value: false });
-            this.$emit('markErrorValidity', { key: 'card', isValid: false });
-            this.$emit('updateErrorMessage', { key: 'card', message: result.error.message });
+            this.markNotFetchingToken();
+            this.markErrorAndInvalid(result.error.message);
           }
         });
       } else {
         const message = 'Incomplete card input';
-        this.$emit('markErrorValidity', { key: 'card', isValid: false });
-        this.$emit('updateErrorMessage', { key: 'card', message });
+        this.markErrorAndInvalid(message);
       }
     },
   },

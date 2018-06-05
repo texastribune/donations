@@ -33,8 +33,12 @@ export default {
 
   methods: {
     onClick() {
-      this.$emit('setValue', { key: 'showManualErrors', value: true });
-      this.$emit('setValue', { key: 'showNativeErrors', value: false });
+      const updates = [
+        { key: 'showManualErrors', value: true },
+        { key: 'showNativeErrors', value: false },
+      ];
+
+      this.$emit('setValue', updates);
       if (this.formIsValid) Vue.nextTick(() => { this.$emit('onSubmit'); });
     },
   },

@@ -50,16 +50,26 @@ export default {
       this.$refs.form.submit();
     },
 
-    markErrorValidity({ key, isValid }) {
-      this.validation[key].valid = isValid;
+    setValue(updates) {
+      if (Array.isArray(updates)) {
+        updates.forEach(({ key, value }) => {
+          this[key] = value;
+        });
+      } else {
+        const { key, value } = updates;
+        this[key] = value;
+      }
     },
 
-    setValue({ key, value }) {
-      this[key] = value;
-    },
-
-    updateErrorMessage({ key, message }) {
-      this.validation[key].message = message;
+    setValidationValue(updates) {
+      if (Array.isArray(updates)) {
+        updates.forEach(({ element, key, value }) => {
+          this.validation[element][key] = value;
+        });
+      } else {
+        const { element, key, value } = updates;
+        this.validation[element][key] = value;
+      }
     },
 
     isEmail(value) {
