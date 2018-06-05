@@ -168,6 +168,21 @@ def page_not_found(error):
     return render_template('error.html', message=message), 404
 
 
+@app.route('/verify-charge', methods=['POST'])
+def verify_charge():
+    try:
+        customer = stripe.Customer.create(
+            email='bogus@foo.com',
+            card=request.json['stripeToken']
+        )
+        customer.delete()
+        return jsonify({'success': True})
+    except stripe.error.CardError as e:
+        body = e.json_body
+        err = body.get('error', {})
+        return jsonify({'error': err}), 400
+
+
 @app.route('/charge', methods=['POST'])
 def charge():
 
@@ -183,15 +198,10 @@ def charge():
     bundles = get_bundles('charge')
 
     if email_is_valid:
-        try:
-            customer = stripe.Customer.create(
-                    email=request.form['stripeEmail'],
-                    card=request.form['stripeToken']
-            )
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get('error', {})
-            return render_template('error.html', message=err.get('message'))
+        customer = stripe.Customer.create(
+                email=request.form['stripeEmail'],
+                card=request.form['stripeToken']
+        )
         print('Create Stripe customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
     else:
