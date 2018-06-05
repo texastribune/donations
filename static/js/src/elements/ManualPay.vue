@@ -87,8 +87,6 @@ export default {
     onChange(isComplete) {
       if (isComplete) {
         createToken().then((result) => {
-          console.log(result);
-
           if (!result.error) {
             this.updateStoreValue({
               storeModule: this.tokenStoreModule,
