@@ -3,6 +3,7 @@
     :class="classesWithValidation"
   >
     <card
+      ref="card"
       :options="options"
       :stripe="stripeKey"
       @change="onChange($event.complete)"
@@ -18,6 +19,7 @@
 
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus';
+import Vue from 'vue';
 
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
@@ -102,17 +104,25 @@ export default {
       this.$emit('setValue', { key: 'isFetchingToken', value: false });
     },
 
-    markValid() {
-      this.$emit('setValidationValue', { element: 'card', key: 'valid', value: true });
+    markValid(element) {
+      this.$emit('setValidationValue', { element, key: 'valid', value: true });
     },
 
-    markErrorAndInvalid(message) {
+    markInvalid(element) {
+      this.$emit('setValidationValue', { element, key: 'valid', value: false });
+    },
+
+    markErrorAndInvalid({ element, message }) {
       const updates = [
-        { element: 'card', key: 'valid', value: false },
-        { element: 'card', key: 'message', value: message },
+        { element, key: 'valid', value: false },
+        { element, key: 'message', value: message },
       ];
 
       this.$emit('setValidationValue', updates);
+    },
+
+    showManualErrors() {
+      this.$emit('setValue', { key: 'showManualErrors', value: true });
     },
 
     onChange(isComplete) {
@@ -135,26 +145,42 @@ export default {
             */
             createCustomer({ token, email })
               .then(({ data: { customer_id: customerId } }) => {
-                this.markValid();
+                this.markValid('card');
                 this.updateStoreValue({
                   storeModule: this.customerIdStoreModule,
                   key: 'customerId',
                   value: customerId,
                 });
-              }).catch(({ response: { data: { error: message } } }) => {
-                this.markErrorAndInvalid(message);
+              }).catch(({ response: { data: { type, message } } }) => {
+                let element;
+
+                this.showManualErrors();
+
+                if (type === 'email') {
+                  this.$refs.card.clear();
+                  element = 'stripeEmail';
+                } else if (type === 'card') {
+                  element = 'card';
+                }
+
+                this.markErrorAndInvalid({ element, message });
               })
               .then(() => {
                 this.markNotFetchingToken();
               });
           } else {
             this.markNotFetchingToken();
-            this.markErrorAndInvalid(result.error.message);
+            this.markErrorAndInvalid({
+              element: 'card',
+              message: result.error.message,
+            });
           }
         });
       } else {
-        const message = 'Incomplete card input';
-        this.markErrorAndInvalid(message);
+        this.markErrorAndInvalid({
+          element: 'card',
+          message: 'Incomplete card input',
+        });
       }
     },
   },

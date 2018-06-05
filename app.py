@@ -170,16 +170,31 @@ def page_not_found(error):
 
 @app.route('/create-customer', methods=['POST'])
 def create_customer():
-    try:
-        customer = stripe.Customer.create(
-            email=request.json['stripeEmail'],
-            card=request.json['stripeToken']
-        )
-        return jsonify({'customer_id': customer.id})
-    except stripe.error.CardError as e:
-        body = e.json_body
-        err = body.get('error', {})
-        return jsonify({'error': err.get('message', '')}), 400
+    stripe_email = request.json['stripeEmail']
+    email_is_valid = validate_email(stripe_email)
+
+    if email_is_valid:
+        try:
+            customer = stripe.Customer.create(
+                email=stripe_email,
+                card=request.json['stripeToken']
+            )
+            return jsonify({'customer_id': customer.id})
+        except stripe.error.CardError as e:
+            body = e.json_body
+            err = body.get('error', {})
+            return jsonify({
+                'type': 'card',
+                'message': err.get('message', '')
+            }), 400
+    else:
+        message = """Our servers had an issue saving your email address.
+                    Please make sure it's properly formatted. If the problem
+                    persists, please contact inquiries@texastribune.org."""
+        return jsonify({
+            'type': 'email',
+            'message': message
+        }), 400
 
 
 @app.route('/charge', methods=['POST'])

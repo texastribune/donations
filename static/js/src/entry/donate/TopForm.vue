@@ -180,7 +180,7 @@
 
     <div
       v-if="showErrorClue"
-      class="grid_row hide_from--m"
+      class="grid_row"
       aria-hidden="true"
     >
       <div class="col">
@@ -258,7 +258,7 @@ export default {
           manual: true,
           native: true,
           valid: false,
-          message: 'Invalid email address',
+          message: 'Enter a valid email address',
           validator: this.isEmail,
         },
         first_name: {
