@@ -18,8 +18,8 @@
       </div>
     </div>
 
-    <div class="grid_row grid_separator--xs">
-      <div class="col">
+    <div class="grid_row grid_wrap--s">
+      <div class="col_6 grid_separator">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
           :validation="validation.amount"
@@ -31,16 +31,7 @@
           @setValidationValue="setValidationValue"
         />
       </div>
-    </div>
-
-    <div class="grid_row grid_separator">
-      <div class="col">
-        <p class="subtext">For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership program</a>.</p>
-      </div>
-    </div>
-
-    <div class="grid_row grid_separator">
-      <div class="col">
+      <div class="col_6 grid_separator">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
           :validation="validation.stripeEmail"
@@ -52,6 +43,12 @@
           store-module="baseForm"
           @setValidationValue="setValidationValue"
         />
+      </div>
+    </div>
+
+    <div class="grid_row grid_separator">
+      <div class="col">
+        <p class="subtext">For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership program</a>.</p>
       </div>
     </div>
 
