@@ -184,6 +184,7 @@ def create_customer():
             body = e.json_body
             err = body.get('error', {})
             return jsonify({
+                'expected': True,
                 'type': 'card',
                 'message': err.get('message', '')
             }), 400
@@ -192,6 +193,7 @@ def create_customer():
                     Please make sure it's properly formatted. If the problem
                     persists, please contact inquiries@texastribune.org."""
         return jsonify({
+            'expected': True,
             'type': 'email',
             'message': message
         }), 400

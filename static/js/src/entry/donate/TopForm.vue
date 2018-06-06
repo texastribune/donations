@@ -148,7 +148,6 @@
               :show-error="showManualErrors"
               :validation="validation.card"
               base-classes="form__manual"
-              error-classes="form__error"
               @setValidationValue="setValidationValue"
             />
           </div>

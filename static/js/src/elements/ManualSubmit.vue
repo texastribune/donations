@@ -53,7 +53,23 @@ export default {
     },
   },
 
+  data() {
+    return {
+      blanketErrorMessage: `
+        There was an issue processing your card.
+        Please try a different card and submit
+        the form again. If the issue persists, contact
+        inquiries@texastribune.org.
+      `,
+    };
+  },
+
   methods: {
+    isUnexpectedError({ status, expected }) {
+      if (status !== 400 || !expected) return true;
+      return false;
+    },
+
     markFetchingToken() {
       this.$emit('setValue', { key: 'isFetchingToken', value: true });
     },
@@ -82,7 +98,7 @@ export default {
             });
 
             /**
-             Because Stripe 3 does not validate CVC client side,
+              Because Stripe 3 does not validate cards client side,
               we have to create the customer on the server and
               check for errors returned there. If they exist,
               we display them. If not, we store the returned customer ID.
@@ -97,25 +113,46 @@ export default {
 
                 Vue.nextTick(() => { this.$emit('onSubmit'); });
               })
-              .catch(({ response: { data: { type, message } } }) => {
+              .catch(({
+                response: {
+                  status,
+                  data: { type, message, expected },
+                },
+              }) => {
                 let element;
+                let messageToShow;
+                const isUnexpectedError =
+                  this.isUnexpectedError({ status, expected });
 
-                if (type === 'email') {
+                if (isUnexpectedError) {
+                  messageToShow = this.blanketErrorMessage;
+                  element = 'card';
+                } else if (type === 'email') {
+                  messageToShow = message;
                   element = 'stripeEmail';
                 } else if (type === 'card') {
+                  messageToShow = message;
                   element = 'card';
                 }
 
-                this.markMessageAndInvalid({ element, message });
-              })
-              .then(() => {
+                this.markMessageAndInvalid({ element, message: messageToShow });
                 this.markNotFetchingToken();
               });
           } else {
+            const { error: { message, type } } = result;
+            let messageToShow;
+
             this.markNotFetchingToken();
+
+            if (type === 'validation_error') {
+              messageToShow = message;
+            } else {
+              messageToShow = this.blanketErrorMessage;
+            }
+
             this.markMessageAndInvalid({
               element: 'card',
-              message: result.error.message,
+              message: messageToShow,
             });
           }
         });

@@ -31,11 +31,6 @@ export default {
   mixins: [updateValidity],
 
   props: {
-    errorClasses: {
-      type: String,
-      default: '',
-    },
-
     showError: {
       type: Boolean,
       default: false,
