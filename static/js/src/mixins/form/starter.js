@@ -8,7 +8,7 @@ export default {
           manual: true,
           native: false,
           valid: false,
-          message: 'Invalid card input',
+          message: 'Incomplete card input',
         },
       },
       showManualErrors: false,

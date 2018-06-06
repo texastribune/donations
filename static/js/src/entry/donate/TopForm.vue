@@ -148,11 +148,8 @@
               :show-error="showManualErrors"
               :validation="validation.card"
               base-classes="form__manual"
-              email-store-module="baseForm"
-              customer-id-store-module="baseForm"
               error-classes="form__error"
               @setValidationValue="setValidationValue"
-              @setValue="setValue"
             />
           </div>
         </div>
@@ -163,9 +160,12 @@
               :form-is-valid="manualIsValid"
               :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
+              email-store-module="baseForm"
+              customer-id-store-module="baseForm"
               value="Donate"
               @onSubmit="onSubmit"
               @setValue="setValue"
+              @setValidationValue="setValidationValue"
             />
           </div>
         </div>
