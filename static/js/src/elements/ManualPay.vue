@@ -19,7 +19,6 @@
 
 <script>
 import { Card, createToken } from 'vue-stripe-elements-plus';
-import Vue from 'vue';
 
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
@@ -145,20 +144,20 @@ export default {
             */
             createCustomer({ token, email })
               .then(({ data: { customer_id: customerId } }) => {
-                this.markValid('card');
                 this.updateStoreValue({
                   storeModule: this.customerIdStoreModule,
                   key: 'customerId',
                   value: customerId,
                 });
-              }).catch(({ response: { data: { type, message } } }) => {
+                this.markValid('card');
+              })
+              .catch(({ response: { data: { type, message } } }) => {
                 let element;
-
-                this.showManualErrors();
 
                 if (type === 'email') {
                   this.$refs.card.clear();
                   element = 'stripeEmail';
+                  this.showManualErrors();
                 } else if (type === 'card') {
                   element = 'card';
                 }
@@ -179,7 +178,7 @@ export default {
       } else {
         this.markErrorAndInvalid({
           element: 'card',
-          message: 'Incomplete card input',
+          message: 'Invalid card input',
         });
       }
     },
