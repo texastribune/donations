@@ -44,7 +44,6 @@ export default {
 
   data() {
     return {
-      complete: false,
       options: {
         hidePostalCode: true,
         iconStyle: 'solid',
@@ -74,9 +73,11 @@ export default {
   },
 
   methods: {
-    onChange({ error }) {
+    onChange({ error, empty }) {
       if (error) {
         this.markMessageAndInvalid({ element: 'card', message: error.message });
+      } else if (empty) {
+        this.markMessageAndInvalid({ element: 'card', message: 'Your card number is incomplete' });
       } else {
         this.markValid('card');
       }

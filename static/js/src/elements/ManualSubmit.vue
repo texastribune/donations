@@ -121,8 +121,7 @@ export default {
               }) => {
                 let element;
                 let messageToShow;
-                const isUnexpectedError =
-                  this.isUnexpectedError({ status, expected });
+                const isUnexpectedError = this.isUnexpectedError({ status, expected });
 
                 if (isUnexpectedError) {
                   messageToShow = this.blanketErrorMessage;
