@@ -2,7 +2,7 @@ import os
 import sys
 import json
 
-from flask import Flask, redirect, render_template, request, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory, jsonify
 from forms import DonateForm, BlastForm, CircleForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -168,6 +168,37 @@ def page_not_found(error):
     return render_template('error.html', message=message), 404
 
 
+@app.route('/create-customer', methods=['POST'])
+def create_customer():
+    stripe_email = request.json['stripeEmail']
+    email_is_valid = validate_email(stripe_email)
+
+    if email_is_valid:
+        try:
+            customer = stripe.Customer.create(
+                email=stripe_email,
+                card=request.json['stripeToken']
+            )
+            return jsonify({'customer_id': customer.id})
+        except stripe.error.CardError as e:
+            body = e.json_body
+            err = body.get('error', {})
+            return jsonify({
+                'expected': True,
+                'type': 'card',
+                'message': err.get('message', '')
+            }), 400
+    else:
+        message = """Our servers had an issue saving your email address.
+                    Please make sure it's properly formatted. If the problem
+                    persists, please contact inquiries@texastribune.org."""
+        return jsonify({
+            'expected': True,
+            'type': 'email',
+            'message': message
+        }), 400
+
+
 @app.route('/charge', methods=['POST'])
 def charge():
 
@@ -178,29 +209,10 @@ def charge():
     customer_first = request.form['first_name']
     customer_last = request.form['last_name']
 
-    email_is_valid = validate_email(customer_email)
-
     bundles = get_bundles('charge')
 
-    if email_is_valid:
-        try:
-            customer = stripe.Customer.create(
-                    email=request.form['stripeEmail'],
-                    card=request.form['stripeToken']
-            )
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get('error', {})
-            return render_template('error.html', message=err.get('message'))
-        print('Create Stripe customer {} {} {}'.format(customer_email,
-            customer_first, customer_last))
-    else:
-        message = "There was an issue saving your email address."
-        print('Issue saving customer {} {} {}; showed error'.format(
-            customer_email, customer_first, customer_last))
-        return render_template('error.html', message=message)
-
     if form.validate():
+        customer = stripe.Customer.retrieve(request.form['customerId'])
         add_customer_and_charge.delay(form=request.form,
                 customer=customer)
         print('Validated form of customer {} {} {}'.format(customer_email,

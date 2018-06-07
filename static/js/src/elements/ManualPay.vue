@@ -5,7 +5,7 @@
     <card
       :options="options"
       :stripe="stripeKey"
-      @change="onChange($event.complete)"
+      @change="onChange"
     />
     <p
       v-if="showError && !valid"
@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import { Card, createToken } from 'vue-stripe-elements-plus';
+import { Card } from 'vue-stripe-elements-plus';
 
-import updateStoreValue from './mixins/updateStoreValue';
+import updateValidity from './mixins/updateValidity';
 
 export default {
   name: 'ManualPay',
@@ -28,22 +28,12 @@ export default {
     Card,
   },
 
-  mixins: [updateStoreValue],
+  mixins: [updateValidity],
 
   props: {
-    errorClasses: {
-      type: String,
-      default: '',
-    },
-
     showError: {
       type: Boolean,
       default: false,
-    },
-
-    tokenStoreModule: {
-      type: String,
-      required: true,
     },
 
     validation: {
@@ -54,7 +44,6 @@ export default {
 
   data() {
     return {
-      complete: false,
       options: {
         hidePostalCode: true,
         iconStyle: 'solid',
@@ -84,22 +73,13 @@ export default {
   },
 
   methods: {
-    onChange(isComplete) {
-      if (isComplete) {
-        createToken().then((result) => {
-          if (!result.error) {
-            this.updateStoreValue({
-              storeModule: this.tokenStoreModule,
-              key: 'stripeToken',
-              value: result.token.id,
-            });
-            this.$emit('markErrorValidity', { key: 'card', isValid: true });
-          }
-        }).catch(() => {
-          window.location.href = '/error';
-        });
+    onChange({ error, empty }) {
+      if (error) {
+        this.markMessageAndInvalid({ element: 'card', message: error.message });
+      } else if (empty) {
+        this.markMessageAndInvalid({ element: 'card', message: 'Your card number is incomplete' });
       } else {
-        this.$emit('markErrorValidity', { key: 'card', isValid: false });
+        this.markValid('card');
       }
     },
   },

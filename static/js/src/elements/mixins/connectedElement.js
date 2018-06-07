@@ -73,11 +73,11 @@ export default {
     },
 
     markValid() {
-      this.$emit('markErrorValidity', { key: this.name, isValid: true });
+      this.$emit('setValidationValue', { element: this.name, key: 'valid', value: true });
     },
 
     markInvalid() {
-      this.$emit('markErrorValidity', { key: this.name, isValid: false });
+      this.$emit('setValidationValue', { element: this.name, key: 'valid', value: false });
     },
   },
 };

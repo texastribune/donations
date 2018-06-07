@@ -8,13 +8,14 @@ export default {
           manual: true,
           native: false,
           valid: false,
-          message: 'Invalid card information',
+          message: 'Your card number is incomplete',
         },
       },
       showManualErrors: false,
       showNativeErrors: false,
       showManualPay: false,
       nativeIsSupported: false,
+      isFetchingToken: false,
     };
   },
 
@@ -49,12 +50,26 @@ export default {
       this.$refs.form.submit();
     },
 
-    markErrorValidity({ key, isValid }) {
-      this.validation[key].valid = isValid;
+    setValue(updates) {
+      if (Array.isArray(updates)) {
+        updates.forEach(({ key, value }) => {
+          this[key] = value;
+        });
+      } else {
+        const { key, value } = updates;
+        this[key] = value;
+      }
     },
 
-    setValue({ key, value }) {
-      this[key] = value;
+    setValidationValue(updates) {
+      if (Array.isArray(updates)) {
+        updates.forEach(({ element, key, value }) => {
+          this.validation[element][key] = value;
+        });
+      } else {
+        const { element, key, value } = updates;
+        this.validation[element][key] = value;
+      }
     },
 
     isEmail(value) {

@@ -28,7 +28,7 @@
           base-classes="form__text form__text--heavy"
           name="amount"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -50,7 +50,7 @@
           base-classes="form__text form__text--standard"
           name="stripeEmail"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -65,7 +65,7 @@
           base-classes="form__text form__text--standard"
           name="first_name"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
       <div class="col_6 grid_separator">
@@ -77,7 +77,7 @@
           base-classes="form__text form__text--standard"
           name="last_name"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -104,7 +104,7 @@
           base-classes="form__text form__text--standard"
           name="zipcode"
           store-module="baseForm"
-          @markErrorValidity="markErrorValidity"
+          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -126,7 +126,8 @@
           :supported="nativeIsSupported"
           base-classes="form__native"
           amount-store-module="baseForm"
-          token-store-module="baseForm"
+          email-store-module="baseForm"
+          customer-id-store-module="baseForm"
           @setValue="setValue"
           @onSubmit="onSubmit"
         />
@@ -147,9 +148,7 @@
               :show-error="showManualErrors"
               :validation="validation.card"
               base-classes="form__manual"
-              token-store-module="baseForm"
-              error-classes="form__error"
-              @markErrorValidity="markErrorValidity"
+              @setValidationValue="setValidationValue"
             />
           </div>
         </div>
@@ -158,10 +157,14 @@
           <div class="col">
             <manual-submit
               :form-is-valid="manualIsValid"
+              :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
+              email-store-module="baseForm"
+              customer-id-store-module="baseForm"
               value="Donate"
               @onSubmit="onSubmit"
               @setValue="setValue"
+              @setValidationValue="setValidationValue"
             />
           </div>
         </div>
@@ -176,7 +179,7 @@
 
     <div
       v-if="showErrorClue"
-      class="grid_row hide_from--m"
+      class="grid_row"
       aria-hidden="true"
     >
       <div class="col">
@@ -189,7 +192,7 @@
       store-module="baseForm"
     />
     <hidden
-      name="stripeToken"
+      name="customerId"
       store-module="baseForm"
     />
     <hidden
@@ -254,7 +257,7 @@ export default {
           manual: true,
           native: true,
           valid: false,
-          message: 'Invalid email address',
+          message: 'Enter a valid email address',
           validator: this.isEmail,
         },
         first_name: {
