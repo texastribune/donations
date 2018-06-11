@@ -10,6 +10,7 @@ module.exports = {
   entry: {
     donate: `${entryDir}/donate/index`,
     charge: `${entryDir}/charge/index`,
+    circle: `${entryDir}/circle/index`,
   },
 
   output: {
