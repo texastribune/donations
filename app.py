@@ -3,7 +3,7 @@ import sys
 import json
 
 from flask import Flask, redirect, render_template, request, send_from_directory, jsonify
-from forms import DonateForm, BlastForm, CircleForm
+from forms import DonateForm, BlastForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -96,21 +96,11 @@ def donate_renew_form():
 
 @app.route('/circleform')
 def circle_form():
-    form = CircleForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        message = "The page you requested can't be found."
-        return render_template('error.html', message=message)
-    openended_status = 'None'
-    installments = request.args.get('installments')
-    installment_period = request.args.get('installmentPeriod')
-    campaign_id = request.args.get('campaignId', default='')
-    return render_template('circle-form.html', form=form, amount=amount,
-            campaign_id=campaign_id, installment_period=installment_period,
-            installments=installments, openended_status=openended_status,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
-
+    bundles = get_bundles('circle')
+    return render_template('circle-form.html',
+        bundles=bundles,
+        key=app.config['STRIPE_KEYS']['publishable_key']
+    )
 
 @app.route('/blastform')
 def the_blast_form():

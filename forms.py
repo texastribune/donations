@@ -23,10 +23,6 @@ class BaseForm(FlaskForm):
     pay_fees_value = HiddenField(u'Pay Fees Value')
     openended_status = HiddenField(u'Openended Status')
 
-# temporary until the circle page is refactored with Vue
-class CircleForm(BaseForm):
-    installment_period = HiddenField(u'Installment Period')
-
 class DonateForm(BaseForm):
     installment_period = RadioField(u'Installment Period',
         choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])

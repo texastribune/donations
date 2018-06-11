@@ -1,63 +1,28 @@
-{% extends "layout.html" %}
-{% block title %}
-  {{ super() }}
-{% endblock %}
-{% block extra_script %}
-  {{ super() }}
+{% extends "new_layout.html" %}
+
+{% block stylesheets %}
+  {% for stylesheet in bundles['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+  {% endfor %}
 {% endblock %}
 
 {% block content %}
-  {{ super() }}
-  <div id="circle" class="main grid_container--xl">
-    <header class="grid_separator--l">
-      <h1>Confirm your circle membership</h1>
-      <p>Thank you for supporting The Texas Tribune by becoming a circle member! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.</p>
-    </header>
-    <form id="form" action="/charge" method="post">
-      <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
-      <div class="grid_row grid_wrap--l grid_wrap--reverse">
-        <div class="col_6">
-          {% include 'includes/form_inner.html' %}
-          {{ form.openended_status(value=openended_status) }}
-          {{ form.installments(value=installments) }}
-          {{ form.description(value='The Texas Tribune Circle Membership') }}
-        </div>
-        <div class="col_1">&nbsp;</div>
-        <div class="col_5 form__box grid_separator">
-          <div class="grid_row grid_wrap--m grid_separator">
-            <div class="col grid_separator">
-              <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
-              <span class="dollar">$</span>
-                {{ form.amount(readonly=true, autocomplete="off", value=amount, class="dollar") }}
-            </div>
-            <div class="col">
-              <label>Length</label><br>
-                {% if installments == '3' %}
-                  <p class="label-info">3 years</p>
-                {% else %}
-                  <p class="label-info">36 months</p>
-                {% endif %}
-            </div>
+  <main class="main grid_container grid_padded--xl">
+    <!-- where the router component attaches -->
+    <div id="app" style="display:none;"></div>
 
-          </div>
-          <div class="grid_row grid_wrap--m">
-            <div class="col">
-              {{ form.pay_fees.label }}
-                {{ form.pay_fees(checked=False, autocomplete="off") }}
-              <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-              <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
-            </div>
-            <div class="col">
-              <label>Level</label><br>
-              <p class="level label-info"></p>
-            </div>
-        </div>
-      </div>
-    </form>
-  </div>
-  {% if installment_period and amount %}
-    {% include 'includes/display_levels_js.html' %}
-  {% endif %}
-  {% include 'includes/stripe_checkout_js.html' %}
-  {% include 'includes/display_pay_fees.html' %}
+    <section class="grid_container--m section-padding">
+      <h2 class="grid_separator">Become a Texas Tribune Member today</h2>
+      <!-- where the form attaches -->
+      <div id="circle-form"></div>
+    </section>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+  <script src="https://js.stripe.com/v3/"></script>
+
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
+  {% endfor %}
 {% endblock %}
