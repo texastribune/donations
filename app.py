@@ -111,6 +111,50 @@ def circle_form():
             installments=installments, openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
+@app.route('/circle-charge')
+def circle_charge():
+    form = DonateForm(request.form)
+    pprint('Request: {}'.format(request))
+
+    customer_email = request.form['stripeEmail']
+    customer_first = request.form['first_name']
+    customer_last = request.form['last_name']
+
+    email_is_valid = validate_email(customer_email)
+
+    bundles = get_bundles('charge')
+
+    if email_is_valid:
+        customer = stripe.Customer.create(
+                email=request.form['stripeEmail'],
+                card=request.form['stripeToken']
+        )
+        print('Create Stripe customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
+    else:
+        message = "There was an issue saving your email address."
+        print('Issue saving customer {} {} {}; showed error'.format(
+            customer_email, customer_first, customer_last))
+        return render_template('error.html', message=message)
+
+    if form.validate():
+        add_customer_and_charge.delay(form=request.form,
+                customer=customer)
+        print('Validated form of customer {} {} {}'.format(customer_email,
+            customer_first, customer_last))
+        # give the frequency and amount to template for GA tracking
+        ga = {
+            'event_label': request.form['installment_period'] if request.form['installment_period'] != 'None' else 'one-time',
+            'event_value': request.form['amount'],
+        }
+        return render_template('charge.html',
+                amount=request.form['amount'], ga=ga, bundles=bundles)
+    else:
+        message = "There was an issue saving your donation information."
+        print('Form validation errors: {}'.format(form.errors))
+        print('Did not validate form of customer {} {} {}'.format(
+            customer_email, customer_first, customer_last))
+        return render_template('error.html', message=message)
 
 @app.route('/blastform')
 def the_blast_form():
