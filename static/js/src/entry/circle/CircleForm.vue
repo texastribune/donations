@@ -8,6 +8,14 @@
   >
     <div class="grid_row grid_separator">
       <div class="col">
+        <choices
+          store-module="circleForm"
+        />
+      </div>
+    </div>
+
+    <div class="grid_row grid_separator">
+      <div class="col">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
           :validation="validation.stripeEmail"
@@ -197,6 +205,7 @@ import TextInput from '../../elements/TextInput.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
+import Choices from './Choices.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
@@ -211,6 +220,7 @@ export default {
     ManualPay,
     ManualSubmit,
     NativePay,
+    Choices,
   },
 
   mixins: [

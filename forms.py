@@ -26,7 +26,6 @@ class DonateForm(BaseForm):
     installment_period = RadioField(u'Installment Period',
         choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
 
-
 class BlastForm(FlaskForm):
     first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
