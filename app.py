@@ -111,7 +111,7 @@ def circle_form():
             installments=installments, openended_status=openended_status,
         key=app.config['STRIPE_KEYS']['publishable_key'])
 
-@app.route('/circle-charge')
+@app.route('/circle-charge', methods=['POST'])
 def circle_charge():
     form = DonateForm(request.form)
     pprint('Request: {}'.format(request))
