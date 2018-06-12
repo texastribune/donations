@@ -10,12 +10,12 @@
         :value="option.value"
         :name="name"
         :checked="value === option.value"
-        :id="getLabelConnector(index)"
+        :id="getLabelConnector(option, index)"
         type="radio"
         @input="updateSingleValue($event.target.value)"
       >
       <label
-        :for="getLabelConnector(index)"
+        :for="getLabelConnector(option, index)"
       >
         {{ option.text }}
       </label>
@@ -39,7 +39,8 @@ export default {
   },
 
   methods: {
-    getLabelConnector(index) {
+    getLabelConnector({ connector }, index) {
+      if (connector) return `${connector}-${index}`;
       return `${this.name}-${index}`;
     },
   },

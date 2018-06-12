@@ -8,9 +8,7 @@
   >
     <div class="grid_row grid_separator">
       <div class="col">
-        <choices
-          store-module="circleForm"
-        />
+        <choices />
       </div>
     </div>
 

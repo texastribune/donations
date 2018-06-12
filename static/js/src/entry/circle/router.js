@@ -3,45 +3,29 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import CircleForm from './CircleForm.vue';
+import { CIRCLE_BUCKETS } from './constants';
 
 Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
-  let installments;
-  let level;
-  let { amount, installmentPeriod = 'monthly' } = queryParams;
+  const defaultLevel = 'editorMonthly';
   const { campaignId = '' } = queryParams;
-  const lowerInstallment = installmentPeriod.toLowerCase();
+  let { level = defaultLevel } = queryParams;
 
-  if (lowerInstallment === 'monthly') {
-    
-  } else if (lowerInstallment === 'yearly') {
+  if (!CIRCLE_BUCKETS[level]) level = defaultLevel;
 
-  } else {
-    installmentPeriod = 'monthly';
-  }
-
-  /* switch () {
-    case 'monthly':
-      amount = amount || '84';
-      installments = '36';
-      break;
-    case 'yearly':
-      amount = amount || '1000';
-      installments = '3';
-      break;
-    default:
-      installmentPeriod = 'monthly';
-      amount = amount || '84';
-      installments = '36';
-  } */
+  const {
+    amount,
+    installments,
+    installmentPeriod,
+  } = CIRCLE_BUCKETS[level];
 
   return {
-    amount,
     level,
+    amount,
     installments,
-    campaign_id: campaignId,
     installment_period: installmentPeriod,
+    campaign_id: campaignId,
   };
 }
 
