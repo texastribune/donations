@@ -24,3 +24,19 @@ html {
 body {
   margin: 0;
 }
+
+.circle-form {
+  &__bucket {
+    border-width: 3px;
+    border-color: $color-white-pure;
+    border-style: solid;
+    
+    &.selected {
+      border-color: $color-yellow-tribune;
+    }
+  }
+
+  &__bucket-header {
+
+  }
+}

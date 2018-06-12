@@ -1,12 +1,16 @@
 <template>
-  <div>
+  <div
+    class="grid_row grid_wrap--s"
+  >
     <div
       v-for="group in groups"
       :key="group.id"
-      :selected="selectedGroup === group.bucket"
+      :class="{ selected: selectedGroup === group.bucket }"
+      class="circle-form__bucket col_4"
     >
       <p
         :id="getGroupHeadingConnector(group)"
+        class="circle-form__bucket-header"
       >
         {{ group.heading }}
       </p>
@@ -14,7 +18,7 @@
         :options="group.options"
         :aria-labelledby="getGroupHeadingConnector(group)"
         aria-describedby="circle-cta circle-intro"
-        base-classes=""
+        base-classes="form__radios"
         name="level"
         store-module="circleForm"
         @updateCallback="onUpdate"
@@ -27,8 +31,8 @@
 import Radios from '../../elements/Radios.vue';
 import getStoreValue from '../../elements/mixins/getStoreValue';
 import updateStoreValues from '../../elements/mixins/updateStoreValues';
-import { CIRCLE_BUCKETS } from './constants';
 import addNumberCommas from '../../utils/addNumberCommas';
+import { CIRCLE_BUCKETS } from './constants';
 
 export default {
   name: 'Choices',
