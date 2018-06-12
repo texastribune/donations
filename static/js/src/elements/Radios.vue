@@ -10,12 +10,12 @@
         :value="option.value"
         :name="name"
         :checked="value === option.value"
-        :id="getLabelConnector(option, index)"
+        :id="getConnector(index)"
         type="radio"
         @input="updateSingleValue($event.target.value)"
       >
       <label
-        :for="getLabelConnector(option, index)"
+        :for="getConnector(index)"
       >
         {{ option.text }}
       </label>
@@ -25,11 +25,15 @@
 
 <script>
 import connectedElement from './mixins/connectedElement';
+import labelConnector from './mixins/labelConnector';
 
 export default {
   name: 'Frequency',
 
-  mixins: [connectedElement],
+  mixins: [
+    labelConnector,
+    connectedElement,
+  ],
 
   props: {
     options: {
@@ -39,9 +43,8 @@ export default {
   },
 
   methods: {
-    getLabelConnector({ connector }, index) {
-      if (connector) return `${connector}-${index}`;
-      return `${this.name}-${index}`;
+    getConnector(index) {
+      return `_${this.randConnector}-${index}`;
     },
   },
 };

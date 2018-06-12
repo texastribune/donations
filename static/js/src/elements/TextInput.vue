@@ -30,11 +30,15 @@
 
 <script>
 import connectedElement from './mixins/connectedElement';
+import labelConnector from './mixins/labelConnector';
 
 export default {
   name: 'TextInput',
 
-  mixins: [connectedElement],
+  mixins: [
+    connectedElement,
+    labelConnector,
+  ],
 
   props: {
     hasLabel: {
@@ -71,7 +75,7 @@ export default {
   computed: {
     connector() {
       if (!this.hasLabel) return false;
-      return this.name;
+      return `_${this.randConnector}`;
     },
 
     ariaLabel() {

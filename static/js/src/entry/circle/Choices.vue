@@ -77,7 +77,6 @@ export default {
 
         options.push({
           id: index,
-          connector: name,
           value: name,
           text: this.buildText({ installmentPeriod, amount }),
         });
