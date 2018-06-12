@@ -11,9 +11,16 @@
     <!-- where the router component attaches -->
     <div id="app" style="display:none;"></div>
 
-    <section class="grid_container--m section-padding">
+    <section class="circle-donate grid_container section-padding">
+      <header class="circle-donate__header grid_container--l">
+        <!-- IDs are for ARIA usage in the form -->
+        <h3 id="circle-cta">Select your Circle Membership</h3>
+        <p id="circle-intro" class="circle_donate__intro">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
+      </header>
       <!-- where the form attaches -->
-      <div id="circle-form"></div>
+      <div class="grid_container--m">
+        <div id="circle-form"></div>
+      </div>
     </section>
   </main>
 {% endblock %}

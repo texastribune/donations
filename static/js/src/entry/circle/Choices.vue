@@ -5,8 +5,15 @@
       :key="group.id"
       :selected="selectedGroup === group.bucket"
     >
+      <p
+        :id="getGroupHeadingConnector(group)"
+      >
+        {{ group.heading }}
+      </p>
       <radios
         :options="group.options"
+        :aria-labelledby="getGroupHeadingConnector(group)"
+        aria-describedby="circle-cta circle-intro"
         base-classes=""
         name="level"
         store-module="circleForm"
@@ -40,16 +47,19 @@ export default {
         {
           id: 0,
           bucket: 'editor',
+          heading: 'Editor\'s Circle',
           options: this.buildOptions(['editorMonthly', 'editorYearly']),
         },
         {
           id: 1,
           bucket: 'leadership',
+          heading: 'Leadership Circle',
           options: this.buildOptions(['leadershipMonthly', 'leadershipYearly']),
         },
         {
           id: 2,
           bucket: 'chairman',
+          heading: 'Chairman\'s Circle',
           options: this.buildOptions(['chairmanMonthly', 'chairmanYearly']),
         },
       ],
@@ -112,6 +122,10 @@ export default {
 
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
+    },
+
+    getGroupHeadingConnector({ bucket, id }) {
+      return `${bucket}-heading-${id}`;
     },
   },
 };

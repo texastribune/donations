@@ -7,6 +7,8 @@
       :key="option.id"
     >
       <input
+        :aria-labelledby="ariaLabelledby"
+        :aria-describedby="ariaDescribedby"
         :value="option.value"
         :name="name"
         :checked="value === option.value"
@@ -26,11 +28,13 @@
 <script>
 import connectedElement from './mixins/connectedElement';
 import labelConnector from './mixins/labelConnector';
+import aria from './mixins/aria';
 
 export default {
   name: 'Frequency',
 
   mixins: [
+    aria,
     labelConnector,
     connectedElement,
   ],

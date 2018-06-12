@@ -31,11 +31,13 @@
 <script>
 import connectedElement from './mixins/connectedElement';
 import labelConnector from './mixins/labelConnector';
+import aria from './mixins/aria';
 
 export default {
   name: 'TextInput',
 
   mixins: [
+    aria,
     connectedElement,
     labelConnector,
   ],
