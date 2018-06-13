@@ -13,20 +13,14 @@
       >
         {{ group.heading }}
       </h2>
-      <ul
-        class="circle-wall__list"
-      >
+      <ul class="circle-wall__list">
         <li
           v-for="(member, index) in group.members"
           :key="index"
           class="circle-wall__item"
         >
-          <span
-            class="circle-wall__star fa fa-star"
-          />
-          <span
-            class="circle-wall__name"
-          >
+          <span class="circle-wall__star fa fa-star" />
+          <span class="circle-wall__name">
             {{ member }}
           </span>
         </li>

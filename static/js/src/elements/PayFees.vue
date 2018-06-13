@@ -42,11 +42,6 @@ export default {
       type: String,
       required: true,
     },
-
-    containerClasses: {
-      type: [String, Array],
-      default: '',
-    },
   },
 
   computed: {

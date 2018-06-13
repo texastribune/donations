@@ -28,7 +28,6 @@
           <text-input
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.stripeEmail"
-            has-label
             label-text="email address"
             type="email"
             base-classes="form__text form__text--standard"
@@ -44,7 +43,6 @@
           <text-input
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.first_name"
-            has-label
             label-text="first name"
             base-classes="form__text form__text--standard"
             name="first_name"
@@ -56,7 +54,6 @@
           <text-input
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.last_name"
-            has-label
             label-text="last name"
             base-classes="form__text form__text--standard"
             name="last_name"
@@ -70,7 +67,6 @@
         <div class="col_6 grid_separator">
           <text-input
             :required="false"
-            has-label
             label-text="encouraged to give by"
             base-classes="form__text form__text--standard"
             name="reason"
@@ -82,7 +78,6 @@
             :required="false"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.zipcode"
-            has-label
             label-text="zip code"
             maxlength="5"
             base-classes="form__text form__text--standard"

@@ -10,6 +10,8 @@
     </label>
     <input
       :id="connector"
+      :aria-labelledby="ariaLabelledby"
+      :aria-describedby="ariaDescribedby"
       :aria-label="ariaLabel"
       :aria-invalid="!valid ? true : false"
       :aria-required="required"
@@ -45,17 +47,12 @@ export default {
   props: {
     hasLabel: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
     labelText: {
       type: String,
-      default: '',
-    },
-
-    maxlength: {
-      type: [String, Boolean],
-      default: false,
+      required: true,
     },
 
     placeholder: {
@@ -82,7 +79,7 @@ export default {
 
     ariaLabel() {
       if (this.hasLabel) return false;
-      return this.name;
+      return this.labelText;
     },
 
     classesWithValidation() {
