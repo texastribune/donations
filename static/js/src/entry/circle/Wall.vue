@@ -8,11 +8,11 @@
       :class="{ 'grid_separator--l': index !== data.length - 1 }"
       class="circle-wall__group"
     >
-      <h3
+      <h2
         class="circle-wall__heading grid_separator--s"
       >
         {{ group.heading }}
-      </h3>
+      </h2>
       <ul
         class="circle-wall__list"
       >

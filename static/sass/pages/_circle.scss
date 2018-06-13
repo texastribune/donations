@@ -87,3 +87,25 @@ body {
     }
   }
 }
+
+.circle-hero {
+  background-color: #f2ede2;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1440px;
+  
+  &__inner {
+    padding: $size-xl;
+  }
+
+  &__title {
+    border-bottom: 3px solid $color-yellow-tribune;
+    font-size: $size-xl;
+    padding-bottom: $size-b;
+    text-align: center;
+
+    @include mq($from: bp-s) {
+      font-size: $size-giant;
+    }
+  }
+}
