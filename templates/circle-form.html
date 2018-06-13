@@ -7,15 +7,15 @@
 {% endblock %}
 
 {% block content %}
-  <main class="main grid_container grid_padded--xl">
+  <main class="main grid_padded--xl">
     <!-- where the router component attaches -->
     <div id="app" style="display:none;"></div>
 
-    <section class="circle-donate grid_container section-padding">
-      <header class="circle-donate__header grid_container--l grid_separator">
+    <section class="circle-donate section-padding">
+      <header class="circle-donate__header grid_container--s grid_separator">
         <!-- IDs are for ARIA usage in the form -->
-        <h3 id="circle-cta">Select your Circle Membership</h3>
-        <p id="circle-intro" class="circle_donate__intro">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
+        <h4 id="circle-cta" class="circle-donate__hed grid_separator--xs">Select your Circle Membership</h4>
+        <p id="circle-intro" class="circle-donate__intro">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
       </header>
       <!-- where the form attaches -->
       <div id="circle-form"></div>

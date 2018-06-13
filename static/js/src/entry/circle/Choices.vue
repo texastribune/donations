@@ -1,16 +1,16 @@
 <template>
   <div
-    class="grid_row grid_wrap--s"
+    class="grid_row grid_wrap--m"
   >
     <div
       v-for="group in groups"
       :key="group.id"
       :class="{ selected: selectedGroup === group.bucket }"
-      class="circle-form__bucket col_4"
+      class="circle-form__bucket col_4 grid_separator"
     >
       <p
         :id="getGroupHeadingConnector(group)"
-        class="circle-form__bucket-header"
+        class="circle-form__bucket-header grid_separator--s"
       >
         {{ group.heading }}
       </p>
@@ -18,7 +18,7 @@
         :options="group.options"
         :aria-labelledby="getGroupHeadingConnector(group)"
         aria-describedby="circle-cta circle-intro"
-        base-classes="form__radios"
+        base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="circleForm"
         @updateCallback="onUpdate"

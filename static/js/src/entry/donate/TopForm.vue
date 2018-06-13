@@ -6,7 +6,7 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div class="grid_row">
+    <div class="grid_row grid_separator">
       <div class="col">
         <radios
           :options="frequencyOptions"

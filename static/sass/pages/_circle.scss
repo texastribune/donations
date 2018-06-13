@@ -25,11 +25,20 @@ body {
   margin: 0;
 }
 
+.circle-donate {
+  &__intro {
+    color: $color-gray-dark;
+    font-size: $size-s;
+  }
+}
+
 .circle-form {
   &__bucket {
     border-width: 3px;
-    border-color: $color-white-pure;
+    border-color: $color-white-off;
     border-style: solid;
+    padding: $size-xs;
+    transition: border-color .2s;
     
     &.selected {
       border-color: $color-yellow-tribune;
@@ -37,6 +46,7 @@ body {
   }
 
   &__bucket-header {
-
+    font-size: $size-m;
+    font-weight: bold;
   }
 }

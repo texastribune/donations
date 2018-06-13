@@ -6,10 +6,18 @@
     class="form circle-form"
     @submit="$event.preventDefault()"
   >
-    <div class="grid_container--l grid_separator--l">
+    <div class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
           <choices />
+        </div>
+      </div>
+    </div>
+
+    <div class="grid_container--m grid_separator">
+      <div class="grid_row">
+        <div class="col">
+          <h4>Your membership information:</h4>
         </div>
       </div>
     </div>
