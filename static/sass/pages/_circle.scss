@@ -50,3 +50,40 @@ body {
     font-weight: bold;
   }
 }
+
+.circle-wall {
+  &__heading {
+    @include mq($from: bp-s) {
+      text-align: center;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+    @include mq($from: bp-s) {
+      justify-content: center;
+    }
+  }
+
+  &__item {
+    margin: 0 $size-xxs/2 $size-xxs/2 0;
+
+    @include mq($until: bp-s) {
+      flex: 1 1 100%;
+    }
+  }
+
+  &__star {
+    color: $color-yellow-tribune;
+    font-size: $size-xs;
+  }
+
+  &__name {
+    @include mq($from: bp-s) {
+      font-size: $size-xs;
+    }
+  }
+}

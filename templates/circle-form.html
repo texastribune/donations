@@ -11,7 +11,7 @@
     <!-- where the router component attaches -->
     <div id="app" style="display:none;"></div>
 
-    <section class="circle-donate section-padding">
+    <section class="circle-donate section-padding grid_separator--l">
       <header class="circle-donate__header grid_container--s grid_separator">
         <!-- IDs are for ARIA usage in the form -->
         <h4 id="circle-cta" class="circle-donate__hed grid_separator--xs">Select your Circle Membership</h4>
@@ -19,6 +19,10 @@
       </header>
       <!-- where the form attaches -->
       <div id="circle-form"></div>
+    </section>
+
+    <section class="circle-wall grid_container grid_separator--l">
+      <div id="circle-wall"></div>
     </section>
   </main>
 {% endblock %}

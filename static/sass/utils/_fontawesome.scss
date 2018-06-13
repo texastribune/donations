@@ -168,6 +168,9 @@
   content: "\f00c";
 }
 
+.fa-star:before {
+  content: "\f005";
+}
 
 /* Icons we do not use */
 /*
@@ -182,9 +185,6 @@
 
 .fa-flag:before {
   content: "\f024";
-}
-.fa-star:before {
-  content: "\f005";
 }
 .fa-clock-o:before {
   content: "\f017";
@@ -250,8 +250,6 @@
 .fa-heart:before {
   content: "\f004";
 }
-
-
 
 .fa-camera-retro:before {
   content: "\f083";
@@ -1436,7 +1434,6 @@
 .fa-yahoo:before {
   content: "\f19e";
 }
-
 
 .fa-reddit-square:before {
   content: "\f1a2";

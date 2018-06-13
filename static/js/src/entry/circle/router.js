@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import CircleForm from './CircleForm.vue';
+import Wall from './Wall.vue';
 import { CIRCLE_BUCKETS } from './constants';
 
 Vue.use(VueRouter);
@@ -59,6 +60,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...CircleForm, store });
+    const wall = new Vue({ ...Wall });
     const { currentRoute: { query } } = router;
 
     store.dispatch(
@@ -68,6 +70,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     routeHandler.$mount('#app');
     topForm.$mount('#circle-form');
+    wall.$mount('#circle-wall');
   });
 }
 

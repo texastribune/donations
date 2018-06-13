@@ -77,10 +77,6 @@ $color-error: #f51c1c;
       align-items: center;
       display: flex;
       margin-bottom: $size-b;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
     }
 
     label {
@@ -101,6 +97,10 @@ $color-error: #f51c1c;
     &--always-stack {
       li {
         flex: 1 1 100%;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     }
 
