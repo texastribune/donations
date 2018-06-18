@@ -12,7 +12,7 @@
         :checked="value === option.value"
         :id="getLabelConnector(index)"
         type="radio"
-        @input="updateSingleValue($event.target.value)"
+        @change="updateSingleValue($event.target.value)"
       >
       <label
         :for="getLabelConnector(index)"

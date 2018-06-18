@@ -17,7 +17,7 @@
       :name="name"
       :placeholder="placeholder"
       :type="type"
-      @input="updateSingleValue($event.target.value)"
+      @change="updateSingleValue($event.target.value)"
     >
     <p
       v-if="showError && !valid"

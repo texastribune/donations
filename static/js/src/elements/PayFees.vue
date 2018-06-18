@@ -9,7 +9,7 @@
       <input
         id="pay-fees"
         type="checkbox"
-        @input="onInput($event.target.checked)"
+        @change="onInput($event.target.checked)"
       >
       <label
         for="pay-fees"
