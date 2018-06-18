@@ -14,24 +14,71 @@
     <div id="app" style="display:none;"></div>
 
     <header class="circle-hero">
-      <div class="circle-hero__inner grid_container--s grid_padded">
+      <div class="circle-hero__inner grid_container--m grid_padded">
         <h1 class="circle-hero__title grid_separator">Join Our Circle</h1>
-        <p class="circle-hero__tag">The Texas Tribune is the only member-supported, digitally focused, nonpartisan news organization that informs and engages with Texans about public policy, politics, government and statewide issues.</p>
+        <p class="circle-hero__tag grid_separator">The Texas Tribune is the only member-supported, digitally focused, nonpartisan news organization that informs and engages with Texans about public policy, politics, government and statewide issues.</p>
+        <p class="circle-hero__tag-yellow">Our nonprofit newsroom depends on your support!</p>
       </div>
     </header>
 
-    <div class="grid_padded--xl">
+    <div class="grid_container grid_padded--xl">
       <section class="circle-donate section-padding grid_separator--l">
-        <header class="circle-donate__header grid_container--s grid_separator">
+        <header class="circle-donate__header grid_container--m grid_separator">
           <!-- IDs are for ARIA usage in the form -->
-          <h2 id="circle-cta" class="circle-donate__hed grid_separator--xs">Select your Circle Membership</h2>
+          <h2 id="circle-cta" class="circle-donate__hed grid_separator--xs">Your Circle Membership</h2>
           <p id="circle-intro" class="circle-donate__intro">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
         </header>
         <!-- where the form attaches -->
         <div id="circle-form"></div>
       </section>
-      
-      <section class="circle-wall grid_container grid_separator--l">
+
+      <section class="grid_container--m circle-benefits section-padding grid_padded">
+        <header>
+          <p class="grid_separator">Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
+          <p class="circle-benefits__header link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</p>
+        </header>
+        <h4 class="smallcaps--light grid_separator--xs">Exclusive Content</h4>
+        <p class="circle-benefits__item grid_separator">Special notifications and updates from Evan Smith, CEO</p>
+        <h4 class="smallcaps--light grid_separator--xs">Access Benefits</h4>
+        <p class="circle-benefits__item grid_separator--s">Early registration to select Tribune events and VIP receptions</p>
+        <p class="circle-benefits__item grid_separator--s">Invitations to exclusive events as part of The Texas Tribune Festival</p>
+        <p class="circle-benefits__item grid_separator">Year-round reserved seating at Tribune statewide events</p>
+        <h4 class="smallcaps--light grid_separator--xs">Special Recognition</h4>
+        <p class="circle-benefits__item grid_separator--l">Exclusive recognition as a Texas Tribune Circle Member on our site</p>
+
+        <p class="grid_separator circle-benefits__header">Questions?</p>
+        <div class="contact grid_row grid_wrap--l grid_separator">
+          <div class="col">
+            <p class="grid_separator--s">For major gifts or grants, contact:</p>
+            <p><strong>Terry Quinn</strong></p>
+            <p>Chief Development Officer</p>
+            <p>512-716-8613</p>
+            <p class="grid_separator"><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></p>
+          </div>
+          <div class="col">
+            <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
+            <p><strong>April Hinkle</strong></p>
+            <p>Chief Revenue Officer</p>
+            <p>512-716-8634</p>
+            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
+          </div>
+        </div>
+        <div class="contact grid_row grid_wrap--l grid_separator--l">
+          <div class="col">
+            <p class="grid_separator--s">For other membership questions, contact:</p>
+            <p><strong>Peter Hunt</strong></p>
+            <p>Member Relations</p>
+            <p>512-716-8695</p>
+            <p class="grid_separator"><a href="mailto:phunt@texastribune.org">phunt@texastribune.org</a></p>
+          </div>
+          <div class="col">&nbsp;</div>
+        </div>
+      </section>
+
+      <section class="circle-wall grid_separator--l">
+        <figure class="circle-wall__logo">
+          <img src="{{ url_for('static', filename='img/circle-member-half-logo.png')}}" alt="Circle Membership logo">
+        </figure>
         <div id="circle-wall"></div>
       </section>
     </div>

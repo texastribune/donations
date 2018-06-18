@@ -37,21 +37,33 @@ body {
     border-width: 3px;
     border-color: $color-white-off;
     border-style: solid;
-    padding: $size-xs;
+    padding: $size-s;
     transition: border-color .2s;
-    
+
     &.selected {
       border-color: $color-yellow-tribune;
     }
   }
 
   &__bucket-header {
-    font-size: $size-m;
+    @extend .font-serif;
+    font-size: $size-l;
     font-weight: bold;
+    line-height: 1;
   }
 }
 
 .circle-wall {
+  &__logo {
+    margin: 0 $size-b $size-l;
+    text-align: center;
+
+    img {
+      max-width: 450px;
+      width: 100%;
+    }
+  }
+
   &__heading {
     @include mq($from: bp-s) {
       text-align: center;
@@ -89,23 +101,64 @@ body {
 }
 
 .circle-hero {
-  background-color: #f2ede2;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 1440px;
-  
+  background-color: $color-sand;
+  background-position-x: 50%;
+  background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
+  background-repeat: repeat;
+  padding-bottom: $size-giant;
+  padding-top: $size-giant;
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-b;
+    padding-top: $size-b;
+  }
+
   &__inner {
-    padding: $size-xl;
+    padding: $size-xl 0;
   }
 
   &__title {
     border-bottom: 3px solid $color-yellow-tribune;
+    color: $color-white-pure;
     font-size: $size-xl;
+    font-weight: 700;
     padding-bottom: $size-b;
-    text-align: center;
 
     @include mq($from: bp-s) {
       font-size: $size-giant;
     }
+
+    @include mq($from: bp-xl) {
+      font-size: 3.5rem;
+    }
+  }
+
+  &__tag {
+    color: $color-white-pure;
+  }
+
+  &__tag-yellow {
+    color: $color-yellow-tribune;
+    font-weight: 700;
+  }
+}
+
+.circle-benefits {
+  &__header {
+    font-weight: 700;
+  }
+
+  &__item {
+    @extend .font-sansserif;
+    font-size: $size-xs;
+  }
+}
+
+.contact {
+  @extend %link--blue;
+
+  p {
+    @extend .font-sansserif;
+    font-size: $size-s;
   }
 }

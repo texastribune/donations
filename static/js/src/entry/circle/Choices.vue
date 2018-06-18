@@ -10,7 +10,7 @@
     >
       <p
         :id="getGroupHeadingConnector(group)"
-        class="circle-form__bucket-header grid_separator--s"
+        class="circle-form__bucket-header grid_separator"
       >
         {{ group.heading }}
       </p>
