@@ -9,7 +9,7 @@
       <input
         id="pay-fees"
         type="checkbox"
-        @change="onInput($event.target.checked)"
+        @change="onChange($event.target.checked)"
       >
       <label
         for="pay-fees"
@@ -67,7 +67,7 @@ export default {
   },
 
   methods: {
-    onInput(checked) {
+    onChange(checked) {
       this.updateStoreValue({
         storeModule: this.payFeesValueStoreModule,
         key: 'pay_fees_value',
