@@ -3,7 +3,6 @@
     aria-live="polite"
   >
     <div
-      v-if="fee"
       :class="classes"
     >
       <input
@@ -15,8 +14,13 @@
         for="pay-fees"
       >
         I agree to pay
-        <span>{{ fee }}</span>
-        for processing fees. Paying fees directs more money to our mission.
+        <span
+          v-if="fee"
+        >
+          {{ fee }}
+        </span>
+        <span>{{ installmentPeriod }}</span>
+        for processing fees. This directs more money to our mission.
       </label>
     </div>
   </div>
@@ -26,14 +30,23 @@
 import validate from 'validate.js';
 
 import updateStoreValue from './mixins/updateStoreValue';
+import getStoreValue from './mixins/getStoreValue';
 
 export default {
   name: 'PayFees',
 
-  mixins: [updateStoreValue],
+  mixins: [
+    updateStoreValue,
+    getStoreValue,
+  ],
 
   props: {
     amountStoreModule: {
+      type: String,
+      required: true,
+    },
+
+    installmentPeriodStoreModule: {
       type: String,
       required: true,
     },
@@ -46,9 +59,10 @@ export default {
 
   computed: {
     fee() {
-      const getter =
-        this.$store.getters[`${this.amountStoreModule}/valueByKey`];
-      let amount = getter('amount');
+      let amount = this.getStoreValue({
+        storeModule: this.amountStoreModule,
+        key: 'amount',
+      });
 
       if (!this.isValidAmount(amount)) return false;
 
@@ -58,6 +72,16 @@ export default {
       const fee = Math.floor((total - amount) * 100) / 100;
 
       return `$${fee.toFixed(2)}`;
+    },
+
+    installmentPeriod() {
+      const installmentPeriod = this.getStoreValue({
+        storeModule: this.installmentPeriodStoreModule,
+        key: 'installment_period',
+      });
+
+      if (installmentPeriod === 'None') return '';
+      return installmentPeriod.toLowerCase();
     },
   },
 

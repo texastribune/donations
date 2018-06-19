@@ -108,6 +108,7 @@
           base-classes="form__fees"
           amount-store-module="baseForm"
           pay-fees-value-store-module="baseForm"
+          installment-period-store-module="baseForm"
         />
       </div>
     </div>
