@@ -101,7 +101,6 @@ body {
 }
 
 .circle-hero {
-  background-color: $color-sand;
   background-position-x: 50%;
   background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
   background-repeat: repeat;
@@ -111,10 +110,6 @@ body {
   @include mq($until: bp-l) {
     padding-bottom: $size-b;
     padding-top: $size-b;
-  }
-
-  &__inner {
-    padding: $size-xl 0;
   }
 
   &__title {
@@ -133,11 +128,11 @@ body {
     }
   }
 
-  &__tag {
+  &__intro {
     color: $color-white-pure;
   }
 
-  &__tag-yellow {
+  &__cta {
     color: $color-yellow-tribune;
     font-weight: 700;
   }

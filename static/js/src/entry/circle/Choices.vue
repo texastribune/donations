@@ -17,7 +17,7 @@
       <radios
         :options="group.options"
         :aria-labelledby="getGroupHeadingConnector(group)"
-        aria-describedby="circle-cta circle-intro"
+        aria-describedby="circle-donate-hed circle-donate-intro"
         base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="circleForm"
