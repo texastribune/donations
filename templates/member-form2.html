@@ -47,7 +47,6 @@
         <div class="prose"><p>As a <a href="https://www.texastribune.org/about">nonprofit newsroom</a>, we rely on members to help keep our stories free and our events open to the public. Join <a href="https://www.texastribune.org/support-us/donors-and-members/">thousands</a> who already support The Texas Tribune with <nobr>their donations.</nobr></p>
         </div>
         <div class="smallcaps grid_separator">Members receive ...</div>
-        <!-- <p class="smallcaps grid_separator--s">Members receive ...</p> -->
         <ul class="list--bulleted">
           <li>Exclusive discounts to our annual <a href="https://festival.texastribune.org/">Texas Tribune Festival</a>, a three-day meeting of the brightest minds in politics and policy.</li>
           <li>Behind-the-scenes access to the Texas Tribune newsroom, including Q&As with our reporters and sneak peeks at special projects.</li>
@@ -55,15 +54,7 @@
         </ul>
       </div>
       <div class="col_1 grid_separator--l"></div>
-      <div class="col_3">
-        <div class="border--yellow_notch"></div>
-        <div class="smallcaps grid_separator--s">Circle Membership</div>
-        <div class="prose grid_separator--xl">
-          <p>For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership program</a>.</p>
-        </div>
-
-        {% include 'includes/member-quotes.html' %}
-      </div>
+      <div class="col_3"></div>
     </div>
 
     <div class="faq grid_row grid_wrap--l grid_separator--l">
@@ -88,7 +79,7 @@
           </div>
         </div>
 
-        <h3 class="grid_separator--s">What if I want to give more?</h3>
+        <h4 class="grid_separator--s">What if I want to give more?</h4>
         <div class="prose grid_separator"><p>For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership</a> program. To make a tax-deductible gift in the name of a business, contact April Hinkle to join our Business Membership program.</p></div>
 
         <div class="contact grid_row grid_wrap--l grid_separator--l">
@@ -108,7 +99,7 @@
           </div>
         </div>
 
-        <h3 class="grid_separator--s">Still have questions?</h3>
+        <h4 class="grid_separator--s">Still have questions?</h4>
         <div class="contact grid_row grid_wrap--l grid_separator--l">
           <div class="col">
             <p class="grid_separator--s">For questions about your current membership, contact:</p>
@@ -122,7 +113,10 @@
         </div>
       </div>
       <div class="col_1"></div>
-      <div class="col_3"></div>
+      <div class="col_3">
+        <div class="border--yellow_notch"></div>
+        {% include 'includes/member-quotes.html' %}
+      </div>
     </div>
   </main>
 {% endblock %}
