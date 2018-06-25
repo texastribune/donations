@@ -8,9 +8,9 @@
 
 {% block content %}
   <section class="splash grid_separator--xl">
-    <div class="grid_container--m grid_padded--xl">
+    <div class="grid_container grid_padded--xl">
       <div class="grid_row">
-        <header class="splash_header col_12">
+        <header class="splash_header col_8">
           <h1 class="splash_header--headline grid_separator--l">
             Texas Tribune members support our&nbsp;
             <span class="rotate_words">
@@ -51,6 +51,10 @@
           <!-- where the form attaches -->
           <div id="top-form"></div>
         </div>
+      </div>
+      <div class="col_1"></div>
+      <div class="col_3">
+        {% include 'includes/member-quotes.html' %}
       </div>
     </div>
 
@@ -108,11 +112,6 @@
             <p class="">Or see our <a href="https://support.texastribune.org/faq.html">full FAQ</a>.</p>
           </div>
         </div>
-      </div>
-      <div class="col_1"></div>
-      <div class="col_3">
-        <div class="border--yellow_notch"></div>
-        {% include 'includes/member-quotes.html' %}
       </div>
     </div>
   </main>
