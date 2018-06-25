@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-  <section class="splash">
+  <section class="splash grid_separator--xl">
     <div class="grid_container--m grid_padded--xl">
       <div class="grid_row">
         <header class="splash_header col_12">
@@ -29,35 +29,32 @@
     </div>
   </section>
   <main class="main grid_container grid_padded--xl">
-    <!-- where the router component attaches -->
-    <div id="app" style="display:none;"></div>
-
-    <section class="grid_container--m section-padding">
-      <h2 class="grid_separator">Become a Texas Tribune Member today</h2>
-      <!-- where the form attaches -->
-      <div id="top-form"></div>
-    </section>
-
-    {% include 'includes/festival-promo.html' %}
-
-    <div class="member_benefits grid_row grid_wrap--l">
+    <div class="grid_row grid_wrap--l">
       <div class="col_8">
-        <div class="border--yellow_notch"></div>
-        <h2 class="grid_separator">Our members are part of a growing community of civically engaged Texans.</h2>
-        <div class="prose"><p>As a <a href="https://www.texastribune.org/about">nonprofit newsroom</a>, we rely on members to help keep our stories free and our events open to the public. Join <a href="https://www.texastribune.org/support-us/donors-and-members/">thousands</a> who already support The Texas Tribune with <nobr>their donations.</nobr></p>
+        <div class="member_benefits section-padding">
+          <div class="border--yellow_notch"></div>
+          <h2 class="grid_separator">Our members are part of a growing community of civically engaged Texans.</h2>
+          <div class="prose"><p>As a <a href="https://www.texastribune.org/about">nonprofit newsroom</a>, we rely on members to help keep our stories free and our events open to the public. Join <a href="https://www.texastribune.org/support-us/donors-and-members/">thousands</a> who already support The Texas Tribune with <nobr>their donations.</nobr></p>
+          </div>
+          <div class="smallcaps grid_separator">Members receive ...</div>
+          <ul class="list--bulleted">
+            <li>Behind-the-scenes access to the Texas Tribune newsroom, including Q&As with our reporters and sneak peeks at special projects.</li>
+            <li>$50 off <a href="https://festival.texastribune.org/">Texas Tribune Festival</a> badges, as well as priority entry to all panel dicsussions. Texas Tribune Festival is our annual, three-day meeting of the brightest minds in politics and policy — an opportunity to connect with people, like you, who care about the future of Texas. <a href="https://festival.texastribune.org/registration">Register here</a>.</li>
+            <li>Our utmost gratitude and a special place on our <a href="https://www.texastribune.org/support-us/donors-and-members/#2018">growing donor wall</a>.</li>
+          </ul>
         </div>
-        <div class="smallcaps grid_separator">Members receive ...</div>
-        <ul class="list--bulleted">
-          <li>Exclusive discounts to our annual <a href="https://festival.texastribune.org/">Texas Tribune Festival</a>, a three-day meeting of the brightest minds in politics and policy.</li>
-          <li>Behind-the-scenes access to the Texas Tribune newsroom, including Q&As with our reporters and sneak peeks at special projects.</li>
-          <li>Our utmost gratitude and a special place on our <a href="https://www.texastribune.org/support-us/donors-and-members/#2018">growing donor wall</a>.</li>
-        </ul>
+        <div class="donation_form section-padding">
+          <!-- where the router component attaches -->
+          <div id="app" style="display:none;"></div>
+          <div class="border--yellow_notch"></div>
+          <h2 class="grid_separator">Become a Texas Tribune Member today</h2>
+          <!-- where the form attaches -->
+          <div id="top-form"></div>
+        </div>
       </div>
-      <div class="col_1 grid_separator--l"></div>
-      <div class="col_3"></div>
     </div>
 
-    <div class="faq grid_row grid_wrap--l grid_separator--l">
+    <div class="faq section-padding grid_row grid_wrap--l grid_separator--l">
       <div class="col_8">
         <div class="border--yellow_notch"></div>
         <h3 class="grid_separator">Frequently Asked Questions</h3>

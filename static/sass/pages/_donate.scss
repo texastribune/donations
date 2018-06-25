@@ -62,12 +62,12 @@ h2 {
         margin-bottom: $size-m;
         padding-bottom: $size-m;
       }
-      
+
       @include mq($from: bp-l) {
         font-size: 2.3rem;
         line-height: 1.25em;
       }
-      
+
       @include mq($from: bp-xl) {
         font-size: 2.75rem;
       }
@@ -118,14 +118,6 @@ h2 {
   2%   { opacity: 0; -webkit-transform: translateY(-30px); transform: translateY(-30px);}
   5%   { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
   100%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
-}
-
-.member_benefits {
-  @extend .section-padding;
-}
-
-.faq {
-  @extend .section-padding;
 }
 
 .list--bulleted {
