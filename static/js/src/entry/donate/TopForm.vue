@@ -248,9 +248,9 @@ export default {
   data() {
     return {
       frequencyOptions: [
-        { id: 0, text: 'Monthly donation', value: 'monthly' },
-        { id: 1, text: 'Yearly donation', value: 'yearly' },
-        { id: 2, text: 'One-time donation', value: 'None' },
+        { id: 0, text: 'One-time donation', value: 'None' },
+        { id: 1, text: 'Monthly donation', value: 'monthly' },
+        { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
       validation: {
         stripeEmail: {
