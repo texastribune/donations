@@ -37,7 +37,7 @@ function createBaseFormState(queryParams) {
     customerId: '',
     first_name: '',
     last_name: '',
-    description: 'The Texas Tribune Membership',
+    description: 'The Texas Tribune Circle Membership',
     reason: '',
     zipcode: '',
     pay_fees_value: 'False',
