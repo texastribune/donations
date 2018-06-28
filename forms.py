@@ -6,7 +6,7 @@ from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
 
-class BaseForm(FlaskForm):
+class DonateForm(FlaskForm):
     first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last name',
@@ -21,8 +21,6 @@ class BaseForm(FlaskForm):
     description = HiddenField(u'Description')
     pay_fees_value = HiddenField(u'Pay Fees Value')
     openended_status = HiddenField(u'Openended Status')
-
-class DonateForm(BaseForm):
     installment_period = RadioField(u'Installment Period',
         choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
 
