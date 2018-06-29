@@ -101,9 +101,10 @@ body {
 }
 
 .circle-hero {
-  background-position-x: 50%;
   background-image: url('../img/circle-bg.jpg');
-  background-repeat: repeat;
+  background-position-y: 90%;
+  background-repeat: no-repeat;
+  background-size: cover;
   padding-bottom: $size-giant;
   padding-top: $size-giant;
 
