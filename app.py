@@ -16,8 +16,6 @@ from app_celery import make_celery
 
 from pprint import pprint
 
-redirect_url = '/donate'
-
 app = Flask(__name__)
 
 app.secret_key = FLASK_SECRET_KEY
@@ -51,6 +49,35 @@ if app.config['ENABLE_SENTRY']:
     sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
 
 """
+Redirects, including for URLs that used to be
+part of the old donations app that lived at
+support.texastribune.org.
+"""
+@app.route('/blast-vip')
+def the_blastvip_form():
+    return redirect('/blastform', code=302)
+
+@app.route('/')
+def root_route():
+    return redirect('/donate', code=301)
+
+@app.route('/index.html')
+def index_html_route():
+    return redirect('/donate', code=301)
+
+@app.route('/faq.html')
+def faq_html_route():
+    return redirect('/donate', code=301)
+
+@app.route('/levels.html')
+def levels_html_route():
+    return redirect('/donate', code=301)
+
+@app.route('/circle.html')
+def circle_html_route():
+    return redirect('/circleform', code=301)
+
+"""
 Read the Webpack assets manifest and then provide the
 scripts, including cache-busting hache, as template context.
 
@@ -78,10 +105,6 @@ def get_bundles(entry):
         bundles['css'].append(asset_path + bundle)
     return bundles
 
-@app.route('/memberform')
-def member_form():
-    return redirect(redirect_url, code=302)
-
 @app.route('/donate')
 def member2_form():
     bundles = get_bundles('donate')
@@ -89,10 +112,6 @@ def member2_form():
         bundles=bundles,
         key=app.config['STRIPE_KEYS']['publishable_key']
     )
-
-@app.route('/donateform')
-def donate_renew_form():
-    return redirect(redirect_url, code=302)
 
 @app.route('/circleform')
 def circle_form():
@@ -141,10 +160,6 @@ def submit_blast():
     else:
         message = "There was an issue saving your donation information."
         return render_template('error.html', message=message)
-
-@app.route('/blast-vip')
-def the_blastvip_form():
-    return redirect('/blastform', code=302)
 
 @app.route('/error')
 def error():
