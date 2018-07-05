@@ -22,21 +22,21 @@
     </div>
     <div class="share grid_row grid_wrap--m grid_separator--l">
       <div class="col grid_separator--s">
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.texastribune.org%2F&amp;display=popup&amp;ref=plugin&amp;src=like&amp;app_id=113869198637480" target="_blank" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-facebook">
+        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.texastribune.org%2F&amp;display=popup&amp;ref=plugin&amp;src=like&amp;app_id=113869198637480" target="_blank">
         <div class="button button--fb button--l button--titlecase">
           <i class="fa fa-facebook"></i> Share on Facebook
         </div>
         </a>
       </div>
       <div class="col grid_separator--s">
-        <a href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw&related=texastribune&text=%23ISupportTexasTribune%20because%20...%20%20%20&tw_p=tweetbutton&url=http%3A%2F%2Fwww.texastribune.org%2Fgive" target="_blank" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-twitter">
+        <a href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&ref_src=twsrc%5Etfw&related=texastribune&text=%23ISupportTexasTribune%20because%20...%20%20%20&tw_p=tweetbutton&url=http%3A%2F%2Fwww.texastribune.org%2Fgive" target="_blank">
         <div class="button button--twitter button--l button--titlecase">
           <i class="fa fa-twitter"></i> Share on Twitter
         </div>
         </a>
       </div>
       <div class="col grid_separator--s">
-        <a href="mailto:?subject=Why%20I%20support%20The%20Texas%20Tribune" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-email">
+        <a href="mailto:?subject=Why%20I%20support%20The%20Texas%20Tribune">
         <div class="button button--email button--l button--titlecase">
           <i class="fa fa-envelope"></i> Email your friends and family
         </div>
@@ -54,7 +54,7 @@
     </div>
     <div class="share grid_row">
       <div class="col">
-        <a href="mailto:membership+whyigive@texastribune.org?Subject=Why%20I%20support%20The%20Texas%20Tribune&amp;Body=Dear%20Texas%20Tribune%20team%2C%20%0A%0AThis%20is%20why%20I%20just%20made%20a%20donation%20to%20your%20newsroom%3A" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-email">
+        <a href="mailto:membership+whyigive@texastribune.org?Subject=Why%20I%20support%20The%20Texas%20Tribune&amp;Body=Dear%20Texas%20Tribune%20team%2C%20%0A%0AThis%20is%20why%20I%20just%20made%20a%20donation%20to%20your%20newsroom%3A">
           <div class="button button--email button--l button--titlecase">
             <i class="fa fa-envelope"></i> Tell us why you support the Tribune
           </div>
@@ -63,16 +63,4 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block bottom_script %}
-  <script>
-    ga('send', {
-      hitType: 'event',
-      eventCategory: 'Support Us',
-      eventAction: 'donation-success',
-      eventLabel: '{{ ga.event_label }}',
-      eventValue: parseInt('{{ ga.event_value }}')
-    });
-  </script>
 {% endblock %}

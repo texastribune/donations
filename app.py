@@ -142,13 +142,8 @@ def circle_charge():
                 customer=customer)
         print('Validated form of customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
-        # give the frequency and amount to template for GA tracking
-        ga = {
-            'event_label': request.form['installment_period'] if request.form['installment_period'] != 'None' else 'one-time',
-            'event_value': request.form['amount'],
-        }
         return render_template('charge.html',
-                amount=request.form['amount'], ga=ga, bundles=bundles)
+                amount=request.form['amount'], bundles=bundles)
     else:
         message = "There was an issue saving your donation information."
         print('Form validation errors: {}'.format(form.errors))
@@ -261,13 +256,8 @@ def charge():
                 customer=customer)
         print('Validated form of customer {} {} {}'.format(customer_email,
             customer_first, customer_last))
-        # give the frequency and amount to template for GA tracking
-        ga = {
-            'event_label': request.form['installment_period'] if request.form['installment_period'] != 'None' else 'one-time',
-            'event_value': request.form['amount'],
-        }
         return render_template('charge.html',
-                amount=request.form['amount'], ga=ga, bundles=bundles)
+                amount=request.form['amount'], bundles=bundles)
     else:
         message = "There was an issue saving your donation information."
         print('Form validation errors: {}'.format(form.errors))
