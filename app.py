@@ -113,7 +113,7 @@ def circle_form():
 
 @app.route('/circle-charge', methods=['POST'])
 def circle_charge():
-    form = DonateForm(request.form)
+    form = CircleForm(request.form)
     pprint('Request: {}'.format(request))
 
     customer_email = request.form['stripeEmail']
