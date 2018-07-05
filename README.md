@@ -1,7 +1,7 @@
 Stripe-Salesforce
 =================
 
-This repo integrates [Stripe Checkout](https://stripe.com/docs/checkout) and [Salesforce](http://www.salesforce.com/) into our [donations app](http://support.texastribune.org/).
+This repo integrates [Stripe Checkout](https://stripe.com/docs/checkout) and [Salesforce](http://www.salesforce.com/).
 
 Getting Started
 ---------------
