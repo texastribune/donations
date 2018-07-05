@@ -64,3 +64,14 @@
   </div>
 </div>
 {% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.dataLayer.push({
+      event: 'customDonationSuccess',
+      gaAction: 'donation submit',
+      gaLabel: '{{ gtm.event_label }}',
+      gaValue: '{{ gtm.event_value }}'
+    });
+  </script>
+{% endblock %}
