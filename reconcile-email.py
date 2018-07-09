@@ -10,8 +10,8 @@ from config import STRIPE_KEYS
 stripe.api_key = STRIPE_KEYS['secret_key']
 
 # get Stripe emails
-customers = stripe.Customer.all(limit=100)
-stripe_emails = set((x['email'].lower() for x in customers.auto_paging_iter()))
+customers = stripe.Customer.list(limit=100)
+stripe_emails = set((x['email'].lower() for x in customers.auto_paging_iter() if x['email']))
 
 # then compare to SF
 query = 'SELECT All_In_One_EMail__c FROM Contact'

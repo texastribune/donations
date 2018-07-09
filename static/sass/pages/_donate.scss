@@ -53,7 +53,7 @@ h2 {
     &--headline {
       @extend h1;
       color: $color-white-pure;
-      border-bottom: 3px solid $color-yellow-tribune;
+      border-bottom: 2px solid $color-yellow-tribune;
       font-weight: bold;
       padding-bottom: $size-l;
 
@@ -62,12 +62,12 @@ h2 {
         margin-bottom: $size-m;
         padding-bottom: $size-m;
       }
-      
+
       @include mq($from: bp-l) {
         font-size: 2.3rem;
         line-height: 1.25em;
       }
-      
+
       @include mq($from: bp-xl) {
         font-size: 2.75rem;
       }
@@ -120,14 +120,6 @@ h2 {
   100%  { opacity: 1; -webkit-transform: translateY(0px); transform: translateY(0px);}
 }
 
-.member_benefits {
-  @extend .section-padding;
-}
-
-.faq {
-  @extend .section-padding;
-}
-
 .list--bulleted {
   @extend .font-serif;
 
@@ -149,4 +141,8 @@ h2 {
     @extend .font-sansserif;
     font-size: $size-s;
   }
+}
+
+.faq {
+  background-color: $color-white-off;
 }
