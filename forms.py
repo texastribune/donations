@@ -28,6 +28,7 @@ class CircleForm(BaseForm):
     installment_period = HiddenField(u'Installment Period')
 
 class DonateForm(BaseForm):
+    customerId = HiddenField(u'Customer ID', [validators.InputRequired()])
     installment_period = RadioField(u'Installment Period',
         choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
 
