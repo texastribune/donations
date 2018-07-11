@@ -2,6 +2,14 @@
 
 {% block title %}Circle Membership | The Texas Tribune{% endblock %}
 
+{% block og_meta %}
+  <meta property="og:url" content="https://checkout.texastribune.org/circleform">
+  <meta property="og:image" content="https://checkout.texastribune.org{{ url_for('static', filename='img/circle-social.jpg') }}">
+  <meta property="og:title" content="Circle Membership | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Circle member today.">
+{% endblock %}
+
 {% block stylesheets %}
   {% for stylesheet in bundles['css'] %}
     <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
