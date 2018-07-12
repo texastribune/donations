@@ -25,10 +25,20 @@ body {
   margin: 0;
 }
 
+.navbar {
+  @media print {
+    display: none;
+  }
+}
+
 .circle-donate {
   &__intro {
     color: $color-gray-dark;
     font-size: $size-s;
+  }
+
+  @media print {
+    display: none;
   }
 }
 
@@ -51,6 +61,10 @@ body {
     font-weight: bold;
     line-height: 1;
   }
+
+  @media print {
+    display: none;
+  }
 }
 
 .circle-wall {
@@ -61,12 +75,20 @@ body {
     img {
       max-width: 450px;
       width: 100%;
+
+      @media print {
+        max-width: 175px;
+      }
     }
   }
 
   &__heading {
     @include mq($from: bp-s) {
       text-align: center;
+    }
+
+    @media print {
+      font-size: $size-b;
     }
   }
 
@@ -78,6 +100,10 @@ body {
     @include mq($from: bp-s) {
       justify-content: center;
     }
+
+    @media print {
+      display: initial;
+    }
   }
 
   &__item {
@@ -85,6 +111,12 @@ body {
 
     @include mq($until: bp-s) {
       flex: 1 1 100%;
+    }
+
+    @media print {
+      display: inline-block;
+      margin-bottom: 0;
+      margin-right: .15rem;
     }
   }
 
@@ -96,6 +128,10 @@ body {
   &__name {
     @include mq($from: bp-s) {
       font-size: $size-xs;
+    }
+
+    @media print {
+      font-size: .6rem;
     }
   }
 }
@@ -137,6 +173,10 @@ body {
     color: $color-yellow-tribune;
     font-weight: 700;
   }
+
+  @media print {
+    display: none;
+  }
 }
 
 .circle-benefits {
@@ -148,6 +188,10 @@ body {
     @extend .font-sansserif;
     font-size: $size-xs;
   }
+
+  @media print {
+    display: none;
+  }
 }
 
 .contact {
@@ -156,5 +200,9 @@ body {
   p {
     @extend .font-sansserif;
     font-size: $size-s;
+  }
+
+  @media print {
+    display: none;
   }
 }

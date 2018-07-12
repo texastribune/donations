@@ -24,6 +24,11 @@ function createBaseFormState(queryParams) {
   const { campaignId = '' } = queryParams;
 
   switch (installmentPeriod.toLowerCase()) {
+    case 'once':
+      openEndedStatus = 'None';
+      installmentPeriod = 'None';
+      amount = amount || '60';
+      break;
     case 'monthly':
       openEndedStatus = 'Open';
       amount = amount || '10';
@@ -31,11 +36,6 @@ function createBaseFormState(queryParams) {
     case 'yearly':
       openEndedStatus = 'Open';
       amount = amount || '75';
-      break;
-    case 'once':
-      openEndedStatus = 'None';
-      installmentPeriod = 'None';
-      amount = amount || '60';
       break;
     default:
       installmentPeriod = 'monthly';

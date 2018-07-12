@@ -2,6 +2,14 @@
 
 {% block title %}Circle Membership | The Texas Tribune{% endblock %}
 
+{% block og_meta %}
+  <meta property="og:url" content="https://checkout.texastribune.org/circleform">
+  <meta property="og:image" content="https://checkout.texastribune.org{{ url_for('static', filename='img/circle-social.jpg') }}">
+  <meta property="og:title" content="Circle Membership | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Circle member today.">
+{% endblock %}
+
 {% block stylesheets %}
   {% for stylesheet in bundles['css'] %}
     <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
@@ -26,7 +34,10 @@
         <header class="circle-donate__header grid_container--m grid_separator">
           <!-- IDs are for ARIA usage in the form -->
           <h2 id="circle-donate-hed" class="circle-donate__hed grid_separator--xs">Your Circle Membership</h2>
-          <p id="circle-donate-intro" class="circle-donate__intro">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
+          <div id="circle-donate-intro">
+            <p class="circle-donate__intro grid_separator">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
+            <p class="circle-donate__intro">Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
+          </div>
         </header>
         <!-- where the form attaches -->
         <div id="circle-form"></div>
@@ -34,7 +45,6 @@
 
       <section class="grid_container--m circle-benefits section-padding grid_padded">
         <header>
-          <p class="grid_separator">Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
           <p class="circle-benefits__header link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</p>
         </header>
         <h4 class="smallcaps--light grid_separator--xs">Exclusive Content</h4>
@@ -49,18 +59,18 @@
         <p class="grid_separator circle-benefits__header">Questions?</p>
         <div class="contact grid_row grid_wrap--l grid_separator">
           <div class="col">
+            <p class="grid_separator--s">For Circle Membership, contact:</p>
+            <p><strong>Jenny Ajluni</strong></p>
+            <p>Development Officer</p>
+            <p>512-250-9168</p>
+            <p class="grid_separator"><a href="mailto:jajluni@texastribune.org">jajluni@texastribune.org</a></p>
+          </div>
+          <div class="col">
             <p class="grid_separator--s">For major gifts or grants, contact:</p>
             <p><strong>Terry Quinn</strong></p>
             <p>Chief Development Officer</p>
             <p>512-716-8613</p>
             <p class="grid_separator"><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></p>
-          </div>
-          <div class="col">
-            <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
-            <p><strong>April Hinkle</strong></p>
-            <p>Chief Revenue Officer</p>
-            <p>512-716-8634</p>
-            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
           </div>
         </div>
         <div class="contact grid_row grid_wrap--l grid_separator--l">
@@ -71,13 +81,19 @@
             <p>512-716-8695</p>
             <p class="grid_separator"><a href="mailto:phunt@texastribune.org">phunt@texastribune.org</a></p>
           </div>
-          <div class="col">&nbsp;</div>
+          <div class="col">
+            <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
+            <p><strong>April Hinkle</strong></p>
+            <p>Chief Revenue Officer</p>
+            <p>512-716-8634</p>
+            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
+          </div>
         </div>
       </section>
 
       <section class="circle-wall grid_separator--l">
-        <figure class="circle-wall__logo">
-          <img src="{{ url_for('static', filename='img/circle-member-half-logo.png')}}" alt="Circle Membership logo">
+        <figure class="circle-wall__logo grid_separator--l">
+          <img src="{{ url_for('static', filename='img/circle-logo.png')}}" alt="Circle Membership logo">
         </figure>
         <!-- where the wall component attaches -->
         <div id="circle-wall"></div>

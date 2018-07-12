@@ -21,6 +21,7 @@ class DonateForm(FlaskForm):
     description = HiddenField(u'Description')
     pay_fees_value = HiddenField(u'Pay Fees Value')
     openended_status = HiddenField(u'Openended Status')
+    customerId = HiddenField(u'Customer ID', [validators.InputRequired()])
     installment_period = RadioField(u'Installment Period',
         choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
 
