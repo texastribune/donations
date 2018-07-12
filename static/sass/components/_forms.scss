@@ -66,7 +66,7 @@ $color-error: #f51c1c;
     width: 100%;
   }
 
-  // radio buttons (it's assumed they're inside an ordered list)
+  // radio buttons (it's assumed they're inside an unordered list)
   &__radios {
     display: flex;
     flex-wrap: wrap;
@@ -88,10 +88,26 @@ $color-error: #f51c1c;
       margin-left: 1px;
     }
 
+    &--serif {
+      label {
+        @extend .font-serif;
+      }
+    }
+
+    &--always-stack {
+      li {
+        flex: 1 1 100%;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+
     &--stack-at-medium {
       @include mq($until: bp-m) {
         li {
-          flex: 0 1 100%;
+          flex: 1 1 100%;
         }
       }
     }

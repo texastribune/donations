@@ -1,63 +1,111 @@
-{% extends "layout.html" %}
-{% block title %}
-  {{ super() }}
+{% extends "new_layout.html" %}
+
+{% block title %}Circle Membership | The Texas Tribune{% endblock %}
+
+{% block og_meta %}
+  <meta property="og:url" content="https://checkout.texastribune.org/circleform">
+  <meta property="og:image" content="https://checkout.texastribune.org{{ url_for('static', filename='img/circle-social.jpg') }}">
+  <meta property="og:title" content="Circle Membership | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Circle member today.">
 {% endblock %}
-{% block extra_script %}
-  {{ super() }}
+
+{% block stylesheets %}
+  {% for stylesheet in bundles['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+  {% endfor %}
 {% endblock %}
 
 {% block content %}
-  {{ super() }}
-  <div id="circle" class="main grid_container--xl">
-    <header class="grid_separator--l">
-      <h1>Confirm your circle membership</h1>
-      <p>Thank you for supporting The Texas Tribune by becoming a circle member! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you.</p>
-    </header>
-    <form id="form" action="/circle-charge" method="post">
-      <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
-      <div class="grid_row grid_wrap--l grid_wrap--reverse">
-        <div class="col_6">
-          {% include 'includes/form_inner.html' %}
-          {{ form.openended_status(value=openended_status) }}
-          {{ form.installments(value=installments) }}
-          {{ form.description(value='The Texas Tribune Circle Membership') }}
-        </div>
-        <div class="col_1">&nbsp;</div>
-        <div class="col_5 form__box grid_separator">
-          <div class="grid_row grid_wrap--m grid_separator">
-            <div class="col grid_separator">
-              <label>{% if installment_period == 'yearly' %}Annual{% endif %}{% if installment_period == 'monthly' %}Monthly{% endif %} Amount</label><br>
-              <span class="dollar">$</span>
-                {{ form.amount(readonly=true, autocomplete="off", value=amount, class="dollar") }}
-            </div>
-            <div class="col">
-              <label>Length</label><br>
-                {% if installments == '3' %}
-                  <p class="label-info">3 years</p>
-                {% else %}
-                  <p class="label-info">36 months</p>
-                {% endif %}
-            </div>
+  <main class="main">
+    <!-- where the router component attaches -->
+    <div id="app" style="display:none;"></div>
 
-          </div>
-          <div class="grid_row grid_wrap--m">
-            <div class="col">
-              {{ form.pay_fees.label }}
-                {{ form.pay_fees(checked=False, autocomplete="off") }}
-              <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-              <p id="pay-fee-info">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
-            </div>
-            <div class="col">
-              <label>Level</label><br>
-              <p class="level label-info"></p>
-            </div>
-        </div>
+    <header class="circle-hero">
+      <div class="circle-hero__inner grid_container--m grid_padded">
+        <h1 class="circle-hero__title grid_separator">Join Our Circle</h1>
+        <p class="circle-hero__intro grid_separator">The Texas Tribune is the only member-supported, digitally focused, nonpartisan news organization that informs and engages with Texans about public policy, politics, government and statewide issues.</p>
+        <p class="circle-hero__cta">Our nonprofit newsroom depends on your support!</p>
       </div>
-    </form>
-  </div>
-  {% if installment_period and amount %}
-    {% include 'includes/display_levels_js.html' %}
-  {% endif %}
-  {% include 'includes/stripe_checkout_js.html' %}
-  {% include 'includes/display_pay_fees.html' %}
+    </header>
+
+    <div class="grid_container grid_padded--xl">
+      <section class="circle-donate section-padding grid_separator--l">
+        <header class="circle-donate__header grid_container--m grid_separator">
+          <!-- IDs are for ARIA usage in the form -->
+          <h2 id="circle-donate-hed" class="circle-donate__hed grid_separator--xs">Your Circle Membership</h2>
+          <div id="circle-donate-intro">
+            <p class="circle-donate__intro grid_separator">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
+            <p class="circle-donate__intro">Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
+          </div>
+        </header>
+        <!-- where the form attaches -->
+        <div id="circle-form"></div>
+      </section>
+
+      <section class="grid_container--m circle-benefits section-padding grid_padded">
+        <header>
+          <p class="circle-benefits__header link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</p>
+        </header>
+        <h4 class="smallcaps--light grid_separator--xs">Exclusive Content</h4>
+        <p class="circle-benefits__item grid_separator">Special notifications and updates from Evan Smith, CEO</p>
+        <h4 class="smallcaps--light grid_separator--xs">Access Benefits</h4>
+        <p class="circle-benefits__item grid_separator--s">Early registration to select Tribune events and VIP receptions</p>
+        <p class="circle-benefits__item grid_separator--s">Invitations to exclusive events as part of The Texas Tribune Festival</p>
+        <p class="circle-benefits__item grid_separator">Year-round reserved seating at Tribune statewide events</p>
+        <h4 class="smallcaps--light grid_separator--xs">Special Recognition</h4>
+        <p class="circle-benefits__item grid_separator--l">Exclusive recognition as a Texas Tribune Circle Member on our site</p>
+
+        <p class="grid_separator circle-benefits__header">Questions?</p>
+        <div class="contact grid_row grid_wrap--l grid_separator">
+          <div class="col">
+            <p class="grid_separator--s">For Circle Membership, contact:</p>
+            <p><strong>Jenny Ajluni</strong></p>
+            <p>Development Officer</p>
+            <p>512-250-9168</p>
+            <p class="grid_separator"><a href="mailto:jajluni@texastribune.org">jajluni@texastribune.org</a></p>
+          </div>
+          <div class="col">
+            <p class="grid_separator--s">For major gifts or grants, contact:</p>
+            <p><strong>Terry Quinn</strong></p>
+            <p>Chief Development Officer</p>
+            <p>512-716-8613</p>
+            <p class="grid_separator"><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></p>
+          </div>
+        </div>
+        <div class="contact grid_row grid_wrap--l grid_separator--l">
+          <div class="col">
+            <p class="grid_separator--s">For other membership questions, contact:</p>
+            <p><strong>Peter Hunt</strong></p>
+            <p>Member Relations</p>
+            <p>512-716-8695</p>
+            <p class="grid_separator"><a href="mailto:phunt@texastribune.org">phunt@texastribune.org</a></p>
+          </div>
+          <div class="col">
+            <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
+            <p><strong>April Hinkle</strong></p>
+            <p>Chief Revenue Officer</p>
+            <p>512-716-8634</p>
+            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="circle-wall grid_separator--l">
+        <figure class="circle-wall__logo grid_separator--l">
+          <img src="{{ url_for('static', filename='img/circle-logo.png')}}" alt="Circle Membership logo">
+        </figure>
+        <!-- where the wall component attaches -->
+        <div id="circle-wall"></div>
+      </section>
+    </div>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+  <script src="https://js.stripe.com/v3/"></script>
+
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
+  {% endfor %}
 {% endblock %}
