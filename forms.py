@@ -6,7 +6,7 @@ from wtforms import validators
 from wtforms.fields.html5 import EmailField
 
 
-class BaseForm(FlaskForm):
+class DonateForm(FlaskForm):
     first_name = StringField(u'First name',
         [validators.required(message="Your first name is required.")])
     last_name = StringField(u'Last name',
@@ -19,18 +19,11 @@ class BaseForm(FlaskForm):
     campaign_id = HiddenField('Campaign ID')
     installments = HiddenField(u'Installments')
     description = HiddenField(u'Description')
-    pay_fees = BooleanField(u'Agree to pay fees')
     pay_fees_value = HiddenField(u'Pay Fees Value')
     openended_status = HiddenField(u'Openended Status')
-
-# temporary until the circle page is refactored with Vue
-class CircleForm(BaseForm):
-    installment_period = HiddenField(u'Installment Period')
-
-class DonateForm(BaseForm):
+    customerId = HiddenField(u'Customer ID', [validators.InputRequired()])
     installment_period = RadioField(u'Installment Period',
         choices=[('yearly', 'Yearly'), ('monthly', 'Monthly'), ('None', 'One Time')])
-
 
 class BlastForm(FlaskForm):
     first_name = StringField(u'First name',

@@ -62,11 +62,6 @@ export default {
       type: Boolean,
       required: true,
     },
-
-    containerClasses: {
-      type: String,
-      default: '',
-    },
   },
 
   computed: {

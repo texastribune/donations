@@ -10,6 +10,8 @@
     </label>
     <input
       :id="connector"
+      :aria-labelledby="ariaLabelledby"
+      :aria-describedby="ariaDescribedby"
       :aria-label="ariaLabel"
       :aria-invalid="!valid ? true : false"
       :aria-required="required"
@@ -30,26 +32,27 @@
 
 <script>
 import connectedElement from './mixins/connectedElement';
+import labelConnector from './mixins/labelConnector';
+import aria from './mixins/aria';
 
 export default {
   name: 'TextInput',
 
-  mixins: [connectedElement],
+  mixins: [
+    aria,
+    connectedElement,
+    labelConnector,
+  ],
 
   props: {
     hasLabel: {
       type: Boolean,
-      default: false,
+      default: true,
     },
 
     labelText: {
       type: String,
-      default: '',
-    },
-
-    maxlength: {
-      type: [String, Boolean],
-      default: false,
+      required: true,
     },
 
     placeholder: {
@@ -71,12 +74,12 @@ export default {
   computed: {
     connector() {
       if (!this.hasLabel) return false;
-      return this.name;
+      return `_${this.randConnector}`;
     },
 
     ariaLabel() {
       if (this.hasLabel) return false;
-      return this.name;
+      return this.labelText;
     },
 
     classesWithValidation() {

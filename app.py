@@ -3,7 +3,7 @@ import sys
 import json
 
 from flask import Flask, redirect, render_template, request, send_from_directory, jsonify
-from forms import DonateForm, BlastForm, CircleForm
+from forms import DonateForm, BlastForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 import stripe
@@ -96,60 +96,11 @@ def donate_renew_form():
 
 @app.route('/circleform')
 def circle_form():
-    form = CircleForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
-    else:
-        message = "The page you requested can't be found."
-        return render_template('error.html', message=message)
-    openended_status = 'None'
-    installments = request.args.get('installments')
-    installment_period = request.args.get('installmentPeriod')
-    campaign_id = request.args.get('campaignId', default='')
-    return render_template('circle-form.html', form=form, amount=amount,
-            campaign_id=campaign_id, installment_period=installment_period,
-            installments=installments, openended_status=openended_status,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
-
-@app.route('/circle-charge', methods=['POST'])
-def circle_charge():
-    form = DonateForm(request.form)
-    pprint('Request: {}'.format(request))
-
-    customer_email = request.form['stripeEmail']
-    customer_first = request.form['first_name']
-    customer_last = request.form['last_name']
-
-    email_is_valid = validate_email(customer_email)
-
-    bundles = get_bundles('charge')
-
-    if email_is_valid:
-        customer = stripe.Customer.create(
-                email=request.form['stripeEmail'],
-                card=request.form['stripeToken']
-        )
-        print('Create Stripe customer {} {} {}'.format(customer_email,
-            customer_first, customer_last))
-    else:
-        message = "There was an issue saving your email address."
-        print('Issue saving customer {} {} {}; showed error'.format(
-            customer_email, customer_first, customer_last))
-        return render_template('error.html', message=message)
-
-    if form.validate():
-        add_customer_and_charge.delay(form=request.form,
-                customer=customer)
-        print('Validated form of customer {} {} {}'.format(customer_email,
-            customer_first, customer_last))
-        return render_template('charge.html',
-                amount=request.form['amount'], bundles=bundles)
-    else:
-        message = "There was an issue saving your donation information."
-        print('Form validation errors: {}'.format(form.errors))
-        print('Did not validate form of customer {} {} {}'.format(
-            customer_email, customer_first, customer_last))
-        return render_template('error.html', message=message)
+    bundles = get_bundles('circle')
+    return render_template('circle-form.html',
+        bundles=bundles,
+        key=app.config['STRIPE_KEYS']['publishable_key']
+    )
 
 @app.route('/blastform')
 def the_blast_form():
