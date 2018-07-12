@@ -59,23 +59,31 @@ def the_blastvip_form():
 
 @app.route('/')
 def root_route():
-    return redirect('/donate', code=301)
+    return redirect('/donate', code=302)
 
 @app.route('/index.html')
 def index_html_route():
-    return redirect('/donate', code=301)
+    return redirect('/donate', code=302)
 
 @app.route('/faq.html')
 def faq_html_route():
-    return redirect('/donate', code=301)
+    return redirect('/donate', code=302)
 
 @app.route('/levels.html')
 def levels_html_route():
-    return redirect('/donate', code=301)
+    return redirect('/donate', code=302)
+
+@app.route('/memberform')
+def member_form_route():
+    return redirect('/donate', code=302)
+
+@app.route('/donateform')
+def donate_form_route():
+    return redirect('/donate', code=302)
 
 @app.route('/circle.html')
 def circle_html_route():
-    return redirect('/circleform', code=301)
+    return redirect('/circleform', code=302)
 
 """
 Read the Webpack assets manifest and then provide the
