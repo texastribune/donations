@@ -1,0 +1,17 @@
+version: 2
+jobs:
+  build:
+    working_directory: /app
+    docker:
+      - image: docker
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run: |
+          docker info
+          docker build -t texastribune/checkout .
+          docker build -f Dockerfile.dev -t texastribune/checkout:dev .
+          docker run -it --rm --workdir=/app --entrypoint=python3 texastribune/checkout:dev /usr/local/bin/py.test tests.py --cov=.
+branches:
+  ignore:
+    - master
