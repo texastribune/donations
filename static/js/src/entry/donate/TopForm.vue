@@ -34,7 +34,7 @@
 
     <div class="grid_row grid_separator">
       <div class="col">
-        <p class="subtext">For three-year commitments of $1,000 or more, join our <a href="https://support.texastribune.org/circle.html">Circle Membership program</a>.</p>
+        <p class="subtext">For three-year commitments of $1,000 or more, join our <a href="/circleform">Circle Membership program</a>.</p>
       </div>
     </div>
 
