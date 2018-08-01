@@ -65,19 +65,19 @@
         <h5 class="site_footer--header">Social Media</h5>
         <ul>
           <li>
-            <a href="http://facebook.com/texastribune" title="Facebook" class="external" ga-event-action="TT Facebook" ga-event-category="social follow intent"><i class="fa fa-facebook"></i>Facebook</a>
+            <a href="http://facebook.com/texastribune" title="Facebook" class="external"><i class="fa fa-facebook"></i>Facebook</a>
           </li>
           <li>
-            <a href="http://twitter.com/texastribune" title="Twitter" class="external" ga-event-action="TT Twitter" ga-event-category="social follow intent"><i class="fa fa-twitter"></i>Twitter</a>
+            <a href="http://twitter.com/texastribune" title="Twitter" class="external"><i class="fa fa-twitter"></i>Twitter</a>
           </li>
           <li>
-            <a href="http://youtube.com/user/thetexastribune" title="YouTube" class="external" ga-event-action="TT YouTube" ga-event-category="social follow intent"><i class="fa fa-youtube"></i>YouTube</a>
+            <a href="http://youtube.com/user/thetexastribune" title="YouTube" class="external"><i class="fa fa-youtube"></i>YouTube</a>
           </li>
           <li>
-            <a href="http://instagram.com/texas_tribune" title="Instagram" class="external" ga-event-action="TT Instagram" ga-event-category="social follow intent"><i class="fa fa-instagram"></i>Instagram</a>
+            <a href="http://instagram.com/texas_tribune" title="Instagram" class="external"><i class="fa fa-instagram"></i>Instagram</a>
           </li>
           <li>
-            <a href="http://www.linkedin.com/company/texas-tribune" title="LinkedIn" class="external" ga-event-action="TT LinkedIn" ga-event-category="social follow intent"><i class="fa fa-linkedin"></i>LinkedIn</a>
+            <a href="http://www.linkedin.com/company/texas-tribune" title="LinkedIn" class="external"><i class="fa fa-linkedin"></i>LinkedIn</a>
           </li>
           <li>
             <a href="https://www.reddit.com/user/texastribune" title="Reddit" class="external"><i class="fa fa-reddit"></i>Reddit</a>
@@ -92,22 +92,3 @@
     </div>
   </div>
 </footer>
-
-<script>
-  (function() {
-    var footerLinks = document.querySelectorAll('#footer-sections a');
-
-    for (var i = 0; i < footerLinks.length; i++) {
-      var currLink = footerLinks[i];
-
-      (function() {
-        currLink.addEventListener('click',
-          function(e) {
-            var section = this.getAttribute('data-section');
-            ga('send', 'event', 'footer-section-link', 'click', section, { 'nonInteraction': 1 });
-          }
-        );
-      })();
-    }
-  })();
-</script>
