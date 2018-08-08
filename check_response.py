@@ -13,7 +13,6 @@ def check_response(response=None, expected_status=200):
     except:
         print('unable to parse response (this is probably okay)')
     if code != expected_status:
-        print(content)
         e = Exception('Expected {} but got {}'.format(expected_status, code))
         e.response = response
         raise e
