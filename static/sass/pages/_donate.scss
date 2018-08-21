@@ -146,3 +146,10 @@ h2 {
 .faq {
   background-color: $color-white-off;
 }
+
+.highlight {
+  background-color: $color-yellow-tribune;
+  display: inline-block;
+  padding-left: $size-xxs;
+  padding-right: $size-xxs;
+}
