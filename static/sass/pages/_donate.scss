@@ -19,6 +19,8 @@
 @import "../promo/quotes";
 
 $animation-single-line-bp: 400px;
+$color-fmd-blue-dark: #323a44;
+$color-fmd-blue-light: #6c99c1;
 
 html {
   @extend .font-sansserif;
@@ -39,48 +41,78 @@ h2 {
 .splash {
   background-color: $color-sand;
   background-position-x: 50%;
-  background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
+  background-image: url('../img/TT-FMD18-BG_pattern-tile-grey.png');
   background-repeat: repeat;
-  padding-bottom: $size-giant;
-  padding-top: $size-giant;
+  padding-bottom: $size-giant*2;
+  padding-top: $size-giant*2;
 
   @include mq($until: bp-l) {
     padding-bottom: $size-b;
     padding-top: $size-b;
   }
 
-  &_header {
-    &--headline {
-      @extend h1;
-      color: $color-white-pure;
-      border-bottom: 2px solid $color-yellow-tribune;
-      font-weight: bold;
-      padding-bottom: $size-l;
+  &--headline {
+    @extend h1;
+    color: $color-fmd-blue-dark;
+    font-weight: bold;
+    padding-bottom: $size-l;
 
-      @include mq($from: bp-m) {
-        font-size: $size-xl;
-        margin-bottom: $size-m;
-        padding-bottom: $size-m;
-      }
+    @include mq($from: bp-m) {
+      font-size: $size-xl;
+      padding-bottom: $size-m;
+    }
 
-      @include mq($from: bp-l) {
-        font-size: 2.3rem;
-        line-height: 1.25em;
-      }
+    @include mq($from: bp-l) {
+      font-size: 2.3rem;
+      line-height: 1.25em;
+    }
 
+    @include mq($from: bp-xl) {
+      font-size: 2.75rem;
+    }
+
+    @include mq($until: $animation-single-line-bp) {
+      padding-bottom: 3.5rem;
+    }
+  }
+
+  &_actions {
+    align-items: center;
+  }
+
+  &--description {
+    @extend %link--blue;
+    color: $color-fmd-blue-dark;
+    font-size: $size-b;
+  }
+
+  &--buttons {
+    @include mq($from: bp-l) {
+      padding-left: $size-xs;
+    }
+
+    .button {
       @include mq($from: bp-xl) {
-        font-size: 2.75rem;
-      }
-
-      @include mq($until: $animation-single-line-bp) {
-        padding-bottom: 3.5rem;
+        width: 44%;
       }
     }
 
-    &--description {
-      @extend %link--blue;
+    .button--yellow {
+      background-color: $color-fmd-blue-light;
+      border: 2px solid $color-fmd-blue-light;
       color: $color-white-pure;
-      font-size: $size-b;
+
+      @include mq($from: bp-l) {
+        line-height: 42px;
+        height: 44px;
+      }
+    }
+
+    .text {
+      color: $color-fmd-blue-dark;
+      font-size: $size-xs;
+      padding-left: $size-xxs/2;
+      padding-right: $size-xxs/2;
     }
   }
 }
@@ -88,7 +120,7 @@ h2 {
 .rotate_words {
   span {
     animation: rotateWord 12s linear 0s 2;
-    color: $color-yellow-tribune;
+    color: $color-fmd-blue-light;
     opacity: 0;
     overflow: hidden;
     position: absolute;
