@@ -358,16 +358,24 @@ def add_opportunity(form=None, customer=None):
         response = sf.post(path=path, data=opportunity)
     except Exception as e:
         content = json.loads(e.response.content.decode('utf-8'))
+        print(content)
         # retry without a campaign if it gives an error
         if 'Campaign ID' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            opportunity['Campaignid'] = ''
-            pprint(opportunity)
-            response = sf.post(path=path, data=opportunity)
-            pprint(response)
-    send_multiple_account_warning()
+            new_form = form.copy()
+            new_form['campaign_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        elif 'Referral ID' in content[0]['message']:
+            print('bad referral ID; retrying...')
+            new_form = form.copy()
+            new_form['referral_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        else:
+            raise(e)
 
-    return response
+    #send_multiple_account_warning()
+
+    return
 
 
 def _format_recurring_donation(contact=None, form=None, customer=None):
