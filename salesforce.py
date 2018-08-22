@@ -346,7 +346,7 @@ def _format_opportunity(contact=None, form=None, customer=None):
     return opportunity
 
 
-def add_opportunity(form=None, customer=None, charge=None):
+def add_opportunity(form=None, customer=None):
 
     print("----Adding opportunity...")
     sf = SalesforceConnection()
