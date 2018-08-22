@@ -470,7 +470,8 @@ def add_recurring_donation(form=None, customer=None):
             pprint(recurring_donation)
             response = sf.post(path=path, data=recurring_donation)
             pprint(response)
-
+        else:
+            raise(e)
     send_multiple_account_warning()
 
     return True
@@ -578,7 +579,8 @@ def add_blast_subscription(form=None, customer=None, charge=None):
             pprint(recurring_donation)
             response = sf.post(path=path, data=recurring_donation)
             pprint(response)
-
+        else:
+            raise(e)
     send_multiple_account_warning()
 
     return response
