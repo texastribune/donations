@@ -1,5 +1,13 @@
 <template>
-  <div>{{ data[0].label }} new members towards goal of {{ data[1].label }}.</div>
+  <div class="thermometer">
+    <div class="bar">
+      <div class="bar_inner bar_inner--goal"></div>
+      <div class="bar_inner bar_inner--actual"></div>
+    </div>
+    <div class="text">
+      <strong>{{ data[0].label }} new members</strong> towards goal of {{ data[1].label }}.
+    </div>
+  </div>
 </template>
 
 <script>
@@ -14,7 +22,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '350', value: 0 },
+        { slug: 'goal', label: '0', value: 0 },
       ],
     };
   },
@@ -27,13 +35,13 @@ export default {
       axios.get(url)
         .then(({
           data: {
-            'T!T': report,
+            'factMap': { 'T!T': { 'aggregates': [actual, goal] } },
           },
         }) => {
-          // this.data[0].label = report.aggregates[0].label;
-          // this.data[0].value = report.aggregates[0].value;
-          // this.data[1].label = report.aggregates[1].label;
-          // this.data[1].value = report.aggregates[1].value;
+          this.data[0].label = actual.label;
+          this.data[0].value = actual.value;
+          this.data[1].label = goal.label;
+          this.data[1].value = goal.value;
           this.loading = false;
         })
         .catch(() => {
