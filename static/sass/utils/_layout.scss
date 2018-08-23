@@ -3,11 +3,6 @@ $size-xxxl: 3rem;
 .section-padding {
   padding-bottom: $size-xl;
   padding-top: $size-xl;
-
-  @include mq($until: bp-l) {
-    padding-bottom: $size-b;
-    padding-top: $size-b;
-  }
 }
 
 // Standard clearfix to clear floats/grid

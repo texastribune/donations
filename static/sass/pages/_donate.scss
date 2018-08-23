@@ -40,13 +40,20 @@ h2 {
 
 .ribbon {
   width: 100%;
+
+  @include mq($until: bp-s) {
+    margin-bottom: $size-xxs;
+  }
+}
+
+.align-center {
+  align-items: center;
 }
 
 .thermometer {
   align-items: center;
   display: flex;
   justify-content: space-between;
-  margin-top: .4rem;
 
   .bar {
     border-radius: 30px;
@@ -79,7 +86,7 @@ h2 {
   }
 
   .text {
-    flex-basis: 150px;
+    flex-basis: 135px;
     font-size: $size-xs;
   }
 }
