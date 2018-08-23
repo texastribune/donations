@@ -311,6 +311,8 @@ def _format_opportunity(contact=None, form=None, customer=None):
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
     campaign_id = form.get('campaign_id', default='')
+    referral_id = form.get('referral_id', default='')
+    print('referral_id: {}'.format(referral_id))
 
     if form['pay_fees_value'] == 'True':
         pay_fees = True
@@ -333,6 +335,7 @@ def _format_opportunity(contact=None, form=None, customer=None):
             'StageName': 'Pledged',
             'Type': 'Single',
             'Stripe_Customer_Id__c': customer.id,
+            'Referral_ID__c': referral_id,
             'LeadSource': 'Stripe',
             'Description': '{}'.format(form['description']),
             'Stripe_Agreed_to_pay_fees__c': pay_fees,
@@ -343,7 +346,7 @@ def _format_opportunity(contact=None, form=None, customer=None):
     return opportunity
 
 
-def add_opportunity(form=None, customer=None, charge=None):
+def add_opportunity(form=None, customer=None):
 
     print("----Adding opportunity...")
     sf = SalesforceConnection()
@@ -355,16 +358,24 @@ def add_opportunity(form=None, customer=None, charge=None):
         response = sf.post(path=path, data=opportunity)
     except Exception as e:
         content = json.loads(e.response.content.decode('utf-8'))
+        print(content)
         # retry without a campaign if it gives an error
         if 'Campaign ID' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            opportunity['Campaignid'] = ''
-            pprint(opportunity)
-            response = sf.post(path=path, data=opportunity)
-            pprint(response)
-    send_multiple_account_warning()
+            new_form = form.copy()
+            new_form['campaign_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        elif 'Referral ID' in content[0]['message']:
+            print('bad referral ID; retrying...')
+            new_form = form.copy()
+            new_form['referral_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        else:
+            raise(e)
 
-    return response
+    #send_multiple_account_warning()
+
+    return
 
 
 def _format_recurring_donation(contact=None, form=None, customer=None):
@@ -390,6 +401,8 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
         installment_period = 'None'
 
     campaign_id = form.get('campaign_id', default='')
+    referral_id = form.get('referral_id', default='')
+    print('referral_id: {}'.format(referral_id))
 
     # TODO: test this
     if open_ended_status == 'None' and (
@@ -410,6 +423,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
         pay_fees = False
 
     recurring_donation = {
+            'Referral_ID__c': referral_id,
             'npe03__Recurring_Donation_Campaign__c': campaign_id,
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(_format_amount(amount)),
@@ -452,10 +466,17 @@ def add_recurring_donation(form=None, customer=None):
         # retry without a campaign if it gives an error
         if 'Campaign: id' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
-            pprint(recurring_donation)
-            response = sf.post(path=path, data=recurring_donation)
-            pprint(response)
+            new_form = form.copy()
+            new_form['campaign_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        elif 'Referral ID' in content[0]['message']:
+            print('bad referral ID; retrying...')
+            new_form = form.copy()
+            new_form['referral_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        else:
+            raise(e)
+
 
     send_multiple_account_warning()
 
@@ -515,8 +536,11 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
         installment_period = 'yearly'
 
     campaign_id = form.get('campaign_id', default='')
+    referral_id = form.get('referral_id', default='')
+    print('referral_id: {}'.format(referral_id))
 
     blast_subscription = {
+            'Referral_ID__c': referral_id,
             'npe03__Recurring_Donation_Campaign__c': campaign_id,
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
@@ -561,7 +585,8 @@ def add_blast_subscription(form=None, customer=None, charge=None):
             pprint(recurring_donation)
             response = sf.post(path=path, data=recurring_donation)
             pprint(response)
-
+        else:
+            raise(e)
     send_multiple_account_warning()
 
     return response

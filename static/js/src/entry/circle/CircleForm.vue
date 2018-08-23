@@ -184,6 +184,10 @@
         store-module="circleForm"
       />
       <hidden
+        name="referral_id"
+        store-module="circleForm"
+      />
+      <hidden
         name="openended_status"
         store-module="circleForm"
       />

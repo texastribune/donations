@@ -198,6 +198,10 @@
       store-module="baseForm"
     />
     <hidden
+      name="referral_id"
+      store-module="baseForm"
+    />
+    <hidden
       name="openended_status"
       store-module="baseForm"
     />

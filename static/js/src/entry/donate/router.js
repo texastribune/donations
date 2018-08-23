@@ -21,7 +21,7 @@ function createBaseFormState(queryParams) {
 
   let openEndedStatus;
   let { amount, installmentPeriod = 'monthly' } = queryParams;
-  const { campaignId = '' } = queryParams;
+  const { campaignId = '', referralId = '' } = queryParams;
 
   switch (installmentPeriod.toLowerCase()) {
     case 'once':
@@ -47,6 +47,7 @@ function createBaseFormState(queryParams) {
     ...baseState,
     amount,
     campaign_id: campaignId,
+    referral_id: referralId,
     installment_period: installmentPeriod,
     openended_status: openEndedStatus,
   };
