@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
+import Thermometer from './Thermometer.vue';
 
 Vue.use(VueRouter);
 
@@ -65,6 +66,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
+    const thermometer = new Vue({ ...Thermometer });
     const { currentRoute: { query } } = router;
 
     store.dispatch(
@@ -74,6 +76,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     routeHandler.$mount('#app');
     topForm.$mount('#top-form');
+    thermometer.$mount('#thermometer');
   });
 }
 
