@@ -50,6 +50,7 @@ h2 {
     display: inline-block;
     height: 30px;
     margin-right: $size-s;
+    overflow: hidden;
     position: relative;
     width: 75%;
 
@@ -58,14 +59,14 @@ h2 {
       border-radius: 30px;
       display: inline-block;
       height: 100%;
-      overflow-x: hidden;
       position: absolute;
       left: 0;
       top: 0;
 
       &--actual {
         opacity: 1;
-        // width set inline by Vue.js
+        transition: width 2s ease-in;
+        width: 0; // width set inline by Vue.js
       }
       &--goal {
         opacity: .1;
