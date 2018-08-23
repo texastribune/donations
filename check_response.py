@@ -15,5 +15,6 @@ def check_response(response=None, expected_status=200):
     if code != expected_status:
         e = Exception('Expected {} but got {}'.format(expected_status, code))
         e.response = response
+        print(response.text)
         raise e
     return True

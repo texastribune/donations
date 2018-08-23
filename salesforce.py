@@ -464,14 +464,20 @@ def add_recurring_donation(form=None, customer=None):
     except Exception as e:
         content = json.loads(e.response.content.decode('utf-8'))
         # retry without a campaign if it gives an error
-        if 'Campaign: id' in content[0]['message']:
+        if 'Campaign ID' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
-            pprint(recurring_donation)
-            response = sf.post(path=path, data=recurring_donation)
-            pprint(response)
+            new_form = form.copy()
+            new_form['campaign_id'] = ''
+            add_opportunity(form=new_form, customer=customer)
+        elif 'Referral ID' in content[0]['message']:
+            print('bad referral ID; retrying...')
+            new_form = form.copy()
+            new_form['npe03__Recurring_Donation_Campaign__c'] = ''
+            add_opportunity(form=new_form, customer=customer)
         else:
             raise(e)
+
+
     send_multiple_account_warning()
 
     return True
