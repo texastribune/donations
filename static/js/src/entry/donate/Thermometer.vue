@@ -2,7 +2,7 @@
   <div class="thermometer">
     <div class="bar">
       <div class="bar_inner bar_inner--goal"></div>
-      <div class="bar_inner bar_inner--actual"></div>
+      <div class="bar_inner bar_inner--actual" v-bind:style="{width: actualWidth + '%'}"></div>
     </div>
     <div class="text">
       <strong>{{ data[0].label }} new members</strong> towards goal of {{ data[1].label }}.
@@ -25,6 +25,11 @@ export default {
         { slug: 'goal', label: '0', value: 0 },
       ],
     };
+  },
+  computed: {
+    actualWidth: function() {
+      return ((this.data[0].value / this.data[1].value) * 100);
+    }
   },
   mounted() {
     this.getSalesforceReport();
