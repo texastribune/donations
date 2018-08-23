@@ -1,9 +1,46 @@
 <template>
-  <div>I am a thermometer, hear me roar.</div>
+  <div>{{ data[0].label }} new members towards goal of {{ data[1].label }}.</div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'Thermometer',
+
+  data() {
+    return {
+      loading: true,
+      error: false,
+      data: [
+        { slug: 'actual', label: '0', value: 0 },
+        { slug: 'goal', label: '350', value: 0 },
+      ],
+    };
+  },
+  mounted() {
+    this.getSalesforceReport();
+  },
+  methods: {
+    getSalesforceReport() {
+      const url = 'https://membership.texastribune.org/smd18-report.json';
+      axios.get(url)
+        .then(({
+          data: {
+            'T!T': report,
+          },
+        }) => {
+          // this.data[0].label = report.aggregates[0].label;
+          // this.data[0].value = report.aggregates[0].value;
+          // this.data[1].label = report.aggregates[1].label;
+          // this.data[1].value = report.aggregates[1].value;
+          this.loading = false;
+        })
+        .catch(() => {
+          this.error = true;
+          this.loading = false;
+        });
+    },
+  },
 };
 </script>
