@@ -5,7 +5,9 @@
       <div class="bar_inner bar_inner--actual" v-bind:style="{width: actualWidth + '%'}"></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} new members</strong> towards goal of {{ data[1].label }}.
+      <strong>{{ data[0].label }} new members</strong>
+      <br>
+      towards goal of {{ data[1].label }}.
     </div>
   </div>
 </template>
