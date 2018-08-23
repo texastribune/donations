@@ -139,11 +139,17 @@ def the_blast_form():
     installment_period = request.args.get('installmentPeriod')
 
     campaign_id = request.args.get('campaignId', default='')
+    referral_id = request.args.get('referralId', default='')
 
-    return render_template('blast-form.html', form=form,
-            campaign_id=campaign_id, installment_period=installment_period,
-        openended_status='Open', amount=amount,
-        key=app.config['STRIPE_KEYS']['publishable_key'])
+    return render_template('blast-form.html',
+        form=form,
+        campaign_id=campaign_id,
+        referral_id=referral_id,
+        installment_period=installment_period,
+        openended_status='Open',
+        amount=amount,
+        key=app.config['STRIPE_KEYS']['publishable_key']
+    )
 
 @app.route('/submit-blast', methods=['POST'])
 def submit_blast():
