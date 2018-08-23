@@ -42,6 +42,44 @@ h2 {
   width: 100%;
 }
 
+.thermometer {
+  margin-top: .35rem;
+
+  .bar {
+    border-radius: 30px;
+    display: inline-block;
+    height: 30px;
+    margin-right: $size-s;
+    position: relative;
+    width: 75%;
+
+    &_inner {
+      background-color: $color-fmd-blue-dark;
+      border-radius: 30px;
+      display: inline-block;
+      height: 100%;
+      overflow-x: hidden;
+      position: absolute;
+      left: 0;
+      top: 0;
+
+      &--actual {
+        opacity: 1;
+        // width set inline by Vue.js
+      }
+      &--goal {
+        opacity: .1;
+        width: 100%;
+      }
+    }
+  }
+
+  .text {
+    width: 20%;
+    font-size: $size-xs;
+  }
+}
+
 .splash {
   background-color: $color-sand;
   background-position-x: 50%;
