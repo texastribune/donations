@@ -1,5 +1,5 @@
 <template>
-  <div class="thermometer" v-if="!loading && !error">
+  <div class="thermometer" v-if="!loading && !error" aria-hidden="true">
     <div class="bar">
       <div class="bar_inner bar_inner--goal"></div>
       <div class="bar_inner bar_inner--actual" :style="{width: `${actualWidth}%`}"></div>
