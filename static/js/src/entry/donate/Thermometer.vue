@@ -7,7 +7,7 @@
     <div class="text">
       <strong>{{ data[0].label }} new members</strong>
       <br>
-      towards goal of {{ data[1].label }}.
+      toward goal of {{ data[1].label }}.
     </div>
   </div>
 </template>
@@ -24,7 +24,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '0', value: 0 },
+        { slug: 'goal', label: '350', value: 350 },
       ],
     };
   },
@@ -38,17 +38,22 @@ export default {
   },
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/smd18-report.json';
+      // const url = 'https://membership.texastribune.org/smd18-report.json';
+      const url = 'https://membership.texastribune.org/fmd18-members.json';
       axios.get(url)
         .then(({
           data: {
-            'factMap': { 'T!T': { 'aggregates': [actual, goal] } },
+            // 'factMap': { 'T!T': { 'aggregates': [actual, goal] } },
+            'value': actual_value,
+            'label': actual_label,
           },
         }) => {
-          this.data[0].label = actual.label;
-          this.data[0].value = actual.value;
-          this.data[1].label = goal.label;
-          this.data[1].value = goal.value;
+          // this.data[0].label = actual.label;
+          // this.data[0].value = actual.value;
+          // this.data[1].label = goal.label;
+          // this.data[1].value = goal.value;
+          this.data[0].label = actual_label;
+          this.data[0].value = actual_value;
           this.loading = false;
         })
         .catch(() => {
