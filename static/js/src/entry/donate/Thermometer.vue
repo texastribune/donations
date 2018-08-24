@@ -2,7 +2,7 @@
   <div class="thermometer">
     <div class="bar">
       <div class="bar_inner bar_inner--goal"></div>
-      <div class="bar_inner bar_inner--actual" v-bind:style="{width: actualWidth + '%'}"></div>
+      <div class="bar_inner bar_inner--actual" :style="{width: `${actualWidth}%`}"></div>
     </div>
     <div class="text">
       <strong>{{ data[0].label }} new members</strong>
