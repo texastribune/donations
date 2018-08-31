@@ -5,11 +5,18 @@
     <div
       :class="classes"
     >
-      <input
+      <input v-if="payFeesState == 'True'"
+        id="pay-fees"
+        type="checkbox"
+        checked=""
+        @change="onChange($event.target.checked)"
+      >
+      <input v-else
         id="pay-fees"
         type="checkbox"
         @change="onChange($event.target.checked)"
       >
+
       <label
         for="pay-fees"
       >
@@ -83,6 +90,15 @@ export default {
       if (installmentPeriod === 'None') return '';
       return installmentPeriod.toLowerCase();
     },
+
+    payFeesState() {
+      const payFeesCheckState = this.getStoreValue({
+      storeModule: this.payFeesValueStoreModule,
+      key: 'pay_fees_value',
+    });
+    return payFeesCheckState;
+    },
+
   },
 
   methods: {

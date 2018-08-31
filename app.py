@@ -85,6 +85,10 @@ def donate_form_route():
 def circle_html_route():
     return redirect('/circleform', code=302)
 
+@app.route('/business.html')
+def business_html_route():
+    return redirect('/businessform', code=302)
+
 """
 Read the Webpack assets manifest and then provide the
 scripts, including cache-busting hache, as template context.
@@ -125,6 +129,14 @@ def member2_form():
 def circle_form():
     bundles = get_bundles('circle')
     return render_template('circle-form.html',
+        bundles=bundles,
+        key=app.config['STRIPE_KEYS']['publishable_key']
+    )
+
+@app.route('/businessform')
+def business_form():
+    bundles = get_bundles('business')
+    return render_template('business-form.html',
         bundles=bundles,
         key=app.config['STRIPE_KEYS']['publishable_key']
     )

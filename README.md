@@ -1,4 +1,4 @@
-Stripe-Salesforce
+Salesforce-Stripe
 =================
 
 This repo integrates [Stripe Checkout](https://stripe.com/docs/checkout) and [Salesforce](http://www.salesforce.com/).
