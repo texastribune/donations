@@ -7,6 +7,7 @@ from pprint import pprint   # TODO: remove
 import celery
 import requests
 from pytz import timezone
+import stripe
 
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
@@ -303,7 +304,7 @@ def upsert_customer(customer=None, form=None):
     return True
 
 
-def _format_opportunity(contact=None, form=None, customer=None):
+def _format_opportunity(contact=None, form=None, customer=None, charge=None):
     """
     Format an opportunity for insertion.
     """
@@ -332,7 +333,6 @@ def _format_opportunity(contact=None, form=None, customer=None):
                 form['last_name'],
                 form['stripeEmail'],
                 ),
-            'StageName': 'Pledged',
             'Type': 'Single',
             'Stripe_Customer_Id__c': customer.id,
             'Referral_ID__c': referral_id,
@@ -340,19 +340,56 @@ def _format_opportunity(contact=None, form=None, customer=None):
             'Description': '{}'.format(form['description']),
             'Stripe_Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(form['reason']),
-            # Co Member First name, last name, and email
+            'Stripe_Transaction_Id__c': charge.id,
+            'Stripe_Card__c': charge.source.id,
+            'StageName': 'Closed Won',
             }
     pprint(opportunity)
     return opportunity
 
+def _amount_to_charge(amount, pay_fees=False):
+    """
+    determine the amount to charge. this depends on whether the payer agreed
+    to pay fees or not. if they did then we add that to the amount charged.
+    stripe charges 2.2% + $0.30.
+
+    stripe wants the amount to charge in cents. so we multiply by 100 and
+    return that.
+
+    https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
+    """
+    amount = float(entry['amount'])
+
+    if entry['stripe_agreed_to_pay_fees__c']:
+        total = (amount + .30) / (1 - 0.022)
+    else:
+        total = amount
+    total_in_cents = total * 100
+
+    return int(total_in_cents)
+
 
 def add_opportunity(form=None, customer=None):
+
+    print("Charging card...")
+    print('---- Charging ${} to {} ({} {})'.format(form['amount'] / 100,
+        customer.id, form['first_name'],form['last_name']))
+
+    pay_fees = form['pay_fees_value'] == 'True'
+    amount = _format_amount(form['amount'], pay_fees)
+
+    charge = stripe.Charge.create(
+            customer=customer.id,
+            amount=amount,
+            currency='usd',
+            description=form['description'],
+            )
 
     print("----Adding opportunity...")
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     opportunity = _format_opportunity(contact=contact, form=form,
-            customer=customer)
+            customer=customer, charge=charge)
     path = '/services/data/v35.0/sobjects/Opportunity'
     try:
         response = sf.post(path=path, data=opportunity)
@@ -461,6 +498,7 @@ def add_recurring_donation(form=None, customer=None):
     path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
     try:
         response = sf.post(path=path, data=recurring_donation)
+        print(response)
     except Exception as e:
         content = json.loads(e.response.content.decode('utf-8'))
         # retry without a campaign if it gives an error
@@ -477,7 +515,39 @@ def add_recurring_donation(form=None, customer=None):
         else:
             raise(e)
 
+    rdo_id = response['id']
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    query = """
+        SELECT Id FROM Opportunity
+        WHERE npe03__Recurring_Donation__c = '{}'
+        AND CloseDate = {}
+    """.format(rdo_id, today)
+    print(query)
+    try:
+        response = sf.query(query)
+    except Exception as e:
+        print(e.response.content.decode('utf-8'))
+        raise(e)
 
+    print(len(response))
+    #TODO raise exception if length is not 1
+    #TODO check StageName and freak out if it's not 'Pledged'
+
+    url = response[0]['attributes']['url']
+    opp_id = response[0]['Id']
+
+    update = dict()
+    update['StageName'] = 'Closed Won'
+    path = '/services/data/v35.0/sobjects/Opportunity/{}'.format(contact['Id'])
+    url = '{}{}'.format(sf.instance_url, url)
+    resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
+    print(resp)
+    check_response(response=resp, expected_status=204)
+
+    #TODO after charging update the opp with the Stripe txn details
+    #TODO look for Closed Won opportunities that don't have Stripe details
+
+    print(response)
     send_multiple_account_warning()
 
     return True
