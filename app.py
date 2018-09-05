@@ -244,7 +244,7 @@ def charge():
             gtm['event_value'] = request.form['amount']
             return render_template('charge.html',
                     amount=request.form['amount'], gtm=gtm, bundles=bundles)
-        except InvalidRequestError:
+        except stripe.error.InvalidRequestError:
             return render_template('error.html', message=error_message)
     else:
         print('Form validation errors: {}'.format(form.errors))
