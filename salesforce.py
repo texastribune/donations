@@ -28,6 +28,8 @@ TWOPLACES = Decimal(10) ** -2       # same as Decimal('0.01')
 
 WARNINGS = dict()
 
+#TODO see if there's already an opportunity on that date with that amount and warn/skip if so
+
 
 def notify_slack(message):
     """
@@ -61,6 +63,7 @@ def send_multiple_account_warning():
     """
     Send the warnings about multiple accounts.
     """
+    print('send_multiple_account_warning called...')
 
     for email in list(WARNINGS.keys()):
         count = WARNINGS[email]
@@ -304,12 +307,12 @@ def upsert_customer(customer=None, form=None):
     return True
 
 
-def _format_opportunity(contact=None, form=None, customer=None, charge=None):
+def _format_opportunity(contact=None, form=None, customer=None, date=None, stage='Closed Won'):
     """
     Format an opportunity for insertion.
     """
-
-    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    if date is None:
+        date = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
     campaign_id = form.get('campaign_id', default='')
     referral_id = form.get('referral_id', default='')
@@ -325,7 +328,7 @@ def _format_opportunity(contact=None, form=None, customer=None, charge=None):
     opportunity = {
             'AccountId': '{}'.format(contact['AccountId']),
             'Amount': '{}'.format(amount),
-            'CloseDate': today,
+            'CloseDate': date,
             'Campaignid': campaign_id,
             'RecordTypeId': DONATION_RECORDTYPEID,
             'Name': '{} {} ({})'.format(
@@ -335,17 +338,16 @@ def _format_opportunity(contact=None, form=None, customer=None, charge=None):
                 ),
             'Type': 'Single',
             'Stripe_Customer_Id__c': customer.id,
-            'Referral_ID__c': referral_id,
             'LeadSource': 'Stripe',
             'Description': '{}'.format(form['description']),
             'Stripe_Agreed_to_pay_fees__c': pay_fees,
             'Encouraged_to_contribute_by__c': '{}'.format(form['reason']),
-            'Stripe_Transaction_Id__c': charge.id,
-            'Stripe_Card__c': charge.source.id,
-            'StageName': 'Closed Won',
+            'StageName': stage,
             }
+
     pprint(opportunity)
     return opportunity
+
 
 def _amount_to_charge(amount, pay_fees=False):
     """
@@ -358,9 +360,9 @@ def _amount_to_charge(amount, pay_fees=False):
 
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
-    amount = float(entry['amount'])
+    amount = float(amount)
 
-    if entry['stripe_agreed_to_pay_fees__c']:
+    if pay_fees:
         total = (amount + .30) / (1 - 0.022)
     else:
         total = amount
@@ -369,14 +371,91 @@ def _amount_to_charge(amount, pay_fees=False):
     return int(total_in_cents)
 
 
+def update_opportunity(opp_id, card_id=None, txn_id=None, referral_id=None, stage=None):
+
+    print('Updating Opportunity ({})...'.format(opp_id))
+    sf = SalesforceConnection()
+    print(opp_id)
+
+    update = dict()
+    if stage:
+        update['StageName'] = stage
+    if txn_id:
+        update['Stripe_Transaction_Id__c'] = txn_id
+    if card_id:
+        update['Stripe_Card__c'] = card_id
+    if referral_id:
+        update['Referral_ID__c'] = referral_id
+    print(update)
+    path = '/services/data/v35.0/sobjects/Opportunity/{}'.format(opp_id)
+    sf.patch(path, update)
+
+
+def _check_duplicate_opportunity(amount, account_id, date=None):
+
+    print('Checking for duplicate transaction...')
+    if date is None:
+        date = datetime.now(tz=zone).strftime('%Y-%m-%d')
+
+    query = """
+        SELECT Id FROM Opportunity
+        WHERE AccountId = '{}'
+        AND CloseDate = {}
+        AND Amount = {}
+    """.format(account_id, date, amount)
+
+    print(query)
+    sf = SalesforceConnection()
+    response = sf.query(query)
+    print(response)
+    print(len(response))
+    return response
+
+
 def add_opportunity(form=None, customer=None):
 
-    print("Charging card...")
-    print('---- Charging ${} to {} ({} {})'.format(form['amount'] / 100,
+    pay_fees = form['pay_fees_value'] == 'True'
+    amount = _amount_to_charge(form['amount'], pay_fees)
+
+    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
         customer.id, form['first_name'],form['last_name']))
 
-    pay_fees = form['pay_fees_value'] == 'True'
-    amount = _format_amount(form['amount'], pay_fees)
+    sf = SalesforceConnection()
+    _, contact = sf.get_or_create_contact(form)
+
+    response = _check_duplicate_opportunity(amount=form['amount'],
+            account_id=contact['AccountId'])
+#    if len(response) == 0:
+#        raise Exception('Possible duplicate Opportunity; not proceeding')
+
+    opportunity = _format_opportunity(contact=contact, form=form,
+            customer=customer)
+    path = '/services/data/v35.0/sobjects/Opportunity'
+    print("----Adding opportunity...")
+    try:
+        response = sf.post(path=path, data=opportunity)
+        opp_id = response['id']
+    except Exception as e:
+        content = json.loads(e.response.content.decode('utf-8'))
+        print(content)
+        # retry without a campaign if it gives an error
+        if 'Campaign ID' in content[0]['message']:
+            print('bad campaign ID; retrying...')
+            opportunity['Campaignid'] = ''
+            response = sf.post(path=path, data=opportunity)
+            opp_id = response['id']
+        else:
+            raise(e)
+
+    if form['referral_id']:
+        try:
+            response = update_opportunity(opp_id=opp_id, referral_id=form['referral_id'])
+        except Exception as e:
+            content = json.loads(e.response.content.decode('utf-8'))
+            print(content)
+            print ('Unable to add referral ID: {}'.format(content[0]['message']))
+
+    print("Charging card...")
 
     charge = stripe.Charge.create(
             customer=customer.id,
@@ -385,31 +464,10 @@ def add_opportunity(form=None, customer=None):
             description=form['description'],
             )
 
-    print("----Adding opportunity...")
-    sf = SalesforceConnection()
-    _, contact = sf.get_or_create_contact(form)
-    opportunity = _format_opportunity(contact=contact, form=form,
-            customer=customer, charge=charge)
-    path = '/services/data/v35.0/sobjects/Opportunity'
-    try:
-        response = sf.post(path=path, data=opportunity)
-    except Exception as e:
-        content = json.loads(e.response.content.decode('utf-8'))
-        print(content)
-        # retry without a campaign if it gives an error
-        if 'Campaign ID' in content[0]['message']:
-            print('bad campaign ID; retrying...')
-            new_form = form.copy()
-            new_form['campaign_id'] = ''
-            add_opportunity(form=new_form, customer=customer)
-        elif 'Referral ID' in content[0]['message']:
-            print('bad referral ID; retrying...')
-            new_form = form.copy()
-            new_form['referral_id'] = ''
-            add_opportunity(form=new_form, customer=customer)
-        else:
-            raise(e)
+    response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
+            stage='Closed Won', txn_id=charge.id)
 
+    print(response)
     #send_multiple_account_warning()
 
     return
@@ -506,12 +564,12 @@ def add_recurring_donation(form=None, customer=None):
             print('bad campaign ID; retrying...')
             new_form = form.copy()
             new_form['campaign_id'] = ''
-            add_opportunity(form=new_form, customer=customer)
+            add_recurring_donation(form=new_form, customer=customer)
         elif 'Referral ID' in content[0]['message']:
             print('bad referral ID; retrying...')
             new_form = form.copy()
             new_form['referral_id'] = ''
-            add_opportunity(form=new_form, customer=customer)
+            add_recurring_donation(form=new_form, customer=customer)
         else:
             raise(e)
 
