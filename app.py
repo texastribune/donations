@@ -220,6 +220,7 @@ def create_customer():
 
 @app.route('/charge', methods=['POST'])
 def charge():
+    error_message = "There was an issue saving your donation information."
     gtm = {}
     form = DonateForm(request.form)
     pprint('Request: {}'.format(request))
@@ -231,24 +232,25 @@ def charge():
     bundles = get_bundles('charge')
 
     if form.validate():
-        customer = stripe.Customer.retrieve(request.form['customerId'])
-        add_customer_and_charge.delay(form=request.form,
-                customer=customer)
-        print('Validated form of customer {} {} {}'.format(customer_email,
-            customer_first, customer_last))
-        if request.form['installment_period'] == 'None':
-            gtm['event_label'] = 'once'
-        else:
-            gtm['event_label'] = request.form['installment_period']
-        gtm['event_value'] = request.form['amount']
-        return render_template('charge.html',
-                amount=request.form['amount'], gtm=gtm, bundles=bundles)
+        try:
+            customer = stripe.Customer.retrieve(request.form['customerId'])
+            add_customer_and_charge.delay(form=request.form, customer=customer)
+            print('Validated form of customer {} {} {}'.format(customer_email,
+                customer_first, customer_last))
+            if request.form['installment_period'] == 'None':
+                gtm['event_label'] = 'once'
+            else:
+                gtm['event_label'] = request.form['installment_period']
+            gtm['event_value'] = request.form['amount']
+            return render_template('charge.html',
+                    amount=request.form['amount'], gtm=gtm, bundles=bundles)
+        except InvalidRequestError:
+            return render_template('error.html', message=error_message)
     else:
-        message = "There was an issue saving your donation information."
         print('Form validation errors: {}'.format(form.errors))
         print('Did not validate form of customer {} {} {}'.format(
             customer_email, customer_first, customer_last))
-        return render_template('error.html', message=message)
+        return render_template('error.html', message=error_message)
 
 
 @app.route('/.well-known/apple-developer-merchantid-domain-association')
