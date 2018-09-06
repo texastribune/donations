@@ -29,6 +29,7 @@ TWOPLACES = Decimal(10) ** -2       # same as Decimal('0.01')
 WARNINGS = dict()
 
 #TODO see if there's already an opportunity on that date with that amount and warn/skip if so
+#TODO using logging instead of print()
 
 
 def notify_slack(message):
@@ -298,6 +299,8 @@ def upsert_customer(customer=None, form=None):
         print("----Exists, updating")
         pprint(update)
 
+        #TODO: why not use sf.patch()?
+
         path = '/services/data/v35.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
         resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
@@ -318,10 +321,7 @@ def _format_opportunity(contact=None, form=None, customer=None, date=None, stage
     referral_id = form.get('referral_id', default='')
     print('referral_id: {}'.format(referral_id))
 
-    if form['pay_fees_value'] == 'True':
-        pay_fees = True
-    else:
-        pay_fees = False
+    pay_fees = form['pay_fees_value'] == 'True'
 
     amount = _format_amount(form['amount'])
 
@@ -447,7 +447,7 @@ def add_opportunity(form=None, customer=None):
         else:
             raise(e)
 
-    if form['referral_id']:
+    if 'referral_id' in form:
         try:
             response = update_opportunity(opp_id=opp_id, referral_id=form['referral_id'])
         except Exception as e:
@@ -468,7 +468,7 @@ def add_opportunity(form=None, customer=None):
             stage='Closed Won', txn_id=charge.id)
 
     print(response)
-    #send_multiple_account_warning()
+    send_multiple_account_warning()
 
     return
 
@@ -482,21 +482,15 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     now = datetime.now(tz=zone).strftime('%Y-%m-%d %I:%M:%S %p %Z')
     amount = form['amount']
     type__c = 'Recurring Donation'
-    try:
-        installments = form['installments']
-    except:
-        installments = 'None'
-    try:
-        open_ended_status = form['openended_status']
-    except:
-        open_ended_status = 'None'
-    try:
-        installment_period = form['installment_period']
-    except:
-        installment_period = 'None'
 
+    installments = form.get('installments', default='None')
+    open_ended_status = form.get('openended_status', default='None')
+    installment_period = form.get('installment_period', default='None')
     campaign_id = form.get('campaign_id', default='')
     referral_id = form.get('referral_id', default='')
+    pay_fees = form['pay_fees_value'] == 'True'
+
+
     print('referral_id: {}'.format(referral_id))
 
     # TODO: test this
@@ -512,13 +506,7 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     else:
         installments = 0
 
-    if form['pay_fees_value'] == 'True':
-        pay_fees = True
-    else:
-        pay_fees = False
-
     recurring_donation = {
-            'Referral_ID__c': referral_id,
             'npe03__Recurring_Donation_Campaign__c': campaign_id,
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(_format_amount(amount)),
@@ -543,6 +531,20 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     return recurring_donation
 
 
+def update_rdo(rdo_id, referral_id=None):
+
+    print('Updating RDO ({})...'.format(rdo_id))
+    sf = SalesforceConnection()
+    print(rdo_id)
+
+    update = dict()
+    if referral_id:
+        update['Referral_ID__c'] = referral_id
+    print(update)
+    path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c/{}'.format(rdo_id)
+    sf.patch(path, update)
+
+
 def add_recurring_donation(form=None, customer=None):
     """
     Insert a recurring donation into SF.
@@ -562,21 +564,24 @@ def add_recurring_donation(form=None, customer=None):
         # retry without a campaign if it gives an error
         if 'Campaign: id' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            new_form = form.copy()
-            new_form['campaign_id'] = ''
-            add_recurring_donation(form=new_form, customer=customer)
-        elif 'Referral ID' in content[0]['message']:
-            print('bad referral ID; retrying...')
-            new_form = form.copy()
-            new_form['referral_id'] = ''
-            add_recurring_donation(form=new_form, customer=customer)
+            recurring_donation['campaign_id'] = ''
+            response = sf.post(path=path, data=recurring_donation)
         else:
             raise(e)
+
+    if 'referral_id' in form:
+        try:
+            response = update_rdo(rdo_id=rdo_id, referral_id=form['referral_id'])
+        except Exception as e:
+            content = json.loads(e.response.content.decode('utf-8'))
+            print(content)
+            print ('Unable to add referral ID: {}'.format(content[0]['message']))
+
 
     rdo_id = response['id']
     today = datetime.now(tz=zone).strftime('%Y-%m-%d')
     query = """
-        SELECT Id FROM Opportunity
+        SELECT Id, StageName FROM Opportunity
         WHERE npe03__Recurring_Donation__c = '{}'
         AND CloseDate = {}
     """.format(rdo_id, today)
@@ -594,18 +599,28 @@ def add_recurring_donation(form=None, customer=None):
     url = response[0]['attributes']['url']
     opp_id = response[0]['Id']
 
-    update = dict()
-    update['StageName'] = 'Closed Won'
-    path = '/services/data/v35.0/sobjects/Opportunity/{}'.format(contact['Id'])
-    url = '{}{}'.format(sf.instance_url, url)
-    resp = requests.patch(url, headers=sf.headers, data=json.dumps(update))
-    print(resp)
-    check_response(response=resp, expected_status=204)
+    response = update_opportunity(opp_id, stage='Closed Won')
+    print(response)
 
-    #TODO after charging update the opp with the Stripe txn details
-    #TODO look for Closed Won opportunities that don't have Stripe details
+    print("Charging card...")
+
+    pay_fees = form['pay_fees_value'] == 'True'
+    amount = _amount_to_charge(form['amount'], pay_fees)
+
+    charge = stripe.Charge.create(
+            customer=customer.id,
+            amount=amount,
+            currency='usd',
+            description=form['description'],
+            )
+
+    response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
+            stage='Closed Won', txn_id=charge.id)
 
     print(response)
+
+    #TODO look for Closed Won opportunities that don't have Stripe details
+
     send_multiple_account_warning()
 
     return True
