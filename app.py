@@ -244,8 +244,14 @@ def charge():
             gtm['event_value'] = request.form['amount']
             return render_template('charge.html',
                     amount=request.form['amount'], gtm=gtm, bundles=bundles)
-        except stripe.error.InvalidRequestError:
-            return render_template('error.html', message=error_message)
+        except stripe.error.InvalidRequestError as e:
+            body = e.json_body
+            err = body.get('error', {})
+            message = err.get('message', '')
+            if 'No such customer:' not in message:
+                raise e
+            else:
+                return render_template('error.html', message=error_message)
     else:
         print('Form validation errors: {}'.format(form.errors))
         print('Did not validate form of customer {} {} {}'.format(
