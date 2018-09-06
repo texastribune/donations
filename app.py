@@ -251,6 +251,7 @@ def charge():
             if 'No such customer:' not in message:
                 raise e
             else:
+                print(message)
                 return render_template('error.html', message=error_message)
     else:
         print('Form validation errors: {}'.format(form.errors))
