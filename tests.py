@@ -282,9 +282,8 @@ def test__format_opportunity():
             'LeadSource': 'Stripe',
             'Name': 'D C (dcraigmile+test6@texastribune.org)',
             'RecordTypeId': '01216000001IhI9',
-            'StageName': 'Pledged',
+            'StageName': 'Closed Won',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'Referral_ID__c': '1234',
             'Description': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
             'Type': 'Single',
@@ -298,7 +297,6 @@ def test__format_circle_donation():
     response = _format_recurring_donation(contact=contact, form=circle_form,
             customer=customer)
     expected_response = {
-            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -323,7 +321,6 @@ def test__format_cent_circle_donation():
     response = _format_recurring_donation(contact=contact,
             form=another_circle_form, customer=customer)
     expected_response = {
-            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -348,7 +345,6 @@ def test__format_recurring_donation():
     response = _format_recurring_donation(contact=contact, form=rdo_form,
             customer=customer)
     expected_response = {
-            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -373,7 +369,6 @@ def test__format_recurring_donation_decimal():
     response = _format_recurring_donation(contact=contact,
             form=another_rdo_form, customer=customer)
     expected_response = {
-            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -398,7 +393,6 @@ def test__format_blast_rdo():
     response = _format_blast_rdo(contact=contact, form=blast_rdo_form,
             customer=customer)
     expected_response = {
-            'Referral_ID__c': '1234',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
             'npe03__Contact__c': '0031700000BHQzBAAX',
