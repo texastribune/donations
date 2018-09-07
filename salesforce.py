@@ -2,7 +2,7 @@ from datetime import datetime
 from decimal import Decimal
 import json
 import locale
-from pprint import pprint   # TODO: remove
+from pprint import pprint
 
 import celery
 import requests
@@ -29,7 +29,7 @@ TWOPLACES = Decimal(10) ** -2       # same as Decimal('0.01')
 
 WARNINGS = dict()
 
-#TODO using logging instead of print()
+# TODO using logging instead of print()
 
 
 def notify_slack(message):
@@ -298,7 +298,7 @@ def upsert_customer(customer=None, form=None):
     if not created:
         print('----Exists, updating')
 
-        #TODO: why not use sf.patch()?
+        # TODO: why not use sf.patch()?
 
         path = '/services/data/v35.0/sobjects/Contact/{}'.format(contact['Id'])
         url = '{}{}'.format(sf.instance_url, path)
@@ -309,7 +309,8 @@ def upsert_customer(customer=None, form=None):
     return True
 
 
-def _format_opportunity(contact=None, form=None, customer=None, date=None, stage='Closed Won'):
+def _format_opportunity(contact=None, form=None, customer=None,
+        date=None, stage='Closed Won'):
     """
     Format an opportunity for insertion.
     """
@@ -366,7 +367,8 @@ def _amount_to_charge(amount, pay_fees=False):
     return int(total_in_cents)
 
 
-def update_opportunity(opp_id, card_id=None, txn_id=None, referral_id=None, stage=None):
+def update_opportunity(opp_id, card_id=None, txn_id=None,
+        referral_id=None, stage=None):
 
     print('Updating Opportunity ({})...'.format(opp_id))
     sf = SalesforceConnection()
@@ -407,7 +409,6 @@ def _check_duplicate_opportunity(account_id, opp_type='Single', date=None):
     response = sf.query(query)
     print(response)
 
-# TODO:
     if len(response) != 0:
         raise Exception('Possible duplicate transaction. Not charging.')
     return response
@@ -445,14 +446,16 @@ def add_opportunity(form=None, customer=None):
 
     if 'referral_id' in form:
         try:
-            response = update_opportunity(opp_id=opp_id, referral_id=form['referral_id'])
+            response = update_opportunity(opp_id=opp_id,
+                    referral_id=form['referral_id'])
         except Exception as e:
             content = json.loads(e.response.content.decode('utf-8'))
             print(content)
-            print ('Unable to add referral ID: {}'.format(content[0]['message']))
+            print ('Unable to add referral ID: {}'.format(
+                content[0]['message']))
 
     print('---- Charging ${} to {} ({} {})'.format(amount / 100,
-        customer.id, form['first_name'],form['last_name']))
+        customer.id, form['first_name'], form['last_name']))
 
     charge = stripe.Charge.create(
             customer=customer.id,
@@ -485,7 +488,6 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     open_ended_status = form.get('openended_status', default='None')
     installment_period = form.get('installment_period', default='None')
     campaign_id = form.get('campaign_id', default='')
-    referral_id = form.get('referral_id', default='')
     pay_fees = form['pay_fees_value'] == 'True'
 
     # TODO: test this
@@ -522,8 +524,9 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
             'npe03__Installment_Period__c': installment_period,
             'Type__c': type__c,
             }
-    pprint(recurring_donation)   # TODO: rm
+    pprint(recurring_donation)
     return recurring_donation
+
 
 def get_rdo_opp(rdo_id):
 
@@ -550,8 +553,6 @@ def get_rdo_opp(rdo_id):
 
     return response[0]
 
-
-#TODO consistent use of quotes
 
 def update_rdo(rdo_id, referral_id=None):
 
@@ -598,25 +599,26 @@ def add_recurring_donation(form=None, customer=None):
 
     if 'referral_id' in form:
         try:
-            response = update_rdo(rdo_id=rdo_id, referral_id=form['referral_id'])
+            response = update_rdo(rdo_id=rdo_id, referral_id=form[
+                'referral_id'])
         except Exception as e:
             content = json.loads(e.response.content.decode('utf-8'))
             print(content)
-            print ('Unable to add referral ID: {}'.format(content[0]['message']))
+            print ('Unable to add referral ID: {}'.format(
+                content[0]['message']))
 
     response = get_rdo_opp(rdo_id)
     opp_id = response['Id']
     response = update_opportunity(opp_id, stage='Closed Won')
     print(response)
 
-
     pay_fees = form['pay_fees_value'] == 'True'
     amount = _amount_to_charge(form['amount'], pay_fees)
 
-    #TODO catch charge failures and mark them in SF
+    # TODO catch charge failures and mark them in SF
 
     print('---- Charging ${} to {} ({} {})'.format(amount / 100,
-        customer.id, form['first_name'],form['last_name']))
+        customer.id, form['first_name'], form['last_name']))
 
     charge = stripe.Charge.create(
             customer=customer.id,
@@ -631,7 +633,7 @@ def add_recurring_donation(form=None, customer=None):
 
     print(response)
 
-    #TODO look for Closed Won opportunities that don't have Stripe details
+    # TODO look for Closed Won opportunities that don't have Stripe details
 
     send_multiple_account_warning()
 
@@ -687,7 +689,6 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
         installment_period = 'yearly'
 
     campaign_id = form.get('campaign_id', default='')
-    referral_id = form.get('referral_id', default='')
 
     blast_subscription = {
             'npe03__Recurring_Donation_Campaign__c': campaign_id,
@@ -711,7 +712,7 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
             'Blast_Subscription_Email__c': '{}'.format(
                 form['subscriber_email']),
             }
-    pprint(blast_subscription)   # TODO: rm
+    pprint(blast_subscription)
     return blast_subscription
 
 
@@ -747,11 +748,13 @@ def add_blast_subscription(form=None, customer=None, charge=None):
     rdo_id = response['id']
     if 'referral_id' in form:
         try:
-            response = update_rdo(rdo_id=rdo_id, referral_id=form['referral_id'])
+            response = update_rdo(rdo_id=rdo_id,
+                    referral_id=form['referral_id'])
         except Exception as e:
             content = json.loads(e.response.content.decode('utf-8'))
             print(content)
-            print ('Unable to add referral ID: {}'.format(content[0]['message']))
+            print ('Unable to add referral ID: {}'.format(
+                content[0]['message']))
 
     response = get_rdo_opp(rdo_id)
     opp_id = response['Id']
@@ -760,7 +763,7 @@ def add_blast_subscription(form=None, customer=None, charge=None):
     print(response)
 
     print('---- Charging ${} to {} ({} {})'.format(amount / 100,
-        customer.id, form['first_name'],form['last_name']))
+        customer.id, form['first_name'], form['last_name']))
 
     charge = stripe.Charge.create(
             customer=customer.id,

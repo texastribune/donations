@@ -8,7 +8,7 @@ def check_response(response=None, expected_status=200):
     """
     code = response.status_code
     try:
-        content = json.loads(response.content.decode('utf-8'))
+        json.loads(response.content.decode('utf-8'))
         # TODO: look for 'success'
     except:
         print('unable to parse response (this is probably okay)')
