@@ -317,11 +317,7 @@ def _format_opportunity(contact=None, form=None, customer=None, date=None, stage
         date = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
     campaign_id = form.get('campaign_id', default='')
-    referral_id = form.get('referral_id', default='')
-    print('referral_id: {}'.format(referral_id))
-
     pay_fees = form['pay_fees_value'] == 'True'
-
     amount = _format_amount(form['amount'])
 
     opportunity = {
@@ -390,47 +386,45 @@ def update_opportunity(opp_id, card_id=None, txn_id=None, referral_id=None, stag
     sf.patch(path, update)
 
 
-def _check_duplicate_opportunity(amount, account_id, date=None):
+def _check_duplicate_opportunity(account_id, opp_type='Single', date=None):
 
-    print('Checking for duplicate transaction...')
+    print('Checking for duplicate transactions...')
     if date is None:
         date = datetime.now(tz=zone).strftime('%Y-%m-%d')
 
     query = """
         SELECT Id FROM Opportunity
         WHERE AccountId = '{}'
+        AND Type = '{}'
         AND CloseDate = {}
-        AND Amount = {}
-    """.format(account_id, date, amount)
+    """.format(account_id, opp_type, date)
 
     print(query)
     sf = SalesforceConnection()
     response = sf.query(query)
     print(response)
-    print(len(response))
+
+# TODO:
+    if len(response) != 0:
+        raise Exception('Possible duplicate transaction. Not charging.')
     return response
 
 
 def add_opportunity(form=None, customer=None):
 
+    print('----Adding opportunity...')
+
     pay_fees = form['pay_fees_value'] == 'True'
     amount = _amount_to_charge(form['amount'], pay_fees)
-
-    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
-        customer.id, form['first_name'],form['last_name']))
 
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
 
-    response = _check_duplicate_opportunity(amount=form['amount'],
-            account_id=contact['AccountId'])
-#    if len(response) == 0:
-#        raise Exception('Possible duplicate Opportunity; not proceeding')
+    response = _check_duplicate_opportunity(account_id=contact['AccountId'])
 
     opportunity = _format_opportunity(contact=contact, form=form,
             customer=customer)
     path = '/services/data/v35.0/sobjects/Opportunity'
-    print("----Adding opportunity...")
     try:
         response = sf.post(path=path, data=opportunity)
         opp_id = response['id']
@@ -454,7 +448,8 @@ def add_opportunity(form=None, customer=None):
             print(content)
             print ('Unable to add referral ID: {}'.format(content[0]['message']))
 
-    print("Charging card...")
+    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
+        customer.id, form['first_name'],form['last_name']))
 
     charge = stripe.Charge.create(
             customer=customer.id,
@@ -463,6 +458,7 @@ def add_opportunity(form=None, customer=None):
             description=form['description'],
             )
 
+    print(charge.outcome.seller_message)
     response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
             stage='Closed Won', txn_id=charge.id)
 
@@ -488,9 +484,6 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     campaign_id = form.get('campaign_id', default='')
     referral_id = form.get('referral_id', default='')
     pay_fees = form['pay_fees_value'] == 'True'
-
-
-    print('referral_id: {}'.format(referral_id))
 
     # TODO: test this
     if open_ended_status == 'None' and (
@@ -529,12 +522,38 @@ def _format_recurring_donation(contact=None, form=None, customer=None):
     pprint(recurring_donation)   # TODO: rm
     return recurring_donation
 
+def get_rdo_opp(rdo_id):
+
+    print('Finding first Opportunity for new RDO...')
+
+    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    query = """
+        SELECT Id, StageName FROM Opportunity
+        WHERE npe03__Recurring_Donation__c = '{}'
+        AND CloseDate = {}
+    """.format(rdo_id, today)
+    try:
+        sf = SalesforceConnection()
+        response = sf.query(query)
+    except Exception as e:
+        print(e.response.content.decode('utf-8'))
+        raise(e)
+
+    if len(response) != 1:
+        raise Exception('More than one Opportunity found.')
+
+    if response[0]['StageName'] != 'Pledged':
+        raise Exception('Opportunity stage is not Pledged')
+
+    return response[0]
+
+
+#TODO consistent use of quotes
 
 def update_rdo(rdo_id, referral_id=None):
 
     print('Updating RDO ({})...'.format(rdo_id))
     sf = SalesforceConnection()
-    print(rdo_id)
 
     update = dict()
     if referral_id:
@@ -552,6 +571,8 @@ def add_recurring_donation(form=None, customer=None):
     print('----Adding recurring donation...')
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
+    response = _check_duplicate_opportunity(opp_type='Recurring Donation',
+            account_id=contact['AccountId'])
     recurring_donation = _format_recurring_donation(contact=contact,
             form=form, customer=customer)
     path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
@@ -563,10 +584,12 @@ def add_recurring_donation(form=None, customer=None):
         # retry without a campaign if it gives an error
         if 'Campaign: id' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            recurring_donation['campaign_id'] = ''
+            recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
             response = sf.post(path=path, data=recurring_donation)
         else:
             raise(e)
+
+    rdo_id = response['id']
 
     if 'referral_id' in form:
         try:
@@ -576,28 +599,8 @@ def add_recurring_donation(form=None, customer=None):
             print(content)
             print ('Unable to add referral ID: {}'.format(content[0]['message']))
 
-
-    rdo_id = response['id']
-    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
-    query = """
-        SELECT Id, StageName FROM Opportunity
-        WHERE npe03__Recurring_Donation__c = '{}'
-        AND CloseDate = {}
-    """.format(rdo_id, today)
-    print(query)
-    try:
-        response = sf.query(query)
-    except Exception as e:
-        print(e.response.content.decode('utf-8'))
-        raise(e)
-
-    print(len(response))
-    #TODO raise exception if length is not 1
-    #TODO check StageName and freak out if it's not 'Pledged'
-
-    url = response[0]['attributes']['url']
-    opp_id = response[0]['Id']
-
+    response = get_rdo_opp(rdo_id)
+    opp_id = response['Id']
     response = update_opportunity(opp_id, stage='Closed Won')
     print(response)
 
@@ -606,6 +609,8 @@ def add_recurring_donation(form=None, customer=None):
     pay_fees = form['pay_fees_value'] == 'True'
     amount = _amount_to_charge(form['amount'], pay_fees)
 
+    #TODO catch charge failures and mark them in SF
+
     charge = stripe.Charge.create(
             customer=customer.id,
             amount=amount,
@@ -613,6 +618,7 @@ def add_recurring_donation(form=None, customer=None):
             description=form['description'],
             )
 
+    print(charge.outcome.seller_message)
     response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
             stage='Closed Won', txn_id=charge.id)
 
@@ -675,10 +681,8 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
 
     campaign_id = form.get('campaign_id', default='')
     referral_id = form.get('referral_id', default='')
-    print('referral_id: {}'.format(referral_id))
 
     blast_subscription = {
-            'Referral_ID__c': referral_id,
             'npe03__Recurring_Donation_Campaign__c': campaign_id,
             'npe03__Contact__c': '{}'.format(contact['Id']),
             'npe03__Amount__c': '{}'.format(amount),
@@ -713,6 +717,10 @@ def add_blast_subscription(form=None, customer=None, charge=None):
 
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
+
+    response = _check_duplicate_opportunity(opp_type='The Blast',
+            account_id=contact['AccountId'])
+
     recurring_donation = _format_blast_rdo(contact=contact,
             form=form, customer=customer)
     path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
@@ -724,11 +732,42 @@ def add_blast_subscription(form=None, customer=None, charge=None):
         if 'Campaign: id' in content[0]['message']:
             print('bad campaign ID; retrying...')
             recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
-            pprint(recurring_donation)
             response = sf.post(path=path, data=recurring_donation)
             pprint(response)
         else:
             raise(e)
+
+    rdo_id = response['id']
+    if 'referral_id' in form:
+        try:
+            response = update_rdo(rdo_id=rdo_id, referral_id=form['referral_id'])
+        except Exception as e:
+            content = json.loads(e.response.content.decode('utf-8'))
+            print(content)
+            print ('Unable to add referral ID: {}'.format(content[0]['message']))
+
+    response = get_rdo_opp(rdo_id)
+    opp_id = response['Id']
+
+    response = update_opportunity(opp_id, stage='Closed Won')
+    print(response)
+
+    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
+        customer.id, form['first_name'],form['last_name']))
+
+    charge = stripe.Charge.create(
+            customer=customer.id,
+            amount=amount,
+            currency='usd',
+            description=form['description'],
+            )
+    print(charge.outcome.seller_message)
+
+    response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
+            stage='Closed Won', txn_id=charge.id)
+
+    print(response)
+
     send_multiple_account_warning()
 
     return response
