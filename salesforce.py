@@ -80,7 +80,7 @@ def send_multiple_account_warning():
 
         send_email(
                 recipient=MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
-                subject="Multiple accounts found for {}".format(email),
+                subject='Multiple accounts found for {}'.format(email),
                 body=body
                 )
 
@@ -90,7 +90,7 @@ def send_multiple_account_warning():
 def get_email(form):
     if 'subscriber_email' in form:
         email = form['subscriber_email']
-        print("found subscriber email: {}".format(email))
+        print('found subscriber email: {}'.format(email))
         return email
     else:
         return form.get('stripeEmail')
@@ -216,7 +216,7 @@ class SalesforceConnection(object):
         the associated account ID.
         """
 
-        print("----Creating contact...")
+        print('----Creating contact...')
         contact = _format_contact(form=form)
         path = '/services/data/v35.0/sobjects/Contact'
         response = self.post(path=path, data=contact)
@@ -274,9 +274,9 @@ def upsert_customer(customer=None, form=None):
     """
 
     if customer is None:
-        raise Exception("Value for 'customer' must be specified.")
+        raise Exception('Value for "customer" must be specified.')
     if form is None:
-        raise Exception("Value for 'form' must be specified.")
+        raise Exception('Value for "form" must be specified.')
 
     pprint('form: {}'.format(form))
 
@@ -296,8 +296,7 @@ def upsert_customer(customer=None, form=None):
     created, contact = sf.get_or_create_contact(updated_request)
 
     if not created:
-        print("----Exists, updating")
-        pprint(update)
+        print('----Exists, updating')
 
         #TODO: why not use sf.patch()?
 
@@ -550,7 +549,7 @@ def add_recurring_donation(form=None, customer=None):
     Insert a recurring donation into SF.
     """
 
-    print("----Adding recurring donation...")
+    print('----Adding recurring donation...')
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     recurring_donation = _format_recurring_donation(contact=contact,
@@ -602,7 +601,7 @@ def add_recurring_donation(form=None, customer=None):
     response = update_opportunity(opp_id, stage='Closed Won')
     print(response)
 
-    print("Charging card...")
+    print('Charging card...')
 
     pay_fees = form['pay_fees_value'] == 'True'
     amount = _amount_to_charge(form['amount'], pay_fees)
@@ -644,12 +643,12 @@ def add_customer_and_charge(form=None, customer=None):
     upsert_customer(form=form, customer=customer)
 
     if (form['installment_period'] == 'None'):
-        print("----One time payment...")
+        print('----One time payment...')
         msg = '*{}* ({}) pledged *${}*{}'.format(name, email, amount, reason)
         notify_slack(msg)
         add_opportunity(form=form, customer=customer)
     else:
-        print("----Recurring payment...")
+        print('----Recurring payment...')
         msg = '*{}* ({}) pledged *${}*{} [{}]'.format(name, email, amount,
                 reason, period)
         notify_slack(msg)
@@ -667,11 +666,7 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
     amount = form['amount']
     installments = 0
     open_ended_status = 'Open'
-
-    if form['pay_fees_value'] == 'True':
-        pay_fees = True
-    else:
-        pay_fees = False
+    pay_fees = form['pay_fees_value'] == 'True'
 
     if amount == '40':
         installment_period = 'monthly'
@@ -711,7 +706,11 @@ def _format_blast_rdo(contact=None, form=None, customer=None):
 
 def add_blast_subscription(form=None, customer=None, charge=None):
 
-    print("----Adding Blast RDO...")
+    print('----Adding Blast RDO...')
+
+    pay_fees = form['pay_fees_value'] == 'True'
+    amount = _amount_to_charge(form['amount'], pay_fees)
+
     sf = SalesforceConnection()
     _, contact = sf.get_or_create_contact(form)
     recurring_donation = _format_blast_rdo(contact=contact,
