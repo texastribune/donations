@@ -84,3 +84,8 @@ SLACK_API_KEY = os.getenv('SLACK_API_KEY')
 #
 ENABLE_SENTRY = bool_env('ENABLE_SENTRY')
 SENTRY_DSN = os.getenv('SENTRY_DSN')
+
+###############
+# Miscellaneous
+#
+CHECK_FOR_DUPLICATES = bool_env('CHECK_FOR_DUPLICATES')

@@ -16,6 +16,7 @@ from config import ENABLE_SLACK
 from config import SLACK_API_KEY
 from config import SLACK_CHANNEL
 from config import MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT
+from config import CHECK_FOR_DUPLICATES
 
 from emails import send_email
 from check_response import check_response
@@ -28,7 +29,6 @@ TWOPLACES = Decimal(10) ** -2       # same as Decimal('0.01')
 
 WARNINGS = dict()
 
-#TODO see if there's already an opportunity on that date with that amount and warn/skip if so
 #TODO using logging instead of print()
 
 
@@ -388,6 +388,9 @@ def update_opportunity(opp_id, card_id=None, txn_id=None, referral_id=None, stag
 
 def _check_duplicate_opportunity(account_id, opp_type='Single', date=None):
 
+    if not CHECK_FOR_DUPLICATES:
+        return
+
     print('Checking for duplicate transactions...')
     if date is None:
         date = datetime.now(tz=zone).strftime('%Y-%m-%d')
@@ -573,6 +576,8 @@ def add_recurring_donation(form=None, customer=None):
     _, contact = sf.get_or_create_contact(form)
     response = _check_duplicate_opportunity(opp_type='Recurring Donation',
             account_id=contact['AccountId'])
+    response = _check_duplicate_opportunity(opp_type='Giving Circle',
+            account_id=contact['AccountId'])
     recurring_donation = _format_recurring_donation(contact=contact,
             form=form, customer=customer)
     path = '/services/data/v35.0/sobjects/npe03__Recurring_Donation__c'
@@ -604,12 +609,14 @@ def add_recurring_donation(form=None, customer=None):
     response = update_opportunity(opp_id, stage='Closed Won')
     print(response)
 
-    print('Charging card...')
 
     pay_fees = form['pay_fees_value'] == 'True'
     amount = _amount_to_charge(form['amount'], pay_fees)
 
     #TODO catch charge failures and mark them in SF
+
+    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
+        customer.id, form['first_name'],form['last_name']))
 
     charge = stripe.Charge.create(
             customer=customer.id,
