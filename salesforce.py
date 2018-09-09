@@ -7,7 +7,6 @@ from pprint import pprint
 import celery
 import requests
 from pytz import timezone
-import stripe
 
 from config import SALESFORCE
 from config import DONATION_RECORDTYPEID
@@ -20,6 +19,7 @@ from config import CHECK_FOR_DUPLICATES
 
 from emails import send_email
 from check_response import check_response
+from charges import charge_customer, ChargeException
 
 zone = timezone(TIMEZONE)
 
@@ -30,7 +30,7 @@ TWOPLACES = Decimal(10) ** -2       # same as Decimal('0.01')
 WARNINGS = dict()
 
 # TODO using logging instead of print()
-
+# TODO: move send_multiple_account_warning invocations
 
 def notify_slack(message):
     """
@@ -351,9 +351,6 @@ def _amount_to_charge(amount, pay_fees=False):
     to pay fees or not. if they did then we add that to the amount charged.
     stripe charges 2.2% + $0.30.
 
-    stripe wants the amount to charge in cents. so we multiply by 100 and
-    return that.
-
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
     amount = float(amount)
@@ -362,9 +359,8 @@ def _amount_to_charge(amount, pay_fees=False):
         total = (amount + .30) / (1 - 0.022)
     else:
         total = amount
-    total_in_cents = total * 100
 
-    return int(total_in_cents)
+    return int(total)
 
 
 def update_opportunity(opp_id, card_id=None, txn_id=None,
@@ -454,17 +450,18 @@ def add_opportunity(form=None, customer=None):
             print ('Unable to add referral ID: {}'.format(
                 content[0]['message']))
 
-    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
+    print('---- Charging ${} to {} ({} {})'.format(amount,
         customer.id, form['first_name'], form['last_name']))
 
-    charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency='usd',
-            description=form['description'],
-            )
+    try:
+        charge = charge_customer(customer_id=customer.id, amount=amount,
+                description=form['description'])
+    except ChargeException as e:
+        # TODO: update opp with this message
+        print(e)
+        response = update_opportunity(opp_id=opp_id, stage='Closed Lost')
+        raise(e)
 
-    print(charge.outcome.seller_message)
     response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
             stage='Closed Won', txn_id=charge.id)
 
@@ -617,17 +614,18 @@ def add_recurring_donation(form=None, customer=None):
 
     # TODO catch charge failures and mark them in SF
 
-    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
+    print('---- Charging ${} to {} ({} {})'.format(amount,
         customer.id, form['first_name'], form['last_name']))
 
-    charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency='usd',
-            description=form['description'],
-            )
+    try:
+        charge = charge_customer(customer_id=customer.id, amount=amount,
+                description=form['description'])
+    except ChargeException as e:
+        # TODO: update opp with this message
+        print(e)
+        response = update_opportunity(opp_id=opp_id, stage='Closed Lost')
+        raise(e)
 
-    print(charge.outcome.seller_message)
     response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
             stage='Closed Won', txn_id=charge.id)
 
@@ -762,16 +760,17 @@ def add_blast_subscription(form=None, customer=None, charge=None):
     response = update_opportunity(opp_id, stage='Closed Won')
     print(response)
 
-    print('---- Charging ${} to {} ({} {})'.format(amount / 100,
+    print('---- Charging ${} to {} ({} {})'.format(amount,
         customer.id, form['first_name'], form['last_name']))
 
-    charge = stripe.Charge.create(
-            customer=customer.id,
-            amount=amount,
-            currency='usd',
-            description=form['description'],
-            )
-    print(charge.outcome.seller_message)
+    try:
+        charge = charge_customer(customer_id=customer.id, amount=amount,
+                description=form['description'])
+    except ChargeException as e:
+        # TODO: update opp with this message
+        print(e)
+        response = update_opportunity(opp_id=opp_id, stage='Closed Lost')
+        raise(e)
 
     response = update_opportunity(opp_id=opp_id, card_id=charge.source.id,
             stage='Closed Won', txn_id=charge.id)
