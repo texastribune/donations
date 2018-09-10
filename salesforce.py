@@ -468,12 +468,12 @@ def add_recurring_donation(form=None, customer=None):
             print('bad campaign ID; retrying...')
             new_form = form.copy()
             new_form['campaign_id'] = ''
-            add_opportunity(form=new_form, customer=customer)
+            add_recurring_donation(form=new_form, customer=customer)
         elif 'Referral ID' in content[0]['message']:
             print('bad referral ID; retrying...')
             new_form = form.copy()
             new_form['referral_id'] = ''
-            add_opportunity(form=new_form, customer=customer)
+            add_recurring_donation(form=new_form, customer=customer)
         else:
             raise(e)
 
