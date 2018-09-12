@@ -144,6 +144,7 @@ class Request(object):
 request = Request()
 
 circle_form = MultiDict()
+circle_form.add('referral_id', '1234')
 circle_form.add('amount', '100')
 circle_form.add('frequency', 'until-cancelled'),
 circle_form.add('last_name', 'C'),
@@ -160,6 +161,7 @@ circle_form.add('pay_fees_value', 'True')
 request.circle_form = circle_form
 
 another_circle_form = MultiDict()
+another_circle_form.add('referral_id', '1234')
 another_circle_form.add('amount', '1500.01')
 another_circle_form.add('frequency', 'until-cancelled'),
 another_circle_form.add('last_name', 'C'),
@@ -189,9 +191,11 @@ rdo_form.add('installments', 'None')
 rdo_form.add('openended_status', 'None')
 rdo_form.add('description', 'The Texas Tribune Membership')
 rdo_form.add('pay_fees_value', 'True')
+rdo_form.add('referral_id', '1234')
 request.rdo_form = rdo_form
 
 another_rdo_form = MultiDict()
+another_rdo_form.add('referral_id', '1234')
 another_rdo_form.add('amount', '9.15')
 another_rdo_form.add('frequency', 'until-cancelled'),
 another_rdo_form.add('last_name', 'C'),
@@ -208,6 +212,7 @@ another_rdo_form.add('pay_fees_value', 'True')
 request.another_rdo_form = another_rdo_form
 
 blast_rdo_form = MultiDict()
+blast_rdo_form.add('referral_id', '1234')
 blast_rdo_form.add('amount', '40')
 blast_rdo_form.add('frequency', 'until-cancelled'),
 blast_rdo_form.add('last_name', 'C'),
@@ -279,6 +284,7 @@ def test__format_opportunity():
             'RecordTypeId': '01216000001IhI9',
             'StageName': 'Pledged',
             'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
+            'Referral_ID__c': '1234',
             'Description': 'The Texas Tribune Membership',
             'Stripe_Agreed_to_pay_fees__c': True,
             'Type': 'Single',
@@ -292,6 +298,7 @@ def test__format_circle_donation():
     response = _format_recurring_donation(contact=contact, form=circle_form,
             customer=customer)
     expected_response = {
+            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -316,6 +323,7 @@ def test__format_cent_circle_donation():
     response = _format_recurring_donation(contact=contact,
             form=another_circle_form, customer=customer)
     expected_response = {
+            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -340,6 +348,7 @@ def test__format_recurring_donation():
     response = _format_recurring_donation(contact=contact, form=rdo_form,
             customer=customer)
     expected_response = {
+            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -364,6 +373,7 @@ def test__format_recurring_donation_decimal():
     response = _format_recurring_donation(contact=contact,
             form=another_rdo_form, customer=customer)
     expected_response = {
+            'Referral_ID__c': '1234',
             'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
@@ -388,6 +398,7 @@ def test__format_blast_rdo():
     response = _format_blast_rdo(contact=contact, form=blast_rdo_form,
             customer=customer)
     expected_response = {
+            'Referral_ID__c': '1234',
             'npe03__Date_Established__c': today,
             'Lead_Source__c': 'Stripe',
             'npe03__Contact__c': '0031700000BHQzBAAX',

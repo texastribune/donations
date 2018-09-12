@@ -10,7 +10,7 @@ Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
   const defaultLevel = 'editorMonthly';
-  const { campaignId = '' } = queryParams;
+  const { campaignId = '', referralId = '' } = queryParams;
   let { level = defaultLevel } = queryParams;
 
   if (!CIRCLE_BUCKETS[level]) level = defaultLevel;
@@ -27,6 +27,7 @@ function getStateFromParams(queryParams) {
     installments,
     installment_period: installmentPeriod,
     campaign_id: campaignId,
+    referral_id: referralId,
   };
 }
 
