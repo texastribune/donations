@@ -9,7 +9,7 @@ def charge_customer(customer_id, amount, description):
     """
     Charge a customer.
 
-    Stripe wants to the amount in cents to we multiply by 100.
+    Stripe wants the amount in cents so we multiply by 100.
     """
 
     print('---- Charging ${} to {} ({})'.format(amount, customer_id,

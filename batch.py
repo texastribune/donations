@@ -97,6 +97,14 @@ def process_charges(query, log):
             log.it('\tParam: {}'.format(error.get('param', '')))
             log.it('\tMessage: {}'.format(error.get('message', '')))
             log.it('\tDecline code: {}'.format(error.get('decline_code', '')))
+            closed_lost_reason = error.get('message', '')
+            if closed_lost_reason:
+                update = {
+                        'npsp__Closed_Lost_Reason__c': closed_lost_reason,
+                        'StageName': 'Closed Lost',
+                        }
+                path = item['attributes']['url']
+                sf.patch(path=path, data=update)
             continue
         except stripe.error.InvalidRequestError as e:
             log.it('Problem: {}'.format(e))
