@@ -834,8 +834,9 @@ def test_fail_continues(sf_connection, sf_patch, sf_connection_query,
 @patch('batch.Log')
 @patch('batch.stripe.Charge.create')
 @patch('batch.SalesforceConnection.query')
+@patch('batch.SalesforceConnection.patch')
 @patch('salesforce.SalesforceConnection.__init__')
-def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
+def test_card_error(sf_connection, sf_patch, sf_connection_query, stripe_charge, log,
         requests_lib):
     """
     This tests CardErrors from Stripe.
@@ -871,6 +872,7 @@ def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
     stripe_charge.side_effect = stripe_error
     sf_connection.return_value = None
     sf_connection_query.return_value = sf_response
+    sf_patch.return_value = None
     requests_lib.patch.return_value = RequestsResponse()
     process_charges('whatever', log)
     print(log.it.call_args_list)
