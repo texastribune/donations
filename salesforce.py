@@ -427,7 +427,6 @@ def add_opportunity(form=None, customer=None):
     path = '/services/data/v35.0/sobjects/Opportunity'
     try:
         response = sf.post(path=path, data=opportunity)
-        opp_id = response['id']
     except Exception as e:
         content = json.loads(e.response.content.decode('utf-8'))
         print(content)
@@ -436,9 +435,10 @@ def add_opportunity(form=None, customer=None):
             print('bad campaign ID; retrying...')
             opportunity['Campaignid'] = ''
             response = sf.post(path=path, data=opportunity)
-            opp_id = response['id']
         else:
             raise(e)
+
+    opp_id = response['id']
 
     if 'referral_id' in form:
         try:
@@ -587,7 +587,7 @@ def add_recurring_donation(form=None, customer=None):
         # retry without a campaign if it gives an error
         if 'Campaign: id' in content[0]['message']:
             print('bad campaign ID; retrying...')
-            recurring_donation['npe03__Recurring_Donation_Campaign__c'] = ''
+            recurring_donation['Campaignid'] = ''
             response = sf.post(path=path, data=recurring_donation)
         else:
             raise(e)
