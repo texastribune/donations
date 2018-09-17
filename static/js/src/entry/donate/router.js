@@ -32,7 +32,7 @@ function createBaseFormState(queryParams) {
       break;
     case 'monthly':
       openEndedStatus = 'Open';
-      amount = amount || '10';
+      amount = amount || '35';
       break;
     case 'yearly':
       openEndedStatus = 'Open';
@@ -41,7 +41,7 @@ function createBaseFormState(queryParams) {
     default:
       installmentPeriod = 'monthly';
       openEndedStatus = 'Open';
-      amount = amount || '10';
+      amount = amount || '35';
   }
 
   return {
