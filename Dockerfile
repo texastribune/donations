@@ -15,7 +15,7 @@ FROM python:3.6
 
 WORKDIR /app
 
-COPY --from=node_base /app /app
+COPY --from=node_base /app/static /app
 
 COPY requirements.txt /app/
 RUN pip3 install -r /app/requirements.txt
