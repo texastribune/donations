@@ -12,3 +12,5 @@ htmlcov
 celerybeat-schedule.db
 celerybeat.pid
 yarn-error.log
+.pytest_cache
+.vscode
