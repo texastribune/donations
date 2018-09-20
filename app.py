@@ -160,6 +160,8 @@ def the_blast_form():
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
+
+    pprint(request.form)
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
