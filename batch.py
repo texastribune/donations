@@ -1,22 +1,20 @@
 from datetime import datetime, timedelta
-import json
 import redis
 
 import celery
 from emails import send_email
 from pytz import timezone
-import requests
 import stripe
 
-from salesforce import SalesforceConnection
 from config import STRIPE_KEYS
 from config import ACCOUNTING_MAIL_RECIPIENT
 from config import TIMEZONE
 from config import REDIS_URL
+from sf import Opportunity
 
 zone = timezone(TIMEZONE)
 
-stripe.api_key = STRIPE_KEYS['secret_key']
+stripe.api_key = STRIPE_KEYS["secret_key"]
 
 
 class Log(object):
@@ -24,6 +22,7 @@ class Log(object):
     This encapulates sending to the console/stdout and email all in one.
 
     """
+
     def __init__(self):
         self.log = list()
 
@@ -136,7 +135,7 @@ class Lock(object):
     def acquire(self):
         if self.connection.get(self.key):
             raise AlreadyExecuting
-        self.connection.setex(name=self.key, value='bar', time=1200)
+        self.connection.setex(name=self.key, value="bar", time=1200)
 
     def release(self):
         self.connection.delete(self.key)
