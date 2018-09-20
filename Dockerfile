@@ -1,5 +1,4 @@
 FROM node:8 as node_base
-MAINTAINER @x110dc
 
 WORKDIR /app
 
