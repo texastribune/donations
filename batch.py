@@ -37,13 +37,13 @@ class Log(object):
         """
         Send the assembled log out as an email.
         """
-        body = '\n'.join(self.log)
+        body = "\n".join(self.log)
         recipient = ACCOUNTING_MAIL_RECIPIENT
-        subject = 'Batch run'
+        subject = "Batch run"
         send_email(body=body, recipient=recipient, subject=subject)
 
 
-def amount_to_charge(entry):
+def amount_to_charge(amount, pay_fees=False):
     """
     Determine the amount to charge. This depends on whether the payer agreed
     to pay fees or not. If they did then we add that to the amount charged.
@@ -54,72 +54,19 @@ def amount_to_charge(entry):
 
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
-    amount = float(entry['Amount'])
-    if entry['Stripe_Agreed_to_pay_fees__c']:
+    amount = float(amount)
+    if pay_fees:
         total = (amount + .30) / (1 - 0.022)
     else:
         total = amount
-    total_in_cents = total * 100
-
-    return int(total_in_cents)
-
-
-def process_charges(query, log):
-
-    sf = SalesforceConnection()
-
-    response = sf.query(query)
-    # TODO: check response code
-
-    log.it('Found {} opportunities available to process.'.format(
-        len(response)))
-
-    for item in response:
-        amount = amount_to_charge(item)
-        try:
-            log.it('---- Charging ${} to {} ({})'.format(amount / 100,
-                item['Stripe_Customer_ID__c'],
-                item['Name']))
-            charge = stripe.Charge.create(
-                    customer=item['Stripe_Customer_ID__c'],
-                    amount=amount,
-                    currency='usd',
-                    description=item['Description'],
-                    )
-        except stripe.error.CardError as e:
-            # look for decline code:
-            error = e.json_body['error']
-            log.it('The card has been declined:')
-            log.it('\tStatus: {}'.format(e.http_status))
-            log.it('\tType: {}'.format(error.get('type', '')))
-            log.it('\tCode: {}'.format(error.get('code', '')))
-            log.it('\tParam: {}'.format(error.get('param', '')))
-            log.it('\tMessage: {}'.format(error.get('message', '')))
-            log.it('\tDecline code: {}'.format(error.get('decline_code', '')))
-            continue
-        except stripe.error.InvalidRequestError as e:
-            log.it('Problem: {}'.format(e))
-            continue
-        except Exception as e:
-            log.it('Problem: {}'.format(e))
-            continue
-        if charge.status != 'succeeded':
-            log.it('Charge failed. Check Stripe logs.')
-            continue
-        update = {
-                'Stripe_Transaction_Id__c': charge.id,
-                'Stripe_Card__c': charge.source.id,
-                'StageName': 'Closed Won',
-                }
-        path = item['attributes']['url']
-        sf.patch(path=path, data=update)
-        log.it('ok')
+    return total
 
 
 class AlreadyExecuting(Exception):
     """
     Here to show when more than one job of the same type is running.
     """
+
     pass
 
 
@@ -144,58 +91,66 @@ class Lock(object):
 @celery.task()
 def charge_cards():
 
-    lock = Lock(key='charge-cards-lock')
+    lock = Lock(key="charge-cards-lock")
     lock.acquire()
 
     log = Log()
 
-    log.it('---Starting batch job...')
+    log.it("---Starting batch job...")
 
-    three_days_ago = (datetime.now(tz=zone) - timedelta(
-        days=3)).strftime('%Y-%m-%d')
-    today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+    three_days_ago = (datetime.now(tz=zone) - timedelta(days=3)).strftime("%Y-%m-%d")
+    today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
-    # regular (non Circle) pledges:
-    log.it('---Processing regular charges...')
+    opportunities = Opportunity.list_pledged(begin=three_days_ago, end=today)
 
-    query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
-            Stripe_Agreed_to_pay_fees__c
-        FROM Opportunity
-        WHERE CloseDate <= {}
-        AND CloseDate >= {}
-        AND StageName = 'Pledged'
-        AND Stripe_Customer_Id__c != ''
-        AND Type != 'Giving Circle'
-        """.format(today, three_days_ago)
+    log.it("---Processing charges...")
 
-    process_charges(query, log)
+    log.it(f"Found {len(opportunities)} opportunities available to process.")
 
-    #
-    # Circle transactions are different from the others. The Close Dates for a
-    # given Circle donation are all identical. That's so that the gift can be
-    # recognized all at once on the donor wall. So we use another field to
-    # determine when the card is actually charged: Expected_Giving_Date__c.
-    # So we process charges separately for Circles.
-    #
+    for item in opportunities:
+        if not item.stripe_customer:
+            log.it("Stripe Customer ID unspecified")
+            continue
+        amount = amount_to_charge(amount=item.amount, pay_fees=item.agreed_to_pay_fees)
+        try:
+            log.it(f"---- Charging ${amount} to {item.stripe_customer} ({item.name})")
 
-    log.it('---Processing Circle charges...')
+            charge = stripe.Charge.create(
+                customer=item.stripe_customer,
+                amount=int(amount * 100),
+                currency="usd",
+                description=item.description,
+            )
+        except stripe.error.CardError as e:
+            # look for decline code:
+            error = e.json_body["error"]
+            log.it("The card has been declined:")
+            log.it("\tStatus: {}".format(e.http_status))
+            log.it("\tType: {}".format(error.get("type", "")))
+            log.it("\tCode: {}".format(error.get("code", "")))
+            log.it("\tParam: {}".format(error.get("param", "")))
+            log.it("\tMessage: {}".format(error.get("message", "")))
+            log.it("\tDecline code: {}".format(error.get("decline_code", "")))
+            continue
+        except stripe.error.InvalidRequestError as e:
+            log.it("Problem: {}".format(e))
+            continue
+        except Exception as e:
+            log.it("Problem: {}".format(e))
+            continue
+        if charge.status != "succeeded":
+            log.it("Charge failed. Check Stripe logs.")
+            continue
+        item.stripe_transaction_id = charge.id
+        item.stripe_card = charge.source.id
+        item.stage_name = "Closed Won"
+        item.save()
+        log.it("ok")
 
-    query = """
-        SELECT Amount, Name, Stripe_Customer_Id__c, Description,
-            Stripe_Agreed_to_pay_fees__c
-        FROM Opportunity
-        WHERE Expected_Giving_Date__c <= {}
-        AND Expected_Giving_Date__c >= {}
-        AND StageName = 'Pledged'
-        AND Stripe_Customer_Id__c != ''
-        AND Type = 'Giving Circle'
-        """.format(today, three_days_ago)
-
-    process_charges(query, log)
     log.send()
 
     lock.release()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     charge_cards()
