@@ -176,10 +176,10 @@ def submit_blast():
 
     if form.validate():
         print("----Adding Blast subscription...")
-        add_blast_customer_and_charge.delay(form=request.form,
-                customer=customer)
-        return render_template('blast-charge.html')
+        add_blast_subscription.delay(customer=customer, form=clean(request.form))
+        return render_template("blast-charge.html")
     else:
+        print("Failed to validate form")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
@@ -229,24 +229,18 @@ def create_customer():
 
 @app.route("/charge", methods=["POST"])
 def charge():
+
+    pprint(request.form)
     gtm = {}
     form = DonateForm(request.form)
-    pprint('Request: {}'.format(request))
 
-    customer_email = request.form['stripeEmail']
-    customer_first = request.form['first_name']
-    customer_last = request.form['last_name']
-
-    bundles = get_bundles('charge')
+    bundles = get_bundles("charge")
 
     if form.validate():
-        customer = stripe.Customer.retrieve(request.form['customerId'])
-        add_customer_and_charge.delay(form=request.form,
-                customer=customer)
-        print('Validated form of customer {} {} {}'.format(customer_email,
-            customer_first, customer_last))
-        if request.form['installment_period'] == 'None':
-            gtm['event_label'] = 'once'
+        customer = stripe.Customer.retrieve(request.form["customerId"])
+        add_donation.delay(customer=customer, form=clean(request.form))
+        if request.form["installment_period"] == "None":
+            gtm["event_label"] = "once"
         else:
             gtm["event_label"] = request.form["installment_period"]
         gtm["event_value"] = request.form["amount"]
