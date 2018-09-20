@@ -1,8 +1,16 @@
 import os
 import sys
 import json
+from pprint import pprint
 
-from flask import Flask, redirect, render_template, request, send_from_directory, jsonify
+from flask import (
+    Flask,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+    jsonify,
+)
 from forms import DonateForm, BlastForm
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -10,80 +18,70 @@ import stripe
 from validate_email import validate_email
 
 from config import FLASK_SECRET_KEY, FLASK_DEBUG
-from salesforce import add_customer_and_charge
-from salesforce import add_blast_customer_and_charge
+from salesforce import add_donation
+from salesforce import add_blast_subscription
 from app_celery import make_celery
+from util import clean
 
-from pprint import pprint
 
 app = Flask(__name__)
 
 app.secret_key = FLASK_SECRET_KEY
 
-app.wsgi_app = SassMiddleware(app.wsgi_app, {
-        'app': ('static/sass', 'static/css', 'static/css')
-        })
+app.wsgi_app = SassMiddleware(
+    app.wsgi_app, {"app": ("static/sass", "static/css", "static/css")}
+)
 
-app.config.from_pyfile('config.py')
+app.config.from_pyfile("config.py")
 app.config.update(
-        CELERY_ACCEPT_CONTENT=['pickle', 'json'],
-        CELERY_ALWAYS_EAGER=False,
-        CELERY_IMPORTS=('app', 'salesforce', 'batch'),
-        )
-stripe.api_key = app.config['STRIPE_KEYS']['secret_key']
+    CELERY_ACCEPT_CONTENT=["pickle", "json"],
+    CELERY_ALWAYS_EAGER=False,
+    CELERY_IMPORTS=("app", "salesforce", "batch"),
+)
+stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
 celery = make_celery(app)
 
 # Set up to send logging to stdout and Heroku forwards to Papertrail
 LOGGING = {
-    'handlers': {
-        'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler',
-            'strm': sys.stdout
-        },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "strm": sys.stdout,
+        }
     }
 }
 
-if app.config['ENABLE_SENTRY']:
-    sentry = Sentry(app, dsn=app.config['SENTRY_DSN'])
+if app.config["ENABLE_SENTRY"]:
+    sentry = Sentry(app, dsn=app.config["SENTRY_DSN"])
 
 """
 Redirects, including for URLs that used to be
 part of the old donations app that lived at
 support.texastribune.org.
 """
-@app.route('/blast-vip')
+
+
+@app.route("/blast-vip")
 def the_blastvip_form():
-    return redirect('/blastform', code=302)
+    return redirect("/blastform", code=302)
 
-@app.route('/')
-def root_route():
-    return redirect('/donate', code=302)
 
-@app.route('/index.html')
+@app.route("/")
+@app.route("/levels.html")
+@app.route("/faq.html")
+@app.route("/index.html")
+@app.route("/memberform")
+@app.route("/donateform")
 def index_html_route():
-    return redirect('/donate', code=302)
+    return redirect("/donate", code=302)
 
-@app.route('/faq.html')
-def faq_html_route():
-    return redirect('/donate', code=302)
 
-@app.route('/levels.html')
-def levels_html_route():
-    return redirect('/donate', code=302)
-
-@app.route('/memberform')
-def member_form_route():
-    return redirect('/donate', code=302)
-
-@app.route('/donateform')
-def donate_form_route():
-    return redirect('/donate', code=302)
-
-@app.route('/circle.html')
+@app.route("/circle.html")
 def circle_html_route():
-    return redirect('/circleform', code=302)
+    return redirect("/circleform", code=302)
+
 
 """
 Read the Webpack assets manifest and then provide the
