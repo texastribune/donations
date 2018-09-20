@@ -92,77 +92,85 @@ builds to needs to already exist. Hence /static/js/prod/.gitkeep.
 We don't want to version control development builds, which is
 why they're compiled to /static/js/build/ instead.
 """
+
+
 def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
     if FLASK_DEBUG:
-        build_dir = os.path.join('static', 'build')
-        asset_path = '/static/build/'
+        build_dir = os.path.join("static", "build")
+        asset_path = "/static/build/"
     else:
-        build_dir = os.path.join(root_dir, 'app', 'static', 'prod')
-        asset_path = '/static/prod/'
-    bundles = {'css': [], 'js': []}
-    manifest_path = os.path.join(build_dir, 'assets.json')
+        build_dir = os.path.join(root_dir, "app", "static", "prod")
+        asset_path = "/static/prod/"
+    bundles = {"css": [], "js": []}
+    manifest_path = os.path.join(build_dir, "assets.json")
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
-    entrypoint = assets['entrypoints'][entry]
-    for bundle in entrypoint['js']:
-        bundles['js'].append(asset_path + bundle)
-    for bundle in entrypoint['css']:
-        bundles['css'].append(asset_path + bundle)
+    entrypoint = assets["entrypoints"][entry]
+    for bundle in entrypoint["js"]:
+        bundles["js"].append(asset_path + bundle)
+    for bundle in entrypoint["css"]:
+        bundles["css"].append(asset_path + bundle)
     return bundles
 
-@app.route('/donate')
+
+@app.route("/donate")
 def member2_form():
-    bundles = get_bundles('donate')
-    return render_template('member-form2.html',
+    bundles = get_bundles("donate")
+    return render_template(
+        "member-form2.html",
         bundles=bundles,
-        key=app.config['STRIPE_KEYS']['publishable_key']
+        key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
-@app.route('/circleform')
+
+@app.route("/circleform")
 def circle_form():
-    bundles = get_bundles('circle')
-    return render_template('circle-form.html',
+    bundles = get_bundles("circle")
+    return render_template(
+        "circle-form.html",
         bundles=bundles,
-        key=app.config['STRIPE_KEYS']['publishable_key']
+        key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
-@app.route('/blastform')
+
+@app.route("/blastform")
 def the_blast_form():
     form = BlastForm()
-    if request.args.get('amount'):
-        amount = request.args.get('amount')
+    if request.args.get("amount"):
+        amount = request.args.get("amount")
     else:
         amount = 349
-    installment_period = request.args.get('installmentPeriod')
+    installment_period = request.args.get("installmentPeriod")
 
-    campaign_id = request.args.get('campaignId', default='')
-    referral_id = request.args.get('referralId', default='')
+    campaign_id = request.args.get("campaignId", default="")
+    referral_id = request.args.get("referralId", default="")
 
-    return render_template('blast-form.html',
+    return render_template(
+        "blast-form.html",
         form=form,
         campaign_id=campaign_id,
         referral_id=referral_id,
         installment_period=installment_period,
-        openended_status='Open',
+        openended_status="Open",
         amount=amount,
-        key=app.config['STRIPE_KEYS']['publishable_key']
+        key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
-@app.route('/submit-blast', methods=['POST'])
+
+@app.route("/submit-blast", methods=["POST"])
 def submit_blast():
     form = BlastForm(request.form)
 
-    email_is_valid = validate_email(request.form['stripeEmail'])
+    email_is_valid = validate_email(request.form["stripeEmail"])
 
     if email_is_valid:
         customer = stripe.Customer.create(
-            email=request.form['stripeEmail'],
-            card=request.form['stripeToken']
+            email=request.form["stripeEmail"], card=request.form["stripeToken"]
         )
     else:
         message = "There was an issue saving your email address."
-        return render_template('error.html', message=message)
+        return render_template("error.html", message=message)
 
     if form.validate():
         print("----Adding Blast subscription...")
@@ -171,52 +179,53 @@ def submit_blast():
         return render_template('blast-charge.html')
     else:
         message = "There was an issue saving your donation information."
-        return render_template('error.html', message=message)
+        return render_template("error.html", message=message)
 
-@app.route('/error')
+
+@app.route("/error")
 def error():
     message = "Something went wrong!"
-    return render_template('error.html', message=message)
+    return render_template("error.html", message=message)
 
 
 @app.errorhandler(404)
 def page_not_found(error):
     message = "The page you requested can't be found."
-    return render_template('error.html', message=message), 404
+    return render_template("error.html", message=message), 404
 
 
-@app.route('/create-customer', methods=['POST'])
+@app.route("/create-customer", methods=["POST"])
 def create_customer():
-    stripe_email = request.json['stripeEmail']
+    stripe_email = request.json["stripeEmail"]
     email_is_valid = validate_email(stripe_email)
 
     if email_is_valid:
         try:
             customer = stripe.Customer.create(
-                email=stripe_email,
-                card=request.json['stripeToken']
+                email=stripe_email, card=request.json["stripeToken"]
             )
-            return jsonify({'customer_id': customer.id})
+            return jsonify({"customer_id": customer.id})
         except stripe.error.CardError as e:
             body = e.json_body
-            err = body.get('error', {})
-            return jsonify({
-                'expected': True,
-                'type': 'card',
-                'message': err.get('message', '')
-            }), 400
+            err = body.get("error", {})
+            return (
+                jsonify(
+                    {
+                        "expected": True,
+                        "type": "card",
+                        "message": err.get("message", ""),
+                    }
+                ),
+                400,
+            )
     else:
         message = """Our servers had an issue saving your email address.
                     Please make sure it's properly formatted. If the problem
                     persists, please contact inquiries@texastribune.org."""
-        return jsonify({
-            'expected': True,
-            'type': 'email',
-            'message': message
-        }), 400
+        return jsonify({"expected": True, "type": "email", "message": message}), 400
 
 
-@app.route('/charge', methods=['POST'])
+@app.route("/charge", methods=["POST"])
 def charge():
     gtm = {}
     form = DonateForm(request.form)
@@ -237,25 +246,25 @@ def charge():
         if request.form['installment_period'] == 'None':
             gtm['event_label'] = 'once'
         else:
-            gtm['event_label'] = request.form['installment_period']
-        gtm['event_value'] = request.form['amount']
-        return render_template('charge.html',
-                amount=request.form['amount'], gtm=gtm, bundles=bundles)
+            gtm["event_label"] = request.form["installment_period"]
+        gtm["event_value"] = request.form["amount"]
+        return render_template(
+            "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
+        )
     else:
         message = "There was an issue saving your donation information."
-        print('Form validation errors: {}'.format(form.errors))
-        print('Did not validate form of customer {} {} {}'.format(
-            customer_email, customer_first, customer_last))
-        return render_template('error.html', message=message)
+        print("Form validation errors: {}".format(form.errors))
+        return render_template("error.html", message=message)
 
 
-@app.route('/.well-known/apple-developer-merchantid-domain-association')
+@app.route("/.well-known/apple-developer-merchantid-domain-association")
 def merchantid():
     root_dir = os.path.dirname(os.getcwd())
-    return send_from_directory(os.path.join(root_dir, 'app'),
-            'apple-developer-merchantid-domain-association')
+    return send_from_directory(
+        os.path.join(root_dir, "app"), "apple-developer-merchantid-domain-association"
+    )
 
 
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
