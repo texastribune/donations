@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import redis
 
 import celery
-from emails import send_email
+from util import send_email
 from pytz import timezone
 import stripe
 
@@ -10,7 +10,7 @@ from config import STRIPE_KEYS
 from config import ACCOUNTING_MAIL_RECIPIENT
 from config import TIMEZONE
 from config import REDIS_URL
-from sf import Opportunity
+from npsp import Opportunity
 
 zone = timezone(TIMEZONE)
 
