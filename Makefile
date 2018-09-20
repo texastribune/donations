@@ -51,3 +51,8 @@ push:
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .
 	docker run --env-file=${DOCKER_ENV_FILE} --rm --interactive --tty --name=py2 sf-py2
+
+restart:
+	-pkill celery
+	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
+	python3 app.py
