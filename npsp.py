@@ -79,6 +79,7 @@ class SalesforceConnection(object):
             e.response = response
             logging.debug(f"response.text: {response.text}")
             raise e
+        return True
 
     def query(self, query, path=None):
 
@@ -103,7 +104,7 @@ class SalesforceConnection(object):
             )
         return response["records"]
 
-    def post(self, path=None, data=None):
+    def post(self, path, data):
         """
         Call the Salesforce API to make inserts.
         """
@@ -113,7 +114,7 @@ class SalesforceConnection(object):
         self.check_response(response=resp, expected_status=201)
         return response
 
-    def patch(self, path=None, data=None):
+    def patch(self, path, data):
         """
         Call the Saleforce API to make updates.
         """
@@ -242,7 +243,7 @@ class Opportunity(SalesforceObject):
         self._amount = amount
 
     def _format(self):
-        opportunity = {
+        return {
             "AccountId": f"{self.account_id}",
             "Amount": f"{self.amount}",
             "CloseDate": self.close_date,
@@ -257,10 +258,9 @@ class Opportunity(SalesforceObject):
             "Description": f"{self.description}",
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
             "Encouraged_to_contribute_by__c": f"{self.encouraged_by}",
-            "Stripe_Transaction_ID__c": f"{self.stripe_transaction}",
-            "Stripe_Card__c": f"{self.stripe_card}",
+            "Stripe_Transaction_ID__c": self.stripe_transaction,
+            "Stripe_Card__c": self.stripe_card,
         }
-        return opportunity
 
     def __str__(self):
         return f"{self.name} for {self.amount}"
@@ -417,18 +417,17 @@ class Account(SalesforceObject):
         self.website = None
 
     def _format(self):
-        account = {
+        return {
             "Website": f"{self.website}",
             "RecordTypeId": ORGANIZATION_RECORDTYPEID,
             "Name": f"{self.name}",
         }
-        return account
 
     def __str__(self):
         return f"{self.name} ({self.website})"
 
     @classmethod
-    def get(cls, name=None, website=None):
+    def get(cls, website=None, name=None):
 
         query = f"""
             SELECT Id, Name, Website
@@ -485,7 +484,7 @@ class Contact(SalesforceObject):
         return f"{self.first_name} {self.last_name}"
 
     @staticmethod
-    def parse_all_email(email=None, results=None):
+    def parse_all_email(email, results):
         filtered_results = list()
         for item in results:
             all_email = item["All_In_One_EMail__c"]
@@ -496,17 +495,16 @@ class Contact(SalesforceObject):
         return filtered_results
 
     def _format(self):
-        contact = {
+        return {
             "Email": self.email,
             "FirstName": self.first_name,
             "LastName": self.last_name,
             "LeadSource": self.lead_source,
             "MailingPostalCode": self.mailing_postal_code,
         }
-        return contact
 
     @classmethod
-    def get_or_create(cls, email=None, first_name=None, last_name=None, zipcode=None):
+    def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None):
         contact = cls.get(email=email)
         if contact:
             return contact
@@ -616,9 +614,8 @@ class Affiliation(SalesforceObject):
         self.sf.save(self)
 
     def _format(self):
-        affiliation = {
+        return {
             "npe5__Contact__c": self.contact,
             "npe5__Role__c": self.role,
             "npe5__Organization__c": self.account,
         }
-        return affiliation
