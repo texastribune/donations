@@ -3,6 +3,20 @@ NS=texastribune
 
 DOCKER_ENV_FILE?=env-docker
 
+interactive: build-dev backing
+	-docker volume rm ${APP}_node_modules-vol
+	-docker volume create --name ${APP}_node_modules-vol
+	docker run \
+		--volume=${APP}_node_modules-vol:/app/node_modules \
+		--volume=$$(pwd):/app \
+		--rm --interactive --tty \
+		--env-file=${DOCKER_ENV_FILE} \
+		--publish=80:5000 \
+		--publish=5555:5555 \
+		--link=rabbitmq:rabbitmq \
+		--link=redis:redis \
+		--name=${APP} ${NS}/${APP}:dev bash
+
 build:
 	docker build --tag=${NS}/${APP} .
 
@@ -21,22 +35,9 @@ clean:
 	-docker stop rabbitmq && docker rm rabbitmq
 
 backing:
-	-docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
-	-docker run --detach --name redis redis
-
-interactive: build-dev
-	-docker volume rm ${APP}_node_modules-vol
-	-docker volume create --name ${APP}_node_modules-vol
-	docker run \
-		--volume=${APP}_node_modules-vol:/app/node_modules \
-		--volume=$$(pwd):/app \
-		--rm --interactive --tty \
-		--env-file=${DOCKER_ENV_FILE} \
-		--publish=80:5000 \
-		--publish=5555:5555 \
-		--link=rabbitmq:rabbitmq \
-		--link=redis:redis \
-		--name=${APP} ${NS}/${APP}:dev bash
+	-docker rm -f rabbitmq redis
+	docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
+	docker run --detach --name redis redis
 
 test: build-dev
 	docker run \
