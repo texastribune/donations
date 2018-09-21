@@ -300,6 +300,9 @@ class RDO(SalesforceObject):
 
     def __init__(self, contact=None, account=None):
 
+        if account and contact:
+            raise SalesforceException("Account and Contact can't both be specified")
+
         today = datetime.now(tz=zone).strftime("%Y-%m-%d")
         now = datetime.now(tz=zone).strftime("%Y-%m-%d %I:%M:%S %p %Z")
 
