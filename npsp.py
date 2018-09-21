@@ -189,6 +189,7 @@ class Opportunity(SalesforceObject):
         self.encouraged_by = None
         self.stripe_card = None
         self.stripe_transaction = None
+        self.closed_lost_reason = None
         self.created = False
 
     @classmethod
@@ -201,7 +202,7 @@ class Opportunity(SalesforceObject):
             Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
             RecordTypeId, Type, Referral_ID__c, LeadSource,
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
-            Stripe_Card__c, AccountId
+            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c
         FROM Opportunity
         WHERE Expected_Giving_Date__c <= {end}
         AND Expected_Giving_Date__c >= {begin}
@@ -229,6 +230,7 @@ class Opportunity(SalesforceObject):
             y.stripe_transaction = item["Stripe_Transaction_ID__c"]
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
+            y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
             y.created = False
             results.append(y)
 
@@ -260,6 +262,7 @@ class Opportunity(SalesforceObject):
             "Encouraged_to_contribute_by__c": f"{self.encouraged_by}",
             "Stripe_Transaction_ID__c": self.stripe_transaction,
             "Stripe_Card__c": self.stripe_card,
+            "npsp__Closed_Lost_Reason__c": f"{self.closed_lost_reason}",
         }
 
     def __str__(self):
