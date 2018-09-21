@@ -4,6 +4,7 @@ NS=texastribune
 DOCKER_ENV_FILE?=env-docker
 
 interactive: build-dev backing
+	-docker rm -f ${APP}
 	-docker volume rm ${APP}_node_modules-vol
 	-docker volume create --name ${APP}_node_modules-vol
 	docker run \
