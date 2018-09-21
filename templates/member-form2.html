@@ -7,22 +7,33 @@
 {% endblock %}
 
 {% block content %}
+
+  {% include 'includes/thermometer.html' %}
+
   <section class="splash grid_separator">
     <div class="grid_container grid_padded--xl">
       <div class="grid_row grid_wrap--l">
-        <header class="splash_header col_8">
-          <h1 class="splash_header--headline grid_separator">
-            Texas Tribune members support our&nbsp;
+        <div class="col_12">
+          <h1 class="splash--headline">
+            Because this is your&nbsp;
             <span class="rotate_words">
-              <span>journalism.</span>
-              <span>events.</span>
+              <span>story.</span>
+              <span>voice.</span>
               <span>community.</span>
-              <span>mission.</span>
+              <span>Texas.</span>
             </span>
           </h1>
-          <p class="splash_header--description grid_separator--s">Do you value credible, nonpartisan, public-interest journalism?</p>
-          <a class="button button--yellow grid_separator" href="#join-today">Show your support</a>
-        </header>
+        </div>
+      </div>
+      <div class="splash_actions grid_row grid_wrap--l">
+        <div class="col_8">
+          <p class="splash--description grid_separator--s">Members invest in our nonprofit newsroom because they believe credible, nonpartisan journalism makes for a better, smarter Texas. This Fall Member Drive, help us rally 350 new members in support of <nobr>our mission.</nobr></p>
+        </div>
+        <div class="col_4 splash--buttons">
+          <a class="button button--yellow grid_separator" href="#join-today" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="support landing">Join now</a>
+          <span class="text">or</span>
+          <a class="button button--yellow grid_separator" href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F%3FbuttonText%3D%2523ISupportTexasTribune%2520because...%2520%255BTELL%2520THE%2520WORLD%2520WHY%2520HERE%2521%255D%2520%26buttonType%3DTweetButton%26buttonUrl%3Dhttps%253A%252F%252Ftrib.it%252Fmembersgive18%26config%3DbuttonType%253ATweetButton%252CbuttonText%253A%2523TTMembersGive%2520because%2520we%2520...%2520%2520%252CbuttonRecommendation%253Atexastribune%252CbuttonUrl%253Ahttp%253A%252F%252Ftrib.it%252FTTMembersGive%26widget%3DButton&ref_src=twsrc%5Etfw&text=%23ISupportTexasTribune%20because...%20%5BTELL%20THE%20WORLD%20WHY%20HERE!%5D%20&tw_p=tweetbutton&url=https%3A%2F%2Ftrib.it%2Fmembersgive18" ga-event-category="donations" ga-event-action="share" ga-event-label="support landing" target="_blank">Spread the word</a>
+        </div>
       </div>
     </div>
   </section>
