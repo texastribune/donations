@@ -246,23 +246,23 @@ class Opportunity(SalesforceObject):
 
     def _format(self):
         return {
-            "AccountId": f"{self.account_id}",
-            "Amount": f"{self.amount}",
+            "AccountId": self.account_id,
+            "Amount": self.amount,
             "CloseDate": self.close_date,
             "CampaignId": self.campaign_id,
             "RecordTypeId": self.record_type_id,
-            "Name": f"{self.name}",
-            "StageName": f"{self.stage_name}",
-            "Type": f"{self.type}",
+            "Name": self.name,
+            "StageName": self.stage_name,
+            "Type": self.type,
             "Stripe_Customer_ID__c": self.stripe_customer,
             "Referral_ID__c": self.referral_id,
-            "LeadSource": f"{self.lead_source}",
-            "Description": f"{self.description}",
+            "LeadSource": self.lead_source,
+            "Description": self.description,
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
-            "Encouraged_to_contribute_by__c": f"{self.encouraged_by}",
+            "Encouraged_to_contribute_by__c": self.encouraged_by,
             "Stripe_Transaction_ID__c": self.stripe_transaction,
             "Stripe_Card__c": self.stripe_card,
-            "npsp__Closed_Lost_Reason__c": f"{self.closed_lost_reason}",
+            "npsp__Closed_Lost_Reason__c": self.closed_lost_reason,
         }
 
     def __str__(self):
@@ -357,13 +357,13 @@ class RDO(SalesforceObject):
             "npe03__Contact__c": self.contact_id,
             "npe03__Amount__c": amount,
             "npe03__Date_Established__c": self.date_established,
-            "Name": f"{self.name}",
+            "Name": self.name,
             "Stripe_Customer_ID__c": self.stripe_customer,
-            "Lead_Source__c": f"{self.lead_source}",
-            "Stripe_Description__c": f"{self.description}",
+            "Lead_Source__c": self.lead_source,
+            "Stripe_Description__c": self.description,
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
-            "Encouraged_to_contribute_by__c": f"{self.encouraged_by}",
-            "npe03__Open_Ended_Status__c": f"{self.open_ended_status}",
+            "Encouraged_to_contribute_by__c": self.encouraged_by,
+            "npe03__Open_Ended_Status__c": self.open_ended_status,
             "npe03__Installments__c": self.installments,
             "npe03__Installment_Period__c": self.installment_period,
             "Blast_Subscription_Email__c": self.blast_subscription_email,
@@ -428,13 +428,13 @@ class Account(SalesforceObject):
 
     def _format(self):
         return {
-            "Website": f"{self.website}",
+            "Website": self.website,
             "RecordTypeId": ORGANIZATION_RECORDTYPEID,
-            "Name": f"{self.name}",
-            "ShippingStreet": f"{self.shipping_street}",
-            "ShippingCity": f"{self.shipping_city}",
-            "ShippingPostalCode": f"{self.shipping_postal_code}",
-            "ShippingState": f"{self.shipping_state}",
+            "Name": self.name,
+            "ShippingStreet": self.shipping_street,
+            "ShippingCity": self.shipping_city,
+            "ShippingPostalCode": self.shipping_postal_code,
+            "ShippingState": self.shipping_state,
         }
 
     def __str__(self):
