@@ -1,7 +1,9 @@
+import os
+
 from celery.schedules import crontab
+
 # from datetime import timedelta
 
-import os
 
 
 def bool_env(val):

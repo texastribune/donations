@@ -1,17 +1,15 @@
 import json
 import re
-
-from unittest.mock import patch
-from unittest.mock import call
-
 from datetime import datetime
-import pytest
-import stripe
-from pytz import timezone
-import responses
+from unittest.mock import call, patch
 
+from pytz import timezone
+
+import pytest
+import responses
+import stripe
+from npsp import RDO, Opportunity
 from npsp import SalesforceConnection as sf
-from npsp import Opportunity, RDO
 
 # ("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
 #  "'until-cancelled'), ('Contact.LastName', 'C'), ('Contact.street', '823 "

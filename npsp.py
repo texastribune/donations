@@ -1,14 +1,15 @@
-from datetime import datetime
-import json
-from decimal import Decimal
-import os
-import logging
-from io import StringIO
 import csv
+import json
+import logging
+import os
+from datetime import datetime
+from decimal import Decimal
+from io import StringIO
 
-from pytz import timezone
-from fuzzywuzzy import process
 import requests
+from pytz import timezone
+
+from fuzzywuzzy import process
 
 zone = timezone("US/Central")  # TODO read in
 

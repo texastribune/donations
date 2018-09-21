@@ -1,18 +1,12 @@
-from collections import defaultdict
-import smtplib
 import logging
+import smtplib
+from collections import defaultdict
+from config import (DEFAULT_MAIL_SENDER, ENABLE_SLACK, MAIL_PASSWORD,
+                    MAIL_PORT, MAIL_SERVER, MAIL_USERNAME,
+                    MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT, SLACK_API_KEY,
+                    SLACK_CHANNEL)
 
 import requests
-
-from config import MAIL_SERVER
-from config import MAIL_PORT
-from config import MAIL_USERNAME
-from config import MAIL_PASSWORD
-from config import DEFAULT_MAIL_SENDER
-from config import ENABLE_SLACK
-from config import SLACK_API_KEY
-from config import SLACK_CHANNEL
-from config import MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT
 
 
 def notify_slack(contact=None, opportunity=None, rdo=None):

@@ -1,15 +1,12 @@
-from datetime import datetime, timedelta
 import logging
+from config import ACCOUNTING_MAIL_RECIPIENT, REDIS_URL, STRIPE_KEYS, TIMEZONE
+from datetime import datetime, timedelta
+
+from pytz import timezone
 
 import celery
 import redis
-from pytz import timezone
 import stripe
-
-from config import STRIPE_KEYS
-from config import ACCOUNTING_MAIL_RECIPIENT
-from config import TIMEZONE
-from config import REDIS_URL
 from npsp import Opportunity
 from util import send_email
 

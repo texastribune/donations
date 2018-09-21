@@ -1,11 +1,10 @@
 import os
+from config import STRIPE_KEYS
 from time import sleep
 
 import stripe
 from salesforce_bulk import SalesforceBulk
 from simple_salesforce import Salesforce
-
-from config import STRIPE_KEYS
 
 stripe.api_key = STRIPE_KEYS["secret_key"]
 
