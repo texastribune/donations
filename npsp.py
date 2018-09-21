@@ -415,12 +415,20 @@ class Account(SalesforceObject):
         self.name = None
         self.created = False
         self.website = None
+        self.shipping_street = None
+        self.shipping_city = None
+        self.shipping_postal_code = None
+        self.shipping_state = None
 
     def _format(self):
         return {
             "Website": f"{self.website}",
             "RecordTypeId": ORGANIZATION_RECORDTYPEID,
             "Name": f"{self.name}",
+            "ShippingStreet": f"{self.shipping_street}",
+            "ShippingCity": f"{self.shipping_city}",
+            "ShippingPostalCode": f"{self.shipping_postal_code}",
+            "ShippingState": f"{self.shipping_state}",
         }
 
     def __str__(self):
