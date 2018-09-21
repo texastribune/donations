@@ -1,5 +1,6 @@
 from collections import defaultdict
 import smtplib
+import logging
 
 import requests
 
@@ -29,8 +30,9 @@ def notify_slack(contact=None, opportunity=None, rdo=None):
             reason = f" (encouraged by {rdo.encouraged_by})"
         message = f"*{contact.name}* ({contact.email}) pledged *${rdo.amount}*{reason} [{rdo.installment_period}]"
 
+    logging.info(message)
+
     if not ENABLE_SLACK:
-        print(message)
         return
 
     payload = {
@@ -44,7 +46,7 @@ def notify_slack(contact=None, opportunity=None, rdo=None):
     try:
         requests.get(url, params=payload)
     except Exception as e:
-        print("Failed to send Slack notification: {}".format(e))
+        logging.error("Failed to send Slack notification: {}".format(e))
 
 
 def send_multiple_account_warning(contact):
@@ -119,6 +121,6 @@ def send_email(recipient, subject, body, sender=None):
         server.login(MAIL_USERNAME, MAIL_PASSWORD)
         server.sendmail(FROM, TO, message)
         server.close()
-        print("successfully sent the mail")
+        logging.debug("successfully sent the mail")
     except Exception as e:
-        print("failed to send mail: {}".format(e))
+        logging.error("failed to send mail: {}".format(e))
