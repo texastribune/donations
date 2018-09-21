@@ -292,7 +292,7 @@ class Opportunity(SalesforceObject):
                     raise
             else:
                 raise
-        return
+        return self
 
 
 class RDO(SalesforceObject):
@@ -406,7 +406,7 @@ class RDO(SalesforceObject):
                     raise
             else:
                 raise
-        return
+        return self
 
 
 class Account(SalesforceObject):
@@ -474,6 +474,7 @@ class Account(SalesforceObject):
 
     def save(self):
         self.sf.save(self)
+        return self
 
 
 class Contact(SalesforceObject):
@@ -591,6 +592,7 @@ class Contact(SalesforceObject):
 
     def save(self):
         self.sf.save(self)
+        return self
 
 
 class Affiliation(SalesforceObject):
@@ -626,6 +628,7 @@ class Affiliation(SalesforceObject):
 
     def save(self):
         self.sf.save(self)
+        return self
 
     def _format(self):
         return {
