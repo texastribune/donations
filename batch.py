@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
-import redis
+import logging
 
 import celery
-from util import send_email
+import redis
 from pytz import timezone
 import stripe
 
@@ -11,6 +11,7 @@ from config import ACCOUNTING_MAIL_RECIPIENT
 from config import TIMEZONE
 from config import REDIS_URL
 from npsp import Opportunity
+from util import send_email
 
 zone = timezone(TIMEZONE)
 
@@ -30,7 +31,7 @@ class Log(object):
         """
         Add something to the log.
         """
-        print(string)
+        logging.info(string)
         self.log.append(string)
 
     def send(self):

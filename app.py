@@ -1,8 +1,8 @@
 import os
 import sys
 import json
-from pprint import pprint
 from datetime import datetime
+import logging
 
 from flask import (
     Flask,
@@ -167,7 +167,7 @@ def the_blast_form():
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
 
-    pprint(request.form)
+    logging.info(request.form)
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
@@ -181,11 +181,11 @@ def submit_blast():
         return render_template("error.html", message=message)
 
     if form.validate():
-        print("----Adding Blast subscription...")
+        logging.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
         return render_template("blast-charge.html")
     else:
-        print("Failed to validate form")
+        logging.warning("Failed to validate form")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
@@ -236,7 +236,7 @@ def create_customer():
 @app.route("/charge", methods=["POST"])
 def charge():
 
-    pprint(request.form)
+    logging.info(request.form)
     gtm = {}
     form = DonateForm(request.form)
 
@@ -255,7 +255,7 @@ def charge():
         )
     else:
         message = "There was an issue saving your donation information."
-        print("Form validation errors: {}".format(form.errors))
+        logging.warning("Form validation errors: {}".format(form.errors))
         return render_template("error.html", message=message)
 
 
@@ -269,7 +269,7 @@ def merchantid():
 
 def add_opportunity(contact=None, form=None, customer=None):
 
-    print("----Adding opportunity...")
+    logging.info("----Adding opportunity...")
 
     opportunity = Opportunity(contact=contact)
     opportunity.amount = form.get("amount", 0)
@@ -336,7 +336,7 @@ def add_donation(form=None, customer=None):
     email = form["stripeEmail"]
     zipcode = form["zipcode"]
 
-    print("----Getting contact....")
+    logging.info("----Getting contact....")
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
     )
@@ -348,11 +348,11 @@ def add_donation(form=None, customer=None):
         contact.save()
 
     if period is None:
-        print("----Creating one time payment...")
+        logging.info("----Creating one time payment...")
         opportunity = add_opportunity(contact=contact, form=form, customer=customer)
         notify_slack(contact=contact, opportunity=opportunity)
     else:
-        print("----Creating recurring payment...")
+        logging.info("----Creating recurring payment...")
         rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
         notify_slack(contact=contact, rdo=rdo)
 
@@ -371,7 +371,7 @@ def add_blast_subscription(form=None, customer=None):
     last_name = form["last_name"]
     email = form["subscriber_email"]
 
-    print("----Getting contact...")
+    logging.info("----Getting contact...")
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
@@ -399,7 +399,7 @@ def add_blast_subscription(form=None, customer=None):
     rdo.billing_email = form["stripeEmail"]
     rdo.blast_subscription_email = form["subscriber_email"]
 
-    print("----Saving RDO....")
+    logging.info("----Saving RDO....")
     rdo.save()
 
     return True
