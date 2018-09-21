@@ -9,20 +9,9 @@ import pytest
 import stripe
 from pytz import timezone
 import responses
-from werkzeug.datastructures import MultiDict
 
-from batch import amount_to_charge
-from batch import process_charges
-from check_response import check_response
-from salesforce import _format_opportunity
-from salesforce import _format_recurring_donation
-from salesforce import _format_blast_rdo
-from salesforce import SalesforceConnection
-from salesforce import upsert_customer
-from salesforce import _format_amount
-from salesforce import _format_contact
-from salesforce import send_multiple_account_warning
-from salesforce import WARNINGS
+from npsp import SalesforceConnection as sf
+from npsp import Opportunity, RDO
 
 # ("Request: ImmutableMultiDict([('Opportunity.Amount', '100'), ('frequency', "
 #  "'until-cancelled'), ('Contact.LastName', 'C'), ('Contact.street', '823 "
@@ -43,7 +32,7 @@ from salesforce import WARNINGS
 # "'D'), ('Contact.MailingState', 'TX')])")
 
 
-zone = timezone('US/Central')
+zone = timezone("US/Central")
 
 
 class CustomerObject(object):
@@ -59,7 +48,7 @@ class Customer(object):
 
 
 customer = Customer()
-customer.id = 'cus_78MqJSBejMN9gn'
+customer.id = "cus_78MqJSBejMN9gn"
 
 # customer = {
 #        'account_balance': 0,
@@ -122,15 +111,14 @@ customer.id = 'cus_78MqJSBejMN9gn'
 # proxy.form = request
 
 contact = {
-        'AccountId': '0011700000BpR8PAAV',
-        'attributes': {
-            'url': '/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX',
-
-            'type': 'Contact'
-            },
-        'Stripe_Customer_Id__c': 'cus_78MnnsgVuQb4r6',
-        'Id': '0031700000BHQzBAAX'
-        }
+    "AccountId": "0011700000BpR8PAAV",
+    "attributes": {
+        "url": "/services/data/v35.0/sobjects/Contact/0031700000BHQzBAAX",
+        "type": "Contact",
+    },
+    "Stripe_Customer_Id__c": "cus_78MnnsgVuQb4r6",
+    "Id": "0031700000BHQzBAAX",
+}
 
 
 class Response(object):
@@ -143,107 +131,113 @@ class Request(object):
 
 request = Request()
 
-circle_form = MultiDict()
-circle_form.add('referral_id', '1234')
-circle_form.add('amount', '100')
-circle_form.add('frequency', 'until-cancelled'),
-circle_form.add('last_name', 'C'),
-circle_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-circle_form.add('first_name', 'D'),
-circle_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
-circle_form.add('stripeTokenType', 'card'),
-circle_form.add('reason', 'Because I love the Trib!')
-circle_form.add('installment_period', 'yearly')
-circle_form.add('installments', '3')
-circle_form.add('openended_status', 'None')
-circle_form.add('description', 'The Texas Tribune Membership')
-circle_form.add('pay_fees_value', 'True')
-request.circle_form = circle_form
+# circle_form = dict()
+# circle_form["referral_id"] = "1234"
+# circle_form.add("amount", "100")
+# circle_form.add("frequency", "until-cancelled"),
+# circle_form.add("last_name", "C"),
+# circle_form.add("stripeEmail", "dcraigmile+test6@texastribune.org"),
+# circle_form.add("first_name", "D"),
+# circle_form.add("stripeToken", "tok_16u66IG8bHZDNB6TCq8l3s4p"),
+# circle_form.add("stripeTokenType", "card"),
+# circle_form.add("reason", "Because I love the Trib!")
+# circle_form.add("installment_period", "yearly")
+# circle_form.add("installments", "3")
+# circle_form.add("openended_status", "None")
+# circle_form.add("description", "The Texas Tribune Membership")
+# circle_form.add("pay_fees_value", "True")
+# request.circle_form = circle_form
 
-another_circle_form = MultiDict()
-another_circle_form.add('referral_id', '1234')
-another_circle_form.add('amount', '1500.01')
-another_circle_form.add('frequency', 'until-cancelled'),
-another_circle_form.add('last_name', 'C'),
-another_circle_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-another_circle_form.add('first_name', 'D'),
-another_circle_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
-another_circle_form.add('stripeTokenType', 'card'),
-another_circle_form.add('reason', 'Because I love the Trib!')
-another_circle_form.add('installment_period', 'yearly')
-another_circle_form.add('installments', '3')
-another_circle_form.add('openended_status', 'None')
-another_circle_form.add('description', 'The Texas Tribune Membership')
-another_circle_form.add('pay_fees_value', 'True')
-request.another_circle_form = another_circle_form
+# another_circle_form = dict()
+# another_circle_form.add("referral_id", "1234")
+# another_circle_form.add("amount", "1500.01")
+# another_circle_form.add("frequency", "until-cancelled"),
+# another_circle_form.add("last_name", "C"),
+# another_circle_form.add("stripeEmail", "dcraigmile+test6@texastribune.org"),
+# another_circle_form.add("first_name", "D"),
+# another_circle_form.add("stripeToken", "tok_16u66IG8bHZDNB6TCq8l3s4p"),
+# another_circle_form.add("stripeTokenType", "card"),
+# another_circle_form.add("reason", "Because I love the Trib!")
+# another_circle_form.add("installment_period", "yearly")
+# another_circle_form.add("installments", "3")
+# another_circle_form.add("openended_status", "None")
+# another_circle_form.add("description", "The Texas Tribune Membership")
+# another_circle_form.add("pay_fees_value", "True")
+# request.another_circle_form = another_circle_form
 
-rdo_form = MultiDict()
-rdo_form.add('amount', '9')
-rdo_form.add('frequency', 'until-cancelled'),
-rdo_form.add('last_name', 'C'),
-rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-rdo_form.add('first_name', 'D'),
-rdo_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
-rdo_form.add('stripeTokenType', 'card'),
-rdo_form.add('reason', 'Because I love the Trib!')
-rdo_form.add('installment_period', 'monthly')
-rdo_form.add('installments', 'None')
-rdo_form.add('openended_status', 'None')
-rdo_form.add('description', 'The Texas Tribune Membership')
-rdo_form.add('pay_fees_value', 'True')
-rdo_form.add('referral_id', '1234')
-request.rdo_form = rdo_form
+# rdo_form = dict()
+# rdo_form.add("amount", "9")
+# rdo_form.add("frequency", "until-cancelled"),
+# rdo_form.add("last_name", "C"),
+# rdo_form.add("stripeEmail", "dcraigmile+test6@texastribune.org"),
+# rdo_form.add("first_name", "D"),
+# rdo_form.add("stripeToken", "tok_16u66IG8bHZDNB6TCq8l3s4p"),
+# rdo_form.add("stripeTokenType", "card"),
+# rdo_form.add("reason", "Because I love the Trib!")
+# rdo_form.add("installment_period", "monthly")
+# rdo_form.add("installments", "None")
+# rdo_form.add("openended_status", "None")
+# rdo_form.add("description", "The Texas Tribune Membership")
+# rdo_form.add("pay_fees_value", "True")
+# rdo_form.add("referral_id", "1234")
+# request.rdo_form = rdo_form
 
-another_rdo_form = MultiDict()
-another_rdo_form.add('referral_id', '1234')
-another_rdo_form.add('amount', '9.15')
-another_rdo_form.add('frequency', 'until-cancelled'),
-another_rdo_form.add('last_name', 'C'),
-another_rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-another_rdo_form.add('first_name', 'D'),
-another_rdo_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
-another_rdo_form.add('stripeTokenType', 'card'),
-another_rdo_form.add('reason', 'Because I love the Trib!')
-another_rdo_form.add('installment_period', 'monthly')
-another_rdo_form.add('installments', 'None')
-another_rdo_form.add('openended_status', 'None')
-another_rdo_form.add('description', 'The Texas Tribune Membership')
-another_rdo_form.add('pay_fees_value', 'True')
-request.another_rdo_form = another_rdo_form
+# another_rdo_form = dict()
+# another_rdo_form.add("referral_id", "1234")
+# another_rdo_form.add("amount", "9.15")
+# another_rdo_form.add("frequency", "until-cancelled"),
+# another_rdo_form.add("last_name", "C"),
+# another_rdo_form.add("stripeEmail", "dcraigmile+test6@texastribune.org"),
+# another_rdo_form.add("first_name", "D"),
+# another_rdo_form.add("stripeToken", "tok_16u66IG8bHZDNB6TCq8l3s4p"),
+# another_rdo_form.add("stripeTokenType", "card"),
+# another_rdo_form.add("reason", "Because I love the Trib!")
+# another_rdo_form.add("installment_period", "monthly")
+# another_rdo_form.add("installments", "None")
+# another_rdo_form.add("openended_status", "None")
+# another_rdo_form.add("description", "The Texas Tribune Membership")
+# another_rdo_form.add("pay_fees_value", "True")
+# request.another_rdo_form = another_rdo_form
 
-blast_rdo_form = MultiDict()
-blast_rdo_form.add('referral_id', '1234')
-blast_rdo_form.add('amount', '40')
-blast_rdo_form.add('frequency', 'until-cancelled'),
-blast_rdo_form.add('last_name', 'C'),
-blast_rdo_form.add('stripeEmail', 'dcraigmile+test6@texastribune.org'),
-blast_rdo_form.add('first_name', 'D'),
-blast_rdo_form.add('stripeToken', 'tok_16u66IG8bHZDNB6TCq8l3s4p'),
-blast_rdo_form.add('stripeTokenType', 'card'),
-blast_rdo_form.add('installment_period', 'monthly')
-blast_rdo_form.add('installments', 'None')
-blast_rdo_form.add('openended_status', 'None')
-blast_rdo_form.add('description', 'Monthly Blast Subscription')
-blast_rdo_form.add('subscriber_email', 'subscriber@foo.bar')
-blast_rdo_form.add('pay_fees_value', 'True')
-request.blast_rdo_form = blast_rdo_form
+# blast_rdo_form = dict()
+# blast_rdo_form.add("referral_id", "1234")
+# blast_rdo_form.add("amount", "40")
+# blast_rdo_form.add("frequency", "until-cancelled"),
+# blast_rdo_form.add("last_name", "C"),
+# blast_rdo_form.add("stripeEmail", "dcraigmile+test6@texastribune.org"),
+# blast_rdo_form.add("first_name", "D"),
+# blast_rdo_form.add("stripeToken", "tok_16u66IG8bHZDNB6TCq8l3s4p"),
+# blast_rdo_form.add("stripeTokenType", "card"),
+# blast_rdo_form.add("installment_period", "monthly")
+# blast_rdo_form.add("installments", "None")
+# blast_rdo_form.add("openended_status", "None")
+# blast_rdo_form.add("description", "Monthly Blast Subscription")
+# blast_rdo_form.add("subscriber_email", "subscriber@foo.bar")
+# blast_rdo_form.add("pay_fees_value", "True")
+# request.blast_rdo_form = blast_rdo_form
+
+opp = Opportunity()
 
 
 def test__format_amount():
-    actual = _format_amount('1500.123')
-    expected = '1500.12'
+    opp.amount = "1500.123"
+    actual = opp.amount
+    expected = "1500.12"
     assert actual == expected
 
-    actual = _format_amount('1500')
-    expected = '1500.00'
+    opp.amount = "1500"
+    actual = opp.amount
+    expected = "1500.00"
     assert actual == expected
 
-    actual = _format_amount('1500.00')
-    expected = '1500.00'
+    opp.amount = "1500.00"
+    actual = opp.amount
+    expected = "1500.00"
     assert actual == expected
 
-    actual = _format_amount('1500.126')
-    expected = '1500.13'
+    opp.amount = "1500.126"
+    actual = opp.amount
+    expected = "1500.13"
     assert actual == expected
 
 
@@ -251,172 +245,206 @@ def test_check_response():
     response = Response()
     response.status_code = 204
     with pytest.raises(Exception):
-        check_response(response)
+        sf.check_response(response)
 
     response.status_code = 500
     with pytest.raises(Exception):
-        check_response(response)
+        sf.check_response(response)
 
     response.status_code = 404
     with pytest.raises(Exception):
-        check_response(response)
+        sf.check_response(response)
 
     response.status_code = 200
-    response = check_response(response)
+    response = sf.check_response(response)
     assert response is True
 
 
-today = datetime.now(tz=zone).strftime('%Y-%m-%d')
+today = datetime.now(tz=zone).strftime("%Y-%m-%d")
+
+opportunity = Opportunity()
+opportunity.account_id = "0011700000BpR8PAAV"
+opportunity.amount = 9
+opportunity.encouraged_by = "Because I love the Trib!"
+opportunity.name = "D C (dcraigmile+test6@texastribune.org)"
+opportunity.stripe_id = "cus_78MqJSBejMN9gn"
+opportunity.agreed_to_pay_fees = True
+opportunity.referral_id = "1234"
+opportunity.lead_source = "Stripe"
+opportunity.description = "The Texas Tribune Membership"
+opportunity.stripe_customer = "cus_78MqJSBejMN9gn"
 
 
 def test__format_opportunity():
 
-    response = _format_opportunity(contact=contact, form=rdo_form,
-            customer=customer)
-    expected_response = {
-            'AccountId': '0011700000BpR8PAAV',
-            'Campaignid': '',
-            'Amount': '9.00',
-            'CloseDate': today,
-            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
-            'LeadSource': 'Stripe',
-            'Name': 'D C (dcraigmile+test6@texastribune.org)',
-            'RecordTypeId': '01216000001IhI9',
-            'StageName': 'Pledged',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'Referral_ID__c': '1234',
-            'Description': 'The Texas Tribune Membership',
-            'Stripe_Agreed_to_pay_fees__c': True,
-            'Type': 'Single',
-            }
+    response = opportunity._format()
+    expected = {
+        "AccountId": "0011700000BpR8PAAV",
+        "CampaignId": None,
+        "Amount": "9.00",
+        "CloseDate": today,
+        "Encouraged_to_contribute_by__c": "Because I love the Trib!",
+        "LeadSource": "Stripe",
+        "Name": "D C (dcraigmile+test6@texastribune.org)",
+        "RecordTypeId": "01216000001IhI9",
+        "StageName": "Pledged",
+        "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Referral_ID__c": "1234",
+        "Description": "The Texas Tribune Membership",
+        "Stripe_Agreed_to_pay_fees__c": True,
+        "Type": "Single",
+        "Stripe_Card__c": None,
+        "Stripe_Transaction_ID__c": None,
+    }
+    assert response == expected
 
-    assert response == expected_response
+
+rdo = RDO()
+rdo.referral_id = "1234"
+rdo.encouraged_by = "Because I love the Trib!"
+rdo.lead_source = "Stripe"
+rdo.contact_id = "0031700000BHQzBAAX"
+rdo.installment_period = "yearly"
+rdo.stripe_customer = "cus_78MqJSBejMN9gn"
+rdo.amount = 100
+rdo.name = "foo"
+rdo.installments = 3
+rdo.open_ended_status = None
+rdo.description = "Texas Tribune Circle Membership"
+rdo.agreed_to_pay_fees = True
+rdo.type = "Giving Circle"
 
 
 def test__format_circle_donation():
 
-    response = _format_recurring_donation(contact=contact, form=circle_form,
-            customer=customer)
+    response = rdo._format()
     expected_response = {
-            'Referral_ID__c': '1234',
-            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
-            'npe03__Date_Established__c': today,
-            'Lead_Source__c': 'Stripe',
-            'npe03__Contact__c': '0031700000BHQzBAAX',
-            'npe03__Installment_Period__c': 'yearly',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '300.00',   # 3 * 100
-            'Name': 'foo',
-            'npe03__Installments__c': '3',
-            'npe03__Open_Ended_Status__c': 'None',
-            'Stripe_Description__c': 'The Texas Tribune Membership',
-            'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Giving Circle',
-            'npe03__Recurring_Donation_Campaign__c': ''
-            }
-    response['Name'] = 'foo'
+        "Referral_ID__c": "1234",
+        "Encouraged_to_contribute_by__c": "Because I love the Trib!",
+        "npe03__Date_Established__c": today,
+        "Lead_Source__c": "Stripe",
+        "npe03__Contact__c": "0031700000BHQzBAAX",
+        "npe03__Installment_Period__c": "yearly",
+        "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Billing_Email__c": None,
+        "Blast_Subscription_Email__c": None,
+        "npe03__Organization__c": None,
+        "npe03__Amount__c": 300.00,  # 3 * 100
+        "Name": "foo",
+        "npe03__Installments__c": 3,
+        "npe03__Open_Ended_Status__c": "None",
+        "Stripe_Description__c": "Texas Tribune Circle Membership",
+        "Stripe_Agreed_to_pay_fees__c": True,
+        "Type__c": "Giving Circle",
+        "npe03__Recurring_Donation_Campaign__c": None,
+    }
     assert response == expected_response
+
+
+rdo.amount = 1501.01
 
 
 def test__format_cent_circle_donation():
 
-    response = _format_recurring_donation(contact=contact,
-            form=another_circle_form, customer=customer)
+    response = rdo._format()
     expected_response = {
-            'Referral_ID__c': '1234',
-            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
-            'npe03__Date_Established__c': today,
-            'Lead_Source__c': 'Stripe',
-            'npe03__Contact__c': '0031700000BHQzBAAX',
-            'npe03__Installment_Period__c': 'yearly',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '4500.03',   # 3 * 1501.01
-            'Name': 'foo',
-            'npe03__Installments__c': '3',
-            'npe03__Open_Ended_Status__c': 'None',
-            'Stripe_Description__c': 'The Texas Tribune Membership',
-            'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Giving Circle',
-            'npe03__Recurring_Donation_Campaign__c': '',
-            }
-    response['Name'] = 'foo'
+        "Referral_ID__c": "1234",
+        "Encouraged_to_contribute_by__c": "Because I love the Trib!",
+        "npe03__Date_Established__c": today,
+        "Lead_Source__c": "Stripe",
+        "npe03__Contact__c": "0031700000BHQzBAAX",
+        "npe03__Installment_Period__c": "yearly",
+        "Stripe_Customer_Id__c": "cus_78MqJSBejMN9gn",
+        "npe03__Amount__c": "4500.03",  # 3 * 1501.01
+        "Name": "foo",
+        "npe03__Installments__c": "3",
+        "npe03__Open_Ended_Status__c": "None",
+        "Stripe_Description__c": "Texas Tribune Circle Membership",
+        "Stripe_Agreed_to_pay_fees__c": True,
+        "Type__c": "Giving Circle",
+        "npe03__Recurring_Donation_Campaign__c": None,
+    }
+    response["Name"] = "foo"
     assert response == expected_response
 
 
 def test__format_recurring_donation():
 
-    response = _format_recurring_donation(contact=contact, form=rdo_form,
-            customer=customer)
+    response = _format_recurring_donation(
+        contact=contact, form=rdo_form, customer=customer
+    )
     expected_response = {
-            'Referral_ID__c': '1234',
-            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
-            'npe03__Date_Established__c': today,
-            'Lead_Source__c': 'Stripe',
-            'npe03__Contact__c': '0031700000BHQzBAAX',
-            'npe03__Installment_Period__c': 'monthly',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '9.00',
-            'Name': 'foo',
-            'npe03__Installments__c': 0,
-            'npe03__Open_Ended_Status__c': 'None',
-            'Stripe_Description__c': 'The Texas Tribune Membership',
-            'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Recurring Donation',
-            'npe03__Recurring_Donation_Campaign__c': ''
-            }
-    response['Name'] = 'foo'
+        "Referral_ID__c": "1234",
+        "Encouraged_to_contribute_by__c": "Because I love the Trib!",
+        "npe03__Date_Established__c": today,
+        "Lead_Source__c": "Stripe",
+        "npe03__Contact__c": "0031700000BHQzBAAX",
+        "npe03__Installment_Period__c": "monthly",
+        "Stripe_Customer_Id__c": "cus_78MqJSBejMN9gn",
+        "npe03__Amount__c": "9.00",
+        "Name": "foo",
+        "npe03__Installments__c": 0,
+        "npe03__Open_Ended_Status__c": "None",
+        "Stripe_Description__c": "The Texas Tribune Membership",
+        "Stripe_Agreed_to_pay_fees__c": True,
+        "Type__c": "Recurring Donation",
+        "npe03__Recurring_Donation_Campaign__c": "",
+    }
+    response["Name"] = "foo"
     assert response == expected_response
 
 
 def test__format_recurring_donation_decimal():
 
-    response = _format_recurring_donation(contact=contact,
-            form=another_rdo_form, customer=customer)
+    response = _format_recurring_donation(
+        contact=contact, form=another_rdo_form, customer=customer
+    )
     expected_response = {
-            'Referral_ID__c': '1234',
-            'Encouraged_to_contribute_by__c': 'Because I love the Trib!',
-            'npe03__Date_Established__c': today,
-            'Lead_Source__c': 'Stripe',
-            'npe03__Contact__c': '0031700000BHQzBAAX',
-            'npe03__Installment_Period__c': 'monthly',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '9.15',
-            'Name': 'foo',
-            'npe03__Installments__c': 0,
-            'npe03__Open_Ended_Status__c': 'None',
-            'Stripe_Description__c': 'The Texas Tribune Membership',
-            'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'Recurring Donation',
-            'npe03__Recurring_Donation_Campaign__c': ''
-            }
-    response['Name'] = 'foo'
+        "Referral_ID__c": "1234",
+        "Encouraged_to_contribute_by__c": "Because I love the Trib!",
+        "npe03__Date_Established__c": today,
+        "Lead_Source__c": "Stripe",
+        "npe03__Contact__c": "0031700000BHQzBAAX",
+        "npe03__Installment_Period__c": "monthly",
+        "Stripe_Customer_Id__c": "cus_78MqJSBejMN9gn",
+        "npe03__Amount__c": "9.15",
+        "Name": "foo",
+        "npe03__Installments__c": 0,
+        "npe03__Open_Ended_Status__c": "None",
+        "Stripe_Description__c": "The Texas Tribune Membership",
+        "Stripe_Agreed_to_pay_fees__c": True,
+        "Type__c": "Recurring Donation",
+        "npe03__Recurring_Donation_Campaign__c": "",
+    }
+    response["Name"] = "foo"
     assert response == expected_response
 
 
 def test__format_blast_rdo():
 
-    response = _format_blast_rdo(contact=contact, form=blast_rdo_form,
-            customer=customer)
+    response = _format_blast_rdo(
+        contact=contact, form=blast_rdo_form, customer=customer
+    )
     expected_response = {
-            'Referral_ID__c': '1234',
-            'npe03__Date_Established__c': today,
-            'Lead_Source__c': 'Stripe',
-            'npe03__Contact__c': '0031700000BHQzBAAX',
-            'npe03__Installment_Period__c': 'monthly',
-            'Stripe_Customer_Id__c': 'cus_78MqJSBejMN9gn',
-            'npe03__Amount__c': '40',
-            'Name': 'foo',
-            'npe03__Installments__c': 0,
-            'npe03__Open_Ended_Status__c': 'Open',
-            'Stripe_Description__c': 'Monthly Blast Subscription',
-            'Stripe_Agreed_to_pay_fees__c': True,
-            'Type__c': 'The Blast',
-            'Billing_Email__c': 'dcraigmile+test6@texastribune.org',
-            'Blast_Subscription_Email__c': 'subscriber@foo.bar',
-            'npe03__Recurring_Donation_Campaign__c': '',
-            }
+        "Referral_ID__c": "1234",
+        "npe03__Date_Established__c": today,
+        "Lead_Source__c": "Stripe",
+        "npe03__Contact__c": "0031700000BHQzBAAX",
+        "npe03__Installment_Period__c": "monthly",
+        "Stripe_Customer_Id__c": "cus_78MqJSBejMN9gn",
+        "npe03__Amount__c": "40",
+        "Name": "foo",
+        "npe03__Installments__c": 0,
+        "npe03__Open_Ended_Status__c": "Open",
+        "Stripe_Description__c": "Monthly Blast Subscription",
+        "Stripe_Agreed_to_pay_fees__c": True,
+        "Type__c": "The Blast",
+        "Billing_Email__c": "dcraigmile+test6@texastribune.org",
+        "Blast_Subscription_Email__c": "subscriber@foo.bar",
+        "npe03__Recurring_Donation_Campaign__c": "",
+    }
 
-    response['Name'] = 'foo'
+    response["Name"] = "foo"
     assert response == expected_response
 
 
@@ -424,13 +452,15 @@ def test__format_contact():
 
     response = _format_contact(form=rdo_form)
 
-    expected_response = {'Description': 'The Texas Tribune Membership',
-            'Email': 'dcraigmile+test6@texastribune.org',
-            'FirstName': 'D',
-            'LastName': 'C',
-            'LeadSource': 'Stripe',
-            'MailingPostalCode': None,
-            'Stripe_Customer_Id__c': None}
+    expected_response = {
+        "Description": "The Texas Tribune Membership",
+        "Email": "dcraigmile+test6@texastribune.org",
+        "FirstName": "D",
+        "LastName": "C",
+        "LeadSource": "Stripe",
+        "MailingPostalCode": None,
+        "Stripe_Customer_Id__c": None,
+    }
 
     assert response == expected_response
 
@@ -446,7 +476,7 @@ def test_upsert_empty_request():
 
 
 def request_callback(request):
-    if 'All_In_One_EMail__c' in request.path_url:
+    if "All_In_One_EMail__c" in request.path_url:
         resp_body = '{"done": true, "records": []}'
     else:
         resp_body = '{"done": true, "records": ["foo"]}'
@@ -456,57 +486,65 @@ def request_callback(request):
 
 @responses.activate
 def test__get_contact():
-    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
+    url_re = re.compile(r"http://foo/services/data/v35.0/query.*")
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
 
-    responses.add(responses.GET, url_re,
-            body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id":'
-            '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=200)
+    responses.add(responses.GET, url_re, body='{"done": true, "records": ["foo"]}')
+    responses.add(
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id":'
+        '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
 
     sf = SalesforceConnection()
-    response = sf._get_contact('schnitzel')
-    expected_response = 'foo'
+    response = sf._get_contact("schnitzel")
+    expected_response = "foo"
     assert response == expected_response
 
 
 @responses.activate
 def test_create_contact():
-    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
-    responses.add(responses.GET, url_re,
-            body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id":'
-            '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=200)
-    responses.add(responses.POST,
-            'http://foo/services/data/v35.0/sobjects/Contact',
-            body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
-            status=201,)
+    url_re = re.compile(r"http://foo/services/data/v35.0/query.*")
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
+    responses.add(responses.GET, url_re, body='{"done": true, "records": ["foo"]}')
+    responses.add(
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id":'
+        '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
+    responses.add(
+        responses.POST,
+        "http://foo/services/data/v35.0/sobjects/Contact",
+        body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
+        status=201,
+    )
 
     sf = SalesforceConnection()
     response = sf.create_contact(form=rdo_form)
-    expected_response = 'foo'
+    expected_response = "foo"
     assert response == expected_response
 
 
 @responses.activate
 def test_find_contact():
-    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
-    responses.add(responses.GET, url_re,
-            body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id":'
-            '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=200)
+    url_re = re.compile(r"http://foo/services/data/v35.0/query.*")
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
+    responses.add(responses.GET, url_re, body='{"done": true, "records": ["foo"]}')
+    responses.add(
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id":'
+        '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
 
     sf = SalesforceConnection()
-    response = sf.find_contact(email='bogus')
-    expected_response = ['foo']
+    response = sf.find_contact(email="bogus")
+    expected_response = ["foo"]
     assert response == expected_response
 
 
@@ -516,25 +554,27 @@ def test_get_or_create_contact_non_extant():
     # first testing for the case where the user doesn't exist and needs to be
     # created
 
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
-    responses.add(responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id":'
-            '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=200)
-    responses.add(responses.POST,
-            'http://foo/services/data/v35.0/sobjects/Contact',
-            body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
-            status=201,)
-    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    responses.add_callback(
-            responses.GET, url_re,
-            callback=request_callback,
-            )
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
+    responses.add(
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id":'
+        '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
+    responses.add(
+        responses.POST,
+        "http://foo/services/data/v35.0/sobjects/Contact",
+        body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
+        status=201,
+    )
+    url_re = re.compile(r"http://foo/services/data/v35.0/query.*")
+    responses.add_callback(responses.GET, url_re, callback=request_callback)
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(form=rdo_form)
     # they were created:
-    expected_response = (True, 'foo')
+    expected_response = (True, "foo")
     assert response == expected_response
 
 
@@ -542,19 +582,21 @@ def test_get_or_create_contact_non_extant():
 def test_get_or_create_contact_extant():
 
     # next we test with the user already extant:
-    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
-    responses.add(responses.GET, url_re,
-            body='{"done": true, "records": ["foo"]}')
-    responses.add(responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id":'
-            '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=200)
+    url_re = re.compile(r"http://foo/services/data/v35.0/query.*")
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
+    responses.add(responses.GET, url_re, body='{"done": true, "records": ["foo"]}')
+    responses.add(
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id":'
+        '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(form=rdo_form)
     # no need to create:
-    expected_response = (False, 'foo')
+    expected_response = (False, "foo")
     assert response == expected_response
 
 
@@ -563,43 +605,46 @@ def test_get_or_create_contact_multiple():
     # TODO: check that we send an alert
 
     # next we test with the user already extant:
-    url_re = re.compile(r'http://foo/services/data/v35.0/query.*')
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
-    responses.add(responses.GET, url_re,
-            body='{"done": true, "records": ["foo", "bar"]}')
-    responses.add(responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id":'
-            '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
-            status=200)
+    url_re = re.compile(r"http://foo/services/data/v35.0/query.*")
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
+    responses.add(
+        responses.GET, url_re, body='{"done": true, "records": ["foo", "bar"]}'
+    )
+    responses.add(
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id":'
+        '"a0917000002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
 
     sf = SalesforceConnection()
     response = sf.get_or_create_contact(form=rdo_form)
     # no need to create:
-    expected_response = (False, 'foo')
+    expected_response = (False, "foo")
     assert response == expected_response
 
 
 @responses.activate
 def test_upsert_non_extant():
 
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
     responses.add(
-            responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
-            '002rZngAAE", "access_token": "bar", "success": true}',
-            status=200,
-            )
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
+        '002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
     responses.add(
-            responses.POST,
-            'http://foo/services/data/v35.0/sobjects/Contact',
-            body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
-            status=201,
-            )
+        responses.POST,
+        "http://foo/services/data/v35.0/sobjects/Contact",
+        body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
+        status=201,
+    )
     responses.add_callback(
-            responses.GET,
-            'http://foo/services/data/v35.0/query',
-            callback=request_callback,
-            )
+        responses.GET, "http://foo/services/data/v35.0/query", callback=request_callback
+    )
 
     actual = upsert_customer(customer=customer, form=rdo_form)
     assert actual is True
@@ -607,27 +652,33 @@ def test_upsert_non_extant():
 
 
 list_resp_body = {
-        'done': True,
-        'records': [
-            {'AccountId': '0011700000BpR8PAAV',
-                'Id': '0031700000BHQzBAAX',
-                'Stripe_Customer_Id__c': 'cus_7GHFg5Dk07Loox',
-                'attributes': {'type': 'Contact',
-                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BH'
-                    'QzBAAX'}},
-            {'AccountId': '0011700000BqjZSAAZ',
-                'Id': '0031700000BM3J4AAL',
-                'Stripe_Customer_Id__c': None,
-                'attributes': {'type': 'Contact',
-                    'url': '/services/data/v35.0/sobjects/Contact/0031700000BM'
-                    '3J4AAL'}}
-                ],
-        'totalSize': 9
-        }
+    "done": True,
+    "records": [
+        {
+            "AccountId": "0011700000BpR8PAAV",
+            "Id": "0031700000BHQzBAAX",
+            "Stripe_Customer_Id__c": "cus_7GHFg5Dk07Loox",
+            "attributes": {
+                "type": "Contact",
+                "url": "/services/data/v35.0/sobjects/Contact/0031700000BH" "QzBAAX",
+            },
+        },
+        {
+            "AccountId": "0011700000BqjZSAAZ",
+            "Id": "0031700000BM3J4AAL",
+            "Stripe_Customer_Id__c": None,
+            "attributes": {
+                "type": "Contact",
+                "url": "/services/data/v35.0/sobjects/Contact/0031700000BM" "3J4AAL",
+            },
+        },
+    ],
+    "totalSize": 9,
+}
 
 
 def request_upsert_extant_callback(request):
-    if 'All_In_One_EMail__c' in request.path_url:
+    if "All_In_One_EMail__c" in request.path_url:
         resp_body = json.dumps(list_resp_body)
     else:
         resp_body = '{"done": true, "records": ["foo"]}'
@@ -638,31 +689,31 @@ def request_upsert_extant_callback(request):
 @responses.activate
 def test_upsert_extant():
 
-    url_re2 = re.compile(r'https://.*/services/oauth2/token')
+    url_re2 = re.compile(r"https://.*/services/oauth2/token")
     responses.add(
-            responses.PATCH,
-            'http://foo/services/data/v35.0/sobjects/Contact/0031700000BHQzBA'
-            'AX',
-            body='{"errors": [], "id": "a0917000002rZngAAE", "success": true}',
-            status=204,
-            )
+        responses.PATCH,
+        "http://foo/services/data/v35.0/sobjects/Contact/0031700000BHQzBA" "AX",
+        body='{"errors": [], "id": "a0917000002rZngAAE", "success": true}',
+        status=204,
+    )
     responses.add(
-            responses.POST, url_re2,
-            body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
-            '002rZngAAE", "access_token": "bar", "success": true}',
-            status=200,
-            )
+        responses.POST,
+        url_re2,
+        body='{"instance_url": "http://foo", "errors": [], "id": "a0917000'
+        '002rZngAAE", "access_token": "bar", "success": true}',
+        status=200,
+    )
     responses.add(
-            responses.POST,
-            'http://foo/services/data/v35.0/sobjects/Contact',
-            body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
-            status=200,
-            )
+        responses.POST,
+        "http://foo/services/data/v35.0/sobjects/Contact",
+        body='{"errors": [], "id": "0031700000F3kcwAAB", "success": true}',
+        status=200,
+    )
     responses.add_callback(
-            responses.GET,
-            'http://foo/services/data/v35.0/query',
-            callback=request_upsert_extant_callback,
-            )
+        responses.GET,
+        "http://foo/services/data/v35.0/query",
+        callback=request_upsert_extant_callback,
+    )
 
     actual = upsert_customer(customer=customer, form=rdo_form)
     assert actual is True
@@ -671,8 +722,8 @@ def test_upsert_extant():
 
 def test_amount_to_charge_cents_just_fees_false():
     foo = {}
-    foo['Amount'] = 10.50
-    foo['Stripe_Agreed_to_pay_fees__c'] = False
+    foo["Amount"] = 10.50
+    foo["Stripe_Agreed_to_pay_fees__c"] = False
 
     actual = amount_to_charge(foo)
     expected = 1050
@@ -681,8 +732,8 @@ def test_amount_to_charge_cents_just_fees_false():
 
 def test_amount_to_charge_just_fees_false():
     foo = {}
-    foo['Amount'] = 10
-    foo['Stripe_Agreed_to_pay_fees__c'] = False
+    foo["Amount"] = 10
+    foo["Stripe_Agreed_to_pay_fees__c"] = False
 
     actual = amount_to_charge(foo)
     expected = 1000
@@ -691,8 +742,8 @@ def test_amount_to_charge_just_fees_false():
 
 def test_amount_to_charge_cents_and_fees_true():
     foo = {}
-    foo['Amount'] = 10.50
-    foo['Stripe_Agreed_to_pay_fees__c'] = True
+    foo["Amount"] = 10.50
+    foo["Stripe_Agreed_to_pay_fees__c"] = True
 
     actual = amount_to_charge(foo)
     expected = 1104
@@ -701,8 +752,8 @@ def test_amount_to_charge_cents_and_fees_true():
 
 def test_amount_to_charge_just_fees_true():
     foo = {}
-    foo['Amount'] = 10
-    foo['Stripe_Agreed_to_pay_fees__c'] = True
+    foo["Amount"] = 10
+    foo["Stripe_Agreed_to_pay_fees__c"] = True
 
     actual = amount_to_charge(foo)
     expected = 1053
@@ -723,25 +774,29 @@ class ChargeReturnValue(object):
     source = SourceObject()
 
 
-sf_response = [{'Amount': 84.0,
-    'Name': 'D C Donation (1 of 36) 2/11/2016',
-    'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
-    'Stripe_Agreed_to_pay_fees__c': False,
-    'Description': 'The Texas Tribune Circle Membership',
-    'attributes': {
-        'type': 'Opportunity',
-        'url': '/services/data/v35.0/sobjects/Opportunity/'
-        '006q0000005r5cOAAQ'
-        }}]
+sf_response = [
+    {
+        "Amount": 84.0,
+        "Name": "D C Donation (1 of 36) 2/11/2016",
+        "Stripe_Customer_ID__c": "cus_7tGeFILs2fuOOd",
+        "Stripe_Agreed_to_pay_fees__c": False,
+        "Description": "The Texas Tribune Circle Membership",
+        "attributes": {
+            "type": "Opportunity",
+            "url": "/services/data/v35.0/sobjects/Opportunity/" "006q0000005r5cOAAQ",
+        },
+    }
+]
 
 
-@patch('batch.requests')
-@patch('batch.Log')
-@patch('batch.stripe.Charge.create')
-@patch('batch.SalesforceConnection.query')
-@patch('salesforce.SalesforceConnection.__init__')
-def test_process_failed_charges(sf_connection, sf_connection_query,
-        stripe_charge, log, requests_lib):
+@patch("batch.requests")
+@patch("batch.Log")
+@patch("batch.stripe.Charge.create")
+@patch("batch.SalesforceConnection.query")
+@patch("salesforce.SalesforceConnection.__init__")
+def test_process_failed_charges(
+    sf_connection, sf_connection_query, stripe_charge, log, requests_lib
+):
     """
     It looks like a Stripe charge can fail without raising an
     exception. This tests that we'll log the error and not proceed.
@@ -751,18 +806,19 @@ def test_process_failed_charges(sf_connection, sf_connection_query,
     sf_connection_query.return_value = sf_response
     sf_connection.return_value = None
     requests_lib.patch.return_value = RequestsResponse()
-    process_charges('whatever', log)
+    process_charges("whatever", log)
     log.it.assert_called_with("Charge failed. Check Stripe logs.")
 
 
-@patch('batch.requests')
-@patch('batch.Log')
-@patch('batch.stripe.Charge.create')
-@patch('batch.SalesforceConnection.query')
-@patch('batch.SalesforceConnection.patch')
-@patch('salesforce.SalesforceConnection.__init__')
-def test_process_success(sf_connection, sf_patch, sf_connection_query,
-        stripe_charge, log, requests_lib):
+@patch("batch.requests")
+@patch("batch.Log")
+@patch("batch.stripe.Charge.create")
+@patch("batch.SalesforceConnection.query")
+@patch("batch.SalesforceConnection.patch")
+@patch("salesforce.SalesforceConnection.__init__")
+def test_process_success(
+    sf_connection, sf_patch, sf_connection_query, stripe_charge, log, requests_lib
+):
     """
     This tests the normal case where everything succeeds.
     """
@@ -774,54 +830,61 @@ def test_process_success(sf_connection, sf_patch, sf_connection_query,
     sf_patch.return_value = None
     sf_connection.return_value = None
     requests_lib.patch.return_value = RequestsResponse()
-    process_charges('whatever', log)
+    process_charges("whatever", log)
     log.it.assert_called_with("ok")
 
 
 sf_response_2 = [
-        {'Amount': 84.0,
-            'Name': 'D C Donation (1 of 36) 2/11/2016',
-            'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
-            'Stripe_Agreed_to_pay_fees__c': False,
-            'Description': 'The Texas Tribune Circle Membership',
-            'attributes': {
-                'type': 'Opportunity',
-                'url': '/services/data/v35.0/sobjects/Opportunity/'
-                '006q0000005r5cOAAQ'
-                }},
-        {'Amount': 36.0,
-            'Name': 'D C Donation (1 of 36) 2/11/2016',
-            'Stripe_Customer_ID__c': 'cus_7tGeFILs2fuOOd',
-            'Stripe_Agreed_to_pay_fees__c': False,
-            'Description': 'The Texas Tribune Circle Membership',
-            'attributes': {
-                'type': 'Opportunity',
-                'url': '/services/data/v35.0/sobjects/Opportunity/'
-                '006q0000005r5cOAAQ'
-                }}
-            ]
+    {
+        "Amount": 84.0,
+        "Name": "D C Donation (1 of 36) 2/11/2016",
+        "Stripe_Customer_ID__c": "cus_7tGeFILs2fuOOd",
+        "Stripe_Agreed_to_pay_fees__c": False,
+        "Description": "The Texas Tribune Circle Membership",
+        "attributes": {
+            "type": "Opportunity",
+            "url": "/services/data/v35.0/sobjects/Opportunity/" "006q0000005r5cOAAQ",
+        },
+    },
+    {
+        "Amount": 36.0,
+        "Name": "D C Donation (1 of 36) 2/11/2016",
+        "Stripe_Customer_ID__c": "cus_7tGeFILs2fuOOd",
+        "Stripe_Agreed_to_pay_fees__c": False,
+        "Description": "The Texas Tribune Circle Membership",
+        "attributes": {
+            "type": "Opportunity",
+            "url": "/services/data/v35.0/sobjects/Opportunity/" "006q0000005r5cOAAQ",
+        },
+    },
+]
 
 
-@patch('batch.requests')
-@patch('batch.Log')
-@patch('batch.stripe.Charge.create')
-@patch('batch.SalesforceConnection.query')
-@patch('batch.SalesforceConnection.patch')
-@patch('salesforce.SalesforceConnection.__init__')
-def test_fail_continues(sf_connection, sf_patch, sf_connection_query,
-        stripe_charge, log, requests_lib):
+@patch("batch.requests")
+@patch("batch.Log")
+@patch("batch.stripe.Charge.create")
+@patch("batch.SalesforceConnection.query")
+@patch("batch.SalesforceConnection.patch")
+@patch("salesforce.SalesforceConnection.__init__")
+def test_fail_continues(
+    sf_connection, sf_patch, sf_connection_query, stripe_charge, log, requests_lib
+):
     """
     This shows that processing will continue even when an error is encountered.
     """
     expected_call_list = [
-            call('Found 2 opportunities available to process.'),
-            call('---- Charging $84.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o'
-            'f 36) 2/11/2016)'),
-            call('Problem: '),
-            call('---- Charging $36.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o'
-            'f 36) 2/11/2016)'),
-            call('ok')
-            ]
+        call("Found 2 opportunities available to process."),
+        call(
+            "---- Charging $84.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o"
+            "f 36) 2/11/2016)"
+        ),
+        call("Problem: "),
+        call(
+            "---- Charging $36.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o"
+            "f 36) 2/11/2016)"
+        ),
+        call("ok"),
+    ]
 
     charge_return_value = ChargeReturnValue()
     charge_return_value.status = "succeeded"
@@ -830,63 +893,71 @@ def test_fail_continues(sf_connection, sf_patch, sf_connection_query,
     sf_connection_query.return_value = sf_response_2
     requests_lib.patch.return_value = RequestsResponse()
     sf_connection.return_value = None
-    process_charges('whatever', log)
+    process_charges("whatever", log)
     log.it.assert_called_with("ok")
     assert len(log.it.call_args_list) == 5
     assert log.it.call_args_list == expected_call_list
 
 
-@patch('batch.requests')
-@patch('batch.Log')
-@patch('batch.stripe.Charge.create')
-@patch('batch.SalesforceConnection.query')
-@patch('salesforce.SalesforceConnection.__init__')
-def test_card_error(sf_connection, sf_connection_query, stripe_charge, log,
-        requests_lib):
+@patch("batch.requests")
+@patch("batch.Log")
+@patch("batch.stripe.Charge.create")
+@patch("batch.SalesforceConnection.query")
+@patch("salesforce.SalesforceConnection.__init__")
+def test_card_error(
+    sf_connection, sf_connection_query, stripe_charge, log, requests_lib
+):
     """
     This tests CardErrors from Stripe.
     """
     expected_call_list = [
-            call('Found 1 opportunities available to process.'),
-            call('---- Charging $84.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o'
-            'f 36) 2/11/2016)'),
-            call('The card has been declined:'),
-            call('\tStatus: 402'),
-            call('\tType: card_error'),
-            call('\tCode: card_declined'),
-            call('\tParam: param'),
-            call('\tMessage: message'),
-            call('\tDecline code: decline_code')
-            ]
+        call("Found 1 opportunities available to process."),
+        call(
+            "---- Charging $84.0 to cus_7tGeFILs2fuOOd (D C Donation (1 o"
+            "f 36) 2/11/2016)"
+        ),
+        call("The card has been declined:"),
+        call("\tStatus: 402"),
+        call("\tType: card_error"),
+        call("\tCode: card_declined"),
+        call("\tParam: param"),
+        call("\tMessage: message"),
+        call("\tDecline code: decline_code"),
+    ]
 
     # this is confusing because it's a dict, not JSON
     # but that's what Stripe calls it. See https://stripe.com/docs/api#errors
     json_body = {
-            'error': {
-                'decline_code': 'decline_code',
-                'type': 'card_error',
-                'message': 'message',
-                'param': 'param',
-                'code': 'card_declined',
-                }
-            }
-    stripe_error = stripe.error.CardError(message="message", param="param",
-            code="code", json_body=json_body, http_status=402)
+        "error": {
+            "decline_code": "decline_code",
+            "type": "card_error",
+            "message": "message",
+            "param": "param",
+            "code": "card_declined",
+        }
+    }
+    stripe_error = stripe.error.CardError(
+        message="message",
+        param="param",
+        code="code",
+        json_body=json_body,
+        http_status=402,
+    )
     charge_return_value = ChargeReturnValue()
     charge_return_value.status = "succeeded"
     stripe_charge.side_effect = stripe_error
     sf_connection.return_value = None
     sf_connection_query.return_value = sf_response
     requests_lib.patch.return_value = RequestsResponse()
-    process_charges('whatever', log)
+    process_charges("whatever", log)
     print(log.it.call_args_list)
     assert len(log.it.call_args_list) == 9
     assert log.it.call_args_list == expected_call_list
 
 
-@patch('salesforce.send_email')
+@patch("salesforce.send_email")
 def test_multiple_account_warnings(send_email_mock):
-    WARNINGS['foo@bar'] = 2
-    WARNINGS['foo@baz'] = 2
+    WARNINGS["foo@bar"] = 2
+    WARNINGS["foo@baz"] = 2
     send_multiple_account_warning()
     assert len(WARNINGS) == 0
