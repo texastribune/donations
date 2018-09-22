@@ -3,7 +3,6 @@ import re
 from datetime import datetime
 from decimal import Decimal
 from unittest.mock import call, patch
-from util import clean
 
 from pytz import timezone
 
@@ -11,8 +10,9 @@ import pytest
 import responses
 import stripe
 from batch import amount_to_charge
-from npsp import RDO, Opportunity, Contact
+from npsp import RDO, Contact, Opportunity
 from npsp import SalesforceConnection as sf
+from util import clean
 
 
 def test__clean():
