@@ -65,7 +65,7 @@ def send_multiple_account_warning(contact):
     )
 
 
-def clean(form=None):
+def clean(form):
     result = defaultdict(lambda: None)
     for k, v in form.items():
         if v is None or v == "None":
