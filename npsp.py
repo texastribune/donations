@@ -349,7 +349,7 @@ class RDO(SalesforceObject):
 
         # TODO should this be in the client?
         if self.installments:
-            amount = float(self.amount) * int(self.installments)
+            amount = str(float(self.amount) * int(self.installments))
 
         recurring_donation = {
             "npe03__Organization__c": self.account_id,

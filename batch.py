@@ -1,6 +1,7 @@
 import logging
 from config import ACCOUNTING_MAIL_RECIPIENT, REDIS_URL, STRIPE_KEYS, TIMEZONE
 from datetime import datetime, timedelta
+from decimal import Decimal
 
 from pytz import timezone
 
@@ -13,6 +14,12 @@ from util import send_email
 zone = timezone(TIMEZONE)
 
 stripe.api_key = STRIPE_KEYS["secret_key"]
+
+TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
+
+
+def quantize(amount):
+    return Decimal(amount).quantize(TWOPLACES)
 
 
 class Log(object):
@@ -57,7 +64,7 @@ def amount_to_charge(amount, pay_fees=False):
         total = (amount + .30) / (1 - 0.022)
     else:
         total = amount
-    return total
+    return quantize(total)
 
 
 class AlreadyExecuting(Exception):

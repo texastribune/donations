@@ -77,6 +77,9 @@ def clean(form=None):
         if v is False or v == "False":
             result[k] = False
             continue
+        if isinstance(v, (int, float)):
+            result[k] = v
+            continue
         try:
             result[k] = int(v)
             continue
