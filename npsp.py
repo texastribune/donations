@@ -77,6 +77,8 @@ class SalesforceConnection(object):
                 e.content = content[0]
             except NameError:
                 e.content = None
+            except KeyError:
+                e.content = content
             e.response = response
             logging.debug(f"response.text: {response.text}")
             raise e
