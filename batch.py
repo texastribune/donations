@@ -54,9 +54,6 @@ def amount_to_charge(amount, pay_fees=False):
     to pay fees or not. If they did then we add that to the amount charged.
     Stripe charges 2.2% + $0.30.
 
-    Stripe wants the amount to charge in cents. So we multiply by 100 and
-    return that.
-
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
     amount = float(amount)
