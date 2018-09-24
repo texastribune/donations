@@ -237,6 +237,7 @@ def charge():
 
     if form.validate():
         try:
+            app.logger.debug("----Retrieving Stripe customer...")
             customer = stripe.Customer.retrieve(request.form["customerId"])
             add_donation.delay(customer=customer, form=clean(request.form))
             if request.form["installment_period"] == "None":
@@ -284,6 +285,7 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
 
+    logging.debug(opportunity)
     opportunity.save()
     return opportunity
 
@@ -320,6 +322,7 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
 
+    logging.debug(rdo)
     rdo.save()
 
     return rdo
@@ -343,6 +346,7 @@ def add_donation(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
     )
+    logging.debug(contact)
 
     # intentionally overwriting zip but not name here
 
@@ -369,6 +373,7 @@ def add_donation(form=None, customer=None):
 def add_blast_subscription(form=None, customer=None):
 
     form = clean(form)
+    logging.info(form)
 
     first_name = form["first_name"]
     last_name = form["last_name"]
@@ -378,6 +383,7 @@ def add_blast_subscription(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
+    logging.debug(contact)
 
     rdo = RDO(contact=contact)
 
@@ -403,6 +409,7 @@ def add_blast_subscription(form=None, customer=None):
     rdo.blast_subscription_email = form["subscriber_email"]
 
     logging.info("----Saving RDO....")
+    logging.debug(rdo)
     rdo.save()
 
     return True

@@ -53,6 +53,7 @@ class SalesforceConnection(object):
         r = requests.post(self.url, data=self.payload)
         self.check_response(r)
         response = json.loads(r.text)
+        logging.debug(response)
 
         self.instance_url = response["instance_url"]
         access_token = response["access_token"]
@@ -104,6 +105,7 @@ class SalesforceConnection(object):
             payload = {}
         else:
             payload = {"q": query}
+        logging.debug(query)
         r = requests.get(url, headers=self.headers, params=payload)
         self.check_response(r)
         response = json.loads(r.text)
@@ -112,6 +114,7 @@ class SalesforceConnection(object):
             return response["records"] + self.query(
                 query=None, path=response["nextRecordsUrl"]
             )
+        logging.debug(response)
         return response["records"]
 
     def post(self, path, data):
@@ -122,6 +125,7 @@ class SalesforceConnection(object):
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
         response = json.loads(resp.text)
         self.check_response(response=resp, expected_status=201)
+        logging.debug(response)
         return response
 
     def patch(self, path, data):
@@ -130,6 +134,7 @@ class SalesforceConnection(object):
         """
 
         url = f"{self.instance_url}{path}"
+        logging.debug(data)
         resp = requests.patch(url, headers=self.headers, data=json.dumps(data))
         self.check_response(response=resp, expected_status=204)
         return resp
