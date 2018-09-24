@@ -2,7 +2,6 @@ import json
 import locale
 import logging
 import os
-import sys
 from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE, LOG_LEVEL
 from datetime import datetime
 
