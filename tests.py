@@ -1,18 +1,21 @@
-import json
-import re
 from datetime import datetime
 from decimal import Decimal
-from unittest.mock import call, patch
-
 from pytz import timezone
 
 import pytest
-import responses
-import stripe
 from batch import amount_to_charge
 from npsp import RDO, Contact, Opportunity
-from npsp import SalesforceConnection as sf
+import npsp
 from util import clean
+
+
+class SalesforceConnectionSubClass(npsp.SalesforceConnection):
+    def __init__(self):
+        pass
+
+
+npsp.sf = SalesforceConnectionSubClass()
+sf = SalesforceConnectionSubClass()
 
 
 def test__clean():
@@ -373,51 +376,6 @@ def test__format_contact():
     }
 
     assert response == expected_response
-
-
-def test_upsert_empty_customer():
-    with pytest.raises(Exception):
-        upsert_customer(customer=None, request=None)
-
-
-def test_upsert_empty_request():
-    with pytest.raises(Exception):
-        upsert_customer(customer=customer, request=None)
-
-
-def request_callback(request):
-    if "All_In_One_EMail__c" in request.path_url:
-        resp_body = '{"done": true, "records": []}'
-    else:
-        resp_body = '{"done": true, "records": ["foo"]}'
-
-    return (200, {}, resp_body)
-
-
-list_resp_body = {
-    "done": True,
-    "records": [
-        {
-            "AccountId": "0011700000BpR8PAAV",
-            "Id": "0031700000BHQzBAAX",
-            "Stripe_Customer_Id__c": "cus_7GHFg5Dk07Loox",
-            "attributes": {
-                "type": "Contact",
-                "url": "/services/data/v35.0/sobjects/Contact/0031700000BH" "QzBAAX",
-            },
-        },
-        {
-            "AccountId": "0011700000BqjZSAAZ",
-            "Id": "0031700000BM3J4AAL",
-            "Stripe_Customer_Id__c": None,
-            "attributes": {
-                "type": "Contact",
-                "url": "/services/data/v35.0/sobjects/Contact/0031700000BM" "3J4AAL",
-            },
-        },
-    ],
-    "totalSize": 9,
-}
 
 
 def test_amount_to_charge_cents_just_fees_false():
