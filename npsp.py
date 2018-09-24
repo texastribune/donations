@@ -169,11 +169,13 @@ class SalesforceObject(object):
 
 class Opportunity(SalesforceObject):
 
-    sf = SalesforceConnection()
-
     api_name = "Opportunity"
 
     def __init__(self, contact=None):
+
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
 
         today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
@@ -206,6 +208,9 @@ class Opportunity(SalesforceObject):
     def list_pledged(cls, begin, end):
 
         # TODO a more generic dserializing method
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
 
         query = f"""
         SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
@@ -218,7 +223,7 @@ class Opportunity(SalesforceObject):
         AND Expected_Giving_Date__c >= {begin}
         AND StageName = 'Pledged'
         """
-        response = cls.sf.query(query)
+        response = sf.query(query)
 
         results = list()
         for item in response:
@@ -280,13 +285,15 @@ class Opportunity(SalesforceObject):
 
     def save(self):
 
+        global sf
+
         if self.account_id is None:
             raise SalesforceException("Account ID must be specified")
         if not self.name:
             raise SalesforceException("Opportunity name must be specified")
 
         try:
-            self.sf.save(self)
+            sf.save(self)
             # TODO should the client decide what's retryable?
         except SalesforceException as e:
             if e.content["errorCode"] == "MALFORMED_ID":
@@ -307,11 +314,13 @@ class Opportunity(SalesforceObject):
 
 class RDO(SalesforceObject):
 
-    sf = SalesforceConnection()
-
     api_name = "npe03__Recurring_Donation__c"
 
     def __init__(self, contact=None, account=None):
+
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
 
         if account and contact:
             raise SalesforceException("Account and Contact can't both be specified")
@@ -395,13 +404,15 @@ class RDO(SalesforceObject):
 
     def save(self):
 
+        global sf
+
         if self.account_id is None and self.contact_id is None:
             raise SalesforceException(
                 "One of Contact ID or Account ID must be specified."
             )
 
         try:
-            self.sf.save(self)
+            sf.save(self)
         except SalesforceException as e:
             if e.content["errorCode"] == "MALFORMED_ID":
                 if e.content["fields"][0] == "npe03__Recurring_Donation_Campaign__c":
@@ -421,11 +432,13 @@ class RDO(SalesforceObject):
 
 class Account(SalesforceObject):
 
-    sf = SalesforceConnection()
-
     api_name = "Account"
 
     def __init__(self):
+
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
 
         self.id = None
         self.name = None
@@ -453,13 +466,16 @@ class Account(SalesforceObject):
     @classmethod
     def get(cls, website=None, name=None):
 
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
+
         query = f"""
             SELECT Id, Name, Website
             FROM Account WHERE
             RecordTypeId = '{ORGANIZATION_RECORDTYPEID}'
         """
-
-        response = cls.sf.query(query)
+        response = sf.query(query)
         website_idx = {
             x["Website"]: {"id": x["Id"], "name": x["Name"]}
             for x in response
@@ -483,17 +499,21 @@ class Account(SalesforceObject):
         return account
 
     def save(self):
-        self.sf.save(self)
+        global sf
+        sf.save(self)
         return self
 
 
 class Contact(SalesforceObject):
 
-    sf = SalesforceConnection()
-
     api_name = "Contact"
 
     def __init__(self):
+
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
+
         self.id = None
         self.account_id = None
         self.first_name = None
@@ -545,6 +565,10 @@ class Contact(SalesforceObject):
     # TODO rename id?
     def get(cls, id=None, email=None):
 
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
+
         if id is None and email is None:
             raise SalesforceException("id or email must be specified")
         if id and email:
@@ -555,7 +579,7 @@ class Contact(SalesforceObject):
                     FROM Contact
                     WHERE id = '{id}'
                     """
-            response = cls.sf.query(query)
+            response = sf.query(query)
             # should only be one result here because we're
             # querying by id
             response = response[0]
@@ -576,7 +600,8 @@ class Contact(SalesforceObject):
                 WHERE All_In_One_EMail__c
                 LIKE '%{email}%'
                 """
-        response = cls.sf.query(query)
+
+        response = sf.query(query)
         if not response:
             return None
         response = cls.parse_all_email(email=email, results=response)
@@ -601,7 +626,8 @@ class Contact(SalesforceObject):
         return f"{self.first_name} {self.last_name}"
 
     def save(self):
-        self.sf.save(self)
+        global sf
+        sf.save(self)
         return self
 
 
@@ -609,9 +635,12 @@ class Affiliation(SalesforceObject):
 
     api_name = "npe5__Affiliation__c"
 
-    sf = SalesforceConnection()
-
     def __init__(self, contact=None, account=None, role=None):
+
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
+
         self.id = None
         self.contact = contact
         self.account = account
@@ -620,12 +649,16 @@ class Affiliation(SalesforceObject):
     @classmethod
     def get(cls, contact, account):
 
+        global sf
+        if sf is None:
+            sf = SalesforceConnection()
+
         query = f"""
             SELECT Id, npe5__Role__c from npe5__Affiliation__c
             WHERE npe5__Contact__c = '{contact}'
             AND npe5__Organization__c = '{account}'
         """
-        response = cls.sf.query(query)
+        response = sf.query(query)
 
         if not response:
             return None
