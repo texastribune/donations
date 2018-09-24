@@ -21,6 +21,9 @@ SALESFORCE_CLIENT_ID = os.environ.get("SALESFORCE_CLIENT_ID", "")
 SALESFORCE_CLIENT_SECRET = os.environ.get("SALESFORCE_CLIENT_SECRET", "")
 SALESFORCE_USERNAME = os.environ.get("SALESFORCE_USERNAME", "")
 SALESFORCE_PASSWORD = os.environ.get("SALESFORCE_PASSWORD", "")
+SALESFORCE_HOST = os.environ.get("SALESFORCE_HOST", "")
+
+sf = None
 
 
 class SalesforceException(Exception):
