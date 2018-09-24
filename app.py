@@ -237,20 +237,29 @@ def charge():
     bundles = get_bundles("charge")
 
     if form.validate():
-        customer = stripe.Customer.retrieve(request.form["customerId"])
-        add_donation.delay(customer=customer, form=clean(request.form))
-        if request.form["installment_period"] == "None":
-            gtm["event_label"] = "once"
-        else:
-            gtm["event_label"] = request.form["installment_period"]
-        gtm["event_value"] = request.form["amount"]
-        return render_template(
-            "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
-        )
+        try:
+            customer = stripe.Customer.retrieve(request.form['customerId'])
+            add_donation.delay(customer=customer, form=clean(request.form))
+            if request.form['installment_period'] == 'None':
+                gtm['event_label'] = 'once'
+            else:
+                gtm['event_label'] = request.form['installment_period']
+            gtm['event_value'] = request.form['amount']
+            return render_template('charge.html',
+                    amount=request.form['amount'], gtm=gtm, bundles=bundles)
+        except stripe.error.InvalidRequestError as e:
+            body = e.json_body
+            err = body.get('error', {})
+            message = err.get('message', '')
+            if 'No such customer:' not in message:
+                raise e
+            else:
+                log.warning(message)
+                return render_template('error.html', message=error_message)
     else:
         message = "There was an issue saving your donation information."
         logging.warning("Form validation errors: {}".format(form.errors))
-        return render_template("error.html", message=message)
+        return render_template('error.html', message=error_message)
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
