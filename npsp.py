@@ -17,6 +17,10 @@ DEFAULT_RECORDTYPEID = "01216000001IhI9"  # TODO
 SALESFORCE_API_VERSION = "v43.0"  # TODO
 ORGANIZATION_RECORDTYPEID = "01216000001IhHMAA0"  # TODO
 TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
+SALESFORCE_CLIENT_ID = os.environ.get("SALESFORCE_CLIENT_ID", "")
+SALESFORCE_CLIENT_SECRET = os.environ.get("SALESFORCE_CLIENT_SECRET", "")
+SALESFORCE_USERNAME = os.environ.get("SALESFORCE_USERNAME", "")
+SALESFORCE_PASSWORD = os.environ.get("SALESFORCE_PASSWORD", "")
 
 
 class SalesforceException(Exception):
@@ -35,10 +39,10 @@ class SalesforceConnection(object):
 
         self.payload = {
             "grant_type": "password",
-            "client_id": os.environ["SALESFORCE_CLIENT_ID"],
-            "client_secret": os.environ["SALESFORCE_CLIENT_SECRET"],
-            "username": os.environ["SALESFORCE_USERNAME"],
-            "password": os.environ["SALESFORCE_PASSWORD"],
+            "client_id": SALESFORCE_CLIENT_ID,
+            "client_secret": SALESFORCE_CLIENT_SECRET,
+            "username": SALESFORCE_USERNAME,
+            "password": SALESFORCE_PASSWORD,
         }
         token_path = "/services/oauth2/token"
         self.url = f"https://{self.host}{token_path}"
