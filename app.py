@@ -3,7 +3,7 @@ import locale
 import logging
 import os
 import sys
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE
+from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE, LOG_LEVEL
 from datetime import datetime
 
 from pytz import timezone
@@ -30,24 +30,10 @@ zone = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, "C")
 
-# Set up to send logging to stdout and Heroku forwards to Papertrail
-LOGGING = {
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "strm": sys.stdout,
-        }
-    }
-}
-
 app = Flask(__name__)
 
-app.logger.debug("this is a DEBUG message")
-app.logger.info("this is an INFO message")
-app.logger.warning("this is a WARNING message")
-app.logger.error("this is an ERROR message")
-app.logger.critical("this is a CRITICAL message")
+log_level = logging.getLevelName(LOG_LEVEL)
+app.logger.setLevel(log_level)
 
 app.secret_key = FLASK_SECRET_KEY
 
