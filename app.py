@@ -24,6 +24,17 @@ zone = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, "C")
 
+# Set up to send logging to stdout and Heroku forwards to Papertrail
+LOGGING = {
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "class": "logging.StreamHandler",
+            "strm": sys.stdout,
+        }
+    }
+}
+
 app = Flask(__name__)
 
 app.secret_key = FLASK_SECRET_KEY
@@ -42,16 +53,7 @@ stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
 make_celery(app)
 
-# Set up to send logging to stdout and Heroku forwards to Papertrail
-LOGGING = {
-    "handlers": {
-        "console": {
-            "level": "INFO",
-            "class": "logging.StreamHandler",
-            "strm": sys.stdout,
-        }
-    }
-}
+
 
 if app.config["ENABLE_SENTRY"]:
     sentry = Sentry(app, dsn=app.config["SENTRY_DSN"])
@@ -161,7 +163,7 @@ def the_blast_form():
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
 
-    logging.info(request.form)
+    app.logger.info(request.form)
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
@@ -175,11 +177,11 @@ def submit_blast():
         return render_template("error.html", message=message)
 
     if form.validate():
-        logging.info("----Adding Blast subscription...")
+        app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
         return render_template("blast-charge.html")
     else:
-        logging.warning("Failed to validate form")
+        app.logger.warning("Failed to validate form")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
@@ -230,7 +232,8 @@ def create_customer():
 @app.route("/charge", methods=["POST"])
 def charge():
 
-    logging.info(request.form)
+    app.logger.info(request.form)
+
     gtm = {}
     form = DonateForm(request.form)
 
@@ -258,7 +261,7 @@ def charge():
                 return render_template('error.html', message=error_message)
     else:
         message = "There was an issue saving your donation information."
-        logging.warning("Form validation errors: {}".format(form.errors))
+        app.logger.warning("Form validation errors: {}".format(form.errors))
         return render_template('error.html', message=error_message)
 
 
