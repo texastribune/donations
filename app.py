@@ -36,7 +36,7 @@ app.config.from_pyfile("config.py")
 app.config.update(
     CELERY_ACCEPT_CONTENT=["pickle", "json"],
     CELERY_ALWAYS_EAGER=False,
-    CELERY_IMPORTS=("app", "salesforce", "batch"),
+    CELERY_IMPORTS=("app", "npsp", "batch"),
 )
 stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
@@ -316,7 +316,7 @@ def add_recurring_donation(contact=None, form=None, customer=None):
     return rdo
 
 
-@celery.task(name="salesforce.add_donation")
+@celery.task(name="app.add_donation")
 def add_donation(form=None, customer=None):
     """
     Add a contact and their donation into SF. This is done in the background
@@ -356,7 +356,7 @@ def add_donation(form=None, customer=None):
     return True
 
 
-@celery.task(name="salesforce.add_blast_subcription")
+@celery.task(name="app.add_blast_subcription")
 def add_blast_subscription(form=None, customer=None):
 
     form = clean(form)
