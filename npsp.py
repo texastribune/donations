@@ -33,7 +33,7 @@ class SalesforceConnection(object):
     Represents the Salesforce API.
     """
 
-    host = os.environ["SALESFORCE_HOST"]
+    host = SALESFORCE_HOST
 
     def __init__(self):
 
