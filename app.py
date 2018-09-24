@@ -11,8 +11,14 @@ from pytz import timezone
 import celery
 import stripe
 from app_celery import make_celery
-from flask import (Flask, jsonify, redirect, render_template, request,
-                   send_from_directory)
+from flask import (
+    Flask,
+    jsonify,
+    redirect,
+    render_template,
+    request,
+    send_from_directory,
+)
 from forms import BlastForm, DonateForm
 from npsp import RDO, Contact, Opportunity
 from raven.contrib.flask import Sentry
@@ -52,7 +58,6 @@ app.config.update(
 stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
 make_celery(app)
-
 
 
 if app.config["ENABLE_SENTRY"]:
@@ -241,28 +246,29 @@ def charge():
 
     if form.validate():
         try:
-            customer = stripe.Customer.retrieve(request.form['customerId'])
+            customer = stripe.Customer.retrieve(request.form["customerId"])
             add_donation.delay(customer=customer, form=clean(request.form))
-            if request.form['installment_period'] == 'None':
-                gtm['event_label'] = 'once'
+            if request.form["installment_period"] == "None":
+                gtm["event_label"] = "once"
             else:
-                gtm['event_label'] = request.form['installment_period']
-            gtm['event_value'] = request.form['amount']
-            return render_template('charge.html',
-                    amount=request.form['amount'], gtm=gtm, bundles=bundles)
+                gtm["event_label"] = request.form["installment_period"]
+            gtm["event_value"] = request.form["amount"]
+            return render_template(
+                "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
+            )
         except stripe.error.InvalidRequestError as e:
             body = e.json_body
-            err = body.get('error', {})
-            message = err.get('message', '')
-            if 'No such customer:' not in message:
+            err = body.get("error", {})
+            message = err.get("message", "")
+            if "No such customer:" not in message:
                 raise e
             else:
-                log.warning(message)
-                return render_template('error.html', message=error_message)
+                app.logger.warning(message)
+                return render_template("error.html", message=message)
     else:
         message = "There was an issue saving your donation information."
         app.logger.warning("Form validation errors: {}".format(form.errors))
-        return render_template('error.html', message=error_message)
+        return render_template("error.html", message=message)
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
