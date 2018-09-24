@@ -43,6 +43,12 @@ LOGGING = {
 
 app = Flask(__name__)
 
+app.logger.debug("this is a DEBUG message")
+app.logger.info("this is an INFO message")
+app.logger.warning("this is a WARNING message")
+app.logger.error("this is an ERROR message")
+app.logger.critical("this is a CRITICAL message")
+
 app.secret_key = FLASK_SECRET_KEY
 
 app.wsgi_app = SassMiddleware(
