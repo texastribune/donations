@@ -4,11 +4,11 @@ from pytz import timezone
 
 import pytest
 from batch import amount_to_charge
-from npsp import RDO, Contact, Opportunity
+from npsp import RDO, Contact, Opportunity, SalesforceConnection
 from util import clean
 
 
-class SalesforceConnectionSubClass(npsp.SalesforceConnection):
+class SalesforceConnectionSubClass(SalesforceConnection):
     def __init__(self):
         pass
 
