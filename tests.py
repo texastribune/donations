@@ -14,7 +14,6 @@ class SalesforceConnectionSubClass(npsp.SalesforceConnection):
         pass
 
 
-npsp.sf = SalesforceConnectionSubClass()
 sf = SalesforceConnectionSubClass()
 
 
