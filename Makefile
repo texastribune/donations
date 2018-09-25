@@ -58,3 +58,7 @@ restart:
 	-pkill celery
 	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
 	python3 app.py
+
+celery:
+	-pkill celery
+	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=DEBUG &
