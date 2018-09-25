@@ -368,6 +368,7 @@ class RDO(SalesforceObject):
 
     def _format(self):
 
+        # TODO be sure to reverse this on deserialization
         amount = self.amount
 
         # TODO should this be in the client?
