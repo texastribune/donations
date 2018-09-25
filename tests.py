@@ -54,7 +54,7 @@ def test__clean():
 
 
 def test__format_amount():
-    opp = Opportunity()
+    opp = Opportunity(sf_connection=sf)
 
     opp.amount = "1500.123"
     actual = opp.amount
@@ -109,7 +109,7 @@ today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
 def test__format_opportunity():
 
-    opportunity = Opportunity()
+    opportunity = Opportunity(sf_connection=sf)
     opportunity.account_id = "0011700000BpR8PAAV"
     opportunity.amount = 9
     opportunity.encouraged_by = "Because I love the Trib!"
@@ -146,7 +146,7 @@ def test__format_opportunity():
 
 def test__format_circle_donation():
 
-    rdo = RDO()
+    rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
     rdo.encouraged_by = "Because I love the Trib!"
     rdo.lead_source = "Stripe"
@@ -187,7 +187,7 @@ def test__format_circle_donation():
 
 def test__format_cent_circle_donation():
 
-    rdo = RDO()
+    rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
     rdo.encouraged_by = "Because I love the Trib!"
     rdo.lead_source = "Stripe"
@@ -229,7 +229,7 @@ def test__format_cent_circle_donation():
 
 def test__format_recurring_donation():
 
-    rdo = RDO()
+    rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
     rdo.encouraged_by = "Because I love the Trib!"
     rdo.lead_source = "Stripe"
@@ -271,7 +271,7 @@ def test__format_recurring_donation():
 
 def test__format_recurring_donation_decimal():
 
-    rdo = RDO()
+    rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
     rdo.encouraged_by = "Because I love the Trib!"
     rdo.lead_source = "Stripe"
@@ -313,7 +313,7 @@ def test__format_recurring_donation_decimal():
 
 def test__format_blast_rdo():
 
-    rdo = RDO()
+    rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
     rdo.lead_source = "Stripe"
     rdo.contact_id = "0031700000BHQzBAAX"
@@ -358,7 +358,7 @@ def test__format_blast_rdo():
 
 def test__format_contact():
 
-    contact = Contact()
+    contact = Contact(sf_connection=sf)
     contact.email = "dcraigmile+test6@texastribune.org"
     contact.first_name = "D"
     contact.last_name = "C"
