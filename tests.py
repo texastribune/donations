@@ -5,7 +5,6 @@ from pytz import timezone
 import pytest
 from batch import amount_to_charge
 from npsp import RDO, Contact, Opportunity
-import npsp
 from util import clean
 
 
