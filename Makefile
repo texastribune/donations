@@ -16,7 +16,7 @@ interactive: build-dev backing
 		--publish=5555:5555 \
 		--link=rabbitmq:rabbitmq \
 		--link=redis:redis \
-		--name=${APP} ${NS}/${APP}:dev bash
+		--name=${APP} ${NS}/${APP}:dev ash
 
 build:
 	docker build --tag=${NS}/${APP} .
