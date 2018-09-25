@@ -27,4 +27,6 @@ RUN pip3 install -r /app/requirements.txt
 COPY dev-requirements.txt /app/
 RUN pip3 install -r /app/dev-requirements.txt
 
+COPY . /app
+
 ENTRYPOINT /bin/ash
