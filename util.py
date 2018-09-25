@@ -40,7 +40,7 @@ def notify_slack(contact=None, opportunity=None, rdo=None):
     try:
         requests.get(url, params=payload)
     except Exception as e:
-        logging.error(f"Failed to send Slack notification: {e}"))
+        logging.error(f"Failed to send Slack notification: {e}")
 
 
 def send_multiple_account_warning(contact):
