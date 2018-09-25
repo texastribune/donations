@@ -259,7 +259,7 @@ def charge():
                 return render_template("error.html", message=message)
     else:
         message = "There was an issue saving your donation information."
-        app.logger.warning("Form validation errors: {}".format(form.errors))
+        app.logger.warning(f"Form validation errors: {form.errors}")
         return render_template("error.html", message=message)
 
 

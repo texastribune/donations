@@ -40,7 +40,7 @@ def notify_slack(contact=None, opportunity=None, rdo=None):
     try:
         requests.get(url, params=payload)
     except Exception as e:
-        logging.error("Failed to send Slack notification: {}".format(e))
+        logging.error(f"Failed to send Slack notification: {e}"))
 
 
 def send_multiple_account_warning(contact):
@@ -120,4 +120,4 @@ def send_email(recipient, subject, body, sender=None):
         server.close()
         logging.debug("successfully sent the mail")
     except Exception as e:
-        logging.error("failed to send mail: {}".format(e))
+        logging.error(f"failed to send mail: {e}")
