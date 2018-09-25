@@ -11,3 +11,4 @@ LICENSE
 .vscode
 .flake8
 .pylintrc
+.editorconfig
