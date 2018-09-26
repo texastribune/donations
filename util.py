@@ -1,13 +1,21 @@
 import logging
 import smtplib
 from collections import defaultdict
-from config import (DEFAULT_MAIL_SENDER, ENABLE_SLACK, MAIL_PASSWORD,
-                    MAIL_PORT, MAIL_SERVER, MAIL_USERNAME,
-                    MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT, SLACK_API_KEY,
-                    SLACK_CHANNEL)
+from config import (
+    DEFAULT_MAIL_SENDER,
+    ENABLE_SLACK,
+    MAIL_PASSWORD,
+    MAIL_PORT,
+    MAIL_SERVER,
+    MAIL_USERNAME,
+    MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
+    SLACK_API_KEY,
+    SLACK_CHANNEL,
+)
 
 import requests
 
+from npsp import SalesforceConnection
 
 def notify_slack(contact=None, opportunity=None, rdo=None):
     """
@@ -121,3 +129,31 @@ def send_email(recipient, subject, body, sender=None):
         logging.debug("successfully sent the mail")
     except Exception as e:
         logging.error(f"failed to send mail: {e}")
+
+
+def send_email_new_business_membership(account=None, contact=None):
+
+    if not BUSINESS_MEMBER_RECIPIENT:
+        raise Exception('BUSINESS_MEMBER_RECIPIENT must be specified')
+
+    sf = SalesforceConnection()
+    url = sf.instance_url
+
+    body = f"A new business membership has been received for {account.name}:\n\n")
+
+    body += f"{url}/{account.id}\n\n")
+    if account.created:
+        body += "A new account was created.\n\n"
+
+    body += f"It was created by {contact.name}:\n\n")
+
+    body += f"{url}/{contact.id}\n\n")
+
+    if contact.created:
+        body += "A new contact was created."
+
+    send_email(
+        recipient=BUSINESS_MEMBER_RECIPIENT,
+        subject="New business membership",
+        body=body,
+    )

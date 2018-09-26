@@ -18,7 +18,7 @@ from flask import (
     request,
     send_from_directory,
 )
-from forms import BlastForm, DonateForm
+from forms import BlastForm, DonateForm, BusinessMembershipForm
 from npsp import RDO, Contact, Opportunity
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -263,6 +263,38 @@ def charge():
         return render_template("error.html", message=message)
 
 
+@app.route("/bmcharge", methods=["POST"])
+def bmcharge():
+
+    app.logger.info(request.form)
+
+    form = BusinessMembershipForm(request.form)
+
+    bundles = get_bundles("charge")
+
+    if form.validate():
+        try:
+            app.logger.debug("----Retrieving Stripe customer...")
+            customer = stripe.Customer.retrieve(request.form["customerId"])
+            add_business_membership.delay(customer=customer, form=clean(request.form))
+            return render_template(
+                "charge.html", amount=request.form["amount"], bundles=bundles
+            )
+        except stripe.error.InvalidRequestError as e:
+            body = e.json_body
+            err = body.get("error", {})
+            message = err.get("message", "")
+            if "No such customer:" not in message:
+                raise e
+            else:
+                app.logger.warning(message)
+                return render_template("error.html", message=message)
+    else:
+        message = "There was an issue saving your donation information."
+        app.logger.warning(f"Form validation errors: {form.errors}")
+        return render_template("error.html", message=message)
+
+
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
 def merchantid():
     root_dir = os.path.dirname(os.getcwd())
@@ -335,6 +367,43 @@ def add_donation(form=None, customer=None):
     because there are a lot of API calls and there's no point in making the
     payer wait for them.
     """
+    form = clean(form)
+    first_name = form["first_name"]
+    last_name = form["last_name"]
+    period = form["installment_period"]
+    email = form["stripeEmail"]
+    zipcode = form["zipcode"]
+
+    logging.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+    )
+    logging.debug(contact)
+
+    # intentionally overwriting zip but not name here
+
+    if not contact.created:
+        contact.zipcode = zipcode
+        contact.save()
+
+    if period is None:
+        logging.info("----Creating one time payment...")
+        opportunity = add_opportunity(contact=contact, form=form, customer=customer)
+        notify_slack(contact=contact, opportunity=opportunity)
+    else:
+        logging.info("----Creating recurring payment...")
+        rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
+        notify_slack(contact=contact, rdo=rdo)
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)
+
+    return True
+
+
+@celery.task(name="app.add_business_membership")
+def add_business_membership(form=None, customer=None):
+
     form = clean(form)
     first_name = form["first_name"]
     last_name = form["last_name"]
