@@ -58,8 +58,9 @@ reconcile-email:
 restart:
 	-pkill celery
 	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=${LOG_LEVEL} &
-	python3 app.py
+	-pkill python
+	yarn run dev
 
-celery:
+celery-restart:
 	-pkill celery
 	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=${LOG_LEVEL} &
