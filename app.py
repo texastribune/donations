@@ -350,7 +350,7 @@ def add_donation(form=None, customer=None):
 
     # intentionally overwriting zip but not name here
 
-    if not contact.created:
+    if zipcode and not contact.created:
         contact.zipcode = zipcode
         contact.save()
 
