@@ -2,6 +2,7 @@ APP=checkout
 NS=texastribune
 
 DOCKER_ENV_FILE?=env-docker
+LOG_LEVEL?=INFO
 
 interactive: build-dev backing
 	-docker rm -f ${APP}
@@ -56,9 +57,9 @@ reconcile-email:
 
 restart:
 	-pkill celery
-	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
+	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=${LOG_LEVEL} &
 	python3 app.py
 
 celery:
 	-pkill celery
-	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=DEBUG &
+	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=${LOG_LEVEL} &
