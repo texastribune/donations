@@ -122,6 +122,7 @@ def charge_cards():
                 amount=int(amount * 100),
                 currency="usd",
                 description=item.description,
+                metadata={"opportunity_id": item.id, "account_id": item.account_id},
             )
         except stripe.error.CardError as e:
             # look for decline code:
