@@ -79,7 +79,7 @@ class BusinessMembershipForm(FlaskForm):
             validators.NumberRange(min=1),
         ],
     )
-    website = StringField(u"Web site")
+    website = StringField(u"Web site", [validators.URL()])
     business_name = StringField(u"Business name")
     reason = StringField(u"Encouraged to give by")
     shipping_city = StringField("Shipping City")
