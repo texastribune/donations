@@ -179,11 +179,10 @@ def submit_blast():
         customer = stripe.Customer.create(
             email=request.form["stripeEmail"], card=request.form["stripeToken"]
         )
-        logging.info(customer)
+        app.logger.info(customer.id)
     else:
         message = "There was an issue saving your email address."
         return render_template("error.html", message=message)
-    logging.info(customer)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
@@ -216,7 +215,7 @@ def create_customer():
             customer = stripe.Customer.create(
                 email=stripe_email, card=request.json["stripeToken"]
             )
-            logging.info(customer)
+            app.logger.info(customer.id)
             return jsonify({"customer_id": customer.id})
         except stripe.error.CardError as e:
             body = e.json_body
@@ -252,7 +251,7 @@ def charge():
         try:
             app.logger.debug("----Retrieving Stripe customer...")
             customer = stripe.Customer.retrieve(request.form["customerId"])
-            logging.info(customer)
+            app.logger.info(customer.id)
             add_donation.delay(customer=customer, form=clean(request.form))
             if request.form["installment_period"] == "None":
                 gtm["event_label"] = "once"
@@ -289,9 +288,9 @@ def bmcharge():
 
     if form.validate():
         try:
-            app.logger.debug("----Retrieving Stripe customer...")
+            app.logger.info("----Retrieving Stripe customer...")
             customer = stripe.Customer.retrieve(request.form["customerId"])
-            logging.info(customer)
+            app.logger.info(customer.id)
             add_business_membership.delay(customer=customer, form=clean(request.form))
             if request.form["installment_period"] == "None":
                 gtm["event_label"] = "once"
@@ -338,8 +337,8 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
 
-    logging.info(opportunity)
     opportunity.save()
+    logging.info(opportunity)
     return opportunity
 
 
@@ -375,8 +374,8 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
 
-    logging.info(rdo)
     rdo.save()
+    logging.info(rdo)
 
     return rdo
 
@@ -436,8 +435,8 @@ def add_business_opportunity(account=None, form=None, customer=None):
     opportunity.agreed_to_pay_fees = form["pay_fees_value"]
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
-    logging.info(opportunity)
     opportunity.save()
+    logging.info(opportunity)
     return opportunity
 
 
@@ -464,8 +463,8 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installment_period = form["installment_period"]
     rdo.record_type_id = BUSINESS_MEMBERSHIP_RECORDTYPEID
 
-    logging.info(rdo)
     rdo.save()
+    logging.info(rdo)
 
     return rdo
 
@@ -490,7 +489,7 @@ def add_business_membership(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
-    logging.debug(contact)
+    logging.info(contact)
     logging.info("----Getting account....")
 
     account = Account.get_or_create(
@@ -541,7 +540,7 @@ def add_blast_subscription(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
-    logging.debug(contact)
+    logging.info(contact)
 
     rdo = RDO(contact=contact)
 
@@ -567,8 +566,8 @@ def add_blast_subscription(form=None, customer=None):
     rdo.blast_subscription_email = form["subscriber_email"]
 
     logging.info("----Saving RDO....")
-    logging.info(rdo)
     rdo.save()
+    logging.info(rdo)
 
     return True
 

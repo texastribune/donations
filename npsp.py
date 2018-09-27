@@ -89,7 +89,7 @@ class SalesforceConnection(object):
             except KeyError:
                 e.content = content
             e.response = response
-            logging.debug(f"response.text: {response.text}")
+            logging.info(f"response.text: {response.text}")
             raise e
         return True
 
@@ -661,7 +661,7 @@ class Affiliation(SalesforceObject):
 
     def __init__(self, contact=None, account=None, role=None, sf_connection=None):
         super().__init__(sf_connection)
-
+        # TODO allow id to be set in __init__?
         self.id = None
         self.contact = contact.id
         self.account = account.id
