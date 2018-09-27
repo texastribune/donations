@@ -82,7 +82,10 @@ class BusinessMembershipForm(FlaskForm):
     website = StringField(u"Web site")
     business_name = StringField(u"Business name")
     reason = StringField(u"Encouraged to give by")
-    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    shipping_city = StringField("Shipping City")
+    shipping_state = StringField("Shipping State", [validators.Length(max=2)])
+    shipping_street = StringField("Shipping Street")
+    shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=5)])
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
     installments = HiddenField(u"Installments")
@@ -94,4 +97,3 @@ class BusinessMembershipForm(FlaskForm):
         u"Installment Period",
         choices=[("yearly", "Yearly"), ("monthly", "Monthly"), ("None", "One Time")],
     )
-

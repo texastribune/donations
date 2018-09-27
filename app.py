@@ -2,7 +2,13 @@ import json
 import locale
 import logging
 import os
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE, LOG_LEVEL
+from config import (
+    FLASK_DEBUG,
+    FLASK_SECRET_KEY,
+    TIMEZONE,
+    LOG_LEVEL,
+    BUSINESS_MEMBERSHIP_RECORDTYPEID,
+)
 from datetime import datetime
 
 from pytz import timezone
@@ -19,10 +25,15 @@ from flask import (
     send_from_directory,
 )
 from forms import BlastForm, DonateForm, BusinessMembershipForm
-from npsp import RDO, Contact, Opportunity
+from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
-from util import clean, notify_slack, send_multiple_account_warning
+from util import (
+    clean,
+    notify_slack,
+    send_multiple_account_warning,
+    send_email_new_business_membership,
+)
 from validate_email import validate_email
 
 zone = timezone(TIMEZONE)
@@ -267,6 +278,7 @@ def charge():
 def bmcharge():
 
     app.logger.info(request.form)
+    gtm = {}
 
     form = BusinessMembershipForm(request.form)
 
@@ -277,8 +289,13 @@ def bmcharge():
             app.logger.debug("----Retrieving Stripe customer...")
             customer = stripe.Customer.retrieve(request.form["customerId"])
             add_business_membership.delay(customer=customer, form=clean(request.form))
+            if request.form["installment_period"] == "None":
+                gtm["event_label"] = "once"
+            else:
+                gtm["event_label"] = request.form["installment_period"]
+            gtm["event_value"] = request.form["amount"]
             return render_template(
-                "charge.html", amount=request.form["amount"], bundles=bundles
+                "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
             )
         except stripe.error.InvalidRequestError as e:
             body = e.json_body
@@ -401,36 +418,102 @@ def add_donation(form=None, customer=None):
     return True
 
 
+def add_business_opportunity(account=None, form=None, customer=None):
+
+    year = datetime.now(tz=zone).strftime("%Y")
+    opportunity = Opportunity(account=account)
+    opportunity.name = f"{year} Business {account.name} One time"
+    opportunity.record_type_id = BUSINESS_MEMBERSHIP_RECORDTYPEID
+    opportunity.amount = form.get("amount", 0)
+    opportunity.stripe_customer = customer["id"]
+    opportunity.campaign_id = form["campaign_id"]
+    opportunity.referral_id = form["referral_id"]
+    opportunity.description = "Texas Tribune Business Membership"
+    opportunity.agreed_to_pay_fees = form["pay_fees_value"]
+    opportunity.encouraged_by = form["reason"]
+    opportunity.lead_source = "Stripe"
+    logging.debug(opportunity)
+    opportunity.save()
+    return opportunity
+
+
+def add_business_rdo(account=None, form=None, customer=None):
+
+    if form["installment_period"] is None:
+        raise Exception("installment_period must have a value")
+
+    year = datetime.now(tz=zone).strftime("%Y")
+
+    rdo = RDO(account=account)
+    rdo.name = f"{year} Business {account.name} Recurring"
+    rdo.type = "Business Membership"
+    rdo.stripe_customer = customer["id"]
+    rdo.campaign_id = form["campaign_id"]
+    rdo.referral_id = form["referral_id"]
+    rdo.description = "Texas Tribune Business Membership"
+    rdo.agreed_to_pay_fees = form["pay_fees_value"]
+    rdo.encouraged_by = form["reason"]
+    rdo.lead_source = "Stripe"
+    rdo.amount = form.get("amount", 0)
+    rdo.installments = form["installments"]
+    rdo.open_ended_status = form["openended_status"]
+    rdo.installment_period = form["installment_period"]
+
+    logging.debug(rdo)
+    rdo.save()
+
+    return rdo
+
+
 @celery.task(name="app.add_business_membership")
 def add_business_membership(form=None, customer=None):
 
     form = clean(form)
+
     first_name = form["first_name"]
     last_name = form["last_name"]
-    period = form["installment_period"]
     email = form["stripeEmail"]
-    zipcode = form["zipcode"]
+
+    website = form["website"]
+    business_name = form["business_name"]
+    shipping_city = form["shipping_city"]
+    shipping_street = form["shipping_street"]
+    shipping_state = form["shipping_state"]
+    shipping_postalcode = form["shipping_postalcode"]
 
     logging.info("----Getting contact....")
     contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+        email=email, first_name=first_name, last_name=last_name
     )
     logging.debug(contact)
+    logging.info("----Getting account....")
 
-    # intentionally overwriting zip but not name here
+    account = Account.get_or_create(
+        website=website,
+        name=business_name,
+        shipping_street=shipping_street,
+        shipping_city=shipping_city,
+        shipping_state=shipping_state,
+        shipping_postalcode=shipping_postalcode,
+    )
+    logging.debug(account)
 
-    if not contact.created:
-        contact.zipcode = zipcode
-        contact.save()
-
-    if period is None:
-        logging.info("----Creating one time payment...")
-        opportunity = add_opportunity(contact=contact, form=form, customer=customer)
-        notify_slack(contact=contact, opportunity=opportunity)
+    if form["installment_period"] is None:
+        logging.info("----Creating single business membership...")
+        add_business_opportunity(account=account, form=form, customer=customer)
+    #        notify_slack(contact=contact, opportunity=opportunity)
     else:
-        logging.info("----Creating recurring payment...")
-        rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
-        notify_slack(contact=contact, rdo=rdo)
+        logging.info("----Creating recurring business membership...")
+        add_business_rdo(account=account, form=form, customer=customer)
+    #        notify_slack(contact=contact, rdo=rdo)
+
+    logging.info("----Getting affiliation...")
+
+    Affiliation.get_or_create(
+        account=account, contact=contact, role="Business Member Donor"
+    )
+
+    send_email_new_business_membership(account=account, contact=contact)
 
     if contact.duplicate_found:
         send_multiple_account_warning(contact)

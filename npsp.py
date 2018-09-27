@@ -167,12 +167,16 @@ class SalesforceConnection(object):
 
 
 class SalesforceObject(object):
+    def _format(self):
+        raise NotImplementedError
+
     def __repr__(self):
         obj = self._format()
         obj["Id"] = self.id
         return json.dumps(obj)
 
     def __init__(self, sf_connection=None):
+        self.id = None
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
 
@@ -180,12 +184,18 @@ class Opportunity(SalesforceObject):
 
     api_name = "Opportunity"
 
-    def __init__(self, contact=None, sf_connection=None):
+    def __init__(self, contact=None, account=None, sf_connection=None):
         super().__init__(sf_connection)
+
+        if contact and account:
+            raise SalesforceException("Account and Contact can't both be specified")
 
         today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
-        if contact is not None:
+        if account is not None:
+            self.account_id = account.id
+            self.name = None
+        elif contact is not None:
             self.account_id = contact.account_id
             self.name = f"{contact.first_name} {contact.last_name} ({contact.email})"
         else:
@@ -214,6 +224,7 @@ class Opportunity(SalesforceObject):
     def list_pledged(cls, begin, end, sf_connection=None):
 
         # TODO a more generic dserializing method
+        # TODO parameterize stage?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
@@ -442,8 +453,10 @@ class Account(SalesforceObject):
         self.website = None
         self.shipping_street = None
         self.shipping_city = None
-        self.shipping_postal_code = None
+        self.shipping_postalcode = None
         self.shipping_state = None
+
+    # TODO: create other types of accounts?
 
     def _format(self):
         return {
@@ -452,12 +465,36 @@ class Account(SalesforceObject):
             "Name": self.name,
             "ShippingStreet": self.shipping_street,
             "ShippingCity": self.shipping_city,
-            "ShippingPostalCode": self.shipping_postal_code,
+            "ShippingPostalCode": self.shipping_postalcode,
             "ShippingState": self.shipping_state,
         }
 
     def __str__(self):
         return f"{self.name} ({self.website})"
+
+    @classmethod
+    def get_or_create(
+        cls,
+        website=None,
+        name=None,
+        shipping_city=None,
+        shipping_street=None,
+        shipping_state=None,
+        shipping_postalcode=None,
+        sf_connection=None,
+    ):
+        account = cls.get(website=website, sf_connection=sf_connection)
+        if account:
+            return account
+        account = Account()
+        account.website = website
+        account.name = name
+        account.shipping_city = shipping_city
+        account.shipping_postalcode = shipping_postalcode
+        account.shipping_state = shipping_state
+        account.shipping_street = shipping_street
+        account.save()
+        return account
 
     @classmethod
     def get(cls, website=None, name=None, sf_connection=None):
@@ -626,8 +663,8 @@ class Affiliation(SalesforceObject):
         super().__init__(sf_connection)
 
         self.id = None
-        self.contact = contact
-        self.account = account
+        self.contact = contact.id
+        self.account = account.id
         self.role = role
 
     @classmethod
@@ -637,8 +674,8 @@ class Affiliation(SalesforceObject):
 
         query = f"""
             SELECT Id, npe5__Role__c from npe5__Affiliation__c
-            WHERE npe5__Contact__c = '{contact}'
-            AND npe5__Organization__c = '{account}'
+            WHERE npe5__Contact__c = '{contact.id}'
+            AND npe5__Organization__c = '{account.id}'
         """
         response = sf.query(query)
 
@@ -650,6 +687,15 @@ class Affiliation(SalesforceObject):
         role = response[0]["npe5__Role__c"]
         affliation = Affiliation(contact=contact, account=account, role=role)
         return affliation
+
+    @classmethod
+    def get_or_create(cls, account=None, contact=None, role=None):
+        affiliation = cls.get(account=account, contact=contact)
+        if affiliation:
+            return affiliation
+        affiliation = Affiliation(account=account, contact=contact, role=role)
+        affiliation.save()
+        return affiliation
 
     def save(self):
         self.sf.save(self)
