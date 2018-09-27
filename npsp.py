@@ -219,6 +219,7 @@ class Opportunity(SalesforceObject):
         self.encouraged_by = None
         self.stripe_card = None
         self.stripe_transaction = None
+        self.expected_giving_date = None
         self.closed_lost_reason = None
         self.created = False
 
@@ -235,7 +236,8 @@ class Opportunity(SalesforceObject):
             Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
             RecordTypeId, Type, Referral_ID__c, LeadSource,
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
-            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c
+            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
+            Expected_Giving_Date__c, AccountId
         FROM Opportunity
         WHERE Expected_Giving_Date__c <= {end}
         AND Expected_Giving_Date__c >= {begin}
@@ -254,6 +256,7 @@ class Opportunity(SalesforceObject):
             y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
             y.stage_name = "Pledged"
             y.close_date = item["CloseDate"]
+            y.expected_giving_date = item["Expected_Giving_Date__c"]
             y.campaign_id = item["CampaignId"]
             y.record_type_id = item["RecordTypeId"]
             y.type = item["Type"]
@@ -264,6 +267,7 @@ class Opportunity(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.account_id = item["AccountId"]
             y.created = False
             results.append(y)
 
@@ -687,8 +691,10 @@ class Affiliation(SalesforceObject):
         if len(response) > 1:
             raise SalesforceException("More than one affiliation found")
         role = response[0]["npe5__Role__c"]
-        affliation = Affiliation(contact=contact, account=account, role=role)
-        return affliation
+
+        affiliation = Affiliation(contact=contact, account=account, role=role)
+        affiliation.id = response[0]["Id"]
+        return affiliation
 
     @classmethod
     def get_or_create(cls, account=None, contact=None, role=None):
