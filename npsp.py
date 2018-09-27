@@ -297,7 +297,7 @@ class Opportunity(SalesforceObject):
         }
 
     def __str__(self):
-        return f"{self.name} for {self.amount}"
+        return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
     def save(self):
 
@@ -404,7 +404,7 @@ class RDO(SalesforceObject):
         return recurring_donation
 
     def __str__(self):
-        return f"{self.name} for {self.amount} ({self.installment_period})"
+        return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
     @property
     def amount(self):
@@ -470,7 +470,7 @@ class Account(SalesforceObject):
         }
 
     def __str__(self):
-        return f"{self.name} ({self.website})"
+        return f"{self.id}: {self.name} ({self.website})"
 
     @classmethod
     def get_or_create(
@@ -648,7 +648,7 @@ class Contact(SalesforceObject):
         return contact
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.id}: {self.first_name} {self.last_name}"
 
     def save(self):
         self.sf.save(self)
@@ -700,6 +700,11 @@ class Affiliation(SalesforceObject):
     def save(self):
         self.sf.save(self)
         return self
+
+    def __str__(self):
+        return (
+            f"{self.id}: {self.contact} is affiliated with {self.account} ({self.role})"
+        )
 
     def _format(self):
         return {
