@@ -3,13 +3,20 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import BusinessForm from './BusinessForm.vue';
-import Wall from './Wall.vue';
-import {BUSINESS_BUCKETS, DEFAULT_PAY_FEES} from './constants';
+// Temp out
+//import Wall from './Wall.vue';
+
+import {
+  BUSINESS_BUCKETS,
+  DEFAULT_PAY_FEES,
+  DEFAULT_SELECTOR_LEVEL,
+  LONG_PROGRAM_NAME,
+} from './constants';
 
 Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
-  const defaultLevel = 'levelAYearly';
+  const defaultLevel = DEFAULT_SELECTOR_LEVEL;
   const { campaignId = '' } = queryParams;
   let { level = defaultLevel } = queryParams;
 
@@ -39,10 +46,10 @@ function createBaseFormState(queryParams) {
     customerId: '',
     first_name: '',
     last_name: '',
-    description: 'The Texas Tribune Business Membership',
+    description: LONG_PROGRAM_NAME,
     reason: '',
     zipcode: '',
-    pay_fees_value: 'False',
+    pay_fees_value: DEFAULT_PAY_FEES,
     openended_status: 'None',
   };
 
@@ -62,7 +69,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...BusinessForm, store });
-    const wall = new Vue({ ...Wall });
+    // const wall = new Vue({ ...Wall });
     const { currentRoute: { query } } = router;
 
     store.dispatch(
@@ -72,7 +79,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     routeHandler.$mount('#app');
     topForm.$mount('#business-form');
-    wall.$mount('#business-wall');
+    // wall.$mount('#business-wall');
   });
 }
 

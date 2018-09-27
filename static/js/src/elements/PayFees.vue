@@ -73,7 +73,7 @@ export default {
 
       if (!this.isValidAmount(amount)) return false;
 
-      amount = parseFloat(amount.trim());
+      amount = parseFloat(amount);
 
       const total = (amount + 0.30) / (1 - 0.022);
       const fee = Math.floor((total - amount) * 100) / 100;
@@ -112,7 +112,7 @@ export default {
 
     isValidAmount(amount) {
       const isValid = validate(
-        { value: amount.trim() },
+        { value: amount },
         { value: { numericality: { greaterThanOrEqualTo: 1 } } },
       );
       return typeof isValid === 'undefined';

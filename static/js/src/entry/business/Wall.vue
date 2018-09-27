@@ -32,10 +32,10 @@
 <script>
 import axios from 'axios';
 import {
-  DONATION_LEVELS,
-  POSITION_IN_PAGE_A,
-  POSITION_IN_PAGE_B,
-  POSITION_IN_PAGE_C
+  MEMBERSHIP_LEVELS,
+  POSITION_0,
+  POSITION_1,
+  POSITION_2
 } from './constants';
 
 export default {
@@ -46,9 +46,9 @@ export default {
       loading: true,
       error: false,
       data: [
-        { id: 0, heading: DONATION_LEVELS[POSITION_IN_PAGE_A].header, members: [] },
-        { id: 1, heading: DONATION_LEVELS[POSITION_IN_PAGE_B].header, members: [] },
-        { id: 2, heading: DONATION_LEVELS[POSITION_IN_PAGE_C].header, members: [] },
+        { id: 0, heading: MEMBERSHIP_LEVELS[POSITION_0].header, members: [] },
+        { id: 1, heading: MEMBERSHIP_LEVELS[POSITION_1].header, members: [] },
+        { id: 2, heading: MEMBERSHIP_LEVELS[POSITION_2].header, members: [] },
       ],
     };
   },

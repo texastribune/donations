@@ -34,10 +34,10 @@ import updateStoreValues from '../../elements/mixins/updateStoreValues';
 import addNumberCommas from '../../utils/addNumberCommas';
 import {
   BUSINESS_BUCKETS,
-  DONATION_LEVELS,
-  POSITION_IN_PAGE_A,
-  POSITION_IN_PAGE_B,
-  POSITION_IN_PAGE_C
+  MEMBERSHIP_LEVELS,
+  POSITION_0,
+  POSITION_1,
+  POSITION_2
 } from './constants';
 
 export default {
@@ -57,20 +57,20 @@ export default {
         {
           id: 0,
           bucket: 'levelA',
-          heading: DONATION_LEVELS[POSITION_IN_PAGE_A].header,
-          options: this.buildOptions(['levelAYearly']),
+          heading: MEMBERSHIP_LEVELS[POSITION_0].header,
+          options: this.buildOptions(['levelAMonthly', 'levelAYearly', 'levelAOneTime']),
         },
         {
           id: 1,
           bucket: 'levelB',
-          heading: DONATION_LEVELS[POSITION_IN_PAGE_B].header,
-          options: this.buildOptions(['levelBYearly']),
+          heading: MEMBERSHIP_LEVELS[POSITION_1].header,
+          options: this.buildOptions(['levelBMonthly', 'levelBYearly', 'levelBOneTime']),
         },
         {
           id: 2,
           bucket: 'levelC',
-          heading: DONATION_LEVELS[POSITION_IN_PAGE_C].header,
-          options: this.buildOptions(['levelCYearly']),
+          heading: MEMBERSHIP_LEVELS[POSITION_2].header,
+          options: this.buildOptions(['levelCMonthly', 'levelCYearly', 'levelCOneTime']),
         },
       ],
     };
@@ -94,7 +94,6 @@ export default {
 
       bucketsToIter.forEach((bucket, index) => {
         const { installmentPeriod, amount, name, header } = bucket;
-
         options.push({
           id: index,
           header: header,
@@ -109,7 +108,10 @@ export default {
     getInitialSelectedGroup() {
       const level =
         this.getStoreValue({ storeModule: 'businessForm', key: 'level' });
-
+      console.log("Setting initial selection state: level");
+      console.log(level);
+      console.log("Setting initial selection state: bucket");
+      console.log(BUSINESS_BUCKETS[level].bucket);
       return BUSINESS_BUCKETS[level].bucket;
     },
 
