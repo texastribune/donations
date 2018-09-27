@@ -458,6 +458,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installments = form["installments"]
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
+    rdo.record_type_id = BUSINESS_MEMBERSHIP_RECORDTYPEID
 
     logging.debug(rdo)
     rdo.save()
