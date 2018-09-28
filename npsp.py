@@ -237,7 +237,7 @@ class Opportunity(SalesforceObject):
             RecordTypeId, Type, Referral_ID__c, LeadSource,
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
             Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
-            Expected_Giving_Date__c, AccountId
+            Expected_Giving_Date__c
         FROM Opportunity
         WHERE Expected_Giving_Date__c <= {end}
         AND Expected_Giving_Date__c >= {begin}
