@@ -1,5 +1,11 @@
 import logging
-from config import ACCOUNTING_MAIL_RECIPIENT, REDIS_URL, STRIPE_KEYS, TIMEZONE
+from config import (
+    ACCOUNTING_MAIL_RECIPIENT,
+    REDIS_URL,
+    STRIPE_KEYS,
+    TIMEZONE,
+    LOG_LEVEL,
+)
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -16,6 +22,11 @@ zone = timezone(TIMEZONE)
 stripe.api_key = STRIPE_KEYS["secret_key"]
 
 TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
+
+log_level = logging.getLevelName(LOG_LEVEL)
+
+root = logging.getLogger()
+root.setLevel(log_level)
 
 
 def quantize(amount):
