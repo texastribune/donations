@@ -108,7 +108,8 @@ h2 {
 
   &--headline {
     @extend h1;
-    color: $color-fmd-blue-dark;
+    // color: $color-fmd-blue-dark;
+    color: $color-white-pure;
     font-weight: bold;
     padding-bottom: $size-l;
 
@@ -137,7 +138,8 @@ h2 {
 
   &--description {
     @extend %link--blue;
-    color: $color-fmd-blue-dark;
+    // color: $color-fmd-blue-dark;
+    color: $color-white-pure;
     font-size: $size-b;
   }
 
@@ -153,9 +155,9 @@ h2 {
     }
 
     .button--yellow {
-      background-color: $color-fmd-blue-light;
-      border: 2px solid $color-fmd-blue-light;
-      color: $color-white-pure;
+      // background-color: $color-fmd-blue-light;
+      // border: 2px solid $color-fmd-blue-light;
+      // color: $color-white-pure;
 
       @include mq($from: bp-l) {
         line-height: 42px;
@@ -164,7 +166,8 @@ h2 {
     }
 
     .text {
-      color: $color-fmd-blue-dark;
+      // color: $color-fmd-blue-dark;
+      color: $color-white-pure;
       font-size: $size-xs;
       padding-left: $size-xxs/2;
       padding-right: $size-xxs/2;
@@ -175,7 +178,8 @@ h2 {
 .rotate_words {
   span {
     animation: rotateWord 12s linear 0s 2;
-    color: $color-fmd-blue-light;
+    // color: $color-fmd-blue-light;
+    color: $color-yellow-tribune;
     opacity: 0;
     overflow: hidden;
     position: absolute;
