@@ -151,6 +151,7 @@ class SalesforceConnection(object):
 
         logging.info(f"{sf_object.api_name} object doesn't exist; creating...")
         path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
+        logging.debug(repr(sf_object))
         try:
             response = self.post(path=path, data=sf_object._format())
         except SalesforceException as e:
@@ -246,6 +247,7 @@ class Opportunity(SalesforceObject):
         AND StageName = 'Pledged'
         """
         response = sf.query(query)
+        logging.debug(response)
 
         results = list()
         for item in response:
