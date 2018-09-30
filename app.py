@@ -425,6 +425,7 @@ def add_business_opportunity(account=None, form=None, customer=None):
 
     year = datetime.now(tz=zone).strftime("%Y")
     opportunity = Opportunity(account=account)
+    opportunity.record_type_name = "Business Membership"
     opportunity.name = f"{year} Business {account.name} One time"
     opportunity.record_type_id = BUSINESS_MEMBERSHIP_RECORDTYPEID
     opportunity.amount = form.get("amount", 0)
@@ -493,6 +494,7 @@ def add_business_membership(form=None, customer=None):
     logging.info("----Getting account....")
 
     account = Account.get_or_create(
+        record_type_name="Organization",
         website=website,
         name=business_name,
         shipping_street=shipping_street,

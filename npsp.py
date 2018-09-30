@@ -13,12 +13,7 @@ from fuzzywuzzy import process
 
 zone = timezone("US/Central")  # TODO read in
 
-DEFAULT_RECORDTYPEID = os.environ.get("DEFAULT_RECORDTYPEID", "")
 SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "")
-ORGANIZATION_RECORDTYPEID = os.environ.get("ORGANIZATION_RECORDTYPEID", "")
-BUSINESS_MEMBERSHIP_RECORDTYPEID = os.environ.get(
-    "BUSINESS_MEMBERSHIP_RECORDTYPEID", ""
-)
 
 SALESFORCE_CLIENT_ID = os.environ.get("SALESFORCE_CLIENT_ID", "")
 SALESFORCE_CLIENT_SECRET = os.environ.get("SALESFORCE_CLIENT_SECRET", "")
@@ -186,7 +181,14 @@ class Opportunity(SalesforceObject):
 
     api_name = "Opportunity"
 
-    def __init__(self, contact=None, account=None, sf_connection=None):
+    def __init__(
+        self,
+        record_type_name="Donation",
+        contact=None,
+        stage_name="Pledged",
+        account=None,
+        sf_connection=None,
+    ):
         super().__init__(sf_connection)
 
         if contact and account:
@@ -208,8 +210,8 @@ class Opportunity(SalesforceObject):
         self._amount = 0
         self.close_date = today
         self.campaign_id = None
-        self.record_type_id = DEFAULT_RECORDTYPEID
-        self.stage_name = "Pledged"
+        self.record_type_name = record_type_name
+        self.stage_name = stage_name
         self.type = "Single"
         self.stripe_customer = None
         self.referral_id = None
@@ -234,7 +236,7 @@ class Opportunity(SalesforceObject):
         query = f"""
         SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
             Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
-            RecordTypeId, Type, Referral_ID__c, LeadSource,
+            RecordType.Name, Type, Referral_ID__c, LeadSource,
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
             Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
             Expected_Giving_Date__c
@@ -256,9 +258,9 @@ class Opportunity(SalesforceObject):
             y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
             y.stage_name = "Pledged"
             y.close_date = item["CloseDate"]
+            y.record_type_name = item["RecordType"]["Name"]
             y.expected_giving_date = item["Expected_Giving_Date__c"]
             y.campaign_id = item["CampaignId"]
-            y.record_type_id = item["RecordTypeId"]
             y.type = item["Type"]
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
@@ -287,7 +289,7 @@ class Opportunity(SalesforceObject):
             "Amount": self.amount,
             "CloseDate": self.close_date,
             "CampaignId": self.campaign_id,
-            "RecordTypeId": self.record_type_id,
+            "RecordType": {"Name": self.record_type_name},
             "Name": self.name,
             "StageName": self.stage_name,
             "Type": self.type,
@@ -461,13 +463,14 @@ class Account(SalesforceObject):
         self.shipping_city = None
         self.shipping_postalcode = None
         self.shipping_state = None
+        self.record_type_name = "Household"
 
     # TODO: create other types of accounts?
 
     def _format(self):
         return {
             "Website": self.website,
-            "RecordTypeId": ORGANIZATION_RECORDTYPEID,
+            "RecordType": {"Name": self.record_type_name},
             "Name": self.name,
             "ShippingStreet": self.shipping_street,
             "ShippingCity": self.shipping_city,
@@ -481,6 +484,7 @@ class Account(SalesforceObject):
     @classmethod
     def get_or_create(
         cls,
+        record_type_name="Household",
         website=None,
         name=None,
         shipping_city=None,
@@ -489,7 +493,11 @@ class Account(SalesforceObject):
         shipping_postalcode=None,
         sf_connection=None,
     ):
-        account = cls.get(website=website, sf_connection=sf_connection)
+        account = cls.get(
+            record_type_name=record_type_name,
+            website=website,
+            sf_connection=sf_connection,
+        )
         if account:
             return account
         account = Account()
@@ -499,18 +507,21 @@ class Account(SalesforceObject):
         account.shipping_postalcode = shipping_postalcode
         account.shipping_state = shipping_state
         account.shipping_street = shipping_street
+        account.record_type_name = record_type_name
         account.save()
         return account
 
     @classmethod
-    def get(cls, website=None, name=None, sf_connection=None):
+    def get(
+        cls, record_type_name="Household", website=None, name=None, sf_connection=None
+    ):
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         query = f"""
             SELECT Id, Name, Website
             FROM Account WHERE
-            RecordTypeId = '{ORGANIZATION_RECORDTYPEID}'
+            RecordType.Name IN ('{record_type_name}')
         """
         response = sf.query(query)
         website_idx = {
