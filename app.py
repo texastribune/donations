@@ -455,10 +455,15 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installments = form["installments"]
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
-    # rdo.record_type_name = "Business Membership"
-
     rdo.save()
     logging.info(rdo)
+
+    # since RDOs hardcode the Record Type to always be Membership we go change them here:
+    # TODO do a composite update
+    # maybe setting attr record_type_name on the RDO should trigger that?
+    for opportunity in rdo.opportunities():
+        opportunity.record_type_name = "Business Membership"
+        opportunity.save()
 
     return rdo
 

@@ -416,6 +416,46 @@ class RDO(SalesforceObject):
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
+    def opportunities(self):
+        query = f"""
+            SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
+            Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
+            RecordType.Name, Type, Referral_ID__c, LeadSource,
+            Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
+            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
+            Expected_Giving_Date__c
+            FROM Opportunity
+            WHERE npe03__Recurring_Donation__c = '{self.id}'
+        """
+        # TODO must make this dynamic
+        response = self.sf.query(query)
+        results = list()
+        for item in response:
+            y = Opportunity(sf_connection=self.sf)
+            y.id = item["Id"]
+            y.name = item["Name"]
+            y.amount = item["Amount"]
+            y.stripe_customer = item["Stripe_Customer_ID__c"]
+            y.description = item["Description"]
+            y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
+            y.stage_name = "Pledged"
+            y.close_date = item["CloseDate"]
+            y.record_type_name = item["RecordType"]["Name"]
+            y.expected_giving_date = item["Expected_Giving_Date__c"]
+            y.campaign_id = item["CampaignId"]
+            y.type = item["Type"]
+            y.referral_id = item["Referral_ID__c"]
+            y.lead_source = item["LeadSource"]
+            y.encouraged_by = item["Encouraged_to_contribute_by__c"]
+            y.stripe_transaction = item["Stripe_Transaction_ID__c"]
+            y.stripe_card = item["Stripe_Card__c"]
+            y.account_id = item["AccountId"]
+            y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.account_id = item["AccountId"]
+            y.created = False
+            results.append(y)
+        return results
+
     @property
     def amount(self):
         return str(Decimal(self._amount).quantize(TWOPLACES))
