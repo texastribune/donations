@@ -86,6 +86,7 @@ class BusinessMembershipForm(FlaskForm):
     shipping_state = StringField("Shipping State", [validators.Length(max=2)])
     shipping_street = StringField("Shipping Street")
     shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    reason = StringField(u"Encouraged to give by")
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
     installments = HiddenField(u"Installments")
