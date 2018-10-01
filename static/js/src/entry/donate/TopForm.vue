@@ -164,7 +164,7 @@
     </div>
 
     <div
-      v-if="showErrorClue"
+      v-if="showErrorClue || showServerErrorMessage"
       class="grid_separator--l"
       aria-hidden="true"
     />
@@ -180,7 +180,7 @@
     </div>
 
     <div
-      v-if="serverErrorMessage"
+      v-if="showServerErrorMessage"
       class="grid_row"
     >
       <div class="col">
@@ -252,7 +252,7 @@ export default {
 
   data() {
     return {
-      serverErrorMessageKey: 'TOP_FORM_SERVER_ERROR_MESSAGE',
+      serverErrorMessage: window.TOP_FORM_SERVER_ERROR_MESSAGE,
       frequencyOptions: [
         { id: 0, text: 'One-time donation', value: 'None' },
         { id: 1, text: 'Monthly donation', value: 'monthly' },

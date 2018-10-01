@@ -130,6 +130,7 @@ export default {
         const updates = [
           { key: 'showManualErrors', value: false },
           { key: 'showNativeErrors', value: true },
+          { key: 'serverErrorMessage', value: '' },
         ];
 
         this.$emit('setValue', updates);

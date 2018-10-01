@@ -44,8 +44,8 @@ export default {
       return false;
     },
 
-    serverErrorMessage() {
-      return (!this.showErrorClue && window[this.serverErrorMessageKey]) || '';
+    showServerErrorMessage() {
+      return !this.showErrorClue && this.serverErrorMessage;
     },
   },
 
