@@ -26,7 +26,7 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
 
     if account:
         amount = rdo.amount or opportunity.amount
-        message = f"{account.name} became a business member at the *{amount}* level."
+        message = f"*{account.name}* became a business member at the *${amount}* level."
     elif opportunity:
         if opportunity.encouraged_by:
             reason = f" (encouraged by {opportunity.encouraged_by})"
