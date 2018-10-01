@@ -1,8 +1,7 @@
 from flask_wtf import FlaskForm
-
-from wtforms.fields import StringField, HiddenField, BooleanField, DecimalField
-from wtforms.fields import RadioField
 from wtforms import validators
+from wtforms.fields import (BooleanField, DecimalField, HiddenField,
+                            RadioField, StringField)
 from wtforms.fields.html5 import EmailField
 
 
