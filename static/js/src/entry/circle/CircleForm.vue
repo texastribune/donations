@@ -142,7 +142,7 @@
       </div>
 
       <div
-        v-if="showErrorClue"
+        v-if="showErrorClue || showServerErrorMessage"
         class="grid_separator--l"
         aria-hidden="true"
       />
@@ -154,6 +154,15 @@
       >
         <div class="col">
           <p class="form__error form__error--centered">Please correct errors above</p>
+        </div>
+      </div>
+
+      <div
+        v-if="showServerErrorMessage"
+        class="grid_row"
+      >
+        <div class="col">
+          <p class="form__error form__error--centered">{{ serverErrorMessage }}</p>
         </div>
       </div>
 
@@ -230,6 +239,7 @@ export default {
 
   data() {
     return {
+      serverErrorMessage: window.TOP_FORM_SERVER_ERROR_MESSAGE,
       validation: {
         stripeEmail: {
           manual: true,
