@@ -120,8 +120,7 @@
           :supported="nativeIsSupported"
           base-classes="form__native"
           amount-store-module="baseForm"
-          email-store-module="baseForm"
-          customer-id-store-module="baseForm"
+          stripe-token-store-module="baseForm"
           @setValue="setValue"
           @onSubmit="onSubmit"
         />
@@ -153,8 +152,7 @@
               :form-is-valid="manualIsValid"
               :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
-              email-store-module="baseForm"
-              customer-id-store-module="baseForm"
+              stripe-token-store-module="baseForm"
               value="Donate"
               @onSubmit="onSubmit"
               @setValue="setValue"
@@ -178,6 +176,15 @@
     >
       <div class="col">
         <p class="form__error form__error--centered">Please correct errors above</p>
+      </div>
+    </div>
+
+    <div
+      v-if="serverErrorMessage"
+      class="grid_row"
+    >
+      <div class="col">
+        <p class="form__error form__error--centered">{{ serverErrorMessage }}</p>
       </div>
     </div>
 
@@ -245,6 +252,7 @@ export default {
 
   data() {
     return {
+      serverErrorMessageKey: 'TOP_FORM_SERVER_ERROR_MESSAGE',
       frequencyOptions: [
         { id: 0, text: 'One-time donation', value: 'None' },
         { id: 1, text: 'Monthly donation', value: 'monthly' },

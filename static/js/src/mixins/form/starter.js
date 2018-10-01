@@ -43,6 +43,10 @@ export default {
       if (this.showNativeErrors && !this.nativeIsValid) return true;
       return false;
     },
+
+    serverErrorMessage() {
+      return (!this.showErrorClue && window[this.serverErrorMessageKey]) || '';
+    },
   },
 
   methods: {

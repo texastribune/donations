@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -6,7 +7,14 @@ import TopForm from './TopForm.vue';
 
 Vue.use(VueRouter);
 
-function createBaseFormState(queryParams) {
+function createInitialFormState(queryParams) {
+  if (window.__BASE_FORM_REHYDRATION__) {
+    return {
+      ...window.__BASE_FORM_REHYDRATION__,
+      stripeToken: '',
+    };
+  }
+
   const baseState = {
     stripeEmail: '',
     stripeToken: '',
@@ -70,7 +78,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     store.dispatch(
       'baseForm/createInitialState',
-      createBaseFormState(query),
+      createInitialFormState(query),
     );
 
     routeHandler.$mount('#app');

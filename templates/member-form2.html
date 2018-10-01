@@ -65,9 +65,13 @@
 {% endblock %}
 
 {% block bottom_script %}
-  <script src="https://js.stripe.com/v3/"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
-  {% for script in bundles['js'] %}
-    <script src="{{ script }}"></script>
-  {% endfor %}
+<script>
+window.TOP_FORM_SERVER_ERROR_MESSAGE = 'foo bar baz';
+</script>
+
+{% for script in bundles['js'] %}
+  <script src="{{ script }}"></script>
+{% endfor %}
 {% endblock %}
