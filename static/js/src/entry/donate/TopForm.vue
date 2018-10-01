@@ -252,7 +252,8 @@ export default {
 
   data() {
     return {
-      serverErrorMessage: window.TOP_FORM_SERVER_ERROR_MESSAGE,
+      // eslint-disable-next-line no-underscore-dangle
+      serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       frequencyOptions: [
         { id: 0, text: 'One-time donation', value: 'None' },
         { id: 1, text: 'Monthly donation', value: 'monthly' },

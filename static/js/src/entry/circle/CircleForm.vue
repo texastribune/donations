@@ -239,7 +239,8 @@ export default {
 
   data() {
     return {
-      serverErrorMessage: window.TOP_FORM_SERVER_ERROR_MESSAGE,
+      // eslint-disable-next-line no-underscore-dangle
+      serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       validation: {
         stripeEmail: {
           manual: true,
