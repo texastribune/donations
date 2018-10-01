@@ -25,16 +25,8 @@
 
 import Vue from 'vue';
 
-import updateStoreValue from './mixins/updateStoreValue';
-import getStoreValue from './mixins/getStoreValue';
-
 export default {
   name: 'NativePay',
-
-  mixins: [
-    updateStoreValue,
-    getStoreValue,
-  ],
 
   props: {
     supported: {
@@ -43,11 +35,6 @@ export default {
     },
 
     amountStoreModule: {
-      type: String,
-      required: true,
-    },
-
-    stripeTokenStoreModule: {
       type: String,
       required: true,
     },
@@ -140,8 +127,7 @@ export default {
       paymentRequest.on('token', (event) => {
         const { token: { id } } = event;
 
-        this.updateStoreValue({
-          storeModule: this.stripeTokenStoreModule,
+        this.$emit('setValue', {
           key: 'stripeToken',
           value: id,
         });

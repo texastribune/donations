@@ -12,18 +12,12 @@
 import Vue from 'vue';
 import { createToken } from 'vue-stripe-elements-plus';
 
-import updateStoreValue from './mixins/updateStoreValue';
-import getStoreValue from './mixins/getStoreValue';
 import updateValidity from './mixins/updateValidity';
 
 export default {
   name: 'ManualSubmit',
 
-  mixins: [
-    updateStoreValue,
-    updateValidity,
-    getStoreValue,
-  ],
+  mixins: [updateValidity],
 
   props: {
     value: {
@@ -38,11 +32,6 @@ export default {
 
     isFetchingToken: {
       type: Boolean,
-      required: true,
-    },
-
-    stripeTokenStoreModule: {
-      type: String,
       required: true,
     },
   },
@@ -83,8 +72,7 @@ export default {
           if (!result.error) {
             const { token: { id } } = result;
 
-            this.updateStoreValue({
-              storeModule: this.stripeTokenStoreModule,
+            this.$emit('setValue', {
               key: 'stripeToken',
               value: id,
             });

@@ -11,6 +11,7 @@ export default {
           message: 'Your card number is incomplete',
         },
       },
+      stripeToken: '',
       showManualErrors: false,
       showNativeErrors: false,
       showManualPay: false,

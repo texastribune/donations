@@ -120,7 +120,6 @@
           :supported="nativeIsSupported"
           base-classes="form__native"
           amount-store-module="baseForm"
-          stripe-token-store-module="baseForm"
           @setValue="setValue"
           @onSubmit="onSubmit"
         />
@@ -152,7 +151,6 @@
               :form-is-valid="manualIsValid"
               :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
-              stripe-token-store-module="baseForm"
               value="Donate"
               @onSubmit="onSubmit"
               @setValue="setValue"
@@ -188,6 +186,10 @@
       </div>
     </div>
 
+    <local-hidden
+      :value="stripeToken"
+      name="stripeToken"
+    />
     <hidden
       name="installments"
       store-module="baseForm"
@@ -198,10 +200,6 @@
     />
     <hidden
       name="campaign_id"
-      store-module="baseForm"
-    />
-    <hidden
-      name="stripeToken"
       store-module="baseForm"
     />
     <hidden
@@ -221,6 +219,7 @@
 
 <script>
 import Hidden from '../../elements/Hidden.vue';
+import LocalHidden from '../../elements/LocalHidden.vue';
 import Radios from '../../elements/Radios.vue';
 import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
@@ -236,6 +235,7 @@ export default {
 
   components: {
     Hidden,
+    LocalHidden,
     TextInput,
     Radios,
     PayFees,

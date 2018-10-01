@@ -98,7 +98,6 @@
             :supported="nativeIsSupported"
             base-classes="form__native"
             amount-store-module="circleForm"
-            stripe-token-store-module="circleForm"
             @setValue="setValue"
             @onSubmit="onSubmit"
           />
@@ -130,7 +129,6 @@
                 :form-is-valid="manualIsValid"
                 :is-fetching-token="isFetchingToken"
                 base-classes="form__submit button button--yellow button--l"
-                stripe-token-store-module="circleForm"
                 value="Donate"
                 @onSubmit="onSubmit"
                 @setValue="setValue"
@@ -166,6 +164,10 @@
         </div>
       </div>
 
+      <local-hidden
+        :value="stripeToken"
+        name="stripeToken"
+      />
       <hidden
         name="amount"
         store-module="circleForm"
@@ -180,10 +182,6 @@
       />
       <hidden
         name="description"
-        store-module="circleForm"
-      />
-      <hidden
-        name="stripeToken"
         store-module="circleForm"
       />
       <hidden
@@ -208,6 +206,7 @@
 
 <script>
 import Hidden from '../../elements/Hidden.vue';
+import LocalHidden from '../../elements/LocalHidden.vue';
 import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
@@ -223,6 +222,7 @@ export default {
 
   components: {
     Hidden,
+    LocalHidden,
     TextInput,
     PayFees,
     Level,

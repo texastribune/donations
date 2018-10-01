@@ -9,15 +9,11 @@ Vue.use(VueRouter);
 
 function createInitialFormState(queryParams) {
   if (window.__BASE_FORM_REHYDRATION__) {
-    return {
-      ...window.__BASE_FORM_REHYDRATION__,
-      stripeToken: '',
-    };
+    return window.__BASE_FORM_REHYDRATION__;
   }
 
   const baseState = {
     stripeEmail: '',
-    stripeToken: '',
     first_name: '',
     last_name: '',
     description: 'The Texas Tribune Membership',
