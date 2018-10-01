@@ -7,6 +7,7 @@
     >
       <input
         id="pay-fees"
+        v-model="isChecked"
         type="checkbox"
         @change="onChange($event.target.checked)"
       >
@@ -15,9 +16,9 @@
       >
         I agree to pay
         <span
-          v-if="fee"
+          v-if="feeAmount"
         >
-          {{ fee }}
+          {{ feeAmount }}
         </span>
         <span>{{ installmentPeriod }}</span>
         for processing fees. This directs more money to our mission.
@@ -58,7 +59,7 @@ export default {
   },
 
   computed: {
-    fee() {
+    feeAmount() {
       let amount = this.getStoreValue({
         storeModule: this.amountStoreModule,
         key: 'amount',
@@ -82,6 +83,15 @@ export default {
 
       if (installmentPeriod === 'None') return '';
       return installmentPeriod.toLowerCase();
+    },
+
+    isChecked() {
+      const payFeesValue = this.getStoreValue({
+        storeModule: this.payFeesValueStoreModule,
+        key: 'pay_fees_value',
+      });
+
+      return payFeesValue === 'True';
     },
   },
 
