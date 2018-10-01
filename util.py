@@ -16,26 +16,38 @@ from config import (
 
 import requests
 
-from npsp import SalesforceConnection
+from npsp import SalesforceConnection, SalesforceException
 
 
-def notify_slack(contact=None, opportunity=None, rdo=None):
-    """
-    Send a notification about a donation to Slack.
-    """
+def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
     reason = ""
-    if opportunity:
+    if rdo and opportunity:
+        raise SalesforceException("rdo and opportunity can't both be specified")
+
+    if account:
+        amount = rdo.amount or opportunity.amount
+        message = f"{account.name} became a business member at the *{amount}* level."
+    elif opportunity:
         if opportunity.encouraged_by:
             reason = f" (encouraged by {opportunity.encouraged_by})"
         message = f"*{contact.name}* ({contact.email}) pledged *${opportunity.amount}*{reason}"
-
-    if rdo:
+    elif rdo:
         if rdo.encouraged_by:
             reason = f" (encouraged by {rdo.encouraged_by})"
         message = f"*{contact.name}* ({contact.email}) pledged *${rdo.amount}*{reason} [{rdo.installment_period}]"
 
     logging.info(message)
 
+    return message
+
+
+def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
+    """
+    Send a notification about a donation to Slack.
+    """
+    message = construct_slack_message(
+        contact=contact, opportunity=opportunity, rdo=rdo, account=account
+    )
     if not ENABLE_SLACK:
         return
 

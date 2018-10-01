@@ -499,12 +499,14 @@ def add_business_membership(form=None, customer=None):
 
     if form["installment_period"] is None:
         logging.info("----Creating single business membership...")
-        add_business_opportunity(account=account, form=form, customer=customer)
-    #        notify_slack(contact=contact, opportunity=opportunity)
+        opportunity = add_business_opportunity(
+            account=account, form=form, customer=customer
+        )
+        notify_slack(account=account, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
-        add_business_rdo(account=account, form=form, customer=customer)
-    #        notify_slack(contact=contact, rdo=rdo)
+        rdo = add_business_rdo(account=account, form=form, customer=customer)
+        notify_slack(account=account, rdo=rdo)
 
     logging.info("----Getting affiliation...")
 
