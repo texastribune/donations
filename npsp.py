@@ -340,8 +340,8 @@ class RDO(SalesforceObject):
 
     api_name = "npe03__Recurring_Donation__c"
 
-    def __init__(self, contact=None, account=None, sf_connection=None):
-        super().__init__(sf_connection)
+    def __init__(self, id=None, contact=None, account=None, sf_connection=None):
+        super().__init__(sf_connection=sf_connection)
 
         if account and contact:
             raise SalesforceException("Account and Contact can't both be specified")
@@ -364,7 +364,7 @@ class RDO(SalesforceObject):
             self.account_id = None
             self.contact_id = None
 
-        self.id = None
+        self.id = id
         self.installments = None
         self.open_ended_status = None
         self.installment_period = None
