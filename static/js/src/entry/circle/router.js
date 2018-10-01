@@ -35,7 +35,6 @@ function createBaseFormState(queryParams) {
   const dynamicState = getStateFromParams(queryParams);
   const staticState = {
     stripeEmail: '',
-    customerId: '',
     first_name: '',
     last_name: '',
     description: 'The Texas Tribune Circle Membership',

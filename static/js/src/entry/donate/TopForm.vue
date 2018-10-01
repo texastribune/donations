@@ -186,10 +186,6 @@
       store-module="baseForm"
     />
     <hidden
-      name="customerId"
-      store-module="baseForm"
-    />
-    <hidden
       name="description"
       store-module="baseForm"
     />

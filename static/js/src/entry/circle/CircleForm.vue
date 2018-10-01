@@ -172,10 +172,6 @@
         store-module="circleForm"
       />
       <hidden
-        name="customerId"
-        store-module="circleForm"
-      />
-      <hidden
         name="description"
         store-module="circleForm"
       />
