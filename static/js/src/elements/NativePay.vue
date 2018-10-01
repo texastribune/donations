@@ -27,7 +27,6 @@ import Vue from 'vue';
 
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
-import createCustomer from '../utils/createCustomer';
 
 export default {
   name: 'NativePay',

@@ -15,7 +15,6 @@ import { createToken } from 'vue-stripe-elements-plus';
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
 import updateValidity from './mixins/updateValidity';
-import createCustomer from '../utils/createCustomer';
 
 export default {
   name: 'ManualSubmit',
