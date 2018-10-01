@@ -2,13 +2,7 @@ import json
 import locale
 import logging
 import os
-from config import (
-    FLASK_DEBUG,
-    FLASK_SECRET_KEY,
-    TIMEZONE,
-    LOG_LEVEL,
-    BUSINESS_MEMBERSHIP_RECORDTYPEID,
-)
+from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE, LOG_LEVEL
 from datetime import datetime
 
 from pytz import timezone
@@ -427,7 +421,6 @@ def add_business_opportunity(account=None, form=None, customer=None):
     opportunity = Opportunity(account=account)
     opportunity.record_type_name = "Business Membership"
     opportunity.name = f"{year} Business {account.name} One time"
-    opportunity.record_type_id = BUSINESS_MEMBERSHIP_RECORDTYPEID
     opportunity.amount = form.get("amount", 0)
     opportunity.stripe_customer = customer["id"]
     opportunity.campaign_id = form["campaign_id"]
@@ -462,7 +455,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installments = form["installments"]
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
-    rdo.record_type_id = BUSINESS_MEMBERSHIP_RECORDTYPEID
+    # rdo.record_type_name = "Business Membership"
 
     rdo.save()
     logging.info(rdo)
