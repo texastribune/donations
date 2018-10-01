@@ -158,7 +158,7 @@ class SalesforceConnection:
             logging.info(f"{sf_object.api_name} object already exists; updating...")
             path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
             try:
-                response = self.patch(path=path, data=sf_object._format())
+                response = self.patch(path=path, data=sf_object.patch_serialize())
             except SalesforceException as e:
                 logging.error(e.response.text)
                 raise
@@ -167,7 +167,7 @@ class SalesforceConnection:
         logging.info(f"{sf_object.api_name} object doesn't exist; creating...")
         path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
         try:
-            response = self.post(path=path, data=sf_object._format())
+            response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
             logging.error(e.response.text)
             raise
@@ -178,14 +178,83 @@ class SalesforceConnection:
         return sf_object
 
 
-class SalesforceObject(object):
+class SalesforceObject:
     def __repr__(self):
         obj = self._format()
         obj["Id"] = self.id
         return json.dumps(obj)
 
+    def __setattr__(self, attr, value):
+        if hasattr(self, attr):
+            super().__setattr__(attr, value)
+            print(f"Setting {attr} to {value} on {type(self)}")
+            self.tainted.append(attr)
+        else:
+            super().__setattr__(attr, value)
+
+    def my_save(self):
+        self.sf.save(self)
+        return self
+
+    def serialize(self):
+        print("called serialize")
+        out = dict()
+        for api_name, obj_attr in self.field_to_attr_map.items():
+            out[api_name] = getattr(self, obj_attr)
+        out.pop("Id", None)
+        return out
+
+    def patch_serialize(self):
+        out = dict()
+        for attribute in self.tainted:
+            if attribute == 'id'
+            if attribute not in self.attr_to_field_map:
+                continue
+            out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
+        return out
+
     def __init__(self, sf_connection=None):
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+    @staticmethod
+    def convert_to_snake_case(name):
+        output = name
+        # remove leading chars:
+        if not output.islower():
+            output = re.sub(r"^[^A-Z]*", "", output)
+        # remove trailing chars:
+        output = re.sub(r"__c$", "", output)
+        output = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", output)
+        output = re.sub("([a-z0-9])([A-Z])", r"\1_\2", output).lower()
+        output = re.sub(r"__+", "_", output)
+        logging.debug(f"{name} -> {output}")
+        return output
+
+    @classmethod
+    def get(cls, oid, sf_connection=None):
+
+        if cls.__name__ == "SalesforceObject":
+            raise NotImplementedError
+
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        # TODO restrict by fields if present
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{oid}"
+        response = sf.get(path)
+        obj = cls()
+        obj.attr_to_field_map = dict()
+        obj.field_to_attr_map = dict()
+        for field, value in response.items():
+            attr = field
+            attr = cls.convert_to_snake_case(attr)
+            if hasattr(obj, attr):
+                logging.warning(f"Duplicate attribute name: {attr} ({field})")
+            obj.attr_to_field_map[attr] = field
+            obj.field_to_attr_map[field] = attr
+            setattr(obj, attr, value)
+            # logging.warning(f"Setting {attr} to {value}")
+
+        return obj
 
 
 class Opportunity(SalesforceObject):
