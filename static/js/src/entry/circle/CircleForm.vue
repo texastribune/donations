@@ -176,6 +176,10 @@
         store-module="circleForm"
       />
       <hidden
+        name="stripeToken"
+        store-module="circleForm"
+      />
+      <hidden
         name="campaign_id"
         store-module="circleForm"
       />

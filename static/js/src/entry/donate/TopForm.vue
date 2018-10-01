@@ -194,6 +194,10 @@
       store-module="baseForm"
     />
     <hidden
+      name="stripeToken"
+      store-module="baseForm"
+    />
+    <hidden
       name="referral_id"
       store-module="baseForm"
     />
