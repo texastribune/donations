@@ -214,6 +214,7 @@ class SalesforceObject:
         return out
 
     def __init__(self, sf_connection=None):
+        self.tainted = list()
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
     @staticmethod
@@ -290,6 +291,12 @@ class Opportunity(SalesforceObject):
         self.stripe_transaction = None
         self.closed_lost_reason = None
         self.created = False
+
+    @classmethod
+    def get(cls, oid):
+        obj = super().get(oid=oid)
+        print(id(obj))
+        return obj
 
     @classmethod
     def list_pledged(cls, begin, end, sf_connection=None):
