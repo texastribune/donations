@@ -69,6 +69,21 @@
 
 <script>
 window.TOP_FORM_SERVER_ERROR_MESSAGE = 'foo bar baz';
+window.__BASE_FORM_REHYDRATION__ = {
+  stripeEmail: 'a@b.co',
+  first_name: 'A',
+  last_name: 'B',
+  description: 'The Texas Tribune Membership',
+  reason: '',
+  zipcode: '',
+  installments: 'None',
+  pay_fees_value: 'False',
+  amount: '10.45',
+  campaign_id: '',
+  referral_id: '',
+  installment_period: 'yearly',
+  openended_status: 'Open',
+};
 </script>
 
 {% for script in bundles['js'] %}
