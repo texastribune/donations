@@ -1,4 +1,5 @@
 import csv
+import re
 import json
 import logging
 import os
@@ -28,7 +29,7 @@ class SalesforceException(Exception):
     pass
 
 
-class SalesforceConnection(object):
+class SalesforceConnection:
 
     """
     Represents the Salesforce API.
@@ -136,6 +137,20 @@ class SalesforceConnection(object):
         resp = requests.patch(url, headers=self.headers, data=json.dumps(data))
         self.check_response(response=resp, expected_status=204)
         return resp
+
+    def get(self, path, fields=None):
+        """
+        Call the Saleforce API to retrieve an object.
+        """
+
+        url = f"{self.instance_url}{path}"
+        if fields:
+            url += "?{','.join(fields)}"
+        logging.debug(url)
+        resp = requests.get(url, headers=self.headers)
+        self.check_response(response=resp, expected_status=200)
+        response = json.loads(resp.text)
+        return response
 
     def save(self, sf_object):
 
