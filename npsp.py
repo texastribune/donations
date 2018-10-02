@@ -164,6 +164,9 @@ class SalesforceConnection(object):
 
 
 class SalesforceObject(object):
+    """
+    This is the parent of all the other Salesforce objects.
+    """
     def _format(self):
         raise NotImplementedError
 
@@ -336,6 +339,9 @@ class Opportunity(SalesforceObject):
 
 
 class RDO(SalesforceObject):
+    """
+    Recurring Donation objects.
+    """
 
     api_name = "npe03__Recurring_Donation__c"
 
@@ -506,8 +512,6 @@ class Account(SalesforceObject):
         self.shipping_state = None
         self.record_type_name = "Household"
 
-    # TODO: create other types of accounts?
-
     def _format(self):
         return {
             "Website": self.website,
@@ -556,6 +560,9 @@ class Account(SalesforceObject):
     def get(
         cls, record_type_name="Household", website=None, name=None, sf_connection=None
     ):
+        """
+        Right now we're only using the website to search for existing accounts.
+        """
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
@@ -565,6 +572,9 @@ class Account(SalesforceObject):
             RecordType.Name IN ('{record_type_name}')
         """
         response = sf.query(query)
+
+        # We do a fuzzy search on the website and if the top hit
+        # has a confidence of 95 or higher we use it.
         website_idx = {
             x["Website"]: {"id": x["Id"], "name": x["Name"]}
             for x in response
@@ -615,6 +625,9 @@ class Contact(SalesforceObject):
 
     @staticmethod
     def parse_all_email(email, results):
+        """
+        This field is a CSV. So we parse that to make sure we've got an exact match and not just a substring match.
+        """
         filtered_results = list()
         for item in results:
             all_email = item["All_In_One_EMail__c"]
@@ -647,7 +660,6 @@ class Contact(SalesforceObject):
         return contact
 
     @classmethod
-    # TODO rename id?
     def get(cls, id=None, email=None, sf_connection=None):
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
@@ -714,6 +726,9 @@ class Contact(SalesforceObject):
 
 
 class Affiliation(SalesforceObject):
+    """
+    This object is a link between a contact and an account.
+    """
 
     api_name = "npe5__Affiliation__c"
 
