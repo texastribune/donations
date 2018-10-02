@@ -16,6 +16,14 @@
   {% endfor %}
 {% endblock %}
 
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
   <main class="main">
     <!-- where the router component attaches -->

@@ -6,8 +6,15 @@
   {% endfor %}
 {% endblock %}
 
-{% block content %}
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
+{% endblock %}
 
+{% block content %}
   <section class="splash grid_separator">
     <div class="grid_container grid_padded--xl">
       <div class="grid_row grid_wrap--l">
