@@ -88,6 +88,9 @@ def send_multiple_account_warning(contact):
 
 
 def clean(form):
+    """
+    Clean up a form by converting strings to their 'None' or boolean equivalents and converting string numbers to their native types. Also makes None the response if the form is asked for a missing key.
+    """
     result = defaultdict(lambda: None)
     for k, v in form.items():
         if v is None or v == "None":
