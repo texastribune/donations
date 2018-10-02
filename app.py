@@ -136,12 +136,14 @@ def do_charge_or_show_errors(**kwargs):
         body = e.json_body
         err = body.get("error", {})
         message = err.get("message", "")
+        form_data = request.form.to_dict()
+        del form_data['stripeToken']
 
         return render_template(kwargs['template'],
             bundles=kwargs['bundles'],
             key=app.config["STRIPE_KEYS"]["publishable_key"],
             message=message,
-            form_data=request.form.to_dict()
+            form_data=form_data
         )
 
 
