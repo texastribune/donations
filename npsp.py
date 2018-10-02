@@ -51,7 +51,6 @@ class SalesforceConnection(object):
         r = requests.post(self.url, data=self.payload)
         self.check_response(r)
         response = json.loads(r.text)
-        logging.debug(response)
 
         self.instance_url = response["instance_url"]
         access_token = response["access_token"]
