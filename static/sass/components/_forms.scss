@@ -8,16 +8,23 @@ $color-error: #f51c1c;
         border-color: $color-error;
       }
     }
-    
-    input {
+
+    input, select {
       @extend .font-sansserif;
       background-color: #fbfbfb;
       border: 1px solid $color-gray-light;
+      border-radius: 0px;
       color: $color-black-pure;
       display: block;
       height: 45px;
       padding: 0 0 0 $size-b;
       width: 100%;
+    }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
     }
 
     label {
@@ -97,7 +104,7 @@ $color-error: #f51c1c;
     &--always-stack {
       li {
         flex: 1 1 100%;
-        
+
         &:last-child {
           margin-bottom: 0;
         }

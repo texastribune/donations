@@ -1,3 +1,5 @@
+import addNumberCommas from "../../utils/addNumberCommas";
+
 <template>
   <form
     ref="form"
@@ -18,9 +20,11 @@
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
+            :required="true"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.stripeEmail"
             label-text="email address"
+            maxlength="80"
             type="email"
             base-classes="form__text form__text--standard"
             name="stripeEmail"
@@ -33,8 +37,11 @@
       <div class="grid_row grid_wrap--s">
         <div class="col_6 grid_separator">
           <text-input
-            :required="false"
+            :required="true"
+            :show-error="showManualErrors || showNativeErrors"
+            :validation="validation.businessName"
             label-text="business name"
+            maxlength="255"
             base-classes="form__text form__text--standard"
             name="reason"
             store-module="businessForm"
@@ -42,13 +49,69 @@
         </div>
         <div class="col_6 grid_separator">
           <text-input
-            :required="false"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.zipcode"
+            :validation="validation.website"
             label-text="website"
+            maxlength="255"
+            base-classes="form__text form__text--standard"
+            name="website"
+            store-module="businessForm"
+            @setValidationValue="setValidationValue"
+          />
+        </div>
+      </div>
+
+      <div className="grid_row grid_separator">
+        <div className="col">
+          <text-input
+            :required="true"
+            :show-error="showManualErrors || showNativeErrors"
+            :validation="validation.businessAddress"
+            label-text="street address"
+            maxlength="255"
+            base-classes="form__text form__text--standard"
+            name="streetAddress"
+            store-module="businessForm"
+            @setValidationValue="setValidationValue"
+          />
+        </div>
+      </div>
+
+      <div class="grid_row grid_separator grid_wrap--s">
+        <div class="col_6 grid_separator">
+          <text-input
+            :required="true"
+            :show-error="showManualErrors || showNativeErrors"
+            :validation="validation.businessCity"
+            label-text="city"
+            maxlength="40"
+            base-classes="form__text form__text--standard"
+            name="city"
+            store-module="businessForm"
+            @setValidationValue="setValidationValue"
+          />
+        </div>
+        <div class="col_4 grid_separator">
+          <select-list
+            :options="options"
+            :required="true"
+            :validation="validation.businessState"
+            label-text="state"
+            name="state"
+            base-classes="form__text form__text--standard"
+            store-module="businessForm"
+            @setValidationValue="setValidationValue"
+          />
+        </div>
+        <div class="col_2 grid_separator">
+          <text-input
+            :required="true"
+            :show-error="showManualErrors || showNativeErrors"
+            :validation="validation.businessZipcode"
+            label-text="zip code"
             maxlength="5"
             base-classes="form__text form__text--standard"
-            name="zipcode"
+            name="zip_code"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -76,6 +139,19 @@
             name="last_name"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
+          />
+        </div>
+      </div>
+
+      <div className="grid_row grid_separator grid_wrap--s">
+        <div className="col grid_separator">
+          <text-input
+            :required="false"
+            label-text="encouraged to give by"
+            maxlength="255"
+            base-classes="form__text form__text--standard"
+            name="reason"
+            store-module="businessForm"
           />
         </div>
       </div>
@@ -200,12 +276,15 @@ import Hidden from '../../elements/Hidden.vue';
 import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
+import SelectList from '../../elements/SelectList.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
 import Choices from './Choices.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
+import {BUSINESS_BUCKETS, US_STATES_SELECT_LIST} from './constants';
+
 
 export default {
   name: 'BusinessForm',
@@ -213,6 +292,7 @@ export default {
   components: {
     Hidden,
     TextInput,
+    SelectList,
     PayFees,
     Level,
     ManualPay,
@@ -228,37 +308,88 @@ export default {
 
   data() {
     return {
-      validation: {
-        stripeEmail: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter a valid email address',
-          validator: this.isEmail,
-        },
-        first_name: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter your first name',
-          validator: this.isNotEmpty,
-        },
-        last_name: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter your last name',
-          validator: this.isNotEmpty,
-        },
-        zipcode: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter a 5-digit zip code',
-          validator: this.isEmptyOrZip,
-        },
+      options: this.buildList(US_STATES_SELECT_LIST),
+      stripeEmail: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a valid email address',
+        validator: this.isEmail,
+      },
+      businessName: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a business name',
+        validator: this.isNotEmpty,
+      },
+      website: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a website, including https:// or http://',
+        validator: this.isURL,
+      },
+      businessAddress: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a street/mailing address',
+        validator: this.isNotEmpty,
+      },
+      businessCity: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a city',
+        validator: this.isNotEmpty,
+      },
+      businessState: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a state',
+        validator: this.isNotEmpty,
+      },
+      businessZipcode: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter a 5-digit zip code',
+        validator: this.isEmptyOrZip,
+      },
+      first_name: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter contact first name',
+        validator: this.isNotEmpty,
+      },
+      last_name: {
+        manual: true,
+        native: true,
+        valid: false,
+        message: 'Enter contact last name',
+        validator: this.isNotEmpty,
       },
     };
   },
+
+  methods: {
+
+    buildList(selectList) {
+      const options = [];
+
+      selectList.forEach((listItem, index) => {
+        options.push({
+          index: index,
+          value: listItem.value,
+          text: listItem.text
+        });
+      });
+      console.log(options);
+      return options;
+    }
+  }
 };
 </script>

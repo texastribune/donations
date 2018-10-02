@@ -6,18 +6,19 @@ export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 export const SHORT_PROGRAM_NAME = 'Business Membership';
 
 export const MEMBERSHIP_LEVELS = [
-  { header: 'Hat\'s Off!', amount: 500 },  // A
+  { header: 'Hat\'s Off!', amount: 500  },  // A
   { header: 'Lone Star',   amount: 1500 }, // B
   { header: 'Big Tex',     amount: 2500 }, // C
 ];
 
 const DEFAULT_PAY_FEES = 'True';
-const MONTHLY_PAYMENTS = { text:'monthly',  installmentsPerYear: 12, recurring: true };
-const ONETIME_PAYMENT  = { text:'one-time', installmentsPerYear: 1,  recurring: false };
-const YEARLY_PAYMENT   = { text:'yearly',   installmentsPerYear: 1,  recurring: true };
+const MONTHLY_PAYMENTS = { text:'monthly donation',  installmentsPerYear: 12, recurring: true };
+const ONETIME_PAYMENT  = { text:'one-time donation', installmentsPerYear: 1,  recurring: false };
+const YEARLY_PAYMENT   = { text:'yearly donation',   installmentsPerYear: 1,  recurring: true };
 
 //
 // Common structure and var names used by the family of SF-S apps
+// Plugs into the common code
 //
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
@@ -105,4 +106,62 @@ export const BUSINESS_BUCKETS = {
 //
 export const DEFAULT_SELECT_BUCKET = BUSINESS_BUCKETS[POSITION_0];
 export const DEFAULT_SELECTOR_LEVEL = 'levelAMonthly';
-
+//
+// US States and territories for select state list
+// Using the DOM standard naminfg convention for select lists
+//
+export const US_STATES_SELECT_LIST = [
+  // 0th element is the start value
+  { value: '', text: 'Select a state' },
+  { value: 'AL', text: 'Alabama' },
+  { value: 'AK', text: 'Alaska' },
+  { value: 'AZ', text: 'Arizona' },
+  { value: 'AR', text: 'Arkansas' },
+  { value: 'CA', text: 'California' },
+  { value: 'CO', text: 'Colorado' },
+  { value: 'CT', text: 'Connecticut' },
+  { value: 'DE', text: 'Delaware' },
+  { value: 'DC', text: 'District of Columbia' },
+  { value: 'FL', text: 'Florida' },
+  { value: 'GA', text: 'Georgia' },
+  { value: 'HI', text: 'Hawaii' },
+  { value: 'ID', text: 'Idaho' },
+  { value: 'IL', text: 'Illinois' },
+  { value: 'IN', text: 'Indiana' },
+  { value: 'IA', text: 'Iowa' },
+  { value: 'KS', text: 'Kansas' },
+  { value: 'KY', text: 'Kentucky' },
+  { value: 'LA', text: 'Louisiana' },
+  { value: 'ME', text: 'Maine' },
+  { value: 'MD', text: 'Maryland' },
+  { value: 'MA', text: 'Massachusetts' },
+  { value: 'MI', text: 'Michigan' },
+  { value: 'MN', text: 'Minnesota' },
+  { value: 'MS', text: 'Mississippi' },
+  { value: 'MO', text: 'Missouri' },
+  { value: 'MT', text: 'Montana' },
+  { value: 'NE', text: 'Nebraska' },
+  { value: 'NV', text: 'Nevada' },
+  { value: 'NH', text: 'New Hampshire' },
+  { value: 'NJ', text: 'New Jersey' },
+  { value: 'NM', text: 'New Mexico' },
+  { value: 'NY', text: 'New York' },
+  { value: 'NC', text: 'North Carolina' },
+  { value: 'ND', text: 'North Dakota' },
+  { value: 'OH', text: 'Ohio' },
+  { value: 'OK', text: 'Oklahoma' },
+  { value: 'OR', text: 'Oregon' },
+  { value: 'PA', text: 'Pennsylvania' },
+  { value: 'RI', text: 'Rhode Island' },
+  { value: 'SC', text: 'South Carolina' },
+  { value: 'SD', text: 'South Dakota' },
+  { value: 'TN', text: 'Tennessee' },
+  { value: 'TX', text: 'Texas' },
+  { value: 'UT', text: 'Utah' },
+  { value: 'VT', text: 'Vermont' },
+  { value: 'VA', text: 'Virginia' },
+  { value: 'WA', text: 'Washington' },
+  { value: 'WV', text: 'West Virginia' },
+  { value: 'WI', text: 'Wisconsin' },
+  { value: 'WY', text: 'Wyoming' },
+];
