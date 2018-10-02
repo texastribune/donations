@@ -11,7 +11,7 @@ from pytz import timezone
 
 from fuzzywuzzy import process
 
-zone = timezone("US/Central")  # TODO read in
+ZONE = timezone(os.environ.get("TIMEZONE", "US/Central"))
 
 SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "")
 
@@ -197,7 +197,7 @@ class Opportunity(SalesforceObject):
         if contact and account:
             raise SalesforceException("Account and Contact can't both be specified")
 
-        today = datetime.now(tz=zone).strftime("%Y-%m-%d")
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
 
         if account is not None:
             self.account_id = account.id
@@ -351,8 +351,8 @@ class RDO(SalesforceObject):
         if account and contact:
             raise SalesforceException("Account and Contact can't both be specified")
 
-        today = datetime.now(tz=zone).strftime("%Y-%m-%d")
-        now = datetime.now(tz=zone).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
 
         if contact is not None:
             self.contact_id = contact.id

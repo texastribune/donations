@@ -33,7 +33,7 @@ from util import (
 )
 from validate_email import validate_email
 
-zone = timezone(TIMEZONE)
+ZONE = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, "C")
 
@@ -438,7 +438,7 @@ def add_business_opportunity(account=None, form=None, customer=None):
     Adds a single business membership to Salesforce.
     """
 
-    year = datetime.now(tz=zone).strftime("%Y")
+    year = datetime.now(tz=ZONE).strftime("%Y")
     opportunity = Opportunity(account=account)
     opportunity.record_type_name = "Business Membership"
     opportunity.name = f"{year} Business {account.name} One time"
@@ -460,7 +460,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     if form["installment_period"] is None:
         raise Exception("installment_period must have a value")
 
-    year = datetime.now(tz=zone).strftime("%Y")
+    year = datetime.now(tz=ZONE).strftime("%Y")
 
     rdo = RDO(account=account)
     rdo.name = f"{year} Business {account.name} Recurring"
@@ -590,7 +590,7 @@ def add_blast_subscription(form=None, customer=None):
         rdo.installment_period = "monthly"
     else:
         rdo.installment_period = "yearly"
-    now = datetime.now(tz=zone).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+    now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
     rdo.name = f"{first_name} {last_name} - {now} - The Blast"
     rdo.type = "The Blast"
     rdo.billing_email = form["stripeEmail"]
