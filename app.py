@@ -12,7 +12,6 @@ import stripe
 from app_celery import make_celery
 from flask import (
     Flask,
-    jsonify,
     redirect,
     render_template,
     request,
@@ -194,69 +193,40 @@ def page_not_found(error):
     return render_template("error.html", message=message), 404
 
 
-@app.route("/create-customer", methods=["POST"])
-def create_customer():
-    stripe_email = request.json["stripeEmail"]
-    email_is_valid = validate_email(stripe_email)
-
-    if email_is_valid:
-        try:
-            customer = stripe.Customer.create(
-                email=stripe_email, card=request.json["stripeToken"]
-            )
-            return jsonify({"customer_id": customer.id})
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get("error", {})
-            return (
-                jsonify(
-                    {
-                        "expected": True,
-                        "type": "card",
-                        "message": err.get("message", ""),
-                    }
-                ),
-                400,
-            )
-    else:
-        message = """Our servers had an issue saving your email address.
-                    Please make sure it's properly formatted. If the problem
-                    persists, please contact inquiries@texastribune.org."""
-        return jsonify({"expected": True, "type": "email", "message": message}), 400
-
-
 @app.route("/charge", methods=["POST"])
 def charge():
-
     app.logger.info(request.form)
 
     gtm = {}
     form = DonateForm(request.form)
-
     bundles = get_bundles("charge")
+    email = request.form["stripeEmail"]
+
+    if email is None or not validate_email(email):
+        message = "There was an issue saving your email address."
+        return render_template("error.html", message=message)
 
     if form.validate():
+        app.logger.debug("----Retrieving Stripe customer...")
+
         try:
-            app.logger.debug("----Retrieving Stripe customer...")
-            customer = stripe.Customer.retrieve(request.form["customerId"])
+            customer = stripe.Customer.create(
+                email=stripe_email, card=request.json["stripeToken"]
+            )
             add_donation.delay(customer=customer, form=clean(request.form))
+            gtm["event_value"] = request.form["amount"]
             if request.form["installment_period"] == "None":
                 gtm["event_label"] = "once"
             else:
                 gtm["event_label"] = request.form["installment_period"]
-            gtm["event_value"] = request.form["amount"]
             return render_template(
                 "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
             )
-        except stripe.error.InvalidRequestError as e:
+        except stripe.error.CardError as e:
             body = e.json_body
             err = body.get("error", {})
             message = err.get("message", "")
-            if "No such customer:" not in message:
-                raise e
-            else:
-                app.logger.warning(message)
-                return render_template("error.html", message=message)
+
     else:
         message = "There was an issue saving your donation information."
         app.logger.warning(f"Form validation errors: {form.errors}")
