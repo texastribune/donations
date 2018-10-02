@@ -7,7 +7,7 @@
     >
       <input
         id="pay-fees"
-        v-model="isChecked"
+        :checked="isChecked"
         type="checkbox"
         @change="onChange($event.target.checked)"
       >
