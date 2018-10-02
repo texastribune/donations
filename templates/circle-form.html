@@ -103,9 +103,16 @@
 {% endblock %}
 
 {% block bottom_script %}
-  <script src="https://js.stripe.com/v3/"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
-  {% for script in bundles['js'] %}
-    <script src="{{ script }}"></script>
-  {% endfor %}
+{% if form_data and message %}
+<script>
+  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = "{{ message }}";
+  window.__CIRCLE_FORM_REHYDRATION__ = '{{ form_data|tojson }}';
+</script>
+{% endif %}
+
+{% for script in bundles['js'] %}
+  <script src="{{ script }}"></script>
+{% endfor %}
 {% endblock %}

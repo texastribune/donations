@@ -34,7 +34,7 @@ function getStateFromParams(queryParams) {
 
 function createInitialFormState(queryParams) {
   if (window.__CIRCLE_FORM_REHYDRATION__) {
-    return window.__CIRCLE_FORM_REHYDRATION__;
+    return JSON.parse(window.__CIRCLE_FORM_REHYDRATION__);
   }
 
   const dynamicState = getStateFromParams(queryParams);

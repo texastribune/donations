@@ -136,12 +136,12 @@ def do_charge_or_show_errors(**kwargs):
         body = e.json_body
         err = body.get("error", {})
         message = err.get("message", "")
-        context = {"messsage": message, "form_data": request.form.to_dict()}
 
         return render_template(kwargs['template'],
             bundles=kwargs['bundles'],
             key=app.config["STRIPE_KEYS"]["publishable_key"],
-            context=context
+            message=message,
+            form_data=request.form.to_dict()
         )
 
 
