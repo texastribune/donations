@@ -211,7 +211,7 @@ def charge():
 
         try:
             customer = stripe.Customer.create(
-                email=stripe_email, card=request.json["stripeToken"]
+                email=email, card=request.form["stripeToken"]
             )
             add_donation.delay(customer=customer, form=clean(request.form))
             gtm["event_value"] = request.form["amount"]
