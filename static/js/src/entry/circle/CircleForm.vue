@@ -1,7 +1,7 @@
 <template>
   <form
     ref="form"
-    action="/charge"
+    action="/circleform"
     method="post"
     class="form circle-form"
     @submit="$event.preventDefault()"

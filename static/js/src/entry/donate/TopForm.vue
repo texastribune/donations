@@ -1,7 +1,7 @@
 <template>
   <form
     ref="form"
-    action="/charge"
+    action="/donate"
     method="post"
     class="form"
     @submit="$event.preventDefault()"

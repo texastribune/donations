@@ -17,7 +17,7 @@ from flask import (
     request,
     send_from_directory,
 )
-from forms import BlastForm, DonateForm
+from forms import BlastForm, DonateForm, CircleForm
 from npsp import RDO, Contact, Opportunity
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -111,21 +111,88 @@ def get_bundles(entry):
     return bundles
 
 
-@app.route("/donate")
+def do_charge_or_show_errors(**kwargs):
+    app.logger.debug("----Retrieving Stripe customer...")
+
+    try:
+        email = request.form['stripeEmail']
+        installment_period = request.form["installment_period"]
+        amount = request.form["amount"]
+        customer = stripe.Customer.create(
+            email=email, card=request.form["stripeToken"]
+        )
+        add_donation.delay(customer=customer, form=clean(request.form))
+
+        gtm = {
+            "event_value": amount,
+            "event_label": "once" if installment_period == "None" else installment_period
+        }
+
+        return render_template("charge.html",
+            gtm=gtm,
+            bundles=get_bundles("charge")
+        )
+    except stripe.error.CardError as e:
+        body = e.json_body
+        err = body.get("error", {})
+        message = err.get("message", "")
+        context = {"messsage": message, "form_data": request.form.to_dict()}
+
+        return render_template(kwargs['template'],
+            bundles=kwargs['bundles'],
+            key=app.config["STRIPE_KEYS"]["publishable_key"],
+            context=context
+        )
+
+
+def validate_form(FormType, **kwargs):
+    app.logger.info(request.form)
+
+    form = FormType(request.form)
+    email = request.form["stripeEmail"]
+
+    if not validate_email(email):
+        message = "There was an issue saving your email address."
+        return render_template("error.html", message=message)
+    if not form.validate():
+        app.logger.warning(f"Form validation errors: {form.errors}")
+        message = "There was an issue saving your donation information."
+        return render_template("error.html", message=message)
+
+    return do_charge_or_show_errors(
+        bundles=kwargs["bundles"],
+        template=kwargs["template"]
+    )
+
+
+@app.route("/donate", methods=["GET", "POST"])
 def member2_form():
     bundles = get_bundles("donate")
-    return render_template(
-        "member-form2.html",
+    template = "member-form2.html"
+
+    if request.method == 'POST':
+        return validate_form(DonateForm,
+            bundles=bundles,
+            template=template
+        )
+
+    return render_template(template,
         bundles=bundles,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
-
-@app.route("/circleform")
+@app.route("/circleform", methods=["GET", "POST"])
 def circle_form():
     bundles = get_bundles("circle")
-    return render_template(
-        "circle-form.html",
+    template = "circle-form.html"
+
+    if request.method == 'POST':
+        return validate_form(CircleForm,
+            bundles=bundles,
+            template=template
+        )
+
+    return render_template(template,
         bundles=bundles,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
@@ -191,46 +258,6 @@ def error():
 def page_not_found(error):
     message = "The page you requested can't be found."
     return render_template("error.html", message=message), 404
-
-
-@app.route("/charge", methods=["POST"])
-def charge():
-    app.logger.info(request.form)
-
-    gtm = {}
-    form = DonateForm(request.form)
-    bundles = get_bundles("charge")
-    email = request.form["stripeEmail"]
-
-    if email is None or not validate_email(email):
-        message = "There was an issue saving your email address."
-        return render_template("error.html", message=message)
-
-    if form.validate():
-        app.logger.debug("----Retrieving Stripe customer...")
-
-        try:
-            customer = stripe.Customer.create(
-                email=email, card=request.form["stripeToken"]
-            )
-            add_donation.delay(customer=customer, form=clean(request.form))
-            gtm["event_value"] = request.form["amount"]
-            if request.form["installment_period"] == "None":
-                gtm["event_label"] = "once"
-            else:
-                gtm["event_label"] = request.form["installment_period"]
-            return render_template(
-                "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
-            )
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get("error", {})
-            message = err.get("message", "")
-
-    else:
-        message = "There was an issue saving your donation information."
-        app.logger.warning(f"Form validation errors: {form.errors}")
-        return render_template("error.html", message=message)
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
