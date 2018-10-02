@@ -456,6 +456,9 @@ def add_business_opportunity(account=None, form=None, customer=None):
 
 
 def add_business_rdo(account=None, form=None, customer=None):
+    """
+    Adds a recurring business membership to Salesforce.
+    """
 
     if form["installment_period"] is None:
         raise Exception("installment_period must have a value")
