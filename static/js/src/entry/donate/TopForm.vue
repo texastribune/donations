@@ -6,6 +6,15 @@
     class="form"
     @submit="$event.preventDefault()"
   >
+    <div
+      v-show="showServerErrorMessage"
+      class="grid_row grid_separator"
+    >
+      <div class="col">
+        <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+      </div>
+    </div>
+
     <div class="grid_row">
       <div class="col">
         <radios
@@ -162,7 +171,7 @@
     </div>
 
     <div
-      v-if="showErrorClue || showServerErrorMessage"
+      v-if="showErrorClue"
       class="grid_separator--l"
       aria-hidden="true"
     />
@@ -173,16 +182,7 @@
       aria-hidden="true"
     >
       <div class="col">
-        <p class="form__error form__error--centered">Please correct errors above</p>
-      </div>
-    </div>
-
-    <div
-      v-if="showServerErrorMessage"
-      class="grid_row"
-    >
-      <div class="col">
-        <p class="form__error form__error--centered">{{ serverErrorMessage }}</p>
+        <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
       </div>
     </div>
 

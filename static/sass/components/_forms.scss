@@ -8,7 +8,7 @@ $color-error: #f51c1c;
         border-color: $color-error;
       }
     }
-    
+
     input {
       @extend .font-sansserif;
       background-color: #fbfbfb;
@@ -27,7 +27,7 @@ $color-error: #f51c1c;
 
     // error message
     p {
-      @extend .form__error;
+      @extend .form__error--normal;
     }
 
     &--standard {
@@ -48,7 +48,16 @@ $color-error: #f51c1c;
   // error message
   &__error {
     color: $color-error;
-    font-size: $size-xs;
+
+    &--normal {
+      font-size: $size-xs;
+    }
+
+    &--prominent {
+      border: 1px solid $color-error;
+      font-size: $size-s;
+      padding: $size-b;
+    }
 
     &--centered {
       text-align: center;
@@ -97,7 +106,7 @@ $color-error: #f51c1c;
     &--always-stack {
       li {
         flex: 1 1 100%;
-        
+
         &:last-child {
           margin-bottom: 0;
         }
@@ -163,7 +172,7 @@ $color-error: #f51c1c;
 
     // error message
     & > p {
-      @extend .form__error;
+      @extend .form__error--normal;
     }
   }
 

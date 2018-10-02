@@ -6,6 +6,15 @@
     class="form circle-form"
     @submit="$event.preventDefault()"
   >
+    <div
+      v-show="showServerErrorMessage"
+      class="grid_row grid_separator"
+    >
+      <div class="col">
+        <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+      </div>
+    </div>
+
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
@@ -151,7 +160,7 @@
         aria-hidden="true"
       >
         <div class="col">
-          <p class="form__error form__error--centered">Please correct errors above</p>
+          <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
         </div>
       </div>
 
@@ -160,7 +169,7 @@
         class="grid_row"
       >
         <div class="col">
-          <p class="form__error form__error--centered">{{ serverErrorMessage }}</p>
+          <p class="form__error form__error--normal">{{ serverErrorMessage }}</p>
         </div>
       </div>
 
