@@ -115,7 +115,7 @@ def do_charge_or_show_errors(**kwargs):
     app.logger.debug("----Retrieving Stripe customer...")
 
     try:
-        email = request.form['stripeEmail']
+        email = request.form["stripeEmail"]
         installment_period = request.form["installment_period"]
         amount = request.form["amount"]
         customer = stripe.Customer.create(
@@ -137,10 +137,10 @@ def do_charge_or_show_errors(**kwargs):
         err = body.get("error", {})
         message = err.get("message", "")
         form_data = request.form.to_dict()
-        del form_data['stripeToken']
+        del form_data["stripeToken"]
 
-        return render_template(kwargs['template'],
-            bundles=kwargs['bundles'],
+        return render_template(kwargs["template"],
+            bundles=kwargs["bundles"],
             key=app.config["STRIPE_KEYS"]["publishable_key"],
             message=message,
             form_data=form_data
@@ -172,7 +172,7 @@ def member2_form():
     bundles = get_bundles("donate")
     template = "member-form2.html"
 
-    if request.method == 'POST':
+    if request.method == "POST":
         return validate_form(DonateForm,
             bundles=bundles,
             template=template
@@ -188,7 +188,7 @@ def circle_form():
     bundles = get_bundles("circle")
     template = "circle-form.html"
 
-    if request.method == 'POST':
+    if request.method == "POST":
         return validate_form(CircleForm,
             bundles=bundles,
             template=template
