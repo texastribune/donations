@@ -122,7 +122,6 @@ def charge_cards():
 
     for item in opportunities:
         if not item.stripe_customer:
-            log.it("Stripe Customer ID unspecified")
             continue
         amount = amount_to_charge(amount=item.amount, pay_fees=item.agreed_to_pay_fees)
         try:

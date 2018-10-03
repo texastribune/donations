@@ -660,7 +660,9 @@ class Contact(SalesforceObject):
     def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None):
         contact = cls.get(email=email)
         if contact:
+            logging.debug(f"Contact found: {contact}")
             return contact
+        logging.debug("Creating contact...")
         contact = Contact()
         contact.email = email
         contact.first_name = first_name
@@ -728,11 +730,15 @@ class Contact(SalesforceObject):
         return contact
 
     def __str__(self):
-        return f"{self.id}: {self.first_name} {self.last_name}"
+        return f"{self.id} ({self.account_id}): {self.first_name} {self.last_name}"
 
     def save(self):
         self.sf.save(self)
-        return self
+        # TODO this is a workaround for now because creating a new
+        # contact will also create a new account and we need that account ID
+        # so we have to re-fetch the contact to get it
+        tmp_contact = self.get(id=self.id)
+        self.account_id = tmp_contact.account_id
 
 
 class Affiliation(SalesforceObject):
