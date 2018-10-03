@@ -54,7 +54,6 @@ class SalesforceConnection(object):
 
         self._instance_url = None
 
-        return None
 
     def _get_token(self):
 
@@ -377,7 +376,6 @@ class Opportunity(SalesforceObject):
                     raise
             else:
                 raise
-        return self
 
 
 class RDO(SalesforceObject):
@@ -658,7 +656,6 @@ class Account(SalesforceObject):
 
     def save(self):
         self.sf.save(self)
-        return self
 
 
 class Contact(SalesforceObject):
@@ -839,7 +836,6 @@ class Affiliation(SalesforceObject):
 
     def save(self):
         self.sf.save(self)
-        return self
 
     def __str__(self):
         return (
