@@ -48,11 +48,17 @@ class SalesforceConnection(object):
         token_path = "/services/oauth2/token"
         self.url = f"https://{self.host}{token_path}"
 
+        self._instance_url = None
+
+        return None
+
+    def _get_token(self):
+
         r = requests.post(self.url, data=self.payload)
         self.check_response(r)
         response = json.loads(r.text)
 
-        self.instance_url = response["instance_url"]
+        self._instance_url = response["instance_url"]
         access_token = response["access_token"]
 
         self.headers = {
@@ -61,7 +67,11 @@ class SalesforceConnection(object):
             "Content-Type": "application/json",
         }
 
-        return None
+    @property
+    def instance_url(self):
+        if not self._instance_url:
+            self._get_token()
+        return self._instance_url
 
     @staticmethod
     def check_response(response=None, expected_status=200):
