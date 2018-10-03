@@ -54,7 +54,6 @@ class SalesforceConnection(object):
 
         self._instance_url = None
 
-
     def _get_token(self):
 
         r = requests.post(self.url, data=self.payload)
@@ -168,8 +167,10 @@ class SalesforceConnection(object):
         response = json.loads(response.text)
         error = False
         for item in response:
-            if item['success'] is not True:
-                logging.warning(f"Failed to update id {item['id']}, errors: {item['errors']}")
+            if item["success"] is not True:
+                logging.warning(
+                    f"Failed to update id {item['id']}, errors: {item['errors']}"
+                )
                 error = item["errors"]
         if error:
             raise SalesforceException(f"Failure on update: {error}")
@@ -428,7 +429,6 @@ class RDO(SalesforceObject):
         self.record_type_name = None
         self.created = False
 
-
     def _format(self):
 
         # TODO be sure to reverse this on deserialization
@@ -538,16 +538,18 @@ class RDO(SalesforceObject):
         # since NPSP doesn't let you pass through the record
         # type ID of the opportunity (it will only use one hard-coded value)
         # we set them for all of the opportunities here. But if the RDO
-        # is open ended then it'll create new opportunities of the wrong 
-        # type on its own. We warn about that. 
-        # 
+        # is open ended then it'll create new opportunities of the wrong
+        # type on its own. We warn about that.
+        #
         # You should fix this through
-        # process builder/mass action scheduler or some other process on the 
+        # process builder/mass action scheduler or some other process on the
         # SF side
         if self.record_type_name == DEFAULT_RDO_TYPE:
             return
         if self.open_ended_status == "Open":
-            logging.warning(f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}")
+            logging.warning(
+                f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
+            )
         update = {"RecordType": {"Name": self.record_type_name}}
         self.sf.update(self.opportunities(), update)
 
