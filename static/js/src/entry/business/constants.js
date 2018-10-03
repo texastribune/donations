@@ -101,18 +101,20 @@ export const BUSINESS_BUCKETS = {
     payFees: DEFAULT_PAY_FEES,
   },
 };
+
 //
 // Set defaults in this file where everything else is initialized
 //
 export const DEFAULT_SELECT_BUCKET = BUSINESS_BUCKETS[POSITION_0];
 export const DEFAULT_SELECTOR_LEVEL = 'levelAMonthly';
+
 //
+// Generic data format for using the SelectList Vue component
 // US States and territories for select state list
-// Using the DOM standard naminfg convention for select lists
+// Using the DOM standard naming convention for select data fields
 //
+export const DEFAULT_STATE_SELECTED = 43; // Texas
 export const US_STATES_SELECT_LIST = [
-  // 0th element is the start value
-  { value: '', text: 'Select a state' },
   { value: 'AL', text: 'Alabama' },
   { value: 'AK', text: 'Alaska' },
   { value: 'AZ', text: 'Arizona' },

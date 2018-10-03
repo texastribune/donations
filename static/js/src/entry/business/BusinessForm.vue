@@ -1,5 +1,3 @@
-import addNumberCommas from "../../utils/addNumberCommas";
-
 <template>
   <form
     ref="form"
@@ -39,22 +37,23 @@ import addNumberCommas from "../../utils/addNumberCommas";
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.businessName"
+            :validation="validation.business_name"
             label-text="business name"
             maxlength="255"
             base-classes="form__text form__text--standard"
-            name="reason"
+            name="business_name"
             store-module="businessForm"
+            @setValidationValue="setValidationValue"
           />
         </div>
         <div class="col_6 grid_separator">
           <text-input
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.website"
+            :validation="validation.business_website"
             label-text="website"
             maxlength="255"
             base-classes="form__text form__text--standard"
-            name="website"
+            name="business_website"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -66,11 +65,11 @@ import addNumberCommas from "../../utils/addNumberCommas";
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.businessAddress"
+            :validation="validation.business_address"
             label-text="street address"
             maxlength="255"
             base-classes="form__text form__text--standard"
-            name="streetAddress"
+            name="business_address"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -82,11 +81,11 @@ import addNumberCommas from "../../utils/addNumberCommas";
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.businessCity"
+            :validation="validation.business_city"
             label-text="city"
             maxlength="40"
             base-classes="form__text form__text--standard"
-            name="city"
+            name="business_city"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -95,10 +94,10 @@ import addNumberCommas from "../../utils/addNumberCommas";
           <select-list
             :options="options"
             :required="true"
-            :validation="validation.businessState"
+            :validation="validation.business_state"
             label-text="state"
-            name="state"
             base-classes="form__text form__text--standard"
+            name="business_state"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -107,11 +106,11 @@ import addNumberCommas from "../../utils/addNumberCommas";
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.businessZipcode"
+            :validation="validation.business_zipcode"
             label-text="zip code"
             maxlength="5"
             base-classes="form__text form__text--standard"
-            name="zip_code"
+            name="business_zipcode"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -283,7 +282,11 @@ import NativePay from '../../elements/NativePay.vue';
 import Choices from './Choices.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
-import {BUSINESS_BUCKETS, US_STATES_SELECT_LIST} from './constants';
+
+import {
+  US_STATES_SELECT_LIST,
+  DEFAULT_STATE_SELECTED
+} from './constants';
 
 
 export default {
@@ -308,70 +311,75 @@ export default {
 
   data() {
     return {
-      options: this.buildList(US_STATES_SELECT_LIST),
-      stripeEmail: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a valid email address',
-        validator: this.isEmail,
+      options: {
+        list: this.buildList(US_STATES_SELECT_LIST),
+        default: DEFAULT_STATE_SELECTED,
       },
-      businessName: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a business name',
-        validator: this.isNotEmpty,
-      },
-      website: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a website, including https:// or http://',
-        validator: this.isURL,
-      },
-      businessAddress: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a street/mailing address',
-        validator: this.isNotEmpty,
-      },
-      businessCity: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a city',
-        validator: this.isNotEmpty,
-      },
-      businessState: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a state',
-        validator: this.isNotEmpty,
-      },
-      businessZipcode: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter a 5-digit zip code',
-        validator: this.isEmptyOrZip,
-      },
-      first_name: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter contact first name',
-        validator: this.isNotEmpty,
-      },
-      last_name: {
-        manual: true,
-        native: true,
-        valid: false,
-        message: 'Enter contact last name',
-        validator: this.isNotEmpty,
-      },
+      validation: {
+        stripeEmail: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter a valid email address',
+          validator: this.isEmail,
+        },
+        business_name: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter a business name',
+          validator: this.isNotEmpty,
+        },
+        business_website: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter a website, including https:// or http://',
+          validator: this.isURL,
+        },
+        business_address: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter a street/mailing address',
+          validator: this.isNotEmpty,
+        },
+        business_city: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter a city',
+          validator: this.isNotEmpty,
+        },
+        business_state: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Select a state',
+          validator: this.isNotEmpty,
+        },
+        business_zipcode: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter a 5-digit zip code',
+          validator: this.isEmptyOrZip,
+        },
+        first_name: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter contact first name',
+          validator: this.isNotEmpty,
+        },
+        last_name: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Enter contact last name',
+          validator: this.isNotEmpty,
+        },
+     },
     };
   },
 
@@ -379,7 +387,6 @@ export default {
 
     buildList(selectList) {
       const options = [];
-
       selectList.forEach((listItem, index) => {
         options.push({
           index: index,
@@ -387,7 +394,6 @@ export default {
           text: listItem.text
         });
       });
-      console.log(options);
       return options;
     }
   }

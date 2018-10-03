@@ -17,10 +17,10 @@
     :aria-required="required"
     :class="classes">
     <option
-      v-for="(option, index) in options"
+      v-for="(option, index) in options.list"
+        :selected="index == options.default"
         :id="getConnector(index)"
         :key="option.value"
-        :selected="option.id == 0"
         :value="option.value" >
         {{ option.text }}
     </option>
@@ -43,9 +43,8 @@ export default {
   ],
 
   props: {
-
     options: {
-      type: Array,
+      type: Object,
       required: true,
     },
 
@@ -59,12 +58,7 @@ export default {
       required: true,
     },
 
-    placeholder: {
-      type: String,
-      default: '',
-    },
-
-    required: {
+   required: {
       type: Boolean,
       default: true,
     },
@@ -76,7 +70,6 @@ export default {
   },
 
   computed: {
-
     connector() {
       if (!this.hasLabel) return false;
       return `_${this.randConnector}`;
@@ -94,8 +87,7 @@ export default {
     },
   },
 
-  methods: {
-
+    methods: {
     getConnector(index) {
       return `_${this.randConnector}-${index}`;
     },
