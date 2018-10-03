@@ -8,10 +8,12 @@
   >
     <div
       v-show="showServerErrorMessage"
-      class="grid_row grid_separator"
+      class="grid_container--l grid_separator"
     >
-      <div class="col">
-        <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+      <div class="grid_row">
+        <div class="col">
+          <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+        </div>
       </div>
     </div>
 
@@ -149,7 +151,7 @@
       </div>
 
       <div
-        v-if="showErrorClue || showServerErrorMessage"
+        v-if="showErrorClue"
         class="grid_separator--l"
         aria-hidden="true"
       />
@@ -161,15 +163,6 @@
       >
         <div class="col">
           <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
-        </div>
-      </div>
-
-      <div
-        v-if="showServerErrorMessage"
-        class="grid_row"
-      >
-        <div class="col">
-          <p class="form__error form__error--normal">{{ serverErrorMessage }}</p>
         </div>
       </div>
 
