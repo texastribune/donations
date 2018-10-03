@@ -27,6 +27,7 @@ $color-error: #f51c1c;
 
     // error message
     p {
+      @extend .form__error;
       @extend .form__error--normal;
     }
 
@@ -172,6 +173,7 @@ $color-error: #f51c1c;
 
     // error message
     & > p {
+      @extend .form__error;
       @extend .form__error--normal;
     }
   }
