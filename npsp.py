@@ -51,7 +51,6 @@ class SalesforceConnection(object):
         r = requests.post(self.url, data=self.payload)
         self.check_response(r)
         response = json.loads(r.text)
-        logging.debug(response)
 
         self.instance_url = response["instance_url"]
         access_token = response["access_token"]
@@ -539,7 +538,9 @@ class Contact(SalesforceObject):
     def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None):
         contact = cls.get(email=email)
         if contact:
+            logging.debug(f"Contact found: {contact}")
             return contact
+        logging.debug("Creating contact...")
         contact = Contact()
         contact.email = email
         contact.first_name = first_name
@@ -608,11 +609,15 @@ class Contact(SalesforceObject):
         return contact
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.id} ({self.account_id}): {self.first_name} {self.last_name}"
 
     def save(self):
         self.sf.save(self)
-        return self
+        # TODO this is a workaround for now because creating a new
+        # contact will also create a new account and we need that account ID
+        # so we have to re-fetch the contact to get it
+        tmp_contact = self.get(id=self.id)
+        self.account_id = tmp_contact.account_id
 
 
 class Affiliation(SalesforceObject):
