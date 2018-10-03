@@ -544,7 +544,9 @@ class RDO(SalesforceObject):
         # SF side
         if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
             return
-        logging.info(f"Setting record type for {self} opportunities to {self.record_type_name}")
+        logging.info(
+            f"Setting record type for {self} opportunities to {self.record_type_name}"
+        )
         if self.open_ended_status == "Open":
             logging.warning(
                 f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
