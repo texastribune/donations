@@ -157,7 +157,6 @@ class SalesforceConnection(object):
             record = dict()
             record["attributes"] = {"type": item.api_name}
             record["id"] = item.id
-            # TODO how to set this field on the objects themselves? Especially if it's one like RecordType?
             for k, v in changes.items():
                 record[k] = v
             records.append(record)
@@ -165,12 +164,11 @@ class SalesforceConnection(object):
         path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
         response = self.patch(path, data, expected_response=200)
         response = json.loads(response.text)
+        logging.debug(response)
         error = False
         for item in response:
             if item["success"] is not True:
-                logging.warning(
-                    f"Failed to update id {item['id']}, errors: {item['errors']}"
-                )
+                logging.warning(f"{item['errors']}")
                 error = item["errors"]
         if error:
             raise SalesforceException(f"Failure on update: {error}")
@@ -544,8 +542,9 @@ class RDO(SalesforceObject):
         # You should fix this through
         # process builder/mass action scheduler or some other process on the
         # SF side
-        if self.record_type_name == DEFAULT_RDO_TYPE:
+        if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
             return
+        logging.info(f"Setting record type for {self} opportunities to {self.record_type_name}")
         if self.open_ended_status == "Open":
             logging.warning(
                 f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
