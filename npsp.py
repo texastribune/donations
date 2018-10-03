@@ -23,6 +23,10 @@ SALESFORCE_HOST = os.environ.get("SALESFORCE_HOST", "")
 
 TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
 
+# this should match whatever record type Salesforce's NPSP is
+# configured to use for opportunities on an RDO
+DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
+
 
 class SalesforceException(Exception):
     pass
@@ -135,7 +139,7 @@ class SalesforceConnection(object):
         logging.debug(response)
         return response
 
-    def patch(self, path, data):
+    def patch(self, path, data, expected_response=204):
         """
         Call the Saleforce API to make updates.
         """
@@ -143,8 +147,35 @@ class SalesforceConnection(object):
         url = f"{self.instance_url}{path}"
         logging.debug(data)
         resp = requests.patch(url, headers=self.headers, data=json.dumps(data))
-        self.check_response(response=resp, expected_status=204)
+        self.check_response(response=resp, expected_status=expected_response)
         return resp
+
+    def update(self, objects, changes):
+        data = dict()
+        # what should this value be?
+        data["allOrNone"] = False
+        records = list()
+        for item in objects:
+            record = dict()
+            record["attributes"] = {"type": item.api_name}
+            record["id"] = item.id
+            # TODO how to set this field on the objects themselves? Especially if it's one like RecordType?
+            for k, v in changes.items():
+                record[k] = v
+            records.append(record)
+        data["records"] = records
+        path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
+        response = self.patch(path, data, expected_response=200)
+        response = json.loads(response.text)
+        error = False
+        for item in response:
+            if item['success'] is not True:
+                logging.warning(f"Failed to update id {item['id']}, errors: {item['errors']}")
+                error = item["errors"]
+        if error:
+            raise SalesforceException(f"Failure on update: {error}")
+
+        return response
 
     def save(self, sf_object):
 
@@ -177,6 +208,7 @@ class SalesforceObject(object):
     """
     This is the parent of all the other Salesforce objects.
     """
+
     def _format(self):
         raise NotImplementedError
 
@@ -395,7 +427,9 @@ class RDO(SalesforceObject):
         self.encouraged_by = None
         self.blast_subscription_email = None
         self.billing_email = None
+        self.record_type_name = None
         self.created = False
+
 
     def _format(self):
 
@@ -502,7 +536,22 @@ class RDO(SalesforceObject):
                     raise
             else:
                 raise
-        return self
+
+        # since NPSP doesn't let you pass through the record
+        # type ID of the opportunity (it will only use one hard-coded value)
+        # we set them for all of the opportunities here. But if the RDO
+        # is open ended then it'll create new opportunities of the wrong 
+        # type on its own. We warn about that. 
+        # 
+        # You should fix this through
+        # process builder/mass action scheduler or some other process on the 
+        # SF side
+        if self.record_type_name == DEFAULT_RDO_TYPE:
+            return
+        if self.open_ended_status == "Open":
+            logging.warning(f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}")
+        update = {"RecordType": {"Name": self.record_type_name}}
+        self.sf.update(self.opportunities(), update)
 
 
 class Account(SalesforceObject):
