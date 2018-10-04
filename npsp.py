@@ -222,6 +222,16 @@ class SalesforceObject(object):
     def _format(self):
         raise NotImplementedError
 
+    @classmethod
+    def get(cls, id, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.__name__}/{id}"
+        logging.debug(path)
+        response = sf.get(path)
+        new_obj = cls() 
+        new_obj.response = response
+        return new_obj
+
     def __repr__(self):
         obj = self._format()
         obj["Id"] = self.id
