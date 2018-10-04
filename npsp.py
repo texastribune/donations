@@ -27,6 +27,9 @@ TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
 # configured to use for opportunities on an RDO
 DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 
+def __getattr__(name):
+    return type(name, (SalesforceObject,), dict())
+
 
 class SalesforceException(Exception):
     pass
@@ -125,6 +128,15 @@ class SalesforceConnection(object):
             )
         logging.debug(response)
         return response["records"]
+
+    def get(self, path):
+        url = f"{self.instance_url}{path}"
+        print(url)
+        resp = requests.get(url, headers=self.headers)
+        print(resp.text)
+        self.check_response(response=resp, expected_status=200)
+        logging.info(resp)
+        return resp
 
     def post(self, path, data):
         """
