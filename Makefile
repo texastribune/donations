@@ -25,7 +25,7 @@ build:
 debug:
 	docker run --volumes-from=${APP} --interactive=true --tty=true ${NS}/${APP} bash
 
-build-dev: build
+build-dev:
 	docker build -f Dockerfile.dev --tag=${NS}/${APP}:dev .
 
 run:

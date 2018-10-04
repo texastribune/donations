@@ -11,7 +11,7 @@ COPY yarn.lock /app/
 COPY .babelrc /app/
 RUN yarn
 
-FROM python:3.6
+FROM python:3.7
 
 WORKDIR /app
 
