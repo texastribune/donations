@@ -1,3 +1,6 @@
+"""
+This file is the entrypoint for this Flask application. Can be executed with 'flask run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+"""
 import json
 import locale
 import logging
@@ -18,14 +21,19 @@ from flask import (
     request,
     send_from_directory,
 )
-from forms import BlastForm, DonateForm
-from npsp import RDO, Contact, Opportunity
+from forms import BlastForm, DonateForm, BusinessMembershipForm
+from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
-from util import clean, notify_slack, send_multiple_account_warning
+from util import (
+    clean,
+    notify_slack,
+    send_multiple_account_warning,
+    send_email_new_business_membership,
+)
 from validate_email import validate_email
 
-zone = timezone(TIMEZONE)
+ZONE = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, "C")
 
@@ -168,10 +176,10 @@ def submit_blast():
         customer = stripe.Customer.create(
             email=request.form["stripeEmail"], card=request.form["stripeToken"]
         )
+        app.logger.info(customer.id)
     else:
         message = "There was an issue saving your email address."
         return render_template("error.html", message=message)
-
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
@@ -204,6 +212,7 @@ def create_customer():
             customer = stripe.Customer.create(
                 email=stripe_email, card=request.json["stripeToken"]
             )
+            app.logger.info(customer.id)
             return jsonify({"customer_id": customer.id})
         except stripe.error.CardError as e:
             body = e.json_body
@@ -227,6 +236,9 @@ def create_customer():
 
 @app.route("/charge", methods=["POST"])
 def charge():
+    """
+    Form submissions for the Blast, regular memberships and Circle memberships come here. It will get the customer ID from Stripe and then call Celery to complete the donation.
+    """
 
     app.logger.info(request.form)
 
@@ -239,7 +251,50 @@ def charge():
         try:
             app.logger.debug("----Retrieving Stripe customer...")
             customer = stripe.Customer.retrieve(request.form["customerId"])
+            app.logger.info(customer.id)
             add_donation.delay(customer=customer, form=clean(request.form))
+            if request.form["installment_period"] == "None":
+                gtm["event_label"] = "once"
+            else:
+                gtm["event_label"] = request.form["installment_period"]
+            gtm["event_value"] = request.form["amount"]
+            return render_template(
+                "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
+            )
+        except stripe.error.InvalidRequestError as e:
+            body = e.json_body
+            err = body.get("error", {})
+            message = err.get("message", "")
+            if "No such customer:" not in message:
+                raise e
+            else:
+                app.logger.warning(message)
+                return render_template("error.html", message=message)
+    else:
+        message = "There was an issue saving your donation information."
+        app.logger.warning(f"Form validation errors: {form.errors}")
+        return render_template("error.html", message=message)
+
+
+@app.route("/bmcharge", methods=["POST"])
+def bmcharge():
+    """
+    The endpoint for Business Membership form. Uses the BusinessMembershipForm for input validation. It will get the Stripe customer ID and then call Celery to complete the donation.
+    """
+
+    app.logger.info(request.form)
+    gtm = {}
+
+    form = BusinessMembershipForm(request.form)
+
+    bundles = get_bundles("charge")
+
+    if form.validate():
+        try:
+            app.logger.info("----Retrieving Stripe customer...")
+            customer = stripe.Customer.retrieve(request.form["customerId"])
+            app.logger.info(customer.id)
+            add_business_membership.delay(customer=customer, form=clean(request.form))
             if request.form["installment_period"] == "None":
                 gtm["event_label"] = "once"
             else:
@@ -265,6 +320,9 @@ def charge():
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
 def merchantid():
+    """
+    This is here to verify our domain so Stripe can support Apple Pay.
+    """
     root_dir = os.path.dirname(os.getcwd())
     return send_from_directory(
         os.path.join(root_dir, "app"), "apple-developer-merchantid-domain-association"
@@ -272,6 +330,9 @@ def merchantid():
 
 
 def add_opportunity(contact=None, form=None, customer=None):
+    """
+    This will add a single donation to Salesforce.
+    """
 
     logging.info("----Adding opportunity...")
 
@@ -285,12 +346,15 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
 
-    logging.debug(opportunity)
     opportunity.save()
+    logging.info(opportunity)
     return opportunity
 
 
 def add_recurring_donation(contact=None, form=None, customer=None):
+    """
+    This will add a recurring donation to Salesforce. Both Circle and regular.
+    """
 
     if form["installment_period"] is None:
         raise Exception("installment_period must have a value")
@@ -322,8 +386,8 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
 
-    logging.debug(rdo)
     rdo.save()
+    logging.info(rdo)
 
     return rdo
 
@@ -333,7 +397,7 @@ def add_donation(form=None, customer=None):
     """
     Add a contact and their donation into SF. This is done in the background
     because there are a lot of API calls and there's no point in making the
-    payer wait for them.
+    payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
     form = clean(form)
     first_name = form["first_name"]
@@ -346,7 +410,7 @@ def add_donation(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
     )
-    logging.debug(contact)
+    logging.info(contact)
 
     # intentionally overwriting zip but not name here
 
@@ -369,8 +433,129 @@ def add_donation(form=None, customer=None):
     return True
 
 
+def add_business_opportunity(account=None, form=None, customer=None):
+    """
+    Adds a single business membership to Salesforce.
+    """
+
+    year = datetime.now(tz=ZONE).strftime("%Y")
+    opportunity = Opportunity(account=account)
+    opportunity.record_type_name = "Business Membership"
+    opportunity.name = f"{year} Business {account.name} One time"
+    opportunity.amount = form.get("amount", 0)
+    opportunity.stripe_customer = customer["id"]
+    opportunity.campaign_id = form["campaign_id"]
+    opportunity.referral_id = form["referral_id"]
+    opportunity.description = "Texas Tribune Business Membership"
+    opportunity.agreed_to_pay_fees = form["pay_fees_value"]
+    opportunity.encouraged_by = form["reason"]
+    opportunity.lead_source = "Stripe"
+    opportunity.save()
+    logging.info(opportunity)
+    return opportunity
+
+
+def add_business_rdo(account=None, form=None, customer=None):
+    """
+    Adds a recurring business membership to Salesforce.
+    """
+
+    if form["installment_period"] is None:
+        raise Exception("installment_period must have a value")
+
+    year = datetime.now(tz=ZONE).strftime("%Y")
+
+    rdo = RDO(account=account)
+    rdo.name = f"{year} Business {account.name} Recurring"
+    rdo.type = "Business Membership"
+    rdo.record_type_name = "Business Membership"
+    rdo.stripe_customer = customer["id"]
+    rdo.campaign_id = form["campaign_id"]
+    rdo.referral_id = form["referral_id"]
+    rdo.description = "Texas Tribune Business Membership"
+    rdo.agreed_to_pay_fees = form["pay_fees_value"]
+    rdo.encouraged_by = form["reason"]
+    rdo.lead_source = "Stripe"
+    rdo.amount = form.get("amount", 0)
+    rdo.installments = form["installments"]
+    rdo.open_ended_status = form["openended_status"]
+    rdo.installment_period = form["installment_period"]
+    rdo.save()
+    logging.info(rdo)
+
+    return rdo
+
+
+@celery.task(name="app.add_business_membership")
+def add_business_membership(form=None, customer=None):
+    """
+    Adds a business membership. Both single and recurring.
+
+    It will look for a matching Contact (or create one). Then it will look for a matching Account (or create one). Then it will add the single or recurring donation to the Account. Then it will add an Affiliation to link the Contact with the Account. It sends a notification to Slack (if configured). It will send email notification about the new membership.
+    """
+
+    form = clean(form)
+
+    first_name = form["first_name"]
+    last_name = form["last_name"]
+    email = form["stripeEmail"]
+
+    website = form["website"]
+    business_name = form["business_name"]
+    shipping_city = form["shipping_city"]
+    shipping_street = form["shipping_street"]
+    shipping_state = form["shipping_state"]
+    shipping_postalcode = form["shipping_postalcode"]
+
+    logging.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name
+    )
+    logging.info(contact)
+    logging.info("----Getting account....")
+
+    account = Account.get_or_create(
+        record_type_name="Organization",
+        website=website,
+        name=business_name,
+        shipping_street=shipping_street,
+        shipping_city=shipping_city,
+        shipping_state=shipping_state,
+        shipping_postalcode=shipping_postalcode,
+    )
+    logging.info(account)
+
+    if form["installment_period"] is None:
+        logging.info("----Creating single business membership...")
+        opportunity = add_business_opportunity(
+            account=account, form=form, customer=customer
+        )
+        notify_slack(account=account, opportunity=opportunity)
+    else:
+        logging.info("----Creating recurring business membership...")
+        rdo = add_business_rdo(account=account, form=form, customer=customer)
+        notify_slack(account=account, rdo=rdo)
+
+    logging.info("----Getting affiliation...")
+
+    affiliation = Affiliation.get_or_create(
+        account=account, contact=contact, role="Business Member Donor"
+    )
+    logging.info(affiliation)
+
+    send_email_new_business_membership(account=account, contact=contact)
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)
+
+    return True
+
+
 @celery.task(name="app.add_blast_subcription")
 def add_blast_subscription(form=None, customer=None):
+    """
+    Adds a Blast subscription. Blast subscriptions are always recurring. They have two email addresses: one for billing and one for the newsletter subscription.
+    """
 
     form = clean(form)
     logging.info(form)
@@ -383,7 +568,7 @@ def add_blast_subscription(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
-    logging.debug(contact)
+    logging.info(contact)
 
     rdo = RDO(contact=contact)
 
@@ -402,15 +587,15 @@ def add_blast_subscription(form=None, customer=None):
         rdo.installment_period = "monthly"
     else:
         rdo.installment_period = "yearly"
-    now = datetime.now(tz=zone).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+    now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
     rdo.name = f"{first_name} {last_name} - {now} - The Blast"
     rdo.type = "The Blast"
     rdo.billing_email = form["stripeEmail"]
     rdo.blast_subscription_email = form["subscriber_email"]
 
     logging.info("----Saving RDO....")
-    logging.debug(rdo)
     rdo.save()
+    logging.info(rdo)
 
     return True
 

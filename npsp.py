@@ -12,17 +12,21 @@ from pytz import timezone
 
 from fuzzywuzzy import process
 
-zone = timezone("US/Central")  # TODO read in
+ZONE = timezone(os.environ.get("TIMEZONE", "US/Central"))
 
-DEFAULT_RECORDTYPEID = "01216000001IhI9"  # TODO
-SALESFORCE_API_VERSION = "v43.0"  # TODO
-ORGANIZATION_RECORDTYPEID = "01216000001IhHMAA0"  # TODO
-TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
+SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "")
+
 SALESFORCE_CLIENT_ID = os.environ.get("SALESFORCE_CLIENT_ID", "")
 SALESFORCE_CLIENT_SECRET = os.environ.get("SALESFORCE_CLIENT_SECRET", "")
 SALESFORCE_USERNAME = os.environ.get("SALESFORCE_USERNAME", "")
 SALESFORCE_PASSWORD = os.environ.get("SALESFORCE_PASSWORD", "")
 SALESFORCE_HOST = os.environ.get("SALESFORCE_HOST", "")
+
+TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
+
+# this should match whatever record type Salesforce's NPSP is
+# configured to use for opportunities on an RDO
+DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 
 
 class SalesforceException(Exception):
@@ -49,11 +53,15 @@ class SalesforceConnection:
         token_path = "/services/oauth2/token"
         self.url = f"https://{self.host}{token_path}"
 
+        self._instance_url = None
+
+    def _get_token(self):
+
         r = requests.post(self.url, data=self.payload)
         self.check_response(r)
         response = json.loads(r.text)
 
-        self.instance_url = response["instance_url"]
+        self._instance_url = response["instance_url"]
         access_token = response["access_token"]
 
         self.headers = {
@@ -62,7 +70,11 @@ class SalesforceConnection:
             "Content-Type": "application/json",
         }
 
-        return None
+    @property
+    def instance_url(self):
+        if not self._instance_url:
+            self._get_token()
+        return self._instance_url
 
     @staticmethod
     def check_response(response=None, expected_status=200):
@@ -86,7 +98,7 @@ class SalesforceConnection:
             except KeyError:
                 e.content = content
             e.response = response
-            logging.debug(f"response.text: {response.text}")
+            logging.info(f"response.text: {response.text}")
             raise e
         return True
 
@@ -126,7 +138,7 @@ class SalesforceConnection:
         logging.debug(response)
         return response
 
-    def patch(self, path, data):
+    def patch(self, path, data, expected_response=204):
         """
         Call the Saleforce API to make updates.
         """
@@ -134,21 +146,47 @@ class SalesforceConnection:
         url = f"{self.instance_url}{path}"
         logging.debug(data)
         resp = requests.patch(url, headers=self.headers, data=json.dumps(data))
-        self.check_response(response=resp, expected_status=204)
+        self.check_response(response=resp, expected_status=expected_response)
         return resp
 
     def get(self, path, fields=None):
         """
         Call the Saleforce API to retrieve an object.
         """
-
         url = f"{self.instance_url}{path}"
         if fields:
             url += "?{','.join(fields)}"
         logging.debug(url)
         resp = requests.get(url, headers=self.headers)
         self.check_response(response=resp, expected_status=200)
-        response = json.loads(resp.text)
+        resp = json.loads(resp.text)
+        return resp
+
+    def update(self, objects, changes):
+        data = dict()
+        # what should this value be?
+        data["allOrNone"] = False
+        records = list()
+        for item in objects:
+            record = dict()
+            record["attributes"] = {"type": item.api_name}
+            record["id"] = item.id
+            for k, v in changes.items():
+                record[k] = v
+            records.append(record)
+        data["records"] = records
+        path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
+        response = self.patch(path, data, expected_response=200)
+        response = json.loads(response.text)
+        logging.debug(response)
+        error = False
+        for item in response:
+            if item["success"] is not True:
+                logging.warning(f"{item['errors']}")
+                error = item["errors"]
+        if error:
+            raise SalesforceException(f"Failure on update: {error}")
+
         return response
 
     def save(self, sf_object):
@@ -161,10 +199,12 @@ class SalesforceConnection:
             except SalesforceException as e:
                 logging.error(e.response.text)
                 raise
+            sf_object.tainted = set() # TODO move this to SalesforceObject.save()?
             return sf_object
 
         logging.info(f"{sf_object.api_name} object doesn't exist; creating...")
         path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
+        logging.debug(repr(sf_object))
         try:
             response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
@@ -174,46 +214,66 @@ class SalesforceConnection:
         sf_object.id = response["id"]
         sf_object.created = True
 
+        sf_object.tainted = set() # TODO move this to SalesforceObject.save()?
         return sf_object
 
 
-class SalesforceObject:
+class SalesforceObject(object):
+    """
+    This is the parent of all the other Salesforce objects.
+    """
+
+    def _format(self):
+        raise NotImplementedError
+
     def __repr__(self):
         obj = self._format()
         obj["Id"] = self.id
         return json.dumps(obj)
 
     def __setattr__(self, attr, value):
+        logging.debug(f"Setting {attr} to {value} on {type(self)}")
         if hasattr(self, attr):
             super().__setattr__(attr, value)
-            print(f"Setting {attr} to {value} on {type(self)}")
-            self.tainted.append(attr)
+            self.tainted.add(attr)
         else:
             super().__setattr__(attr, value)
+
 
     def my_save(self):
         self.sf.save(self)
         return self
 
+    # TODO why do we have to filter the id? Shouldn't it only be called when the id isn't present?
+    # TODO combine these two serialize methods
+    # TODO what happens when we save a new object that has no attribute map? I guess we have to fetch the schema to get the api names
+    # TODO __getattr__ fetch on demand? If so we don't have to fetch the account_id from a new contact
+    # TODO list of fields to grab on SELECT for each type of object? Does it have to be api names or can we fetch the schema?
+    # TODO store the schemas and field maps on the class instead of the object? I think the field maps may have to be per-object.
     def serialize(self):
         print("called serialize")
         out = dict()
         for api_name, obj_attr in self.field_to_attr_map.items():
+            if obj_attr == 'id':
+                continue
             out[api_name] = getattr(self, obj_attr)
-        out.pop("Id", None)
         return out
 
     def patch_serialize(self):
         out = dict()
         for attribute in self.tainted:
-            if attribute == 'id'
+            if attribute == 'id':
+                # id is always in the URL not the body
+                continue
             if attribute not in self.attr_to_field_map:
+                # we don't want .created and .duplicate_found
                 continue
             out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
         return out
 
     def __init__(self, sf_connection=None):
-        self.tainted = list()
+        self.tainted = set()
+        self.id = None
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
     @staticmethod
@@ -230,8 +290,10 @@ class SalesforceObject:
         logging.debug(f"{name} -> {output}")
         return output
 
+    # TODO does this need to be a class method?
+    # TODO move this to __init__?
     @classmethod
-    def get(cls, oid, sf_connection=None):
+    def get(cls, id, sf_connection=None):
 
         if cls.__name__ == "SalesforceObject":
             raise NotImplementedError
@@ -239,16 +301,21 @@ class SalesforceObject:
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         # TODO restrict by fields if present
-        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{oid}"
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{id}"
+        logging.debug(path)
         response = sf.get(path)
+        logging.debug(response)
         obj = cls()
         obj.attr_to_field_map = dict()
         obj.field_to_attr_map = dict()
         for field, value in response.items():
-            attr = field
-            attr = cls.convert_to_snake_case(attr)
-            if hasattr(obj, attr):
+            attr = cls.convert_to_snake_case(field)
+            if attr in obj.attr_to_field_map.keys():
+                logging.warning(obj.attr_to_field_map[attr])
                 logging.warning(f"Duplicate attribute name: {attr} ({field})")
+                # use just the lowercase api name if there's a clash. 
+                # TODO Maybe check to make sure that's not a dupe too?
+                attr = field.lower()
             obj.attr_to_field_map[attr] = field
             obj.field_to_attr_map[field] = attr
             setattr(obj, attr, value)
@@ -261,12 +328,25 @@ class Opportunity(SalesforceObject):
 
     api_name = "Opportunity"
 
-    def __init__(self, contact=None, sf_connection=None):
+    def __init__(
+        self,
+        record_type_name="Donation",
+        contact=None,
+        stage_name="Pledged",
+        account=None,
+        sf_connection=None,
+    ):
         super().__init__(sf_connection)
 
-        today = datetime.now(tz=zone).strftime("%Y-%m-%d")
+        if contact and account:
+            raise SalesforceException("Account and Contact can't both be specified")
 
-        if contact is not None:
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+
+        if account is not None:
+            self.account_id = account.id
+            self.name = None
+        elif contact is not None:
             self.account_id = contact.account_id
             self.name = f"{contact.first_name} {contact.last_name} ({contact.email})"
         else:
@@ -277,8 +357,8 @@ class Opportunity(SalesforceObject):
         self._amount = 0
         self.close_date = today
         self.campaign_id = None
-        self.record_type_id = DEFAULT_RECORDTYPEID
-        self.stage_name = "Pledged"
+        self.record_type_name = record_type_name
+        self.stage_name = stage_name
         self.type = "Single"
         self.stripe_customer = None
         self.referral_id = None
@@ -288,12 +368,13 @@ class Opportunity(SalesforceObject):
         self.encouraged_by = None
         self.stripe_card = None
         self.stripe_transaction = None
+        self.expected_giving_date = None
         self.closed_lost_reason = None
         self.created = False
 
     @classmethod
-    def get(cls, oid):
-        obj = super().get(oid=oid)
+    def get(cls, id):
+        obj = super().get(id=id)
         print(id(obj))
         return obj
 
@@ -301,21 +382,24 @@ class Opportunity(SalesforceObject):
     def list_pledged(cls, begin, end, sf_connection=None):
 
         # TODO a more generic dserializing method
+        # TODO parameterize stage?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         query = f"""
         SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
             Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
-            RecordTypeId, Type, Referral_ID__c, LeadSource,
+            RecordType.Name, Type, Referral_ID__c, LeadSource,
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
-            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c
+            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
+            Expected_Giving_Date__c
         FROM Opportunity
         WHERE Expected_Giving_Date__c <= {end}
         AND Expected_Giving_Date__c >= {begin}
         AND StageName = 'Pledged'
         """
         response = sf.query(query)
+        logging.debug(response)
 
         results = list()
         for item in response:
@@ -328,8 +412,9 @@ class Opportunity(SalesforceObject):
             y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
             y.stage_name = "Pledged"
             y.close_date = item["CloseDate"]
+            y.record_type_name = item["RecordType"]["Name"]
+            y.expected_giving_date = item["Expected_Giving_Date__c"]
             y.campaign_id = item["CampaignId"]
-            y.record_type_id = item["RecordTypeId"]
             y.type = item["Type"]
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
@@ -338,6 +423,7 @@ class Opportunity(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.account_id = item["AccountId"]
             y.created = False
             results.append(y)
 
@@ -357,7 +443,7 @@ class Opportunity(SalesforceObject):
             "Amount": self.amount,
             "CloseDate": self.close_date,
             "CampaignId": self.campaign_id,
-            "RecordTypeId": self.record_type_id,
+            "RecordType": {"Name": self.record_type_name},
             "Name": self.name,
             "StageName": self.stage_name,
             "Type": self.type,
@@ -373,7 +459,7 @@ class Opportunity(SalesforceObject):
         }
 
     def __str__(self):
-        return f"{self.name} for {self.amount}"
+        return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
     def save(self):
 
@@ -399,26 +485,28 @@ class Opportunity(SalesforceObject):
                     raise
             else:
                 raise
-        return self
 
 
 class RDO(SalesforceObject):
+    """
+    Recurring Donation objects.
+    """
 
     api_name = "npe03__Recurring_Donation__c"
 
-    def __init__(self, contact=None, account=None, sf_connection=None):
-        super().__init__(sf_connection)
+    def __init__(self, id=None, contact=None, account=None, sf_connection=None):
+        super().__init__(sf_connection=sf_connection)
 
         if account and contact:
             raise SalesforceException("Account and Contact can't both be specified")
 
-        today = datetime.now(tz=zone).strftime("%Y-%m-%d")
-        now = datetime.now(tz=zone).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
 
         if contact is not None:
             self.contact_id = contact.id
             self.name = (
-                f"{now} for {contact.first_name} {contact.last_name} ({contact.email})"
+                f"{now} for {contact.sf_object} {contact.last_name} ({contact.email})"
             )
             self.account_id = None
         elif account is not None:
@@ -430,7 +518,7 @@ class RDO(SalesforceObject):
             self.account_id = None
             self.contact_id = None
 
-        self.id = None
+        self.id = id
         self.installments = None
         self.open_ended_status = None
         self.installment_period = None
@@ -446,6 +534,7 @@ class RDO(SalesforceObject):
         self.encouraged_by = None
         self.blast_subscription_email = None
         self.billing_email = None
+        self.record_type_name = None
         self.created = False
 
     def _format(self):
@@ -480,7 +569,47 @@ class RDO(SalesforceObject):
         return recurring_donation
 
     def __str__(self):
-        return f"{self.name} for {self.amount} ({self.installment_period})"
+        return f"{self.id}: {self.name} for {self.amount} ({self.description})"
+
+    def opportunities(self):
+        query = f"""
+            SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
+            Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
+            RecordType.Name, Type, Referral_ID__c, LeadSource,
+            Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
+            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
+            Expected_Giving_Date__c
+            FROM Opportunity
+            WHERE npe03__Recurring_Donation__c = '{self.id}'
+        """
+        # TODO must make this dynamic
+        response = self.sf.query(query)
+        results = list()
+        for item in response:
+            y = Opportunity(sf_connection=self.sf)
+            y.id = item["Id"]
+            y.name = item["Name"]
+            y.amount = item["Amount"]
+            y.stripe_customer = item["Stripe_Customer_ID__c"]
+            y.description = item["Description"]
+            y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
+            y.stage_name = "Pledged"
+            y.close_date = item["CloseDate"]
+            y.record_type_name = item["RecordType"]["Name"]
+            y.expected_giving_date = item["Expected_Giving_Date__c"]
+            y.campaign_id = item["CampaignId"]
+            y.type = item["Type"]
+            y.referral_id = item["Referral_ID__c"]
+            y.lead_source = item["LeadSource"]
+            y.encouraged_by = item["Encouraged_to_contribute_by__c"]
+            y.stripe_transaction = item["Stripe_Transaction_ID__c"]
+            y.stripe_card = item["Stripe_Card__c"]
+            y.account_id = item["AccountId"]
+            y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.account_id = item["AccountId"]
+            y.created = False
+            results.append(y)
+        return results
 
     @property
     def amount(self):
@@ -513,7 +642,27 @@ class RDO(SalesforceObject):
                     raise
             else:
                 raise
-        return self
+
+        # since NPSP doesn't let you pass through the record
+        # type ID of the opportunity (it will only use one hard-coded value)
+        # we set them for all of the opportunities here. But if the RDO
+        # is open ended then it'll create new opportunities of the wrong
+        # type on its own. We warn about that.
+        #
+        # You should fix this through
+        # process builder/mass action scheduler or some other process on the
+        # SF side
+        if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
+            return
+        logging.info(
+            f"Setting record type for {self} opportunities to {self.record_type_name}"
+        )
+        if self.open_ended_status == "Open":
+            logging.warning(
+                f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
+            )
+        update = {"RecordType": {"Name": self.record_type_name}}
+        self.sf.update(self.opportunities(), update)
 
 
 class Account(SalesforceObject):
@@ -529,34 +678,73 @@ class Account(SalesforceObject):
         self.website = None
         self.shipping_street = None
         self.shipping_city = None
-        self.shipping_postal_code = None
+        self.shipping_postalcode = None
         self.shipping_state = None
+        self.record_type_name = "Household"
 
     def _format(self):
         return {
             "Website": self.website,
-            "RecordTypeId": ORGANIZATION_RECORDTYPEID,
+            "RecordType": {"Name": self.record_type_name},
             "Name": self.name,
             "ShippingStreet": self.shipping_street,
             "ShippingCity": self.shipping_city,
-            "ShippingPostalCode": self.shipping_postal_code,
+            "ShippingPostalCode": self.shipping_postalcode,
             "ShippingState": self.shipping_state,
         }
 
     def __str__(self):
-        return f"{self.name} ({self.website})"
+        return f"{self.id}: {self.name} ({self.website})"
 
     @classmethod
-    def get(cls, website=None, name=None, sf_connection=None):
+    def get_or_create(
+        cls,
+        record_type_name="Household",
+        website=None,
+        name=None,
+        shipping_city=None,
+        shipping_street=None,
+        shipping_state=None,
+        shipping_postalcode=None,
+        sf_connection=None,
+    ):
+        account = cls.get(
+            record_type_name=record_type_name,
+            website=website,
+            sf_connection=sf_connection,
+        )
+        if account:
+            return account
+        account = Account()
+        account.website = website
+        account.name = name
+        account.shipping_city = shipping_city
+        account.shipping_postalcode = shipping_postalcode
+        account.shipping_state = shipping_state
+        account.shipping_street = shipping_street
+        account.record_type_name = record_type_name
+        account.save()
+        return account
+
+    @classmethod
+    def get(
+        cls, record_type_name="Household", website=None, name=None, sf_connection=None
+    ):
+        """
+        Right now we're only using the website to search for existing accounts.
+        """
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         query = f"""
             SELECT Id, Name, Website
             FROM Account WHERE
-            RecordTypeId = '{ORGANIZATION_RECORDTYPEID}'
+            RecordType.Name IN ('{record_type_name}')
         """
         response = sf.query(query)
+
+        # We do a fuzzy search on the website and if the top hit
+        # has a confidence of 95 or higher we use it.
         website_idx = {
             x["Website"]: {"id": x["Id"], "name": x["Name"]}
             for x in response
@@ -581,32 +769,25 @@ class Account(SalesforceObject):
 
     def save(self):
         self.sf.save(self)
-        return self
 
 
 class Contact(SalesforceObject):
 
     api_name = "Contact"
 
-    def __init__(self, sf_connection=None):
+    def __init__(self, id=None, sf_connection=None):
         super().__init__(sf_connection)
 
-        self.id = None
-        self.account_id = None
-        self.first_name = None
-        self.last_name = None
+        self.id = id
         self.created = False
-        self.email = None
-        self.lead_source = "Stripe"
-        self.mailing_postal_code = None
         self.duplicate_found = False
 
-    @property
-    def name(self):
-        return f"{self.first_name} {self.last_name}"
 
     @staticmethod
     def parse_all_email(email, results):
+        """
+        This field is a CSV. So we parse that to make sure we've got an exact match and not just a substring match.
+        """
         filtered_results = list()
         for item in results:
             all_email = item["All_In_One_EMail__c"]
@@ -641,7 +822,6 @@ class Contact(SalesforceObject):
         return contact
 
     @classmethod
-    # TODO rename id?
     def get(cls, id=None, email=None, sf_connection=None):
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
@@ -651,8 +831,10 @@ class Contact(SalesforceObject):
         if id and email:
             raise SalesforceException("id and email can't both be specified")
         if id:
+            contact = super().get(id=id)
+            return contact
             query = f"""
-                    SELECT Id, AccountId, FirstName, LastName, LeadSource, Stripe_Customer_ID__c, MailingPostalCode, Email
+                    SELECT Id, AccountId, FirstName, LastName, Email
                     FROM Contact
                     WHERE id = '{id}'
                     """
@@ -672,7 +854,7 @@ class Contact(SalesforceObject):
             return contact
 
         query = f"""
-                SELECT Id, AccountId, FirstName, LastName, LeadSource, MailingPostalCode, All_In_One_EMail__c, Email
+                SELECT Id, AccountId, FirstName, LastName, Email
                 FROM Contact
                 WHERE All_In_One_EMail__c
                 LIKE '%{email}%'
@@ -707,20 +889,24 @@ class Contact(SalesforceObject):
         # TODO this is a workaround for now because creating a new
         # contact will also create a new account and we need that account ID
         # so we have to re-fetch the contact to get it
-        tmp_contact = self.get(id=self.id)
-        self.account_id = tmp_contact.account_id
+        if not self.account_id:
+            tmp_contact = self.get(id=self.id)
+            self.account_id = tmp_contact.account_id
 
 
 class Affiliation(SalesforceObject):
+    """
+    This object is a link between a contact and an account.
+    """
 
     api_name = "npe5__Affiliation__c"
 
     def __init__(self, contact=None, account=None, role=None, sf_connection=None):
         super().__init__(sf_connection)
-
+        # TODO allow id to be set in __init__?
         self.id = None
-        self.contact = contact
-        self.account = account
+        self.contact = contact.id
+        self.account = account.id
         self.role = role
 
     @classmethod
@@ -730,8 +916,8 @@ class Affiliation(SalesforceObject):
 
         query = f"""
             SELECT Id, npe5__Role__c from npe5__Affiliation__c
-            WHERE npe5__Contact__c = '{contact}'
-            AND npe5__Organization__c = '{account}'
+            WHERE npe5__Contact__c = '{contact.id}'
+            AND npe5__Organization__c = '{account.id}'
         """
         response = sf.query(query)
 
@@ -741,12 +927,27 @@ class Affiliation(SalesforceObject):
         if len(response) > 1:
             raise SalesforceException("More than one affiliation found")
         role = response[0]["npe5__Role__c"]
-        affliation = Affiliation(contact=contact, account=account, role=role)
-        return affliation
+
+        affiliation = Affiliation(contact=contact, account=account, role=role)
+        affiliation.id = response[0]["Id"]
+        return affiliation
+
+    @classmethod
+    def get_or_create(cls, account=None, contact=None, role=None):
+        affiliation = cls.get(account=account, contact=contact)
+        if affiliation:
+            return affiliation
+        affiliation = Affiliation(account=account, contact=contact, role=role)
+        affiliation.save()
+        return affiliation
 
     def save(self):
         self.sf.save(self)
-        return self
+
+    def __str__(self):
+        return (
+            f"{self.id}: {self.contact} is affiliated with {self.account} ({self.role})"
+        )
 
     def _format(self):
         return {
