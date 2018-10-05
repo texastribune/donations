@@ -23,7 +23,8 @@
   </header>
   <div id="blast" class="grid_container blast_main">
     <form action="/submit-blast" method="post" class="blastform grid_separator--l">
-      <input name="campaign_id" id="campaign_id" value="{{ campaign_id  }}" type="hidden">
+      <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
+      <input name="referral_id" id="referral_id" value="{{ referral_id }}" type="hidden">
       <div class="form-outer-section outer-section narrow">
 
         <header class="grid_separator--l">
@@ -74,7 +75,7 @@
               {% endfor %}
             </ul>
             <h4 class="grid_separator--s">Would multiple people at your organization like to receive The Blast? Good news! We offer group rates.</h4>
-            <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168686">512-716-8686</a> for more information.</p>
+            <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168695">512-716-8695</a> for more information.</p>
           </div>
         </div>
         {{ form.description(value='Blast Subscription') }}

@@ -1,0 +1,20 @@
+<script>
+  var installment_periods = document.querySelectorAll('input[name="installment_period"]');
+  var openended_status_open = document.getElementById("openended_status-0");
+  var openended_status_none = document.getElementById("openended_status-1");
+
+  installment_periods.forEach(function(element){
+    var id = element.id;
+    
+    element.onclick = function(){
+      if (id == 'installment_period-2') {
+        openended_status_open.checked = false;
+        openended_status_none.checked = true;
+      } else {
+        openended_status_none.checked = false;
+        openended_status_open.checked = true;
+      }
+    };
+  });
+
+</script>

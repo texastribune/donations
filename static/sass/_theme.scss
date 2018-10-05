@@ -187,49 +187,23 @@ label[for='openended_status-0'], label[for='openended_status-1'] {
   }
 }
 
-// Stripe form submit button styles
-.button {
-  color: $color-black-pure;
-  @extend .font-sansserif;
-  font-size: $size-l;
-  font-weight: bold;
-  letter-spacing: 0.03em;
+// Stripe submit button styles
+.submit {
   text-align: center;
-
-  &:focus {
-    outline: none;
+  &.submit--wApple .text_separator{
+    font-size: $size-xxs;
+    align-self: center;
   }
-}
-
-.button-flat {
-  background-color: $color-yellow-tribune;
-  border: 2px solid $color-yellow-tribune;
-  color: $color-black-off;
-  font-weight: 700;
-  height: 45px;
-  line-height: 0;
-  text-align: center;
-  width: 250px;
-
-  &:hover {
-    background-color: $color-white-pure;
-    color: #222222;
-    cursor: pointer;
+  .button--applePay {
+    background-color: $color-black-pure;
+    background-image: -webkit-named-image(apple-pay-logo-white);
+    background-origin: content-box;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 90%;
+    border-color: $color-black-pure;
+    margin-right: 0;
   }
-}
-
-.button-applePay {
-  -webkit-appearance: none;
-  background-color: black;
-  background-image: -webkit-named-image(apple-pay-logo-white);
-  background-origin: content-box;
-  background-position: 50% 50%;
-  background-repeat: no-repeat;
-  background-size: 100% 60%;
-  cursor: pointer;
-  border: none;
-  height: 45px;
-  width: 150px;
 }
 
 // Error styles

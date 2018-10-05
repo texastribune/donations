@@ -1,0 +1,14 @@
+{
+  "extends": [
+    "plugin:vue/recommended",
+    "airbnb-base"
+  ],
+
+  "parser": "vue-eslint-parser",
+
+  "rules": {
+    "import/no-extraneous-dependencies": [
+      "error", { "devDependencies": true }
+    ]
+  }
+}

@@ -53,12 +53,12 @@ var stripe_donation = function() {
 
       if (!first_name_exists || !last_name_exists || !valid_email) {
         $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a valid email address, and a first and last name, then resubmit.');
+        $('.error-form-message').text('Please check that you entered a valid email address, and a first and last name.');
       }
 
       if (!amount_above_one_dollar) {
         $('.form-error').show();
-        $('.error-form-message').text('Please check that you entered a donation amount above $1, and then resubmit.');
+        $('.error-form-message').text('Please enter a donation above $1.');
       }
 
       if (first_name_exists & last_name_exists & amount_above_one_dollar & valid_email) {

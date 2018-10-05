@@ -1,7 +1,7 @@
 // This isn't actually being used or loaded, leaving for reference.
-// .font-serif {
-//   font-family: 'PT Serif', Georgia, serif;
-// }
+.font-serif {
+  font-family: 'PT Serif', Georgia, serif;
+}
 
 .font-sansserif {
   font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -50,30 +50,26 @@ p {
 h1 {
   font-size: $size-xxl;
   line-height: 1.2;
-
-  @include mq($until: bp-s) {
-    font-size: $size-xl;
-  }
 }
 
 h2 {
   @extend .font-sansserif;
-  font-size: $size-l;
+  font-size: $size-xl;
 }
 
 h3 {
   @extend .font-sansserif;
-  font-size: $size-m;
+  font-size: $size-l;
 }
 
 h4 {
   @extend .font-sansserif;
-  font-size: $size-s;
+  font-size: $size-m;
 }
 
 h5 {
   @extend .font-sansserif;
-  font-size: $size-xs;
+  font-size: $size-s;
 }
 
 p {
@@ -83,6 +79,20 @@ p {
 // we want all of our cite elements to not be italicized
 cite {
   font-style: normal;
+}
+
+.prose {
+  p {
+    @extend .font-serif;
+    @extend %link--blue;
+    color: $color-black-off;
+    line-height: 1.4;
+    margin: $size-b 0;
+
+    &:first-of-type {
+      margin: 0 0 $size-b;
+    }
+  }
 }
 
 // Smallhead: <h5>

@@ -1,0 +1,45 @@
+$color-navy-dark: #2f3640;
+$color-navy-medium: #404b56;
+$color-navy-light: #515f6b;
+
+.smd_buckets {
+  @extend .section-padding;
+}
+
+.bucket_card {
+  border: 1px solid $color-yellow-tribune;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: $size-xl $size-l $size-l;
+
+  @include mq($until: bp-s) {
+    &:first-child {
+      margin-bottom: $size-l;
+    }
+  }
+
+  &--goal {
+    @extend .smallcaps;
+    border-radius: 50px;
+    border: 1px solid $color-navy-light;
+    font-size: $size-xs;
+    left: $size-l;
+    padding: 2px $size-xxs;
+    text-align: center;
+    width: 130px;
+  }
+
+  &--complete {
+    background-color: $color-navy-light;
+    border-color: $color-navy-light;
+    color: $color-white-pure;
+    width: 180px;
+  }
+
+  &--description {
+    @extend .font-sansserif;
+    @extend %link--blue;
+    font-size: $size-s;
+  }
+}

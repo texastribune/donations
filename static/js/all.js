@@ -22,7 +22,7 @@ var display_level = function() {
     } else {
       level_label.text('');
     }
-  } else {
+  } else if (frequency == 'yearly') {
     // detemine level and update text based on yearly frequency
     if (input_amount == 10) {
       level_label.text('Student');
@@ -41,6 +41,9 @@ var display_level = function() {
     } else {
       level_label.text('');
     }
+  } else {
+    level_label.text('');
+    level_label.parent().hide();
   }
 };
 
@@ -79,13 +82,17 @@ var listen_for_installments = function() {
   });
 };
 
-
 // https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
 var payFeeAmount = function() {
-  var goalAmount = parseFloat($('input[name="amount"]').val()),
-      totalAmount = (goalAmount + .30) / (1 - 0.022);
-      feeAmount = Math.floor((totalAmount - goalAmount) * 100) / 100,
-      payFeeElement = $('#pay-fee-amount span');
+  var goalAmount = parseFloat($('input[name="amount"]').val());
+  var payFeeElement = $('#pay-fee-amount span');
 
-  payFeeElement.text('$' + feeAmount.toFixed(2));
+  if (isNaN(goalAmount)) {
+    payFeeElement.text('');
+  } else {
+    var totalAmount = (goalAmount + .30) / (1 - 0.022);
+    var feeAmount = Math.floor((totalAmount - goalAmount) * 100) / 100;
+
+    payFeeElement.text('$' + feeAmount.toFixed(2));
+  }
 };

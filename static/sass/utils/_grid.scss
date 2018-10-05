@@ -62,31 +62,10 @@ $column-slug: col !default;
   }
 }
 
-// Custom colum sizing for layout_main_siderail.html
-// includes left padding on large screens
-// width set to include .col_siderail
-.col_main {
-  flex: 0 0 100%;
-  margin-left: 0;
+.col_adunit300x250 {
+  @extend %flex-col;
   margin-right: 0;
-  max-width: 100%;
-
-  @include mq($from: bp-l) {
-    margin-right: $size-xl;
-    max-width: calc(100% - 338px);
-  }
-}
-
-.col_siderail {
-  flex: 0 0 100%;
-  margin-left: 0;
-  margin-right: 0;
-  max-width: 100%;
-
-  @include mq($from: bp-l) {
-    flex: 0 0 42%;
-    max-width: 310px;
-  }
+  max-width: 310px;
 }
 
 .grid {
@@ -147,6 +126,9 @@ $column-slug: col !default;
   &_separator--l {
     margin-bottom: $size-xl;
   }
+  &_separator--xl {
+    margin-bottom: $size-xxl;
+  }
 
   &_order {
     &--primary {
@@ -180,25 +162,10 @@ $column-slug: col !default;
     max-width: $width;
   }
 
-  // .grid_wrap
-  // allow items in a grid_row to wrap until a breakpoint
-  .grid_wrap--#{$size} {
+  .grid_separator--until_#{$size} {
     @include mq($until: $bp) {
-      flex-wrap: wrap;
-
-      @for $i from 1 through $grid-columns {
-        > .#{$column-slug}_#{$i},
-        > .col {
-          flex: 0 1 100%;
-          margin-right: 0;
-          max-width: 100%;
-        }
-      }
+      margin-bottom: $grid-gutter;
     }
-  }
-
-  .grid_wrap--reverse {
-    flex-wrap: wrap-reverse;
   }
 
   .grid_row--until_#{$size} {
@@ -219,6 +186,84 @@ $column-slug: col !default;
 
       > :last-child {
         margin-right: 0;
+      }
+    }
+  }
+
+  .grid_row--m_to_l {
+    @include mq($from: $bp-m, $until: $bp-l) {
+      display: flex;
+      flex-wrap: nowrap;
+
+      > :last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  /**
+    Use the following two classes in tandem,
+    probably with .col and .col_adunit300x250
+    together in a row. It flips the order
+    at different breakpoints, which can be
+    useful when stacking.
+  */
+  .grid_order--secondary--until_#{$size} {
+    order: 1;
+
+    @include mq($until: $bp) {
+      order: 2;
+    }
+  }
+
+  .grid_order--primary--until_#{$size} {
+    order: 2;
+
+    @include mq($until: $bp) {
+      order: 1;
+    }
+  }
+
+  // .grid_wrap
+  // allow items in a grid_row to wrap until a breakpoint
+  .grid_wrap--#{$size} {
+    @include mq($until: $bp) {
+      flex-wrap: wrap;
+
+      @for $i from 1 through $grid-columns {
+        > .#{$column-slug}_#{$i},
+        > .col {
+          flex: 0 1 100%;
+          margin-right: 0;
+          max-width: 100%;
+        }
+      }
+    }
+
+    &.grid_wrap--reverse {
+      @include mq($until: $bp) {
+        flex-wrap: wrap-reverse;
+
+        @for $i from 1 through $grid-columns {
+          > .#{$column-slug}_#{$i},
+          > .col {
+            flex: 0 1 100%;
+            margin-right: 0;
+            max-width: 100%;
+          }
+        }
+      }
+    }
+
+    .col_adunit300x250 {
+      flex: 0 1 100%;
+      margin-right: 0;
+      max-width: 100%;
+
+      @include mq($from: $bp) {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 310px;
       }
     }
   }
@@ -269,4 +314,8 @@ $column-slug: col !default;
 // General body class to prevent horizontal scrolling
 .tt_body {
   overflow-x: hidden;
+}
+
+.grid_separator--extra {
+  margin: $size-b*4 0;
 }

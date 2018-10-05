@@ -7,13 +7,13 @@ Usage:
 
 """
 
-from pytz import timezone
-import stripe
+from config import STRIPE_KEYS, TIMEZONE
 
-from config import STRIPE_KEYS
-from config import TIMEZONE
-from batch import Log
-from batch import process_charges
+from pytz import timezone
+
+import stripe
+from batch import Log, process_charges
+from docopt import docopt
 
 zone = timezone(TIMEZONE)
 
@@ -65,7 +65,6 @@ def charge_cards(date):
     log.send()
 
 
-from docopt import docopt
 if __name__ == '__main__':
     arguments = docopt(__doc__, version='Reprocess 1.0')
     charge_cards(arguments['<date>'])

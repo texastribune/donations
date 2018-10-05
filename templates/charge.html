@@ -1,49 +1,48 @@
-{% extends "layout.html" %}
+{% extends "new_layout.html" %}
 
-{% block title %}
-  {{ super() }}
-{% endblock %}
-
-{% block extra_script %}
-  {{ super() }}
+{% block stylesheets %}
+  {% for stylesheet in bundles['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+  {% endfor %}
 {% endblock %}
 
 {% block content %}
-  {{ super() }}
-  <div class="main grid_container--m">
-    <div class="grid_row">
+<div id="charge" class="main grid_container--m grid_padded--m">
+  <div class="grid_container--m grid_separator--l">
+    <div class="grid_row grid_separator">
       <figure class="image_default">
         <img src="https://static.texastribune.org/media/marketing/TT-support_thankyou.png" />
       </figure>
     </div>
-    <div class="grid_row grid_wrap--m">
-      <div class="col">
+    <div class="grid_row">
+      <div class="prose">
         <p>Members like you help make our journalism free for all. You can help ensure the rest of Texas knows about our mission to inform and engage the public in politics and policy news by sharing your membership story now.</p>
-        <p>What's your Texas Tribune story?</p>
+        <p><strong>Why do you support The Texas Tribune?</strong></p>
       </div>
     </div>
-    <div class="grid_row grid_wrap--m social-wrapper">
+    <div class="share grid_row grid_wrap--m grid_separator">
       <div class="col">
-        <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.texastribune.org%2F&amp;display=popup&amp;ref=plugin&amp;src=like&amp;app_id=113869198637480" target="_blank" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-facebook">
-        <div class="button social facebook">
-          <i class="fa fa-facebook"></i> Share on Facebook
+        <a href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F%3FbuttonText%3D%2523ISupportTexasTribune%2520because...%2520%255BTELL%2520THE%2520WORLD%2520WHY%2520HERE%2521%255D%2520%26buttonType%3DTweetButton%26buttonUrl%3Dhttps%253A%252F%252Ftrib.it%252Ffmdgive2018%26config%3DbuttonType%253ATweetButton%252CbuttonText%253A%2523TTMembersGive%2520because%2520we%2520...%2520%2520%252CbuttonRecommendation%253Atexastribune%252CbuttonUrl%253Ahttp%253A%252F%252Ftrib.it%252FTTMembersGive%26widget%3DButton&ref_src=twsrc%5Etfw&text=%23ISupportTexasTribune%20because...%20%5BTELL%20THE%20WORLD%20WHY%20HERE!%5D%20&tw_p=tweetbutton&url=https%3A%2F%2Ftrib.it%2Ffmdgive2018" target="_blank">
+        <div class="button button--twitter button--l button--titlecase grid_separator">
+          <i class="fa fa-twitter"></i> Tweet #ISupportTexasTribune
         </div>
         </a>
-      </div>
-      <div class="col">
-        <a href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fpublish.twitter.com%2F&amp;ref_src=twsrc%5Etfw&amp;related=texastribune&amp;text=%23ISupportTexasTribune%20because...&amp;tw_p=tweetbutton&amp;url=https%3A%2F%2Fsupport.texastribune.org%2F" target="_blank" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-twitter">
-        <div class="button social twitter">
-          <i class="fa fa-twitter"></i> Tweet to your followers
+        <div class="prose">
+          <p>Or share with your friends and family via   <a href="mailto:?subject=Why%20I%20support%20The%20Texas%20Tribune">email</a> or <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.texastribune.org/donate&amp;display=popup&amp;ref=plugin&amp;src=like&amp;app_id=113869198637480" target="_blank">Facebook</a>.</p>
         </div>
-        </a>
       </div>
-    </div>
-    <div class="social-wrapper">
-      <a href="mailto:membership@texastribune.org?Subject=Why%20I%20support%20The%20Texas%20Tribune&amp;Body=Dear%20Texas%20Tribune%20team%2C%20%0A%0AThis%20is%20why%20I%20just%20made%20a%20donation%20to%20your%20newsroom%3A" ga-on="click" ga-event-category="Share" ga-event-action="donate-share-email">
-        <div class="button social email">
-          <i class="fa fa-envelope"></i>Tell us why you support the Tribune.
-        </div>
-      </a>
     </div>
   </div>
+</div>
+{% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.dataLayer.push({
+      event: 'customDonationSuccess',
+      gaAction: 'donation submit',
+      gaLabel: '{{ gtm.event_label }}',
+      gaValue: '{{ gtm.event_value }}'
+    });
+  </script>
 {% endblock %}

@@ -1,0 +1,55 @@
+{
+  "name": "salesforce-stripe",
+  "description": "Salesforce - Stripe connector",
+  "scripts": {
+    "js:dev": "NODE_ENV=development webpack --config ./webpack/config.dev.js",
+    "dev": "python3 app.py & yarn run js:dev",
+    "postinstall": "NODE_ENV=production webpack --config ./webpack/config.prod.js"
+  },
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/texastribune/salesforce-stripe"
+  },
+  "bugs": {
+    "url": "https://github.com/texastribune/salesforce-stripe/issues"
+  },
+  "dependencies": {
+    "autoprefixer": "^8.5.0",
+    "axios": "^0.18.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "css-loader": "^0.28.11",
+    "es6-promise": "^4.2.4",
+    "file-loader": "^1.1.11",
+    "mini-css-extract-plugin": "^0.4.0",
+    "node-sass": "^4.9.0",
+    "optimize-css-assets-webpack-plugin": "^4.0.1",
+    "postcss-loader": "^2.1.5",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.21.0",
+    "validate.js": "^0.12.0",
+    "vue": "^2.5.16",
+    "vue-loader": "^14.2.2",
+    "vue-router": "^3.0.1",
+    "vue-stripe-elements-plus": "0.2.8",
+    "vue-template-compiler": "^2.5.16",
+    "vuex": "^3.0.1",
+    "webpack": "^4.5.0",
+    "webpack-assets-manifest": "^3.0.1",
+    "webpack-cli": "^2.0.14",
+    "webpack-merge": "^4.1.2",
+    "webpack-sources": "^1.0"
+  },
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "eslint": "^4.15.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-vue": "^4.2.0"
+  },
+  "license": "MIT"
+}

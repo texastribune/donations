@@ -1,15 +1,25 @@
-FROM ubuntu:14.04
-MAINTAINER @x110dc
+FROM node:8 as node_base
 
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
-RUN apt-get update -qq
-RUN apt-get install -yq language-pack-en-base && \
-  dpkg-reconfigure locales
-RUN apt-get install -yq python3-pip
+WORKDIR /app
+
+ENV NPM_CONFIG_LOGLEVEL warn
+
+COPY static /app/static
+COPY webpack /app/webpack
+COPY package.json /app/
+COPY yarn.lock /app/
+COPY .babelrc /app/
+RUN yarn
+
+FROM python:3.6
+
+WORKDIR /app
+
+COPY --from=node_base /app/static /app
+
 COPY requirements.txt /app/
 RUN pip3 install -r /app/requirements.txt
 
+COPY . /app/
 EXPOSE 80
-COPY *.py /app/
-COPY apple-developer-merchantid-domain-association /app/
 ENTRYPOINT /bin/bash

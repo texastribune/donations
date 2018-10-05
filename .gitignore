@@ -3,9 +3,14 @@ env-docker
 .env
 *.pyc
 /static/css/
+/static/build/
+node_modules/
 *.DS_Store
 .cache
 .coverage
 htmlcov
 celerybeat-schedule.db
 celerybeat.pid
+yarn-error.log
+.pytest_cache
+.vscode

@@ -2,6 +2,22 @@ APP=checkout
 NS=texastribune
 
 DOCKER_ENV_FILE?=env-docker
+LOG_LEVEL?=INFO
+
+interactive: build-dev backing
+	-docker rm -f ${APP}
+	-docker volume rm ${APP}_node_modules-vol
+	-docker volume create --name ${APP}_node_modules-vol
+	docker run \
+		--volume=${APP}_node_modules-vol:/app/node_modules \
+		--volume=$$(pwd):/app \
+		--rm --interactive --tty \
+		--env-file=${DOCKER_ENV_FILE} \
+		--publish=80:5000 \
+		--publish=5555:5555 \
+		--link=rabbitmq:rabbitmq \
+		--link=redis:redis \
+		--name=${APP} ${NS}/${APP}:dev ash
 
 build:
 	docker build --tag=${NS}/${APP} .
@@ -21,27 +37,16 @@ clean:
 	-docker stop rabbitmq && docker rm rabbitmq
 
 backing:
-	-docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
-	-docker run --detach --name redis redis
-
-interactive: build-dev
-	docker run \
-		--workdir=/flask \
-		--volume=$$(pwd):/flask \
-		--env-file=${DOCKER_ENV_FILE} \
-		--rm --interactive --tty \
-		--publish=80:5000 \
-		--publish=5555:5555 \
-		--link=rabbitmq:rabbitmq \
-		--link=redis:redis \
-		--name=${APP} ${NS}/${APP}:dev bash
+	-docker rm -f rabbitmq redis
+	docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
+	docker run --detach --name redis redis
 
 test: build-dev
 	docker run \
 		--workdir=/app \
 		--rm \
 		--entrypoint=python3 \
-		texastribune/checkout:dev /usr/local/bin/py.test tests.py --cov=.
+		texastribune/checkout:dev /usr/bin/py.test /app/tests.py --cov=/app
 
 push:
 	docker push ${NS}/${APP}
@@ -49,3 +54,13 @@ push:
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .
 	docker run --env-file=${DOCKER_ENV_FILE} --rm --interactive --tty --name=py2 sf-py2
+
+restart:
+	-pkill celery
+	-pkill python
+	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=${LOG_LEVEL} &
+	yarn run dev
+
+celery-restart:
+	-pkill celery
+	C_FORCE_ROOT=True celery -A app.celery worker --loglevel=${LOG_LEVEL} &
