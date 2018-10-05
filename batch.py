@@ -1,11 +1,5 @@
 import logging
-from config import (
-    ACCOUNTING_MAIL_RECIPIENT,
-    REDIS_URL,
-    STRIPE_KEYS,
-    TIMEZONE,
-    LOG_LEVEL,
-)
+from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from datetime import datetime, timedelta
 from decimal import Decimal
 
