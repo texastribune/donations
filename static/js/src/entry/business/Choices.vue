@@ -13,6 +13,7 @@
         class="business-form__bucket-header grid_separator"
       >
         {{ group.heading }}
+        {{ group.subheading }}
       </p>
       <radios
         :options="group.options"
@@ -37,7 +38,7 @@ import {
   MEMBERSHIP_LEVELS,
   POSITION_0,
   POSITION_1,
-  POSITION_2
+  POSITION_2,
 } from './constants';
 
 export default {
@@ -58,6 +59,7 @@ export default {
           id: 0,
           bucket: 'levelA',
           heading: MEMBERSHIP_LEVELS[POSITION_0].header,
+          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_0].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_0].subheader,
           options: this.buildOptions(['levelAMonthly', 'levelAYearly', 'levelAOneTime']),
         },
         {
@@ -108,10 +110,6 @@ export default {
     getInitialSelectedGroup() {
       const level =
         this.getStoreValue({ storeModule: 'businessForm', key: 'level' });
-      console.log("Setting initial selection state: level");
-      console.log(level);
-      console.log("Setting initial selection state: bucket");
-      console.log(BUSINESS_BUCKETS[level].bucket);
       return BUSINESS_BUCKETS[level].bucket;
     },
 

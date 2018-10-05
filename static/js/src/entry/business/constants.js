@@ -5,16 +5,41 @@ export const POSITION_2 = 2;
 export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 export const SHORT_PROGRAM_NAME = 'Business Membership';
 
+const MEMBERSHIP_LEVELS_COMMON_SUBHEADER = ' yearly contribution';
 export const MEMBERSHIP_LEVELS = [
-  { header: 'Hat\'s Off!', amount: 500  },  // A
-  { header: 'Lone Star',   amount: 1500 }, // B
-  { header: 'Big Tex',     amount: 2500 }, // C
+  { header: 'Hat\'s Off!', amount: 500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // A
+  { header: 'Lone Star', amount: 1500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER  }, // B
+  { header: 'Big Tex', amount: 2500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // C
 ];
 
+//
+// Query related
+//
+export const QUERY_PARAMETERS_INSTALLMENTS = [
+  {value: 0, text: '1'},
+  {value: 1, text: 'Open'},
+];
+export const QUERY_PARAMETERS_INSTALLMENT_PERIOD = [
+  {value: 0, text: 'None'},
+  {value: 1, text: 'Monthly'},
+  {value: 2, text: 'Yearly'},
+];
+//
+// Whitelisting and query params
+//
+export const WL_DEFAULT_QUERY_PARAMETERS = {
+  campaign_id: '',
+  referral_id: '',
+  installments: QUERY_PARAMETERS_INSTALLMENTS[1].text,
+  installmentPeriod: QUERY_PARAMETERS_INSTALLMENT_PERIOD[1].text,
+};
+export const WL_QUERY_ESCAPE_THRESHOLD = 25;
+
 const DEFAULT_PAY_FEES = 'True';
-const MONTHLY_PAYMENTS = { text:'monthly donation',  installmentsPerYear: 12, recurring: true };
-const ONETIME_PAYMENT  = { text:'one-time donation', installmentsPerYear: 1,  recurring: false };
-const YEARLY_PAYMENT   = { text:'yearly donation',   installmentsPerYear: 1,  recurring: true };
+
+const MONTHLY_PAYMENTS = { text: 'monthly donation', installmentsPerYear: 12, recurring: true };
+const ONETIME_PAYMENT = { text: 'one-time donation', installmentsPerYear: 1, recurring: false };
+const YEARLY_PAYMENT = { text: 'yearly donation', installmentsPerYear: 1, recurring: true };
 
 //
 // Common structure and var names used by the family of SF-S apps
@@ -23,8 +48,7 @@ const YEARLY_PAYMENT   = { text:'yearly donation',   installmentsPerYear: 1,  re
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
-    header: MEMBERSHIP_LEVELS[POSITION_0].header,
-    amount: Math.trunc( MEMBERSHIP_LEVELS[POSITION_0].amount / MONTHLY_PAYMENTS.installmentsPerYear ),
+    amount: Math.trunc(MEMBERSHIP_LEVELS[POSITION_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
     installmentPeriod: MONTHLY_PAYMENTS.text,
     installments: MONTHLY_PAYMENTS.installmentsPerYear,
     recurring: MONTHLY_PAYMENTS.recurring,
@@ -32,7 +56,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelAYearly: {
     bucket: 'levelA',
-    header: MEMBERSHIP_LEVELS[POSITION_0].header,
     amount: MEMBERSHIP_LEVELS[POSITION_0].amount / YEARLY_PAYMENT.installmentsPerYear,
     installmentPeriod: YEARLY_PAYMENT.text,
     installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
@@ -41,7 +64,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelAOneTime: {
     bucket: 'levelA',
-    header: MEMBERSHIP_LEVELS[POSITION_0].header,
     amount: MEMBERSHIP_LEVELS[POSITION_0].amount / ONETIME_PAYMENT.installmentsPerYear,
     installmentPeriod: ONETIME_PAYMENT.text,
     installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
@@ -50,7 +72,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelBMonthly: {
     bucket: 'levelB',
-    header: MEMBERSHIP_LEVELS[POSITION_1].header,
     amount: Math.trunc(MEMBERSHIP_LEVELS[POSITION_1].amount / MONTHLY_PAYMENTS.installmentsPerYear),
     installmentPeriod: MONTHLY_PAYMENTS.text,
     installments: MONTHLY_PAYMENTS.installmentsPerYear,
@@ -59,7 +80,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelBYearly: {
     bucket: 'levelB',
-    header: MEMBERSHIP_LEVELS[POSITION_1].header,
     amount: MEMBERSHIP_LEVELS[POSITION_1].amount,
     installmentPeriod: YEARLY_PAYMENT.text,
     installments: YEARLY_PAYMENT.installmentsPerYear,
@@ -67,7 +87,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelBOneTime: {
     bucket: 'levelB',
-    header: MEMBERSHIP_LEVELS[POSITION_1].header,
     amount: MEMBERSHIP_LEVELS[POSITION_1].amount / ONETIME_PAYMENT.installmentsPerYear,
     installmentPeriod: ONETIME_PAYMENT.text,
     installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
@@ -76,7 +95,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelCMonthly: {
     bucket: 'levelC',
-    header: MEMBERSHIP_LEVELS[POSITION_2].header,
     amount: Math.trunc(MEMBERSHIP_LEVELS[POSITION_2].amount / MONTHLY_PAYMENTS.installmentsPerYear),
     installmentPeriod: MONTHLY_PAYMENTS.text,
     installments: MONTHLY_PAYMENTS.installmentsPerYear,
@@ -85,7 +103,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelCYearly: {
     bucket: 'levelC',
-    header: MEMBERSHIP_LEVELS[POSITION_2].header,
     amount: MEMBERSHIP_LEVELS[POSITION_2].amount,
     installmentPeriod: YEARLY_PAYMENT.text,
     installments: YEARLY_PAYMENT.installmentsPerYear,
@@ -93,7 +110,6 @@ export const BUSINESS_BUCKETS = {
   },
   levelCOneTime: {
     bucket: 'levelC',
-    header: MEMBERSHIP_LEVELS[POSITION_2].header,
     amount: MEMBERSHIP_LEVELS[POSITION_2].amount / ONETIME_PAYMENT.installmentsPerYear,
     installmentPeriod: ONETIME_PAYMENT.text,
     installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
@@ -105,11 +121,12 @@ export const BUSINESS_BUCKETS = {
 //
 // Set defaults in this file where everything else is initialized
 //
-export const DEFAULT_SELECT_BUCKET = BUSINESS_BUCKETS[POSITION_0];
-export const DEFAULT_SELECTOR_LEVEL = 'levelAMonthly';
+export const DEFAULT_LEVEL_BUCKET = BUSINESS_BUCKETS[POSITION_0];
+export const DEFAULT_DONATION_LEVEL = 'levelAMonthly';
 
 //
 // Generic data format for using the SelectList Vue component
+//
 // US States and territories for select state list
 // Using the DOM standard naming convention for select data fields
 //

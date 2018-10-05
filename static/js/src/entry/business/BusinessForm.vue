@@ -49,11 +49,11 @@
         <div class="col_6 grid_separator">
           <text-input
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.business_website"
+            :validation="validation.website"
             label-text="website"
             maxlength="255"
             base-classes="form__text form__text--standard"
-            name="business_website"
+            name="website"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -65,11 +65,11 @@
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.business_address"
+            :validation="validation.shipping_street"
             label-text="street address"
             maxlength="255"
             base-classes="form__text form__text--standard"
-            name="business_address"
+            name="shipping_street"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -81,11 +81,11 @@
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.business_city"
+            :validation="validation.shipping_city"
             label-text="city"
             maxlength="40"
             base-classes="form__text form__text--standard"
-            name="business_city"
+            name="shipping_city"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -94,10 +94,10 @@
           <select-list
             :options="options"
             :required="true"
-            :validation="validation.business_state"
+            :validation="validation.shipping_state"
             label-text="state"
             base-classes="form__text form__text--standard"
-            name="business_state"
+            name="shipping_state"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -106,11 +106,11 @@
           <text-input
             :required="true"
             :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.business_zipcode"
+            :validation="validation.shipping_postalcode"
             label-text="zip code"
             maxlength="5"
             base-classes="form__text form__text--standard"
-            name="business_zipcode"
+            name="shipping_postalcode"
             store-module="businessForm"
             @setValidationValue="setValidationValue"
           />
@@ -235,11 +235,11 @@
       </div>
 
       <hidden
-        name="amount"
+        name="campaign_id"
         store-module="businessForm"
       />
       <hidden
-        name="installment_period"
+        name="referral_id"
         store-module="businessForm"
       />
       <hidden
@@ -247,15 +247,7 @@
         store-module="businessForm"
       />
       <hidden
-        name="customerId"
-        store-module="businessForm"
-      />
-      <hidden
-        name="description"
-        store-module="businessForm"
-      />
-      <hidden
-        name="campaign_id"
+        name="pay_fees_value"
         store-module="businessForm"
       />
       <hidden
@@ -263,7 +255,15 @@
         store-module="businessForm"
       />
       <hidden
-        name="pay_fees_value"
+        name="customerId"
+        store-module="businessForm"
+      />
+      <hidden
+        name="installment_period"
+        store-module="businessForm"
+      />
+      <hidden
+        name="amount"
         store-module="businessForm"
       />
     </div>
@@ -330,35 +330,35 @@ export default {
           message: 'Enter a business name',
           validator: this.isNotEmpty,
         },
-        business_website: {
+        website: {
           manual: true,
           native: true,
           valid: false,
           message: 'Enter a website, including https:// or http://',
           validator: this.isURL,
         },
-        business_address: {
+        shipping_street: {
           manual: true,
           native: true,
           valid: false,
           message: 'Enter a street/mailing address',
           validator: this.isNotEmpty,
         },
-        business_city: {
+        shipping_city: {
           manual: true,
           native: true,
           valid: false,
           message: 'Enter a city',
           validator: this.isNotEmpty,
         },
-        business_state: {
+        shipping_state: {
           manual: true,
           native: true,
           valid: false,
           message: 'Select a state',
           validator: this.isNotEmpty,
         },
-        business_zipcode: {
+        shipping_postalcode: {
           manual: true,
           native: true,
           valid: false,
