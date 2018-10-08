@@ -1,4 +1,5 @@
 import logging
+from decimal import Decimal
 from config import STRIPE_KEYS
 
 import stripe
@@ -64,6 +65,7 @@ def charge(opportunity):
     if charge.status != "succeeded":
         logging.warning("Charge failed. Check Stripe logs.")
         return
+
     opportunity.stripe_transaction_id = charge.id
     opportunity.stripe_card = charge.source.id
     opportunity.stage_name = "Closed Won"
