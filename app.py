@@ -21,6 +21,9 @@ from flask import (
     request,
     send_from_directory,
 )
+from flask_talisman import Talisman
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from forms import BlastForm, DonateForm, BusinessMembershipForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from raven.contrib.flask import Sentry
@@ -36,11 +39,32 @@ from validate_email import validate_email
 ZONE = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, "C")
+csp = {
+    "default-src": "'self'",
+    "img-src": "*.texastribune.org",
+    "script-src": [
+        "*.texastribune.org",
+        "*.stripe.com",
+        "*.jquery.com",
+        "*.googletagmanager.com",
+        "*.facebook.net",
+        "*.googleapis.com",
+        "*.cloudflare.com",
+    ],
+}
+
 
 app = Flask(__name__)
+Talisman(app, content_security_policy=csp)
+
+limiter = Limiter(
+    app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
+)
 
 log_level = logging.getLevelName(LOG_LEVEL)
 app.logger.setLevel(log_level)
+for handler in app.logger.handlers:
+    limiter.logger.addHandler(handler)
 
 app.secret_key = FLASK_SECRET_KEY
 
