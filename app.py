@@ -42,16 +42,40 @@ ZONE = timezone(TIMEZONE)
 
 locale.setlocale(locale.LC_ALL, "C")
 csp = {
-    "default-src": "'self'",
-    "img-src": "*.texastribune.org",
+    "default-src": ["'self'", "*.texastribune.org"],
+    "font-src": [
+        "'self'",
+        "data:",
+        "*.cloudflare.com",
+        "*.gstatic.com",
+        "*.typekit.net",
+    ],
+    "style-src": ["'self'", "'unsafe-inline'", "*.googleapis.com"],
+    "img-src": [
+        "'self'",
+        "*.facebook.com",
+        "*.texastribune.org",
+        "*.doubleclick.net",
+        "*.google.com",
+        "*.stripe.com",
+        "*.typekit.net"
+    ],
+    "connect-src": ["*.stripe.com", "*.texastribune.org"],
+    "frame-src": ["'self'", "*.stripe.com", "*.facebook.net", "*.facebook.com"],
     "script-src": [
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "*.typekit.net",
         "*.texastribune.org",
         "*.stripe.com",
         "*.jquery.com",
         "*.googletagmanager.com",
         "*.facebook.net",
         "*.googleapis.com",
+        "*.googleadservices.com",
         "*.cloudflare.com",
+        "*.google-analytics.com",
+        "*.doubleclick.net",
     ],
 }
 
