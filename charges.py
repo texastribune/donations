@@ -18,7 +18,7 @@ def amount_to_charge(opportunity):
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
     amount = float(opportunity.amount)
-    if opportunity.pay_fees:
+    if opportunity.agreed_to_pay_fees:
         total = (amount + .30) / (1 - 0.022)
     else:
         total = amount
