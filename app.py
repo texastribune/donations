@@ -1,5 +1,7 @@
 """
-This file is the entrypoint for this Flask application. Can be executed with 'flask run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+This file is the entrypoint for this Flask application. Can be executed with 'flask
+run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+
 """
 import json
 import locale
@@ -261,7 +263,10 @@ def create_customer():
 @app.route("/charge", methods=["POST"])
 def charge():
     """
-    Form submissions for the Blast, regular memberships and Circle memberships come here. It will get the customer ID from Stripe and then call Celery to complete the donation.
+    Form submissions for the Blast, regular memberships and Circle memberships come
+    here. It will get the customer ID from Stripe and then call Celery to complete the
+    donation.
+
     """
 
     app.logger.info(request.form)
@@ -303,7 +308,10 @@ def charge():
 @app.route("/bmcharge", methods=["POST"])
 def bmcharge():
     """
-    The endpoint for Business Membership form. Uses the BusinessMembershipForm for input validation. It will get the Stripe customer ID and then call Celery to complete the donation.
+    The endpoint for Business Membership form. Uses the BusinessMembershipForm for input
+    validation. It will get the Stripe customer ID and then call Celery to complete the
+    donation.
+
     """
 
     app.logger.info(request.form)
@@ -515,7 +523,12 @@ def add_business_membership(form=None, customer=None):
     """
     Adds a business membership. Both single and recurring.
 
-    It will look for a matching Contact (or create one). Then it will look for a matching Account (or create one). Then it will add the single or recurring donation to the Account. Then it will add an Affiliation to link the Contact with the Account. It sends a notification to Slack (if configured). It will send email notification about the new membership.
+    It will look for a matching Contact (or create one). Then it will look for a
+    matching Account (or create one). Then it will add the single or recurring donation
+    to the Account. Then it will add an Affiliation to link the Contact with the
+    Account. It sends a notification to Slack (if configured). It will send email
+    notification about the new membership.
+
     """
 
     form = clean(form)
@@ -578,7 +591,9 @@ def add_business_membership(form=None, customer=None):
 @celery.task(name="app.add_blast_subcription")
 def add_blast_subscription(form=None, customer=None):
     """
-    Adds a Blast subscription. Blast subscriptions are always recurring. They have two email addresses: one for billing and one for the newsletter subscription.
+    Adds a Blast subscription. Blast subscriptions are always recurring. They have two
+    email addresses: one for billing and one for the newsletter subscription.
+
     """
 
     form = clean(form)
