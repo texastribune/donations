@@ -496,7 +496,6 @@ class RDO(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
-            y.account_id = item["AccountId"]
             y.created = False
             results.append(y)
         return results
