@@ -79,22 +79,23 @@ class BusinessMembershipForm(FlaskForm):
             validators.NumberRange(min=1),
         ],
     )
-    website = StringField(u"Web site", [validators.URL()])
-    business_name = StringField(u"Business name", [validators.InputRequired()])
-    reason = StringField(u"Encouraged to give by")
-    shipping_city = StringField("Shipping City")
-    shipping_state = StringField("Shipping State", [validators.Length(max=2)])
-    shipping_street = StringField("Shipping Street")
-    shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=5)])
-    reason = StringField(u"Encouraged to give by")
-    campaign_id = HiddenField("Campaign ID")
-    referral_id = HiddenField("Referral ID")
-    installments = HiddenField(u"Installments")
-    description = HiddenField(u"Description")
-    pay_fees_value = HiddenField(u"Pay Fees Value")
-    openended_status = HiddenField(u"Openended Status")
-    customerId = HiddenField(u"Customer ID", [validators.InputRequired()])
-    installment_period = RadioField(
-        u"Installment Period",
-        choices=[("yearly", "Yearly"), ("monthly", "Monthly"), ("None", "One Time")],
+    website = StringField(u"Web site", [validators.URL(), validators.Length(max=255)])
+    business_name = StringField(
+        u"Business name", [validators.InputRequired(), validators.Length(max=255)]
     )
+    reason = StringField(u"Encouraged to give by", [validators.Length(max=80)])
+    shipping_city = StringField("Shipping City", [validators.Length(max=40)])
+    shipping_state = StringField("Shipping State", [validators.Length(max=2)])
+    shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
+    shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
+    campaign_id = HiddenField("Campaign ID", [validators.Length(max=18)])
+    referral_id = HiddenField("Referral ID", [validators.Length(max=18)])
+    installments = HiddenField(u"Installments", [validators.AnyOf(["1", "None"])])
+    pay_fees_value = HiddenField(
+        u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
+    )
+    openended_status = HiddenField(
+        u"Openended Status", [validators.AnyOf(["None", "Open"])]
+    )
+    customerId = HiddenField(u"Customer ID", [validators.InputRequired()])
+    installment_period = StringField([validators.AnyOf(["yearly", "monthly", "None"])])
