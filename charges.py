@@ -37,7 +37,7 @@ def charge(opportunity):
     )
 
     try:
-        charge = stripe.Charge.create(
+        card_charge = stripe.Charge.create(
             customer=opportunity.stripe_customer,
             amount=int(amount * 100),
             currency="usd",
@@ -62,11 +62,11 @@ def charge(opportunity):
     except Exception as e:
         logging.warning(f"Problem: {e}")
         return
-    if charge.status != "succeeded":
+    if card_charge.status != "succeeded":
         logging.warning("Charge failed. Check Stripe logs.")
         return
 
-    opportunity.stripe_transaction_id = charge.id
-    opportunity.stripe_card = charge.source.id
+    opportunity.stripe_transaction_id = card_charge.id
+    opportunity.stripe_card = card_charge.source.id
     opportunity.stage_name = "Closed Won"
     opportunity.save()
