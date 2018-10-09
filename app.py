@@ -114,23 +114,13 @@ def get_bundles(entry):
 def do_charge_or_show_errors(**kwargs):
     app.logger.debug("----Retrieving Stripe customer...")
 
+    email = request.form["stripeEmail"]
+    installment_period = request.form["installment_period"]
+    amount = request.form["amount"]
+
     try:
-        email = request.form["stripeEmail"]
-        installment_period = request.form["installment_period"]
-        amount = request.form["amount"]
         customer = stripe.Customer.create(
             email=email, card=request.form["stripeToken"]
-        )
-        add_donation.delay(customer=customer, form=clean(request.form))
-
-        gtm = {
-            "event_value": amount,
-            "event_label": "once" if installment_period == "None" else installment_period
-        }
-
-        return render_template("charge.html",
-            gtm=gtm,
-            bundles=get_bundles("charge")
         )
     except stripe.error.CardError as e:
         body = e.json_body
@@ -145,6 +135,16 @@ def do_charge_or_show_errors(**kwargs):
             message=message,
             form_data=form_data
         )
+
+    add_donation.delay(customer=customer, form=clean(request.form))
+    gtm = {
+        "event_value": amount,
+        "event_label": "once" if installment_period == "None" else installment_period
+    }
+    return render_template("charge.html",
+        gtm=gtm,
+        bundles=get_bundles("charge")
+    )
 
 
 def validate_form(FormType, **kwargs):
