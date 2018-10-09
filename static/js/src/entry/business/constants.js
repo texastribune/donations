@@ -5,7 +5,7 @@ export const POSITION_2 = 2;
 export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 export const SHORT_PROGRAM_NAME = 'Business Membership';
 
-const MEMBERSHIP_LEVELS_COMMON_SUBHEADER = ' yearly contribution';
+const MEMBERSHIP_LEVELS_COMMON_SUBHEADER = ' donation';
 export const MEMBERSHIP_LEVELS = [
   { header: 'Hat\'s Off!', amount: 500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // A
   { header: 'Lone Star', amount: 1500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER  }, // B
@@ -15,31 +15,35 @@ export const MEMBERSHIP_LEVELS = [
 //
 // Query related
 //
-export const QUERY_PARAMETERS_INSTALLMENTS = [
-  {value: 0, text: '1'},
-  {value: 1, text: 'Open'},
-];
-export const QUERY_PARAMETERS_INSTALLMENT_PERIOD = [
-  {value: 0, text: 'None'},
-  {value: 1, text: 'Monthly'},
-  {value: 2, text: 'Yearly'},
-];
+export const QUERY_PARAMETERS_STRING_VALUES = {
+  oneStr: '1',
+  onceStr: 'once',
+  openStr: 'open',
+  noneStr: 'none',
+  monthlyStr: 'monthly',
+  yearlyStr: 'yearly',
+};
 //
 // Whitelisting and query params
+// Add new query parameters here to whitelist them
 //
 export const WL_DEFAULT_QUERY_PARAMETERS = {
-  campaign_id: '',
-  referral_id: '',
-  installments: QUERY_PARAMETERS_INSTALLMENTS[1].text,
-  installmentPeriod: QUERY_PARAMETERS_INSTALLMENT_PERIOD[1].text,
+  campaignId: '',
+  referralId: '',
+  installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
+  // Special processing for these
+  // (looks redundant but this is per backend and requestor reqs
+  installment_period: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
+  openended_status: QUERY_PARAMETERS_STRING_VALUES.openStr,
 };
-export const WL_QUERY_ESCAPE_THRESHOLD = 25;
+export const WL_QUERY_ESCAPE_THRESHOLD = 6;
 
 const DEFAULT_PAY_FEES = 'True';
 
-const MONTHLY_PAYMENTS = { text: 'monthly donation', installmentsPerYear: 12, recurring: true };
-const ONETIME_PAYMENT = { text: 'one-time donation', installmentsPerYear: 1, recurring: false };
-const YEARLY_PAYMENT = { text: 'yearly donation', installmentsPerYear: 1, recurring: true };
+const MONTHLY_PAYMENTS = { text: 'monthly', installmentsPerYear: 12, recurring: true };
+const ONETIME_PAYMENT = { text: 'one-time', installmentsPerYear: 1, recurring: false };
+const YEARLY_PAYMENT = { text: 'yearly', installmentsPerYear: 1, recurring: true };
 
 //
 // Common structure and var names used by the family of SF-S apps

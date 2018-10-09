@@ -12,7 +12,7 @@
         :id="getGroupHeadingConnector(group)"
         class="business-form__bucket-header grid_separator"
       >
-        {{ group.heading }}
+        {{ group.heading }}<br/>
         {{ group.subheading }}
       </p>
       <radios
@@ -66,12 +66,14 @@ export default {
           id: 1,
           bucket: 'levelB',
           heading: MEMBERSHIP_LEVELS[POSITION_1].header,
+          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_1].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_0].subheader,
           options: this.buildOptions(['levelBMonthly', 'levelBYearly', 'levelBOneTime']),
         },
         {
           id: 2,
           bucket: 'levelC',
           heading: MEMBERSHIP_LEVELS[POSITION_2].header,
+          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_2].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_0].subheader,
           options: this.buildOptions(['levelCMonthly', 'levelCYearly', 'levelCOneTime']),
         },
       ],
