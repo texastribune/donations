@@ -346,19 +346,9 @@ def bmcharge():
     bundles = get_bundles("charge")
 
     if form.validate():
+        app.logger.info("----Retrieving Stripe customer...")
         try:
-            app.logger.info("----Retrieving Stripe customer...")
             customer = stripe.Customer.retrieve(request.form["customerId"])
-            app.logger.info(customer.id)
-            add_business_membership.delay(customer=customer, form=clean(request.form))
-            if request.form["installment_period"] == "None":
-                gtm["event_label"] = "once"
-            else:
-                gtm["event_label"] = request.form["installment_period"]
-            gtm["event_value"] = request.form["amount"]
-            return render_template(
-                "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
-            )
         except stripe.error.InvalidRequestError as e:
             body = e.json_body
             err = body.get("error", {})
@@ -368,6 +358,17 @@ def bmcharge():
             else:
                 app.logger.warning(message)
                 return render_template("error.html", message=message)
+
+        app.logger.info(customer.id)
+        add_business_membership.delay(customer=customer, form=clean(request.form))
+        if request.form["installment_period"] == "None":
+            gtm["event_label"] = "once"
+        else:
+            gtm["event_label"] = request.form["installment_period"]
+        gtm["event_value"] = request.form["amount"]
+        return render_template(
+            "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
+        )
     else:
         message = "There was an issue saving your donation information."
         app.logger.warning(f"Form validation errors: {form.errors}")
