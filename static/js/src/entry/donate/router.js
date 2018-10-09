@@ -9,7 +9,7 @@ Vue.use(VueRouter);
 
 function createInitialFormState(queryParams) {
   if (window.__BASE_FORM_REHYDRATION__) {
-    return JSON.parse(window.__BASE_FORM_REHYDRATION__);
+    return window.__BASE_FORM_REHYDRATION__;
   }
 
   const baseState = {

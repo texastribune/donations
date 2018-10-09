@@ -76,8 +76,8 @@
 
 {% if form_data and message %}
 <script>
-  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = "{{ message }}";
-  window.__BASE_FORM_REHYDRATION__ = '{{ form_data|tojson }}';
+  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message|tojson }};
+  window.__BASE_FORM_REHYDRATION__ = {{ form_data|tojson }};
 </script>
 {% endif %}
 
