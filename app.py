@@ -58,7 +58,7 @@ csp = {
         "*.doubleclick.net",
         "*.google.com",
         "*.stripe.com",
-        "*.typekit.net"
+        "*.typekit.net",
     ],
     "connect-src": ["*.stripe.com", "*.texastribune.org"],
     "frame-src": ["'self'", "*.stripe.com", "*.facebook.net", "*.facebook.com"],
