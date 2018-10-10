@@ -368,7 +368,7 @@ def add_donation(form=None, customer=None):
         logging.info(f"Changing name of contact to {first_name} {last_name}")
         contact.first_name = first_name
         contact.last_name = last_name
-        contact.zipcode = zipcode
+        contact.mailing_postal_code = zipcode
         contact.save()
 
     if contact.first_name != first_name or contact.last_name != last_name:
@@ -376,8 +376,8 @@ def add_donation(form=None, customer=None):
             f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
         )
 
-    if zipcode and not contact.created and contact.zipcode != zipcode:
-        contact.zipcode = zipcode
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
         contact.save()
 
     if period is None:
