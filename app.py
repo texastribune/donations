@@ -207,6 +207,21 @@ def circle_form():
         key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
+@app.route("/businessform", methods=["GET", "POST"])
+def business_form():
+    bundles = get_bundles("business")
+    template = "business-form.html"
+
+    if request.method == "POST":
+        return validate_form(BusinessMembershipForm,
+            bundles=bundles,
+            template=template
+        )
+
+    return render_template(template,
+        bundles=bundles,
+        key=app.config["STRIPE_KEYS"]["publishable_key"],
+    )
 
 @app.route("/blastform")
 def the_blast_form():
