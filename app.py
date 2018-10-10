@@ -383,9 +383,13 @@ def add_donation(form=None, customer=None):
     )
     logging.info(contact)
 
-    # intentionally overwriting zip but not name here
+    if contact.first_name == "Subscriber" and contact.last_name = "Subscriber":
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.zipcode = zipcode
+        contact.save()
 
-    if zipcode and not contact.created:
+    if zipcode and not contact.created and contact.zipcode != zipcode:
         contact.zipcode = zipcode
         contact.save()
 
