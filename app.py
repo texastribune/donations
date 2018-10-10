@@ -114,7 +114,7 @@ def get_bundles(entry):
 
 
 def do_charge_or_show_errors(**kwargs):
-    app.logger.debug("----Retrieving Stripe customer...")
+    app.logger.debug("----Creating Stripe customer...")
 
     email = request.form["stripeEmail"]
     installment_period = request.form["installment_period"]
@@ -136,6 +136,7 @@ def do_charge_or_show_errors(**kwargs):
             message=message,
             form_data=form_data,
         )
+    logging.info(customer.id)
     if "function" in kwargs:
         function(customer=customer, form=clean(request.form))
     else:
@@ -301,7 +302,6 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.lead_source = "Stripe"
 
     opportunity.save()
-    logging.info(opportunity)
     return opportunity
 
 
@@ -341,8 +341,6 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.description = "Texas Tribune Circle Membership"
 
     rdo.save()
-    logging.info(rdo)
-
     return rdo
 
 
@@ -367,9 +365,7 @@ def add_donation(form=None, customer=None):
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(
-            f"Changing name of contact to {first_name} {last_name}"
-        )
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
         contact.first_name = first_name
         contact.last_name = last_name
         contact.zipcode = zipcode
@@ -483,9 +479,7 @@ def add_business_membership(form=None, customer=None):
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(
-            f"Changing name of contact to {first_name} {last_name}"
-        )
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
         contact.first_name = first_name
         contact.last_name = last_name
         contact.save()
@@ -513,10 +507,12 @@ def add_business_membership(form=None, customer=None):
         opportunity = add_business_opportunity(
             account=account, form=form, customer=customer
         )
+        logging.info(opportunity)
         notify_slack(account=account, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
+        logging.info(rdo)
         notify_slack(account=account, rdo=rdo)
 
     logging.info("----Getting affiliation...")
