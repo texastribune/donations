@@ -25,17 +25,8 @@
 
 import Vue from 'vue';
 
-import updateStoreValue from './mixins/updateStoreValue';
-import getStoreValue from './mixins/getStoreValue';
-import createCustomer from '../utils/createCustomer';
-
 export default {
   name: 'NativePay',
-
-  mixins: [
-    updateStoreValue,
-    getStoreValue,
-  ],
 
   props: {
     supported: {
@@ -44,16 +35,6 @@ export default {
     },
 
     amountStoreModule: {
-      type: String,
-      required: true,
-    },
-
-    customerIdStoreModule: {
-      type: String,
-      required: true,
-    },
-
-    emailStoreModule: {
       type: String,
       required: true,
     },
@@ -136,6 +117,7 @@ export default {
         const updates = [
           { key: 'showManualErrors', value: false },
           { key: 'showNativeErrors', value: true },
+          { key: 'serverErrorMessage', value: '' },
         ];
 
         this.$emit('setValue', updates);
@@ -143,31 +125,15 @@ export default {
       });
 
       paymentRequest.on('token', (event) => {
-        const { token: { id: token } } = event;
-        const email = this.getStoreValue({
-          storeModule: this.emailStoreModule,
-          key: 'stripeEmail',
+        const { token: { id } } = event;
+
+        this.$emit('setValue', {
+          key: 'stripeToken',
+          value: id,
         });
 
-        /**
-          Because Stripe 3 does not validate CVC client side,
-          we have to create the customer on the server and
-          check for errors returned there. If they exist,
-          we display them. If not, we submit the form.
-        */
-        createCustomer({ token, email })
-          .then(({ data: { customer_id: customerId } }) => {
-            this.updateStoreValue({
-              storeModule: this.customerIdStoreModule,
-              key: 'customerId',
-              value: customerId,
-            });
-            event.complete('success');
-            Vue.nextTick(() => { this.$emit('onSubmit'); });
-          })
-          .catch(() => {
-            event.complete('fail');
-          });
+        event.complete('success');
+        Vue.nextTick(() => { this.$emit('onSubmit'); });
       });
     },
 
