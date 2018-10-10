@@ -368,7 +368,7 @@ def add_donation(form=None, customer=None):
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
         logging.info(
-            f"Changing name of contact to {contact.first_name} {contact.last_name}"
+            f"Changing name of contact to {first_name} {last_name}"
         )
         contact.first_name = first_name
         contact.last_name = last_name
@@ -484,11 +484,10 @@ def add_business_membership(form=None, customer=None):
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
         logging.info(
-            f"Changing name of contact to {contact.first_name} {contact.last_name}"
+            f"Changing name of contact to {first_name} {last_name}"
         )
         contact.first_name = first_name
         contact.last_name = last_name
-        contact.zipcode = zipcode
         contact.save()
 
     if contact.first_name != first_name or contact.last_name != last_name:
