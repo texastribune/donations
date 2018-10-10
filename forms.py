@@ -9,35 +9,37 @@ from wtforms.fields import (
 )
 from wtforms.fields.html5 import EmailField
 
+class BaseForm(FlaskForm):
+    first_name = StringField(u'First name',
+        [validators.required(message="Your first name is required.")])
+    last_name = StringField(u'Last name',
+        [validators.required(message="Your last name is required.")])
+    amount = DecimalField(u'Amount',
+        [validators.required(message="Please choose a donation amount."),
+        validators.NumberRange(min=1)])
+    zipcode = StringField(u'ZIP Code', [validators.Length(max=5)])
+    stripeEmail = EmailField('Email address',
+        [validators.DataRequired(), validators.Email()])
+    stripeToken = HiddenField(u'Stripe token', [validators.InputRequired()])
+    description = HiddenField(u'Description', [validators.InputRequired()])
+    pay_fees_value = HiddenField(u'Pay Fees Value',
+        [validators.AnyOf(['True', 'False'])])
+    reason = StringField(u'Encouraged to give by')
+    campaign_id = HiddenField('Campaign ID')
+    referral_id = HiddenField('Referral ID')
 
-class DonateForm(FlaskForm):
-    first_name = StringField(
-        u"First name", [validators.required(message="Your first name is required.")]
-    )
-    last_name = StringField(
-        u"Last name", [validators.required(message="Your last name is required.")]
-    )
-    amount = DecimalField(
-        u"Amount",
-        [
-            validators.required(message="Please choose a donation amount."),
-            validators.NumberRange(min=1),
-        ],
-    )
-    reason = StringField(u"Encouraged to give by")
-    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
-    campaign_id = HiddenField("Campaign ID")
-    referral_id = HiddenField("Referral ID")
-    installments = HiddenField(u"Installments")
-    description = HiddenField(u"Description")
-    pay_fees_value = HiddenField(u"Pay Fees Value")
-    openended_status = HiddenField(u"Openended Status")
-    customerId = HiddenField(u"Customer ID", [validators.InputRequired()])
-    installment_period = RadioField(
-        u"Installment Period",
-        choices=[("yearly", "Yearly"), ("monthly", "Monthly"), ("None", "One Time")],
-    )
+class DonateForm(BaseForm):
+    installments = HiddenField(u'Installments', [validators.AnyOf(['None'])])
+    openended_status = HiddenField(u'Openended Status',
+        [validators.AnyOf(['None', 'Open'])])
+    installment_period = StringField(u'Installment Period',
+        [validators.AnyOf(['yearly', 'monthly', 'None'])])
 
+class CircleForm(BaseForm):
+    installments = HiddenField(u'Installments', [validators.AnyOf(['3', '36'])])
+    openended_status = HiddenField(u'Openended Status', [validators.AnyOf(['None'])])
+    installment_period = StringField(u'Installment Period',
+        [validators.AnyOf(['yearly', 'monthly'])])
 
 class BlastForm(FlaskForm):
     first_name = StringField(
