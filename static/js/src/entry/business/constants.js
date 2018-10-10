@@ -8,7 +8,7 @@ export const SHORT_PROGRAM_NAME = 'Business Membership';
 const MEMBERSHIP_LEVELS_COMMON_SUBHEADER = ' donation';
 export const MEMBERSHIP_LEVELS = [
   { header: 'Hat\'s Off!', amount: 500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // A
-  { header: 'Lone Star', amount: 1500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER  }, // B
+  { header: 'Lone Star', amount: 1500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // B
   { header: 'Big Tex', amount: 2500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // C
 ];
 
@@ -18,8 +18,8 @@ export const MEMBERSHIP_LEVELS = [
 export const QUERY_PARAMETERS_STRING_VALUES = {
   oneStr: '1',
   onceStr: 'once',
-  openStr: 'open',
-  noneStr: 'none',
+  openStr: 'Open',
+  noneStr: 'None',
   monthlyStr: 'monthly',
   yearlyStr: 'yearly',
 };
@@ -33,7 +33,7 @@ export const WL_DEFAULT_QUERY_PARAMETERS = {
   installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
   installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
   // Special processing for these
-  // (looks redundant but this is per backend and requestor reqs
+  // (looks redundant but this is per backend and requestor requirements
   installment_period: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
   openended_status: QUERY_PARAMETERS_STRING_VALUES.openStr,
 };
@@ -41,10 +41,27 @@ export const WL_QUERY_ESCAPE_THRESHOLD = 6;
 
 const DEFAULT_PAY_FEES = 'True';
 
-const MONTHLY_PAYMENTS = { text: 'monthly', installmentsPerYear: 12, recurring: true };
-const ONETIME_PAYMENT = { text: 'one-time', installmentsPerYear: 1, recurring: false };
-const YEARLY_PAYMENT = { text: 'yearly', installmentsPerYear: 1, recurring: true };
-
+//
+// Back-end form to UI translations for the different payment options (common radio buttons)
+//
+const MONTHLY_PAYMENTS = {
+  text: 'monthly',
+  installmentsPerYear: 12,
+  formInstallmentsValue: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+  formOpenEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
+};
+const YEARLY_PAYMENT = {
+  text: 'yearly',
+  installmentsPerYear: 1,
+  formInstallmentsValue: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+  formOpenEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
+};
+const ONETIME_PAYMENT = {
+  text: 'one-time',
+  installmentsPerYear: 1,
+  formInstallmentsValue: QUERY_PARAMETERS_STRING_VALUES.oneStr,
+  formOpenEndedStatus: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+};
 //
 // Common structure and var names used by the family of SF-S apps
 // Plugs into the common code
@@ -52,139 +69,85 @@ const YEARLY_PAYMENT = { text: 'yearly', installmentsPerYear: 1, recurring: true
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
-    amount: Math.trunc(MEMBERSHIP_LEVELS[POSITION_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
-    installments: MONTHLY_PAYMENTS.installmentsPerYear,
-    recurring: MONTHLY_PAYMENTS.recurring,
+    openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelAYearly: {
     bucket: 'levelA',
     amount: MEMBERSHIP_LEVELS[POSITION_0].amount / YEARLY_PAYMENT.installmentsPerYear,
+    installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
-    installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
-    recurring: YEARLY_PAYMENT.recurring,
+    openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelAOneTime: {
     bucket: 'levelA',
     amount: MEMBERSHIP_LEVELS[POSITION_0].amount / ONETIME_PAYMENT.installmentsPerYear,
+    installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
-    installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
-    recurring: ONETIME_PAYMENT.recurring,
+    openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelBMonthly: {
     bucket: 'levelB',
-    amount: Math.trunc(MEMBERSHIP_LEVELS[POSITION_1].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_1].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
-    installments: MONTHLY_PAYMENTS.installmentsPerYear,
-    recurring: MONTHLY_PAYMENTS.recurring,
+    openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelBYearly: {
     bucket: 'levelB',
     amount: MEMBERSHIP_LEVELS[POSITION_1].amount,
+    installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
-    installments: YEARLY_PAYMENT.installmentsPerYear,
+    openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelBOneTime: {
     bucket: 'levelB',
     amount: MEMBERSHIP_LEVELS[POSITION_1].amount / ONETIME_PAYMENT.installmentsPerYear,
+    installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
-    installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
-    recurring: ONETIME_PAYMENT.recurring,
+    openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelCMonthly: {
     bucket: 'levelC',
-    amount: Math.trunc(MEMBERSHIP_LEVELS[POSITION_2].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_2].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
-    installments: MONTHLY_PAYMENTS.installmentsPerYear,
-    recurring: MONTHLY_PAYMENTS.recurring,
+    openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelCYearly: {
     bucket: 'levelC',
     amount: MEMBERSHIP_LEVELS[POSITION_2].amount,
+    installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
-    installments: YEARLY_PAYMENT.installmentsPerYear,
+    openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
   levelCOneTime: {
     bucket: 'levelC',
     amount: MEMBERSHIP_LEVELS[POSITION_2].amount / ONETIME_PAYMENT.installmentsPerYear,
+    installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
-    installments: MEMBERSHIP_LEVELS[POSITION_0].amount,
-    recurring: ONETIME_PAYMENT.recurring,
+    openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
     payFees: DEFAULT_PAY_FEES,
   },
 };
-
 //
-// Set defaults in this file where everything else is initialized
+// Selected box on Choices form
+// Currently donation level is not a query parameter, do the one-time
+// payment option switched radio selections within the default level
 //
-export const DEFAULT_LEVEL_BUCKET = BUSINESS_BUCKETS[POSITION_0];
 export const DEFAULT_DONATION_LEVEL = 'levelAMonthly';
+export const DEFAULT_ONCE_DONATION_LEVEL = 'levelAOneTime';
 
-//
-// Generic data format for using the SelectList Vue component
-//
-// US States and territories for select state list
-// Using the DOM standard naming convention for select data fields
-//
+// Texas will be default slection on state list
 export const DEFAULT_STATE_SELECTED = 43; // Texas
-export const US_STATES_SELECT_LIST = [
-  { value: 'AL', text: 'Alabama' },
-  { value: 'AK', text: 'Alaska' },
-  { value: 'AZ', text: 'Arizona' },
-  { value: 'AR', text: 'Arkansas' },
-  { value: 'CA', text: 'California' },
-  { value: 'CO', text: 'Colorado' },
-  { value: 'CT', text: 'Connecticut' },
-  { value: 'DE', text: 'Delaware' },
-  { value: 'DC', text: 'District of Columbia' },
-  { value: 'FL', text: 'Florida' },
-  { value: 'GA', text: 'Georgia' },
-  { value: 'HI', text: 'Hawaii' },
-  { value: 'ID', text: 'Idaho' },
-  { value: 'IL', text: 'Illinois' },
-  { value: 'IN', text: 'Indiana' },
-  { value: 'IA', text: 'Iowa' },
-  { value: 'KS', text: 'Kansas' },
-  { value: 'KY', text: 'Kentucky' },
-  { value: 'LA', text: 'Louisiana' },
-  { value: 'ME', text: 'Maine' },
-  { value: 'MD', text: 'Maryland' },
-  { value: 'MA', text: 'Massachusetts' },
-  { value: 'MI', text: 'Michigan' },
-  { value: 'MN', text: 'Minnesota' },
-  { value: 'MS', text: 'Mississippi' },
-  { value: 'MO', text: 'Missouri' },
-  { value: 'MT', text: 'Montana' },
-  { value: 'NE', text: 'Nebraska' },
-  { value: 'NV', text: 'Nevada' },
-  { value: 'NH', text: 'New Hampshire' },
-  { value: 'NJ', text: 'New Jersey' },
-  { value: 'NM', text: 'New Mexico' },
-  { value: 'NY', text: 'New York' },
-  { value: 'NC', text: 'North Carolina' },
-  { value: 'ND', text: 'North Dakota' },
-  { value: 'OH', text: 'Ohio' },
-  { value: 'OK', text: 'Oklahoma' },
-  { value: 'OR', text: 'Oregon' },
-  { value: 'PA', text: 'Pennsylvania' },
-  { value: 'RI', text: 'Rhode Island' },
-  { value: 'SC', text: 'South Carolina' },
-  { value: 'SD', text: 'South Dakota' },
-  { value: 'TN', text: 'Tennessee' },
-  { value: 'TX', text: 'Texas' },
-  { value: 'UT', text: 'Utah' },
-  { value: 'VT', text: 'Vermont' },
-  { value: 'VA', text: 'Virginia' },
-  { value: 'WA', text: 'Washington' },
-  { value: 'WV', text: 'West Virginia' },
-  { value: 'WI', text: 'Wisconsin' },
-  { value: 'WY', text: 'Wyoming' },
-];
+

@@ -82,13 +82,13 @@ export default {
     },
 
     installmentPeriod() {
-      const installmentPeriod = this.getStoreValue({
+      let installmentPeriod = this.getStoreValue({
         storeModule: this.installmentPeriodStoreModule,
         key: 'installment_period',
       });
-
-      if (installmentPeriod === 'None') return '';
-      return installmentPeriod.toLowerCase();
+      // Standardize the data before compare and/or save
+      installmentPeriod = installmentPeriod.toLowerCase();
+      return (installmentPeriod === 'none') ? '' : installmentPeriod;
     },
 
     payFeesState() {

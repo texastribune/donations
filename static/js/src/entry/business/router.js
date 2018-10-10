@@ -12,6 +12,7 @@ import {
   BUSINESS_BUCKETS,
   DEFAULT_PAY_FEES,
   DEFAULT_DONATION_LEVEL,
+  DEFAULT_ONCE_DONATION_LEVEL,
   LONG_PROGRAM_NAME,
   WL_DEFAULT_QUERY_PARAMETERS,
   WL_QUERY_ESCAPE_THRESHOLD,
@@ -22,12 +23,12 @@ Vue.use(VueRouter);
 
 
 function getStateFromParams(queryParams) {
-  const defaultLevel = DEFAULT_DONATION_LEVEL;
   let scrubbedQueryParams;
   //
-  // If this query significantly exceeds the threshold number of parameters
-  // it's likely to be malicious,ignore query params and use defaults
-  // in this case
+  // If this query is within the threshold number of parameters
+  //   scrub and merge query params with the default state
+  // Otherwise, it's likely to be malicious,
+  //   ignore query params and use defaults
   //
   (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
     scrubbedQueryParams = queryParamScrubAndMerge(queryParams, Object.keys(WL_DEFAULT_QUERY_PARAMETERS)) :
@@ -37,17 +38,18 @@ function getStateFromParams(queryParams) {
   //
   const mergedQueryParams = Object.assign({}, WL_DEFAULT_QUERY_PARAMETERS, scrubbedQueryParams);
 
-  // Unpack and interpret query params per spec and add them to query vars
+  let level = DEFAULT_DONATION_LEVEL;
+  // Unpack and interpret query params per spec
   if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
+    // Set data for form submit
     mergedQueryParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
     mergedQueryParams.installment_period = QUERY_PARAMETERS_STRING_VALUES.noneStr;
     mergedQueryParams.openended_status = QUERY_PARAMETERS_STRING_VALUES.noneStr;
+    // Set UI
+    level = DEFAULT_ONCE_DONATION_LEVEL;
   }
 
-  console.log('>>>>>>>>>>>>>--------- merged and split query params ->');
-  console.log(mergedQueryParams);
-
-  const level = defaultLevel;
+  // Set the Choices form state from defaults + query parameters
   const {
     amount,
     payFees,
@@ -77,6 +79,9 @@ function createBaseFormState(queryParams) {
     zipcode: '',
     pay_fees_value: DEFAULT_PAY_FEES,
   };
+  console.log("Form state ");
+  console.log(staticState);
+  console.log(dynamicState);
 
   return { ...staticState, ...dynamicState };
 }
@@ -94,7 +99,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...BusinessForm, store });
-    // const wall = new Vue({ ...Wall });
+
     const { currentRoute: { query } } = router;
 
     store.dispatch(
@@ -109,3 +114,9 @@ function bindRouterEvents(router, routeHandler, store) {
 }
 
 export { createRouter, bindRouterEvents };
+
+// Test strings
+//  http://local.texastribune.org/businessform?installmentPeriod=once
+//  http://local.texastribune.org/businessform?campaignId=ui903&installmentPeriod=once
+//  http://local.texastribune.org/businessform?campaignId=ui903&installmentPeriod=once&foo=bar
+//  http://local.texastribune.org/businessform?campaignId=ui903&installmentPeriod=once&<script>jk//∫ß

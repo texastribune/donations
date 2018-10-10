@@ -97,15 +97,13 @@ export default {
       });
 
       bucketsToIter.forEach((bucket, index) => {
-        const { installmentPeriod, amount, name, header } = bucket;
+        const { installmentPeriod, amount, name } = bucket;
         options.push({
           id: index,
-          header: header,
           value: name,
           text: this.buildText({ installmentPeriod, amount }),
         });
       });
-      console.log(options);
       return options;
     },
 
@@ -121,11 +119,13 @@ export default {
         bucket,
         installments,
         installmentPeriod,
+        openEndedStatus,
       } = BUSINESS_BUCKETS[level];
 
       const updates = {
         installment_period: installmentPeriod,
         installments,
+        openended_status: openEndedStatus,
         amount,
       };
 
@@ -140,6 +140,8 @@ export default {
     getGroupHeadingConnector({ bucket, id }) {
       return `${bucket}-heading-${id}`;
     },
+
+
   },
 };
 </script>
