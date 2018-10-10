@@ -73,7 +73,6 @@ class BusinessMembershipForm(FlaskForm):
     openended_status = HiddenField(
         u"Openended Status", [validators.AnyOf(["None", "Open"])]
     )
-    customerId = HiddenField(u"Customer ID", [validators.InputRequired()])
     installment_period = StringField([validators.AnyOf(["yearly", "monthly", "None"])])
 
 class BlastForm(FlaskForm):
