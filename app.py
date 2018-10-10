@@ -143,8 +143,10 @@ def do_charge_or_show_errors(**kwargs):
             message=message,
             form_data=form_data
         )
-
-    add_donation.delay(customer=customer, form=clean(request.form))
+    if function in kwargs:
+        function(customer=customer, form=clean(request.form))
+    else:
+        add_donation.delay(customer=customer, form=clean(request.form))
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period
@@ -207,7 +209,8 @@ def circle_form():
         key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
-@app.route("/businessform", methods=["GET", "POST"])
+
+@app.route("/business", methods=["GET", "POST"])
 def business_form():
     bundles = get_bundles("business")
     template = "business-form.html"
@@ -215,7 +218,8 @@ def business_form():
     if request.method == "POST":
         return validate_form(BusinessMembershipForm,
             bundles=bundles,
-            template=template
+            template=template,
+            function=add_business_membership.delay,
         )
 
     return render_template(template,
