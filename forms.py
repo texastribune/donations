@@ -41,32 +41,6 @@ class CircleForm(BaseForm):
     installment_period = StringField(u'Installment Period',
         [validators.AnyOf(['yearly', 'monthly'])])
 
-class BlastForm(FlaskForm):
-    first_name = StringField(
-        u"First name", [validators.required(message="Your first name is required.")]
-    )
-    last_name = StringField(
-        u"Last name", [validators.required(message="Your last name is required.")]
-    )
-    amount_choices = [
-        ("349", "Annual"),
-        ("40", "Monthly"),
-        ("325", "Annual Tax-Exempt"),
-    ]
-    amount = RadioField(u"Amount", choices=amount_choices, default="349")
-    subscriber_email = EmailField(
-        "Subscriber Email address", [validators.DataRequired(), validators.Email()]
-    )
-    installment_period = HiddenField(u"Installment Period")
-    installments = HiddenField(u"Installments")
-    openended_status = HiddenField(u"Openended Status")
-    campaign_id = HiddenField("Campaign ID")
-    referral_id = HiddenField("Referral ID")
-    description = HiddenField(u"Description")
-    pay_fees = BooleanField(u"Agree to pay fees")
-    pay_fees_value = HiddenField(u"Pay Fees Value")
-
-
 class BusinessMembershipForm(FlaskForm):
     first_name = StringField(
         u"First name", [validators.required(message="Your first name is required.")]
@@ -101,3 +75,28 @@ class BusinessMembershipForm(FlaskForm):
     )
     customerId = HiddenField(u"Customer ID", [validators.InputRequired()])
     installment_period = StringField([validators.AnyOf(["yearly", "monthly", "None"])])
+
+class BlastForm(FlaskForm):
+    first_name = StringField(
+        u"First name", [validators.required(message="Your first name is required.")]
+    )
+    last_name = StringField(
+        u"Last name", [validators.required(message="Your last name is required.")]
+    )
+    amount_choices = [
+        ("349", "Annual"),
+        ("40", "Monthly"),
+        ("325", "Annual Tax-Exempt"),
+    ]
+    amount = RadioField(u"Amount", choices=amount_choices, default="349")
+    subscriber_email = EmailField(
+        "Subscriber Email address", [validators.DataRequired(), validators.Email()]
+    )
+    installment_period = HiddenField(u"Installment Period")
+    installments = HiddenField(u"Installments")
+    openended_status = HiddenField(u"Openended Status")
+    campaign_id = HiddenField("Campaign ID")
+    referral_id = HiddenField("Referral ID")
+    description = HiddenField(u"Description")
+    pay_fees = BooleanField(u"Agree to pay fees")
+    pay_fees_value = HiddenField(u"Pay Fees Value")
