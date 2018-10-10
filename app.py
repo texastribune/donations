@@ -13,13 +13,7 @@ from pytz import timezone
 import celery
 import stripe
 from app_celery import make_celery
-from flask import (
-    Flask,
-    redirect,
-    render_template,
-    request,
-    send_from_directory,
-)
+from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from raven.contrib.flask import Sentry
@@ -127,9 +121,7 @@ def do_charge_or_show_errors(**kwargs):
     amount = request.form["amount"]
 
     try:
-        customer = stripe.Customer.create(
-            email=email, card=request.form["stripeToken"]
-        )
+        customer = stripe.Customer.create(email=email, card=request.form["stripeToken"])
     except stripe.error.CardError as e:
         body = e.json_body
         err = body.get("error", {})
@@ -137,24 +129,22 @@ def do_charge_or_show_errors(**kwargs):
         form_data = request.form.to_dict()
         del form_data["stripeToken"]
 
-        return render_template(kwargs["template"],
+        return render_template(
+            kwargs["template"],
             bundles=kwargs["bundles"],
             key=app.config["STRIPE_KEYS"]["publishable_key"],
             message=message,
-            form_data=form_data
+            form_data=form_data,
         )
-    if function in kwargs:
+    if "function" in kwargs:
         function(customer=customer, form=clean(request.form))
     else:
         add_donation.delay(customer=customer, form=clean(request.form))
     gtm = {
         "event_value": amount,
-        "event_label": "once" if installment_period == "None" else installment_period
+        "event_label": "once" if installment_period == "None" else installment_period,
     }
-    return render_template("charge.html",
-        gtm=gtm,
-        bundles=get_bundles("charge")
-    )
+    return render_template("charge.html", gtm=gtm, bundles=get_bundles("charge"))
 
 
 def validate_form(FormType, **kwargs):
@@ -172,8 +162,7 @@ def validate_form(FormType, **kwargs):
         return render_template("error.html", message=message)
 
     return do_charge_or_show_errors(
-        bundles=kwargs["bundles"],
-        template=kwargs["template"]
+        bundles=kwargs["bundles"], template=kwargs["template"]
     )
 
 
@@ -183,15 +172,12 @@ def member2_form():
     template = "member-form2.html"
 
     if request.method == "POST":
-        return validate_form(DonateForm,
-            bundles=bundles,
-            template=template
-        )
+        return validate_form(DonateForm, bundles=bundles, template=template)
 
-    return render_template(template,
-        bundles=bundles,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+    return render_template(
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
+
 
 @app.route("/circleform", methods=["GET", "POST"])
 def circle_form():
@@ -199,14 +185,10 @@ def circle_form():
     template = "circle-form.html"
 
     if request.method == "POST":
-        return validate_form(CircleForm,
-            bundles=bundles,
-            template=template
-        )
+        return validate_form(CircleForm, bundles=bundles, template=template)
 
-    return render_template(template,
-        bundles=bundles,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+    return render_template(
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
 
 
@@ -216,16 +198,17 @@ def business_form():
     template = "business-form.html"
 
     if request.method == "POST":
-        return validate_form(BusinessMembershipForm,
+        return validate_form(
+            BusinessMembershipForm,
             bundles=bundles,
             template=template,
             function=add_business_membership.delay,
         )
 
-    return render_template(template,
-        bundles=bundles,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+    return render_template(
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
+
 
 @app.route("/blastform")
 def the_blast_form():
@@ -384,14 +367,18 @@ def add_donation(form=None, customer=None):
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(f"Changing name of contact to {contact.first_name} {contact.last_name}")
+        logging.info(
+            f"Changing name of contact to {contact.first_name} {contact.last_name}"
+        )
         contact.first_name = first_name
         contact.last_name = last_name
         contact.zipcode = zipcode
         contact.save()
 
     if contact.first_name != first_name or contact.last_name != last_name:
-        logging.info(f"Contact name doesn't match: {contact.first_name} {contact.last_name}")
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
 
     if zipcode and not contact.created and contact.zipcode != zipcode:
         contact.zipcode = zipcode
@@ -489,19 +476,25 @@ def add_business_membership(form=None, customer=None):
     shipping_postalcode = form["shipping_postalcode"]
 
     logging.info("----Getting contact....")
-    contact = Contact.get_or_create(email=email, first_name=first_name, last_name=last_name)
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name
+    )
 
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(f"Changing name of contact to {contact.first_name} {contact.last_name}")
+        logging.info(
+            f"Changing name of contact to {contact.first_name} {contact.last_name}"
+        )
         contact.first_name = first_name
         contact.last_name = last_name
         contact.zipcode = zipcode
         contact.save()
 
     if contact.first_name != first_name or contact.last_name != last_name:
-        logging.info(f"Contact name doesn't match: {contact.first_name} {contact.last_name}")
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
 
     logging.info("----Getting account....")
 

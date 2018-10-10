@@ -9,37 +9,52 @@ from wtforms.fields import (
 )
 from wtforms.fields.html5 import EmailField
 
+
 class BaseForm(FlaskForm):
-    first_name = StringField(u'First name',
-        [validators.required(message="Your first name is required.")])
-    last_name = StringField(u'Last name',
-        [validators.required(message="Your last name is required.")])
-    amount = DecimalField(u'Amount',
-        [validators.required(message="Please choose a donation amount."),
-        validators.NumberRange(min=1)])
-    zipcode = StringField(u'ZIP Code', [validators.Length(max=5)])
-    stripeEmail = EmailField('Email address',
-        [validators.DataRequired(), validators.Email()])
-    stripeToken = HiddenField(u'Stripe token', [validators.InputRequired()])
-    description = HiddenField(u'Description', [validators.InputRequired()])
-    pay_fees_value = HiddenField(u'Pay Fees Value',
-        [validators.AnyOf(['True', 'False'])])
-    reason = StringField(u'Encouraged to give by')
-    campaign_id = HiddenField('Campaign ID')
-    referral_id = HiddenField('Referral ID')
+    first_name = StringField(
+        u"First name", [validators.required(message="Your first name is required.")]
+    )
+    last_name = StringField(
+        u"Last name", [validators.required(message="Your last name is required.")]
+    )
+    amount = DecimalField(
+        u"Amount",
+        [
+            validators.required(message="Please choose a donation amount."),
+            validators.NumberRange(min=1),
+        ],
+    )
+    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    stripeEmail = EmailField(
+        "Email address", [validators.DataRequired(), validators.Email()]
+    )
+    stripeToken = HiddenField(u"Stripe token", [validators.InputRequired()])
+    description = HiddenField(u"Description", [validators.InputRequired()])
+    pay_fees_value = HiddenField(
+        u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
+    )
+    reason = StringField(u"Encouraged to give by")
+    campaign_id = HiddenField("Campaign ID")
+    referral_id = HiddenField("Referral ID")
+
 
 class DonateForm(BaseForm):
-    installments = HiddenField(u'Installments', [validators.AnyOf(['None'])])
-    openended_status = HiddenField(u'Openended Status',
-        [validators.AnyOf(['None', 'Open'])])
-    installment_period = StringField(u'Installment Period',
-        [validators.AnyOf(['yearly', 'monthly', 'None'])])
+    installments = HiddenField(u"Installments", [validators.AnyOf(["None"])])
+    openended_status = HiddenField(
+        u"Openended Status", [validators.AnyOf(["None", "Open"])]
+    )
+    installment_period = StringField(
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
+    )
+
 
 class CircleForm(BaseForm):
-    installments = HiddenField(u'Installments', [validators.AnyOf(['3', '36'])])
-    openended_status = HiddenField(u'Openended Status', [validators.AnyOf(['None'])])
-    installment_period = StringField(u'Installment Period',
-        [validators.AnyOf(['yearly', 'monthly'])])
+    installments = HiddenField(u"Installments", [validators.AnyOf(["3", "36"])])
+    openended_status = HiddenField(u"Openended Status", [validators.AnyOf(["None"])])
+    installment_period = StringField(
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
+    )
+
 
 class BusinessMembershipForm(FlaskForm):
     first_name = StringField(
@@ -74,6 +89,7 @@ class BusinessMembershipForm(FlaskForm):
         u"Openended Status", [validators.AnyOf(["None", "Open"])]
     )
     installment_period = StringField([validators.AnyOf(["yearly", "monthly", "None"])])
+
 
 class BlastForm(FlaskForm):
     first_name = StringField(
