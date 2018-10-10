@@ -383,11 +383,15 @@ def add_donation(form=None, customer=None):
     )
     logging.info(contact)
 
-    if contact.first_name == "Subscriber" and contact.last_name = "Subscriber":
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {contact.first_name} {contact.last_name}")
         contact.first_name = first_name
         contact.last_name = last_name
         contact.zipcode = zipcode
         contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(f"Contact name doesn't match: {contact.first_name} {contact.last_name}")
 
     if zipcode and not contact.created and contact.zipcode != zipcode:
         contact.zipcode = zipcode
@@ -396,10 +400,12 @@ def add_donation(form=None, customer=None):
     if period is None:
         logging.info("----Creating one time payment...")
         opportunity = add_opportunity(contact=contact, form=form, customer=customer)
+        logging.info(opportunity)
         notify_slack(contact=contact, opportunity=opportunity)
     else:
         logging.info("----Creating recurring payment...")
         rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
+        logging.info(rdo)
         notify_slack(contact=contact, rdo=rdo)
 
     if contact.duplicate_found:
@@ -483,10 +489,20 @@ def add_business_membership(form=None, customer=None):
     shipping_postalcode = form["shipping_postalcode"]
 
     logging.info("----Getting contact....")
-    contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name
-    )
+    contact = Contact.get_or_create(email=email, first_name=first_name, last_name=last_name)
+
     logging.info(contact)
+
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {contact.first_name} {contact.last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.zipcode = zipcode
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(f"Contact name doesn't match: {contact.first_name} {contact.last_name}")
+
     logging.info("----Getting account....")
 
     account = Account.get_or_create(
