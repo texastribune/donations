@@ -415,7 +415,6 @@ def add_business_opportunity(account=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
     opportunity.save()
-    logging.info(opportunity)
     return opportunity
 
 
