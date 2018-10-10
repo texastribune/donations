@@ -444,8 +444,6 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
     rdo.save()
-    logging.info(rdo)
-
     return rdo
 
 
