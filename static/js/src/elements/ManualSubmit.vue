@@ -12,19 +12,12 @@
 import Vue from 'vue';
 import { createToken } from 'vue-stripe-elements-plus';
 
-import updateStoreValue from './mixins/updateStoreValue';
-import getStoreValue from './mixins/getStoreValue';
 import updateValidity from './mixins/updateValidity';
-import createCustomer from '../utils/createCustomer';
 
 export default {
   name: 'ManualSubmit',
 
-  mixins: [
-    updateStoreValue,
-    updateValidity,
-    getStoreValue,
-  ],
+  mixins: [updateValidity],
 
   props: {
     value: {
@@ -41,16 +34,6 @@ export default {
       type: Boolean,
       required: true,
     },
-
-    customerIdStoreModule: {
-      type: String,
-      required: true,
-    },
-
-    emailStoreModule: {
-      type: String,
-      required: true,
-    },
   },
 
   data() {
@@ -65,11 +48,6 @@ export default {
   },
 
   methods: {
-    isUnexpectedError({ status, expected }) {
-      if (status !== 400 || !expected) return true;
-      return false;
-    },
-
     markFetchingToken() {
       this.$emit('setValue', { key: 'isFetchingToken', value: true });
     },
@@ -82,6 +60,7 @@ export default {
       const updates = [
         { key: 'showManualErrors', value: true },
         { key: 'showNativeErrors', value: false },
+        { key: 'serverErrorMessage', value: '' },
       ];
 
       this.$emit('setValue', updates);
@@ -91,52 +70,14 @@ export default {
 
         createToken().then((result) => {
           if (!result.error) {
-            const { token: { id: token } } = result;
-            const email = this.getStoreValue({
-              storeModule: this.emailStoreModule,
-              key: 'stripeEmail',
+            const { token: { id } } = result;
+
+            this.$emit('setValue', {
+              key: 'stripeToken',
+              value: id,
             });
 
-            /**
-              Because Stripe 3 does not validate cards client side,
-              we have to create the customer on the server and
-              check for errors returned there. If they exist,
-              we display them. If not, we store the returned customer ID.
-            */
-            createCustomer({ token, email })
-              .then(({ data: { customer_id: customerId } }) => {
-                this.updateStoreValue({
-                  storeModule: this.customerIdStoreModule,
-                  key: 'customerId',
-                  value: customerId,
-                });
-
-                Vue.nextTick(() => { this.$emit('onSubmit'); });
-              })
-              .catch(({
-                response: {
-                  status,
-                  data: { type, message, expected },
-                },
-              }) => {
-                let element;
-                let messageToShow;
-                const isUnexpectedError = this.isUnexpectedError({ status, expected });
-
-                if (isUnexpectedError) {
-                  messageToShow = this.blanketErrorMessage;
-                  element = 'card';
-                } else if (type === 'email') {
-                  messageToShow = message;
-                  element = 'stripeEmail';
-                } else if (type === 'card') {
-                  messageToShow = message;
-                  element = 'card';
-                }
-
-                this.markMessageAndInvalid({ element, message: messageToShow });
-                this.markNotFetchingToken();
-              });
+            Vue.nextTick(() => { this.$emit('onSubmit'); });
           } else {
             const { error: { message, type } } = result;
             let messageToShow;

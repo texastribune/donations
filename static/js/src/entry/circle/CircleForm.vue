@@ -1,11 +1,22 @@
 <template>
   <form
     ref="form"
-    action="/charge"
+    action="/circleform"
     method="post"
     class="form circle-form"
     @submit="$event.preventDefault()"
   >
+    <div
+      v-show="showServerErrorMessage"
+      class="grid_container--l grid_separator"
+    >
+      <div class="grid_row">
+        <div class="col">
+          <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+        </div>
+      </div>
+    </div>
+
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
@@ -98,8 +109,6 @@
             :supported="nativeIsSupported"
             base-classes="form__native"
             amount-store-module="circleForm"
-            email-store-module="circleForm"
-            customer-id-store-module="circleForm"
             @setValue="setValue"
             @onSubmit="onSubmit"
           />
@@ -131,8 +140,6 @@
                 :form-is-valid="manualIsValid"
                 :is-fetching-token="isFetchingToken"
                 base-classes="form__submit button button--yellow button--l"
-                email-store-module="circleForm"
-                customer-id-store-module="circleForm"
                 value="Donate"
                 @onSubmit="onSubmit"
                 @setValue="setValue"
@@ -155,10 +162,14 @@
         aria-hidden="true"
       >
         <div class="col">
-          <p class="form__error form__error--centered">Please correct errors above</p>
+          <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
         </div>
       </div>
 
+      <local-hidden
+        :value="stripeToken"
+        name="stripeToken"
+      />
       <hidden
         name="amount"
         store-module="circleForm"
@@ -169,10 +180,6 @@
       />
       <hidden
         name="installments"
-        store-module="circleForm"
-      />
-      <hidden
-        name="customerId"
         store-module="circleForm"
       />
       <hidden
@@ -201,6 +208,7 @@
 
 <script>
 import Hidden from '../../elements/Hidden.vue';
+import LocalHidden from '../../elements/LocalHidden.vue';
 import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
@@ -216,6 +224,7 @@ export default {
 
   components: {
     Hidden,
+    LocalHidden,
     TextInput,
     PayFees,
     Level,
@@ -232,6 +241,8 @@ export default {
 
   data() {
     return {
+      // eslint-disable-next-line no-underscore-dangle
+      serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       validation: {
         stripeEmail: {
           manual: true,

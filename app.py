@@ -15,18 +15,11 @@ from pytz import timezone
 import celery
 import stripe
 from app_celery import make_celery
-from flask import (
-    Flask,
-    jsonify,
-    redirect,
-    render_template,
-    request,
-    send_from_directory,
-)
 from flask_talisman import Talisman
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from forms import BlastForm, DonateForm, BusinessMembershipForm
+from flask import Flask, redirect, render_template, request, send_from_directory
+from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
@@ -170,23 +163,151 @@ def get_bundles(entry):
     return bundles
 
 
-@app.route("/donate")
-def member2_form():
-    bundles = get_bundles("donate")
-    return render_template(
-        "member-form2.html",
-        bundles=bundles,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+@celery.task(name="app.add_donation")
+def add_donation(form=None, customer=None):
+    """
+    Add a contact and their donation into SF. This is done in the background
+    because there are a lot of API calls and there's no point in making the
+    payer wait for them. It sends a notification about the donation to Slack (if configured).
+    """
+    form = clean(form)
+    first_name = form["first_name"]
+    last_name = form["last_name"]
+    period = form["installment_period"]
+    email = form["stripeEmail"]
+    zipcode = form["zipcode"]
+
+    logging.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+    )
+    logging.info(contact)
+
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
+
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if period is None:
+        logging.info("----Creating one time payment...")
+        opportunity = add_opportunity(contact=contact, form=form, customer=customer)
+        logging.info(opportunity)
+        notify_slack(contact=contact, opportunity=opportunity)
+    else:
+        logging.info("----Creating recurring payment...")
+        rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
+        logging.info(rdo)
+        notify_slack(contact=contact, rdo=rdo)
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)
+
+    return True
+
+
+def do_charge_or_show_errors(template, bundles, function):
+    app.logger.debug("----Creating Stripe customer...")
+
+    email = request.form["stripeEmail"]
+    installment_period = request.form["installment_period"]
+    amount = request.form["amount"]
+
+    try:
+        customer = stripe.Customer.create(email=email, card=request.form["stripeToken"])
+    except stripe.error.CardError as e:
+        body = e.json_body
+        err = body.get("error", {})
+        message = err.get("message", "")
+        form_data = request.form.to_dict()
+        del form_data["stripeToken"]
+
+        return render_template(
+            template,
+            bundles=bundles,
+            key=app.config["STRIPE_KEYS"]["publishable_key"],
+            message=message,
+            form_data=form_data,
+        )
+    logging.info(customer.id)
+    function(customer=customer, form=clean(request.form))
+    gtm = {
+        "event_value": amount,
+        "event_label": "once" if installment_period == "None" else installment_period,
+    }
+    return render_template("charge.html", gtm=gtm, bundles=get_bundles("charge"))
+
+
+def validate_form(FormType, bundles, template, function=add_donation.delay):
+    app.logger.info(request.form)
+
+    form = FormType(request.form)
+    email = request.form["stripeEmail"]
+
+    if not validate_email(email):
+        message = "There was an issue saving your email address."
+        return render_template("error.html", message=message)
+    if not form.validate():
+        app.logger.warning(f"Form validation errors: {form.errors}")
+        message = "There was an issue saving your donation information."
+        return render_template("error.html", message=message)
+
+    return do_charge_or_show_errors(
+        bundles=bundles, template=template, function=function
     )
 
 
-@app.route("/circleform")
+@app.route("/donate", methods=["GET", "POST"])
+def member2_form():
+    bundles = get_bundles("donate")
+    template = "member-form2.html"
+
+    if request.method == "POST":
+        return validate_form(DonateForm, bundles=bundles, template=template)
+
+    return render_template(
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
+    )
+
+
+@app.route("/circleform", methods=["GET", "POST"])
 def circle_form():
     bundles = get_bundles("circle")
+    template = "circle-form.html"
+
+    if request.method == "POST":
+        return validate_form(CircleForm, bundles=bundles, template=template)
+
     return render_template(
-        "circle-form.html",
-        bundles=bundles,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
+    )
+
+
+@app.route("/business", methods=["GET", "POST"])
+def business_form():
+    bundles = get_bundles("business")
+    template = "business-form.html"
+
+    if request.method == "POST":
+        return validate_form(
+            BusinessMembershipForm,
+            bundles=bundles,
+            template=template,
+            function=add_business_membership.delay,
+        )
+
+    return render_template(
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
 
 
@@ -252,129 +373,6 @@ def page_not_found(error):
     return render_template("error.html", message=message), 404
 
 
-@app.route("/create-customer", methods=["POST"])
-def create_customer():
-    stripe_email = request.json["stripeEmail"]
-    email_is_valid = validate_email(stripe_email)
-
-    if email_is_valid:
-        try:
-            customer = stripe.Customer.create(
-                email=stripe_email, card=request.json["stripeToken"]
-            )
-            app.logger.info(customer.id)
-            return jsonify({"customer_id": customer.id})
-        except stripe.error.CardError as e:
-            body = e.json_body
-            err = body.get("error", {})
-            return (
-                jsonify(
-                    {
-                        "expected": True,
-                        "type": "card",
-                        "message": err.get("message", ""),
-                    }
-                ),
-                400,
-            )
-    else:
-        message = """Our servers had an issue saving your email address.
-                    Please make sure it's properly formatted. If the problem
-                    persists, please contact inquiries@texastribune.org."""
-        return jsonify({"expected": True, "type": "email", "message": message}), 400
-
-
-@app.route("/charge", methods=["POST"])
-def charge():
-    """
-    Form submissions for the Blast, regular memberships and Circle memberships come
-    here. It will get the customer ID from Stripe and then call Celery to complete the
-    donation.
-
-    """
-
-    app.logger.info(request.form)
-
-    gtm = {}
-    form = DonateForm(request.form)
-
-    bundles = get_bundles("charge")
-
-    if form.validate():
-        try:
-            app.logger.debug("----Retrieving Stripe customer...")
-            customer = stripe.Customer.retrieve(request.form["customerId"])
-            app.logger.info(customer.id)
-            add_donation.delay(customer=customer, form=clean(request.form))
-            if request.form["installment_period"] == "None":
-                gtm["event_label"] = "once"
-            else:
-                gtm["event_label"] = request.form["installment_period"]
-            gtm["event_value"] = request.form["amount"]
-            return render_template(
-                "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
-            )
-        except stripe.error.InvalidRequestError as e:
-            body = e.json_body
-            err = body.get("error", {})
-            message = err.get("message", "")
-            if "No such customer:" not in message:
-                raise e
-            else:
-                app.logger.warning(message)
-                return render_template("error.html", message=message)
-    else:
-        message = "There was an issue saving your donation information."
-        app.logger.warning(f"Form validation errors: {form.errors}")
-        return render_template("error.html", message=message)
-
-
-@app.route("/bmcharge", methods=["POST"])
-def bmcharge():
-    """
-    The endpoint for Business Membership form. Uses the BusinessMembershipForm for input
-    validation. It will get the Stripe customer ID and then call Celery to complete the
-    donation.
-
-    """
-
-    app.logger.info(request.form)
-    gtm = {}
-
-    form = BusinessMembershipForm(request.form)
-
-    bundles = get_bundles("charge")
-
-    if form.validate():
-        app.logger.info("----Retrieving Stripe customer...")
-        try:
-            customer = stripe.Customer.retrieve(request.form["customerId"])
-        except stripe.error.InvalidRequestError as e:
-            body = e.json_body
-            err = body.get("error", {})
-            message = err.get("message", "")
-            if "No such customer:" not in message:
-                raise e
-            else:
-                app.logger.warning(message)
-                return render_template("error.html", message=message)
-
-        app.logger.info(customer.id)
-        add_business_membership.delay(customer=customer, form=clean(request.form))
-        if request.form["installment_period"] == "None":
-            gtm["event_label"] = "once"
-        else:
-            gtm["event_label"] = request.form["installment_period"]
-        gtm["event_value"] = request.form["amount"]
-        return render_template(
-            "charge.html", amount=request.form["amount"], gtm=gtm, bundles=bundles
-        )
-    else:
-        message = "There was an issue saving your donation information."
-        app.logger.warning(f"Form validation errors: {form.errors}")
-        return render_template("error.html", message=message)
-
-
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
 def merchantid():
     """
@@ -404,7 +402,6 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.lead_source = "Stripe"
 
     opportunity.save()
-    logging.info(opportunity)
     return opportunity
 
 
@@ -444,50 +441,7 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.description = "Texas Tribune Circle Membership"
 
     rdo.save()
-    logging.info(rdo)
-
     return rdo
-
-
-@celery.task(name="app.add_donation")
-def add_donation(form=None, customer=None):
-    """
-    Add a contact and their donation into SF. This is done in the background
-    because there are a lot of API calls and there's no point in making the
-    payer wait for them. It sends a notification about the donation to Slack (if configured).
-    """
-    form = clean(form)
-    first_name = form["first_name"]
-    last_name = form["last_name"]
-    period = form["installment_period"]
-    email = form["stripeEmail"]
-    zipcode = form["zipcode"]
-
-    logging.info("----Getting contact....")
-    contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
-    )
-    logging.info(contact)
-
-    # intentionally overwriting zip but not name here
-
-    if zipcode and not contact.created:
-        contact.zipcode = zipcode
-        contact.save()
-
-    if period is None:
-        logging.info("----Creating one time payment...")
-        opportunity = add_opportunity(contact=contact, form=form, customer=customer)
-        notify_slack(contact=contact, opportunity=opportunity)
-    else:
-        logging.info("----Creating recurring payment...")
-        rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
-        notify_slack(contact=contact, rdo=rdo)
-
-    if contact.duplicate_found:
-        send_multiple_account_warning(contact)
-
-    return True
 
 
 def add_business_opportunity(account=None, form=None, customer=None):
@@ -508,7 +462,6 @@ def add_business_opportunity(account=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
     opportunity.save()
-    logging.info(opportunity)
     return opportunity
 
 
@@ -538,8 +491,6 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
     rdo.save()
-    logging.info(rdo)
-
     return rdo
 
 
@@ -573,7 +524,20 @@ def add_business_membership(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
+
     logging.info(contact)
+
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
+
     logging.info("----Getting account....")
 
     account = Account.get_or_create(
@@ -592,10 +556,12 @@ def add_business_membership(form=None, customer=None):
         opportunity = add_business_opportunity(
             account=account, form=form, customer=customer
         )
+        logging.info(opportunity)
         notify_slack(account=account, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
+        logging.info(rdo)
         notify_slack(account=account, rdo=rdo)
 
     logging.info("----Getting affiliation...")
