@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -31,11 +32,14 @@ function getStateFromParams(queryParams) {
   };
 }
 
-function createBaseFormState(queryParams) {
+function createInitialFormState(queryParams) {
+  if (window.__CIRCLE_FORM_REHYDRATION__) {
+    return window.__CIRCLE_FORM_REHYDRATION__;
+  }
+
   const dynamicState = getStateFromParams(queryParams);
   const staticState = {
     stripeEmail: '',
-    customerId: '',
     first_name: '',
     last_name: '',
     description: 'The Texas Tribune Circle Membership',
@@ -66,7 +70,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     store.dispatch(
       'circleForm/createInitialState',
-      createBaseFormState(query),
+      createInitialFormState(query),
     );
 
     routeHandler.$mount('#app');

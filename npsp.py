@@ -13,7 +13,7 @@ from fuzzywuzzy import process
 
 ZONE = timezone(os.environ.get("TIMEZONE", "US/Central"))
 
-SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "")
+SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "v43.0")
 
 SALESFORCE_CLIENT_ID = os.environ.get("SALESFORCE_CLIENT_ID", "")
 SALESFORCE_CLIENT_SECRET = os.environ.get("SALESFORCE_CLIENT_SECRET", "")
@@ -335,7 +335,6 @@ class Opportunity(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
-            y.account_id = item["AccountId"]
             y.created = False
             results.append(y)
 
