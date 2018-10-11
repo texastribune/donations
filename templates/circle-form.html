@@ -16,6 +16,14 @@
   {% endfor %}
 {% endblock %}
 
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
+{% endblock %}
+
 {% block content %}
   <main class="main">
     <!-- where the router component attaches -->
@@ -39,6 +47,8 @@
             <p class="circle-donate__intro">Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
           </div>
         </header>
+        <!-- for hash links when a form is invalid -->
+        <div id="join-today"></div>
         <!-- where the form attaches -->
         <div id="circle-form"></div>
       </section>
@@ -103,9 +113,16 @@
 {% endblock %}
 
 {% block bottom_script %}
-  <script src="https://js.stripe.com/v3/"></script>
+<script src="https://js.stripe.com/v3/"></script>
 
-  {% for script in bundles['js'] %}
-    <script src="{{ script }}"></script>
-  {% endfor %}
+{% if form_data and message %}
+<script>
+  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message|tojson }};
+  window.__CIRCLE_FORM_REHYDRATION__ = {{ form_data|tojson }};
+</script>
+{% endif %}
+
+{% for script in bundles['js'] %}
+  <script src="{{ script }}"></script>
+{% endfor %}
 {% endblock %}
