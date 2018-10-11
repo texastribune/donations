@@ -24,7 +24,6 @@ class BaseForm(FlaskForm):
             validators.NumberRange(min=1),
         ],
     )
-    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
     stripeEmail = EmailField(
         "Email address", [validators.DataRequired(), validators.Email()]
     )
@@ -33,9 +32,9 @@ class BaseForm(FlaskForm):
     pay_fees_value = HiddenField(
         u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
     )
-    reason = StringField(u"Encouraged to give by")
-    campaign_id = HiddenField("Campaign ID")
-    referral_id = HiddenField("Referral ID")
+    reason = StringField(u"Encouraged to give by", [validators.Length(max=80)])
+    campaign_id = HiddenField("Campaign ID", [validators.Length(max=18)])
+    referral_id = HiddenField("Referral ID", [validators.Length(max=18)])
 
 
 class DonateForm(BaseForm):
@@ -46,6 +45,7 @@ class DonateForm(BaseForm):
     installment_period = StringField(
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
+    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
 
 
 class CircleForm(BaseForm):
@@ -54,37 +54,19 @@ class CircleForm(BaseForm):
     installment_period = StringField(
         u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
     )
+    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
 
 
-class BusinessMembershipForm(FlaskForm):
-    first_name = StringField(
-        u"First name", [validators.required(message="Your first name is required.")]
-    )
-    last_name = StringField(
-        u"Last name", [validators.required(message="Your last name is required.")]
-    )
-    amount = DecimalField(
-        u"Amount",
-        [
-            validators.required(message="Please choose a donation amount."),
-            validators.NumberRange(min=1),
-        ],
-    )
+class BusinessMembershipForm(BaseForm):
     website = StringField(u"Web site", [validators.URL(), validators.Length(max=255)])
     business_name = StringField(
         u"Business name", [validators.InputRequired(), validators.Length(max=255)]
     )
-    reason = StringField(u"Encouraged to give by", [validators.Length(max=80)])
     shipping_city = StringField("Shipping City", [validators.Length(max=40)])
     shipping_state = StringField("Shipping State", [validators.Length(max=2)])
     shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
     shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
-    campaign_id = HiddenField("Campaign ID", [validators.Length(max=18)])
-    referral_id = HiddenField("Referral ID", [validators.Length(max=18)])
     installments = HiddenField(u"Installments", [validators.AnyOf(["1", "None"])])
-    pay_fees_value = HiddenField(
-        u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
-    )
     openended_status = HiddenField(
         u"Openended Status", [validators.AnyOf(["None", "Open"])]
     )
