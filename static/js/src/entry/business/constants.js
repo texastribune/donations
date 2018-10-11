@@ -65,11 +65,13 @@ const ONETIME_PAYMENT = {
 //
 // Common structure and var names used by the family of SF-S apps
 // Plugs into the common code
+// --[ REFACTOR candidate: Use payment details object defined above directly ]--
 //
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
     amount: Math.round(MEMBERSHIP_LEVELS[POSITION_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    // paymentDetails: MONTHLY_PAYMENTS
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
     openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,

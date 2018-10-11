@@ -364,7 +364,7 @@ export default {
           native: true,
           valid: false,
           message: 'Enter a 5-digit zip code',
-          validator: this.isEmptyOrZip,
+          validator: this.isZip,
         },
         first_name: {
           manual: true,

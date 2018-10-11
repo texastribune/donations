@@ -72,16 +72,18 @@ function createBaseFormState(queryParams) {
   const staticState = {
     stripeEmail: '',
     customerId: '',
+    business_name: '',
+    website: '',
+    shipping_street: '',
+    shipping_city: '',
+    shipping_state: '',
+    shipping_postalcode: null,
     first_name: '',
     last_name: '',
     description: LONG_PROGRAM_NAME,
     reason: '',
-    zipcode: '',
     pay_fees_value: DEFAULT_PAY_FEES,
   };
-  console.log("Form state ");
-  console.log(staticState);
-  console.log(dynamicState);
 
   return { ...staticState, ...dynamicState };
 }

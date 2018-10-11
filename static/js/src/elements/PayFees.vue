@@ -86,7 +86,7 @@ export default {
         storeModule: this.installmentPeriodStoreModule,
         key: 'installment_period',
       });
-      // Standardize the data before compare and/or save
+      // Standardize the data (mutation) before compare and/or save
       installmentPeriod = installmentPeriod.toLowerCase();
       return (installmentPeriod === 'none') ? '' : installmentPeriod;
     },
