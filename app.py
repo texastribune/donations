@@ -183,17 +183,14 @@ def do_charge_or_show_errors(template, bundles, function):
         del form_data["stripeToken"]
 
         return render_template(
-            kwargs["template"],
-            bundles=kwargs["bundles"],
+            template,
+            bundles=bundles,
             key=app.config["STRIPE_KEYS"]["publishable_key"],
             message=message,
             form_data=form_data,
         )
     logging.info(customer.id)
-    if "function" in kwargs:
-        function(customer=customer, form=clean(request.form))
-    else:
-        add_donation.delay(customer=customer, form=clean(request.form))
+    function(customer=customer, form=clean(request.form))
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -201,7 +198,7 @@ def do_charge_or_show_errors(template, bundles, function):
     return render_template("charge.html", gtm=gtm, bundles=get_bundles("charge"))
 
 
-def validate_form(FormType, **kwargs):
+def validate_form(FormType, bundles, template, function=add_donation.delay):
     app.logger.info(request.form)
 
     form = FormType(request.form)
@@ -216,7 +213,7 @@ def validate_form(FormType, **kwargs):
         return render_template("error.html", message=message)
 
     return do_charge_or_show_errors(
-        bundles=kwargs["bundles"], template=kwargs["template"]
+        bundles=bundles, template=template, function=function
     )
 
 
@@ -395,59 +392,6 @@ def add_recurring_donation(contact=None, form=None, customer=None):
 
     rdo.save()
     return rdo
-
-
-@celery.task(name="app.add_donation")
-def add_donation(form=None, customer=None):
-    """
-    Add a contact and their donation into SF. This is done in the background
-    because there are a lot of API calls and there's no point in making the
-    payer wait for them. It sends a notification about the donation to Slack (if configured).
-    """
-    form = clean(form)
-    first_name = form["first_name"]
-    last_name = form["last_name"]
-    period = form["installment_period"]
-    email = form["stripeEmail"]
-    zipcode = form["zipcode"]
-
-    logging.info("----Getting contact....")
-    contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
-    )
-    logging.info(contact)
-
-    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(f"Changing name of contact to {first_name} {last_name}")
-        contact.first_name = first_name
-        contact.last_name = last_name
-        contact.mailing_postal_code = zipcode
-        contact.save()
-
-    if contact.first_name != first_name or contact.last_name != last_name:
-        logging.info(
-            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
-        )
-
-    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
-        contact.mailing_postal_code = zipcode
-        contact.save()
-
-    if period is None:
-        logging.info("----Creating one time payment...")
-        opportunity = add_opportunity(contact=contact, form=form, customer=customer)
-        logging.info(opportunity)
-        notify_slack(contact=contact, opportunity=opportunity)
-    else:
-        logging.info("----Creating recurring payment...")
-        rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
-        logging.info(rdo)
-        notify_slack(contact=contact, rdo=rdo)
-
-    if contact.duplicate_found:
-        send_multiple_account_warning(contact)
-
-    return True
 
 
 def add_business_opportunity(account=None, form=None, customer=None):
