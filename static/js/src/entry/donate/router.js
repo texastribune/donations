@@ -1,16 +1,19 @@
+/* eslint-disable no-underscore-dangle */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-// import Thermometer from './Thermometer.vue';
 
 Vue.use(VueRouter);
 
-function createBaseFormState(queryParams) {
+function createInitialFormState(queryParams) {
+  if (window.__BASE_FORM_REHYDRATION__) {
+    return window.__BASE_FORM_REHYDRATION__;
+  }
+
   const baseState = {
     stripeEmail: '',
-    customerId: '',
     first_name: '',
     last_name: '',
     description: 'The Texas Tribune Membership',
@@ -67,17 +70,15 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
-    // const thermometer = new Vue({ ...Thermometer });
     const { currentRoute: { query } } = router;
 
     store.dispatch(
       'baseForm/createInitialState',
-      createBaseFormState(query),
+      createInitialFormState(query),
     );
 
     routeHandler.$mount('#app');
     topForm.$mount('#top-form');
-    // thermometer.$mount('#thermometer');
   });
 }
 
