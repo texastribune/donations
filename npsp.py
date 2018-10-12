@@ -92,7 +92,7 @@ class SalesforceConnection:
         try:
             content = json.loads(response.content.decode("utf-8"))
         except Exception as e:
-            log.debug(f"Exception in check_response: {e}")
+            log.exception(f"Exception in check_response: {e}")
         if code != expected_status:
             e = SalesforceException(f"Expected {expected_status} but got {code}")
             try:
@@ -206,7 +206,7 @@ class SalesforceConnection:
             try:
                 response = self.patch(path=path, data=sf_object.serialize())
             except SalesforceException as e:
-                log.error(e.response.text)
+                log.exception(e.response.text)
                 raise
             return sf_object
 
@@ -216,7 +216,7 @@ class SalesforceConnection:
         try:
             response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
-            log.error(e.response.text)
+            log.exception(e.response.text)
             raise
 
         sf_object.id = response["id"]
