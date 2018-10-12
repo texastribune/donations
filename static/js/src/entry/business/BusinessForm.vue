@@ -18,7 +18,6 @@
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
-            :required="true"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.stripeEmail"
             label-text="email address"
@@ -35,7 +34,6 @@
       <div class="grid_row grid_wrap--s">
         <div class="col_6 grid_separator">
           <text-input
-            :required="true"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.business_name"
             label-text="business name"
@@ -63,7 +61,6 @@
       <div className="grid_row grid_separator">
         <div className="col">
           <text-input
-            :required="true"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_street"
             label-text="street address"
@@ -79,7 +76,6 @@
       <div class="grid_row grid_separator grid_wrap--s">
         <div class="col_6 grid_separator">
           <text-input
-            :required="true"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_city"
             label-text="city"
@@ -93,7 +89,6 @@
         <div class="col_4 grid_separator">
           <select-list
             :options="options"
-            :required="true"
             :validation="validation.shipping_state"
             label-text="state"
             base-classes="form__text form__text--standard"
@@ -104,7 +99,6 @@
         </div>
         <div class="col_2 grid_separator">
           <text-input
-            :required="true"
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_postalcode"
             label-text="zip code"
@@ -312,10 +306,6 @@ export default {
 
   data() {
     return {
-      options: {
-        list: this.buildList(US_STATES_SELECT_LIST),
-        default: DEFAULT_STATE_SELECTED,
-      },
       validation: {
         stripeEmail: {
           manual: true,
@@ -381,6 +371,10 @@ export default {
           validator: this.isNotEmpty,
         },
      },
+      options: {
+        list: this.buildList(US_STATES_SELECT_LIST),
+        default: DEFAULT_STATE_SELECTED,
+      },
     };
   },
 

@@ -1,7 +1,7 @@
-// eslint-disable-next-line import/prefer-default-export
-export const POSITION_0 = 0;
-export const POSITION_1 = 1;
-export const POSITION_2 = 2;
+// eslint-disable-POSITION_ON_FORM_0next-line import/prefer-default-export
+export const POSITION_ON_FORM_0 = 0;
+export const POSITION_ON_FORM_1 = 1;
+export const POSITION_ON_FORM_2 = 2;
 export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 export const SHORT_PROGRAM_NAME = 'Business Membership';
 
@@ -24,23 +24,6 @@ export const QUERY_PARAMETERS_STRING_VALUES = {
   yearlyStr: 'yearly',
 };
 //
-// Whitelisting and query params
-// Add new query parameters here to whitelist them
-//
-export const WL_DEFAULT_QUERY_PARAMETERS = {
-  campaignId: '',
-  referralId: '',
-  installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
-  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
-  // Special processing for these
-  // (looks redundant but this is per backend and requestor requirements
-  installment_period: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
-  openended_status: QUERY_PARAMETERS_STRING_VALUES.openStr,
-};
-export const WL_QUERY_ESCAPE_THRESHOLD = 6;
-
-const DEFAULT_PAY_FEES = 'True';
-
 //
 // Back-end form to UI translations for the different payment options (common radio buttons)
 //
@@ -67,10 +50,12 @@ const ONETIME_PAYMENT = {
 // Plugs into the common code
 // --[ REFACTOR candidate: Use payment details object defined above directly ]--
 //
+const DEFAULT_PAY_FEES = 'True';
+
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
     // paymentDetails: MONTHLY_PAYMENTS
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
@@ -79,7 +64,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelAYearly: {
     bucket: 'levelA',
-    amount: MEMBERSHIP_LEVELS[POSITION_0].amount / YEARLY_PAYMENT.installmentsPerYear,
+    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / YEARLY_PAYMENT.installmentsPerYear,
     installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
     openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
@@ -87,7 +72,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelAOneTime: {
     bucket: 'levelA',
-    amount: MEMBERSHIP_LEVELS[POSITION_0].amount / ONETIME_PAYMENT.installmentsPerYear,
+    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / ONETIME_PAYMENT.installmentsPerYear,
     installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
     openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
@@ -95,7 +80,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelBMonthly: {
     bucket: 'levelB',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_1].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / MONTHLY_PAYMENTS.installmentsPerYear),
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
     openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
@@ -103,7 +88,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelBYearly: {
     bucket: 'levelB',
-    amount: MEMBERSHIP_LEVELS[POSITION_1].amount,
+    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount,
     installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
     openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
@@ -111,7 +96,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelBOneTime: {
     bucket: 'levelB',
-    amount: MEMBERSHIP_LEVELS[POSITION_1].amount / ONETIME_PAYMENT.installmentsPerYear,
+    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / ONETIME_PAYMENT.installmentsPerYear,
     installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
     openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
@@ -119,7 +104,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelCMonthly: {
     bucket: 'levelC',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_2].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / MONTHLY_PAYMENTS.installmentsPerYear),
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
     openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
@@ -127,7 +112,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelCYearly: {
     bucket: 'levelC',
-    amount: MEMBERSHIP_LEVELS[POSITION_2].amount,
+    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount,
     installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
     openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
@@ -135,7 +120,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelCOneTime: {
     bucket: 'levelC',
-    amount: MEMBERSHIP_LEVELS[POSITION_2].amount / ONETIME_PAYMENT.installmentsPerYear,
+    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / ONETIME_PAYMENT.installmentsPerYear,
     installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
     openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
@@ -143,13 +128,27 @@ export const BUSINESS_BUCKETS = {
   },
 };
 //
-// Selected box on Choices form
-// Currently donation level is not a query parameter, do the one-time
-// payment option switched radio selections within the default level
+// MASTER Setting for default selection
+// Currently donation level is not a query parameter
 //
-export const DEFAULT_DONATION_LEVEL = 'levelAMonthly';
-export const DEFAULT_ONCE_DONATION_LEVEL = 'levelAOneTime';
+export const DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD = 'levelAYearly';
+export const DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD = 'levelAOneTime';
 
-// Texas will be default slection on state list
+// Texas will be default selection on state list
 export const DEFAULT_STATE_SELECTED = 43; // Texas
+//
+// Whitelisting and query params
+// Add new query parameters here to whitelist them
+//
+export const WL_DEFAULT_QUERY_PARAMETERS = {
+  campaignId: '',
+  referralId: '',
+  installments: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installments,
+  installmentPeriod: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installmentPeriod,
+  // Special processing for these
+  // (looks redundant but this is per backend and requestor requirements
+  installment_period: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installmentPeriod,
+  openended_status: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].openEndedStatus,
+};
+export const WL_QUERY_ESCAPE_THRESHOLD = 6;
 

@@ -33,9 +33,9 @@
 import axios from 'axios';
 import {
   MEMBERSHIP_LEVELS,
-  POSITION_0,
-  POSITION_1,
-  POSITION_2
+  POSITION_ON_FORM_0,
+  POSITION_ON_FORM_1,
+  POSITION_ON_FORM_2
 } from './constants';
 
 export default {
@@ -46,9 +46,9 @@ export default {
       loading: true,
       error: false,
       data: [
-        { id: 0, heading: MEMBERSHIP_LEVELS[POSITION_0].header, members: [] },
-        { id: 1, heading: MEMBERSHIP_LEVELS[POSITION_1].header, members: [] },
-        { id: 2, heading: MEMBERSHIP_LEVELS[POSITION_2].header, members: [] },
+        { id: 0, heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].header, members: [] },
+        { id: 1, heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].header, members: [] },
+        { id: 2, heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].header, members: [] },
       ],
     };
   },

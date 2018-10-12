@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="classesWithValidation"
+    :class="classes"
   >
   <label
     v-if="hasLabel"
@@ -13,7 +13,6 @@
     :aria-labelledby="ariaLabelledby"
     :aria-describedby="ariaDescribedby"
     :aria-label="ariaLabel"
-    :aria-invalid="!valid ? true : false"
     :aria-required="required"
     :class="classes">
     <option
@@ -82,8 +81,7 @@ export default {
 
     classesWithValidation() {
       const { classes } = this;
-      if (!this.showError || this.valid) return classes;
-      return `invalid ${classes}`;
+      return classes;
     },
   },
 

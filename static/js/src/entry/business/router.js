@@ -11,8 +11,8 @@ import queryParamScrubAndMerge from '../../utils/queryParameterHandlers';
 import {
   BUSINESS_BUCKETS,
   DEFAULT_PAY_FEES,
-  DEFAULT_DONATION_LEVEL,
-  DEFAULT_ONCE_DONATION_LEVEL,
+  DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD,
+  DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD,
   LONG_PROGRAM_NAME,
   WL_DEFAULT_QUERY_PARAMETERS,
   WL_QUERY_ESCAPE_THRESHOLD,
@@ -24,6 +24,8 @@ Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
   let scrubbedQueryParams;
+  console.log("wl def object");
+  console.log(WL_DEFAULT_QUERY_PARAMETERS);
   //
   // If this query is within the threshold number of parameters
   //   scrub and merge query params with the default state
@@ -38,7 +40,7 @@ function getStateFromParams(queryParams) {
   //
   const mergedQueryParams = Object.assign({}, WL_DEFAULT_QUERY_PARAMETERS, scrubbedQueryParams);
 
-  let level = DEFAULT_DONATION_LEVEL;
+  let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   // Unpack and interpret query params per spec
   if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
     // Set data for form submit
@@ -46,9 +48,10 @@ function getStateFromParams(queryParams) {
     mergedQueryParams.installment_period = QUERY_PARAMETERS_STRING_VALUES.noneStr;
     mergedQueryParams.openended_status = QUERY_PARAMETERS_STRING_VALUES.noneStr;
     // Set UI
-    level = DEFAULT_ONCE_DONATION_LEVEL;
+    level = DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   }
-
+  console.log("form start");
+  console.log(mergedQueryParams);
   // Set the Choices form state from defaults + query parameters
   const {
     amount,
@@ -77,7 +80,7 @@ function createBaseFormState(queryParams) {
     shipping_street: '',
     shipping_city: '',
     shipping_state: '',
-    shipping_postalcode: null,
+    shipping_postalcode: '',
     first_name: '',
     last_name: '',
     description: LONG_PROGRAM_NAME,

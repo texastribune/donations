@@ -36,9 +36,9 @@ import addNumberCommas from '../../utils/addNumberCommas';
 import {
   BUSINESS_BUCKETS,
   MEMBERSHIP_LEVELS,
-  POSITION_0,
-  POSITION_1,
-  POSITION_2,
+  POSITION_ON_FORM_0,
+  POSITION_ON_FORM_1,
+  POSITION_ON_FORM_2,
 } from './constants';
 
 export default {
@@ -58,22 +58,22 @@ export default {
         {
           id: 0,
           bucket: 'levelA',
-          heading: MEMBERSHIP_LEVELS[POSITION_0].header,
-          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_0].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_0].subheader,
+          heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].header,
+          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].subheader,
           options: this.buildOptions(['levelAMonthly', 'levelAYearly', 'levelAOneTime']),
         },
         {
           id: 1,
           bucket: 'levelB',
-          heading: MEMBERSHIP_LEVELS[POSITION_1].header,
-          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_1].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_0].subheader,
+          heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].header,
+          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].subheader,
           options: this.buildOptions(['levelBMonthly', 'levelBYearly', 'levelBOneTime']),
         },
         {
           id: 2,
           bucket: 'levelC',
-          heading: MEMBERSHIP_LEVELS[POSITION_2].header,
-          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_2].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_0].subheader,
+          heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].header,
+          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].subheader,
           options: this.buildOptions(['levelCMonthly', 'levelCYearly', 'levelCOneTime']),
         },
       ],
