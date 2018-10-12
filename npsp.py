@@ -1,8 +1,10 @@
+import builtins
 import csv
 import re
 import json
 import logging
 import os
+from pprint import pprint # TODO rm
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
@@ -149,6 +151,10 @@ class SalesforceConnection:
         self.check_response(response=resp, expected_status=expected_response)
         return resp
 
+    def describe(self, object_name):
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
+        return self.get(path)
+
     def get(self, path, fields=None):
         """
         Call the Saleforce API to retrieve an object.
@@ -193,13 +199,13 @@ class SalesforceConnection:
 
         if sf_object.id:
             logging.info(f"{sf_object.api_name} object already exists; updating...")
+            logging.debug(sf_object.serialize())
             path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
             try:
-                response = self.patch(path=path, data=sf_object.patch_serialize())
+                response = self.patch(path=path, data=sf_object.serialize())
             except SalesforceException as e:
                 logging.error(e.response.text)
                 raise
-            sf_object.tainted = set() # TODO move this to SalesforceObject.save()?
             return sf_object
 
         logging.info(f"{sf_object.api_name} object doesn't exist; creating...")
@@ -222,6 +228,14 @@ class SalesforceObject(object):
     """
     This is the parent of all the other Salesforce objects.
     """
+    @classmethod
+    def schema(self):
+        sf = SalesforceConnection()  # TODO pass this in?
+        print(self.api_name)
+        schema = sf.describe(self.api_name)
+        pprint(schema)
+        # TODO do type-checking for certain fields? Like those with picklists? Or
+        # numbers? Or those that are updateable=False?
 
     def _format(self):
         raise NotImplementedError
@@ -233,6 +247,9 @@ class SalesforceObject(object):
 
     def __setattr__(self, attr, value):
         logging.debug(f"Setting {attr} to {value} on {type(self)}")
+        # TODO: i think there's a reason I didn't the super() outside of the hasattr but
+        # I can't remember what it is
+        # TODO don't taint it if it's already set to the same value?
         if hasattr(self, attr):
             super().__setattr__(attr, value)
             self.tainted.add(attr)
@@ -242,6 +259,7 @@ class SalesforceObject(object):
 
     def my_save(self):
         self.sf.save(self)
+        self.tainted = set() 
         return self
 
     # TODO why do we have to filter the id? Shouldn't it only be called when the id isn't present?
@@ -249,26 +267,24 @@ class SalesforceObject(object):
     # TODO what happens when we save a new object that has no attribute map? I guess we have to fetch the schema to get the api names
     # TODO __getattr__ fetch on demand? If so we don't have to fetch the account_id from a new contact
     # TODO list of fields to grab on SELECT for each type of object? Does it have to be api names or can we fetch the schema?
-    # TODO store the schemas and field maps on the class instead of the object? I think the field maps may have to be per-object.
+    # TODO store the schemas and field maps on the class instead of the object? I think
+    # the field maps may have to be per-object.
+    # TODO should we ever try to warn if they save an object that has the same
+    # name/email/whatever but doesn't have an ID? Probably not.
     def serialize(self):
         print("called serialize")
         out = dict()
-        for api_name, obj_attr in self.field_to_attr_map.items():
-            if obj_attr == 'id':
-                continue
-            out[api_name] = getattr(self, obj_attr)
-        return out
-
-    def patch_serialize(self):
-        out = dict()
-        for attribute in self.tainted:
-            if attribute == 'id':
-                # id is always in the URL not the body
-                continue
-            if attribute not in self.attr_to_field_map:
-                # we don't want .created and .duplicate_found
-                continue
-            out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
+        if hasattr(self,'id'): # object exists; use tainted
+            for attribute in self.tainted:
+                if attribute == 'id':
+                    # id is always in the URL not the body
+                    continue
+                if attribute not in self.attr_to_field_map:
+                    # we don't want .created and .duplicate_found
+                    continue
+                out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
+            return out
+        out = {api_name: getattr(self, attribute) for api_name, attribute in self.field_to_attr_map.items()}
         return out
 
     def __init__(self, sf_connection=None):
@@ -313,12 +329,13 @@ class SalesforceObject(object):
             if attr in obj.attr_to_field_map.keys():
                 logging.warning(obj.attr_to_field_map[attr])
                 logging.warning(f"Duplicate attribute name: {attr} ({field})")
-                # use just the lowercase api name if there's a clash. 
+                # use just the lowercase api name if there's a clash.
                 # TODO Maybe check to make sure that's not a dupe too?
                 attr = field.lower()
             obj.attr_to_field_map[attr] = field
             obj.field_to_attr_map[field] = attr
-            setattr(obj, attr, value)
+            # not using setattr() because we don't want to set tainted in our __setattr__
+            obj.__dict__[attr] = value
             # logging.warning(f"Setting {attr} to {value}")
 
         return obj
@@ -375,7 +392,7 @@ class Opportunity(SalesforceObject):
     @classmethod
     def get(cls, id):
         obj = super().get(id=id)
-        print(id(obj))
+        print(builtins.id(obj))
         return obj
 
     @classmethod
