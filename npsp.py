@@ -14,6 +14,8 @@ from pytz import timezone
 
 from fuzzywuzzy import process
 
+log = logging.getLogger(__name__)
+
 ZONE = timezone(os.environ.get("TIMEZONE", "US/Central"))
 
 SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "v43.0")
@@ -90,7 +92,7 @@ class SalesforceConnection:
         try:
             content = json.loads(response.content.decode("utf-8"))
         except Exception as e:
-            logging.debug(f"Exception in check_response: {e}")
+            log.debug(f"Exception in check_response: {e}")
         if code != expected_status:
             e = SalesforceException(f"Expected {expected_status} but got {code}")
             try:
@@ -100,7 +102,7 @@ class SalesforceConnection:
             except KeyError:
                 e.content = content
             e.response = response
-            logging.info(f"response.text: {response.text}")
+            log.info(f"response.text: {response.text}")
             raise e
         return True
 
@@ -117,7 +119,7 @@ class SalesforceConnection:
             payload = {}
         else:
             payload = {"q": query}
-        logging.debug(query)
+        log.debug(query)
         r = requests.get(url, headers=self.headers, params=payload)
         self.check_response(r)
         response = json.loads(r.text)
@@ -126,7 +128,7 @@ class SalesforceConnection:
             return response["records"] + self.query(
                 query=None, path=response["nextRecordsUrl"]
             )
-        logging.debug(response)
+        log.debug(response)
         return response["records"]
 
     def post(self, path, data):
@@ -137,7 +139,7 @@ class SalesforceConnection:
         resp = requests.post(url, headers=self.headers, data=json.dumps(data))
         response = json.loads(resp.text)
         self.check_response(response=resp, expected_status=201)
-        logging.debug(response)
+        log.debug(response)
         return response
 
     def patch(self, path, data, expected_response=204):
@@ -146,7 +148,7 @@ class SalesforceConnection:
         """
 
         url = f"{self.instance_url}{path}"
-        logging.debug(data)
+        log.debug(data)
         resp = requests.patch(url, headers=self.headers, data=json.dumps(data))
         self.check_response(response=resp, expected_status=expected_response)
         return resp
@@ -162,7 +164,7 @@ class SalesforceConnection:
         url = f"{self.instance_url}{path}"
         if fields:
             url += "?{','.join(fields)}"
-        logging.debug(url)
+        log.debug(url)
         resp = requests.get(url, headers=self.headers)
         self.check_response(response=resp, expected_status=200)
         resp = json.loads(resp.text)
@@ -184,11 +186,11 @@ class SalesforceConnection:
         path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
         response = self.patch(path, data, expected_response=200)
         response = json.loads(response.text)
-        logging.debug(response)
+        log.debug(response)
         error = False
         for item in response:
             if item["success"] is not True:
-                logging.warning(f"{item['errors']}")
+                log.warning(f"{item['errors']}")
                 error = item["errors"]
         if error:
             raise SalesforceException(f"Failure on update: {error}")
@@ -198,23 +200,23 @@ class SalesforceConnection:
     def save(self, sf_object):
 
         if sf_object.id:
-            logging.info(f"{sf_object.api_name} object already exists; updating...")
-            logging.debug(sf_object.serialize())
+            log.info(f"{sf_object.api_name} object already exists; updating...")
+            log.debug(sf_object.serialize())
             path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
             try:
                 response = self.patch(path=path, data=sf_object.serialize())
             except SalesforceException as e:
-                logging.error(e.response.text)
+                log.error(e.response.text)
                 raise
             return sf_object
 
-        logging.info(f"{sf_object.api_name} object doesn't exist; creating...")
+        log.info(f"{sf_object.api_name} object doesn't exist; creating...")
         path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
-        logging.debug(repr(sf_object))
+        log.debug(repr(sf_object))
         try:
             response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
-            logging.error(e.response.text)
+            log.error(e.response.text)
             raise
 
         sf_object.id = response["id"]
@@ -246,7 +248,7 @@ class SalesforceObject(object):
         return json.dumps(obj)
 
     def __setattr__(self, attr, value):
-        logging.debug(f"Setting {attr} to {value} on {type(self)}")
+        log.debug(f"Setting {attr} to {value} on {type(self)}")
         # TODO: i think there's a reason I didn't the super() outside of the hasattr but
         # I can't remember what it is
         # TODO don't taint it if it's already set to the same value?
@@ -303,7 +305,7 @@ class SalesforceObject(object):
         output = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", output)
         output = re.sub("([a-z0-9])([A-Z])", r"\1_\2", output).lower()
         output = re.sub(r"__+", "_", output)
-        logging.debug(f"{name} -> {output}")
+        log.debug(f"{name} -> {output}")
         return output
 
     # TODO does this need to be a class method?
@@ -318,17 +320,17 @@ class SalesforceObject(object):
 
         # TODO restrict by fields if present
         path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{id}"
-        logging.debug(path)
+        log.debug(path)
         response = sf.get(path)
-        logging.debug(response)
+        log.debug(response)
         obj = cls()
         obj.attr_to_field_map = dict()
         obj.field_to_attr_map = dict()
         for field, value in response.items():
             attr = cls.convert_to_snake_case(field)
             if attr in obj.attr_to_field_map.keys():
-                logging.warning(obj.attr_to_field_map[attr])
-                logging.warning(f"Duplicate attribute name: {attr} ({field})")
+                log.warning(obj.attr_to_field_map[attr])
+                log.warning(f"Duplicate attribute name: {attr} ({field})")
                 # use just the lowercase api name if there's a clash.
                 # TODO Maybe check to make sure that's not a dupe too?
                 attr = field.lower()
@@ -336,7 +338,7 @@ class SalesforceObject(object):
             obj.field_to_attr_map[field] = attr
             # not using setattr() because we don't want to set tainted in our __setattr__
             obj.__dict__[attr] = value
-            # logging.warning(f"Setting {attr} to {value}")
+            # log.warning(f"Setting {attr} to {value}")
 
         return obj
 
@@ -416,7 +418,7 @@ class Opportunity(SalesforceObject):
         AND StageName = 'Pledged'
         """
         response = sf.query(query)
-        logging.debug(response)
+        log.debug(response)
 
         results = list()
         for item in response:
@@ -490,11 +492,11 @@ class Opportunity(SalesforceObject):
         except SalesforceException as e:
             if e.content["errorCode"] == "MALFORMED_ID":
                 if e.content["fields"][0] == "CampaignId":
-                    logging.warning("bad campaign ID; retrying...")
+                    log.warning("bad campaign ID; retrying...")
                     self.campaign_id = None
                     self.save()
                 elif e.content["fields"][0] == "Referral_ID__c":
-                    logging.warning("bad referral ID; retrying...")
+                    log.warning("bad referral ID; retrying...")
                     self.referral_id = None
                     self.save()
                 else:
@@ -647,11 +649,11 @@ class RDO(SalesforceObject):
         except SalesforceException as e:
             if e.content["errorCode"] == "MALFORMED_ID":
                 if e.content["fields"][0] == "npe03__Recurring_Donation_Campaign__c":
-                    logging.warning("bad campaign ID; retrying...")
+                    log.warning("bad campaign ID; retrying...")
                     self.campaign_id = None
                     self.save()
                 elif e.content["fields"][0] == "Referral_ID__c":
-                    logging.warning("bad referral ID; retrying...")
+                    log.warning("bad referral ID; retrying...")
                     self.referral_id = None
                     self.save()
                 else:
@@ -670,11 +672,11 @@ class RDO(SalesforceObject):
         # SF side
         if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
             return
-        logging.info(
+        log.info(
             f"Setting record type for {self} opportunities to {self.record_type_name}"
         )
         if self.open_ended_status == "Open":
-            logging.warning(
+            log.warning(
                 f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
             )
         update = {"RecordType": {"Name": self.record_type_name}}
@@ -769,7 +771,7 @@ class Account(SalesforceObject):
         url_list = list(website_idx.keys())
 
         extracted = process.extractOne(website, url_list)
-        logging.debug(extracted)
+        log.debug(extracted)
         if extracted is None:
             return None
         url, confidence = extracted
@@ -826,9 +828,9 @@ class Contact(SalesforceObject):
     def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None):
         contact = cls.get(email=email)
         if contact:
-            logging.debug(f"Contact found: {contact}")
+            log.debug(f"Contact found: {contact}")
             return contact
-        logging.debug("Creating contact...")
+        log.debug("Creating contact...")
         contact = Contact()
         contact.email = email
         contact.first_name = first_name
