@@ -56,6 +56,9 @@ def charge(opportunity):
         opportunity.closed_lost_reason = error.get("message", "unknown failure")
         opportunity.stage_name = "Closed Lost"
         opportunity.save()
+        logging.debug(
+            f"Opportunity set to '{opportunity.stage_name}' with reason: {opportunity.closed_lost_reason}"
+        )
         return
     except stripe.error.InvalidRequestError as e:
         logging.warning(f"Problem: {e}")

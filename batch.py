@@ -33,7 +33,7 @@ class Log(object):
         """
         Add something to the log.
         """
-        logging.info(string)
+        logging.debug(string)
         self.log.append(string)
 
     def send(self):
