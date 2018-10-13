@@ -4,7 +4,7 @@ import re
 import json
 import logging
 import os
-from pprint import pprint # TODO rm
+from pprint import pprint  # TODO rm
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
@@ -154,7 +154,9 @@ class SalesforceConnection:
         return resp
 
     def describe(self, object_name):
-        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
+        path = (
+            f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
+        )
         return self.get(path)
 
     def get(self, path, fields=None):
@@ -222,7 +224,7 @@ class SalesforceConnection:
         sf_object.id = response["id"]
         sf_object.created = True
 
-        sf_object.tainted = set() # TODO move this to SalesforceObject.save()?
+        sf_object.tainted = set()  # TODO move this to SalesforceObject.save()?
         return sf_object
 
 
@@ -230,12 +232,30 @@ class SalesforceObject(object):
     """
     This is the parent of all the other Salesforce objects.
     """
+
+    @property
     @classmethod
-    def schema(self):
+    def api_name(cls):
+        raise NotImplementedError
+
+    @classmethod
+    def schema(cls):
+        log.debug('called schema()')
         sf = SalesforceConnection()  # TODO pass this in?
-        print(self.api_name)
-        schema = sf.describe(self.api_name)
-        pprint(schema)
+        schema = sf.describe(cls.api_name)
+        cls.attr_to_field_map = dict()
+        cls.field_to_attr_map = dict()
+        for item in schema['fields']:
+            field = item['name']
+            attr = cls.convert_to_snake_case(field)
+            if attr in cls.attr_to_field_map.keys():
+                log.warning(cls.attr_to_field_map[attr])
+                log.warning(f"Duplicate attribute name: {attr} ({field})")
+                # use just the lowercase api name if there's a clash.
+                # TODO Maybe check to make sure that's not a dupe too?
+                attr = field.lower()
+            cls.attr_to_field_map[attr] = field
+            cls.field_to_attr_map[field] = attr
         # TODO do type-checking for certain fields? Like those with picklists? Or
         # numbers? Or those that are updateable=False?
 
@@ -252,20 +272,21 @@ class SalesforceObject(object):
         # TODO: i think there's a reason I didn't the super() outside of the hasattr but
         # I can't remember what it is
         # TODO don't taint it if it's already set to the same value?
+        # TODO don't taint id?
         if hasattr(self, attr):
             super().__setattr__(attr, value)
+            logging.debug(f'Marking {self.api_name} {attr} as tainted')
             self.tainted.add(attr)
         else:
             super().__setattr__(attr, value)
 
-
     def my_save(self):
+        if not hasattr(self, "attr_to_field_map"):
+            self.schema()
         self.sf.save(self)
-        self.tainted = set() 
+        self.tainted = set()
         return self
 
-    # TODO why do we have to filter the id? Shouldn't it only be called when the id isn't present?
-    # TODO combine these two serialize methods
     # TODO what happens when we save a new object that has no attribute map? I guess we have to fetch the schema to get the api names
     # TODO __getattr__ fetch on demand? If so we don't have to fetch the account_id from a new contact
     # TODO list of fields to grab on SELECT for each type of object? Does it have to be api names or can we fetch the schema?
@@ -274,11 +295,11 @@ class SalesforceObject(object):
     # TODO should we ever try to warn if they save an object that has the same
     # name/email/whatever but doesn't have an ID? Probably not.
     def serialize(self):
-        print("called serialize")
-        out = dict()
-        if hasattr(self,'id'): # object exists; use tainted
+        log.info("called serialize")
+        if hasattr(self, "id"):  # object exists; use tainted
+            out = dict()
             for attribute in self.tainted:
-                if attribute == 'id':
+                if attribute == "id":
                     # id is always in the URL not the body
                     continue
                 if attribute not in self.attr_to_field_map:
@@ -286,7 +307,10 @@ class SalesforceObject(object):
                     continue
                 out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
             return out
-        out = {api_name: getattr(self, attribute) for api_name, attribute in self.field_to_attr_map.items()}
+        out = {
+            api_name: getattr(self, attribute)
+            for api_name, attribute in self.field_to_attr_map.items()
+        }
         return out
 
     def __init__(self, sf_connection=None):
@@ -324,20 +348,20 @@ class SalesforceObject(object):
         response = sf.get(path)
         log.debug(response)
         obj = cls()
-        obj.attr_to_field_map = dict()
-        obj.field_to_attr_map = dict()
+        cls.attr_to_field_map = dict()
+        cls.field_to_attr_map = dict()
         for field, value in response.items():
             attr = cls.convert_to_snake_case(field)
-            if attr in obj.attr_to_field_map.keys():
-                log.warning(obj.attr_to_field_map[attr])
+            if attr in cls.attr_to_field_map.keys():
+                log.warning(cls.attr_to_field_map[attr])
                 log.warning(f"Duplicate attribute name: {attr} ({field})")
                 # use just the lowercase api name if there's a clash.
                 # TODO Maybe check to make sure that's not a dupe too?
                 attr = field.lower()
-            obj.attr_to_field_map[attr] = field
-            obj.field_to_attr_map[field] = attr
-            # not using setattr() because we don't want to set tainted in our __setattr__
             obj.__dict__[attr] = value
+            cls.attr_to_field_map[attr] = field
+            cls.field_to_attr_map[field] = attr
+            # not using setattr() because we don't want to set tainted in our __setattr__
             # log.warning(f"Setting {attr} to {value}")
 
         return obj
@@ -799,7 +823,6 @@ class Contact(SalesforceObject):
         self.id = id
         self.created = False
         self.duplicate_found = False
-
 
     @staticmethod
     def parse_all_email(email, results):
