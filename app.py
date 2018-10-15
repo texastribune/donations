@@ -556,7 +556,7 @@ def add_blast_subscription(form=None, customer=None):
     rdo.installments = 0
     rdo.description = "Blast Subscription"
     rdo.open_ended_status = "Open"
-    if rdo.amount == 40:
+    if int(float(rdo.amount)) == 40:
         rdo.installment_period = "monthly"
     else:
         rdo.installment_period = "yearly"
