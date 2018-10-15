@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -6,10 +7,13 @@ import TopForm from './TopForm.vue';
 
 Vue.use(VueRouter);
 
-function createBaseFormState(queryParams) {
+function createInitialFormState(queryParams) {
+  if (window.__BASE_FORM_REHYDRATION__) {
+    return window.__BASE_FORM_REHYDRATION__;
+  }
+
   const baseState = {
     stripeEmail: '',
-    customerId: '',
     first_name: '',
     last_name: '',
     description: 'The Texas Tribune Membership',
@@ -21,7 +25,7 @@ function createBaseFormState(queryParams) {
 
   let openEndedStatus;
   let { amount, installmentPeriod = 'monthly' } = queryParams;
-  const { campaignId = '' } = queryParams;
+  const { campaignId = '', referralId = '' } = queryParams;
 
   switch (installmentPeriod.toLowerCase()) {
     case 'once':
@@ -31,7 +35,7 @@ function createBaseFormState(queryParams) {
       break;
     case 'monthly':
       openEndedStatus = 'Open';
-      amount = amount || '10';
+      amount = amount || '35';
       break;
     case 'yearly':
       openEndedStatus = 'Open';
@@ -40,13 +44,14 @@ function createBaseFormState(queryParams) {
     default:
       installmentPeriod = 'monthly';
       openEndedStatus = 'Open';
-      amount = amount || '10';
+      amount = amount || '35';
   }
 
   return {
     ...baseState,
     amount,
     campaign_id: campaignId,
+    referral_id: referralId,
     installment_period: installmentPeriod,
     openended_status: openEndedStatus,
   };
@@ -69,7 +74,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     store.dispatch(
       'baseForm/createInitialState',
-      createBaseFormState(query),
+      createInitialFormState(query),
     );
 
     routeHandler.$mount('#app');

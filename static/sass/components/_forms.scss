@@ -13,7 +13,6 @@ $color-error: #f51c1c;
       @extend .font-sansserif;
       background-color: #fbfbfb;
       border: 1px solid $color-gray-light;
-      border-radius: 0px;
       color: $color-black-pure;
       display: block;
       height: 45px;
@@ -24,7 +23,6 @@ $color-error: #f51c1c;
     select {
       -webkit-appearance: none;
       -moz-appearance: none;
-      appearance: none;
     }
 
     label {
@@ -35,6 +33,7 @@ $color-error: #f51c1c;
     // error message
     p {
       @extend .form__error;
+      @extend .form__error--normal;
     }
 
     &--standard {
@@ -55,7 +54,16 @@ $color-error: #f51c1c;
   // error message
   &__error {
     color: $color-error;
-    font-size: $size-xs;
+
+    &--normal {
+      font-size: $size-xs;
+    }
+
+    &--prominent {
+      border: 1px solid $color-error;
+      font-size: $size-s;
+      padding: $size-b;
+    }
 
     &--centered {
       text-align: center;
@@ -171,6 +179,7 @@ $color-error: #f51c1c;
     // error message
     & > p {
       @extend .form__error;
+      @extend .form__error--normal;
     }
   }
 

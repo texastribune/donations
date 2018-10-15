@@ -11,6 +11,7 @@ export default {
           message: 'Your card number is incomplete',
         },
       },
+      stripeToken: '',
       showManualErrors: false,
       showNativeErrors: false,
       showManualPay: false,
@@ -42,6 +43,10 @@ export default {
       if (this.showManualErrors && !this.manualIsValid) return true;
       if (this.showNativeErrors && !this.nativeIsValid) return true;
       return false;
+    },
+
+    showServerErrorMessage() {
+      return !this.showErrorClue && this.serverErrorMessage;
     },
   },
 

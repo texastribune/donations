@@ -7,27 +7,27 @@ Usage:
 
 """
 
-from pytz import timezone
-import stripe
+from config import STRIPE_KEYS, TIMEZONE
 
-from config import STRIPE_KEYS
-from config import TIMEZONE
-from batch import Log
-from batch import process_charges
+from pytz import timezone
+
+import stripe
+from batch import Log, process_charges
+from docopt import docopt
 
 zone = timezone(TIMEZONE)
 
-stripe.api_key = STRIPE_KEYS['secret_key']
+stripe.api_key = STRIPE_KEYS["secret_key"]
 
 
 def charge_cards(date):
 
     log = Log()
 
-    log.it('---Starting reprocess job...')
+    log.it("---Starting reprocess job...")
 
     # regular (non Circle) pledges:
-    log.it('---Processing regular charges...')
+    log.it("---Processing regular charges...")
 
     query = """
         SELECT Amount, Name, Stripe_Customer_Id__c, Description,
@@ -37,7 +37,9 @@ def charge_cards(date):
         AND StageName = 'Pledged'
         AND Stripe_Customer_Id__c != ''
         AND Type != 'Giving Circle'
-        """.format(date)
+        """.format(
+        date
+    )
 
     process_charges(query, log)
 
@@ -49,7 +51,7 @@ def charge_cards(date):
     # So we process charges separately for Circles.
     #
 
-    log.it('---Processing Circle charges...')
+    log.it("---Processing Circle charges...")
 
     query = """
         SELECT Amount, Name, Stripe_Customer_Id__c, Description,
@@ -59,13 +61,14 @@ def charge_cards(date):
         AND StageName = 'Pledged'
         AND Stripe_Customer_Id__c != ''
         AND Type = 'Giving Circle'
-        """.format(date)
+        """.format(
+        date
+    )
 
     process_charges(query, log)
     log.send()
 
 
-from docopt import docopt
-if __name__ == '__main__':
-    arguments = docopt(__doc__, version='Reprocess 1.0')
-    charge_cards(arguments['<date>'])
+if __name__ == "__main__":
+    arguments = docopt(__doc__, version="Reprocess 1.0")
+    charge_cards(arguments["<date>"])

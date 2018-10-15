@@ -55,7 +55,7 @@ const DEFAULT_PAY_FEES = 'True';
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
     // paymentDetails: MONTHLY_PAYMENTS
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
@@ -64,7 +64,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelAYearly: {
     bucket: 'levelA',
-    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / YEARLY_PAYMENT.installmentsPerYear,
+    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / YEARLY_PAYMENT.installmentsPerYear).toString(),
     installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
     openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
@@ -72,7 +72,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelAOneTime: {
     bucket: 'levelA',
-    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / ONETIME_PAYMENT.installmentsPerYear,
+    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
     installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
     openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
@@ -80,7 +80,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelBMonthly: {
     bucket: 'levelB',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
     openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
@@ -88,7 +88,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelBYearly: {
     bucket: 'levelB',
-    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount,
+    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / YEARLY_PAYMENT.installmentsPerYear).toString(),
     installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
     openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
@@ -96,7 +96,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelBOneTime: {
     bucket: 'levelB',
-    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / ONETIME_PAYMENT.installmentsPerYear,
+    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
     installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
     openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
@@ -104,7 +104,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelCMonthly: {
     bucket: 'levelC',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / MONTHLY_PAYMENTS.installmentsPerYear),
+    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
     installments: MONTHLY_PAYMENTS.formInstallmentsValue,
     installmentPeriod: MONTHLY_PAYMENTS.text,
     openEndedStatus: MONTHLY_PAYMENTS.formOpenEndedStatus,
@@ -112,7 +112,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelCYearly: {
     bucket: 'levelC',
-    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount,
+    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / YEARLY_PAYMENT.installmentsPerYear).toString(),
     installments: YEARLY_PAYMENT.formInstallmentsValue,
     installmentPeriod: YEARLY_PAYMENT.text,
     openEndedStatus: YEARLY_PAYMENT.formOpenEndedStatus,
@@ -120,7 +120,7 @@ export const BUSINESS_BUCKETS = {
   },
   levelCOneTime: {
     bucket: 'levelC',
-    amount: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / ONETIME_PAYMENT.installmentsPerYear,
+    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
     installments: ONETIME_PAYMENT.formInstallmentsValue,
     installmentPeriod: ONETIME_PAYMENT.text,
     openEndedStatus: ONETIME_PAYMENT.formOpenEndedStatus,
@@ -151,4 +151,3 @@ export const WL_DEFAULT_QUERY_PARAMETERS = {
   openended_status: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].openEndedStatus,
 };
 export const WL_QUERY_ESCAPE_THRESHOLD = 6;
-
