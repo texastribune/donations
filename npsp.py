@@ -4,7 +4,7 @@ import re
 import json
 import logging
 import os
-from pprint import pprint  # TODO rm
+from pprint import pprint
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
@@ -201,6 +201,11 @@ class SalesforceConnection:
 
     def save(self, sf_object):
 
+        if "schema_map" not in sf_object.__dict__:
+            sf_object.schema()
+        pprint(sf_object.__dict__)
+        pprint(sf_object.serialize())
+
         if sf_object.id:
             log.info(f"{sf_object.api_name} object already exists; updating...")
             log.debug(sf_object.serialize())
@@ -214,7 +219,6 @@ class SalesforceConnection:
 
         log.info(f"{sf_object.api_name} object doesn't exist; creating...")
         path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
-        log.debug(repr(sf_object))
         try:
             response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
@@ -224,7 +228,7 @@ class SalesforceConnection:
         sf_object.id = response["id"]
         sf_object.created = True
 
-        sf_object.tainted = set()  # TODO move this to SalesforceObject.save()?
+        sf_object.tainted = set()
         return sf_object
 
 
@@ -247,36 +251,110 @@ class SalesforceObject(object):
         cls.field_to_attr_map = dict()
         for item in schema['fields']:
             field = item['name']
-            attr = cls.convert_to_snake_case(field)
+            attr = cls.snake_case(field)
             if attr in cls.attr_to_field_map.keys():
                 log.warning(cls.attr_to_field_map[attr])
                 log.warning(f"Duplicate attribute name: {attr} ({field})")
                 # use just the lowercase api name if there's a clash.
-                # TODO Maybe check to make sure that's not a dupe too?
                 attr = field.lower()
             cls.attr_to_field_map[attr] = field
             cls.field_to_attr_map[field] = attr
+        cls.schema_map = cls.attr_to_field_map
         # TODO do type-checking for certain fields? Like those with picklists? Or
         # numbers? Or those that are updateable=False?
 
     def _format(self):
         raise NotImplementedError
 
+    def deserialize(self, response):
+        cls = type(self)
+        cls.attr_to_field_map = dict()
+        cls.field_to_attr_map = dict()
+        for field, value in response.items():
+            attr = cls.snake_case(field)
+            if attr in cls.attr_to_field_map.keys():
+                log.warning(cls.attr_to_field_map[attr])
+                log.warning(f"Duplicate attribute name: {attr} ({field})")
+                # use just the lowercase api name if there's a clash.
+                attr = field.lower()
+            # not using setattr() because we don't want to set tainted in our __setattr__
+            self.__dict__[attr] = value
+            cls.attr_to_field_map[attr] = field
+            cls.field_to_attr_map[field] = attr
+            # log.warning(f"Setting {attr} to {value}")
+
+    @classmethod
+    def deserialize_group(cls, response):
+        group = list()
+        for item in response:
+            obj = cls()
+            obj.deserialize(item)
+            group.append(obj)
+        return group
+
     def __repr__(self):
-        obj = self._format()
-        obj["Id"] = self.id
+        obj = self.serialize()
         return json.dumps(obj)
+
+    def fetch(self, sf_connection=None):
+        log.info(f"Calling fetch() on {type(self)}")
+
+        cls = type(self)
+
+        if cls.__name__ == "SalesforceObject":
+            raise NotImplementedError
+
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        # TODO restrict by fields if present
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{self.api_name}/{self.id}"
+        log.debug(path)
+        response = sf.get(path)
+        log.debug(response)
+        pprint(response)
+        cls.attr_to_field_map = dict()
+        cls.field_to_attr_map = dict()
+        for field, value in response.items():
+            attr = cls.snake_case(field)
+            if attr in cls.attr_to_field_map.keys():
+                log.warning(cls.attr_to_field_map[attr])
+                log.warning(f"Duplicate attribute name: {attr} ({field})")
+                # use just the lowercase api name if there's a clash.
+                attr = field.lower()
+            if attr in self.__dict__ and self.__dict__[attr] != value:
+                log.debug(f"Overwriting value of {attr} ({self.__dict__[attr]}) on {cls} to {value}")
+            # not using setattr() because we don't want to set tainted in our __setattr__
+            self.__dict__[attr] = value
+            cls.attr_to_field_map[attr] = field
+            cls.field_to_attr_map[field] = attr
+
+    def __getattr__(self, attr):
+        log.info(f"Getting {attr} from {type(self).__name__}")
+        if "schema_map" in self.__dict__ and attr not in self.schema_map:
+            log.debug(f"schema_map not present or {attr} not in schema_map")
+            raise AttributeError
+
+        if "id" not in self.__dict__ or not self.__dict__['id']:
+            log.info("id not in dict")
+            raise AttributeError
+        log.info(f"Fetching {type(self)} {self.id}")
+        if self.tainted:
+            log.warning(f"Overwriting value(s) of {','.join(self.tainted)} on {type(self)}")
+        self.fetch()
+        if attr in self.__dict__:
+            return getattr(self, attr)
+        raise AttributeError
 
     def __setattr__(self, attr, value):
         log.debug(f"Setting {attr} to {value} on {type(self)}")
         # TODO: i think there's a reason I didn't the super() outside of the hasattr but
         # I can't remember what it is
         # TODO don't taint it if it's already set to the same value?
-        # TODO don't taint id?
-        if hasattr(self, attr):
+        if attr in self.__dict__:
             super().__setattr__(attr, value)
-            logging.debug(f'Marking {self.api_name} {attr} as tainted')
-            self.tainted.add(attr)
+            if attr != "id":
+                logging.debug(f'Marking {self.api_name} {attr} as tainted')
+                self.tainted.add(attr)
         else:
             super().__setattr__(attr, value)
 
@@ -287,16 +365,17 @@ class SalesforceObject(object):
         self.tainted = set()
         return self
 
-    # TODO what happens when we save a new object that has no attribute map? I guess we have to fetch the schema to get the api names
     # TODO __getattr__ fetch on demand? If so we don't have to fetch the account_id from a new contact
     # TODO list of fields to grab on SELECT for each type of object? Does it have to be api names or can we fetch the schema?
     # TODO store the schemas and field maps on the class instead of the object? I think
     # the field maps may have to be per-object.
     # TODO should we ever try to warn if they save an object that has the same
     # name/email/whatever but doesn't have an ID? Probably not.
+    # TODO use composite request to create Contact/Account/Opportunity in one API call?
+    # TODO write unit tests for all of this
     def serialize(self):
         log.info("called serialize")
-        if hasattr(self, "id"):  # object exists; use tainted
+        if hasattr(self, "id") and self.id is not None:  # object exists; use tainted
             out = dict()
             for attribute in self.tainted:
                 if attribute == "id":
@@ -310,6 +389,7 @@ class SalesforceObject(object):
         out = {
             api_name: getattr(self, attribute)
             for api_name, attribute in self.field_to_attr_map.items()
+            if attribute in self.__dict__
         }
         return out
 
@@ -319,7 +399,7 @@ class SalesforceObject(object):
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
     @staticmethod
-    def convert_to_snake_case(name):
+    def snake_case(name):
         output = name
         # remove leading chars:
         if not output.islower():
@@ -336,6 +416,7 @@ class SalesforceObject(object):
     # TODO move this to __init__?
     @classmethod
     def get(cls, id, sf_connection=None):
+        log.info(f"Calling get() on {type(cls)}")
 
         if cls.__name__ == "SalesforceObject":
             raise NotImplementedError
@@ -351,12 +432,11 @@ class SalesforceObject(object):
         cls.attr_to_field_map = dict()
         cls.field_to_attr_map = dict()
         for field, value in response.items():
-            attr = cls.convert_to_snake_case(field)
+            attr = cls.snake_case(field)
             if attr in cls.attr_to_field_map.keys():
                 log.warning(cls.attr_to_field_map[attr])
                 log.warning(f"Duplicate attribute name: {attr} ({field})")
                 # use just the lowercase api name if there's a clash.
-                # TODO Maybe check to make sure that's not a dupe too?
                 attr = field.lower()
             obj.__dict__[attr] = value
             cls.attr_to_field_map[attr] = field
@@ -366,10 +446,12 @@ class SalesforceObject(object):
 
         return obj
 
+# TODO print warning when we have to fetch a new field? So we can add that field to the defaults?
 
 class Opportunity(SalesforceObject):
 
     api_name = "Opportunity"
+    default_fetch_fields = ['id', 'amount', 'name', 'stripe_customer_id', 'description', 'stripe_agreed_to_pay_fees', 'account_id']
 
     def __init__(
         self,
@@ -397,87 +479,43 @@ class Opportunity(SalesforceObject):
             self.account_id = None
 
         self.id = None
-        self._amount = 0
+        self.amount = 0
         self.close_date = today
-        self.campaign_id = None
         self.record_type_name = record_type_name
         self.stage_name = stage_name
         self.type = "Single"
-        self.stripe_customer = None
-        self.referral_id = None
-        self.lead_source = None
-        self.description = None
-        self.agreed_to_pay_fees = False
-        self.encouraged_by = None
-        self.stripe_card = None
-        self.stripe_transaction = None
-        self.expected_giving_date = None
-        self.closed_lost_reason = None
         self.created = False
 
     @classmethod
     def get(cls, id):
         obj = super().get(id=id)
-        print(builtins.id(obj))
         return obj
 
     @classmethod
-    def list_pledged(cls, begin, end, sf_connection=None):
+    def list(cls, begin, end, stage_name="Pledged", sf_connection=None):
 
         # TODO a more generic dserializing method
-        # TODO parameterize stage?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
+        if not hasattr(cls, "attr_to_field_map"):
+            cls.schema()
+        query_string = ','.join(cls.attr_to_field_map[attr] for attr in cls.default_fetch_fields)
+        log.info(query_string)
 
         query = f"""
-        SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
-            Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
-            RecordType.Name, Type, Referral_ID__c, LeadSource,
-            Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
-            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
-            Expected_Giving_Date__c
+        SELECT {query_string}
         FROM Opportunity
         WHERE Expected_Giving_Date__c <= {end}
         AND Expected_Giving_Date__c >= {begin}
-        AND StageName = 'Pledged'
+        AND StageName = '{stage_name}'
         """
+        log.debug(query)
         response = sf.query(query)
         log.debug(response)
 
-        results = list()
-        for item in response:
-            y = cls()
-            y.id = item["Id"]
-            y.name = item["Name"]
-            y.amount = item["Amount"]
-            y.stripe_customer = item["Stripe_Customer_ID__c"]
-            y.description = item["Description"]
-            y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
-            y.stage_name = "Pledged"
-            y.close_date = item["CloseDate"]
-            y.record_type_name = item["RecordType"]["Name"]
-            y.expected_giving_date = item["Expected_Giving_Date__c"]
-            y.campaign_id = item["CampaignId"]
-            y.type = item["Type"]
-            y.referral_id = item["Referral_ID__c"]
-            y.lead_source = item["LeadSource"]
-            y.encouraged_by = item["Encouraged_to_contribute_by__c"]
-            y.stripe_transaction = item["Stripe_Transaction_ID__c"]
-            y.stripe_card = item["Stripe_Card__c"]
-            y.account_id = item["AccountId"]
-            y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
-            y.created = False
-            results.append(y)
+        opportunities = cls.deserialize_group(response)
 
-        return results
-
-    @property
-    def amount(self):
-        return str(Decimal(self._amount).quantize(TWOPLACES))
-
-    @amount.setter
-    def amount(self, amount):
-        self._amount = amount
+        return opportunities
 
     def _format(self):
         return {
@@ -501,10 +539,12 @@ class Opportunity(SalesforceObject):
         }
 
     def __str__(self):
-        return f"{self.id}: {self.name} for {self.amount} ({self.description})"
+        return f"{self.id}: {self.name} for ${self.amount:.2f} ({self.description})"
 
     def save(self):
 
+        # TODO it looks like account_id isn't required; remove this?
+        # TODO but stage_name and close_date are required
         if self.account_id is None:
             raise SalesforceException("Account ID must be specified")
         if not self.name:
@@ -566,7 +606,7 @@ class RDO(SalesforceObject):
         self.installment_period = None
         self.campaign_id = None
         self.referral_id = None
-        self._amount = 0
+        self.amount = 0
         self.type = "Recurring Donation"
         self.date_established = today
         self.stripe_customer = None
@@ -611,7 +651,7 @@ class RDO(SalesforceObject):
         return recurring_donation
 
     def __str__(self):
-        return f"{self.id}: {self.name} for {self.amount} ({self.description})"
+        return f"{self.id}: {self.name} for ${self.amount:.2f} ({self.description})"
 
     def opportunities(self):
         query = f"""
@@ -652,14 +692,6 @@ class RDO(SalesforceObject):
             y.created = False
             results.append(y)
         return results
-
-    @property
-    def amount(self):
-        return str(Decimal(self._amount).quantize(TWOPLACES))
-
-    @amount.setter
-    def amount(self, amount):
-        self._amount = amount
 
     def save(self):
 

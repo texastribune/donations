@@ -114,21 +114,23 @@ def charge_cards():
     three_days_ago = (datetime.now(tz=zone) - timedelta(days=3)).strftime("%Y-%m-%d")
     today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
-    opportunities = Opportunity.list_pledged(begin=three_days_ago, end=today)
+    opportunities = Opportunity.list(begin=three_days_ago, end=today)
 
     log.it("---Processing charges...")
 
     log.it(f"Found {len(opportunities)} opportunities available to process.")
 
     for item in opportunities:
-        if not item.stripe_customer:
+        if not item.stripe_customer_id:
             continue
         amount = amount_to_charge(amount=item.amount, pay_fees=item.agreed_to_pay_fees)
         try:
-            log.it(f"---- Charging ${amount} to {item.stripe_customer} ({item.name})")
+            log.it(
+                f"---- Charging ${amount} to {item.stripe_customer_id} ({item.name})"
+            )
 
             charge = stripe.Charge.create(
-                customer=item.stripe_customer,
+                customer=item.stripe_customer_id,
                 amount=int(amount * 100),
                 currency="usd",
                 description=item.description,
