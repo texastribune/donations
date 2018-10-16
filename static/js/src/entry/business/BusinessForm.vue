@@ -1,11 +1,23 @@
 <template>
   <form
     ref="form"
-    action="/charge"
+    action="/business"
     method="post"
     class="form business-form"
     @submit="$event.preventDefault()"
   >
+
+    <div
+      v-show="showServerErrorMessage"
+      class="grid_container--l grid_separator"
+    >
+      <div class="grid_row">
+        <div class="col">
+          <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+        </div>
+      </div>
+    </div>
+
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
@@ -58,8 +70,8 @@
         </div>
       </div>
 
-      <div className="grid_row grid_separator">
-        <div className="col">
+      <div class="grid_row grid_separator">
+        <div class="col">
           <text-input
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_street"
@@ -89,12 +101,10 @@
         <div class="col_4 grid_separator">
           <select-list
             :options="options"
-            :validation="validation.shipping_state"
             label-text="state"
             base-classes="form__text form__text--standard"
             name="shipping_state"
             store-module="businessForm"
-            @setValidationValue="setValidationValue"
           />
         </div>
         <div class="col_2 grid_separator">
@@ -136,8 +146,8 @@
         </div>
       </div>
 
-      <div className="grid_row grid_separator grid_wrap--s">
-        <div className="col grid_separator">
+      <div class="grid_row grid_separator grid_wrap--s">
+        <div class="col grid_separator">
           <text-input
             :required="false"
             label-text="encouraged to give by"
@@ -167,8 +177,6 @@
             :supported="nativeIsSupported"
             base-classes="form__native"
             amount-store-module="businessForm"
-            email-store-module="businessForm"
-            customer-id-store-module="businessForm"
             @setValue="setValue"
             @onSubmit="onSubmit"
           />
@@ -200,8 +208,6 @@
                 :form-is-valid="manualIsValid"
                 :is-fetching-token="isFetchingToken"
                 base-classes="form__submit button button--yellow button--l"
-                email-store-module="businessForm"
-                customer-id-store-module="businessForm"
                 value="Donate"
                 @onSubmit="onSubmit"
                 @setValue="setValue"
@@ -224,10 +230,14 @@
         aria-hidden="true"
       >
         <div class="col">
-          <p class="form__error form__error--centered">Please correct errors above</p>
+          <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
         </div>
       </div>
 
+      <local-hidden
+        :value="stripeToken"
+        name="stripeToken"
+      />
       <hidden
         name="campaign_id"
         store-module="businessForm"
@@ -267,6 +277,7 @@
 <script>
 import Hidden from '../../elements/Hidden.vue';
 import Level from '../../elements/Level.vue';
+import LocalHidden from '../../elements/LocalHidden.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
 import SelectList from '../../elements/SelectList.vue';
@@ -279,9 +290,7 @@ import formStarter from '../../mixins/form/starter';
 // import addNumberCommas from '../../utils/addNumberCommas';
 import { US_STATES_SELECT_LIST } from '../../utils/formSelectListConstants';
 
-import {
-  DEFAULT_STATE_SELECTED
-} from './constants';
+import { DEFAULT_STATE_SELECTED } from './constants';
 
 
 export default {
@@ -289,6 +298,7 @@ export default {
 
   components: {
     Hidden,
+    LocalHidden,
     TextInput,
     SelectList,
     PayFees,
@@ -306,6 +316,8 @@ export default {
 
   data() {
     return {
+      // eslint-disable-next-line no-underscore-dangle
+      serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       validation: {
         stripeEmail: {
           manual: true,
@@ -342,13 +354,7 @@ export default {
           message: 'Enter a city',
           validator: this.isNotEmpty,
         },
-        shipping_state: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Select a state',
-          validator: this.isNotEmpty,
-        },
+// State was here
         shipping_postalcode: {
           manual: true,
           native: true,
@@ -370,7 +376,7 @@ export default {
           message: 'Enter contact last name',
           validator: this.isNotEmpty,
         },
-     },
+      },
       options: {
         list: this.buildList(US_STATES_SELECT_LIST),
         default: DEFAULT_STATE_SELECTED,
@@ -384,13 +390,13 @@ export default {
       const options = [];
       selectList.forEach((listItem, index) => {
         options.push({
-          index: index,
+          index,
           value: listItem.value,
-          text: listItem.text
+          text: listItem.text,
         });
       });
       return options;
-    }
-  }
+    },
+  },
 };
 </script>

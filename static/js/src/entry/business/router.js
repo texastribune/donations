@@ -24,8 +24,8 @@ Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
   let scrubbedQueryParams;
-  console.log("wl def object");
-  console.log(WL_DEFAULT_QUERY_PARAMETERS);
+  //console.log("wl def object");
+  //console.log(WL_DEFAULT_QUERY_PARAMETERS);
   //
   // If this query is within the threshold number of parameters
   //   scrub and merge query params with the default state
@@ -50,8 +50,8 @@ function getStateFromParams(queryParams) {
     // Set UI
     level = DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   }
-  console.log("form start");
-  console.log(mergedQueryParams);
+  //console.log("form start");
+  //console.log(mergedQueryParams);
   // Set the Choices form state from defaults + query parameters
   const {
     amount,
@@ -70,7 +70,10 @@ function getStateFromParams(queryParams) {
   };
 }
 
-function createBaseFormState(queryParams) {
+function createInitialFormState(queryParams) {
+  if (window.__BUSINESS_FORM_REHYDRATION__) {
+    return window.__BUSINESS_FORM_REHYDRATION__;
+  }
   const dynamicState = getStateFromParams(queryParams);
   const staticState = {
     stripeEmail: '',
@@ -93,7 +96,7 @@ function createBaseFormState(queryParams) {
 
 function createRouter() {
   return new VueRouter({
-    base: '/businessform',
+    base: '/business',
     mode: 'history',
     routes: [
       { path: '/', component: RouteHandler },
@@ -109,7 +112,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     store.dispatch(
       'businessForm/createInitialState',
-      createBaseFormState(query),
+      createInitialFormState(query),
     );
 
     routeHandler.$mount('#app');
