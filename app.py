@@ -7,7 +7,7 @@ import json
 import locale
 import logging
 import os
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE, LOG_LEVEL
+from config import FLASK_DEBUG, FLASK_SECRET_KEY, LOG_LEVEL, TIMEZONE
 from datetime import datetime
 
 from pytz import timezone
@@ -26,8 +26,8 @@ from sassutils.wsgi import SassMiddleware
 from util import (
     clean,
     notify_slack,
-    send_multiple_account_warning,
     send_email_new_business_membership,
+    send_multiple_account_warning,
 )
 from validate_email import validate_email
 
