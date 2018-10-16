@@ -189,7 +189,7 @@ def do_charge_or_show_errors(template, bundles, function):
             message=message,
             form_data=form_data,
         )
-    logging.info(customer.id)
+    app.logger.info(f"Customer id: {customer.id}")
     function(customer=customer, form=clean(request.form))
     gtm = {
         "event_value": amount,
@@ -297,7 +297,7 @@ def submit_blast():
         customer = stripe.Customer.create(
             email=request.form["stripeEmail"], card=request.form["stripeToken"]
         )
-        app.logger.info(customer.id)
+        app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
         return render_template("error.html", message=message)
