@@ -5,7 +5,7 @@ import json
 import locale
 import logging
 import os
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, TIMEZONE, LOG_LEVEL
+from config import FLASK_DEBUG, FLASK_SECRET_KEY, LOG_LEVEL, TIMEZONE
 from datetime import datetime
 
 from pytz import timezone
@@ -21,8 +21,8 @@ from sassutils.wsgi import SassMiddleware
 from util import (
     clean,
     notify_slack,
-    send_multiple_account_warning,
     send_email_new_business_membership,
+    send_multiple_account_warning,
 )
 from validate_email import validate_email
 
@@ -189,7 +189,7 @@ def do_charge_or_show_errors(template, bundles, function):
             message=message,
             form_data=form_data,
         )
-    logging.info(customer.id)
+    app.logger.info(f"Customer id: {customer.id}")
     function(customer=customer, form=clean(request.form))
     gtm = {
         "event_value": amount,
@@ -297,7 +297,7 @@ def submit_blast():
         customer = stripe.Customer.create(
             email=request.form["stripeEmail"], card=request.form["stripeToken"]
         )
-        app.logger.info(customer.id)
+        app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
         return render_template("error.html", message=message)
@@ -556,7 +556,7 @@ def add_blast_subscription(form=None, customer=None):
     rdo.installments = 0
     rdo.description = "Blast Subscription"
     rdo.open_ended_status = "Open"
-    if rdo.amount == 40:
+    if int(float(rdo.amount)) == 40:
         rdo.installment_period = "monthly"
     else:
         rdo.installment_period = "yearly"
