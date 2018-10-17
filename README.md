@@ -8,7 +8,40 @@ Getting Started
 
 The recommended method for running this repo locally is to use [Docker](https://www.docker.com/). If you don't already have Docker set up, you'll want to [install Docker for Mac](https://docs.docker.com/engine/installation/mac/) to get a Docker environment set up on your computer.
 
-You'll also need to have an `env` file set up with the environment variables for Stripe and Salesforce so that Docker can find them.
+You'll also need to have an `env` file set up with the environment variables for Stripe
+and Salesforce so that Docker can find them. By default the `Makefile` will look for
+`env-docker` but this can be overridden with the `DOCKER_ENV_FILE` environment variable.
+
+Environment
+-----------
+| Variable                    |                                        Example |
+|-----------------------------|-----------------------------------------------:|
+| `PUBLISABLE_KEY`            |                                  pk_test_12345 |
+| `SECRET_KEY`                |                                  sk_test_12335 |
+| `SALESFORCE_HOST`           |                            test.salesforce.com |
+| `SALESFORCE_CLIENT_ID`      |                                                |
+| `SALESFORCE_CLIENT_SECRET`  |                                                |
+| `SALESFORCE_USERNAME`       |                                                |
+| `SALESFORCE_PASSWORD`       |                                                |
+| `SALESFORCE_TOKEN`          |                                                |
+| `CELERY_BROKER_URL`         |              amqp://guest:guest@rabbitmq:5672/ |
+| `CELERY_RESULT_BACKEND`     |                           redis://redis:6379/0 |
+| `FLASK_SECRET_KEY`          | b'f;\xeb\x9bT2\xcd\xdb\xe1#z\xfb\xab\xf8(\x03' |
+| `ENABLE_SENTRY`             |                                          False |
+| `SENTRY_DSN`                |          https://user:pass@sentry/7?timeout=10 |
+| `ENABLE_SLACK`              |                                          False |
+| `SLACK_API_KEY`             |                                                |
+| `SLACK_CHANNEL`             |                                     #donations |
+| `MAIL_SERVER`               |                                mail.server.com |
+| `MAIL_USERNAME`             |                                                |
+| `MAIL_PASSWORD`             |                                                |
+| `MAIL_PORT`                 |                                             25 |
+| `MAIL_USE_TLS`              |                                           True |
+| `DEFAULT_MAIL_SENDER`       |                                    foo@bar.org |
+| `ACCOUNTING_MAIL_RECIPIENT` |                                    foo@bar.org |
+| `BUSINESS_MEMBER_RECIPIENT` |                                    foo@bar.org |
+| `REDIS_URL`                 |                             redis://redis:6379 |
+| `SALESFORCE_API_VERSION`    |                                          v43.0 |
 
 Running the Project
 -------------------
@@ -17,13 +50,10 @@ Run `make backing`. This will start RabbitMQ and Redis.
 Run `make interactive`. This will drop you into the Flask app.
 Run `yarn run dev`. You should then be able to interact with the app at `local.texastribune.org:80`
 ```
-# flower -A app.celery --port=5555 --address=0.0.0.0    # monitoring
 C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
 celery beat --app app.celery &
 # gunicorn app:app --log-file=- --bind=0.0.0.0:5000 --access-logfile=-
 ```
-
-Blastform: http://local.texastribune.org/blastform
 
 Front-end commands:
 + `yarn run dev`: Start Flask development server and watch for JS and CSS changes
@@ -40,9 +70,7 @@ Running tests
 -------------
 
 To run the project tests, run
-`make interactive`
-`py.test tests.py`
-
+`make test`
 
 Deploy
 -------------------
