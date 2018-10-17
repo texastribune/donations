@@ -46,7 +46,7 @@ test: build-dev
 		--workdir=/app \
 		--rm \
 		--entrypoint=python3 \
-		texastribune/checkout:dev /usr/bin/py.test /app/tests.py --cov=/app
+		texastribune/checkout:dev /usr/bin/py.test -x /app/tests.py --cov=/app
 
 push:
 	docker push ${NS}/${APP}

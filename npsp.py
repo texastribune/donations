@@ -376,6 +376,9 @@ class SalesforceObject(object):
     # TODO use composite request to create Contact/Account/Opportunity in one API call?
     # TODO use related API query to get opps for an RDO?
     def serialize(self):
+        # don't differentiate patch() vs post() here and let that happen (by removing
+        # what's not tainted) in the save() method? Because right now we're testing for
+        # "id" in both places and that feels ugly and redundant
         log.debug("called serialize")
         # TODO construct the reverse map here and in deserialize() on demand since here and deserialize() are
         # the only places we use it?
