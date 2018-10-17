@@ -135,7 +135,7 @@ export const DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD = 'levelAYearly';
 export const DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD = 'levelAOneTime';
 
 // Texas will be default selection on state list
-export const DEFAULT_STATE_SELECTED = 43; // Texas
+export const DEFAULT_STATE_SELECTED = 'TX'; // Texas
 //
 // Whitelisting and query params
 // Add new query parameters here to whitelist them

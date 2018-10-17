@@ -18,7 +18,7 @@
       @change="onChange($event.target.selectedIndex)">
       <option
         v-for="(option, index) in options.list"
-        :selected="index == isSelected"
+        :selected="option.value == isSelected"
         :id="index"
         :key="index"
         :value="option.value" >
@@ -34,6 +34,7 @@ import connectedElement from './mixins/connectedElement';
 import labelConnector from './mixins/labelConnector';
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
+import { US_STATES_SELECT_LIST } from '../utils/formSelectListConstants';
 
 export default {
   name: 'SelectList',
@@ -97,7 +98,7 @@ export default {
       this.updateStoreValue({
         storeModule: this.shippingStateStoreModule,
         key: 'shipping_state',
-        value: selectedIndex,
+        value: US_STATES_SELECT_LIST[selectedIndex].value,
       });
     },
     getConnector(index) {
