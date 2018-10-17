@@ -104,7 +104,7 @@
             label-text="state"
             base-classes="form__text form__text--standard"
             name="shipping_state"
-            store-module="businessForm"
+            shipping-state-store-module="businessForm"
           />
         </div>
         <div class="col_2 grid_separator">
@@ -272,6 +272,10 @@
       />
       <hidden
         name="amount"
+        store-module="businessForm"
+      />
+      <hidden
+        name="shipping_state"
         store-module="businessForm"
       />
     </div>
