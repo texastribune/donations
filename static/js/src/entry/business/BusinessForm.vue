@@ -251,6 +251,10 @@
         store-module="businessForm"
       />
       <hidden
+        name="description"
+        store-module="businessForm"
+      />
+      <hidden
         name="pay_fees_value"
         store-module="businessForm"
       />
@@ -354,7 +358,6 @@ export default {
           message: 'Enter a city',
           validator: this.isNotEmpty,
         },
-// State was here
         shipping_postalcode: {
           manual: true,
           native: true,
