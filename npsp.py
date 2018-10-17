@@ -4,7 +4,7 @@ import re
 import json
 import logging
 import os
-from pprint import pprint # TODO rm
+from pprint import pprint  # TODO rm
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
@@ -318,7 +318,7 @@ class SalesforceObject(object):
     def __getattr__(self, attr):
         # TODO what about the case where the field map was generated from a SELECT so it
         # already exists but they request something that does actually exist but hasn't
-        # been fetched yet? Call fetch() only if: 
+        # been fetched yet? Call fetch() only if:
         # 1. The field map exists
         # 2. the attr isn't in it
         # 3. the schema hasn't been fetched
@@ -512,7 +512,7 @@ class Opportunity(SalesforceObject):
     def list(cls, begin, end, stage_name="Pledged", sf_connection=None):
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
-        if not hasattr(cls, "attr_to_field_map"): 
+        if not hasattr(cls, "attr_to_field_map"):
             cls.get_schema()  # TODO make this automatic when attr_to_field_map is referenced?
         query_string = ",".join(
             cls.attr_to_field_map[attr] for attr in cls.default_fetch_fields
