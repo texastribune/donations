@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+
 from pytz import timezone
 
 import pytest
@@ -129,7 +130,7 @@ def test__format_opportunity():
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
         "LeadSource": "Stripe",
         "Name": "D C (dcraigmile+test6@texastribune.org)",
-        "RecordTypeId": "01216000001IhI9",
+        "RecordType": {"Name": "Donation"},
         "StageName": "Pledged",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
         "Referral_ID__c": "1234",
@@ -378,27 +379,43 @@ def test__format_contact():
 
 def test_amount_to_charge_cents_just_fees_false():
 
-    actual = amount_to_charge(amount=10.50, pay_fees=False)
+    opp = Opportunity()
+    opp.amount = 10.50
+    opp.agreed_to_pay_fees = False
+
+    actual = amount_to_charge(opp)
     expected = Decimal("10.50")
     assert actual == expected
 
 
 def test_amount_to_charge_just_fees_false():
 
-    actual = amount_to_charge(amount=10, pay_fees=False)
+    opp = Opportunity()
+    opp.amount = 10
+    opp.agreed_to_pay_fees = False
+
+    actual = amount_to_charge(opp)
     expected = Decimal("10.00")
     assert actual == expected
 
 
 def test_amount_to_charge_cents_and_fees_true():
 
-    actual = amount_to_charge(amount=10.50, pay_fees=True)
+    opp = Opportunity()
+    opp.amount = 10.50
+    opp.agreed_to_pay_fees = True
+
+    actual = amount_to_charge(opp)
     expected = Decimal("11.04")
     assert actual == expected
 
 
 def test_amount_to_charge_just_fees_true():
 
-    actual = amount_to_charge(amount=10, pay_fees=True)
+    opp = Opportunity()
+    opp.amount = 10
+    opp.agreed_to_pay_fees = True
+
+    actual = amount_to_charge(opp)
     expected = Decimal("10.53")
     assert actual == expected

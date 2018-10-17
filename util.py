@@ -1,31 +1,53 @@
 import logging
 import smtplib
 from collections import defaultdict
-from config import (DEFAULT_MAIL_SENDER, ENABLE_SLACK, MAIL_PASSWORD,
-                    MAIL_PORT, MAIL_SERVER, MAIL_USERNAME,
-                    MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT, SLACK_API_KEY,
-                    SLACK_CHANNEL)
+from config import (
+    BUSINESS_MEMBER_RECIPIENT,
+    DEFAULT_MAIL_SENDER,
+    ENABLE_SLACK,
+    MAIL_PASSWORD,
+    MAIL_PORT,
+    MAIL_SERVER,
+    MAIL_USERNAME,
+    MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
+    SLACK_API_KEY,
+    SLACK_CHANNEL,
+)
 
 import requests
 
+from npsp import SalesforceConnection, SalesforceException
 
-def notify_slack(contact=None, opportunity=None, rdo=None):
-    """
-    Send a notification about a donation to Slack.
-    """
+
+def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
     reason = ""
-    if opportunity:
+    if rdo and opportunity:
+        raise SalesforceException("rdo and opportunity can't both be specified")
+
+    if account:
+        amount = rdo.amount or opportunity.amount
+        message = f"*{account.name}* became a business member at the *${amount}* level."
+    elif opportunity:
         if opportunity.encouraged_by:
             reason = f" (encouraged by {opportunity.encouraged_by})"
         message = f"*{contact.name}* ({contact.email}) pledged *${opportunity.amount}*{reason}"
-
-    if rdo:
+    elif rdo:
         if rdo.encouraged_by:
             reason = f" (encouraged by {rdo.encouraged_by})"
         message = f"*{contact.name}* ({contact.email}) pledged *${rdo.amount}*{reason} [{rdo.installment_period}]"
 
     logging.info(message)
 
+    return message
+
+
+def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
+    """
+    Send a notification about a donation to Slack.
+    """
+    message = construct_slack_message(
+        contact=contact, opportunity=opportunity, rdo=rdo, account=account
+    )
     if not ENABLE_SLACK:
         return
 
@@ -66,6 +88,9 @@ def send_multiple_account_warning(contact):
 
 
 def clean(form):
+    """
+    Clean up a form by converting strings to their 'None' or boolean equivalents and converting string numbers to their native types. Also makes None the response if the form is asked for a missing key.
+    """
     result = defaultdict(lambda: None)
     for k, v in form.items():
         if v is None or v == "None":
@@ -121,3 +146,31 @@ def send_email(recipient, subject, body, sender=None):
         logging.debug("successfully sent the mail")
     except Exception as e:
         logging.error(f"failed to send mail: {e}")
+
+
+def send_email_new_business_membership(account, contact):
+
+    if not BUSINESS_MEMBER_RECIPIENT:
+        raise Exception("BUSINESS_MEMBER_RECIPIENT must be specified")
+
+    url = SalesforceConnection().instance_url
+
+    body = f"A new business membership has been received for {account.name}:\n\n"
+
+    body += f"{url}/{account.id}\n\n"
+    if account.created:
+        body += "A new account was created.\n\n"
+
+    body += f"It was created by {contact.name}:\n\n"
+
+    body += f"{url}/{contact.id}\n\n"
+
+    if contact.created:
+        body += "A new contact was created."
+
+    logging.info(body)
+    send_email(
+        recipient=BUSINESS_MEMBER_RECIPIENT,
+        subject="New business membership",
+        body=body,
+    )

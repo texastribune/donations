@@ -1,5 +1,5 @@
 import logging
-from config import ACCOUNTING_MAIL_RECIPIENT, REDIS_URL, STRIPE_KEYS, TIMEZONE
+from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from datetime import datetime, timedelta
 from decimal import Decimal
 
@@ -7,19 +7,17 @@ from pytz import timezone
 
 import celery
 import redis
-import stripe
+from charges import amount_to_charge, charge
 from npsp import Opportunity
 from util import send_email
 
 zone = timezone(TIMEZONE)
 
-stripe.api_key = STRIPE_KEYS["secret_key"]
 
-TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
+log_level = logging.getLevelName(LOG_LEVEL)
 
-
-def quantize(amount):
-    return Decimal(amount).quantize(TWOPLACES)
+root = logging.getLogger()
+root.setLevel(log_level)
 
 
 class Log(object):
@@ -35,7 +33,7 @@ class Log(object):
         """
         Add something to the log.
         """
-        logging.info(string)
+        logging.debug(string)
         self.log.append(string)
 
     def send(self):
@@ -46,22 +44,6 @@ class Log(object):
         recipient = ACCOUNTING_MAIL_RECIPIENT
         subject = "Batch run"
         send_email(body=body, recipient=recipient, subject=subject)
-
-
-def amount_to_charge(amount, pay_fees=False):
-    """
-    Determine the amount to charge. This depends on whether the payer agreed
-    to pay fees or not. If they did then we add that to the amount charged.
-    Stripe charges 2.2% + $0.30.
-
-    https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
-    """
-    amount = float(amount)
-    if pay_fees:
-        total = (amount + .30) / (1 - 0.022)
-    else:
-        total = amount
-    return quantize(total)
 
 
 class AlreadyExecuting(Exception):
@@ -90,6 +72,9 @@ class Lock(object):
         self.connection.delete(self.key)
 
 
+# TODO stop sending this email and just rely on Sentry and logs?
+
+
 @celery.task()
 def charge_cards():
 
@@ -109,44 +94,14 @@ def charge_cards():
 
     log.it(f"Found {len(opportunities)} opportunities available to process.")
 
-    for item in opportunities:
-        if not item.stripe_customer:
+    for opportunity in opportunities:
+        if not opportunity.stripe_customer:
             continue
-        amount = amount_to_charge(amount=item.amount, pay_fees=item.agreed_to_pay_fees)
-        try:
-            log.it(f"---- Charging ${amount} to {item.stripe_customer} ({item.name})")
-
-            charge = stripe.Charge.create(
-                customer=item.stripe_customer,
-                amount=int(amount * 100),
-                currency="usd",
-                description=item.description,
-            )
-        except stripe.error.CardError as e:
-            # look for decline code:
-            error = e.json_body["error"]
-            log.it("The card has been declined:")
-            log.it("\tStatus: {}".format(e.http_status))
-            log.it("\tType: {}".format(error.get("type", "")))
-            log.it("\tCode: {}".format(error.get("code", "")))
-            log.it("\tParam: {}".format(error.get("param", "")))
-            log.it("\tMessage: {}".format(error.get("message", "")))
-            log.it("\tDecline code: {}".format(error.get("decline_code", "")))
-            continue
-        except stripe.error.InvalidRequestError as e:
-            log.it("Problem: {}".format(e))
-            continue
-        except Exception as e:
-            log.it("Problem: {}".format(e))
-            continue
-        if charge.status != "succeeded":
-            log.it("Charge failed. Check Stripe logs.")
-            continue
-        item.stripe_transaction_id = charge.id
-        item.stripe_card = charge.source.id
-        item.stage_name = "Closed Won"
-        item.save()
-        log.it("ok")
+        amount = amount_to_charge(opportunity)
+        log.it(
+            f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
+        )
+        charge(opportunity)
 
     log.send()
 
