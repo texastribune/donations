@@ -4,7 +4,7 @@ import re
 import json
 import logging
 import os
-from pprint import pprint
+from pprint import pprint # TODO rm
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
@@ -174,6 +174,7 @@ class SalesforceConnection:
 
     def update(self, objects, changes):
         data = dict()
+        # TODO generate data below in a separate function
         # what should this value be?
         data["allOrNone"] = False
         records = list()
@@ -278,6 +279,7 @@ class SalesforceObject(object):
     @classmethod
     def deserialize_group(cls, response):
         group = list()
+        # TODO make this a list comprehension
         for item in response:
             obj = cls()
             obj.deserialize(item)
@@ -302,6 +304,7 @@ class SalesforceObject(object):
         log.debug(path)
         response = sf.get(path)
         cls = type(self)
+        # TODO: isn't everything below the same as deserialize()?
         cls.attr_to_field_map, cls.field_to_attr_map = cls.make_maps(response.keys())
         for field, value in response.items():
             attr = cls.field_to_attr_map[field]
@@ -313,14 +316,30 @@ class SalesforceObject(object):
             self.__dict__[cls.field_to_attr_map[field]] = value
 
     def __getattr__(self, attr):
+        # TODO what about the case where the field map was generated from a SELECT so it
+        # already exists but they request something that does actually exist but hasn't
+        # been fetched yet? Call fetch() only if: 
+        # 1. The field map exists
+        # 2. the attr isn't in it
+        # 3. the schema hasn't been fetched
+        #    if the value is found after the fetch then warn that maybe it should be a
+        #    default field
+        #    TODO create an empty field map if it doeesn't exist in __init__ so we don't
+        #    have to test if it exists?
+        name = f"{type(self).__name__}.{attr}"
         log.debug(f"Getting {attr} from {type(self).__name__}")
-        if "attr_to_field_map" in type(self).__dict__ and attr not in self.attr_to_field_map.keys():
-            log.debug(f"attr_to_field_map not present or {attr} not in attr_to_field_map")
-            raise AttributeError
+        if (
+            "attr_to_field_map" in type(self).__dict__
+            and attr not in self.attr_to_field_map.keys()
+        ):
+            log.debug(
+                f"attr_to_field_map not present or {attr} not in attr_to_field_map"
+            )
+            raise AttributeError(f"{name} not in map")
 
         if "id" not in self.__dict__ or not self.__dict__["id"]:
             log.debug("id not in dict; can't fetch")
-            raise AttributeError
+            raise AttributeError(f"No 'id' so can't fetch {name}")
         if self.tainted:
             log.warning(
                 f"Overwriting value(s) of {','.join(self.tainted)} on {type(self)}"
@@ -329,13 +348,16 @@ class SalesforceObject(object):
         self.fetch()
         if attr in self.__dict__:
             return getattr(self, attr)
-        raise AttributeError
+        raise AttributeError(f"{name}")
 
     def __setattr__(self, attr, value):
         log.debug(f"Setting {attr} to {value} on {type(self)}")
         # TODO: i think there's a reason I didn't the super() outside of the hasattr but
         # I can't remember what it is
         # TODO don't taint it if it's already set to the same value?
+        # TODO right now if we get the attr name wrong it will set it but will silently
+        # skip/fail when serializing -- a way to fix this?
+        # TODO should we only add to tainted if the map exists and it's in there?
         if attr in self.__dict__:
             super().__setattr__(attr, value)
             if attr != "id" and attr != "tainted":
@@ -344,23 +366,21 @@ class SalesforceObject(object):
         else:
             super().__setattr__(attr, value)
 
-    def my_save(self):
+    def my_save(self):  # TODO rm
         self.sf.save(self)
         self.tainted = set()
         return self
 
     # TODO __getattr__ fetch on demand? If so we don't have to fetch the account_id from a new contact
     # TODO list of fields to grab on SELECT for each type of object? Does it have to be api names or can we fetch the schema?
-    # TODO store the schemas and field maps on the class instead of the object? I think
-    # the field maps may have to be per-object.
-    # TODO should we ever try to warn if they save an object that has the same
-    # name/email/whatever but doesn't have an ID? Probably not.
     # TODO use composite request to create Contact/Account/Opportunity in one API call?
-    # TODO write unit tests for all of this
+    # TODO use related API query to get opps for an RDO?
     def serialize(self):
         log.debug("called serialize")
+        # TODO construct the reverse map here and in deserialize() on demand since here and deserialize() are
+        # the only places we use it?
         if not hasattr(self, "field_to_attr_map"):
-            self.schema()
+            self.get_schema()
         out = dict()
         if hasattr(self, "id") and self.id is not None:  # object exists; use tainted
             for attribute in self.tainted:
@@ -377,6 +397,7 @@ class SalesforceObject(object):
                 for api_name, attribute in self.field_to_attr_map.items()
                 if attribute in self.__dict__
             }
+            del out["Id"]
         # TODO get this on the deserialize too
         if hasattr(self, "record_type_name") and self.record_type_name is not None:
             out["RecordType"] = {"Name": self.record_type_name}
@@ -488,8 +509,8 @@ class Opportunity(SalesforceObject):
     def list(cls, begin, end, stage_name="Pledged", sf_connection=None):
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
-        if not hasattr(cls, "attr_to_field_map"):
-            cls.get_schema()
+        if not hasattr(cls, "attr_to_field_map"): 
+            cls.get_schema()  # TODO make this automatic when attr_to_field_map is referenced?
         query_string = ",".join(
             cls.attr_to_field_map[attr] for attr in cls.default_fetch_fields
         )
@@ -777,6 +798,7 @@ class Account(SalesforceObject):
 
         # We do a fuzzy search on the website and if the top hit
         # has a confidence of 95 or higher we use it.
+        # TODO extract this and test it
         website_idx = {
             x["Website"]: {"id": x["Id"], "name": x["Name"]}
             for x in response
@@ -813,6 +835,7 @@ class Contact(SalesforceObject):
         self.duplicate_found = False
 
     @staticmethod
+    # TODO test
     def parse_all_email(email, results):
         """
         This field is a CSV. So we parse that to make sure we've got an exact match and not just a substring match.
