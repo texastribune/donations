@@ -32,7 +32,6 @@ import aria from './mixins/aria';
 import labelConnector from './mixins/labelConnector';
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
-//import { US_STATES_SELECT_LIST } from '../utils/formSelectListConstants';
 
 export default {
   name: 'SelectList',
@@ -63,11 +62,7 @@ export default {
       type: Boolean,
       default: true,
     },
-    type: {
-      type: String,
-      default: 'select',
-    },
-    shippingStateStoreModule: {
+    selectListStoreModule: {
       type: String,
       required: true,
     },
@@ -75,11 +70,11 @@ export default {
   },
   computed: {
     isSelected() {
-      const shippingState = this.getStoreValue({
-        storeModule: this.shippingStateStoreModule,
+      let selectList = this.getStoreValue({
+        storeModule: this.selectListStoreModule,
         key: this.name,
       });
-      return shippingState;
+      return selectList;
     },
     connector() {
       if (!this.hasLabel) return false;
@@ -97,13 +92,10 @@ export default {
   methods: {
     onChange(selectedIndex) {
       this.updateStoreValue({
-        storeModule: this.shippingStateStoreModule,
+        storeModule: this.selectListStoreModule,
         key: this.name,
         value: this.listOfChoices[selectedIndex].value,
       });
-    },
-    getConnector(index) {
-      return `_${this.randConnector}-${index}`;
     },
   },
 };

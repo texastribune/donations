@@ -104,7 +104,7 @@
             label-text="state"
             base-classes="form__text form__text--standard"
             name="shipping_state"
-            shipping-state-store-module="businessForm"
+            select-list-store-module="businessForm"
           />
         </div>
         <div class="col_2 grid_separator">
