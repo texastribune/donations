@@ -84,10 +84,6 @@ export default {
       if (this.hasLabel) return false;
       return this.labelText;
     },
-    classesWithValidation() {
-      const { classes } = this;
-      return classes;
-    },
   },
   methods: {
     onChange(selectedIndex) {
