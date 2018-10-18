@@ -31,7 +31,6 @@ CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
 CELERY_ALWAYS_EAGER = bool_env("CELERY_ALWAYS_EAGER")
 # deprecated:
-# CHARGE_MINUTES_FREQUENCY = int(os.getenv('CHARGE_MINUTES_FREQUENCY', 1440))
 CELERYBEAT_SCHEDULE = {
     "every-day": {
         "task": "batch.charge_cards",
