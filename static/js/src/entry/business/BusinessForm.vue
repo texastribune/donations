@@ -100,7 +100,7 @@
         </div>
         <div class="col_4 grid_separator">
           <select-list
-            :options="options"
+            :list-of-choices="list_of_choices"
             label-text="state"
             base-classes="form__text form__text--standard"
             name="shipping_state"
@@ -382,9 +382,7 @@ export default {
           validator: this.isNotEmpty,
         },
       },
-      options: {
-        list: this.buildList(US_STATES_SELECT_LIST),
-      },
+      list_of_choices: this.buildList(US_STATES_SELECT_LIST),
     };
   },
 

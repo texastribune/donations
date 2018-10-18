@@ -16,12 +16,12 @@
       :aria-required="required"
       @change="onChange($event.target.selectedIndex)">
       <option
-        v-for="(option, index) in options.list"
-        :selected="option.value == isSelected"
+        v-for="(item, index) in listOfChoices"
+        :selected="item.value == isSelected"
         :id="index"
         :key="index"
-        :value="option.value">
-        {{ option.text }}
+        :value="item.value">
+        {{ item.text }}
       </option>
     </select>
   </div>
@@ -43,8 +43,8 @@ export default {
     getStoreValue,
   ],
   props: {
-    options: {
-      type: Object,
+   listOfChoices: {
+      type: Array,
       required: true,
     },
     hasLabel: {
