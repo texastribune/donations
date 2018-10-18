@@ -20,7 +20,7 @@ interactive: build-dev backing
 		--name=${APP} ${NS}/${APP}:dev ash
 
 build:
-	docker build --tag=${NS}/${APP} .
+	docker build -f Dockerfile.sample --tag=${NS}/${APP} .
 
 debug:
 	docker run --volumes-from=${APP} --interactive=true --tty=true ${NS}/${APP} bash
@@ -28,8 +28,8 @@ debug:
 build-dev: build
 	docker build -f Dockerfile.dev --tag=${NS}/${APP}:dev .
 
-run:
-	docker run --name=${APP} --detach=true --publish=5000:80 ${NS}/${APP}
+run: build
+	docker run --rm --name=${APP} --detach=true --publish=80:5000 ${NS}/${APP}
 
 clean:
 	-docker stop ${APP} && docker rm ${APP}

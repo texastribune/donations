@@ -22,4 +22,4 @@ RUN pip3 install -r /app/requirements.txt
 
 COPY . /app/
 EXPOSE 80
-ENTRYPOINT /bin/bash
+ENTRYPOINT ["/usr/local/bin/gunicorn", "app:app", "--bind", "0.0.0.0:5000", "--log-level", "DEBUG", "--log-file=-"]
