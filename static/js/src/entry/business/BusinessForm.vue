@@ -295,9 +295,8 @@ import NativePay from '../../elements/NativePay.vue';
 import Choices from './Choices.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
-// import addNumberCommas from '../../utils/addNumberCommas';
+
 import { US_STATES_SELECT_LIST } from '../../utils/formSelectListConstants';
-//import { DEFAULT_STATE_SELECTED } from './constants';
 
 
 export default {
@@ -385,7 +384,6 @@ export default {
       },
       options: {
         list: this.buildList(US_STATES_SELECT_LIST),
-        // default: DEFAULT_STATE_SELECTED,
       },
     };
   },

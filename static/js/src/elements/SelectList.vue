@@ -14,14 +14,13 @@
       :aria-describedby="ariaDescribedby"
       :aria-label="ariaLabel"
       :aria-required="required"
-      :class="classes"
       @change="onChange($event.target.selectedIndex)">
       <option
         v-for="(option, index) in options.list"
         :selected="option.value == isSelected"
         :id="index"
         :key="index"
-        :value="option.value" >
+        :value="option.value">
         {{ option.text }}
       </option>
     </select>
@@ -30,7 +29,6 @@
 
 <script>
 import aria from './mixins/aria';
-import connectedElement from './mixins/connectedElement';
 import labelConnector from './mixins/labelConnector';
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
@@ -40,7 +38,6 @@ export default {
   name: 'SelectList',
   mixins: [
     aria,
-    connectedElement,
     labelConnector,
     updateStoreValue,
     getStoreValue,
