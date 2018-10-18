@@ -1,5 +1,7 @@
 FROM node:8 as node_base
 
+# TODO another Dockerfile for Celery (that can be plain python)?
+
 WORKDIR /app
 
 ENV NPM_CONFIG_LOGLEVEL warn
