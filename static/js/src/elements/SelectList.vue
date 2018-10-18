@@ -32,7 +32,7 @@ import aria from './mixins/aria';
 import labelConnector from './mixins/labelConnector';
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
-import { US_STATES_SELECT_LIST } from '../utils/formSelectListConstants';
+//import { US_STATES_SELECT_LIST } from '../utils/formSelectListConstants';
 
 export default {
   name: 'SelectList',
@@ -43,6 +43,10 @@ export default {
     getStoreValue,
   ],
   props: {
+    name: {
+      type: String,
+      required: true,
+    },
     listOfChoices: {
       type: Array,
       required: true,
@@ -73,7 +77,7 @@ export default {
     isSelected() {
       const shippingState = this.getStoreValue({
         storeModule: this.shippingStateStoreModule,
-        key: 'shipping_state',
+        key: this.name,
       });
       return shippingState;
     },
@@ -94,8 +98,8 @@ export default {
     onChange(selectedIndex) {
       this.updateStoreValue({
         storeModule: this.shippingStateStoreModule,
-        key: 'shipping_state',
-        value: US_STATES_SELECT_LIST[selectedIndex].value,
+        key: this.name,
+        value: this.listOfChoices[selectedIndex].value,
       });
     },
     getConnector(index) {
