@@ -382,23 +382,8 @@ export default {
           validator: this.isNotEmpty,
         },
       },
-      list_of_choices: this.buildList(US_STATES_SELECT_LIST),
+      list_of_choices: US_STATES_SELECT_LIST,
     };
-  },
-
-  methods: {
-
-    buildList(selectList) {
-      const options = [];
-      selectList.forEach((listItem, index) => {
-        options.push({
-          index,
-          value: listItem.value,
-          text: listItem.text,
-        });
-      });
-      return options;
-    },
   },
 };
 </script>

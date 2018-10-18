@@ -43,7 +43,7 @@ export default {
     getStoreValue,
   ],
   props: {
-   listOfChoices: {
+    listOfChoices: {
       type: Array,
       required: true,
     },
