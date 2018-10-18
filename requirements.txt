@@ -6,7 +6,6 @@ Flask-WTF==0.14.2
 WTForms==2.2.1
 stripe==2.10.1
 celery==4.2.1
-flower==0.9.1
 redis==2.10.6
 validate_email==1.3
 raven[flask]==6.9.0
