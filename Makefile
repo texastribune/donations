@@ -17,7 +17,7 @@ interactive: build-dev backing
 		--publish=5555:5555 \
 		--link=rabbitmq:rabbitmq \
 		--link=redis:redis \
-		--name=${APP} ${NS}/${APP}:dev ash
+		--name=${APP} ${NS}/${APP}:dev bash
 
 build:
 	docker build -f Dockerfile.sample --tag=${NS}/${APP} .
@@ -26,7 +26,7 @@ debug:
 	docker run --volumes-from=${APP} --interactive=true --tty=true ${NS}/${APP} bash
 
 build-dev: build
-	docker build -f Dockerfile.dev --tag=${NS}/${APP}:dev .
+	docker build -f Dockerfile --tag=${NS}/${APP}:dev .
 
 run: build
 	docker run --rm --name=${APP} --detach=true --publish=80:5000 ${NS}/${APP}
