@@ -74,7 +74,7 @@ csp = {
 
 
 app = Flask(__name__)
-Talisman(app, content_security_policy=csp)
+Talisman(app, content_security_policy=csp, content_security_policy_report_only=True)
 
 limiter = Limiter(
     app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
