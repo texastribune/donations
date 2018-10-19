@@ -15,6 +15,7 @@ from config import (
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
     ENABLE_SENTRY,
+    REPORT_URI,
 )
 from datetime import datetime
 
@@ -92,7 +93,12 @@ csp = {
 
 
 app = Flask(__name__)
-Talisman(app, content_security_policy=csp, content_security_policy_report_only=True)
+Talisman(
+    app,
+    content_security_policy=csp,
+    content_security_policy_report_only=True,
+    content_security_policy_report_uri=REPORT_URI,
+)
 
 limiter = Limiter(
     app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
