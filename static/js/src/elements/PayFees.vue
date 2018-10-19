@@ -29,14 +29,18 @@
 
 <script>
 import validate from 'validate.js';
+
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
+
 export default {
   name: 'PayFees',
+
   mixins: [
     updateStoreValue,
     getStoreValue,
   ],
+
   props: {
     amountStoreModule: {
       type: String,
@@ -51,6 +55,7 @@ export default {
       required: true,
     },
   },
+
   computed: {
     feeAmount() {
       let amount = this.getStoreValue({
@@ -79,6 +84,7 @@ export default {
       return payFeesValue === 'True';
     },
   },
+
   methods: {
     onChange(checked) {
       this.updateStoreValue({
