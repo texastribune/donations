@@ -15,7 +15,8 @@ RUN apt-get -yq update && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" > /etc/apt/sources.list.d/nodesource.list && \
     apt-get -yq update && \
-    apt-get -y install nodejs yarn
+    apt-get -y install nodejs yarn && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
