@@ -27,10 +27,11 @@ COPY yarn.lock /app/
 COPY .babelrc /app/
 RUN yarn
 
+RUN pip install --upgrade pip
 COPY requirements.txt /app/
-RUN pip3 install -r /app/requirements.txt
+RUN pip install -r /app/requirements.txt
 COPY dev-requirements.txt /app/
-RUN pip3 install -r /app/dev-requirements.txt
+RUN pip install -r /app/dev-requirements.txt
 
 COPY . /app
 
