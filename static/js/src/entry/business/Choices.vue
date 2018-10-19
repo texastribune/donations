@@ -97,7 +97,8 @@ export default {
       });
 
       bucketsToIter.forEach((bucket, index) => {
-        const { installmentPeriod, amount, name } = bucket;
+        const { amount, name } = bucket;
+        const { installmentPeriod } = bucket.paymentDetails;
         options.push({
           id: index,
           value: name,
@@ -117,15 +118,13 @@ export default {
       const {
         amount,
         bucket,
-        installments,
-        installmentPeriod,
-        openEndedStatus,
+        paymentDetails,
       } = BUSINESS_BUCKETS[level];
 
       const updates = {
-        installment_period: installmentPeriod,
-        installments,
-        openended_status: openEndedStatus,
+        installment_period: paymentDetails.installmentPeriod,
+        installments: paymentDetails.installments,
+        openended_status: paymentDetails.openEndedStatus,
         amount,
       };
 
