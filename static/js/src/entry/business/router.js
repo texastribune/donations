@@ -16,6 +16,7 @@ import {
   DEFAULT_STATE_SELECTED,
   LONG_PROGRAM_NAME,
   WL_DEFAULT_QUERY_PARAMETERS,
+  WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
   WL_QUERY_ESCAPE_THRESHOLD,
   QUERY_PARAMETERS_STRING_VALUES,
 } from './constants';
@@ -25,9 +26,17 @@ Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
   let scrubbedQueryParams;
-  //console.log("wl def object");
-  //console.log(WL_DEFAULT_QUERY_PARAMETERS);
   //
+  // 1
+  // Mutate parameters to release space and kill any long, malicious query
+  //
+  Object.keys(queryParams).forEach((key) => {
+    (queryParams[key] != null) ?
+      queryParams[key] = (queryParams[key].substring(0, WL_QUERY_PARAMETERS_MAX_NBR_CHARS)) :
+      null;
+  });
+  //
+  // 2
   // If this query is within the threshold number of parameters
   //   scrub and merge query params with the default state
   // Otherwise, it's likely to be malicious,
@@ -36,11 +45,13 @@ function getStateFromParams(queryParams) {
   (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
     scrubbedQueryParams = queryParamScrubAndMerge(queryParams, Object.keys(WL_DEFAULT_QUERY_PARAMETERS)) :
     scrubbedQueryParams = {};
+
   //
-  // Result is parameters merged from defaults and query parameter overrides
+  // 3
+  // Result is parameters merged from defaults and overrides from
+  // sanitized query parameters
   //
   const mergedQueryParams = Object.assign({}, WL_DEFAULT_QUERY_PARAMETERS, scrubbedQueryParams);
-
   let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   // Unpack and interpret query params per spec
   if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
@@ -51,9 +62,10 @@ function getStateFromParams(queryParams) {
     // Set UI
     level = DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   }
-  //console.log("form start");
-  //console.log(mergedQueryParams);
+
+  //
   // Set the Choices form state from defaults + query parameters
+  //
   const {
     amount,
     payFees,
@@ -125,7 +137,8 @@ function bindRouterEvents(router, routeHandler, store) {
 export { createRouter, bindRouterEvents };
 
 // Test strings
-//  http://local.texastribune.org/businessform?installmentPeriod=once
-//  http://local.texastribune.org/businessform?campaignId=ui903&installmentPeriod=once
-//  http://local.texastribune.org/businessform?campaignId=ui903&installmentPeriod=once&foo=bar
-//  http://local.texastribune.org/businessform?campaignId=ui903&installmentPeriod=once&<script>jk//∫ß
+//  http://local.texastribune.org/business?installmentPeriod=foo
+//  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once
+//  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once&foo=bar
+//  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once&<script>jk//∫ß
+//  http://local.texastribune.org/business?campaignId=ui903&referralId=7ujhjhjhjheiwfioefu880348390483048328fdklvgjkvbhdfjkvhdsjhvbfjkgt439t748937t892347327t934797jhj&installmentPeriod=once&<script>jk//∫ß

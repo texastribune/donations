@@ -3,7 +3,6 @@ export const POSITION_ON_FORM_0 = 0;
 export const POSITION_ON_FORM_1 = 1;
 export const POSITION_ON_FORM_2 = 2;
 export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
-export const SHORT_PROGRAM_NAME = 'Business Membership';
 
 const MEMBERSHIP_LEVELS_COMMON_SUBHEADER = ' donation';
 export const MEMBERSHIP_LEVELS = [
@@ -139,15 +138,18 @@ export const DEFAULT_STATE_SELECTED = 'TX'; // Texas
 //
 // Whitelisting and query params
 // Add new query parameters here to whitelist them
-//
+// { param name, max length }
 export const WL_DEFAULT_QUERY_PARAMETERS = {
-  campaignId: '',
-  referralId: '',
+  campaignId:'',
+  referralId:'',
   installments: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installments,
-  installmentPeriod: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installmentPeriod,
+  installmentPeriod:BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installmentPeriod,
   // Special processing for these
   // (looks redundant but this is per backend and requestor requirements
-  installment_period: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installmentPeriod,
+  installment_period:BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].installmentPeriod,
   openended_status: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].openEndedStatus,
 };
+//
+// Guard against processing insanely long query strings
+export const WL_QUERY_PARAMETERS_MAX_NBR_CHARS = 18; // From spec
 export const WL_QUERY_ESCAPE_THRESHOLD = 6;
