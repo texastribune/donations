@@ -11,6 +11,7 @@ from config import (
     LOG_LEVEL,
     TIMEZONE,
     SENTRY_DSN,
+    SENTRY_ENVIRONMENT,
     ENABLE_SENTRY,
 )
 from datetime import datetime
@@ -40,7 +41,9 @@ if ENABLE_SENTRY:
     from sentry_sdk.integrations.celery import CeleryIntegration
 
     sentry_sdk.init(
-        dsn=SENTRY_DSN, integrations=[FlaskIntegration(), CeleryIntegration()]
+        dsn=SENTRY_DSN,
+        environment=SENTRY_ENVIRONMENT,
+        integrations=[FlaskIntegration(), CeleryIntegration()],
     )
 
 locale.setlocale(locale.LC_ALL, "C")
