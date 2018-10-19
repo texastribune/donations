@@ -10,7 +10,7 @@ jobs:
       - run: |
           docker info
           docker build -f Dockerfile -t texastribune/checkout:dev .
-          docker run -it --rm --workdir=/app --entrypoint=python texastribune/checkout:dev /usr/bin/py.test /app/tests.py --cov=/app
+          docker run -it --rm --workdir=/app --entrypoint=python texastribune/checkout:dev /usr/local/bin/py.test /app/tests.py --cov=/app
 branches:
   ignore:
     - master
