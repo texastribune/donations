@@ -460,9 +460,9 @@ class RDO(SalesforceObject):
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
-    # TODO sensible way to cache this to prevent it from being run multiple times when nothing 
-    # has changed? The opportunities themselves may've changed even when the RDO hasn't so 
-    # this may not be doable. 
+    # TODO sensible way to cache this to prevent it from being run multiple times when nothing
+    # has changed? The opportunities themselves may've changed even when the RDO hasn't so
+    # this may not be doable.
 
     def opportunities(self):
         query = f"""
