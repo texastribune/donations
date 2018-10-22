@@ -5,7 +5,13 @@ import json
 import locale
 import logging
 import os
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, LOG_LEVEL, TIMEZONE
+from config import (
+    FLASK_DEBUG,
+    FLASK_SECRET_KEY,
+    LOG_LEVEL,
+    TIMEZONE,
+    STRIPE_WEBHOOK_SECRET,
+)
 from datetime import datetime
 
 from pytz import timezone
@@ -332,6 +338,41 @@ def merchantid():
     return send_from_directory(
         os.path.join(root_dir, "app"), "apple-developer-merchantid-domain-association"
     )
+
+
+@app.route("/stripehook", methods=["POST"])
+def stripehook():
+    payload = request.data.decode("utf-8")
+    signature = request.headers.get("Stripe-Signature", None)
+    print(signature)
+    print(STRIPE_WEBHOOK_SECRET)
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, signature, STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        print("Error while decoding event!")
+        return "Bad payload", 400
+    except stripe.error.SignatureVerificationError:
+        print("Invalid signature!")
+        return "Bad signature", 400
+    from pprint import pprint
+
+    # customer.source.updated
+    pprint(event)
+    print(event.data.object.id)
+    print(event.data.object.exp_month)
+    print(event.data.object.exp_year)
+    print(event.data.object.last4)
+    print(event.data.object.brand)
+    print(event.data.object.customer)
+    print(event.data.object.object)
+    print(event.type)
+    print(event.id)
+    print("Received event: id={id}, type={type}".format(id=event.id, type=event.type))
+
+    return "", 200
 
 
 def add_opportunity(contact=None, form=None, customer=None):

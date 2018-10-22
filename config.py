@@ -61,6 +61,7 @@ STRIPE_KEYS = {
     "secret_key": os.getenv("SECRET_KEY"),
     "publishable_key": os.getenv("PUBLISHABLE_KEY"),
 }
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 
 #######
 # Slack
