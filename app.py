@@ -5,7 +5,15 @@ import json
 import locale
 import logging
 import os
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, LOG_LEVEL, TIMEZONE
+from config import (
+    FLASK_DEBUG,
+    FLASK_SECRET_KEY,
+    LOG_LEVEL,
+    TIMEZONE,
+    SENTRY_DSN,
+    SENTRY_ENVIRONMENT,
+    ENABLE_SENTRY,
+)
 from datetime import datetime
 from pprint import pformat
 
@@ -17,7 +25,6 @@ from app_celery import make_celery
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
-from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 from util import (
     clean,
@@ -29,6 +36,17 @@ from validate_email import validate_email
 from charges import charge
 
 ZONE = timezone(TIMEZONE)
+
+if ENABLE_SENTRY:
+    import sentry_sdk
+    from sentry_sdk.integrations.flask import FlaskIntegration
+    from sentry_sdk.integrations.celery import CeleryIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        environment=SENTRY_ENVIRONMENT,
+        integrations=[FlaskIntegration(), CeleryIntegration()],
+    )
 
 locale.setlocale(locale.LC_ALL, "C")
 
@@ -53,9 +71,6 @@ stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
 make_celery(app)
 
-
-if app.config["ENABLE_SENTRY"]:
-    sentry = Sentry(app, dsn=app.config["SENTRY_DSN"])
 
 """
 Redirects, including for URLs that used to be
