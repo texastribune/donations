@@ -28,22 +28,22 @@ export const QUERY_PARAMETERS_STRING_VALUES = {
 // Back-end form to UI translations for the different payment options (common radio buttons)
 //
 const MONTHLY_PAYMENTS = {
-  installmentPeriod: 'monthly',
+  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
   installmentsPerYear: 12,
   installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
   openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
 };
 const YEARLY_PAYMENT = {
-  installmentPeriod: 'yearly',
+  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.yearlyStr,
   installmentsPerYear: 1,
   installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
   openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
 };
 const ONETIME_PAYMENT = {
-  installmentPeriod: 'one-time',
+  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.onceStr,
   installmentsPerYear: 1,
   installments: QUERY_PARAMETERS_STRING_VALUES.oneStr,
-  formOpenEndedStatus: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+  openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.noneStr,
 };
 
 //

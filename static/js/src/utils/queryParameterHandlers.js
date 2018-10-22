@@ -5,7 +5,7 @@
 // whitelist - list of filter keys
 // return values for valid keys
 //
-export default function queryParamScrubAndMerge(dirtyList, whitelist) {
+export default function queryParamWhiteListScrub(dirtyList, whitelist) {
   // Only process whitelisted parameters; for dupes the last value will bethe one used
   return whitelist.reduce((result, key) =>
     (dirtyList[key] !== undefined

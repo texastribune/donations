@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 import RouteHandler from '../../RouteHandler.vue';
 import BusinessForm from './BusinessForm.vue';
 
-import queryParamScrubAndMerge from '../../utils/queryParameterHandlers';
+import queryParamWhiteListScrub from '../../utils/queryParameterHandlers';
 // Temp out V2 add
 // import Wall from './Wall.vue';
 
@@ -25,9 +25,7 @@ Vue.use(VueRouter);
 
 
 function getStateFromParams(queryParams) {
-  let scrubbedQueryParams;
   //
-  // 1
   // Mutate parameters to release space and kill any long, malicious query
   //
   Object.keys(queryParams).forEach((key) => {
@@ -35,25 +33,28 @@ function getStateFromParams(queryParams) {
       queryParams[key] = (queryParams[key].substring(0, WL_QUERY_PARAMETERS_MAX_NBR_CHARS)) :
       null;
   });
+
   //
-  // 2
   // If this query is within the threshold number of parameters
-  //   scrub and merge query params with the default state
+  //   filter input query oarams using the app whitelist
   // Otherwise, it's likely to be malicious,
   //   ignore query params and use defaults
   //
+  let scrubbedQueryParams;
   (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
-    scrubbedQueryParams = queryParamScrubAndMerge(queryParams, Object.keys(WL_DEFAULT_QUERY_PARAMETERS)) :
+    scrubbedQueryParams = queryParamWhiteListScrub(queryParams, Object.keys(WL_DEFAULT_QUERY_PARAMETERS)) :
     scrubbedQueryParams = {};
 
   //
-  // 3
-  // Result is parameters merged from defaults and overrides from
-  // sanitized query parameters
+  // Now merge defaults with overrides from
+  // sanitized query parameters to get the final state
   //
   const mergedQueryParams = Object.assign({}, WL_DEFAULT_QUERY_PARAMETERS, scrubbedQueryParams);
   let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
-  // Unpack and interpret query params per spec
+
+  //
+  // Special processing: Unpack and interpret query params per spec
+  //
   if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
     // Set data for form submit
     mergedQueryParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
@@ -137,6 +138,7 @@ function bindRouterEvents(router, routeHandler, store) {
 export { createRouter, bindRouterEvents };
 
 // Test strings
+// http://local.texastribune.org/business?installments=None
 //  http://local.texastribune.org/business?installmentPeriod=foo
 //  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once
 //  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once&foo=bar
