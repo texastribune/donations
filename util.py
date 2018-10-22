@@ -2,13 +2,13 @@ import logging
 import smtplib
 from collections import defaultdict
 from config import (
+    BUSINESS_MEMBER_RECIPIENT,
     DEFAULT_MAIL_SENDER,
     ENABLE_SLACK,
     MAIL_PASSWORD,
     MAIL_PORT,
     MAIL_SERVER,
     MAIL_USERNAME,
-    BUSINESS_MEMBER_RECIPIENT,
     MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
     SLACK_API_KEY,
     SLACK_CHANNEL,
