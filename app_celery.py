@@ -3,7 +3,16 @@ from config import SENTRY_DSN
 
 
 def make_celery(app):
-    celery = Celery(app.import_name, broker=app.config["CELERY_BROKER_URL"])
+    celery = Celery(
+        app.import_name,
+        broker_pool_limit=1,
+        broker_heartbeat=None,
+        broker=app.config["CELERY_BROKER_URL"],
+        broker_connection_timeout=30,
+        result_backend=None,
+        event_queue_expires=60,
+        worker_prefetch_multiplier=1,
+    )
     celery.conf.update(app.config)
     TaskBase = celery.Task
 
