@@ -1,7 +1,6 @@
 import logging
 from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from datetime import datetime, timedelta
-from decimal import Decimal
 
 from pytz import timezone
 
