@@ -18,6 +18,7 @@ from config import (
     REPORT_URI,
 )
 from datetime import datetime
+from pprint import pformat
 
 from pytz import timezone
 
@@ -38,6 +39,7 @@ from util import (
     send_multiple_account_warning,
 )
 from validate_email import validate_email
+from charges import charge
 
 ZONE = timezone(TIMEZONE)
 
@@ -223,11 +225,21 @@ def add_donation(form=None, customer=None):
     if period is None:
         logging.info("----Creating one time payment...")
         opportunity = add_opportunity(contact=contact, form=form, customer=customer)
+        charge(opportunity)
         logging.info(opportunity)
         notify_slack(contact=contact, opportunity=opportunity)
     else:
         logging.info("----Creating recurring payment...")
         rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
+        # get opportunities
+        opportunities = rdo.opportunities()
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        opp = [
+            opportunity
+            for opportunity in opportunities
+            if opportunity.expected_giving_date == today
+        ][0]
+        charge(opp)
         logging.info(rdo)
         notify_slack(contact=contact, rdo=rdo)
 
@@ -270,7 +282,7 @@ def do_charge_or_show_errors(template, bundles, function):
 
 
 def validate_form(FormType, bundles, template, function=add_donation.delay):
-    app.logger.info(request.form)
+    app.logger.info(pformat(request.form))
 
     form = FormType(request.form)
     email = request.form["stripeEmail"]
@@ -358,8 +370,7 @@ def the_blast_form():
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
-
-    app.logger.info(request.form)
+    app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
@@ -578,11 +589,21 @@ def add_business_membership(form=None, customer=None):
             account=account, form=form, customer=customer
         )
         logging.info(opportunity)
+        charge(opportunity)
         notify_slack(account=account, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
         logging.info(rdo)
+        # get opportunities
+        opportunities = rdo.opportunities()
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        opp = [
+            opportunity
+            for opportunity in opportunities
+            if opportunity.expected_giving_date == today
+        ][0]
+        charge(opp)
         notify_slack(account=account, rdo=rdo)
 
     logging.info("----Getting affiliation...")
@@ -609,7 +630,6 @@ def add_blast_subscription(form=None, customer=None):
     """
 
     form = clean(form)
-    logging.info(form)
 
     first_name = form["first_name"]
     last_name = form["last_name"]
@@ -647,7 +667,15 @@ def add_blast_subscription(form=None, customer=None):
     logging.info("----Saving RDO....")
     rdo.save()
     logging.info(rdo)
-
+    # get opportunities
+    opportunities = rdo.opportunities()
+    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    opp = [
+        opportunity
+        for opportunity in opportunities
+        if opportunity.expected_giving_date == today
+    ][0]
+    charge(opp)
     return True
 
 
