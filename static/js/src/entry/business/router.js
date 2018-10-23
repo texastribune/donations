@@ -23,37 +23,33 @@ import {
 
 Vue.use(VueRouter);
 
-
 function getStateFromParams(queryParams) {
-  //
-  // Mutate parameters to release space and kill any long, malicious query
-  //
-  Object.keys(queryParams).forEach((key) => {
-    (queryParams[key] != null) ?
-      queryParams[key] = (queryParams[key].substring(0, WL_QUERY_PARAMETERS_MAX_NBR_CHARS)) :
-      null;
-  });
-
   //
   // If this query is within the threshold number of parameters
   //   filter input query oarams using the app whitelist
-  // Otherwise, it's likely to be malicious,
-  //   ignore query params and use defaults
   //
   let scrubbedQueryParams;
   (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
-    scrubbedQueryParams = queryParamWhiteListScrub(queryParams, Object.keys(WL_DEFAULT_QUERY_PARAMETERS)) :
+    scrubbedQueryParams = queryParamWhiteListScrub(
+      queryParams,
+      Object.keys(WL_DEFAULT_QUERY_PARAMETERS),
+      WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
+    ) :
     scrubbedQueryParams = {};
 
   //
-  // Now merge defaults with overrides from
+  // Next, merge defaults with overrides from
   // sanitized query parameters to get the final state
   //
   const mergedQueryParams = Object.assign({}, WL_DEFAULT_QUERY_PARAMETERS, scrubbedQueryParams);
+
   let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
 
+  console.log('----> params merged --> ');
+  console.log(mergedQueryParams);
   //
   // Special processing: Unpack and interpret query params per spec
+  // If this gets more complex a case switch would probbaly be more obvious
   //
   if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
     // Set data for form submit
