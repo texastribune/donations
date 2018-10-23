@@ -81,6 +81,7 @@ csp = {
         "*.google.co.in",
         "*.google.es",
         "www.google-analytics.com",
+        "www.googletagmanager.com",
     ],
     "connect-src": [
         "*.stripe.com",
