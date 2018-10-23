@@ -269,25 +269,57 @@ class Opportunity(SalesforceObject):
         self.created = False
 
     @classmethod
-    def list_pledged(cls, begin, end, sf_connection=None):
+    def list(
+        cls,
+        begin=None,
+        end=None,
+        stage_name="Pledged",
+        stripe_customer_id=None,
+        sf_connection=None,
+    ):
 
         # TODO a more generic dserializing method
         # TODO parameterize stage?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
-        query = f"""
-        SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
-            Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
-            RecordType.Name, Type, Referral_ID__c, LeadSource,
-            Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
-            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
-            Expected_Giving_Date__c
-        FROM Opportunity
-        WHERE Expected_Giving_Date__c <= {end}
-        AND Expected_Giving_Date__c >= {begin}
-        AND StageName = 'Pledged'
+        if stripe_customer_id is None:
+            where = f"""
+            WHERE Expected_Giving_Date__c <= {end}
+            AND Expected_Giving_Date__c >= {begin}
+            AND StageName = '{stage_name}'
         """
+        else:
+            where = f"WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'"
+
+        query = f"""
+            SELECT 
+                Id, 
+                Amount, 
+                Name, 
+                Stripe_Customer_ID__c, 
+                Description,
+                Stripe_Agreed_to_pay_fees__c, 
+                CloseDate, 
+                CampaignId,
+                RecordType.Name, 
+                Type, 
+                Referral_ID__c, 
+                LeadSource,
+                Encouraged_to_contribute_by__c, 
+                Stripe_Transaction_ID__c,
+                Stripe_Card__c, 
+                AccountId, 
+                npsp__Closed_Lost_Reason__c,
+                Expected_Giving_Date__c, 
+                Stripe_Card_Brand__c, 
+                Stripe_Card_Expiration__c,
+                Stripe_Card_Last_4__c
+            FROM Opportunity
+            {where}
+        """
+        from pprint import pprint
+        pprint(query)
         response = sf.query(query)
         logging.debug(response)
 
@@ -313,6 +345,9 @@ class Opportunity(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.stripe_card_brand = item["Stripe_Card_Brand__c"]
+            y.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
+            y.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
             y.created = False
             results.append(y)
 
@@ -345,6 +380,9 @@ class Opportunity(SalesforceObject):
             "Stripe_Transaction_ID__c": self.stripe_transaction,
             "Stripe_Card__c": self.stripe_card,
             "npsp__Closed_Lost_Reason__c": self.closed_lost_reason,
+            "Stripe_Card_Brand__c": self.stripe_card_brand,
+            "Stripe_Card_Expiration__c": self.stripe_card_expiration,
+            "Stripe_Card_Last_4__c": self.stripe_card_last_4,
         }
 
     def __str__(self):
