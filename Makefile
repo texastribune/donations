@@ -17,19 +17,19 @@ interactive: build-dev backing
 		--publish=5555:5555 \
 		--link=rabbitmq:rabbitmq \
 		--link=redis:redis \
-		--name=${APP} ${NS}/${APP}:dev ash
+		--name=${APP} ${NS}/${APP}:dev bash
 
 build:
-	docker build --tag=${NS}/${APP} .
+	docker build -f Dockerfile.sample --tag=${NS}/${APP} .
 
 debug:
 	docker run --volumes-from=${APP} --interactive=true --tty=true ${NS}/${APP} bash
 
-build-dev:
-	docker build -f Dockerfile.dev --tag=${NS}/${APP}:dev .
+build-dev: build
+	docker build -f Dockerfile --tag=${NS}/${APP}:dev .
 
-run:
-	docker run --name=${APP} --detach=true --publish=5000:80 ${NS}/${APP}
+run: build
+	docker run --rm --name=${APP} --detach=true --publish=80:5000 ${NS}/${APP}
 
 clean:
 	-docker stop ${APP} && docker rm ${APP}
@@ -45,8 +45,8 @@ test: build-dev
 	docker run \
 		--workdir=/app \
 		--rm \
-		--entrypoint=python3 \
-		texastribune/checkout:dev /usr/bin/py.test /app/tests.py --cov=/app
+		--entrypoint=python \
+		texastribune/checkout:dev /usr/local/bin/py.test /app/tests.py --cov=/app
 
 push:
 	docker push ${NS}/${APP}
