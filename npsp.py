@@ -397,7 +397,6 @@ class Opportunity(SalesforceObject):
         print(card_details)
         return sf.updates(opportunities, card_details)
 
-
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
@@ -553,7 +552,6 @@ class RDO(SalesforceObject):
             y.created = False
             results.append(y)
         return results
-
 
     @property
     def amount(self):
