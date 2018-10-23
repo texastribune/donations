@@ -35,6 +35,8 @@ def charge(opportunity):
     logging.info(
         f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
     )
+    if opportunity.stage_name != "Pledged":
+        raise Exception(f"Opportunity {opportunity.id} is not Pledged")
 
     try:
         card_charge = stripe.Charge.create(
@@ -62,13 +64,16 @@ def charge(opportunity):
         return
     except stripe.error.InvalidRequestError as e:
         logging.warning(f"Problem: {e}")
+        # TODO should we raise this?
         return
     except Exception as e:
         logging.warning(f"Problem: {e}")
+        # TODO should we raise this?
         return
 
     if card_charge.status != "succeeded":
         logging.warning("Charge failed. Check Stripe logs.")
+        # TODO should we raise this?
         return
     from pprint import pprint
 
