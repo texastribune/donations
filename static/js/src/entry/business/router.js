@@ -144,3 +144,7 @@ export { createRouter, bindRouterEvents };
 //  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once&foo=bar
 //  http://local.texastribune.org/business?campaignId=ui903&installmentPeriod=once&<script>jk//∫ß
 //  http://local.texastribune.org/business?campaignId=ui903&referralId=7ujhjhjhjheiwfioefu880348390483048328fdklvgjkvbhdfjkvhdsjhvbfjkgt439t748937t892347327t934797jhj&installmentPeriod=once&<script>jk//∫ß
+// EMAILS
+// fjpbarb+1@gmail.com
+// Confuses validate js
+// // ff+/;FLF@g.co
