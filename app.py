@@ -1,5 +1,7 @@
 """
-This file is the entrypoint for this Flask application. Can be executed with 'flask run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+This file is the entrypoint for this Flask application. Can be executed with 'flask
+run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+
 """
 import json
 import locale
@@ -13,6 +15,7 @@ from config import (
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
     ENABLE_SENTRY,
+    REPORT_URI,
 )
 from datetime import datetime
 from pprint import pformat
@@ -22,6 +25,9 @@ from pytz import timezone
 import celery
 import stripe
 from app_celery import make_celery
+from flask_talisman import Talisman
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
@@ -49,11 +55,61 @@ if ENABLE_SENTRY:
     )
 
 locale.setlocale(locale.LC_ALL, "C")
+csp = {
+    "default-src": ["'self'", "*.texastribune.org"],
+    "font-src": [
+        "'self'",
+        "data:",
+        "*.cloudflare.com",
+        "*.gstatic.com",
+        "*.typekit.net",
+    ],
+    "style-src": ["'self'", "'unsafe-inline'", "*.googleapis.com"],
+    "img-src": [
+        "'self'",
+        "*.facebook.com",
+        "*.texastribune.org",
+        "*.doubleclick.net",
+        "*.google.com",
+        "*.stripe.com",
+        "*.typekit.net",
+    ],
+    "connect-src": ["*.stripe.com", "*.texastribune.org"],
+    "frame-src": ["'self'", "*.stripe.com", "*.facebook.net", "*.facebook.com"],
+    "script-src": [
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "*.typekit.net",
+        "*.texastribune.org",
+        "*.stripe.com",
+        "*.jquery.com",
+        "*.googletagmanager.com",
+        "*.facebook.net",
+        "*.googleapis.com",
+        "*.googleadservices.com",
+        "*.cloudflare.com",
+        "*.google-analytics.com",
+        "*.doubleclick.net",
+    ],
+}
+
 
 app = Flask(__name__)
+Talisman(
+    app,
+    content_security_policy=csp,
+    content_security_policy_report_only=True,
+    content_security_policy_report_uri=REPORT_URI,
+)
+
+limiter = Limiter(
+    app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
+)
 
 log_level = logging.getLevelName(LOG_LEVEL)
 app.logger.setLevel(log_level)
+for handler in app.logger.handlers:
+    limiter.logger.addHandler(handler)
 
 app.secret_key = FLASK_SECRET_KEY
 
@@ -475,7 +531,12 @@ def add_business_membership(form=None, customer=None):
     """
     Adds a business membership. Both single and recurring.
 
-    It will look for a matching Contact (or create one). Then it will look for a matching Account (or create one). Then it will add the single or recurring donation to the Account. Then it will add an Affiliation to link the Contact with the Account. It sends a notification to Slack (if configured). It will send email notification about the new membership.
+    It will look for a matching Contact (or create one). Then it will look for a
+    matching Account (or create one). Then it will add the single or recurring donation
+    to the Account. Then it will add an Affiliation to link the Contact with the
+    Account. It sends a notification to Slack (if configured). It will send email
+    notification about the new membership.
+
     """
 
     form = clean(form)
@@ -563,7 +624,9 @@ def add_business_membership(form=None, customer=None):
 @celery.task(name="app.add_blast_subcription")
 def add_blast_subscription(form=None, customer=None):
     """
-    Adds a Blast subscription. Blast subscriptions are always recurring. They have two email addresses: one for billing and one for the newsletter subscription.
+    Adds a Blast subscription. Blast subscriptions are always recurring. They have two
+    email addresses: one for billing and one for the newsletter subscription.
+
     """
 
     form = clean(form)
