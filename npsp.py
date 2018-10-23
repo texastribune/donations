@@ -319,6 +319,7 @@ class Opportunity(SalesforceObject):
             {where}
         """
         from pprint import pprint
+
         pprint(query)
         response = sf.query(query)
         logging.debug(response)

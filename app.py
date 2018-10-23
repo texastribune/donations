@@ -391,6 +391,18 @@ def stripehook():
     print(event.data.object.object)
     print(event.type)
     print(event.id)
+
+    opps = Opportunity.list(stripe_customer_id=event.data.object.customer)
+    for opp in opps:
+        print(opp)
+        expiration = (
+            f"{event.data.object.exp_year}-{event.data.object.exp_month:02d}-01"
+        )
+        opp.stripe_card_brand = event.data.object.brand
+        opp.stripe_card_last_4 = event.data.object.last4
+        opp.stripe_card_expiration = expiration
+        opp.save()
+
     print("Received event: id={id}, type={type}".format(id=event.id, type=event.type))
 
     return "", 200
