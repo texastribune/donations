@@ -417,12 +417,34 @@ def merchantid():
     )
 
 
+# TODO why do I have to set the name here?
+@celery.task(name="app.customer_source.updated")
+def customer_source_updated(event):
+
+    card_details = dict()
+
+    # TODO update this with Opportunity fields when npsp is merged
+    if "last4" in event["data"]["previous_attributes"]:
+        card_details["Stripe_Card_Last_4__c"] = event["data"]["object"]["last4"]
+    if "brand" in event["data"]["previous_attributes"]:
+        card_details["Stripe_Card_Brand__c"] = event["data"]["object"]["brand"]
+    if "exp_year" in event["data"]["previous_attributes"]:
+        expiration = f"{event['data']['object']['exp_year']}-{event['data']['object']['exp_month']:02d}-01"
+        card_details["Stripe_Card_Expiration__c"] = expiration
+
+    if not card_details:
+        app.logger.info("Event not relevant; discarding.")
+
+    # TODO limit this to pledged?
+    opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
+    response = Opportunity.update_card(opps, card_details)
+    logging.info(response)
+
+
 @app.route("/stripehook", methods=["POST"])
 def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
-    print(signature)
-    print(STRIPE_WEBHOOK_SECRET)
 
     try:
         event = stripe.Webhook.construct_event(
@@ -434,32 +456,13 @@ def stripehook():
     except stripe.error.SignatureVerificationError:
         print("Invalid signature!")
         return "Bad signature", 400
-    from pprint import pprint
 
-    # customer.source.updated
-    pprint(event)
-    print(event.data.object.id)
-    print(event.data.object.exp_month)
-    print(event.data.object.exp_year)
-    print(event.data.object.last4)
-    print(event.data.object.brand)
-    print(event.data.object.customer)
-    print(event.data.object.object)
-    print(event.type)
-    print(event.id)
+    app.logger.info(f"Received event: id={event.id}, type={event.type}")
 
-    opps = Opportunity.list(stripe_customer_id=event.data.object.customer)
-    for opp in opps:
-        print(opp)
-        expiration = (
-            f"{event.data.object.exp_year}-{event.data.object.exp_month:02d}-01"
-        )
-        opp.stripe_card_brand = event.data.object.brand
-        opp.stripe_card_last_4 = event.data.object.last4
-        opp.stripe_card_expiration = expiration
-        opp.save()
+    if event.type == "customer.source.updated":
+        customer_source_updated.delay(event)
 
-    print("Received event: id={id}, type={type}".format(id=event.id, type=event.type))
+    app.logger.info(event)
 
     return "", 200
 

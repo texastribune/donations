@@ -66,7 +66,7 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 #######
 # Slack
 #
-ENABLE_SLACK = bool_env("ENABLE_SLACK", False)
+ENABLE_SLACK = bool_env("ENABLE_SLACK")
 SLACK_CHANNEL = os.getenv("SLACK_CHANNEL", "#stripe")
 SLACK_API_KEY = os.getenv("SLACK_API_KEY")
 

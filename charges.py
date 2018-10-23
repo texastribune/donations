@@ -66,11 +66,20 @@ def charge(opportunity):
     except Exception as e:
         logging.warning(f"Problem: {e}")
         return
+
     if card_charge.status != "succeeded":
         logging.warning("Charge failed. Check Stripe logs.")
         return
+    from pprint import pprint
 
-    opportunity.stripe_transaction_id = card_charge.id
+    pprint(card_charge)
+
+    opportunity.stripe_card_brand = card_charge.source.brand
+    opportunity.stripe_card_last_4 = card_charge.source.last4
+    opportunity.stripe_card_expiration = (
+        f"{card_charge.source.exp_year}-{card_charge.source.exp_month}-01"
+    )
     opportunity.stripe_card = card_charge.source.id
+    opportunity.stripe_transaction_id = card_charge.id
     opportunity.stage_name = "Closed Won"
     opportunity.save()
