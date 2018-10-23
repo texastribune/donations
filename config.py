@@ -66,7 +66,7 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 #######
 # Slack
 #
-ENABLE_SLACK = bool_env("ENABLE_SLACK")
+ENABLE_SLACK = bool_env("ENABLE_SLACK", False)
 SLACK_CHANNEL = os.getenv("SLACK_CHANNEL", "#stripe")
 SLACK_API_KEY = os.getenv("SLACK_API_KEY")
 
@@ -76,3 +76,4 @@ SLACK_API_KEY = os.getenv("SLACK_API_KEY")
 ENABLE_SENTRY = bool_env("ENABLE_SENTRY")
 SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", "unknown")
+REPORT_URI = os.getenv("REPORT_URI")
