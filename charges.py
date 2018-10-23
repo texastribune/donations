@@ -36,7 +36,7 @@ def charge(opportunity):
         f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
     )
     if opportunity.stage_name != "Pledged":
-        raise Exception(f"Opportunity {opportunity.id} is not in Pledged stage")
+        raise Exception(f"Opportunity {opportunity.id} is not Pledged")
 
     try:
         card_charge = stripe.Charge.create(
