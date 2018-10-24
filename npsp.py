@@ -295,7 +295,10 @@ class Opportunity(SalesforceObject):
             AND StageName = '{stage_name}'
         """
         else:
-            where = f"WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'"
+            where = f"""
+                WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
+                AND StageName = {stage_name}
+            """
 
         query = f"""
             SELECT

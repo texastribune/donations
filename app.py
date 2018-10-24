@@ -455,7 +455,7 @@ def customer_source_updated(event):
     if not card_details:
         app.logger.info("Event not relevant; discarding.")
 
-    # TODO limit this to pledged?
+    # TODO limit to only future opportunities?
     opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
@@ -482,7 +482,7 @@ def stripehook():
     if event.type == "customer.source.updated":
         customer_source_updated.delay(event)
 
-    app.logger.info(event)
+    app.logger.debug(event)
 
     return "", 200
 
