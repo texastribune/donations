@@ -82,6 +82,10 @@ csp = {
         "*.google.es",
         "www.google-analytics.com",
         "www.googletagmanager.com",
+        "www.google.pt",
+        "www.google.lv",
+        "www.google.my",
+        "www.google.com.au",
     ],
     "connect-src": [
         "*.stripe.com",
@@ -95,6 +99,7 @@ csp = {
         "*.facebook.net",
         "*.facebook.com",
         "bid.g.doubleclick.net",
+        "wib.capitalone.com",
     ],
     "script-src": [
         "'unsafe-inline'",
