@@ -4,11 +4,13 @@ export const POSITION_ON_FORM_1 = 1;
 export const POSITION_ON_FORM_2 = 2;
 export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 
-const MEMBERSHIP_LEVELS_COMMON_SUBHEADER = ' donation';
+//
+// To reorder the buckets (donation levels) on the page, reorder this array
+//  the logic automatically follows
 export const MEMBERSHIP_LEVELS = [
-  { header: 'Hat\'s Off!', amount: 500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // A
-  { header: 'Lone Star', amount: 1500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // B
-  { header: 'Big Tex', amount: 2500, subheader: MEMBERSHIP_LEVELS_COMMON_SUBHEADER }, // C
+  { header: 'Big Tex', amount: 2500 },
+  { header: 'Lone Star', amount: 1500 },
+  { header: 'Hat\'s Off!', amount: 500 },
 ];
 
 //
@@ -52,7 +54,7 @@ const ONETIME_PAYMENT = {
 };
 
 //
-// Common structure and var names used by the family of SF-S apps
+// Common structure and var names used by the donation apps
 // Plugs into the common donate app code
 //
 const DEFAULT_PAY_FEES = 'True';
