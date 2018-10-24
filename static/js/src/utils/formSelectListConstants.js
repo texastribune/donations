@@ -1,7 +1,7 @@
 //
 // Select field list elements for forms
 // Generic data format for using the SelectList Vue component
-// Using the DOM standard naming convention for select data fields
+// Using the DOM standard naming convention for form select fields
 //
 
 // US States and territories for select state list

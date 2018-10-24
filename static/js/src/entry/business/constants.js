@@ -124,7 +124,7 @@ export const DEFAULT_STATE_SELECTED = 'TX'; // Texas
 // Whitelisting and query params
 // Add new query parameters here to whitelist them
 //
-export const WL_DEFAULT_QUERY_PARAMETERS = {
+export const WL_DEFAULT_PARAMETERS = {
   campaignId: '',
   referralId: '',
   installments: BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].paymentDetails.installments,

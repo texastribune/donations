@@ -85,6 +85,7 @@ def circle_html_route():
 """
 Read the Webpack assets manifest and then provide the
 scripts, including cache-busting hache, as template context.
+
 For Heroku to compile assets on deploy, the directory it
 builds to needs to already exist. Hence /static/js/prod/.gitkeep.
 We don't want to version control development builds, which is
@@ -447,6 +448,7 @@ def add_business_rdo(account=None, form=None, customer=None):
 def add_business_membership(form=None, customer=None):
     """
     Adds a business membership. Both single and recurring.
+
     It will look for a matching Contact (or create one). Then it will look for a matching Account (or create one). Then it will add the single or recurring donation to the Account. Then it will add an Affiliation to link the Contact with the Account. It sends a notification to Slack (if configured). It will send email notification about the new membership.
     """
 

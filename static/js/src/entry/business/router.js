@@ -15,7 +15,7 @@ import {
   DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD,
   DEFAULT_STATE_SELECTED,
   LONG_PROGRAM_NAME,
-  WL_DEFAULT_QUERY_PARAMETERS,
+  WL_DEFAULT_PARAMETERS,
   WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
   WL_QUERY_ESCAPE_THRESHOLD,
   QUERY_PARAMETERS_STRING_VALUES,
@@ -23,7 +23,16 @@ import {
 
 Vue.use(VueRouter);
 
+function mapInstallmentPeriodOncetoForm(finalSanitizedParams) {
+  // Set data for form submit
+  finalSanitizedParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
+  finalSanitizedParams.installment_period = QUERY_PARAMETERS_STRING_VALUES.noneStr;
+  finalSanitizedParams.openended_status = QUERY_PARAMETERS_STRING_VALUES.noneStr;
+  return (Object.assign(finalSanitizedParams, { updated: true }));
+}
+
 function getStateFromParams(queryParams) {
+  let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   //
   // If this query is within the threshold number of parameters
   //   filter input query oarams using the app whitelist
@@ -32,34 +41,22 @@ function getStateFromParams(queryParams) {
   (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
     scrubbedQueryParams = queryParamWhiteListScrub(
       queryParams,
-      Object.keys(WL_DEFAULT_QUERY_PARAMETERS),
+      Object.keys(WL_DEFAULT_PARAMETERS),
       WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
     ) :
     scrubbedQueryParams = {};
-
+  // Merge defaults with overrides from
+  // sanitized query parameters to create form load state
+  let mergedQueryParams = Object.assign({}, WL_DEFAULT_PARAMETERS, scrubbedQueryParams);
   //
-  // Next, merge defaults with overrides from
-  // sanitized query parameters to get the final state
-  //
-  const mergedQueryParams = Object.assign({}, WL_DEFAULT_QUERY_PARAMETERS, scrubbedQueryParams);
-
-  let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
-
-  console.log('----> params merged --> ');
-  console.log(mergedQueryParams);
-  //
-  // Special processing: Unpack and interpret query params per spec
-  // If this gets more complex a case switch would probbaly be more obvious
-  //
+  // Post-processing: Unpack and interpret query params per spec
+  // ?installmentPeriod=once
   if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
     // Set data for form submit
-    mergedQueryParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
-    mergedQueryParams.installment_period = QUERY_PARAMETERS_STRING_VALUES.noneStr;
-    mergedQueryParams.openended_status = QUERY_PARAMETERS_STRING_VALUES.noneStr;
-    // Set UI
+    mergedQueryParams = mapInstallmentPeriodOncetoForm(mergedQueryParams);
+    // Set UI level with payment period selected state
     level = DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   }
-
   //
   // Set the Choices form state from defaults + query parameters
   //

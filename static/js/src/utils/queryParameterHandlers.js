@@ -4,10 +4,8 @@
 // whitelist - list of filter keys
 // return values for valid keys
 //
-//
-//
 // Returns the valid query parameters based on the whitelist
-// and the max number of characters truncation
+// and the max number of characters filter
 //
 export default function queryParamWhiteListScrub(dirtyList, whitelist, maxNbrChars){
   return whitelist.reduce((result, key) =>
@@ -15,4 +13,3 @@ export default function queryParamWhiteListScrub(dirtyList, whitelist, maxNbrCha
       ? Object.assign(result, { [key]: dirtyList[key].substring(0, maxNbrChars) })
       : result), {});
 }
-

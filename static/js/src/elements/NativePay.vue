@@ -110,7 +110,6 @@ export default {
           }
         })
         .catch(() => {
-          console.log('-----------> Stripe paymentRequest.canMakePayment() has failed. Displaying manual pay option.');
           this.$emit('setValue', { key: 'showManualPay', value: true });
         });
 

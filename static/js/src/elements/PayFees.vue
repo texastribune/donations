@@ -46,10 +46,12 @@ export default {
       type: String,
       required: true,
     },
+
     installmentPeriodStoreModule: {
       type: String,
       required: true,
     },
+
     payFeesValueStoreModule: {
       type: String,
       required: true,
@@ -62,25 +64,33 @@ export default {
         storeModule: this.amountStoreModule,
         key: 'amount',
       });
+
       if (!this.isValidAmount(amount)) return false;
+
       amount = parseFloat(amount.trim());
+
       const total = (amount + 0.30) / (1 - 0.022);
       const fee = Math.floor((total - amount) * 100) / 100;
+
       return `$${fee.toFixed(2)}`;
     },
+
     installmentPeriod() {
       const installmentPeriod = this.getStoreValue({
         storeModule: this.installmentPeriodStoreModule,
         key: 'installment_period',
       });
+
       if (installmentPeriod === 'None') return '';
       return installmentPeriod.toLowerCase();
     },
+
     isChecked() {
       const payFeesValue = this.getStoreValue({
         storeModule: this.payFeesValueStoreModule,
         key: 'pay_fees_value',
       });
+
       return payFeesValue === 'True';
     },
   },
@@ -93,6 +103,7 @@ export default {
         value: checked ? 'True' : 'False',
       });
     },
+
     isValidAmount(amount) {
       const isValid = validate(
         { value: amount.trim() },
