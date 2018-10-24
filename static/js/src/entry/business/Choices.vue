@@ -58,19 +58,19 @@ export default {
           id: 0,
           bucket: 'levelA',
           heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].header,
-          options: this.buildOptions(['levelAMonthly', 'levelAYearly', 'levelAOneTime']),
+          options: this.buildOptions(['levelAYearly', 'levelAMonthly', 'levelAOneTime']),
         },
         {
           id: 1,
           bucket: 'levelB',
           heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].header,
-          options: this.buildOptions(['levelBMonthly', 'levelBYearly', 'levelBOneTime']),
+          options: this.buildOptions(['levelBYearly', 'levelBMonthly', 'levelBOneTime']),
         },
         {
           id: 2,
           bucket: 'levelC',
           heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].header,
-          options: this.buildOptions(['levelCMonthly', 'levelCYearly', 'levelCOneTime']),
+          options: this.buildOptions(['levelCYearly', 'levelCMonthly', 'levelCOneTime']),
         },
       ],
     };

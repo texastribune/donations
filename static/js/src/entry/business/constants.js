@@ -59,6 +59,8 @@ const ONETIME_PAYMENT = {
 //
 const DEFAULT_PAY_FEES = 'True';
 
+// No order dependency in code for these
+// the key is the bucket
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
