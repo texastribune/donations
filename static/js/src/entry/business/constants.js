@@ -17,10 +17,12 @@ export const MEMBERSHIP_LEVELS = [
 export const QUERY_PARAMETERS_STRING_VALUES = {
   oneStr: '1',
   onceStr: 'once',
+  oneTimeStr: 'one-time',
   openStr: 'Open',
   noneStr: 'None',
   monthlyStr: 'monthly',
   yearlyStr: 'yearly',
+  annuallyStr: 'annually',
 };
 
 //
@@ -32,18 +34,21 @@ const MONTHLY_PAYMENTS = {
   installmentsPerYear: 12,
   installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
   openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
+  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
 };
 const YEARLY_PAYMENT = {
   installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.yearlyStr,
   installmentsPerYear: 1,
   installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
   openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
+  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.annuallyStr,
 };
 const ONETIME_PAYMENT = {
   installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.onceStr,
   installmentsPerYear: 1,
   installments: QUERY_PARAMETERS_STRING_VALUES.oneStr,
   openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.oneTimeStr,
 };
 
 //

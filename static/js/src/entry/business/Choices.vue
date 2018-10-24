@@ -12,8 +12,7 @@
         :id="getGroupHeadingConnector(group)"
         class="business-form__bucket-header grid_separator"
       >
-        {{ group.heading }}<br/>
-        {{ group.subheading }}
+        {{ group.heading }}<br>
       </p>
       <radios
         :options="group.options"
@@ -59,21 +58,18 @@ export default {
           id: 0,
           bucket: 'levelA',
           heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].header,
-          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].subheader,
           options: this.buildOptions(['levelAMonthly', 'levelAYearly', 'levelAOneTime']),
         },
         {
           id: 1,
           bucket: 'levelB',
           heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].header,
-          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].subheader,
           options: this.buildOptions(['levelBMonthly', 'levelBYearly', 'levelBOneTime']),
         },
         {
           id: 2,
           bucket: 'levelC',
           heading: MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].header,
-          subheading: '$' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount + ' ' + MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].subheader,
           options: this.buildOptions(['levelCMonthly', 'levelCYearly', 'levelCOneTime']),
         },
       ],
@@ -81,8 +77,8 @@ export default {
   },
 
   methods: {
-    buildText({ installmentPeriod, amount }) {
-      return `$${addNumberCommas(amount)} ${installmentPeriod}`;
+    buildText({ uiInstallmentPeriod, amount }) {
+      return `$${addNumberCommas(amount)} ${uiInstallmentPeriod}`;
     },
 
     buildOptions(bucketNames) {
@@ -98,11 +94,11 @@ export default {
 
       bucketsToIter.forEach((bucket, index) => {
         const { amount, name } = bucket;
-        const { installmentPeriod } = bucket.paymentDetails;
+        const { uiInstallmentPeriod } = bucket.paymentDetails;
         options.push({
           id: index,
           value: name,
-          text: this.buildText({ installmentPeriod, amount }),
+          text: this.buildText({ uiInstallmentPeriod, amount }),
         });
       });
       return options;
