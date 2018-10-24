@@ -74,3 +74,5 @@ SLACK_API_KEY = os.getenv("SLACK_API_KEY")
 #
 ENABLE_SENTRY = bool_env("ENABLE_SENTRY")
 SENTRY_DSN = os.getenv("SENTRY_DSN")
+SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", "unknown")
+REPORT_URI = os.getenv("REPORT_URI")

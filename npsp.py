@@ -460,6 +460,10 @@ class RDO(SalesforceObject):
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
+    # TODO sensible way to cache this to prevent it from being run multiple times when nothing
+    # has changed? The opportunities themselves may've changed even when the RDO hasn't so
+    # this may not be doable.
+
     def opportunities(self):
         query = f"""
             SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
@@ -495,7 +499,6 @@ class RDO(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
-            y.account_id = item["AccountId"]
             y.created = False
             results.append(y)
         return results
@@ -543,13 +546,14 @@ class RDO(SalesforceObject):
         # SF side
         if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
             return
-        logging.info(
-            f"Setting record type for {self} opportunities to {self.record_type_name}"
-        )
         if self.open_ended_status == "Open":
             logging.warning(
                 f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
             )
+            return
+        logging.info(
+            f"Setting record type for {self} opportunities to {self.record_type_name}"
+        )
         update = {"RecordType": {"Name": self.record_type_name}}
         self.sf.update(self.opportunities(), update)
 

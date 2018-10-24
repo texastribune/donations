@@ -1,22 +1,36 @@
 """
-This file is the entrypoint for this Flask application. Can be executed with 'flask run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+This file is the entrypoint for this Flask application. Can be executed with 'flask
+run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
+
 """
 import json
 import locale
 import logging
 import os
-from config import FLASK_DEBUG, FLASK_SECRET_KEY, LOG_LEVEL, TIMEZONE
+from config import (
+    FLASK_DEBUG,
+    FLASK_SECRET_KEY,
+    LOG_LEVEL,
+    TIMEZONE,
+    SENTRY_DSN,
+    SENTRY_ENVIRONMENT,
+    ENABLE_SENTRY,
+    REPORT_URI,
+)
 from datetime import datetime
+from pprint import pformat
 
 from pytz import timezone
 
 import celery
 import stripe
 from app_celery import make_celery
+from flask_talisman import Talisman
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
-from raven.contrib.flask import Sentry
 from sassutils.wsgi import SassMiddleware
 from util import (
     clean,
@@ -25,15 +39,102 @@ from util import (
     send_multiple_account_warning,
 )
 from validate_email import validate_email
+from charges import charge
 
 ZONE = timezone(TIMEZONE)
 
+if ENABLE_SENTRY:
+    import sentry_sdk
+    from sentry_sdk.integrations.flask import FlaskIntegration
+    from sentry_sdk.integrations.celery import CeleryIntegration
+
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        environment=SENTRY_ENVIRONMENT,
+        integrations=[FlaskIntegration(), CeleryIntegration()],
+    )
+
 locale.setlocale(locale.LC_ALL, "C")
+csp = {
+    "default-src": ["'self'", "*.texastribune.org"],
+    "font-src": [
+        "'self'",
+        "data:",
+        "*.cloudflare.com",
+        "*.gstatic.com",
+        "*.typekit.net",
+        "cdn.joinhoney.com",
+    ],
+    "style-src": ["'self'", "'unsafe-inline'", "*.googleapis.com"],
+    "img-src": [
+        "'self'",
+        "*.facebook.com",
+        "*.texastribune.org",
+        "*.doubleclick.net",
+        "*.google.com",
+        "*.stripe.com",
+        "*.typekit.net",
+        "*.google.ca",
+        "*.gstatic.com",
+        "*.google.com.gt",
+        "*.google.co.uk",
+        "*.google.co.in",
+        "*.google.es",
+        "www.google-analytics.com",
+        "www.googletagmanager.com",
+        "www.google.pt",
+        "www.google.lv",
+        "www.google.my",
+        "www.google.com.au",
+    ],
+    "connect-src": [
+        "*.stripe.com",
+        "*.texastribune.org",
+        "www.google-analytics.com",
+        "stats.g.doubleclick.net",
+    ],
+    "frame-src": [
+        "'self'",
+        "*.stripe.com",
+        "*.facebook.net",
+        "*.facebook.com",
+        "bid.g.doubleclick.net",
+        "wib.capitalone.com",
+    ],
+    "script-src": [
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "*.typekit.net",
+        "*.texastribune.org",
+        "*.stripe.com",
+        "*.jquery.com",
+        "*.googletagmanager.com",
+        "*.facebook.net",
+        "*.googleapis.com",
+        "*.googleadservices.com",
+        "*.cloudflare.com",
+        "*.google-analytics.com",
+        "*.doubleclick.net",
+    ],
+}
+
 
 app = Flask(__name__)
+Talisman(
+    app,
+    content_security_policy=csp,
+    content_security_policy_report_only=True,
+    content_security_policy_report_uri=REPORT_URI,
+)
+
+limiter = Limiter(
+    app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
+)
 
 log_level = logging.getLevelName(LOG_LEVEL)
 app.logger.setLevel(log_level)
+for handler in app.logger.handlers:
+    limiter.logger.addHandler(handler)
 
 app.secret_key = FLASK_SECRET_KEY
 
@@ -51,9 +152,6 @@ stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
 make_celery(app)
 
-
-if app.config["ENABLE_SENTRY"]:
-    sentry = Sentry(app, dsn=app.config["SENTRY_DSN"])
 
 """
 Redirects, including for URLs that used to be
@@ -152,11 +250,21 @@ def add_donation(form=None, customer=None):
     if period is None:
         logging.info("----Creating one time payment...")
         opportunity = add_opportunity(contact=contact, form=form, customer=customer)
+        charge(opportunity)
         logging.info(opportunity)
         notify_slack(contact=contact, opportunity=opportunity)
     else:
         logging.info("----Creating recurring payment...")
         rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
+        # get opportunities
+        opportunities = rdo.opportunities()
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        opp = [
+            opportunity
+            for opportunity in opportunities
+            if opportunity.expected_giving_date == today
+        ][0]
+        charge(opp)
         logging.info(rdo)
         notify_slack(contact=contact, rdo=rdo)
 
@@ -199,7 +307,7 @@ def do_charge_or_show_errors(template, bundles, function):
 
 
 def validate_form(FormType, bundles, template, function=add_donation.delay):
-    app.logger.info(request.form)
+    app.logger.info(pformat(request.form))
 
     form = FormType(request.form)
     email = request.form["stripeEmail"]
@@ -287,8 +395,7 @@ def the_blast_form():
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
-
-    app.logger.info(request.form)
+    app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
@@ -449,7 +556,12 @@ def add_business_membership(form=None, customer=None):
     """
     Adds a business membership. Both single and recurring.
 
-    It will look for a matching Contact (or create one). Then it will look for a matching Account (or create one). Then it will add the single or recurring donation to the Account. Then it will add an Affiliation to link the Contact with the Account. It sends a notification to Slack (if configured). It will send email notification about the new membership.
+    It will look for a matching Contact (or create one). Then it will look for a
+    matching Account (or create one). Then it will add the single or recurring donation
+    to the Account. Then it will add an Affiliation to link the Contact with the
+    Account. It sends a notification to Slack (if configured). It will send email
+    notification about the new membership.
+
     """
 
     form = clean(form)
@@ -502,11 +614,21 @@ def add_business_membership(form=None, customer=None):
             account=account, form=form, customer=customer
         )
         logging.info(opportunity)
+        charge(opportunity)
         notify_slack(account=account, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
         logging.info(rdo)
+        # get opportunities
+        opportunities = rdo.opportunities()
+        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        opp = [
+            opportunity
+            for opportunity in opportunities
+            if opportunity.expected_giving_date == today
+        ][0]
+        charge(opp)
         notify_slack(account=account, rdo=rdo)
 
     logging.info("----Getting affiliation...")
@@ -527,11 +649,12 @@ def add_business_membership(form=None, customer=None):
 @celery.task(name="app.add_blast_subcription")
 def add_blast_subscription(form=None, customer=None):
     """
-    Adds a Blast subscription. Blast subscriptions are always recurring. They have two email addresses: one for billing and one for the newsletter subscription.
+    Adds a Blast subscription. Blast subscriptions are always recurring. They have two
+    email addresses: one for billing and one for the newsletter subscription.
+
     """
 
     form = clean(form)
-    logging.info(form)
 
     first_name = form["first_name"]
     last_name = form["last_name"]
@@ -569,7 +692,15 @@ def add_blast_subscription(form=None, customer=None):
     logging.info("----Saving RDO....")
     rdo.save()
     logging.info(rdo)
-
+    # get opportunities
+    opportunities = rdo.opportunities()
+    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    opp = [
+        opportunity
+        for opportunity in opportunities
+        if opportunity.expected_giving_date == today
+    ][0]
+    charge(opp)
     return True
 
 
