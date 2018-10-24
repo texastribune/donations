@@ -48,7 +48,7 @@
           <text-input
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.business_name"
-            label-text="business name"
+            label-text="organization name"
             maxlength="255"
             base-classes="form__text form__text--standard"
             name="business_name"
