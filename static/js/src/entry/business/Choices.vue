@@ -17,7 +17,7 @@
       <radios
         :options="group.options"
         :aria-labelledby="getGroupHeadingConnector(group)"
-        aria-describedby="opening-pitch-hed opening-pitch-intro"
+        aria-describedby="business-form-hed business-form__intro"
         base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="businessForm"

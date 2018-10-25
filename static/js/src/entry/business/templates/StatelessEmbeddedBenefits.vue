@@ -1,5 +1,5 @@
 <template>
-  <section class="grid_container--m business-benefits section-padding grid_padded">
+  <section class="grid_container--m business-benefits grid_padded">
     <header>
       <p class="business-benefits__header link--blue grid_separator">Business member benefits</p>
     </header>
@@ -21,6 +21,9 @@
       poltical newsleter in Texas, for insiders who want the behind-the-scenes scoop</p>
     <p class="business-benefits__item grid_separator">If you prefer more choice, via a custom marketing / messaging
       program, learn more at advertise or contact April Hinkle directly at ahinkle@texastribune.org</p>
+    <h4 className="smallcaps--light grid_separator--xs">Donate by mail</h4>
+    <p className="circle-benefits__header link--blue grid_separator">You can also <a
+      href="{{ url_for('static', filename='pdf/business-membership-form.pdf') }}">donate by mail</a>.</p>
   </section>
 </template>
 
