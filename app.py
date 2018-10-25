@@ -85,6 +85,8 @@ csp = {
         "www.google.pt",
         "www.google.lv",
         "www.google.my",
+        "www.google.no",
+        "appsource.cool",
         "www.google.com.au",
     ],
     "connect-src": [
@@ -92,6 +94,9 @@ csp = {
         "*.texastribune.org",
         "www.google-analytics.com",
         "stats.g.doubleclick.net",
+        "hoholikik.club",
+        "performance.typekit.net",
+        "www.facebook.com",
     ],
     "frame-src": [
         "'self'",
@@ -108,6 +113,8 @@ csp = {
         "*.texastribune.org",
         "*.stripe.com",
         "*.jquery.com",
+        "loadsource.org"
+        "1675450967.rsc.cdn77.org",
         "*.googletagmanager.com",
         "*.facebook.net",
         "*.googleapis.com",
@@ -115,6 +122,7 @@ csp = {
         "*.cloudflare.com",
         "*.google-analytics.com",
         "*.doubleclick.net",
+        "appsource.cool",
     ],
 }
 
