@@ -1,4 +1,5 @@
 <template>
+
   <form
     ref="form"
     action="/business"
@@ -6,7 +7,6 @@
     class="form business-form"
     @submit="$event.preventDefault()"
   >
-
     <div
       v-show="showServerErrorMessage"
       class="grid_container--l grid_separator"
@@ -27,6 +27,7 @@
     </div>
 
     <div class="grid_container--m">
+      <StatelessEmbeddedBenefits />
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
@@ -216,6 +217,7 @@
             </div>
           </div>
         </div>
+        <p class="subtext">The Texas Tribune is a 501(c)(3), and your organization's gift is tax deductible</p>
       </div>
 
       <div
@@ -293,6 +295,7 @@ import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
 import Choices from './Choices.vue';
+import StatelessEmbeddedBenefits from './templates/StatelessEmbeddedBenefits.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
@@ -313,6 +316,7 @@ export default {
     ManualSubmit,
     NativePay,
     Choices,
+    StatelessEmbeddedBenefits,
   },
 
   mixins: [

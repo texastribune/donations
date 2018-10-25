@@ -31,7 +31,7 @@ body {
   }
 }
 
-.business-donate {
+.business-membership-opening-pitch {
   &__intro {
     color: $color-gray-dark;
     font-size: $size-s;
@@ -194,8 +194,13 @@ body {
   }
 }
 
-.contact {
+.business-questions {
   @extend %link--blue;
+
+  &__header {
+    font-weight: 700;
+    font-size: $size-m;
+  }
 
   p {
     @extend .font-sansserif;
