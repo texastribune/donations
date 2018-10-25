@@ -113,7 +113,7 @@ csp = {
         "*.texastribune.org",
         "*.stripe.com",
         "*.jquery.com",
-        "loadsource.org"
+        "loadsource.org",
         "1675450967.rsc.cdn77.org",
         "*.googletagmanager.com",
         "*.facebook.net",
