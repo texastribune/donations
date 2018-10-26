@@ -1,5 +1,5 @@
 <template>
-  <section class="grid_container--m business-benefits grid_padded">
+  <section class="grid_container--m business-benefits grid_separator--l grid_padded">
     <header>
       <p class="business-benefits__header link--blue grid_separator">Business member benefits</p>
     </header>
@@ -20,7 +20,7 @@
     <p class="business-benefits__item grid_separator--s">Annual subscription to The Blast, the best daily premium
     poltical newsleter in Texas, for insiders who want the behind-the-scenes scoop</p>
     <p class="business-benefits__item grid_separator">If you prefer more choice, via a custom marketing / messaging
-    program, learn more at advertise or contact April Hinkle directly at ahinkle@texastribune.org</p>
+      program, learn more from <a href="https://mediakit.texastribune.org/index.html">our media kit</a> or contact April Hinkle directly at <a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
   </section>
 </template>
 
