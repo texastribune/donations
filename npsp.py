@@ -540,6 +540,9 @@ class Opportunity(SalesforceObject):
 
         # TODO it looks like account_id isn't required; remove this?
         # TODO but stage_name and close_date are required
+        # truncate to 80 chars:
+        self.name = self.name[:80]
+
         if self.account_id is None:
             raise SalesforceException("Account ID must be specified")
         if not self.name:
@@ -578,12 +581,11 @@ class RDO(SalesforceObject):
             raise SalesforceException("Account and Contact can't both be specified")
 
         today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
-        now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
 
         if contact is not None:
             self.contact = contact.id
             self.name = (
-                f"{now} for {contact.sf_object} {contact.last_name} ({contact.email})"
+                f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
             )
             self.account_id = None
         else:
@@ -682,7 +684,10 @@ class RDO(SalesforceObject):
 
     def save(self):
 
-        if self.account_id is None and self.contact is None:
+        # truncate to 80 characters
+        self.name = self.name[:80]
+
+        if self.account_id is None and self.contact_id is None:
             raise SalesforceException(
                 "One of Contact ID or Account ID must be specified."
             )
