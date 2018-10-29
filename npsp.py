@@ -449,9 +449,7 @@ class RDO(SalesforceObject):
 
         if contact is not None:
             self.contact_id = contact.id
-            self.name = (
-                f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
-            )
+            self.name = f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
             self.account_id = None
         elif account is not None:
             self.account_id = account.id
