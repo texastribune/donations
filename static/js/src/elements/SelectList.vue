@@ -2,23 +2,19 @@
   <div
     :class="classes"
   >
-    <label
-      v-if="hasLabel"
-      :for="connector"
-    >
+    <label>
       {{ labelText }}
     </label>
 
     <select
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"
-      :aria-label="ariaLabel"
       :aria-required="required"
       @change="onChange($event.target.selectedIndex)">
       <option
         v-for="(item, index) in listOfChoices"
         :selected="item.value == isSelected"
-        :id="index"
+        :id="getConnector(index)"
         :key="index"
         :value="item.value">
         {{ item.text }}
@@ -30,6 +26,7 @@
 <script>
 import aria from './mixins/aria';
 import labelConnector from './mixins/labelConnector';
+import connectedElement from './mixins/connectedElement';
 import updateStoreValue from './mixins/updateStoreValue';
 import getStoreValue from './mixins/getStoreValue';
 
@@ -37,6 +34,7 @@ export default {
   name: 'SelectList',
   mixins: [
     aria,
+    connectedElement,
     labelConnector,
     updateStoreValue,
     getStoreValue,
@@ -49,10 +47,6 @@ export default {
     listOfChoices: {
       type: Array,
       required: true,
-    },
-    hasLabel: {
-      type: Boolean,
-      default: true,
     },
     labelText: {
       type: String,
@@ -80,10 +74,6 @@ export default {
       if (!this.hasLabel) return false;
       return `_${this.randConnector}`;
     },
-    ariaLabel() {
-      if (this.hasLabel) return false;
-      return this.labelText;
-    },
   },
   methods: {
     onChange(selectedIndex) {
@@ -92,6 +82,9 @@ export default {
         key: this.name,
         value: this.listOfChoices[selectedIndex].value,
       });
+    },
+    getConnector(index) {
+      return `_${this.randConnector}-${index}`;
     },
   },
 };

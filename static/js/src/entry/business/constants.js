@@ -8,7 +8,7 @@ export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 // To reorder the buckets (donation levels) on the page, reorder this array
 //  the logic automatically follows
 export const MEMBERSHIP_LEVELS = [
-  { header: 'TEST ONLY Big Tex', amount: 1 },
+  { header: 'Big Tex', amount: 2500 },
   { header: 'Lone Star', amount: 1500 },
   { header: 'Hat\'s Off!', amount: 500 },
 ];

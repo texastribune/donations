@@ -299,7 +299,7 @@ import StatelessEmbeddedBenefits from './templates/StatelessEmbeddedBenefits.vue
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
-import { US_STATES_SELECT_LIST } from '../../utils/formSelectListConstants';
+import { US_STATES_SELECT_LIST } from './formSelectListConstants';
 
 
 export default {
