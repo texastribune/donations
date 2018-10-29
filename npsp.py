@@ -583,10 +583,8 @@ class RDO(SalesforceObject):
         today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
 
         if contact is not None:
-            self.contact = contact.id
-            self.name = (
-                f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
-            )
+            self.contact_id = contact.id
+            self.name = f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
             self.account_id = None
         else:
             self.contact = None
