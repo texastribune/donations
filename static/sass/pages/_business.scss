@@ -182,6 +182,7 @@ body {
 .business-benefits {
   &__header {
     font-weight: 700;
+
   }
 
   &__item {
@@ -194,17 +195,12 @@ body {
   }
 }
 
-.business-questions {
+.business-contact {
   @extend %link--blue;
-
-  &__header {
-    font-weight: 700;
-    font-size: $size-m;
-  }
 
   p {
     @extend .font-sansserif;
-    font-size: $size-s;
+    font-size: $size-xs;
   }
 
   @media print {
