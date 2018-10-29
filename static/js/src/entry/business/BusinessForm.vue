@@ -290,7 +290,7 @@ import Level from '../../elements/Level.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
-import SelectList from '../../elements/SelectList.vue';
+import SelectList from './SelectList.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';

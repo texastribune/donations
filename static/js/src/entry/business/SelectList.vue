@@ -9,13 +9,12 @@
     <select
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"
-      :aria-required="required"
       @change="onChange($event.target.selectedIndex)">
       <option
         v-for="(item, index) in listOfChoices"
         :selected="item.value == isSelected"
         :id="getConnector(index)"
-        :key="index"
+        :key="index+'_'+item.value"
         :value="item.value">
         {{ item.text }}
       </option>
@@ -24,11 +23,11 @@
 </template>
 
 <script>
-import aria from './mixins/aria';
-import labelConnector from './mixins/labelConnector';
-import connectedElement from './mixins/connectedElement';
-import updateStoreValue from './mixins/updateStoreValue';
-import getStoreValue from './mixins/getStoreValue';
+import aria from '../../elements/mixins/aria';
+import labelConnector from '../../elements/mixins/labelConnector';
+import connectedElement from '../../elements/mixins/connectedElement';
+import updateStoreValue from '../../elements/mixins/updateStoreValue';
+import getStoreValue from '../../elements/mixins/getStoreValue';
 
 export default {
   name: 'SelectList',
