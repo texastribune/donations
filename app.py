@@ -482,7 +482,7 @@ def customer_source_updated(event):
         card_details["Stripe_Card_Expiration__c"] = expiration
 
     if not card_details:
-        app.logger.info("Event not relevant; discarding.")
+        logging.info("Event not relevant; discarding.")
 
     # TODO limit to only future opportunities?
     opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
@@ -511,7 +511,8 @@ def stripehook():
     if event.type == "customer.source.updated":
         customer_source_updated.delay(event)
 
-    app.logger.debug(event)
+    # TODO change this to debug later
+    app.logger.info(event)
 
     return "", 200
 
