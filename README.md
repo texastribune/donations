@@ -42,6 +42,7 @@ Environment
 | `BUSINESS_MEMBER_RECIPIENT` |                                    foo@bar.org |
 | `REDIS_URL`                 |                             redis://redis:6379 |
 | `SALESFORCE_API_VERSION`    |                                          v43.0 |
+| `REPORT-URI`                |                                https://foo.bar |
 
 Running the Project
 -------------------
