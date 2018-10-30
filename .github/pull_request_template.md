@@ -1,29 +1,24 @@
-#### What's the plan?
-[for PRs that haven't been fully implemented yet]
-
 #### What's this PR do?
 
 #### Why are we doing this? How does it help us?
 
 #### How should this be manually tested?
 
-#### Have automated tests been added?
+#### How should this change be communicated to end users?
 
-#### Has this been tested on mobile?
-
-#### Are there performance implications?
+#### Are there any smells or added technical debt to note?
 
 #### What are the relevant tickets?
 
-#### How should this change be communicated to end users?
+#### Have you done the following, if applicable:
+***(optional: add explanation between parentheses)***
 
-#### Next steps?
+* [ ] Added automated tests? *( )*
+* [ ] Tested manually on mobile? *( )*
+* [ ] Checked for performance implications? *( )*
+* [ ] Checked for security implications? *( )*
+* [ ] Updated the documentation/wiki? *( )*
 
-#### Smells?
+#### TODOs / next steps:
 
-#### TODOs:
-* [ ] your TODO here
-
-#### Has the relevant documentation/wiki been updated?
-
-#### Technical debt note
+* [ ] *your TODO here*

@@ -405,6 +405,7 @@ class Opportunity(SalesforceObject):
 
     def save(self):
 
+        # TODO this will fail if name hasn't been set
         # truncate to 80 chars:
         self.name = self.name[:80]
 
