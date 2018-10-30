@@ -28,7 +28,7 @@ function mapInstallmentPeriodOncetoForm(finalSanitizedParams) {
   finalSanitizedParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
   finalSanitizedParams.installment_period = QUERY_PARAMETERS_STRING_VALUES.noneStr;
   finalSanitizedParams.openended_status = QUERY_PARAMETERS_STRING_VALUES.noneStr;
-  return (Object.assign(finalSanitizedParams, { updated: true }));
+  return (finalSanitizedParams);
 }
 
 function getStateFromParams(queryParams) {
@@ -130,6 +130,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
 export { createRouter, bindRouterEvents };
 
+// TEMPORARILY here == move to proper test
 // Test strings
 // http://local.texastribune.org/business?installments=None
 //  http://local.texastribune.org/business?installmentPeriod=foo

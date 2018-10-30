@@ -8,7 +8,8 @@ export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 // To reorder the buckets (donation levels) on the page, reorder this array
 //  the logic automatically follows
 export const MEMBERSHIP_LEVELS = [
-  { header: 'Big Tex', amount: 2500 },
+  { header: '$1 TEST', amount: 1 },
+  // { header: 'Big Tex', amount: 2500 },
   { header: 'Lone Star', amount: 1500 },
   { header: 'Hat\'s Off!', amount: 500 },
 ];
@@ -57,14 +58,15 @@ const ONETIME_PAYMENT = {
 // Common structure and var names used by the donation apps
 // Plugs into the common donate app code
 //
-const DEFAULT_PAY_FEES = 'True';
+export const DEFAULT_PAY_FEES = 'True';
 
 // No order dependency in code for these
 // the key is the bucket
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
-    amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
+    amount: '1',
+    // amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
     paymentDetails: MONTHLY_PAYMENTS,
     payFees: DEFAULT_PAY_FEES,
   },
