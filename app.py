@@ -100,6 +100,7 @@ csp = {
         "www.google.com.au",
         "www.google.com.br",
         "www.google.com.ar",
+        "www.google.com.kr",
     ],
     "connect-src": [
         "*.stripe.com",
