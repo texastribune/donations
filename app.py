@@ -473,16 +473,27 @@ def customer_source_updated(event):
     card_details = dict()
 
     # TODO update this with Opportunity fields when npsp is merged
-    if "last4" in event["data"]["previous_attributes"]:
-        card_details["Stripe_Card_Last_4__c"] = event["data"]["object"]["last4"]
-    if "brand" in event["data"]["previous_attributes"]:
-        card_details["Stripe_Card_Brand__c"] = event["data"]["object"]["brand"]
-    if "exp_year" in event["data"]["previous_attributes"]:
-        expiration = f"{event['data']['object']['exp_year']}-{event['data']['object']['exp_month']:02d}-01"
-        card_details["Stripe_Card_Expiration__c"] = expiration
 
-    if not card_details:
+    # we update all of these fields if any of them have changed because
+    # we don't have these fields already populated; after some time that won't be
+    # important
+
+    if any(
+        [
+            "last4" in event["data"]["previous_attributes"],
+            "brand" in event["data"]["previous_attributes"],
+            "exp_year" in event["data"]["previous_attributes"],
+        ]
+    ):
+        # TODO this should be the last day of the month; which of course is harder
+        #        expiration = f"{event['data']['object']['exp_year']}-{event['data']['object']['exp_month']:02d}-01"
+        expiration = f"{event['data']['object']['exp_year']}-{event['data']['object']['exp_month']:02d}"
+        card_details["Stripe_Card_Expiration__c"] = expiration
+        card_details["Stripe_Card_Brand__c"] = event["data"]["object"]["brand"]
+        card_details["Stripe_Card_Last_4__c"] = event["data"]["object"]["last4"]
+    else:
         logging.info("Event not relevant; discarding.")
+        return
 
     # TODO limit to only future opportunities?
     opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])

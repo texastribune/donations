@@ -297,7 +297,7 @@ class Opportunity(SalesforceObject):
         else:
             where = f"""
                 WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
-                AND StageName = {stage_name}
+                AND StageName = '{stage_name}'
             """
 
         query = f"""
