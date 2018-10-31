@@ -265,10 +265,6 @@
         store-module="businessForm"
       />
       <hidden
-        name="customerId"
-        store-module="businessForm"
-      />
-      <hidden
         name="installment_period"
         store-module="businessForm"
       />

@@ -2,11 +2,12 @@
   <div
     :class="classes"
   >
-    <label>
+    <label for="state-select-list">
       {{ labelText }}
     </label>
 
     <select
+      id="state-select-list"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"
       @change="onChange($event.target.selectedIndex)">
