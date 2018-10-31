@@ -41,19 +41,17 @@ function getStateFromParams(queryParams) {
   (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
     scrubbedQueryParams = queryParamWhiteListScrub(
       queryParams,
-      Object.keys(WL_DEFAULT_PARAMETERS),
+      WL_DEFAULT_PARAMETERS,
       WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
     ) :
-    scrubbedQueryParams = {};
-  // Merge defaults with overrides from
-  // sanitized query parameters to create form load state
-  let mergedQueryParams = Object.assign({}, WL_DEFAULT_PARAMETERS, scrubbedQueryParams);
+    scrubbedQueryParams = WL_DEFAULT_PARAMETERS;
+
   //
-  // Post-processing: Unpack and interpret query params per spec
+  // Post-processing: Unpack and map query params per spec
   // ?installmentPeriod=once
-  if (mergedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
+  if (scrubbedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
     // Set data for form submit
-    mergedQueryParams = mapInstallmentPeriodOncetoForm(mergedQueryParams);
+    scrubbedQueryParams = mapInstallmentPeriodOncetoForm(scrubbedQueryParams);
     // Set UI level with payment period selected state
     level = DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD;
   }
@@ -69,11 +67,11 @@ function getStateFromParams(queryParams) {
     level,
     amount,
     pay_fees_value: payFees,
-    campaign_id: mergedQueryParams.campaignId,
-    referral_id: mergedQueryParams.referralId,
-    installment_period: mergedQueryParams.installment_period,
-    installments: mergedQueryParams.installments,
-    openended_status: mergedQueryParams.openended_status,
+    campaign_id: scrubbedQueryParams.campaignId,
+    referral_id: scrubbedQueryParams.referralId,
+    installment_period: scrubbedQueryParams.installment_period,
+    installments: scrubbedQueryParams.installments,
+    openended_status: scrubbedQueryParams.openended_status,
   };
 }
 
@@ -84,7 +82,6 @@ function createInitialFormState(queryParams) {
   const dynamicState = getStateFromParams(queryParams);
   const staticState = {
     stripeEmail: '',
-    customerId: '',
     business_name: '',
     website: '',
     shipping_street: '',
