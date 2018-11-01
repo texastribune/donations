@@ -98,6 +98,7 @@ csp = {
         "www.google.no",
         "appsource.cool",
         "www.google.com.au",
+        "www.google.com.sa",
         "www.google.com.br",
         "www.google.com.ar",
         "www.google.com.kr",
