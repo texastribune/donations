@@ -1,5 +1,5 @@
 <template>
-  <section class="grid_container--m business-benefits grid_separator--l grid_padded">
+  <section class="grid_container--m business-benefits grid_separator--l">
     <header>
       <p class="business-benefits__header link--blue grid_separator">Business member benefits</p>
     </header>
