@@ -101,7 +101,6 @@ function createInitialFormState(queryParams) {
 function createRouter() {
   return new VueRouter({
     base: '/business',
-    //     base: '/business',
     mode: 'history',
     routes: [
       { path: '/', component: RouteHandler },
