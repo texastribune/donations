@@ -12,7 +12,7 @@
     communication</p>
     <p class="business-benefits__item grid_separator--s">First opportunity to RSVP for select Texas Tribune
     events</p>
-    <p class="business-benefits__item grid_separator--s">Special fee to reserve Studio 919, the Tribune's event studio.</p>
+    <p class="business-benefits__item grid_separator--s">Special fee to reserve Studio 919, the Tribune's event studio</p>
     <p class="business-benefits__item grid_separator--s">Discount for Texas Tribune Festival pass</p>
     <p class="business-benefits__item grid_separator--s">Texas Tribune Business Membership window decal or 4x6
     printed card</p>
