@@ -540,6 +540,7 @@ class Opportunity(SalesforceObject):
 
         # TODO it looks like account_id isn't required; remove this?
         # TODO but stage_name and close_date are required
+        # TODO this will fail if name hasn't been set
         # truncate to 80 chars:
         self.name = self.name[:80]
 

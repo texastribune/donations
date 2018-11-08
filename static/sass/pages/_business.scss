@@ -1,0 +1,209 @@
+@import "../vendor/normalize";
+@import "../vendor/mq";
+
+@import "../utils/variables";
+@import "../utils/colors";
+@import "../utils/links";
+@import "../utils/typography";
+@import "../utils/grid";
+@import "../utils/layout";
+@import "../utils/buttons";
+@import "../utils/images";
+@import "../utils/fontawesome";
+@import "../utils/lines";
+@import "../components/footer";
+@import "../components/navbar";
+@import "../components/forms";
+
+html {
+  @extend .font-sansserif;
+  min-height: 100%;
+  position: relative;
+}
+
+body {
+  margin: 0;
+}
+
+.navbar {
+  @media print {
+    display: none;
+  }
+}
+
+.opening-pitch {
+  &__intro {
+    color: $color-gray-dark;
+    font-size: $size-s;
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.business-form {
+  &__bucket {
+    border-width: 3px;
+    border-color: $color-white-off;
+    border-style: solid;
+    padding: $size-s;
+    transition: border-color .2s;
+
+    &.selected {
+      border-color: $color-yellow-tribune;
+    }
+  }
+
+  &__bucket-header {
+    @extend .font-serif;
+    font-size: $size-l;
+    font-weight: bold;
+    line-height: 1;
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.business-wall {
+  &__logo {
+    margin: 0 $size-b $size-l;
+    text-align: center;
+
+    img {
+      max-width: 450px;
+      width: 100%;
+
+      @media print {
+        max-width: 175px;
+      }
+    }
+  }
+
+  &__heading {
+    @include mq($from: bp-s) {
+      text-align: center;
+    }
+
+    @media print {
+      font-size: $size-b;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+    @include mq($from: bp-s) {
+      justify-content: center;
+    }
+
+    @media print {
+      display: initial;
+    }
+  }
+
+  &__item {
+    margin: 0 $size-xxs/2 $size-xxs/2 0;
+
+    @include mq($until: bp-s) {
+      flex: 1 1 100%;
+    }
+
+    @media print {
+      display: inline-block;
+      margin-bottom: 0;
+      margin-right: .15rem;
+    }
+  }
+
+  &__star {
+    color: $color-yellow-tribune;
+    font-size: $size-xs;
+  }
+
+  &__name {
+    @include mq($from: bp-s) {
+      font-size: $size-xs;
+    }
+
+    @media print {
+      font-size: .6rem;
+    }
+  }
+}
+
+.business-hero {
+  background-image: url('../img/TT-business-member-BG-test-bldg001.jpg');
+  background-position-y: 90%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: $size-giant;
+  padding-top: $size-giant;
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-b;
+    padding-top: $size-b;
+  }
+
+  &__title {
+    border-bottom: 3px solid $color-yellow-tribune;
+    color: $color-white-pure;
+    font-size: $size-xl;
+    font-weight: 700;
+    padding-bottom: $size-b;
+
+    @include mq($from: bp-s) {
+      font-size: $size-giant;
+    }
+
+    @include mq($from: bp-xl) {
+      font-size: 3.5rem;
+    }
+  }
+
+  &__intro {
+    color: $color-white-pure;
+  }
+
+  &__cta {
+    color: $color-yellow-tribune;
+    font-weight: 700;
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.business-benefits {
+  &__header {
+    font-weight: 700;
+
+  }
+
+  &__item {
+    @extend .font-sansserif;
+    font-size: $size-xs;
+  }
+
+  @media print {
+    display: none;
+  }
+}
+
+.business-contact {
+  @extend %link--blue;
+
+  p {
+    @extend .font-sansserif;
+    font-size: $size-xs;
+  }
+
+  @media print {
+    display: none;
+  }
+}
