@@ -858,3 +858,12 @@ class Affiliation(SalesforceObject):
             "npe5__Role__c": self.role,
             "npe5__Organization__c": self.account,
         }
+
+class Task:
+
+    api_name = "Task"
+
+    def __init__(self, contact=None, account=None, role=None, sf_connection=None):
+        super().__init__(sf_connection)
+        # TODO allow id to be set in __init__?
+        self.id = None
