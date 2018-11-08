@@ -9,7 +9,7 @@ $color-error: #f51c1c;
       }
     }
 
-    input {
+    input, select {
       @extend .font-sansserif;
       background-color: #fbfbfb;
       border: 1px solid $color-gray-light;
@@ -18,6 +18,11 @@ $color-error: #f51c1c;
       height: 45px;
       padding: 0 0 0 $size-b;
       width: 100%;
+    }
+
+    select {
+      -webkit-appearance: none;
+      -moz-appearance: none;
     }
 
     label {
