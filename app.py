@@ -60,14 +60,24 @@ csp = {
     "font-src": [
         "'self'",
         "data:",
+        "maxcdn.bootstrapcdn.com",
         "*.cloudflare.com",
         "*.gstatic.com",
         "*.typekit.net",
         "cdn.joinhoney.com",
     ],
-    "style-src": ["'self'", "'unsafe-inline'", "*.googleapis.com"],
+    "style-src": [
+        "'self'",
+        "'unsafe-inline'",
+        "*.googleapis.com",
+        "tagmanager.google.com",
+    ],
     "img-src": [
         "'self'",
+        "data:",
+        "www.google.co.ve",
+        "www.google.com.gi",
+        "mirextpro.com",
         "*.facebook.com",
         "*.texastribune.org",
         "*.doubleclick.net",
@@ -78,20 +88,29 @@ csp = {
         "*.google.it",
         "*.gstatic.com",
         "*.google.com.gt",
+        "*.google.hu",
         "*.google.co.uk",
         "*.google.co.in",
         "*.google.es",
         "*.google.gr",
         "*.google.no",
+        "www.google.de",
+        "www.google.ch",
         "www.google-analytics.com",
         "www.googletagmanager.com",
         "www.google.com.mx",
+        "www.google.com.co",
         "www.google.pt",
+        "www.google.fr",
         "www.google.lv",
         "www.google.my",
         "www.google.no",
         "appsource.cool",
         "www.google.com.au",
+        "www.google.com.sa",
+        "www.google.com.br",
+        "www.google.com.ar",
+        "www.google.com.kr",
     ],
     "connect-src": [
         "*.stripe.com",
@@ -101,18 +120,26 @@ csp = {
         "hoholikik.club",
         "performance.typekit.net",
         "www.facebook.com",
+        "us.api4load.com",
     ],
     "frame-src": [
         "'self'",
         "*.stripe.com",
         "*.facebook.net",
         "*.facebook.com",
+        "mozbar.moz.com",
         "bid.g.doubleclick.net",
+        "s3.amazonaws.com",
         "wib.capitalone.com",
+        "cdn.ritekit.com",
+        "www.googletagmanager.com",
     ],
     "script-src": [
+        "data:",
         "'unsafe-inline'",
         "'unsafe-eval'",
+        "firm.akerman.com",
+        "tagmanager.google.com",
         "*.typekit.net",
         "*.texastribune.org",
         "*.stripe.com",
@@ -363,7 +390,7 @@ def circle_form():
     )
 
 
-@app.route("/business", methods=["GET", "POST"])
+#@app.route("/business", methods=["GET", "POST"])
 def business_form():
     bundles = get_bundles("business")
     template = "business-form.html"
