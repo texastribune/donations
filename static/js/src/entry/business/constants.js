@@ -45,13 +45,14 @@ const YEARLY_PAYMENT = {
   openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
   uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.annuallyStr,
 };
-const ONETIME_PAYMENT = {
-  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.onceStr,
-  installmentsPerYear: 1,
-  installments: QUERY_PARAMETERS_STRING_VALUES.oneStr,
-  openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.noneStr,
-  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.oneTimeStr,
-};
+// This was removed 11/18; it may come back
+//const ONETIME_PAYMENT = {
+//  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.onceStr,
+//  installmentsPerYear: 1,
+//  installments: QUERY_PARAMETERS_STRING_VALUES.oneStr,
+//  openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.noneStr,
+//  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.oneTimeStr,
+//};
 
 //
 // Common structure and var names used by the donation apps
@@ -59,8 +60,8 @@ const ONETIME_PAYMENT = {
 //
 export const DEFAULT_PAY_FEES = 'True';
 
-// No order dependency in code for these
-// the key is the bucket
+// No order dependency in code for these.
+// The key is the bucket
 export const BUSINESS_BUCKETS = {
   levelAMonthly: {
     bucket: 'levelA',
@@ -74,12 +75,13 @@ export const BUSINESS_BUCKETS = {
     paymentDetails: YEARLY_PAYMENT,
     payFees: DEFAULT_PAY_FEES,
   },
-  levelAOneTime: {
-    bucket: 'levelA',
-    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
-    paymentDetails: ONETIME_PAYMENT,
-    payFees: DEFAULT_PAY_FEES,
-  },
+  // This was removed 11/18; it may come back
+  //levelAOneTime: {
+  //  bucket: 'levelA',
+  //  amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
+  //  paymentDetails: ONETIME_PAYMENT,
+  //  payFees: DEFAULT_PAY_FEES,
+  //},
   levelBMonthly: {
     bucket: 'levelB',
     amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
@@ -92,12 +94,13 @@ export const BUSINESS_BUCKETS = {
     paymentDetails: YEARLY_PAYMENT,
     payFees: DEFAULT_PAY_FEES,
   },
-  levelBOneTime: {
-    bucket: 'levelB',
-    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
-    paymentDetails: ONETIME_PAYMENT,
-    payFees: DEFAULT_PAY_FEES,
-  },
+  // This was removed 11/18; it may come back
+  //levelBOneTime: {
+  //  bucket: 'levelB',
+  //  amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
+  //  paymentDetails: ONETIME_PAYMENT,
+  //  payFees: DEFAULT_PAY_FEES,
+  //},
   levelCMonthly: {
     bucket: 'levelC',
     amount: Math.round(MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / MONTHLY_PAYMENTS.installmentsPerYear).toString(),
@@ -110,12 +113,13 @@ export const BUSINESS_BUCKETS = {
     paymentDetails: YEARLY_PAYMENT,
     payFees: DEFAULT_PAY_FEES,
   },
-  levelCOneTime: {
-    bucket: 'levelC',
-    amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
-    paymentDetails: ONETIME_PAYMENT,
-    payFees: DEFAULT_PAY_FEES,
-  },
+  // This was removed 11/18; it may come back
+  //levelCOneTime: {
+  //  bucket: 'levelC',
+  //  amount: (MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount / ONETIME_PAYMENT.installmentsPerYear).toString(),
+  //  paymentDetails: ONETIME_PAYMENT,
+  //  payFees: DEFAULT_PAY_FEES,
+  //},
 };
 
 //

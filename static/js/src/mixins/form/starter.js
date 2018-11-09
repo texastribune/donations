@@ -85,6 +85,14 @@ export default {
       return typeof isValid === 'undefined';
     },
 
+    isURL(value) {
+      const isValid = validate(
+        { website: value.trim() },
+        { website: { url: true } },
+      );
+      return typeof isValid === 'undefined';
+    },
+
     isNumeric(value) {
       const isValid = validate(
         { value: value.trim() },
@@ -114,13 +122,8 @@ export default {
       return typeof isValid === 'undefined';
     },
 
-    isURL(value) {
-      const isValid = validate(
-        { website: value.trim() },
-        { website: {url: true} },
-      );
-      return typeof isValid === 'undefined';
+    isValidReason(value) {
+      return value.trim().length <= 255;
     },
-
   },
 };

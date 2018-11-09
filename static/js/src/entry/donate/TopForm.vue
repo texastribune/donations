@@ -91,10 +91,13 @@
       <div class="col_6 grid_separator">
         <text-input
           :required="false"
+          :show-error="showManualErrors || showNativeErrors"
+          :validation="validation.reason"
           label-text="encouraged to give by"
           base-classes="form__text form__text--standard"
           name="reason"
           store-module="baseForm"
+          @setValidationValue="setValidationValue"
         />
       </div>
       <div class="col_6 grid_separator">
@@ -294,6 +297,13 @@ export default {
           valid: false,
           message: 'Enter a 5-digit zip code',
           validator: this.isEmptyOrZip,
+        },
+        reason: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Must be 255 characters or fewer',
+          validator: this.isValidReason,
         },
       },
     };
