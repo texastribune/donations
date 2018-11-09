@@ -391,7 +391,7 @@ def circle_form():
     )
 
 
-#@app.route("/business", methods=["GET", "POST"])
+@app.route("/business", methods=["GET", "POST"])
 def business_form():
     bundles = get_bundles("business")
     template = "business-form.html"
