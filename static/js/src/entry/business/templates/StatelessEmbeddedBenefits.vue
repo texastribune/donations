@@ -7,13 +7,13 @@
     <p class="business-benefits__item grid_separator--s">Organization name featured on texastribune.org support
     page, Business Membership tab, with link to business site</p>
     <p class="business-benefits__item grid_separator--s">Organization name featured in a thank you segment of The
-    Brief, once annually</p>
+    Brief once annually</p>
     <p class="business-benefits__item grid_separator--s">Included in distribution list for TribMonth, an exclusive
     communication</p>
     <p class="business-benefits__item grid_separator--s">First opportunity to RSVP for select Texas Tribune
     events</p>
     <p class="business-benefits__item grid_separator--s">Special fee to reserve Studio 919, the Tribune's event studio</p>
-    <p class="business-benefits__item grid_separator--s">Discount for Texas Tribune Festival pass</p>
+    <p class="business-benefits__item grid_separator--s">Discounted Texas Tribune Festival pass</p>
     <p class="business-benefits__item grid_separator--s">Texas Tribune Business Membership window decal or 4x6
     printed card</p>
     <h4 class="smallcaps--light grid_separator--xs">At higher levels</h4>
