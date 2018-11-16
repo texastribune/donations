@@ -76,9 +76,6 @@ def charge(opportunity):
         logging.warning("Charge failed. Check Stripe logs.")
         # TODO should we raise this?
         return
-    from pprint import pprint
-
-    pprint(card_charge)
 
     opportunity.stripe_card_brand = card_charge.source.brand
     opportunity.stripe_card_last_4 = card_charge.source.last4
