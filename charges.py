@@ -1,3 +1,4 @@
+import calendar
 import logging
 from decimal import Decimal
 from config import STRIPE_KEYS
@@ -81,9 +82,10 @@ def charge(opportunity):
 
     opportunity.stripe_card_brand = card_charge.source.brand
     opportunity.stripe_card_last_4 = card_charge.source.last4
-    opportunity.stripe_card_expiration = (
-        f"{card_charge.source.exp_year}-{card_charge.source.exp_month}-01"
-    )
+    year = card_charge.source.exp_year
+    month = card_charge.source.exp_month
+    day = calendar.monthrange(year, month)[1]
+    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
     opportunity.stripe_card = card_charge.source.id
     opportunity.stripe_transaction_id = card_charge.id
     opportunity.stage_name = "Closed Won"
