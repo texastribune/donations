@@ -3,6 +3,7 @@ This file is the entrypoint for this Flask application. Can be executed with 'fl
 run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
 
 """
+import calendar
 import json
 import locale
 import logging
@@ -500,9 +501,10 @@ def customer_source_updated(event):
             "exp_year" in event["data"]["previous_attributes"],
         ]
     ):
-        # TODO this should be the last day of the month; which of course is harder
-        #        expiration = f"{event['data']['object']['exp_year']}-{event['data']['object']['exp_month']:02d}-01"
-        expiration = f"{event['data']['object']['exp_year']}-{event['data']['object']['exp_month']:02d}"
+        year = event['data']['object']['exp_year']
+        month = event['data']['object']['exp_month']
+        day = calendar.monthrange(year, month)[1]
+        expiration = f"{year}-{month:02d}-{day:02d}"
         card_details["Stripe_Card_Expiration__c"] = expiration
         card_details["Stripe_Card_Brand__c"] = event["data"]["object"]["brand"]
         card_details["Stripe_Card_Last_4__c"] = event["data"]["object"]["last4"]
