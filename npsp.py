@@ -148,7 +148,7 @@ class SalesforceConnection(object):
         self.check_response(response=resp, expected_status=expected_response)
         return resp
 
-    def update(self, objects, changes):
+    def updates(self, objects, changes):
         data = dict()
         # what should this value be?
         data["allOrNone"] = False
@@ -263,31 +263,70 @@ class Opportunity(SalesforceObject):
         self.agreed_to_pay_fees = False
         self.encouraged_by = None
         self.stripe_card = None
-        self.stripe_transaction = None
+        self.stripe_card_brand = None
+        self.stripe_card_last_4 = None
+        self.stripe_card_expiration = None
+        self.stripe_transaction_id = None
         self.expected_giving_date = None
         self.closed_lost_reason = None
         self.created = False
 
     @classmethod
-    def list_pledged(cls, begin, end, sf_connection=None):
+    def list(
+        cls,
+        begin=None,
+        end=None,
+        stage_name="Pledged",
+        stripe_customer_id=None,
+        sf_connection=None,
+    ):
 
         # TODO a more generic dserializing method
         # TODO parameterize stage?
+        # TODO allow filter by stage name on both?
+        # TODO allow filtering by anything that uses equality?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
-        query = f"""
-        SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
-            Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
-            RecordType.Name, Type, Referral_ID__c, LeadSource,
-            Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
-            Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
-            Expected_Giving_Date__c
-        FROM Opportunity
-        WHERE Expected_Giving_Date__c <= {end}
-        AND Expected_Giving_Date__c >= {begin}
-        AND StageName = 'Pledged'
+        if stripe_customer_id is None:
+            where = f"""
+            WHERE Expected_Giving_Date__c <= {end}
+            AND Expected_Giving_Date__c >= {begin}
+            AND StageName = '{stage_name}'
         """
+        else:
+            where = f"""
+                WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
+                AND StageName = '{stage_name}'
+            """
+
+        query = f"""
+            SELECT
+                Id,
+                Amount,
+                Name,
+                Stripe_Customer_ID__c,
+                Description,
+                Stripe_Agreed_to_pay_fees__c,
+                CloseDate,
+                CampaignId,
+                RecordType.Name,
+                Type,
+                Referral_ID__c,
+                LeadSource,
+                Encouraged_to_contribute_by__c,
+                Stripe_Transaction_ID__c,
+                Stripe_Card__c,
+                AccountId,
+                npsp__Closed_Lost_Reason__c,
+                Expected_Giving_Date__c,
+                Stripe_Card_Brand__c,
+                Stripe_Card_Expiration__c,
+                Stripe_Card_Last_4__c
+            FROM Opportunity
+            {where}
+        """
+
         response = sf.query(query)
         logging.debug(response)
 
@@ -309,10 +348,13 @@ class Opportunity(SalesforceObject):
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
             y.encouraged_by = item["Encouraged_to_contribute_by__c"]
-            y.stripe_transaction = item["Stripe_Transaction_ID__c"]
+            y.stripe_transaction_id = item["Stripe_Transaction_ID__c"]
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.stripe_card_brand = item["Stripe_Card_Brand__c"]
+            y.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
+            y.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
             y.created = False
             results.append(y)
 
@@ -342,10 +384,19 @@ class Opportunity(SalesforceObject):
             "Description": self.description,
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
             "Encouraged_to_contribute_by__c": self.encouraged_by,
-            "Stripe_Transaction_ID__c": self.stripe_transaction,
+            "Stripe_Transaction_ID__c": self.stripe_transaction_id,
             "Stripe_Card__c": self.stripe_card,
             "npsp__Closed_Lost_Reason__c": self.closed_lost_reason,
+            "Stripe_Card_Brand__c": self.stripe_card_brand,
+            "Stripe_Card_Expiration__c": self.stripe_card_expiration,
+            "Stripe_Card_Last_4__c": self.stripe_card_last_4,
         }
+
+    @classmethod
+    def update_card(cls, opportunities, card_details, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        print(card_details)
+        return sf.updates(opportunities, card_details)
 
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
@@ -496,7 +547,7 @@ class RDO(SalesforceObject):
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
             y.encouraged_by = item["Encouraged_to_contribute_by__c"]
-            y.stripe_transaction = item["Stripe_Transaction_ID__c"]
+            y.stripe_transaction_id = item["Stripe_Transaction_ID__c"]
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
@@ -559,7 +610,7 @@ class RDO(SalesforceObject):
             f"Setting record type for {self} opportunities to {self.record_type_name}"
         )
         update = {"RecordType": {"Name": self.record_type_name}}
-        self.sf.update(self.opportunities(), update)
+        self.sf.updates(self.opportunities(), update)
 
 
 class Account(SalesforceObject):
