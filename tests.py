@@ -140,6 +140,9 @@ def test__format_opportunity():
         "Stripe_Card__c": None,
         "Stripe_Transaction_ID__c": None,
         "npsp__Closed_Lost_Reason__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     assert response == expected
 
