@@ -501,8 +501,8 @@ def customer_source_updated(event):
             "exp_year" in event["data"]["previous_attributes"],
         ]
     ):
-        year = event['data']['object']['exp_year']
-        month = event['data']['object']['exp_month']
+        year = event["data"]["object"]["exp_year"]
+        month = event["data"]["object"]["exp_month"]
         day = calendar.monthrange(year, month)[1]
         expiration = f"{year}-{month:02d}-{day:02d}"
         card_details["Stripe_Card_Expiration__c"] = expiration
@@ -602,6 +602,18 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.description = "Texas Tribune Circle Membership"
 
     rdo.save()
+
+    # TODO start here
+    customer = stripe.Customer.retrieve(customer["id"])
+    card = customer.sources.retrieve(customer.sources.data[0].id)
+
+    opportunity.stripe_card_brand = card.brand
+    opportunity.stripe_card_last_4 = card.last4
+    year = card.exp_year
+    month = card.exp_month
+    day = calendar.monthrange(year, month)[1]
+    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+
     return rdo
 
 
