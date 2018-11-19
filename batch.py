@@ -87,7 +87,7 @@ def charge_cards():
     three_days_ago = (datetime.now(tz=zone) - timedelta(days=3)).strftime("%Y-%m-%d")
     today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
-    opportunities = Opportunity.list_pledged(begin=three_days_ago, end=today)
+    opportunities = Opportunity.list(begin=three_days_ago, end=today)
 
     log.it("---Processing charges...")
 
