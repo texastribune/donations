@@ -3,6 +3,7 @@ This file is the entrypoint for this Flask application. Can be executed with 'fl
 run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
 
 """
+import calendar
 import json
 import locale
 import logging
@@ -12,6 +13,7 @@ from config import (
     FLASK_SECRET_KEY,
     LOG_LEVEL,
     TIMEZONE,
+    STRIPE_WEBHOOK_SECRET,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
     ENABLE_SENTRY,
@@ -478,6 +480,69 @@ def merchantid():
     return send_from_directory(
         os.path.join(root_dir, "app"), "apple-developer-merchantid-domain-association"
     )
+
+
+# TODO why do I have to set the name here?
+@celery.task(name="app.customer_source.updated")
+def customer_source_updated(event):
+
+    card_details = dict()
+
+    # TODO update this with Opportunity fields when npsp is merged
+
+    # we update all of these fields if any of them have changed because
+    # we don't have these fields already populated; after some time that won't be
+    # important
+
+    if any(
+        [
+            "last4" in event["data"]["previous_attributes"],
+            "brand" in event["data"]["previous_attributes"],
+            "exp_year" in event["data"]["previous_attributes"],
+        ]
+    ):
+        year = event['data']['object']['exp_year']
+        month = event['data']['object']['exp_month']
+        day = calendar.monthrange(year, month)[1]
+        expiration = f"{year}-{month:02d}-{day:02d}"
+        card_details["Stripe_Card_Expiration__c"] = expiration
+        card_details["Stripe_Card_Brand__c"] = event["data"]["object"]["brand"]
+        card_details["Stripe_Card_Last_4__c"] = event["data"]["object"]["last4"]
+    else:
+        logging.info("Event not relevant; discarding.")
+        return
+
+    # TODO limit to only future opportunities?
+    opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
+    response = Opportunity.update_card(opps, card_details)
+    logging.info(response)
+
+
+@app.route("/stripehook", methods=["POST"])
+def stripehook():
+    payload = request.data.decode("utf-8")
+    signature = request.headers.get("Stripe-Signature", None)
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, signature, STRIPE_WEBHOOK_SECRET
+        )
+    except ValueError:
+        print("Error while decoding event!")
+        return "Bad payload", 400
+    except stripe.error.SignatureVerificationError:
+        print("Invalid signature!")
+        return "Bad signature", 400
+
+    app.logger.info(f"Received event: id={event.id}, type={event.type}")
+
+    if event.type == "customer.source.updated":
+        customer_source_updated.delay(event)
+
+    # TODO change this to debug later
+    app.logger.info(event)
+
+    return "", 200
 
 
 def add_opportunity(contact=None, form=None, customer=None):

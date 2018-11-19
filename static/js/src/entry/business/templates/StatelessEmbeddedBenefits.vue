@@ -18,7 +18,7 @@
     printed card</p>
     <h4 class="smallcaps--light grid_separator--xs">At higher levels</h4>
     <p class="business-benefits__item grid_separator--s">Annual subscription to The Blast, the best daily premium
-    poltical newsleter in Texas, for insiders who want the behind-the-scenes scoop</p>
+    political newsletter in Texas, for insiders who want the behind-the-scenes scoop</p>
     <p class="business-benefits__item link--blue grid_separator">If you are interested in a custom marketing / messaging program, learn more from <a href="https://mediakit.texastribune.org/index.html">our media kit</a> or contact April Hinkle directly at <a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
   </section>
 </template>

@@ -130,6 +130,12 @@ def test__format_opportunity(get_schema):
         "Description": "The Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type": "Single",
+        "Stripe_Card__c": None,
+        "Stripe_Transaction_ID__c": None,
+        "npsp__Closed_Lost_Reason__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     assert response == expected
 

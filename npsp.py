@@ -172,7 +172,7 @@ class SalesforceConnection:
         resp = json.loads(resp.text)
         return resp
 
-    def update(self, objects, changes):
+    def updates(self, objects, changes):
         data = dict()
         # TODO generate data below in a separate function
         # what should this value be?
@@ -507,9 +507,35 @@ class Opportunity(SalesforceObject):
         self.record_type_name = record_type_name
         self.stage_name = stage_name
         self.type = "Single"
+        self.stripe_customer = None
+        self.referral_id = None
+        self.lead_source = None
+        self.description = None
+        self.agreed_to_pay_fees = False
+        self.encouraged_by = None
+        self.stripe_card = None
+        self.stripe_card_brand = None
+        self.stripe_card_last_4 = None
+        self.stripe_card_expiration = None
+        self.stripe_transaction_id = None
+        self.expected_giving_date = None
+        self.closed_lost_reason = None
+        self.created = False
 
     @classmethod
-    def list(cls, begin, end, stage_name="Pledged", sf_connection=None):
+    def list(
+        cls,
+        begin=None,
+        end=None,
+        stage_name="Pledged",
+        stripe_customer_id=None,
+        sf_connection=None,
+    ):
+
+        # TODO a more generic dserializing method
+        # TODO parameterize stage?
+        # TODO allow filter by stage name on both?
+        # TODO allow filtering by anything that uses equality?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
         if not hasattr(cls, "attr_to_field_map"):
@@ -518,6 +544,18 @@ class Opportunity(SalesforceObject):
             cls.attr_to_field_map[attr] for attr in cls.default_fetch_fields
         )
         log.debug(query_string)
+
+        if stripe_customer_id is None:
+            where = f"""
+            WHERE Expected_Giving_Date__c <= {end}
+            AND Expected_Giving_Date__c >= {begin}
+            AND StageName = '{stage_name}'
+        """
+        else:
+            where = f"""
+                WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
+                AND StageName = '{stage_name}'
+            """
 
         query = f"""
         SELECT {query_string}
@@ -532,6 +570,12 @@ class Opportunity(SalesforceObject):
         opportunities = cls.deserialize_group(response)
 
         return opportunities
+
+    @classmethod
+    def update_card(cls, opportunities, card_details, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        print(card_details)
+        return sf.updates(opportunities, card_details)
 
     def __str__(self):
         return f"{self.id}: {self.name} for ${self.amount:.2f} ({self.description})"
@@ -673,7 +717,7 @@ class RDO(SalesforceObject):
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
             y.encouraged_by = item["Encouraged_to_contribute_by__c"]
-            y.stripe_transaction = item["Stripe_Transaction_ID__c"]
+            y.stripe_transaction_id = item["Stripe_Transaction_ID__c"]
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
@@ -728,7 +772,7 @@ class RDO(SalesforceObject):
             f"Setting record type for {self} opportunities to {self.record_type_name}"
         )
         update = {"RecordType": {"Name": self.record_type_name}}
-        self.sf.update(self.opportunities(), update)
+        self.sf.updates(self.opportunities(), update)
 
 
 class Account(SalesforceObject):
