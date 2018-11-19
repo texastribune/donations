@@ -130,7 +130,7 @@ def test__format_opportunity():
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
         "LeadSource": "Stripe",
         "Name": "D C (dcraigmile+test6@texastribune.org)",
-        "RecordType": {"Name": "Donation"},
+        "RecordType": {"Name": "Membership"},
         "StageName": "Pledged",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
         "Referral_ID__c": "1234",
