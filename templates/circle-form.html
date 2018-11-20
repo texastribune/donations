@@ -52,24 +52,35 @@
         <div id="join-today"></div>
         <!-- where the form attaches -->
         <div id="circle-form"></div>
+
+        <div class="prose grid_container--m">
+          <br>
+          <p>You can also <a href="{{ url_for('static', filename='pdf/circle-donate.pdf') }}">donate by mail</a>.</p>
+        </div>
       </section>
 
       <section class="grid_container--m circle-benefits section-padding grid_padded">
         <header>
-          <p class="circle-benefits__header link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</p>
+          <div class="border--yellow_notch"></div>
+          <h4 class="link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</h4>
         </header>
-        <h4 class="smallcaps--light grid_separator--xs">Exclusive Content</h4>
-        <p class="circle-benefits__item grid_separator">Special notifications and updates from Evan Smith, CEO</p>
-        <h4 class="smallcaps--light grid_separator--xs">Access Benefits</h4>
-        <p class="circle-benefits__item grid_separator--s">Early registration to select Tribune events and VIP receptions</p>
-        <p class="circle-benefits__item grid_separator--s">Invitations to exclusive events as part of The Texas Tribune Festival</p>
-        <p class="circle-benefits__item grid_separator">Year-round reserved seating at Tribune statewide events</p>
-        <h4 class="smallcaps--light grid_separator--xs">Special Recognition</h4>
-        <p class="circle-benefits__item grid_separator--l">Exclusive recognition as a Texas Tribune Circle Member on our site</p>
+        <h4 class="smallcaps--light"><strong>Exclusive Content</strong></h4>
+        <div class="prose grid_separator--xl"><p>Special notifications and updates from Evan Smith, CEO</p></div>
 
-        <p class="circle-benefits__header link--blue grid_separator">You can also <a href="{{ url_for('static', filename='pdf/circle-donate.pdf') }}">donate by mail</a>.</p>
+        <h4 class="smallcaps--light"><strong>Access Benefits</strong></h4>
+        <div class="prose grid_separator--xl">
+          <p>Early registration to select Tribune events and VIP receptions</p>
+          <p>Invitations to exclusive events as part of The Texas Tribune Festival</p>
+          <p>Year-round reserved seating at Tribune statewide events</p>
+        </div>
 
-        <p class="grid_separator circle-benefits__header">Questions?</p>
+        <h4 class="smallcaps--light"><strong>Special Recognition</strong></h4>
+        <div class="prose grid_separator--xl">
+          <p>Exclusive recognition as a Texas Tribune Circle Member on our site</p>
+        </div>
+
+        <div class="border--yellow_notch"></div>
+        <h4 class="grid_separator">Questions?</h4>
         <div class="contact grid_row grid_wrap--l grid_separator">
           <div class="col">
             <p class="grid_separator--s">For Circle Membership, contact:</p>
