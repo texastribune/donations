@@ -1,5 +1,4 @@
 <template>
-
   <form
     ref="form"
     action="/business"
@@ -281,6 +280,8 @@
 </template>
 
 <script>
+import validate from 'validate.js';
+
 import Hidden from '../../elements/Hidden.vue';
 import Level from '../../elements/Level.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
@@ -296,7 +297,6 @@ import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
 import { US_STATES_SELECT_LIST } from './formSelectListConstants';
-
 
 export default {
   name: 'BusinessForm',
@@ -384,6 +384,16 @@ export default {
       },
       list_of_choices: US_STATES_SELECT_LIST,
     };
+  },
+
+  methods: {
+    isURL(value) {
+      const isValid = validate(
+        { website: value.trim() },
+        { website: { url: true } },
+      );
+      return typeof isValid === 'undefined';
+    },
   },
 };
 </script>
