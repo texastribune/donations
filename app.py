@@ -357,7 +357,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         message = "There was an issue saving your email address."
         return render_template("error.html", message=message)
     if not form.validate():
-        app.logger.warning(f"Form validation errors: {form.errors}")
+        app.logger.error(f"Form validation errors: {form.errors}")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
@@ -454,7 +454,7 @@ def submit_blast():
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
         return render_template("blast-charge.html")
     else:
-        app.logger.warning("Failed to validate form")
+        app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
