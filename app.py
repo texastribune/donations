@@ -533,6 +533,7 @@ def customer_source_updated(event):
     opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
+    logging.info('card details updated')
 
 
 @app.route("/stripehook", methods=["POST"])
