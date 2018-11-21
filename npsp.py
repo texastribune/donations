@@ -514,7 +514,6 @@ class RDO(SalesforceObject):
             "Stripe_Card_Brand__c": self.stripe_card_brand,
             "Stripe_Card_Expiration__c": self.stripe_card_expiration,
             "Stripe_Card_Last_4__c": self.stripe_card_last_4,
-
         }
         return recurring_donation
 
