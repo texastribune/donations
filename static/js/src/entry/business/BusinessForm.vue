@@ -33,7 +33,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.stripeEmail"
             label-text="email address"
-            maxlength="80"
             type="email"
             base-classes="form__text form__text--standard"
             name="stripeEmail"
@@ -49,7 +48,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.business_name"
             label-text="organization name"
-            maxlength="255"
             base-classes="form__text form__text--standard"
             name="business_name"
             store-module="businessForm"
@@ -61,7 +59,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.website"
             label-text="website"
-            maxlength="255"
             base-classes="form__text form__text--standard"
             name="website"
             store-module="businessForm"
@@ -76,7 +73,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_street"
             label-text="street address"
-            maxlength="255"
             base-classes="form__text form__text--standard"
             name="shipping_street"
             store-module="businessForm"
@@ -91,7 +87,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_city"
             label-text="city"
-            maxlength="40"
             base-classes="form__text form__text--standard"
             name="shipping_city"
             store-module="businessForm"
@@ -112,7 +107,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.shipping_postalcode"
             label-text="zip code"
-            maxlength="5"
             base-classes="form__text form__text--standard"
             name="shipping_postalcode"
             store-module="businessForm"
@@ -150,11 +144,13 @@
         <div class="col grid_separator">
           <text-input
             :required="false"
+            :show-error="showManualErrors || showNativeErrors"
+            :validation="validation.reason"
             label-text="encouraged to give by"
-            maxlength="255"
             base-classes="form__text form__text--standard"
             name="reason"
             store-module="businessForm"
+            @setValidationValue="setValidationValue"
           />
         </div>
       </div>
@@ -336,29 +332,29 @@ export default {
           manual: true,
           native: true,
           valid: false,
-          message: 'Enter a business name',
-          validator: this.isNotEmpty,
+          message: 'Enter a business name (255 characters or fewer)',
+          validator: this.isNotEmptyAndIsMaxLength(255),
         },
         website: {
           manual: true,
           native: true,
           valid: false,
           message: 'Enter a website, including https:// or http://',
-          validator: this.isURL,
+          validator: this.isValidWebsite,
         },
         shipping_street: {
           manual: true,
           native: true,
           valid: false,
-          message: 'Enter a street/mailing address',
-          validator: this.isNotEmpty,
+          message: 'Enter a street/mailing address (255 characters or fewer)',
+          validator: this.isNotEmptyAndIsMaxLength(255),
         },
         shipping_city: {
           manual: true,
           native: true,
           valid: false,
-          message: 'Enter a city',
-          validator: this.isNotEmpty,
+          message: 'Enter a city (40 characters or fewer)',
+          validator: this.isNotEmptyAndIsMaxLength(40),
         },
         shipping_postalcode: {
           manual: true,
@@ -381,6 +377,13 @@ export default {
           message: 'Enter contact last name',
           validator: this.isNotEmpty,
         },
+        reason: {
+          manual: true,
+          native: true,
+          valid: false,
+          message: 'Must be 255 characters or fewer',
+          validator: this.isMaxLength(255),
+        },
       },
       list_of_choices: US_STATES_SELECT_LIST,
     };
@@ -393,6 +396,10 @@ export default {
         { website: { url: true } },
       );
       return typeof isValid === 'undefined';
+    },
+
+    isValidWebsite(value) {
+      return this.isURL(value) && this.isMaxLength(255)(value);
     },
   },
 };

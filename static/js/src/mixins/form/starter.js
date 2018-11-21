@@ -114,8 +114,17 @@ export default {
       return typeof isValid === 'undefined';
     },
 
-    isValidReason(value) {
-      return value.trim().length <= 255;
+    isMaxLength(maxLength) {
+      return value => (
+        value.trim().length <= maxLength
+      );
+    },
+
+    isNotEmptyAndIsMaxLength(maxLength) {
+      return value => (
+        this.isNotEmpty(value) &&
+        value.trim().length <= maxLength
+      );
     },
   },
 };
