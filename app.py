@@ -254,7 +254,12 @@ def get_bundles(entry):
 
 def apply_card_details(rdo=None, customer=None):
 
-    # TODO maybe do this before the first RDO.save() to conserve one API call?
+    """
+    Takes the expiration date, card brand and expiration from a Stripe object and copies
+    it to an RDO. The RDO is NOT saved and must be done after calling this function.
+    That's to save an API call since other RDO details will almost certainly need to be
+    saved as well.
+    """
 
     customer = stripe.Customer.retrieve(customer["id"])
     card = customer.sources.retrieve(customer.sources.data[0].id)
@@ -533,7 +538,7 @@ def customer_source_updated(event):
     opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
-    logging.info('card details updated')
+    logging.info("card details updated")
 
 
 @app.route("/stripehook", methods=["POST"])
