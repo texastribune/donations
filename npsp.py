@@ -226,7 +226,7 @@ class Opportunity(SalesforceObject):
 
     def __init__(
         self,
-        record_type_name="Donation",
+        record_type_name="Membership",
         contact=None,
         stage_name="Pledged",
         account=None,
