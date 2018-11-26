@@ -303,7 +303,7 @@ export default {
           native: true,
           valid: false,
           message: 'Must be 255 characters or fewer',
-          validator: this.isValidReason,
+          validator: this.isMaxLength(255),
         },
       },
     };

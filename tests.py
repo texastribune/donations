@@ -184,6 +184,9 @@ def test__format_circle_donation():
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Giving Circle",
         "npe03__Recurring_Donation_Campaign__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     assert response == expected_response
 
@@ -225,6 +228,9 @@ def test__format_cent_circle_donation():
         "npe03__Recurring_Donation_Campaign__c": None,
         "Billing_Email__c": None,
         "Blast_Subscription_Email__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -267,6 +273,9 @@ def test__format_recurring_donation():
         "npe03__Recurring_Donation_Campaign__c": None,
         "Billing_Email__c": None,
         "Blast_Subscription_Email__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -309,6 +318,9 @@ def test__format_recurring_donation_decimal():
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Recurring Donation",
         "npe03__Recurring_Donation_Campaign__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -353,6 +365,9 @@ def test__format_blast_rdo():
         "Blast_Subscription_Email__c": "subscriber@foo.bar",
         "npe03__Organization__c": None,
         "npe03__Recurring_Donation_Campaign__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Last_4__c": None,
+        "Stripe_Card_Expiration__c": None,
     }
 
     response["Name"] = "foo"
