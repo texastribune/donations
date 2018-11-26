@@ -217,8 +217,10 @@ def index_html_route():
 
 
 @app.route("/circle.html")
+@app.route("/circleform")
 def circle_html_route():
-    return redirect("/circleform", code=302)
+    query_string = request.query_string.decode("utf-8")
+    return redirect("/circle?%s" % query_string, code=302)
 
 
 """
@@ -379,7 +381,7 @@ def member2_form():
     )
 
 
-@app.route("/circleform", methods=["GET", "POST"])
+@app.route("/circle", methods=["GET", "POST"])
 def circle_form():
     bundles = get_bundles("circle")
     template = "circle-form.html"
