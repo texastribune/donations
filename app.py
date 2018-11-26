@@ -254,6 +254,28 @@ def get_bundles(entry):
     return bundles
 
 
+def apply_card_details(rdo=None, customer=None):
+
+    """
+    Takes the expiration date, card brand and expiration from a Stripe object and copies
+    it to an RDO. The RDO is NOT saved and must be done after calling this function.
+    That's to save an API call since other RDO details will almost certainly need to be
+    saved as well.
+    """
+
+    customer = stripe.Customer.retrieve(customer["id"])
+    card = customer.sources.retrieve(customer.sources.data[0].id)
+    year = card.exp_year
+    month = card.exp_month
+    day = calendar.monthrange(year, month)[1]
+
+    rdo.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    rdo.stripe_card_brand = card.brand
+    rdo.stripe_card_last_4 = card.last4
+
+    return rdo
+
+
 @celery.task(name="app.add_donation")
 def add_donation(form=None, customer=None):
     """
@@ -503,8 +525,8 @@ def customer_source_updated(event):
             "exp_year" in event["data"]["previous_attributes"],
         ]
     ):
-        year = event['data']['object']['exp_year']
-        month = event['data']['object']['exp_month']
+        year = event["data"]["object"]["exp_year"]
+        month = event["data"]["object"]["exp_month"]
         day = calendar.monthrange(year, month)[1]
         expiration = f"{year}-{month:02d}-{day:02d}"
         card_details["Stripe_Card_Expiration__c"] = expiration
@@ -518,6 +540,7 @@ def customer_source_updated(event):
     opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
+    logging.info("card details updated")
 
 
 @app.route("/stripehook", methods=["POST"])
@@ -567,6 +590,16 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
 
+    customer = stripe.Customer.retrieve(customer["id"])
+    card = customer.sources.retrieve(customer.sources.data[0].id)
+    year = card.exp_year
+    month = card.exp_month
+    day = calendar.monthrange(year, month)[1]
+
+    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    opportunity.stripe_card_brand = card.brand
+    opportunity.stripe_card_last_4 = card.last4
+
     opportunity.save()
     return opportunity
 
@@ -606,7 +639,9 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
 
+    apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
+
     return rdo
 
 
@@ -656,7 +691,10 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installments = form["installments"]
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
+
+    apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
+
     return rdo
 
 
@@ -799,6 +837,7 @@ def add_blast_subscription(form=None, customer=None):
     rdo.blast_subscription_email = form["subscriber_email"]
 
     logging.info("----Saving RDO....")
+    apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
     logging.info(rdo)
     # get opportunities
@@ -810,6 +849,7 @@ def add_blast_subscription(form=None, customer=None):
         if opportunity.expected_giving_date == today
     ][0]
     charge(opp)
+
     return True
 
 
