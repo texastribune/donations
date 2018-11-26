@@ -64,16 +64,16 @@ def charge(opportunity):
         )
         return
     except stripe.error.InvalidRequestError as e:
-        logging.warning(f"Problem: {e}")
+        logging.error(f"Problem: {e}")
         # TODO should we raise this?
         return
     except Exception as e:
-        logging.warning(f"Problem: {e}")
+        logging.error(f"Problem: {e}")
         # TODO should we raise this?
         return
 
     if card_charge.status != "succeeded":
-        logging.warning("Charge failed. Check Stripe logs.")
+        logging.error("Charge failed. Check Stripe logs.")
         # TODO should we raise this?
         return
 
