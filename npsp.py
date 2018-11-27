@@ -149,6 +149,10 @@ class SalesforceConnection(object):
         return resp
 
     def updates(self, objects, changes):
+
+        if not objects:
+            raise SalesforceException("at least one object must be specified")
+
         data = dict()
         # what should this value be?
         data["allOrNone"] = False
@@ -226,7 +230,7 @@ class Opportunity(SalesforceObject):
 
     def __init__(
         self,
-        record_type_name="Donation",
+        record_type_name="Membership",
         contact=None,
         stage_name="Pledged",
         account=None,
@@ -394,6 +398,8 @@ class Opportunity(SalesforceObject):
 
     @classmethod
     def update_card(cls, opportunities, card_details, sf_connection=None):
+        if not opportunities:
+            raise SalesforceException("at least one Opportunity must be specified")
         sf = SalesforceConnection() if sf_connection is None else sf_connection
         print(card_details)
         return sf.updates(opportunities, card_details)
@@ -476,6 +482,11 @@ class RDO(SalesforceObject):
         self.blast_subscription_email = None
         self.billing_email = None
         self.record_type_name = None
+
+        self.stripe_card_brand = None
+        self.stripe_card_expiration = None
+        self.stripe_card_last_4 = None
+
         self.created = False
 
     def _format(self):
@@ -506,6 +517,9 @@ class RDO(SalesforceObject):
             "Blast_Subscription_Email__c": self.blast_subscription_email,
             "Billing_Email__c": self.billing_email,
             "Type__c": self.type,
+            "Stripe_Card_Brand__c": self.stripe_card_brand,
+            "Stripe_Card_Expiration__c": self.stripe_card_expiration,
+            "Stripe_Card_Last_4__c": self.stripe_card_last_4,
         }
         return recurring_donation
 
@@ -523,7 +537,8 @@ class RDO(SalesforceObject):
             RecordType.Name, Type, Referral_ID__c, LeadSource,
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
             Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
-            Expected_Giving_Date__c
+            Expected_Giving_Date__c, Stripe_Card_Brand__c,
+            Stripe_Card_Expiration__c, Stripe_Card_Last_4__c
             FROM Opportunity
             WHERE npe03__Recurring_Donation__c = '{self.id}'
         """
@@ -548,6 +563,9 @@ class RDO(SalesforceObject):
             y.lead_source = item["LeadSource"]
             y.encouraged_by = item["Encouraged_to_contribute_by__c"]
             y.stripe_transaction_id = item["Stripe_Transaction_ID__c"]
+            y.stripe_card_brand = item["Stripe_Card_Brand__c"]
+            y.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
+            y.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
