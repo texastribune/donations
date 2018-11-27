@@ -486,8 +486,11 @@ def customer_source_updated(event):
         logging.info("Event not relevant; discarding.")
         return
 
-    # TODO limit to only future opportunities?
-    opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
+    opps = Opportunity.list(stage_name="Pledged", stripe_customer_id=event["data"]["object"]["customer"])
+
+    if not opps:
+        return
+
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
     logging.info("card details updated")

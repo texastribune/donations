@@ -149,6 +149,10 @@ class SalesforceConnection(object):
         return resp
 
     def updates(self, objects, changes):
+
+        if not objects:
+            raise SalesforceException("at least one object must be specified")
+
         data = dict()
         # what should this value be?
         data["allOrNone"] = False
@@ -394,6 +398,8 @@ class Opportunity(SalesforceObject):
 
     @classmethod
     def update_card(cls, opportunities, card_details, sf_connection=None):
+        if not opportunities:
+            raise SalesforceException("at least one Opportunity must be specified")
         sf = SalesforceConnection() if sf_connection is None else sf_connection
         print(card_details)
         return sf.updates(opportunities, card_details)
