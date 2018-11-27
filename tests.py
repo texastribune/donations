@@ -123,7 +123,7 @@ def test__format_opportunity(get_schema):
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
         "LeadSource": "Stripe",
         "Name": "D C (dcraigmile+test6@texastribune.org)",
-        "RecordType": {"Name": "Donation"},
+        "RecordType": {"Name": "Membership"},
         "StageName": "Pledged",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
         "Referral_ID__c": "1234",
@@ -198,6 +198,10 @@ def test__format_circle_donation(get_schema):
         "Stripe_Description__c": "Texas Tribune Circle Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Giving Circle",
+        "npe03__Recurring_Donation_Campaign__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     assert response == expected_response
 
@@ -234,6 +238,12 @@ def test__format_cent_circle_donation():
         "Stripe_Description__c": "Texas Tribune Circle Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Giving Circle",
+        "npe03__Recurring_Donation_Campaign__c": None,
+        "Billing_Email__c": None,
+        "Blast_Subscription_Email__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -271,6 +281,12 @@ def test__format_recurring_donation():
         "Stripe_Description__c": "Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Recurring Donation",
+        "npe03__Recurring_Donation_Campaign__c": None,
+        "Billing_Email__c": None,
+        "Blast_Subscription_Email__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -308,6 +324,10 @@ def test__format_recurring_donation_decimal():
         "Stripe_Description__c": "Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Recurring Donation",
+        "npe03__Recurring_Donation_Campaign__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Expiration__c": None,
+        "Stripe_Card_Last_4__c": None,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -348,6 +368,11 @@ def test__format_blast_rdo():
         "Type__c": "The Blast",
         "Billing_Email__c": "dcraigmile+test6@texastribune.org",
         "Blast_Subscription_Email__c": "subscriber@foo.bar",
+        "npe03__Organization__c": None,
+        "npe03__Recurring_Donation_Campaign__c": None,
+        "Stripe_Card_Brand__c": None,
+        "Stripe_Card_Last_4__c": None,
+        "Stripe_Card_Expiration__c": None,
     }
 
     response["Name"] = "foo"
