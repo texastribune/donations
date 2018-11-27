@@ -77,42 +77,7 @@ csp = {
     "img-src": [
         "'self'",
         "data:",
-        "www.google.co.ve",
-        "www.google.com.gi",
-        "mirextpro.com",
-        "*.facebook.com",
-        "*.texastribune.org",
-        "*.doubleclick.net",
-        "*.google.com",
-        "*.stripe.com",
-        "*.typekit.net",
-        "*.google.ca",
-        "*.google.it",
-        "*.gstatic.com",
-        "*.google.com.gt",
-        "*.google.hu",
-        "*.google.co.uk",
-        "*.google.co.in",
-        "*.google.es",
-        "*.google.gr",
-        "*.google.no",
-        "www.google.de",
-        "www.google.ch",
-        "www.google-analytics.com",
-        "www.googletagmanager.com",
-        "www.google.com.mx",
-        "www.google.com.co",
-        "www.google.pt",
-        "www.google.fr",
-        "www.google.lv",
-        "www.google.my",
-        "www.google.no",
-        "appsource.cool",
-        "www.google.com.au",
-        "www.google.com.sa",
-        "www.google.com.br",
-        "www.google.com.ar",
-        "www.google.com.kr",
+        "*",
     ],
     "connect-src": [
         "*.stripe.com",
@@ -140,22 +105,7 @@ csp = {
         "data:",
         "'unsafe-inline'",
         "'unsafe-eval'",
-        "firm.akerman.com",
-        "tagmanager.google.com",
-        "*.typekit.net",
-        "*.texastribune.org",
-        "*.stripe.com",
-        "*.jquery.com",
-        "loadsource.org",
-        "1675450967.rsc.cdn77.org",
-        "*.googletagmanager.com",
-        "*.facebook.net",
-        "*.googleapis.com",
-        "*.googleadservices.com",
-        "*.cloudflare.com",
-        "*.google-analytics.com",
-        "*.doubleclick.net",
-        "appsource.cool",
+        "*",
     ],
 }
 
@@ -217,8 +167,10 @@ def index_html_route():
 
 
 @app.route("/circle.html")
+@app.route("/circleform")
 def circle_html_route():
-    return redirect("/circleform", code=302)
+    query_string = request.query_string.decode("utf-8")
+    return redirect("/circle?%s" % query_string, code=302)
 
 
 """
@@ -250,6 +202,28 @@ def get_bundles(entry):
     for bundle in entrypoint["css"]:
         bundles["css"].append(asset_path + bundle)
     return bundles
+
+
+def apply_card_details(rdo=None, customer=None):
+
+    """
+    Takes the expiration date, card brand and expiration from a Stripe object and copies
+    it to an RDO. The RDO is NOT saved and must be done after calling this function.
+    That's to save an API call since other RDO details will almost certainly need to be
+    saved as well.
+    """
+
+    customer = stripe.Customer.retrieve(customer["id"])
+    card = customer.sources.retrieve(customer.sources.data[0].id)
+    year = card.exp_year
+    month = card.exp_month
+    day = calendar.monthrange(year, month)[1]
+
+    rdo.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    rdo.stripe_card_brand = card.brand
+    rdo.stripe_card_last_4 = card.last4
+
+    return rdo
 
 
 @celery.task(name="app.add_donation")
@@ -357,7 +331,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         message = "There was an issue saving your email address."
         return render_template("error.html", message=message)
     if not form.validate():
-        app.logger.warning(f"Form validation errors: {form.errors}")
+        app.logger.error(f"Form validation errors: {form.errors}")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
@@ -379,7 +353,7 @@ def member2_form():
     )
 
 
-@app.route("/circleform", methods=["GET", "POST"])
+@app.route("/circle", methods=["GET", "POST"])
 def circle_form():
     bundles = get_bundles("circle")
     template = "circle-form.html"
@@ -454,7 +428,7 @@ def submit_blast():
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
         return render_template("blast-charge.html")
     else:
-        app.logger.warning("Failed to validate form")
+        app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message)
 
@@ -501,8 +475,8 @@ def customer_source_updated(event):
             "exp_year" in event["data"]["previous_attributes"],
         ]
     ):
-        year = event['data']['object']['exp_year']
-        month = event['data']['object']['exp_month']
+        year = event["data"]["object"]["exp_year"]
+        month = event["data"]["object"]["exp_month"]
         day = calendar.monthrange(year, month)[1]
         expiration = f"{year}-{month:02d}-{day:02d}"
         card_details["Stripe_Card_Expiration__c"] = expiration
@@ -512,16 +486,23 @@ def customer_source_updated(event):
         logging.info("Event not relevant; discarding.")
         return
 
-    # TODO limit to only future opportunities?
-    opps = Opportunity.list(stripe_customer_id=event["data"]["object"]["customer"])
+    opps = Opportunity.list(stage_name="Pledged", stripe_customer_id=event["data"]["object"]["customer"])
+
+    if not opps:
+        return
+
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
+    logging.info("card details updated")
 
 
 @app.route("/stripehook", methods=["POST"])
 def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
+
+    print(payload)
+    print(signature)
 
     try:
         event = stripe.Webhook.construct_event(
@@ -562,6 +543,16 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
 
+    customer = stripe.Customer.retrieve(customer["id"])
+    card = customer.sources.retrieve(customer.sources.data[0].id)
+    year = card.exp_year
+    month = card.exp_month
+    day = calendar.monthrange(year, month)[1]
+
+    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    opportunity.stripe_card_brand = card.brand
+    opportunity.stripe_card_last_4 = card.last4
+
     opportunity.save()
     return opportunity
 
@@ -601,7 +592,9 @@ def add_recurring_donation(contact=None, form=None, customer=None):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
 
+    apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
+
     return rdo
 
 
@@ -651,7 +644,10 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installments = form["installments"]
     rdo.open_ended_status = form["openended_status"]
     rdo.installment_period = form["installment_period"]
+
+    apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
+
     return rdo
 
 
@@ -794,6 +790,7 @@ def add_blast_subscription(form=None, customer=None):
     rdo.blast_subscription_email = form["subscriber_email"]
 
     logging.info("----Saving RDO....")
+    apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
     logging.info(rdo)
     # get opportunities
@@ -805,6 +802,7 @@ def add_blast_subscription(form=None, customer=None):
         if opportunity.expected_giving_date == today
     ][0]
     charge(opp)
+
     return True
 
 

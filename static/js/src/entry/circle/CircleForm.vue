@@ -1,7 +1,7 @@
 <template>
   <form
     ref="form"
-    action="/circleform"
+    action="/circle"
     method="post"
     class="form circle-form"
     @submit="$event.preventDefault()"
@@ -85,7 +85,6 @@
             :show-error="showManualErrors || showNativeErrors"
             :validation="validation.zipcode"
             label-text="zip code"
-            maxlength="5"
             base-classes="form__text form__text--standard"
             name="zipcode"
             store-module="circleForm"
@@ -280,7 +279,7 @@ export default {
           native: true,
           valid: false,
           message: 'Must be 255 characters or fewer',
-          validator: this.isValidReason,
+          validator: this.isMaxLength(255),
         },
       },
     };
