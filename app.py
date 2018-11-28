@@ -594,7 +594,7 @@ def amazonhook():
     app.logger.info(json.dumps(payload, indent=2))
     notification_type = list(payload.keys())[0]
 
-    # maybe check ["AuthorizationStatus"]["State"] and only process if it's "Closed"?
+    # TODO maybe check ["AuthorizationStatus"]["State"] and only process if it's "Closed"?
 
     if notification_type == "AuthorizationNotification":
         authorization_notification.delay(payload)
