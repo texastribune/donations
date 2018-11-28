@@ -586,6 +586,7 @@ def get_zip(details=None):
 def amazonhook():
 
     payload = IpnHandler(request.data, request.headers)
+    # TODO: uncomment when done testing
     #    if not payload.authenticate():
     #        return payload.error
 
