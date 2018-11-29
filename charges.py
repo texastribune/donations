@@ -1,7 +1,8 @@
 import calendar
 import logging
 from decimal import Decimal
-from config import STRIPE_KEYS
+from config import STRIPE_KEYS, CIRCLE_FAILURE_RECIPIENT
+from npsp import User, Task
 
 import stripe
 
@@ -62,7 +63,14 @@ def charge(opportunity):
         logging.debug(
             f"Opportunity set to '{opportunity.stage_name}' with reason: {opportunity.closed_lost_reason}"
         )
+        if opportunity.type == "Giving Circle":
+            user = User.get(CIRCLE_FAILURE_RECIPIENT)
+            subject = "Credit card charge failed for Circle member"
+            task = Task(owner_id=user.id, what_id=opportunity.id, subject=subject)
+            task.save()
+
         return
+
     except stripe.error.InvalidRequestError as e:
         logging.error(f"Problem: {e}")
         # TODO should we raise this?
