@@ -74,11 +74,7 @@ csp = {
         "*.googleapis.com",
         "tagmanager.google.com",
     ],
-    "img-src": [
-        "'self'",
-        "data:",
-        "*",
-    ],
+    "img-src": ["'self'", "data:", "*"],
     "connect-src": [
         "*.stripe.com",
         "*.texastribune.org",
@@ -101,12 +97,7 @@ csp = {
         "cdn.ritekit.com",
         "www.googletagmanager.com",
     ],
-    "script-src": [
-        "data:",
-        "'unsafe-inline'",
-        "'unsafe-eval'",
-        "*",
-    ],
+    "script-src": ["data:", "'unsafe-inline'", "'unsafe-eval'", "*"],
 }
 
 
@@ -486,7 +477,9 @@ def customer_source_updated(event):
         logging.info("Event not relevant; discarding.")
         return
 
-    opps = Opportunity.list(stage_name="Pledged", stripe_customer_id=event["data"]["object"]["customer"])
+    opps = Opportunity.list(
+        stage_name="Pledged", stripe_customer_id=event["data"]["object"]["customer"]
+    )
 
     if not opps:
         return
