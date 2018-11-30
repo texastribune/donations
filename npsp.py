@@ -949,3 +949,57 @@ class Affiliation(SalesforceObject):
             "npe5__Role__c": self.role,
             "npe5__Organization__c": self.account,
         }
+
+
+class Task(SalesforceObject):
+
+    api_name = "Task"
+
+    def __init__(self, owner_id=None, what_id=None, subject=None, sf_connection=None):
+        super().__init__(sf_connection)
+        self.owner_id = owner_id
+        self.what_id = what_id
+        self.subject = subject
+
+    def save(self):
+        self.sf.save(self)
+
+    def __str__(self):
+        return f"{self.subject}"
+
+    def _format(self):
+        return {
+            "OwnerId": self.owner_id,
+            "WhatId": self.what_id,
+            "Subject": self.subject,
+        }
+
+
+class User(SalesforceObject):
+
+    api_name = "User"
+
+    def __init__(self, sf_connection=None):
+        super().__init__(sf_connection)
+
+    def __str__(self):
+        return f"{self.id}: {self.username}"
+
+    @classmethod
+    def get(cls, username, sf_connection=None):
+
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        query = f"""
+            SELECT Id, Username FROM User
+            WHERE username = '{username}'
+        """
+        response = sf.query(query)
+
+        if not response:
+            return None
+
+        user = User()
+        user.id = response[0]["Id"]
+        user.username = response[0]["Username"]
+        return user
