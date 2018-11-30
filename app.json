@@ -1,0 +1,174 @@
+{
+  "name": "donations",
+  "scripts": {
+  },
+  "env": {
+    "ACCOUNTING_MAIL_RECIPIENT": {
+      "required": true
+    },
+    "AMAZON_MERCHANT_ID": {
+      "required": true
+    },
+    "AMAZON_SANDBOX": {
+      "required": true
+    },
+    "BATCH_HOURS": {
+      "required": true
+    },
+    "BUSINESS_MEMBER_RECIPIENT": {
+      "required": true
+    },
+    "CELERY_BROKER_URL": {
+      "required": true
+    },
+    "CELERY_RESULT_BACKEND": {
+      "required": true
+    },
+    "CELERY_TASK_SERIALIZER": {
+      "required": true
+    },
+    "CLOUDAMQP_APIKEY": {
+      "required": true
+    },
+    "CLOUDAMQP_URL": {
+      "required": true
+    },
+    "DEFAULT_MAIL_SENDER": {
+      "required": true
+    },
+    "ENABLE_SENTRY": {
+      "required": true
+    },
+    "ENABLE_SLACK": {
+      "required": true
+    },
+    "FLASK_SECRET_KEY": {
+      "required": true
+    },
+    "LOG_LEVEL": {
+      "required": true
+    },
+    "MAIL_PASSWORD": {
+      "required": true
+    },
+    "MAIL_PORT": {
+      "required": true
+    },
+    "MAIL_SERVER": {
+      "required": true
+    },
+    "MAIL_USE_TLS": {
+      "required": true
+    },
+    "MAIL_USERNAME": {
+      "required": true
+    },
+    "MAILGUN_API_KEY": {
+      "required": true
+    },
+    "MAILGUN_DOMAIN": {
+      "required": true
+    },
+    "MAILGUN_PUBLIC_KEY": {
+      "required": true
+    },
+    "MAILGUN_SMTP_LOGIN": {
+      "required": true
+    },
+    "MAILGUN_SMTP_PASSWORD": {
+      "required": true
+    },
+    "MAILGUN_SMTP_PORT": {
+      "required": true
+    },
+    "MAILGUN_SMTP_SERVER": {
+      "required": true
+    },
+    "MAILTRAP_API_TOKEN": {
+      "required": true
+    },
+    "MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT": {
+      "required": true
+    },
+    "MWS_ACCESS_KEY": {
+      "required": true
+    },
+    "MWS_SECRET_KEY": {
+      "required": true
+    },
+    "PAPERTRAIL_API_TOKEN": {
+      "required": true
+    },
+    "PUBLISHABLE_KEY": {
+      "required": true
+    },
+    "REDIS_URL": {
+      "required": true
+    },
+    "REPORT_URI": {
+      "required": true
+    },
+    "SALESFORCE_API_VERSION": {
+      "required": true
+    },
+    "SALESFORCE_CLIENT_ID": {
+      "required": true
+    },
+    "SALESFORCE_CLIENT_SECRET": {
+      "required": true
+    },
+    "SALESFORCE_HOST": {
+      "required": true
+    },
+    "SALESFORCE_PASSWORD": {
+      "required": true
+    },
+    "SALESFORCE_USERNAME": {
+      "required": true
+    },
+    "SECRET_KEY": {
+      "required": true
+    },
+    "SENTRY_DSN": {
+      "required": true
+    },
+    "SENTRY_ENVIRONMENT": {
+      "required": true
+    },
+    "SLACK_API_KEY": {
+      "required": true
+    },
+    "SLACK_CHANNEL": {
+      "required": true
+    },
+    "STRIPE_WEBHOOK_SECRET": {
+      "required": true
+    },
+    "TZ": {
+      "required": true
+    }
+  },
+  "formation": {
+    "worker": {
+      "quantity": 1
+    },
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "cloudamqp",
+    "mailgun",
+    "mailtrap",
+    "papertrail",
+    "heroku-redis"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "heroku/nodejs"
+    }
+  ]
+}
