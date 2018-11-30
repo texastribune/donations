@@ -38,37 +38,53 @@
     </header>
 
     <div class="grid_container grid_padded--xl">
-      <section class="circle-donate section-padding grid_separator--l">
+      <section class="circle-donate section-padding">
         <header class="circle-donate__header grid_container--m grid_separator">
           <!-- IDs are for ARIA usage in the form -->
-          <h2 id="circle-donate-hed" class="circle-donate__hed grid_separator--xs">Your Circle Membership</h2>
-          <div id="circle-donate-intro">
-            <p class="circle-donate__intro grid_separator">Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
-            <p class="circle-donate__intro">Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
+          <div class="border--yellow_notch"></div>
+          <h2 id="circle-donate-hed" class="circle-donate__hed grid_separator">Your Circle Membership</h2>
+          <div id="circle-donate-intro" class="prose grid_separator--xl">
+            <p>Circle Membership is a three-year commitment to provide backing for the vital work of our journalists.</p>
+            <p>Circle Members believe in supporting our mission as a public service — free of charge on our website, in free syndication and at our numerous free public events — so all Texans have access to nonpartisan news and information.</p>
           </div>
         </header>
         <!-- for hash links when a form is invalid -->
         <div id="join-today"></div>
         <!-- where the form attaches -->
         <div id="circle-form"></div>
+
+        <div class="prose grid_container--m">
+          <br>
+          <p>You can also <a href="{{ url_for('static', filename='pdf/circle-donate.pdf') }}">donate by mail</a>.</p>
+        </div>
       </section>
 
       <section class="grid_container--m circle-benefits section-padding grid_padded">
         <header>
-          <p class="circle-benefits__header link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</p>
+          <div class="border--yellow_notch"></div>
+          <h4 class="link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</h4>
         </header>
-        <h4 class="smallcaps--light grid_separator--xs">Exclusive Content</h4>
-        <p class="circle-benefits__item grid_separator">Special notifications and updates from Evan Smith, CEO</p>
-        <h4 class="smallcaps--light grid_separator--xs">Access Benefits</h4>
-        <p class="circle-benefits__item grid_separator--s">Early registration to select Tribune events and VIP receptions</p>
-        <p class="circle-benefits__item grid_separator--s">Invitations to exclusive events as part of The Texas Tribune Festival</p>
-        <p class="circle-benefits__item grid_separator">Year-round reserved seating at Tribune statewide events</p>
-        <h4 class="smallcaps--light grid_separator--xs">Special Recognition</h4>
-        <p class="circle-benefits__item grid_separator--l">Exclusive recognition as a Texas Tribune Circle Member on our site</p>
+        <h4 class="smallcaps--light"><strong>Exclusive Content</strong></h4>
+        <div class="prose grid_separator--xl"><p>Special notifications and updates from Evan Smith, CEO</p></div>
 
-        <p class="circle-benefits__header link--blue grid_separator">You can also <a href="{{ url_for('static', filename='pdf/circle-donate.pdf') }}">donate by mail</a>.</p>
+        <h4 class="smallcaps--light"><strong>Access Benefits</strong></h4>
+        <ul class="list--bulleted grid_separator--l">
+          <li>Early registration to select Tribune events and VIP receptions</li>
+          <li>Invitations to exclusive events as part of The Texas Tribune Festival</li>
+          <li>Year-round reserved seating at Tribune statewide events</li>
+        </ul>
 
-        <p class="grid_separator circle-benefits__header">Questions?</p>
+        <h4 class="smallcaps--light"><strong>Special Recognition</strong></h4>
+        <div class="prose grid_separator--xl">
+          <p>Exclusive recognition as a Texas Tribune Circle Member on our site</p>
+        </div>
+      </section>
+
+      <section class="grid_container--m circle-benefits section-padding grid_padded">
+        <header>
+          <div class="border--yellow_notch"></div>
+          <h4 class="grid_separator circle-benefits__header">Questions?</h4>
+        </header>
         <div class="contact grid_row grid_wrap--l grid_separator">
           <div class="col">
             <p class="grid_separator--s">For Circle Membership, contact:</p>
