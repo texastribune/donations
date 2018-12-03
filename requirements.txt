@@ -4,7 +4,7 @@ libsass==0.15.1
 pytz==2018.5
 Flask-WTF==0.14.2
 WTForms==2.2.1
-stripe==2.10.1
+stripe==2.15.0
 celery==4.2.1
 redis==2.10.6
 validate_email==1.3
