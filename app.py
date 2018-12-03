@@ -327,9 +327,9 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
 
 @app.route("/donate", methods=["GET", "POST"])
-def member2_form():
+def donate_form():
     bundles = get_bundles("donate")
-    template = "member-form2.html"
+    template = "donate-form.html"
 
     if request.method == "POST":
         return validate_form(DonateForm, bundles=bundles, template=template)
