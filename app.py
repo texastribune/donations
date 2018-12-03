@@ -315,11 +315,11 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if not validate_email(email):
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message)
+        return render_template("error.html", message=message, bundles=get_bundles("old"))
     if not form.validate():
         app.logger.error(f"Form validation errors: {form.errors}")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message)
+        return render_template("error.html", message=message, bundles=get_bundles("old"))
 
     return do_charge_or_show_errors(
         bundles=bundles, template=template, function=function
@@ -372,6 +372,7 @@ def business_form():
 
 @app.route("/blastform")
 def the_blast_form():
+    bundles = get_bundles("old")
     form = BlastForm()
     if request.args.get("amount"):
         amount = request.args.get("amount")
@@ -391,11 +392,13 @@ def the_blast_form():
         openended_status="Open",
         amount=amount,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
+        bundles=bundles
     )
 
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
+    bundles = get_bundles("old")
     app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
@@ -408,27 +411,41 @@ def submit_blast():
         app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message)
+        return render_template("error.html", message=message, bundles=bundles)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html")
+        return render_template("blast-charge.html", bundles=bundles)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message)
+        return render_template(
+            "error.html",
+            message=message,
+            bundles=bundles
+        )
 
 
 @app.route("/error")
 def error():
+    bundles = get_bundles("old")
     message = "Something went wrong!"
-    return render_template("error.html", message=message)
+    return render_template(
+        "error.html",
+        message=message,
+        bundles=bundles
+    )
 
 
 @app.errorhandler(404)
 def page_not_found(error):
+    bundles = get_bundles("old")
     message = "The page you requested can't be found."
-    return render_template("error.html", message=message), 404
+    return render_template(
+        "error.html",
+        message=message,
+        bundles=bundles
+    ), 404
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")

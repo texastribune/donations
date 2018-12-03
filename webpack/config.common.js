@@ -12,6 +12,7 @@ module.exports = {
     charge: `${entryDir}/charge/index`,
     circle: `${entryDir}/circle/index`,
     business: `${entryDir}/business/index`,
+    old: `${entryDir}/old/index`,
   },
 
   output: {
