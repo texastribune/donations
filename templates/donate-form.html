@@ -1,0 +1,87 @@
+{% extends "new_layout.html" %}
+
+{% block stylesheets %}
+  {% for stylesheet in bundles['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+  {% endfor %}
+{% endblock %}
+
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+  <section class="splash grid_separator">
+    <div class="grid_container grid_padded--xl">
+      <div class="grid_row grid_wrap--l">
+        <div class="col_12">
+          <h1 class="splash--headline">
+            Texas Tribune members
+            <br />
+            support our&nbsp;
+            <span class="rotate_words">
+              <span>journalism.</span>
+              <span>events.</span>
+              <span>community.</span>
+              <span>mission.</span>
+            </span>
+          </h1>
+        </div>
+      </div>
+      <div class="splash_actions grid_row grid_wrap--l">
+        <div class="col_8">
+          <p class="splash--description grid_separator">Do you value credible, nonpartisan, public-interest journalism?</p>
+          <a class="button button--yellow grid_separator" href="#join-today" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="support landing">Show Your Support</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main">
+    <section class="grid_container grid_padded--xl grid_separator--xl">
+      <div class="grid_row grid_wrap--l">
+        <div class="col_8">
+          <div class="member_benefits section-padding">
+            {% include 'includes/benefits.html' %}
+          </div>
+          <div id="join-today" class="donation_form section-padding">
+            <!-- where the router component attaches -->
+            <div id="app" style="display:none;"></div>
+            <div class="border--yellow_notch"></div>
+            <h2 class="grid_separator">Become a Texas Tribune Member today</h2>
+            <!-- where the form attaches -->
+            <div id="top-form"></div>
+          </div>
+        </div>
+        <div class="col_1"></div>
+        <div class="col_3">
+          {% include 'includes/quotes.html' %}
+        </div>
+      </div>
+    </section>
+
+    <section class="faq section-padding">
+      <div class="grid_separator--xl"></div>
+      {% include 'includes/faq.html' %}
+    </section>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+<script src="https://js.stripe.com/v3/"></script>
+
+{% if form_data and message %}
+<script>
+  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message|tojson }};
+  window.__BASE_FORM_REHYDRATION__ = {{ form_data|tojson }};
+</script>
+{% endif %}
+
+{% for script in bundles['js'] %}
+  <script src="{{ script }}"></script>
+{% endfor %}
+{% endblock %}
