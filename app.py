@@ -33,7 +33,6 @@ from flask_limiter.util import get_remote_address
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
-from sassutils.wsgi import SassMiddleware
 from util import (
     clean,
     notify_slack,
@@ -119,10 +118,6 @@ for handler in app.logger.handlers:
     limiter.logger.addHandler(handler)
 
 app.secret_key = FLASK_SECRET_KEY
-
-app.wsgi_app = SassMiddleware(
-    app.wsgi_app, {"app": ("static/sass", "static/css", "static/css")}
-)
 
 app.config.from_pyfile("config.py")
 app.config.update(
