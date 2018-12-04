@@ -308,8 +308,6 @@ class Opportunity(SalesforceObject):
     ):
 
         # TODO a more generic dserializing method
-        # TODO parameterize stage?
-        # TODO allow filter by stage name on both?
         # TODO allow filtering by anything that uses equality?
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
