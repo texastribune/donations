@@ -18,6 +18,11 @@ You'll also need to have an `env` file set up with the environment variables for
 and Salesforce so that Docker can find them. By default the `Makefile` will look for
 `env-docker` but this can be overridden with the `DOCKER_ENV_FILE` environment variable.
 
+Requirements
+------------
+Python 3.6+
+See requirements.txt and dev-requirements.txt for specific Python packages and versions.
+
 Environment
 -----------
 | Variable                    |                                        Example |
@@ -100,3 +105,8 @@ Then deploy to test with the command `git push test master` or production with `
 If you need to deploy a branch other than master to the test server, use the command `git push <server> <branch>:master`. For example `git push test your-branch-name:master`.
 
 Test URL: http://donations-testing.texastribune.org/
+
+Security
+--------
+
+If you find vulnerabilities in this repo please report them to security@texastribune.org.

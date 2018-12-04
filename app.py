@@ -448,7 +448,7 @@ def merchantid():
 
 
 # TODO why do I have to set the name here?
-@celery.task(name="app.customer_source.updated")
+@celery.task(name="app.customer_source_updated")
 def customer_source_updated(event):
 
     card_details = dict()
