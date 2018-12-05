@@ -53,21 +53,11 @@ module.exports = {
         test: /\.(scss|sass)$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader', {
+          'css-loader',
+          {
             loader: 'postcss-loader',
             options: {
-              plugins: [
-                Autoprefixer({
-                  browsers: [
-                    '> 0.5%',
-                    'last 2 versions',
-                    'Firefox ESR',
-                    'iOS >= 10',
-                    'Safari >= 11',
-                    'not dead',
-                  ],
-                }),
-              ],
+              plugins: [Autoprefixer()],
             },
           },
           'sass-loader',

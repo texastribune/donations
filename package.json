@@ -16,7 +16,7 @@
     "url": "https://github.com/texastribune/salesforce-stripe/issues"
   },
   "dependencies": {
-    "autoprefixer": "^8.5.0",
+    "autoprefixer": "^9.4.2",
     "axios": "^0.18.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -28,8 +28,8 @@
     "file-loader": "^1.1.11",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
-    "optimize-css-assets-webpack-plugin": "^4.0.1",
-    "postcss-loader": "^2.1.5",
+    "optimize-css-assets-webpack-plugin": "^5.0.1",
+    "postcss-loader": "^3.0.0",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "validate.js": "^0.12.0",
