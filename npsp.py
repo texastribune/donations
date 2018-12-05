@@ -18,8 +18,7 @@ log = logging.getLogger(__name__)
 
 ZONE = timezone(os.environ.get("TIMEZONE", "US/Central"))
 
-SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "v43.0")
-
+SALESFORCE_API_VERSION = os.environ.get("SALESFORCE_API_VERSION", "43.0")
 SALESFORCE_CLIENT_ID = os.environ.get("SALESFORCE_CLIENT_ID", "")
 SALESFORCE_CLIENT_SECRET = os.environ.get("SALESFORCE_CLIENT_SECRET", "")
 SALESFORCE_USERNAME = os.environ.get("SALESFORCE_USERNAME", "")
@@ -112,7 +111,7 @@ class SalesforceConnection:
         Call the Salesforce API to do SOQL queries.
         """
         if path is None:
-            path = f"/services/data/{SALESFORCE_API_VERSION}/query"
+            path = f"/services/data/v{SALESFORCE_API_VERSION}/query"
 
         url = f"{self.instance_url}{path}"
         if query is None:
@@ -154,14 +153,24 @@ class SalesforceConnection:
         return resp
 
     def describe(self, object_name):
+        """
+        Get the schema for an object type.
+
+        Arguments:
+            object_name {string} -- object type's name; e.g. 'Opportunity'
+
+        Returns:
+            json -- the schema
+        """
+
         path = (
-            f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
+            f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
         )
         return self.get(path)
 
     def get(self, path, fields=None):
         """
-        Call the Saleforce API to retrieve an object.
+        Call the Saleforce API to retrieve objects.
         """
         url = f"{self.instance_url}{path}"
         if fields:
@@ -173,13 +182,27 @@ class SalesforceConnection:
         return resp
 
     def updates(self, objects, changes):
+        """
+        Update several objects in one API call.
+
+        Arguments:
+            objects {list} -- the objects to modify
+            changes {dictionary} -- the changes to make
+
+        Raises:
+            SalesforceException -- raised if the update fails; some objects may still be
+            updated
+
+        Returns:
+            json -- list of update outcomes
+        """
 
         if not objects:
             raise SalesforceException("at least one object must be specified")
 
         data = dict()
         # TODO generate data below in a separate function
-        # what should this value be?
+        # TODO what should this value be?
         data["allOrNone"] = False
         records = list()
         for item in objects:
@@ -190,7 +213,7 @@ class SalesforceConnection:
                 record[k] = v
             records.append(record)
         data["records"] = records
-        path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
+        path = f"/services/data/v{SALESFORCE_API_VERSION}/composite/sobjects/"
         response = self.patch(path, data, expected_response=200)
         response = json.loads(response.text)
         log.debug(response)
@@ -215,7 +238,7 @@ class SalesforceConnection:
 
             log.info(f"{sf_object.api_name} object already exists; updating...")
             log.debug(sf_object.serialize())
-            path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
+            path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
             try:
                 response = self.patch(path=path, data=sf_object.serialize())
             except SalesforceException as e:
@@ -224,7 +247,7 @@ class SalesforceConnection:
             return
 
         log.info(f"{sf_object.api_name} object doesn't exist; creating...")
-        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
+        path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
         try:
             response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
@@ -239,7 +262,7 @@ class SalesforceConnection:
 
 class SalesforceObject(object):
     """
-    This is the parent of all the other Salesforce objects.
+    This is the parent of all other Salesforce objects.
     """
 
     @property
@@ -277,6 +300,11 @@ class SalesforceObject(object):
         cls = type(self)
         cls.attr_to_field_map, cls.field_to_attr_map = cls.make_maps(response.keys())
         for field, value in response.items():
+            attr = cls.field_to_attr_map[field]
+            if attr in self.__dict__ and self.__dict__[attr] != value:
+                log.warning(
+                    f"Overwriting value of {attr} ({self.__dict__[attr]}) on {cls} to {value}"
+                )
             # not using setattr() because we don't want to set tainted in our __setattr__
             self.__dict__[cls.field_to_attr_map[field]] = value
 
@@ -304,22 +332,13 @@ class SalesforceObject(object):
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         # TODO restrict by fields if present?
-        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{self.api_name}/{self.id}"
+        path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{self.api_name}/{self.id}"
         log.debug(path)
         response = sf.get(path)
-        cls = type(self)
-        # TODO: isn't everything below the same as deserialize()?
-        cls.attr_to_field_map, cls.field_to_attr_map = cls.make_maps(response.keys())
-        for field, value in response.items():
-            attr = cls.field_to_attr_map[field]
-            if attr in self.__dict__ and self.__dict__[attr] != value:
-                log.warning(
-                    f"Overwriting value of {attr} ({self.__dict__[attr]}) on {cls} to {value}"
-                )
-            # not using setattr() because we don't want to set tainted in our __setattr__
-            self.__dict__[cls.field_to_attr_map[field]] = value
+        self.deserialize(response)
 
     def __getattr__(self, attr):
+        # remember that this only gets invoked if the attribute doesn't exist already
         # TODO what about the case where the field map was generated from a SELECT so it
         # already exists but they request something that does actually exist but hasn't
         # been fetched yet? Call fetch() only if:
@@ -369,11 +388,6 @@ class SalesforceObject(object):
                 self.tainted.add(attr)
         else:
             super().__setattr__(attr, value)
-
-    def my_save(self):  # TODO rm
-        self.sf.save(self)
-        self.tainted = set()
-        return self
 
     # TODO __getattr__ fetch on demand? If so we don't have to fetch the account_id from a new contact
     # TODO list of fields to grab on SELECT for each type of object? Does it have to be api names or can we fetch the schema?
@@ -433,6 +447,7 @@ class SalesforceObject(object):
 
     # TODO does this need to be a class method?
     # TODO move this to __init__?
+    # TODO do we need both this and fetch()?
     @classmethod
     def get(cls, id, sf_connection=None):
         log.debug(f"Calling get() on {cls}")
@@ -443,7 +458,7 @@ class SalesforceObject(object):
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         # TODO restrict by fields if present
-        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{id}"
+        path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{id}"
         log.debug(path)
         response = sf.get(path)
         obj = cls()
@@ -482,7 +497,7 @@ class Opportunity(SalesforceObject):
 
     def __init__(
         self,
-        record_type_name="Membership",
+        record_type_name=DEFAULT_RDO_TYPE,
         contact=None,
         stage_name="Pledged",
         account=None,
