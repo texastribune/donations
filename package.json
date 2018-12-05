@@ -66,7 +66,8 @@
     "extends": [
       "plugin:vue/recommended",
       "airbnb-base",
-      "prettier"
+      "prettier",
+      "prettier/vue"
     ],
     "rules": {
       "no-console": "error",
