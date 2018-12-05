@@ -10,7 +10,7 @@ jobs:
       - run: |
           docker info
           docker build -f Dockerfile -t texastribune/checkout:dev .
-          docker run -it --rm --workdir=/app --entrypoint=/app/circle.sh
+          docker run -it --rm --workdir=/app --entrypoint=/app/circle.sh texastribune/checkout:dev
 branches:
   ignore:
     - master
