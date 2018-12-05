@@ -68,6 +68,7 @@
     ],
     "parser": "vue-eslint-parser",
     "rules": {
+      "no-console": "error",
       "import/no-extraneous-dependencies": [
         "error",
         {
