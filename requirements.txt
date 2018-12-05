@@ -14,3 +14,5 @@ flask-talisman==0.5.1
 flask-limiter==1.0.1
 sentry-sdk==0.4.3
 blinker==1.4
+amazon-pay==2.5.2
+nameparser==1.0.2

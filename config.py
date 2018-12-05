@@ -78,6 +78,13 @@ SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", "unknown")
 REPORT_URI = os.getenv("REPORT_URI")
 
+########
+# Amazon
+#
+MWS_ACCESS_KEY = os.getenv("MWS_ACCESS_KEY", "")
+MWS_SECRET_KEY = os.getenv("MWS_SECRET_KEY", "")
+AMAZON_MERCHANT_ID = os.getenv("AMAZON_MERCHANT_ID", "")
+AMAZON_SANDBOX = bool_env("AMAZON_SANDBOX")
 #######
 # Tasks
 #
