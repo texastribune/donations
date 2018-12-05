@@ -769,7 +769,7 @@ class Contact(SalesforceObject):
         for item in results:
             all_email = item["All_In_One_EMail__c"].lower()
             buffer = StringIO(all_email)
-            reader = csv.reader(buffer)
+            reader = csv.reader(buffer, skipinitialspace=True)
             if email.lower() in list(reader)[0]:
                 filtered_results.append(item)
         return filtered_results

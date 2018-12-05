@@ -536,7 +536,7 @@ def authorization_notification(payload):
 
     logging.info("----Getting contact....")
     contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name
+        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
     )
     logging.info(contact)
 
