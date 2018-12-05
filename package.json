@@ -47,10 +47,10 @@
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
-    "eslint": "^4.15.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.7.0",
-    "eslint-plugin-vue": "^4.2.0"
+    "eslint": "^5.3.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-vue": "^5.0.0"
   },
   "license": "MIT",
   "eslintConfig": {
