@@ -13,7 +13,8 @@ export default {
 
       if (typeof baseClasses === 'string') {
         return baseClasses;
-      } else if (Array.isArray(baseClasses)) {
+      }
+      if (Array.isArray(baseClasses)) {
         return baseClasses.join(' ');
       }
       return '';
@@ -27,9 +28,11 @@ export default {
       if (classes) {
         if (typeof classes === 'string') {
           return classes;
-        } else if (Array.isArray(classes)) {
+        }
+        if (Array.isArray(classes)) {
           return classes.join(' ');
         }
+        return '';
       }
       return '';
     },
