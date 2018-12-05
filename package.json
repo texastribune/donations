@@ -70,6 +70,10 @@
     ],
     "rules": {
       "no-console": "error",
+      "vue/component-name-in-template-casing": [
+        "error",
+        "kebab-case"
+      ],
       "import/no-extraneous-dependencies": [
         "error",
         {
