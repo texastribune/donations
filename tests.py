@@ -143,6 +143,7 @@ def test__format_opportunity():
         "Stripe_Card_Brand__c": None,
         "Stripe_Card_Expiration__c": None,
         "Stripe_Card_Last_4__c": None,
+        "Amazon_Order_Id__c": None,
     }
     assert response == expected
 

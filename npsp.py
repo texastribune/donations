@@ -295,6 +295,7 @@ class Opportunity(SalesforceObject):
         self.stripe_transaction_id = None
         self.expected_giving_date = None
         self.closed_lost_reason = None
+        self.amazon_order_id = None
         self.created = False
 
     @classmethod
@@ -346,7 +347,8 @@ class Opportunity(SalesforceObject):
                 Expected_Giving_Date__c,
                 Stripe_Card_Brand__c,
                 Stripe_Card_Expiration__c,
-                Stripe_Card_Last_4__c
+                Stripe_Card_Last_4__c,
+                Amazon_Order_Id__c
             FROM Opportunity
             {where}
         """
@@ -379,6 +381,7 @@ class Opportunity(SalesforceObject):
             y.stripe_card_brand = item["Stripe_Card_Brand__c"]
             y.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
             y.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
+            y.amazon_order_id = item["Amazon_Order_Id__c"]
             y.created = False
             results.append(y)
 
@@ -414,6 +417,7 @@ class Opportunity(SalesforceObject):
             "Stripe_Card_Brand__c": self.stripe_card_brand,
             "Stripe_Card_Expiration__c": self.stripe_card_expiration,
             "Stripe_Card_Last_4__c": self.stripe_card_last_4,
+            "Amazon_Order_Id__c": self.amazon_order_id,
         }
 
     @classmethod
@@ -787,7 +791,7 @@ class Contact(SalesforceObject):
         for item in results:
             all_email = item["All_In_One_EMail__c"].lower()
             buffer = StringIO(all_email)
-            reader = csv.reader(buffer)
+            reader = csv.reader(buffer, skipinitialspace=True)
             if email.lower() in list(reader)[0]:
                 filtered_results.append(item)
         return filtered_results
