@@ -85,6 +85,7 @@ MWS_ACCESS_KEY = os.getenv("MWS_ACCESS_KEY", "")
 MWS_SECRET_KEY = os.getenv("MWS_SECRET_KEY", "")
 AMAZON_MERCHANT_ID = os.getenv("AMAZON_MERCHANT_ID", "")
 AMAZON_SANDBOX = bool_env("AMAZON_SANDBOX")
+AMAZON_CAMPAIGN_ID = os.getenv("AMAZON_CAMPAIGN_ID", "")
 #######
 # Tasks
 #
