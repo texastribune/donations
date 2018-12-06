@@ -8,6 +8,7 @@ import json
 import locale
 import logging
 import os
+import re
 from config import (
     FLASK_DEBUG,
     FLASK_SECRET_KEY,
@@ -18,6 +19,10 @@ from config import (
     SENTRY_ENVIRONMENT,
     ENABLE_SENTRY,
     REPORT_URI,
+    MWS_ACCESS_KEY,
+    MWS_SECRET_KEY,
+    AMAZON_MERCHANT_ID,
+    AMAZON_SANDBOX,
 )
 from datetime import datetime
 from pprint import pformat
@@ -33,7 +38,9 @@ from flask_limiter.util import get_remote_address
 from flask import Flask, redirect, render_template, request, send_from_directory
 from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
-from sassutils.wsgi import SassMiddleware
+from amazon_pay.ipn_handler import IpnHandler
+from amazon_pay.client import AmazonPayClient
+from nameparser import HumanName
 from util import (
     clean,
     notify_slack,
@@ -119,10 +126,6 @@ for handler in app.logger.handlers:
     limiter.logger.addHandler(handler)
 
 app.secret_key = FLASK_SECRET_KEY
-
-app.wsgi_app = SassMiddleware(
-    app.wsgi_app, {"app": ("static/sass", "static/css", "static/css")}
-)
 
 app.config.from_pyfile("config.py")
 app.config.update(
@@ -320,11 +323,11 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if not validate_email(email):
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message)
+        return render_template("error.html", message=message, bundles=get_bundles("old"))
     if not form.validate():
         app.logger.error(f"Form validation errors: {form.errors}")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message)
+        return render_template("error.html", message=message, bundles=get_bundles("old"))
 
     return do_charge_or_show_errors(
         bundles=bundles, template=template, function=function
@@ -332,9 +335,9 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
 
 @app.route("/donate", methods=["GET", "POST"])
-def member2_form():
+def donate_form():
     bundles = get_bundles("donate")
-    template = "member-form2.html"
+    template = "donate-form.html"
 
     if request.method == "POST":
         return validate_form(DonateForm, bundles=bundles, template=template)
@@ -377,6 +380,7 @@ def business_form():
 
 @app.route("/blastform")
 def the_blast_form():
+    bundles = get_bundles("old")
     form = BlastForm()
     if request.args.get("amount"):
         amount = request.args.get("amount")
@@ -396,11 +400,13 @@ def the_blast_form():
         openended_status="Open",
         amount=amount,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
+        bundles=bundles
     )
 
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
+    bundles = get_bundles("old")
     app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
@@ -413,27 +419,41 @@ def submit_blast():
         app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message)
+        return render_template("error.html", message=message, bundles=bundles)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html")
+        return render_template("blast-charge.html", bundles=bundles)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message)
+        return render_template(
+            "error.html",
+            message=message,
+            bundles=bundles
+        )
 
 
 @app.route("/error")
 def error():
+    bundles = get_bundles("old")
     message = "Something went wrong!"
-    return render_template("error.html", message=message)
+    return render_template(
+        "error.html",
+        message=message,
+        bundles=bundles
+    )
 
 
 @app.errorhandler(404)
 def page_not_found(error):
+    bundles = get_bundles("old")
     message = "The page you requested can't be found."
-    return render_template("error.html", message=message), 404
+    return render_template(
+        "error.html",
+        message=message,
+        bundles=bundles
+    ), 404
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
@@ -487,6 +507,113 @@ def customer_source_updated(event):
     response = Opportunity.update_card(opps, card_details)
     logging.info(response)
     logging.info("card details updated")
+
+
+@celery.task(name="app.authorization_notification")
+def authorization_notification(payload):
+
+    amzn_id = payload["AuthorizationNotification"]["AuthorizationDetails"]["AmazonAuthorizationId"]
+
+    # trim everything after the last dash - seems like there should be a more
+    # straightforward way to do this
+    match = re.search("^(.*)[-]", amzn_id)
+    amzn_id = match.group(1)
+    logging.info(amzn_id)
+
+    client = AmazonPayClient(
+        mws_access_key=MWS_ACCESS_KEY,
+        mws_secret_key=MWS_SECRET_KEY,
+        merchant_id=AMAZON_MERCHANT_ID,
+        region="na",
+        currency_code="USD",
+        sandbox=AMAZON_SANDBOX,
+    )
+    response = client.get_order_reference_details(amazon_order_reference_id=amzn_id)
+    response = response.to_dict()
+
+    logging.info(json.dumps(response, indent=4))
+
+    details = response["GetOrderReferenceDetailsResponse"][
+        "GetOrderReferenceDetailsResult"
+    ]["OrderReferenceDetails"]
+
+    amount = details["OrderTotal"]["Amount"]
+    logging.info(amount)
+    name = HumanName(details["Buyer"]["Name"])
+    first_name = name.first
+    last_name = name.last
+    email = details["Buyer"]["Email"]
+    zipcode = get_zip(details=details)
+    description = details["SellerOrderAttributes"]["StoreName"]
+
+    logging.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+    )
+    logging.info(contact)
+
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
+
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    logging.info("----Adding opportunity...")
+
+    opportunity = Opportunity(contact=contact, stage_name="Closed Won")
+    opportunity.amount = amount
+    opportunity.description = description
+    opportunity.lead_source = "Amazon Pay"
+    opportunity.amazon_order_id = amzn_id
+    opportunity.save()
+    logging.info(opportunity)
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)
+
+
+def get_zip(details=None):
+
+    try:
+        return details["Destination"]["PhysicalDestination"]["PostalCode"]
+    except KeyError:
+        logging.info("No destination found")
+    try:
+        return details["BillingAddress"]["PhysicalAddress"]["PostalCode"]
+    except KeyError:
+        logging.info("No billing address found")
+    return ""
+
+
+@app.route("/amazonhook", methods=["POST"])
+def amazonhook():
+
+    payload = IpnHandler(request.data, request.headers)
+    # TODO: uncomment when done testing
+    #    if not payload.authenticate():
+    #        return payload.error
+
+    payload = json.loads(payload.to_json())
+    app.logger.info(json.dumps(payload, indent=2))
+    notification_type = list(payload.keys())[0]
+
+    # TODO maybe check ["AuthorizationStatus"]["State"] and only process if it's "Closed"?
+
+    if notification_type == "AuthorizationNotification":
+        authorization_notification.delay(payload)
+    else:
+        app.logger.info("ignoring event")
+
+    return "", 200
 
 
 @app.route("/stripehook", methods=["POST"])

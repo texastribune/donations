@@ -1,48 +1,87 @@
-{% extends "layout.html" %}
-{% block title %}
-  {{ super() }}
+{% extends "new_layout.html" %}
+
+{% block stylesheets %}
+  {% for stylesheet in bundles['css'] %}
+    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+  {% endfor %}
 {% endblock %}
-{% block extra_script %}
-  {{ super() }}
+
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
 {% endblock %}
 
 {% block content %}
-  {{ super() }}
-
-  <div class="main grid_container--xl">
-    <form action="/charge" method="post">
-      <header class="grid_separator--l">
-        <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
-        <input name="referral_id" id="referral_id" value="{{ referral_id }}" type="hidden">
-        <h1>Confirm your donation</h1>
-        <p>Thank you for supporting The Texas Tribune! As a 501(c)(3) nonprofit organization, our work is made possible through the generosity of members and donors like you. If you'd prefer to become a member, you can set up a recurring <a href="/memberform?installmentPeriod=monthly&amount={{ amount }}">monthly</a> or <a href="/memberform?installmentPeriod=yearly&amount={{ amount }}">annual</a> donation.</p>
-      </header>
-      <div class="grid_row grid_wrap--l grid_wrap--reverse">
-        <div class="col_6">
-          {% include 'includes/form_inner.html' %}
-          {{ form.description(value='The Texas Tribune Membership') }}
-        </div>
-        <div class="col_1">&nbsp;</div>
-        <div class="col_5 form__box grid_separator">
-          <div class="grid_row grid_wrap--m grid_separator--l">
-            <div class="col">
-              <label>Amount</label><br>
-                <span class="dollar">$</span>
-                  {{ form.amount(value=amount, autocomplete="off", class="dollar") }}
-            </div>
-          </div>
-          <div class="grid_row grid_wrap--m">
-            <div class="col">
-              {{ form.pay_fees.label }}
-                {{ form.pay_fees(checked=False, autocomplete="off") }}
-              <p id="pay-fee-amount" class="label-info"><span></span>{% if installment_period == 'yearly' %} yearly{% endif %}{% if installment_period == 'monthly' %} monthly{% endif %}</p>
-            </div>
-          </div>
-          <p class="subtext grid_separator">Paying these tax-deductible fees directs more money in support of the Tribune’s mission.</p>
+  <section class="splash grid_separator">
+    <div class="grid_container grid_padded--xl">
+      <div class="grid_row grid_wrap--l">
+        <div class="col_12">
+          <h1 class="splash--headline">
+            Texas Tribune members
+            <br />
+            support our&nbsp;
+            <span class="rotate_words">
+              <span>journalism.</span>
+              <span>events.</span>
+              <span>community.</span>
+              <span>mission.</span>
+            </span>
+          </h1>
         </div>
       </div>
-    </form>
-  </div>
-  {% include 'includes/stripe_checkout_js.html' %}
-  {% include 'includes/display_pay_fees.html' %}
+      <div class="splash_actions grid_row grid_wrap--l">
+        <div class="col_8">
+          <p class="splash--description grid_separator">Do you value credible, nonpartisan, public-interest journalism?</p>
+          <a class="button button--yellow grid_separator" href="#join-today" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="support landing">Show Your Support</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main">
+    <section class="grid_container grid_padded--xl grid_separator--xl">
+      <div class="grid_row grid_wrap--l">
+        <div class="col_8">
+          <div class="member_benefits section-padding">
+            {% include 'includes/benefits.html' %}
+          </div>
+          <div id="join-today" class="donation_form section-padding">
+            <!-- where the router component attaches -->
+            <div id="app" style="display:none;"></div>
+            <div class="border--yellow_notch"></div>
+            <h2 class="grid_separator">Become a Texas Tribune Member today</h2>
+            <!-- where the form attaches -->
+            <div id="top-form"></div>
+          </div>
+        </div>
+        <div class="col_1"></div>
+        <div class="col_3">
+          {% include 'includes/quotes.html' %}
+        </div>
+      </div>
+    </section>
+
+    <section class="faq section-padding">
+      <div class="grid_separator--xl"></div>
+      {% include 'includes/faq.html' %}
+    </section>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+<script src="https://js.stripe.com/v3/"></script>
+
+{% if form_data and message %}
+<script>
+  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message|tojson }};
+  window.__BASE_FORM_REHYDRATION__ = {{ form_data|tojson }};
+</script>
+{% endif %}
+
+{% for script in bundles['js'] %}
+  <script src="{{ script }}"></script>
+{% endfor %}
 {% endblock %}
