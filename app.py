@@ -23,6 +23,7 @@ from config import (
     MWS_SECRET_KEY,
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
+    AMAZON_CAMPAIGN_ID
 )
 from datetime import datetime
 from pprint import pformat
@@ -574,9 +575,11 @@ def authorization_notification(payload):
     opportunity.description = description
     opportunity.lead_source = "Amazon Pay"
     opportunity.amazon_order_id = amzn_id
+    opportunity.campaign_id = AMAZON_CAMPAIGN_ID
+    opportunity.name = f"[Alexa] {contact.first_name} {contact.last_name} ({contact.email})"
     opportunity.save()
     logging.info(opportunity)
-
+    notify_slack(contact=contact, opportunity=opportunity)
     if contact.duplicate_found:
         send_multiple_account_warning(contact)
 
