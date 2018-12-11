@@ -52,8 +52,6 @@
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-vue": "^5.0.0",
-    "husky": "^1.2.0",
-    "lint-staged": "^8.1.0",
     "prettier": "^1.15.3",
     "vue-eslint-parser": "^4.0.2"
   },
@@ -98,16 +96,5 @@
     "singleQuote": true,
     "tabWidth": 2,
     "trailingComma": "es5"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,vue}": [
-      "prettier --write",
-      "git add"
-    ]
   }
 }
