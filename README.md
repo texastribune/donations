@@ -18,7 +18,7 @@ You'll also need to have an `env` file set up with the environment variables for
 and Salesforce so that Docker can find them. By default the `Makefile` will look for
 `env-docker` but this can be overridden with the `DOCKER_ENV_FILE` environment variable.
 
-You might also want to install [`pre-commit`](https://pre-commit.com/#install) for code-formatting hooks.
+You should also install [`pre-commit`](https://pre-commit.com/#install), which we use for managing Git hooks. Once downloaded, run `pre-commit install` at the root of this repo.
 
 Requirements
 ------------
