@@ -1,4 +1,5 @@
-- repo: https://github.com/prettier/prettier
-  rev: 1.15.3
-  hooks:
-    - id: prettier
+repos:
+  - repo: https://github.com/prettier/prettier
+    rev: 1.15.3
+    hooks:
+      - id: prettier
