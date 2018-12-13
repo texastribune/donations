@@ -67,7 +67,7 @@ if ENABLE_SENTRY:
 locale.setlocale(locale.LC_ALL, "C")
 csp = {
     "default-src": ["'self'", "*.texastribune.org"],
-    "font-src": ["'self'", "data:", "*.cloudflare.com"],
+    "font-src": ["'self'", "data:", "*.cloudflare.com", "fonts.gstatic.com"],
     "style-src": [
         "'self'",
         "'unsafe-inline'",
@@ -77,7 +77,16 @@ csp = {
     "img-src": ["'self'", "data:", "*.texastribune.org"],
     "connect-src": ["*.stripe.com", "*.texastribune.org", "www.google-analytics.com"],
     "frame-src": ["'self'", "*.stripe.com", "www.googletagmanager.com"],
-    "script-src": ["data:", "'unsafe-inline'", "'unsafe-eval'", "*.texastribune.org"],
+    "script-src": [
+        "data:",
+        "'unsafe-inline'",
+        "'unsafe-eval'",
+        "*.texastribune.org",
+        "js.stripe.com",
+        "*.googleapis.com",
+        "connect.facebook.net",
+        "www.googletagmanager.com",
+    ],
 }
 
 
