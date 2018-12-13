@@ -23,7 +23,7 @@ from config import (
     MWS_SECRET_KEY,
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
-    AMAZON_CAMPAIGN_ID
+    AMAZON_CAMPAIGN_ID,
 )
 from datetime import datetime
 from pprint import pformat
@@ -67,45 +67,17 @@ if ENABLE_SENTRY:
 locale.setlocale(locale.LC_ALL, "C")
 csp = {
     "default-src": ["'self'", "*.texastribune.org"],
-    "font-src": [
-        "'self'",
-        "data:",
-        "maxcdn.bootstrapcdn.com",
-        "*.cloudflare.com",
-        "*.gstatic.com",
-        "*.typekit.net",
-        "cdn.joinhoney.com",
-    ],
+    "font-src": ["'self'", "data:", "*.cloudflare.com"],
     "style-src": [
         "'self'",
         "'unsafe-inline'",
         "*.googleapis.com",
         "tagmanager.google.com",
     ],
-    "img-src": ["'self'", "data:", "*"],
-    "connect-src": [
-        "*.stripe.com",
-        "*.texastribune.org",
-        "www.google-analytics.com",
-        "stats.g.doubleclick.net",
-        "hoholikik.club",
-        "performance.typekit.net",
-        "www.facebook.com",
-        "us.api4load.com",
-    ],
-    "frame-src": [
-        "'self'",
-        "*.stripe.com",
-        "*.facebook.net",
-        "*.facebook.com",
-        "mozbar.moz.com",
-        "bid.g.doubleclick.net",
-        "s3.amazonaws.com",
-        "wib.capitalone.com",
-        "cdn.ritekit.com",
-        "www.googletagmanager.com",
-    ],
-    "script-src": ["data:", "'unsafe-inline'", "'unsafe-eval'", "*"],
+    "img-src": ["'self'", "data:", "*.texastribune.org"],
+    "connect-src": ["*.stripe.com", "*.texastribune.org", "www.google-analytics.com"],
+    "frame-src": ["'self'", "*.stripe.com", "www.googletagmanager.com"],
+    "script-src": ["data:", "'unsafe-inline'", "'unsafe-eval'", "*.texastribune.org"],
 }
 
 
@@ -324,11 +296,15 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if not validate_email(email):
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message, bundles=get_bundles("old"))
+        return render_template(
+            "error.html", message=message, bundles=get_bundles("old")
+        )
     if not form.validate():
         app.logger.error(f"Form validation errors: {form.errors}")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message, bundles=get_bundles("old"))
+        return render_template(
+            "error.html", message=message, bundles=get_bundles("old")
+        )
 
     return do_charge_or_show_errors(
         bundles=bundles, template=template, function=function
@@ -401,7 +377,7 @@ def the_blast_form():
         openended_status="Open",
         amount=amount,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
-        bundles=bundles
+        bundles=bundles,
     )
 
 
@@ -428,33 +404,21 @@ def submit_blast():
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template(
-            "error.html",
-            message=message,
-            bundles=bundles
-        )
+        return render_template("error.html", message=message, bundles=bundles)
 
 
 @app.route("/error")
 def error():
     bundles = get_bundles("old")
     message = "Something went wrong!"
-    return render_template(
-        "error.html",
-        message=message,
-        bundles=bundles
-    )
+    return render_template("error.html", message=message, bundles=bundles)
 
 
 @app.errorhandler(404)
 def page_not_found(error):
     bundles = get_bundles("old")
     message = "The page you requested can't be found."
-    return render_template(
-        "error.html",
-        message=message,
-        bundles=bundles
-    ), 404
+    return render_template("error.html", message=message, bundles=bundles), 404
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
@@ -513,7 +477,9 @@ def customer_source_updated(event):
 @celery.task(name="app.authorization_notification")
 def authorization_notification(payload):
 
-    amzn_id = payload["AuthorizationNotification"]["AuthorizationDetails"]["AmazonAuthorizationId"]
+    amzn_id = payload["AuthorizationNotification"]["AuthorizationDetails"][
+        "AmazonAuthorizationId"
+    ]
 
     # trim everything after the last dash - seems like there should be a more
     # straightforward way to do this
@@ -576,7 +542,9 @@ def authorization_notification(payload):
     opportunity.lead_source = "Amazon Pay"
     opportunity.amazon_order_id = amzn_id
     opportunity.campaign_id = AMAZON_CAMPAIGN_ID
-    opportunity.name = f"[Alexa] {contact.first_name} {contact.last_name} ({contact.email})"
+    opportunity.name = (
+        f"[Alexa] {contact.first_name} {contact.last_name} ({contact.email})"
+    )
     opportunity.save()
     logging.info(opportunity)
     notify_slack(contact=contact, opportunity=opportunity)

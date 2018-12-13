@@ -12,16 +12,16 @@
     >
       <div class="grid_row">
         <div class="col">
-          <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+          <p class="form__error form__error--prominent">
+            {{ serverErrorMessage }}
+          </p>
         </div>
       </div>
     </div>
 
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
-        <div class="col">
-          <choices />
-        </div>
+        <div class="col"><choices /></div>
       </div>
     </div>
 
@@ -152,58 +152,25 @@
         </div>
       </div>
 
-      <div
-        v-if="showErrorClue"
-        class="grid_separator--l"
-        aria-hidden="true"
-      />
+      <div v-if="showErrorClue" class="grid_separator--l" aria-hidden="true" />
 
-      <div
-        v-if="showErrorClue"
-        class="grid_row"
-        aria-hidden="true"
-      >
+      <div v-if="showErrorClue" class="grid_row" aria-hidden="true">
         <div class="col">
-          <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
+          <p class="form__error form__error--normal form__error--centered">
+            Please correct errors above
+          </p>
         </div>
       </div>
 
-      <local-hidden
-        :value="stripeToken"
-        name="stripeToken"
-      />
-      <hidden
-        name="amount"
-        store-module="circleForm"
-      />
-      <hidden
-        name="installment_period"
-        store-module="circleForm"
-      />
-      <hidden
-        name="installments"
-        store-module="circleForm"
-      />
-      <hidden
-        name="description"
-        store-module="circleForm"
-      />
-      <hidden
-        name="campaign_id"
-        store-module="circleForm"
-      />
-      <hidden
-        name="referral_id"
-        store-module="circleForm"
-      />
-      <hidden
-        name="openended_status"
-        store-module="circleForm"
-      />
-      <hidden
-        name="pay_fees_value"
-        store-module="circleForm"
-      />
+      <local-hidden :value="stripeToken" name="stripeToken" />
+      <hidden name="amount" store-module="circleForm" />
+      <hidden name="installment_period" store-module="circleForm" />
+      <hidden name="installments" store-module="circleForm" />
+      <hidden name="description" store-module="circleForm" />
+      <hidden name="campaign_id" store-module="circleForm" />
+      <hidden name="referral_id" store-module="circleForm" />
+      <hidden name="openended_status" store-module="circleForm" />
+      <hidden name="pay_fees_value" store-module="circleForm" />
     </div>
   </form>
 </template>
@@ -211,7 +178,6 @@
 <script>
 import Hidden from '../../elements/Hidden.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
-import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
 import ManualPay from '../../elements/ManualPay.vue';
@@ -229,17 +195,13 @@ export default {
     LocalHidden,
     TextInput,
     PayFees,
-    Level,
     ManualPay,
     ManualSubmit,
     NativePay,
     Choices,
   },
 
-  mixins: [
-    formStarter,
-    updateStoreValue,
-  ],
+  mixins: [formStarter, updateStoreValue],
 
   data() {
     return {

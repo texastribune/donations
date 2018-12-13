@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 
@@ -26,9 +27,11 @@ Vue.use(VueRouter);
 function mapInstallmentPeriodOncetoForm(finalSanitizedParams) {
   // Set data for form submit
   finalSanitizedParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
-  finalSanitizedParams.installment_period = QUERY_PARAMETERS_STRING_VALUES.noneStr;
-  finalSanitizedParams.openended_status = QUERY_PARAMETERS_STRING_VALUES.noneStr;
-  return (finalSanitizedParams);
+  finalSanitizedParams.installment_period =
+    QUERY_PARAMETERS_STRING_VALUES.noneStr;
+  finalSanitizedParams.openended_status =
+    QUERY_PARAMETERS_STRING_VALUES.noneStr;
+  return finalSanitizedParams;
 }
 
 function getStateFromParams(queryParams) {
@@ -38,18 +41,21 @@ function getStateFromParams(queryParams) {
   //   filter input query oarams using the app whitelist
   //
   let scrubbedQueryParams;
-  (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) ?
-    scrubbedQueryParams = queryParamWhiteListScrub(
-      queryParams,
-      WL_DEFAULT_PARAMETERS,
-      WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
-    ) :
-    scrubbedQueryParams = WL_DEFAULT_PARAMETERS;
+  Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD
+    ? (scrubbedQueryParams = queryParamWhiteListScrub(
+        queryParams,
+        WL_DEFAULT_PARAMETERS,
+        WL_QUERY_PARAMETERS_MAX_NBR_CHARS
+      ))
+    : (scrubbedQueryParams = WL_DEFAULT_PARAMETERS);
 
   //
   // Post-processing: Unpack and map query params per spec
   // ?installmentPeriod=once
-  if (scrubbedQueryParams.installmentPeriod.toLowerCase() === QUERY_PARAMETERS_STRING_VALUES.onceStr) {
+  if (
+    scrubbedQueryParams.installmentPeriod.toLowerCase() ===
+    QUERY_PARAMETERS_STRING_VALUES.onceStr
+  ) {
     // Set data for form submit
     scrubbedQueryParams = mapInstallmentPeriodOncetoForm(scrubbedQueryParams);
     // Set UI level with payment period selected state
@@ -58,10 +64,7 @@ function getStateFromParams(queryParams) {
   //
   // Set the Choices form state from defaults + query parameters
   //
-  const {
-    amount,
-    payFees,
-  } = BUSINESS_BUCKETS[level];
+  const { amount, payFees } = BUSINESS_BUCKETS[level];
 
   return {
     level,
@@ -102,9 +105,7 @@ function createRouter() {
   return new VueRouter({
     base: '/business',
     mode: 'history',
-    routes: [
-      { path: '/', component: RouteHandler },
-    ],
+    routes: [{ path: '/', component: RouteHandler }],
   });
 }
 
@@ -112,11 +113,13 @@ function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...BusinessForm, store });
 
-    const { currentRoute: { query } } = router;
+    const {
+      currentRoute: { query },
+    } = router;
 
     store.dispatch(
       'businessForm/createInitialState',
-      createInitialFormState(query),
+      createInitialFormState(query)
     );
 
     routeHandler.$mount('#app');

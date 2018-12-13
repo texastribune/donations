@@ -1,12 +1,14 @@
 <template>
-  <div class="thermometer" v-if="!loading && !error">
+  <div v-if="!loading && !error" class="thermometer">
     <div class="bar" aria-hidden="true">
       <div class="bar_inner bar_inner--goal"></div>
-      <div class="bar_inner bar_inner--actual" :style="{width: `${actualWidth}%`}"></div>
+      <div
+        class="bar_inner bar_inner--actual"
+        :style="{ width: `${actualWidth}%` }"
+      ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} new members</strong>
-      <br>
+      <strong>{{ data[0].label }} new members</strong> <br />
       toward goal of {{ data[1].label }}.
     </div>
   </div>
@@ -28,32 +30,26 @@ export default {
       ],
     };
   },
+
   computed: {
-    actualWidth: function() {
-      return ((this.data[0].value / this.data[1].value) * 100);
-    }
+    actualWidth() {
+      return (this.data[0].value / this.data[1].value) * 100;
+    },
   },
+
   mounted() {
     this.getSalesforceReport();
   },
+
   methods: {
     getSalesforceReport() {
-      // const url = 'https://membership.texastribune.org/smd18-report.json';
       const url = 'https://membership.texastribune.org/fmd18-members.json';
-      axios.get(url)
-        .then(({
-          data: {
-            // 'factMap': { 'T!T': { 'aggregates': [actual, goal] } },
-            'value': actual_value,
-            'label': actual_label,
-          },
-        }) => {
-          // this.data[0].label = actual.label;
-          // this.data[0].value = actual.value;
-          // this.data[1].label = goal.label;
-          // this.data[1].value = goal.value;
-          this.data[0].label = actual_label;
-          this.data[0].value = actual_value;
+
+      axios
+        .get(url)
+        .then(({ data: { value: actualValue, label: actualLabel } }) => {
+          this.data[0].label = actualLabel;
+          this.data[0].value = actualValue;
           this.loading = false;
         })
         .catch(() => {
