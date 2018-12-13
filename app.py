@@ -67,45 +67,17 @@ if ENABLE_SENTRY:
 locale.setlocale(locale.LC_ALL, "C")
 csp = {
     "default-src": ["'self'", "*.texastribune.org"],
-    "font-src": [
-        "'self'",
-        "data:",
-        "maxcdn.bootstrapcdn.com",
-        "*.cloudflare.com",
-        "*.gstatic.com",
-        "*.typekit.net",
-        "cdn.joinhoney.com",
-    ],
+    "font-src": ["'self'", "data:", "*.cloudflare.com"],
     "style-src": [
         "'self'",
         "'unsafe-inline'",
         "*.googleapis.com",
         "tagmanager.google.com",
     ],
-    "img-src": ["'self'", "data:", "*"],
-    "connect-src": [
-        "*.stripe.com",
-        "*.texastribune.org",
-        "www.google-analytics.com",
-        "stats.g.doubleclick.net",
-        "hoholikik.club",
-        "performance.typekit.net",
-        "www.facebook.com",
-        "us.api4load.com",
-    ],
-    "frame-src": [
-        "'self'",
-        "*.stripe.com",
-        "*.facebook.net",
-        "*.facebook.com",
-        "mozbar.moz.com",
-        "bid.g.doubleclick.net",
-        "s3.amazonaws.com",
-        "wib.capitalone.com",
-        "cdn.ritekit.com",
-        "www.googletagmanager.com",
-    ],
-    "script-src": ["data:", "'unsafe-inline'", "'unsafe-eval'", "*"],
+    "img-src": ["'self'", "data:", "*.texastribune.org"],
+    "connect-src": ["*.stripe.com", "*.texastribune.org", "www.google-analytics.com"],
+    "frame-src": ["'self'", "*.stripe.com", "www.googletagmanager.com"],
+    "script-src": ["data:", "'unsafe-inline'", "'unsafe-eval'", "*.texastribune.org"],
 }
 
 
