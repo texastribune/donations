@@ -12,21 +12,21 @@
     >
       <div class="grid_row">
         <div class="col">
-          <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+          <p class="form__error form__error--prominent">
+            {{ serverErrorMessage }}
+          </p>
         </div>
       </div>
     </div>
 
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
-        <div class="col">
-          <choices />
-        </div>
+        <div class="col"><choices /></div>
       </div>
     </div>
 
     <div class="grid_container--m">
-      <StatelessEmbeddedBenefits />
+      <stateless-embedded-benefits />
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
@@ -212,65 +212,32 @@
             </div>
           </div>
         </div>
-        <p class="subtext">The Texas Tribune is a 501(c)(3), and your organization's gift is tax deductible</p>
+        <p class="subtext">
+          The Texas Tribune is a 501(c)(3), and your organization's gift is tax
+          deductible
+        </p>
       </div>
 
-      <div
-        v-if="showErrorClue"
-        class="grid_separator--l"
-        aria-hidden="true"
-      />
+      <div v-if="showErrorClue" class="grid_separator--l" aria-hidden="true" />
 
-      <div
-        v-if="showErrorClue"
-        class="grid_row"
-        aria-hidden="true"
-      >
+      <div v-if="showErrorClue" class="grid_row" aria-hidden="true">
         <div class="col">
-          <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
+          <p class="form__error form__error--normal form__error--centered">
+            Please correct errors above
+          </p>
         </div>
       </div>
 
-      <local-hidden
-        :value="stripeToken"
-        name="stripeToken"
-      />
-      <hidden
-        name="campaign_id"
-        store-module="businessForm"
-      />
-      <hidden
-        name="referral_id"
-        store-module="businessForm"
-      />
-      <hidden
-        name="installments"
-        store-module="businessForm"
-      />
-      <hidden
-        name="description"
-        store-module="businessForm"
-      />
-      <hidden
-        name="pay_fees_value"
-        store-module="businessForm"
-      />
-      <hidden
-        name="openended_status"
-        store-module="businessForm"
-      />
-      <hidden
-        name="installment_period"
-        store-module="businessForm"
-      />
-      <hidden
-        name="amount"
-        store-module="businessForm"
-      />
-      <hidden
-        name="shipping_state"
-        store-module="businessForm"
-      />
+      <local-hidden :value="stripeToken" name="stripeToken" />
+      <hidden name="campaign_id" store-module="businessForm" />
+      <hidden name="referral_id" store-module="businessForm" />
+      <hidden name="installments" store-module="businessForm" />
+      <hidden name="description" store-module="businessForm" />
+      <hidden name="pay_fees_value" store-module="businessForm" />
+      <hidden name="openended_status" store-module="businessForm" />
+      <hidden name="installment_period" store-module="businessForm" />
+      <hidden name="amount" store-module="businessForm" />
+      <hidden name="shipping_state" store-module="businessForm" />
     </div>
   </form>
 </template>
@@ -279,7 +246,6 @@
 import validate from 'validate.js';
 
 import Hidden from '../../elements/Hidden.vue';
-import Level from '../../elements/Level.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
@@ -303,7 +269,6 @@ export default {
     TextInput,
     SelectList,
     PayFees,
-    Level,
     ManualPay,
     ManualSubmit,
     NativePay,
@@ -311,10 +276,7 @@ export default {
     StatelessEmbeddedBenefits,
   },
 
-  mixins: [
-    formStarter,
-    updateStoreValue,
-  ],
+  mixins: [formStarter, updateStoreValue],
 
   data() {
     return {
@@ -393,7 +355,7 @@ export default {
     isURL(value) {
       const isValid = validate(
         { website: value.trim() },
-        { website: { url: true } },
+        { website: { url: true } }
       );
       return typeof isValid === 'undefined';
     },

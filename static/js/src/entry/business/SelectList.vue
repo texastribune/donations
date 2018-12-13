@@ -1,22 +1,20 @@
 <template>
-  <div
-    :class="classes"
-  >
-    <label for="state-select-list">
-      {{ labelText }}
-    </label>
+  <div :class="classes">
+    <label for="state-select-list"> {{ labelText }} </label>
 
     <select
       id="state-select-list"
       :aria-labelledby="ariaLabelledby"
       :aria-describedby="ariaDescribedby"
-      @change="onChange($event.target.selectedIndex)">
+      @change="onChange($event.target.selectedIndex)"
+    >
       <option
         v-for="(item, index) in listOfChoices"
-        :selected="item.value == isSelected"
         :id="index"
-        :key="index+'_'+item.value"
-        :value="item.value">
+        :key="`${index}_${item.value}`"
+        :selected="item.value == isSelected"
+        :value="item.value"
+      >
         {{ item.text }}
       </option>
     </select>
@@ -31,12 +29,7 @@ import getStoreValue from '../../elements/mixins/getStoreValue';
 
 export default {
   name: 'SelectList',
-  mixins: [
-    aria,
-    labelConnector,
-    updateStoreValue,
-    getStoreValue,
-  ],
+  mixins: [aria, labelConnector, updateStoreValue, getStoreValue],
   props: {
     name: {
       type: String,
@@ -58,11 +51,10 @@ export default {
       type: String,
       required: true,
     },
-
   },
   computed: {
     isSelected() {
-      let selectList = this.getStoreValue({
+      const selectList = this.getStoreValue({
         storeModule: this.selectListStoreModule,
         key: this.name,
       });
