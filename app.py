@@ -67,25 +67,46 @@ if ENABLE_SENTRY:
 locale.setlocale(locale.LC_ALL, "C")
 csp = {
     "default-src": ["'self'", "*.texastribune.org"],
-    "font-src": ["'self'", "data:", "*.cloudflare.com", "fonts.gstatic.com"],
+    "font-src": [
+        "'self'",
+        "data:",
+        "*.cloudflare.com",
+        "fonts.gstatic.com",
+        "use.typekit.net",
+    ],
     "style-src": [
         "'self'",
         "'unsafe-inline'",
         "*.googleapis.com",
         "tagmanager.google.com",
     ],
-    "img-src": ["'self'", "data:", "*.texastribune.org"],
+    "img-src": [
+        "'self'",
+        "data:",
+        "*.texastribune.org",
+        "q.stripe.com",
+        "www.facebook.com",
+    ],
     "connect-src": ["*.stripe.com", "*.texastribune.org", "www.google-analytics.com"],
-    "frame-src": ["'self'", "*.stripe.com", "www.googletagmanager.com"],
+    "frame-src": [
+        "'self'",
+        "*.stripe.com",
+        "www.googletagmanager.com",
+        "www.facebook.com",
+    ],
     "script-src": [
         "data:",
         "'unsafe-inline'",
         "'unsafe-eval'",
         "*.texastribune.org",
+        "www.googleadservices.com",
         "js.stripe.com",
         "*.googleapis.com",
         "connect.facebook.net",
         "www.googletagmanager.com",
+        "use.typekit.net",
+        "code.jquery.com",
+        "checkout.stripe.com",
     ],
 }
 
