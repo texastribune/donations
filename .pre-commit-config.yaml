@@ -6,3 +6,10 @@ repos:
       -
         id: prettier
         files: '^static/js/src/.*\.(js|json|vue)'
+  -
+    repo: https://github.com/ambv/black
+    rev: stable
+    hooks:
+      -
+        id: black
+        types: [python]
