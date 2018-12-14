@@ -86,6 +86,10 @@ csp = {
         "*.texastribune.org",
         "q.stripe.com",
         "www.facebook.com",
+        "stats.g.doubleclick.net",
+        "www.google-analytics.com",
+        "www.google.com",
+        "googleads.g.doubleclick.net",
     ],
     "connect-src": ["*.stripe.com", "*.texastribune.org", "www.google-analytics.com"],
     "frame-src": [
@@ -93,6 +97,7 @@ csp = {
         "*.stripe.com",
         "www.googletagmanager.com",
         "www.facebook.com",
+        "bid.g.doubleclick.net",
     ],
     "script-src": [
         "data:",
@@ -107,6 +112,8 @@ csp = {
         "use.typekit.net",
         "code.jquery.com",
         "checkout.stripe.com",
+        "www.google-analytics.com",
+        "googleads.g.doubleclick.net",
     ],
 }
 
