@@ -1,3 +1,4 @@
+import json
 import logging
 import smtplib
 from collections import defaultdict
@@ -48,21 +49,87 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     message = construct_slack_message(
         contact=contact, opportunity=opportunity, rdo=rdo, account=account
     )
+
+    send_slack_message(text=message, username=opportunity.lead_source)
+
+
+def send_slack_message(
+    channel=SLACK_CHANNEL, text=None, username="moneybot", icon_emoji=":moneybag:"
+):
+
     if not ENABLE_SLACK:
         return
 
     payload = {
         "token": SLACK_API_KEY,
-        "channel": SLACK_CHANNEL,
-        "text": message,
-        "username": "moneybot",
-        "icon_emoji": ":moneybag:",
+        "channel": channel,
+        "text": text,
+        "username": username,
+        "icon_emoji": icon_emoji,
     }
     url = "https://slack.com/api/chat.postMessage"
     try:
         requests.get(url, params=payload)
     except Exception as e:
         logging.error(f"Failed to send Slack notification: {e}")
+
+
+def send_slack_attachment(
+    channel=SLACK_CHANNEL, attachment=None, username="moneybot", icon_emoji=":moneybag:"
+):
+    attachment = [
+        {
+            "as_user": False,
+            "icon_emoji": ":moneybag:",
+            "fallback": "This is the fallback",
+            "color": "good",
+            "text": "text",
+            #            "pretext": "foo@bar.com",
+            "fields": [
+                {"title": "Source", "value": "Amazon Alexa", "short": True},
+                {"title": "Amount", "value": "$5", "short": True},
+                {"title": "Name", "value": "Foo Bar", "short": False},
+                {"title": "Period", "value": "yearly", "short": True},
+                {"title": "Type", "value": "Circle", "short": True},
+            ],
+        }
+    ]
+    # attachment = [
+    #     {
+    #         "fallback": "Deployment status.",
+    #         "color": "good",
+    #         "mrkdwn_in": ["text"],
+    #         "title": "instance_name",
+    #         "fields": [
+    #             {"value": "status", "short": False},
+    #             {"value": "Command ID: foo", "short": False},
+    #         ],
+    #     }
+    # ]
+
+    from pprint import pprint
+
+    pprint(attachment)
+
+    if not ENABLE_SLACK:
+        return
+    payload = {
+        "channel": channel,
+        "attachments": attachment,
+        "username": "Foo Bar",
+        "icon_emoji": ":moneybag:",
+    }
+    pprint(payload)
+    url = "https://slack.com/api/chat.postMessage"
+    headers = {
+        "Authorization": f"Bearer {SLACK_API_KEY}",
+        "Content-type": "application/json; charset=utf-8",
+    }
+    try:
+        response = requests.post(url, headers=headers, json=payload)
+    except Exception as e:
+        logging.error(f"Failed to send Slack notification: {e}")
+    pprint(response.text, indent=2)
 
 
 def send_multiple_account_warning(contact):

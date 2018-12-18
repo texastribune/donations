@@ -590,7 +590,7 @@ def authorization_notification(payload):
     opportunity = Opportunity(contact=contact, stage_name="Closed Won")
     opportunity.amount = amount
     opportunity.description = description
-    opportunity.lead_source = "Amazon Pay"
+    opportunity.lead_source = "Amazon Alexa"
     opportunity.amazon_order_id = amzn_id
     opportunity.campaign_id = AMAZON_CAMPAIGN_ID
     opportunity.name = (

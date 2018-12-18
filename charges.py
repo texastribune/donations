@@ -3,6 +3,7 @@ import logging
 from decimal import Decimal
 from config import STRIPE_KEYS, CIRCLE_FAILURE_RECIPIENT
 from npsp import User, Task
+from util import send_slack_message
 
 import stripe
 
@@ -67,6 +68,13 @@ def charge(opportunity):
             user = User.get(CIRCLE_FAILURE_RECIPIENT)
             subject = "Credit card charge failed for Circle member"
             task = Task(owner_id=user.id, what_id=opportunity.id, subject=subject)
+            print("sending slack message")
+            send_slack_message(
+                channel="#circle",
+                text=f"Circle charge failed for {opportunity.name} [{opportunity.closed_lost_reason}]",
+                icon_emoji=":x:",
+            )
+
             task.save()
 
         return
