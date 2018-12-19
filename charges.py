@@ -21,7 +21,7 @@ def amount_to_charge(opportunity):
     """
     amount = float(opportunity.amount)
     if opportunity.agreed_to_pay_fees:
-        total = (amount + .30) / (1 - 0.022)
+        total = (amount + 0.30) / (1 - 0.022)
     else:
         total = amount
     return quantize(total)

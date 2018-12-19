@@ -1,26 +1,17 @@
 <template>
-  <ul
-    :class="classes"
-  >
-    <li
-      v-for="(option, index) in options"
-      :key="option.id"
-    >
+  <ul :class="classes">
+    <li v-for="(option, index) in options" :key="option.id">
       <input
+        :id="getConnector(index)"
         :aria-labelledby="ariaLabelledby"
         :aria-describedby="ariaDescribedby"
         :value="option.value"
         :name="name"
         :checked="value === option.value"
-        :id="getConnector(index)"
         type="radio"
         @change="updateSingleValue($event.target.value)"
-      >
-      <label
-        :for="getConnector(index)"
-      >
-        {{ option.text }}
-      </label>
+      />
+      <label :for="getConnector(index)"> {{ option.text }} </label>
     </li>
   </ul>
 </template>
@@ -33,11 +24,7 @@ import aria from './mixins/aria';
 export default {
   name: 'Frequency',
 
-  mixins: [
-    aria,
-    labelConnector,
-    connectedElement,
-  ],
+  mixins: [aria, labelConnector, connectedElement],
 
   props: {
     options: {

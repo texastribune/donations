@@ -5,6 +5,7 @@
 //
 
 // US States and territories for select state list
+// eslint-disable-next-line import/prefer-default-export
 export const US_STATES_SELECT_LIST = [
   { value: 'AL', text: 'Alabama' },
   { value: 'AK', text: 'Alaska' },

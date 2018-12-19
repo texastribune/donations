@@ -6,12 +6,11 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div
-      v-show="showServerErrorMessage"
-      class="grid_row grid_separator"
-    >
+    <div v-show="showServerErrorMessage" class="grid_row grid_separator">
       <div class="col">
-        <p class="form__error form__error--prominent">{{ serverErrorMessage }}</p>
+        <p class="form__error form__error--prominent">
+          {{ serverErrorMessage }}
+        </p>
       </div>
     </div>
 
@@ -43,7 +42,10 @@
 
     <div class="grid_row grid_separator">
       <div class="col">
-        <p class="subtext">For three-year commitments of $1,000 or more, join our <a href="/circleform">Circle Membership program</a>.</p>
+        <p class="subtext">
+          For three-year commitments of $1,000 or more, join our
+          <a href="/circleform">Circle Membership program</a>.
+        </p>
       </div>
     </div>
 
@@ -173,50 +175,23 @@
       </div>
     </div>
 
-    <div
-      v-if="showErrorClue"
-      class="grid_separator--l"
-      aria-hidden="true"
-    />
+    <div v-if="showErrorClue" class="grid_separator--l" aria-hidden="true" />
 
-    <div
-      v-if="showErrorClue"
-      class="grid_row"
-      aria-hidden="true"
-    >
+    <div v-if="showErrorClue" class="grid_row" aria-hidden="true">
       <div class="col">
-        <p class="form__error form__error--normal form__error--centered">Please correct errors above</p>
+        <p class="form__error form__error--normal form__error--centered">
+          Please correct errors above
+        </p>
       </div>
     </div>
 
-    <local-hidden
-      :value="stripeToken"
-      name="stripeToken"
-    />
-    <hidden
-      name="installments"
-      store-module="baseForm"
-    />
-    <hidden
-      name="description"
-      store-module="baseForm"
-    />
-    <hidden
-      name="campaign_id"
-      store-module="baseForm"
-    />
-    <hidden
-      name="referral_id"
-      store-module="baseForm"
-    />
-    <hidden
-      name="openended_status"
-      store-module="baseForm"
-    />
-    <hidden
-      name="pay_fees_value"
-      store-module="baseForm"
-    />
+    <local-hidden :value="stripeToken" name="stripeToken" />
+    <hidden name="installments" store-module="baseForm" />
+    <hidden name="description" store-module="baseForm" />
+    <hidden name="campaign_id" store-module="baseForm" />
+    <hidden name="referral_id" store-module="baseForm" />
+    <hidden name="openended_status" store-module="baseForm" />
+    <hidden name="pay_fees_value" store-module="baseForm" />
   </form>
 </template>
 
@@ -224,7 +199,6 @@
 import Hidden from '../../elements/Hidden.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
 import Radios from '../../elements/Radios.vue';
-import Level from '../../elements/Level.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
 import ManualPay from '../../elements/ManualPay.vue';
@@ -242,16 +216,12 @@ export default {
     TextInput,
     Radios,
     PayFees,
-    Level,
     ManualPay,
     ManualSubmit,
     NativePay,
   },
 
-  mixins: [
-    formStarter,
-    updateStoreValue,
-  ],
+  mixins: [formStarter, updateStoreValue],
 
   data() {
     return {
@@ -313,9 +283,7 @@ export default {
     onFrequencyUpdate(newValue) {
       let openEndedVal = '';
 
-      if (newValue === 'yearly' ||
-          newValue === 'monthly'
-      ) {
+      if (newValue === 'yearly' || newValue === 'monthly') {
         openEndedVal = 'Open';
       } else if (newValue === 'None') {
         openEndedVal = 'None';
