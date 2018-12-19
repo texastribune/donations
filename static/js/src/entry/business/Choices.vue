@@ -1,23 +1,16 @@
 <template>
-  <div
-    class="grid_row grid_wrap--m"
-  >
+  <div class="grid_row grid_wrap--m">
     <div
       v-for="group in groups"
       :key="group.id"
       :class="{ selected: selectedGroup === group.bucket }"
       class="business-form__bucket col_4 grid_separator"
     >
-      <p
-        :id="getGroupHeadingConnector(group)"
-        class="business-form__bucket-header grid_separator"
-      >
-        {{ group.heading }}<br>
+      <p class="business-form__bucket-header grid_separator">
+        {{ group.heading }} <br />
       </p>
       <radios
         :options="group.options"
-        :aria-labelledby="getGroupHeadingConnector(group)"
-        aria-describedby="business-form-hed business-form__intro"
         base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="businessForm"
@@ -45,10 +38,7 @@ export default {
 
   components: { Radios },
 
-  mixins: [
-    getStoreValue,
-    updateStoreValues,
-  ],
+  mixins: [getStoreValue, updateStoreValues],
 
   data() {
     return {
@@ -85,7 +75,7 @@ export default {
       const options = [];
       const bucketsToIter = [];
 
-      bucketNames.forEach((name) => {
+      bucketNames.forEach(name => {
         bucketsToIter.push({
           ...BUSINESS_BUCKETS[name],
           name,
@@ -105,17 +95,15 @@ export default {
     },
 
     getInitialSelectedGroup() {
-      const level =
-        this.getStoreValue({ storeModule: 'businessForm', key: 'level' });
+      const level = this.getStoreValue({
+        storeModule: 'businessForm',
+        key: 'level',
+      });
       return BUSINESS_BUCKETS[level].bucket;
     },
 
     onUpdate(level) {
-      const {
-        amount,
-        bucket,
-        paymentDetails,
-      } = BUSINESS_BUCKETS[level];
+      const { amount, bucket, paymentDetails } = BUSINESS_BUCKETS[level];
 
       const updates = {
         installment_period: paymentDetails.installmentPeriod,
@@ -131,12 +119,6 @@ export default {
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
     },
-
-    getGroupHeadingConnector({ bucket, id }) {
-      return `${bucket}-heading-${id}`;
-    },
-
-
   },
 };
 </script>

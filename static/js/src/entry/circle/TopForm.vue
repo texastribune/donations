@@ -188,7 +188,7 @@ import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
 export default {
-  name: 'CircleForm',
+  name: 'TopForm',
 
   components: {
     Hidden,

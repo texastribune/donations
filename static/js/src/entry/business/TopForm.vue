@@ -26,7 +26,7 @@
     </div>
 
     <div class="grid_container--m">
-      <stateless-embedded-benefits />
+      <benefits />
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
@@ -95,11 +95,11 @@
         </div>
         <div class="col_4 grid_separator">
           <select-list
-            :list-of-choices="list_of_choices"
+            :options="usStatesOptions"
             label-text="state"
             base-classes="form__text form__text--standard"
             name="shipping_state"
-            select-list-store-module="businessForm"
+            store-module="businessForm"
           />
         </div>
         <div class="col_2 grid_separator">
@@ -166,7 +166,7 @@
         </div>
       </div>
 
-      <div class="grid_row">
+      <div class="grid_row grid_separator">
         <div class="col">
           <native-pay
             :form-is-valid="nativeIsValid"
@@ -198,7 +198,7 @@
             </div>
           </div>
 
-          <div class="grid_row">
+          <div class="grid_row grid_separator">
             <div class="col">
               <manual-submit
                 :form-is-valid="manualIsValid"
@@ -237,7 +237,6 @@
       <hidden name="openended_status" store-module="businessForm" />
       <hidden name="installment_period" store-module="businessForm" />
       <hidden name="amount" store-module="businessForm" />
-      <hidden name="shipping_state" store-module="businessForm" />
     </div>
   </form>
 </template>
@@ -249,19 +248,18 @@ import Hidden from '../../elements/Hidden.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
 import PayFees from '../../elements/PayFees.vue';
 import TextInput from '../../elements/TextInput.vue';
-import SelectList from './SelectList.vue';
+import SelectList from '../../elements/SelectList.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
 import Choices from './Choices.vue';
-import StatelessEmbeddedBenefits from './templates/StatelessEmbeddedBenefits.vue';
+import Benefits from './Benefits.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
-
-import { US_STATES_SELECT_LIST } from './formSelectListConstants';
+import { US_STATES_SELECT_LIST } from './constants';
 
 export default {
-  name: 'BusinessForm',
+  name: 'TopForm',
 
   components: {
     Hidden,
@@ -273,7 +271,7 @@ export default {
     ManualSubmit,
     NativePay,
     Choices,
-    StatelessEmbeddedBenefits,
+    Benefits,
   },
 
   mixins: [formStarter, updateStoreValue],
@@ -282,6 +280,7 @@ export default {
     return {
       // eslint-disable-next-line no-underscore-dangle
       serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
+      usStatesOptions: US_STATES_SELECT_LIST,
       validation: {
         stripeEmail: {
           manual: true,
@@ -347,7 +346,6 @@ export default {
           validator: this.isMaxLength(255),
         },
       },
-      list_of_choices: US_STATES_SELECT_LIST,
     };
   },
 

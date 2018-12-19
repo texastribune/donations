@@ -1,23 +1,16 @@
 <template>
-  <div
-    class="grid_row grid_wrap--m"
-  >
+  <div class="grid_row grid_wrap--m">
     <div
       v-for="group in groups"
       :key="group.id"
       :class="{ selected: selectedGroup === group.bucket }"
       class="circle-form__bucket col_4 grid_separator"
     >
-      <p
-        :id="getGroupHeadingConnector(group)"
-        class="circle-form__bucket-header grid_separator"
-      >
+      <p class="circle-form__bucket-header grid_separator">
         {{ group.heading }}
       </p>
       <radios
         :options="group.options"
-        :aria-labelledby="getGroupHeadingConnector(group)"
-        aria-describedby="circle-donate-hed circle-donate-intro"
         base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="circleForm"
@@ -39,10 +32,7 @@ export default {
 
   components: { Radios },
 
-  mixins: [
-    getStoreValue,
-    updateStoreValues,
-  ],
+  mixins: [getStoreValue, updateStoreValues],
 
   data() {
     return {
@@ -51,7 +41,7 @@ export default {
         {
           id: 0,
           bucket: 'editor',
-          heading: 'Editor\'s Circle',
+          heading: "Editor's Circle",
           options: this.buildOptions(['editorMonthly', 'editorYearly']),
         },
         {
@@ -63,7 +53,7 @@ export default {
         {
           id: 2,
           bucket: 'chairman',
-          heading: 'Chairman\'s Circle',
+          heading: "Chairman's Circle",
           options: this.buildOptions(['chairmanMonthly', 'chairmanYearly']),
         },
       ],
@@ -79,7 +69,7 @@ export default {
       const options = [];
       const bucketsToIter = [];
 
-      bucketNames.forEach((name) => {
+      bucketNames.forEach(name => {
         bucketsToIter.push({
           ...CIRCLE_BUCKETS[name],
           name,
@@ -100,8 +90,10 @@ export default {
     },
 
     getInitialSelectedGroup() {
-      const level =
-        this.getStoreValue({ storeModule: 'circleForm', key: 'level' });
+      const level = this.getStoreValue({
+        storeModule: 'circleForm',
+        key: 'level',
+      });
 
       return CIRCLE_BUCKETS[level].bucket;
     },
@@ -126,10 +118,6 @@ export default {
 
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
-    },
-
-    getGroupHeadingConnector({ bucket, id }) {
-      return `${bucket}-heading-${id}`;
     },
   },
 };
