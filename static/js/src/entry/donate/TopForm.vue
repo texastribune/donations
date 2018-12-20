@@ -18,9 +18,9 @@
       <div class="col">
         <radios
           :options="frequencyOptions"
+          :store-module="storeModule"
           base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
-          store-module="baseForm"
           @updateCallback="onFrequencyUpdate"
         />
       </div>
@@ -29,11 +29,11 @@
     <div class="grid_row grid_separator--xs">
       <div class="col">
         <text-input
+          :store-module="storeModule"
           :show-error="showManualErrors || showNativeErrors"
           label-text="amount ($)"
           base-classes="form__text form__text--heavy"
           name="amount"
-          store-module="baseForm"
         />
       </div>
     </div>
@@ -50,12 +50,12 @@
     <div class="grid_row grid_separator">
       <div class="col">
         <text-input
+          :store-module="storeModule"
           :show-error="showManualErrors || showNativeErrors"
           label-text="email address"
           type="email"
           base-classes="form__text form__text--standard"
           name="stripeEmail"
-          store-module="baseForm"
         />
       </div>
     </div>
@@ -63,20 +63,20 @@
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
+          :store-module="storeModule"
           :show-error="showManualErrors || showNativeErrors"
           label-text="first name"
           base-classes="form__text form__text--standard"
           name="first_name"
-          store-module="baseForm"
         />
       </div>
       <div class="col_6 grid_separator">
         <text-input
+          :store-module="storeModule"
           :show-error="showManualErrors || showNativeErrors"
           label-text="last name"
           base-classes="form__text form__text--standard"
           name="last_name"
-          store-module="baseForm"
         />
       </div>
     </div>
@@ -84,44 +84,39 @@
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
+          :store-module="storeModule"
           :required="false"
           :show-error="showManualErrors || showNativeErrors"
           label-text="encouraged to give by"
           base-classes="form__text form__text--standard"
           name="reason"
-          store-module="baseForm"
         />
       </div>
       <div class="col_6 grid_separator">
         <text-input
+          :store-module="storeModule"
           :required="false"
           :show-error="showManualErrors || showNativeErrors"
           label-text="zip code"
           base-classes="form__text form__text--standard"
           name="zipcode"
-          store-module="baseForm"
         />
       </div>
     </div>
 
     <div class="grid_row grid_separator">
       <div class="col">
-        <pay-fees
-          base-classes="form__fees"
-          amount-store-module="baseForm"
-          pay-fees-value-store-module="baseForm"
-          installment-period-store-module="baseForm"
-        />
+        <pay-fees :store-module="storeModule" base-classes="form__fees" />
       </div>
     </div>
 
     <div class="grid_row">
       <div class="col">
         <native-pay
+          :store-module="storeModule"
           :form-is-valid="nativeIsValid"
           :supported="nativeIsSupported"
           base-classes="form__native"
-          amount-store-module="baseForm"
           @setValue="setValue"
           @onSubmit="onSubmit"
         />
@@ -174,12 +169,12 @@
     </div>
 
     <local-hidden :value="stripeToken" name="stripeToken" />
-    <hidden name="installments" store-module="baseForm" />
-    <hidden name="description" store-module="baseForm" />
-    <hidden name="campaign_id" store-module="baseForm" />
-    <hidden name="referral_id" store-module="baseForm" />
-    <hidden name="openended_status" store-module="baseForm" />
-    <hidden name="pay_fees_value" store-module="baseForm" />
+    <hidden name="installments" :store-module="storeModule" />
+    <hidden name="description" :store-module="storeModule" />
+    <hidden name="campaign_id" :store-module="storeModule" />
+    <hidden name="referral_id" :store-module="storeModule" />
+    <hidden name="openended_status" :store-module="storeModule" />
+    <hidden name="pay_fees_value" :store-module="storeModule" />
   </form>
 </template>
 
@@ -213,6 +208,7 @@ export default {
 
   data() {
     return {
+      storeModule: 'baseForm',
       // eslint-disable-next-line no-underscore-dangle
       serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       frequencyOptions: [
