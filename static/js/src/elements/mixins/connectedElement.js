@@ -1,4 +1,21 @@
+import getValue from './getValue';
+import getValidator from './getValidator';
+import getValidity from './getValidity';
+import getMessage from './getMessage';
+import updateValue from './updateValue';
+import updateValidity from './updateValidity';
+import * as validatorFns from '../../utils/validators';
+
 export default {
+  mixins: [
+    getValue,
+    getValidator,
+    getValidity,
+    getMessage,
+    updateValue,
+    updateValidity,
+  ],
+
   props: {
     name: {
       type: String,
@@ -14,58 +31,62 @@ export default {
       type: String,
       required: true,
     },
-
-    validation: {
-      type: Object,
-      default: null,
-    },
   },
 
   computed: {
     value() {
-      const getter =
-        this.$store.getters[`${this.storeModule}/valueByKey`];
-      return getter(this.name);
+      return this.getValue({
+        storeModule: this.storeModule,
+        key: this.name,
+      });
     },
 
-    valid() {
-      if (!this.validation) return true;
-      return this.validation.valid;
+    isValid() {
+      if (!this.validator) return true;
+
+      return this.getValidity({
+        storeModule: this.storeModule,
+        key: this.name,
+      });
     },
 
-    errorMessage() {
-      if (!this.validation) return '';
-      return this.validation.message;
+    validator() {
+      const validator = this.getValidator({
+        storeModule: this.storeModule,
+        key: this.name,
+      });
+
+      if (!validator) return false;
+      return validatorFns[validator];
+    },
+
+    message() {
+      return this.message({
+        storeModule: this.storeModule,
+        key: this.name,
+      });
     },
   },
 
   mounted() {
-    if (!this.validation) return;
-    if (this.validation.validator(this.value)) this.markValid();
+    if (!this.validator) return;
+    if (this.validator(this.value)) this.markValid();
   },
 
   methods: {
     updateSingleValue(newValue) {
-      if (!this.validation) {
+      if (!this.validator) {
         this.fireDispatch(newValue);
         this.fireUpdateCallback(newValue);
       } else {
-        if (this.validation.validator(newValue)) {
+        if (this.validator(newValue)) {
           this.markValid();
           this.fireUpdateCallback(newValue);
         } else {
           this.markInvalid();
         }
-
         this.fireDispatch(newValue);
       }
-    },
-
-    fireDispatch(value) {
-      this.$store.dispatch(
-        `${this.storeModule}/updateValue`,
-        { key: this.name, value },
-      );
     },
 
     fireUpdateCallback(value) {
@@ -73,11 +94,27 @@ export default {
     },
 
     markValid() {
-      this.$emit('setValidationValue', { element: this.name, key: 'valid', value: true });
+      this.updateValidity({
+        storeModule: this.storeModule,
+        key: this.name,
+        isValid: true,
+      });
     },
 
     markInvalid() {
-      this.$emit('setValidationValue', { element: this.name, key: 'valid', value: false });
+      this.updateValidity({
+        storeModule: this.storeModule,
+        key: this.name,
+        isValid: false,
+      });
+    },
+
+    fireDispatch(value) {
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: this.name,
+        value,
+      });
     },
   },
 };

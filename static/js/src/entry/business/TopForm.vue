@@ -242,8 +242,6 @@
 </template>
 
 <script>
-import validate from 'validate.js';
-
 import Hidden from '../../elements/Hidden.vue';
 import LocalHidden from '../../elements/LocalHidden.vue';
 import PayFees from '../../elements/PayFees.vue';
@@ -347,20 +345,6 @@ export default {
         },
       },
     };
-  },
-
-  methods: {
-    isURL(value) {
-      const isValid = validate(
-        { website: value.trim() },
-        { website: { url: true } }
-      );
-      return typeof isValid === 'undefined';
-    },
-
-    isValidWebsite(value) {
-      return this.isURL(value) && this.isMaxLength(255)(value);
-    },
   },
 };
 </script>

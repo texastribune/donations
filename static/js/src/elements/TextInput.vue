@@ -12,7 +12,7 @@
       :type="type"
       @input="updateSingleValue($event.target.value)"
     />
-    <p v-if="showError && !valid" role="alert">{{ errorMessage }}</p>
+    <p v-if="showError && !isValid" role="alert">{{ message }}</p>
   </div>
 </template>
 

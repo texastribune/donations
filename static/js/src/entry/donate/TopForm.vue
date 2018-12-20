@@ -30,12 +30,10 @@
       <div class="col">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
-          :validation="validation.amount"
           label-text="amount ($)"
           base-classes="form__text form__text--heavy"
           name="amount"
           store-module="baseForm"
-          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -44,7 +42,7 @@
       <div class="col">
         <p class="subtext">
           For three-year commitments of $1,000 or more, join our
-          <a href="/circleform">Circle Membership program</a>.
+          <a href="/circle">Circle Membership program</a>.
         </p>
       </div>
     </div>
@@ -53,13 +51,11 @@
       <div class="col">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
-          :validation="validation.stripeEmail"
           label-text="email address"
           type="email"
           base-classes="form__text form__text--standard"
           name="stripeEmail"
           store-module="baseForm"
-          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -68,23 +64,19 @@
       <div class="col_6 grid_separator">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
-          :validation="validation.first_name"
           label-text="first name"
           base-classes="form__text form__text--standard"
           name="first_name"
           store-module="baseForm"
-          @setValidationValue="setValidationValue"
         />
       </div>
       <div class="col_6 grid_separator">
         <text-input
           :show-error="showManualErrors || showNativeErrors"
-          :validation="validation.last_name"
           label-text="last name"
           base-classes="form__text form__text--standard"
           name="last_name"
           store-module="baseForm"
-          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -94,24 +86,20 @@
         <text-input
           :required="false"
           :show-error="showManualErrors || showNativeErrors"
-          :validation="validation.reason"
           label-text="encouraged to give by"
           base-classes="form__text form__text--standard"
           name="reason"
           store-module="baseForm"
-          @setValidationValue="setValidationValue"
         />
       </div>
       <div class="col_6 grid_separator">
         <text-input
           :required="false"
           :show-error="showManualErrors || showNativeErrors"
-          :validation="validation.zipcode"
           label-text="zip code"
           base-classes="form__text form__text--standard"
           name="zipcode"
           store-module="baseForm"
-          @setValidationValue="setValidationValue"
         />
       </div>
     </div>
@@ -204,7 +192,7 @@ import TextInput from '../../elements/TextInput.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
-import updateStoreValue from '../../elements/mixins/updateStoreValue';
+import updateValue from '../../elements/mixins/updateValue';
 import formStarter from '../../mixins/form/starter';
 
 export default {
@@ -221,7 +209,7 @@ export default {
     NativePay,
   },
 
-  mixins: [formStarter, updateStoreValue],
+  mixins: [formStarter, updateValue],
 
   data() {
     return {
@@ -232,50 +220,6 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
-      validation: {
-        stripeEmail: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter a valid email address',
-          validator: this.isEmail,
-        },
-        first_name: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter your first name',
-          validator: this.isNotEmpty,
-        },
-        last_name: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter your last name',
-          validator: this.isNotEmpty,
-        },
-        amount: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter numeric amount above $1',
-          validator: this.isValidDonationAmount,
-        },
-        zipcode: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter a 5-digit zip code',
-          validator: this.isEmptyOrZip,
-        },
-        reason: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Must be 255 characters or fewer',
-          validator: this.isMaxLength(255),
-        },
-      },
     };
   },
 
@@ -289,7 +233,7 @@ export default {
         openEndedVal = 'None';
       }
 
-      this.updateStoreValue({
+      this.updateValue({
         storeModule: 'baseForm',
         key: 'openended_status',
         value: openEndedVal,

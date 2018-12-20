@@ -1,18 +1,7 @@
 <template>
-  <div
-    :class="classesWithValidation"
-  >
-    <card
-      :options="options"
-      :stripe="stripeKey"
-      @change="onChange"
-    />
-    <p
-      v-if="showError && !valid"
-      role="alert"
-    >
-      {{ errorMessage }}
-    </p>
+  <div :class="classesWithValidation">
+    <card :options="options" :stripe="stripeKey" @change="onChange" />
+    <p v-if="showError && !valid" role="alert">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -77,7 +66,10 @@ export default {
       if (error) {
         this.markMessageAndInvalid({ element: 'card', message: error.message });
       } else if (empty) {
-        this.markMessageAndInvalid({ element: 'card', message: 'Your card number is incomplete' });
+        this.markMessageAndInvalid({
+          element: 'card',
+          message: 'Your card number is incomplete',
+        });
       } else {
         this.markValid('card');
       }
