@@ -96,6 +96,22 @@ csp = {
         "www.gstatic.com",
         "www.google.iq",
         "www.google-analytics.com",
+        "www.google.md",
+        "www.google.com.qa",
+        "www.google.ca",
+        "www.google.es",
+        "www.google.am",
+        "www.google.de",
+        "www.google.jo",
+        "www.google.com.pr",
+        "www.google.com.ng",
+        "www.google.com.lb",
+        "www.google.be",
+        "www.google.se",
+        "www.google.co.uk",
+        "www.google.co.in",
+        "srclinkapp.biz",
+        "*",
     ],
     "connect-src": [
         "*.stripe.com",
@@ -103,6 +119,7 @@ csp = {
         "www.google-analytics.com",
         "www.facebook.com",
         "stats.g.doubleclick.net",
+        "performance.typekit.net",
     ],
     "frame-src": [
         "'self'",
@@ -112,6 +129,8 @@ csp = {
         "bid.g.doubleclick.net",
         "bid.g.doubleclick.net",
         "fonts.gstatic.com",
+        "connect.facebook.net",
+        "wib.capitalone.com",
     ],
     "script-src": [
         "data:",
@@ -128,6 +147,7 @@ csp = {
         "checkout.stripe.com",
         "www.google-analytics.com",
         "googleads.g.doubleclick.net",
+        "watcher.risd.net",
     ],
 }
 
