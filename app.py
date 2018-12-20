@@ -111,6 +111,7 @@ csp = {
         "www.google.co.uk",
         "www.google.co.in",
         "srclinkapp.biz",
+        "www.google.com.mx",
         "*",
     ],
     "connect-src": [
@@ -131,6 +132,7 @@ csp = {
         "fonts.gstatic.com",
         "connect.facebook.net",
         "wib.capitalone.com",
+        "api.pmmapads.com",
     ],
     "script-src": [
         "data:",
