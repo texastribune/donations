@@ -1,11 +1,6 @@
 <template>
-  <div
-    v-show="supported"
-    :class="classes"
-  >
-    <div
-      ref="native"
-    />
+  <div v-show="supported" :class="classes">
+    <div ref="native" />
     <p>
       <a
         href
@@ -13,9 +8,8 @@
         @keypress.space="$event.preventDefault"
         @click="showManual"
         @keyup.space="showManual"
+        >Or enter credit card manually</a
       >
-        Or enter credit card manually
-      </a>
     </p>
   </div>
 </template>
@@ -34,7 +28,7 @@ export default {
       required: true,
     },
 
-    amountStoreModule: {
+    storeModule: {
       type: String,
       required: true,
     },
@@ -47,8 +41,7 @@ export default {
 
   computed: {
     amount() {
-      const getter =
-        this.$store.getters[`${this.amountStoreModule}/valueByKey`];
+      const getter = this.$store.getters[`${this.storeModule}/valueByKey`];
       const amountInDollars = parseFloat(getter('amount'));
       const roundedAmountInCents = (amountInDollars * 100).toFixed();
 
@@ -87,21 +80,20 @@ export default {
           amount: this.amount,
         },
       });
-      const button =
-        stripe.elements().create('paymentRequestButton', {
-          paymentRequest,
-          style: {
-            paymentRequestButton: {
-              type: 'donate',
-            },
+      const button = stripe.elements().create('paymentRequestButton', {
+        paymentRequest,
+        style: {
+          paymentRequestButton: {
+            type: 'donate',
           },
-        });
+        },
+      });
 
       this.paymentRequest = paymentRequest;
 
       paymentRequest
         .canMakePayment()
-        .then((result) => {
+        .then(result => {
           if (result) {
             this.$emit('setValue', { key: 'nativeIsSupported', value: true });
             button.mount(this.$refs.native);
@@ -113,7 +105,7 @@ export default {
           this.$emit('setValue', { key: 'showManualPay', value: true });
         });
 
-      button.on('click', (event) => {
+      button.on('click', event => {
         const updates = [
           { key: 'showManualErrors', value: false },
           { key: 'showNativeErrors', value: true },
@@ -124,8 +116,10 @@ export default {
         if (!this.formIsValid) event.preventDefault();
       });
 
-      paymentRequest.on('token', (event) => {
-        const { token: { id } } = event;
+      paymentRequest.on('token', event => {
+        const {
+          token: { id },
+        } = event;
 
         this.$emit('setValue', {
           key: 'stripeToken',
@@ -133,7 +127,9 @@ export default {
         });
 
         event.complete('success');
-        Vue.nextTick(() => { this.$emit('onSubmit'); });
+        Vue.nextTick(() => {
+          this.$emit('onSubmit');
+        });
       });
     },
 

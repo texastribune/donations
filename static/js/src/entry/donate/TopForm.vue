@@ -137,7 +137,6 @@
               :show-error="showManualErrors"
               :validation="validation.card"
               base-classes="form__manual"
-              @setValidationValue="setValidationValue"
             />
           </div>
         </div>
@@ -151,7 +150,6 @@
               value="Donate"
               @onSubmit="onSubmit"
               @setValue="setValue"
-              @setValidationValue="setValidationValue"
             />
           </div>
         </div>
