@@ -121,6 +121,7 @@ csp = {
         "www.facebook.com",
         "stats.g.doubleclick.net",
         "performance.typekit.net",
+        "*",
     ],
     "frame-src": [
         "'self'",
@@ -133,6 +134,7 @@ csp = {
         "connect.facebook.net",
         "wib.capitalone.com",
         "api.pmmapads.com",
+        "*",
     ],
     "script-src": [
         "data:",
@@ -150,6 +152,7 @@ csp = {
         "www.google-analytics.com",
         "googleads.g.doubleclick.net",
         "watcher.risd.net",
+        "*",
     ],
 }
 
