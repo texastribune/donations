@@ -1,7 +1,7 @@
 <template>
   <div :class="classesWithValidation">
     <card :options="options" :stripe="stripeKey" @change="onChange" />
-    <p v-if="showError && !valid" role="alert">{{ message }}</p>
+    <p v-if="showError && !isValid" role="alert">{{ message }}</p>
   </div>
 </template>
 
@@ -42,7 +42,7 @@ export default {
       return window.__STRIPE_KEY__;
     },
 
-    valid() {
+    isValid() {
       return this.card.isValid;
     },
 
@@ -52,7 +52,7 @@ export default {
 
     classesWithValidation() {
       const { classes } = this;
-      if (!this.showError || this.valid) return classes;
+      if (!this.showError || this.isValid) return classes;
       return `invalid ${classes}`;
     },
   },

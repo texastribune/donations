@@ -149,8 +149,9 @@
               :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
               value="Donate"
-              @onSubmit="onSubmit"
               @setLocalValue="setLocalValue"
+              @setCardValue="setCardValue"
+              @onSubmit="onSubmit"
             />
           </div>
         </div>
@@ -229,7 +230,7 @@ export default {
       }
 
       this.updateValue({
-        storeModule: 'baseForm',
+        storeModule: this.storeModule,
         key: 'openended_status',
         value: openEndedVal,
       });

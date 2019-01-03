@@ -12,12 +12,8 @@
 import Vue from 'vue';
 import { createToken } from 'vue-stripe-elements-plus';
 
-import updateValidity from './mixins/updateValidity';
-
 export default {
   name: 'ManualSubmit',
-
-  mixins: [updateValidity],
 
   props: {
     value: {
@@ -96,10 +92,10 @@ export default {
               messageToShow = this.blanketErrorMessage;
             }
 
-            this.markMessageAndInvalid({
-              element: 'card',
-              message: messageToShow,
-            });
+            this.$emit('setCardValue', [
+              { key: 'isValid', value: false },
+              { key: 'message', value: messageToShow },
+            ]);
           }
         });
       }
