@@ -13,17 +13,13 @@ export const isNumeric = value => {
   return typeof isValid === 'undefined';
 };
 
-export const isZip = value => {
-  return this.isNumeric(value) && value.trim().length === 5;
-};
+export const isZip = value => isNumeric(value) && value.trim().length === 5;
 
-export const isNotEmpty = value => {
-  return !validate.isEmpty(value.trim());
-};
+export const isNotEmpty = value => !validate.isEmpty(value.trim());
 
 export const isEmptyOrZip = value => {
-  if (!this.isNotEmpty(value)) return true;
-  return this.isZip(value);
+  if (!isNotEmpty(value)) return true;
+  return isZip(value);
 };
 
 export const isValidDonationAmount = value => {
@@ -34,13 +30,11 @@ export const isValidDonationAmount = value => {
   return typeof isValid === 'undefined';
 };
 
-export const isMaxLength = maxLength => {
-  return value => value.trim().length <= maxLength;
-};
+export const isMaxLength = maxLength => value =>
+  value.trim().length <= maxLength;
 
-export const isNotEmptyAndIsMaxLength = maxLength => {
-  return value => this.isNotEmpty(value) && value.trim().length <= maxLength;
-};
+export const isNotEmptyAndIsMaxLength = maxLength => value =>
+  isNotEmpty(value) && value.trim().length <= maxLength;
 
 export const isURL = value => {
   const isValid = validate(
@@ -50,6 +44,4 @@ export const isURL = value => {
   return typeof isValid === 'undefined';
 };
 
-export const isValidWebsite = value => {
-  return this.isURL(value) && this.isMaxLength(255)(value);
-};
+export const isValidWebsite = value => isURL(value) && isMaxLength(255)(value);

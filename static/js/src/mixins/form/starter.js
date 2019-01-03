@@ -6,8 +6,8 @@ export default {
         message: 'Your card number is incomplete',
       },
       stripeToken: '',
-      showManualErrors: false,
-      showNativeErrors: false,
+      showErrors: false,
+      showCardError: false,
       showManualPay: false,
       nativeIsSupported: false,
       isFetchingToken: false,
@@ -15,25 +15,17 @@ export default {
   },
 
   computed: {
-    manualIsValid() {
-      const manualErrors = Object.keys(this.validation).filter(key => {
-        const curr = this.validation[key];
-        return !curr.valid && curr.manual;
-      });
-      return manualErrors.length === 0;
-    },
+    isValid() {
+      const fields = this.$store.state[this.storeModule];
+      const invalids = Object.keys(fields).filter(key => !fields[key].isValid);
 
-    nativeIsValid() {
-      const nativeErrors = Object.keys(this.validation).filter(key => {
-        const curr = this.validation[key];
-        return !curr.valid && curr.native;
-      });
-      return nativeErrors.length === 0;
+      return invalids.length === 0;
     },
 
     showErrorClue() {
-      if (this.showManualErrors && !this.manualIsValid) return true;
-      if (this.showNativeErrors && !this.nativeIsValid) return true;
+      if (this.showCardError && !this.card.isValid) return true;
+      if (this.showErrors && !this.isValid) return true;
+
       return false;
     },
 
@@ -47,7 +39,7 @@ export default {
       this.$refs.form.submit();
     },
 
-    setValue(updates) {
+    setLocalValue(updates) {
       if (Array.isArray(updates)) {
         updates.forEach(({ key, value }) => {
           this[key] = value;
@@ -55,6 +47,17 @@ export default {
       } else {
         const { key, value } = updates;
         this[key] = value;
+      }
+    },
+
+    setCardValue(updates) {
+      if (Array.isArray(updates)) {
+        updates.forEach(({ key, value }) => {
+          this.card[key] = value;
+        });
+      } else {
+        const { key, value } = updates;
+        this.card[key] = value;
       }
     },
   },

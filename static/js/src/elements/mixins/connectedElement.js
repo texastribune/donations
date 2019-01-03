@@ -4,7 +4,6 @@ import getValidity from './getValidity';
 import getMessage from './getMessage';
 import updateValue from './updateValue';
 import updateValidity from './updateValidity';
-import * as validatorFns from '../../utils/validators';
 
 export default {
   mixins: [
@@ -42,8 +41,6 @@ export default {
     },
 
     isValid() {
-      if (!this.validator) return true;
-
       return this.getValidity({
         storeModule: this.storeModule,
         key: this.name,
@@ -51,17 +48,14 @@ export default {
     },
 
     validator() {
-      const validator = this.getValidator({
+      return this.getValidator({
         storeModule: this.storeModule,
         key: this.name,
       });
-
-      if (!validator) return false;
-      return validatorFns[validator];
     },
 
     message() {
-      return this.message({
+      return this.getMessage({
         storeModule: this.storeModule,
         key: this.name,
       });
@@ -69,13 +63,13 @@ export default {
   },
 
   mounted() {
-    if (!this.validator) return;
+    if (this.validator === null) return;
     if (this.validator(this.value)) this.markValid();
   },
 
   methods: {
     updateSingleValue(newValue) {
-      if (!this.validator) {
+      if (this.validator === null) {
         this.fireDispatch(newValue);
         this.fireUpdateCallback(newValue);
       } else {

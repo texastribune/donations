@@ -95,24 +95,27 @@ export default {
         .canMakePayment()
         .then(result => {
           if (result) {
-            this.$emit('setValue', { key: 'nativeIsSupported', value: true });
+            this.$emit('setLocalValue', {
+              key: 'nativeIsSupported',
+              value: true,
+            });
             button.mount(this.$refs.native);
           } else {
             throw new Error();
           }
         })
         .catch(() => {
-          this.$emit('setValue', { key: 'showManualPay', value: true });
+          this.$emit('setLocalValue', { key: 'showManualPay', value: true });
         });
 
       button.on('click', event => {
         const updates = [
-          { key: 'showManualErrors', value: false },
-          { key: 'showNativeErrors', value: true },
+          { key: 'showErrors', value: true },
+          { key: 'showCardError', value: false },
           { key: 'serverErrorMessage', value: '' },
         ];
 
-        this.$emit('setValue', updates);
+        this.$emit('setLocalValue', updates);
         if (!this.formIsValid) event.preventDefault();
       });
 
@@ -121,7 +124,7 @@ export default {
           token: { id },
         } = event;
 
-        this.$emit('setValue', {
+        this.$emit('setLocalValue', {
           key: 'stripeToken',
           value: id,
         });
@@ -135,7 +138,7 @@ export default {
 
     showManual(event) {
       event.preventDefault();
-      this.$emit('setValue', { key: 'showManualPay', value: true });
+      this.$emit('setLocalValue', { key: 'showManualPay', value: true });
     },
   },
 };

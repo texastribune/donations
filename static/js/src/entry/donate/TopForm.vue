@@ -30,7 +30,7 @@
       <div class="col">
         <text-input
           :store-module="storeModule"
-          :show-error="showManualErrors || showNativeErrors"
+          :show-error="showErrors"
           label-text="amount ($)"
           base-classes="form__text form__text--heavy"
           name="amount"
@@ -51,7 +51,7 @@
       <div class="col">
         <text-input
           :store-module="storeModule"
-          :show-error="showManualErrors || showNativeErrors"
+          :show-error="showErrors"
           label-text="email address"
           type="email"
           base-classes="form__text form__text--standard"
@@ -64,7 +64,7 @@
       <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
-          :show-error="showManualErrors || showNativeErrors"
+          :show-error="showErrors"
           label-text="first name"
           base-classes="form__text form__text--standard"
           name="first_name"
@@ -73,7 +73,7 @@
       <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
-          :show-error="showManualErrors || showNativeErrors"
+          :show-error="showErrors"
           label-text="last name"
           base-classes="form__text form__text--standard"
           name="last_name"
@@ -86,7 +86,7 @@
         <text-input
           :store-module="storeModule"
           :required="false"
-          :show-error="showManualErrors || showNativeErrors"
+          :show-error="showErrors"
           label-text="encouraged to give by"
           base-classes="form__text form__text--standard"
           name="reason"
@@ -96,7 +96,7 @@
         <text-input
           :store-module="storeModule"
           :required="false"
-          :show-error="showManualErrors || showNativeErrors"
+          :show-error="showErrors"
           label-text="zip code"
           base-classes="form__text form__text--standard"
           name="zipcode"
@@ -114,10 +114,10 @@
       <div class="col">
         <native-pay
           :store-module="storeModule"
-          :form-is-valid="nativeIsValid"
+          :form-is-valid="isValid"
           :supported="nativeIsSupported"
           base-classes="form__native"
-          @setValue="setValue"
+          @setLocalValue="setLocalValue"
           @onSubmit="onSubmit"
         />
       </div>
@@ -134,9 +134,10 @@
         <div class="grid_row">
           <div class="col">
             <manual-pay
-              :show-error="showManualErrors"
-              :validation="validation.card"
+              :show-error="showErrors && showCardError"
+              :card="card"
               base-classes="form__manual"
+              @setCardValue="setCardValue"
             />
           </div>
         </div>
@@ -144,12 +145,12 @@
         <div class="grid_row">
           <div class="col">
             <manual-submit
-              :form-is-valid="manualIsValid"
+              :form-is-valid="isValid && card.isValid"
               :is-fetching-token="isFetchingToken"
               base-classes="form__submit button button--yellow button--l"
               value="Donate"
               @onSubmit="onSubmit"
-              @setValue="setValue"
+              @setLocalValue="setLocalValue"
             />
           </div>
         </div>

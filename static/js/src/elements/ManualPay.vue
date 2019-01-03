@@ -1,14 +1,12 @@
 <template>
   <div :class="classesWithValidation">
     <card :options="options" :stripe="stripeKey" @change="onChange" />
-    <p v-if="showError && !valid" role="alert">{{ errorMessage }}</p>
+    <p v-if="showError && !valid" role="alert">{{ message }}</p>
   </div>
 </template>
 
 <script>
 import { Card } from 'vue-stripe-elements-plus';
-
-import updateValidity from './mixins/updateValidity';
 
 export default {
   name: 'ManualPay',
@@ -17,15 +15,13 @@ export default {
     Card,
   },
 
-  mixins: [updateValidity],
-
   props: {
     showError: {
       type: Boolean,
       default: false,
     },
 
-    validation: {
+    card: {
       type: Object,
       required: true,
     },
@@ -47,11 +43,11 @@ export default {
     },
 
     valid() {
-      return this.validation.valid;
+      return this.card.isValid;
     },
 
-    errorMessage() {
-      return this.validation.message;
+    message() {
+      return this.card.message;
     },
 
     classesWithValidation() {
@@ -63,16 +59,24 @@ export default {
 
   methods: {
     onChange({ error, empty }) {
+      let validValue;
+      let messageValue;
+
       if (error) {
-        this.markMessageAndInvalid({ element: 'card', message: error.message });
+        validValue = false;
+        messageValue = error.message;
       } else if (empty) {
-        this.markMessageAndInvalid({
-          element: 'card',
-          message: 'Your card number is incomplete',
-        });
+        validValue = false;
+        messageValue = 'Your card number is incomplete';
       } else {
-        this.markValid('card');
+        validValue = true;
+        messageValue = '';
       }
+
+      this.$emit('setCardValue', [
+        { key: 'isValid', value: validValue },
+        { key: 'message', value: messageValue },
+      ]);
     },
   },
 };
