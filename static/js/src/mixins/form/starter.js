@@ -1,6 +1,8 @@
 export default {
   data() {
     return {
+      // card input is the only input not stored
+      // at the Vuex level
       card: {
         isValid: false,
         message: 'Your card number is incomplete',
@@ -15,6 +17,8 @@ export default {
   },
 
   computed: {
+    // Returns true if all form values at the Vuex level are valid.
+    // This does NOT account for local `card` validity
     isValid() {
       const fields = this.$store.state[this.storeModule];
       const invalids = Object.keys(fields).filter(key => !fields[key].isValid);
@@ -22,6 +26,7 @@ export default {
       return invalids.length === 0;
     },
 
+    // whether to show "please correct errors above" below form
     showErrorClue() {
       if (this.showCardError && !this.card.isValid) return true;
       if (this.showErrors && !this.isValid) return true;
@@ -29,6 +34,7 @@ export default {
       return false;
     },
 
+    // whether to show card-failure message produced on the server
     showServerErrorMessage() {
       return !this.showErrorClue && this.serverErrorMessage;
     },

@@ -43,7 +43,8 @@ function createInitialFormState(queryParams) {
       amount = amount || '35';
   }
 
-  // merge query-parameter values into state object
+  // merge query-parameter values into full state object,
+  // which contains validation information
   return mergeValuesIntoStartState(BASE_FORM_STATE, {
     amount,
     campaign_id: campaignId,
