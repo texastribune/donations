@@ -37,7 +37,13 @@ from flask_talisman import Talisman
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask import Flask, redirect, render_template, request, send_from_directory
-from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
+from forms import (
+    BlastForm,
+    BlastPromoForm,
+    DonateForm,
+    BusinessMembershipForm,
+    CircleForm,
+)
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from amazon_pay.ipn_handler import IpnHandler
 from amazon_pay.client import AmazonPayClient
@@ -195,6 +201,7 @@ support.texastribune.org.
 
 
 @app.route("/blast-vip")
+# @app.route("/blast-promo")
 def the_blastvip_form():
     return redirect("/blastform", code=302)
 
@@ -429,6 +436,51 @@ def business_form():
     return render_template(
         template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
+
+
+@app.route("/blast-promo")
+def the_blast_promo_form():
+    bundles = get_bundles("old")
+    form = BlastPromoForm()
+
+    campaign_id = request.args.get("campaignId", default="")
+    referral_id = request.args.get("referralId", default="")
+
+    return render_template(
+        "blast-promo.html",
+        form=form,
+        campaign_id=campaign_id,
+        referral_id=referral_id,
+        installment_period="yearly",
+        key=app.config["STRIPE_KEYS"]["publishable_key"],
+        bundles=bundles,
+    )
+
+
+@app.route("/submit-blast-promo", methods=["POST"])
+def submit_blast_promo():
+    bundles = get_bundles("old")
+    app.logger.info(pformat(request.form))
+    form = BlastPromoForm(request.form)
+
+    email_is_valid = validate_email(request.form["stripeEmail"])
+
+    if email_is_valid:
+        customer = stripe.Customer.create(
+            email=request.form["stripeEmail"], card=request.form["stripeToken"]
+        )
+        app.logger.info(f"Customer id: {customer.id}")
+    else:
+        message = "There was an issue saving your email address."
+        return render_template("error.html", message=message, bundles=bundles)
+    if form.validate():
+        app.logger.info("----Adding Blast subscription...")
+        add_blast_subscription.delay(customer=customer, form=clean(request.form))
+        return render_template("blast-charge.html", bundles=bundles)
+    else:
+        app.logger.error("Failed to validate form")
+        message = "There was an issue saving your donation information."
+        return render_template("error.html", message=message, bundles=bundles)
 
 
 @app.route("/blastform")
