@@ -74,42 +74,34 @@ def send_slack_message(
         logging.error(f"Failed to send Slack notification: {e}")
 
 
-def send_slack_attachment(
-    channel=SLACK_CHANNEL, attachment=None, username="moneybot", icon_emoji=":moneybag:"
+def make_slack_attachment(
+    email=None, donor=None, source=None, amount=None, period=None
 ):
+
     attachment = [
         {
-            "as_user": False,
-            "icon_emoji": ":moneybag:",
-            "fallback": "This is the fallback",
+            # "pretext"
+            "fallback": "Donation",
             "color": "good",
-            "text": "text",
-            #            "pretext": "foo@bar.com",
+            # "text": "text",
+            "author_name": donor,
+            # author_link
+            # author_icon
+            "title": email,
+            # title_link
             "fields": [
-                {"title": "Source", "value": "Amazon Alexa", "short": True},
-                {"title": "Amount", "value": "$5", "short": True},
-                {"title": "Name", "value": "Foo Bar", "short": False},
-                {"title": "Period", "value": "yearly", "short": True},
-                {"title": "Type", "value": "Circle", "short": True},
+                {"title": "Source", "value": source, "short": False},
+                {"title": "Amount", "value": f"${amount}", "short": True},
+                {"title": "Period", "value": period, "short": False},
+                {"title": "Type", "value": type, "short": False},
             ],
         }
     ]
-    # attachment = [
-    #     {
-    #         "fallback": "Deployment status.",
-    #         "color": "good",
-    #         "mrkdwn_in": ["text"],
-    #         "title": "instance_name",
-    #         "fields": [
-    #             {"value": "status", "short": False},
-    #             {"value": "Command ID: foo", "short": False},
-    #         ],
-    #     }
-    # ]
 
-    from pprint import pprint
 
-    pprint(attachment)
+def send_slack_attachment(
+    channel=SLACK_CHANNEL, attachment=None, username="moneybot", icon_emoji=":moneybag:"
+):
 
     if not ENABLE_SLACK:
         return
@@ -130,6 +122,46 @@ def send_slack_attachment(
     except Exception as e:
         logging.error(f"Failed to send Slack notification: {e}")
     pprint(response.text, indent=2)
+
+    # {
+    # 	"icon_emoji": ":moneybag:",
+    # 	"attachments": [
+    #         {
+    #             "fallback": "Required plain-text summary of the attachment.",
+    #             "color": "#2eb886",
+    #             "pretext": "Optional text that appears above the attachment block",
+    #             "author_name": "Bobby Tables",
+    #             "author_link": "http://flickr.com/bobby/",
+    #             "author_icon": "http://flickr.com/icons/bobby.jpg",
+    #             "title": "Your Name Here",
+    #             "title_link": "https://api.slack.com/",
+    #             "text": "Optional text that appears within the attachment",
+    #              "fields": [
+    #                 {"title": "Source", "value": "Amazon Alexa", "short": true},
+    #                 {"title": "Amount", "value": "$5", "short": true},
+    #                 {"title": "Period", "value": "yearly", "short": true},
+    #                 {"title": "Type", "value": "Circle", "short": true}
+    #             ],
+    #             "image_url": "http://my-website.com/path/to/image.jpg",
+    #             "thumb_url": "http://example.com/path/to/thumb.png",
+    #             "footer": "Slack API",
+    #             "footer_icon": "https://platform.slack-edge.com/img/default_application_icon.png",
+    #             "ts": 123456789
+    #         }
+    #     ]
+    # }
+    # attachment = [
+    #     {
+    #         "fallback": "Deployment status.",
+    #         "color": "good",
+    #         "mrkdwn_in": ["text"],
+    #         "title": "instance_name",
+    #         "fields": [
+    #             {"value": "status", "short": False},
+    #             {"value": "Command ID: foo", "short": False},
+    #         ],
+    #     }
+    # ]
 
 
 def send_multiple_account_warning(contact):
