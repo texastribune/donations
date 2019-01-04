@@ -160,7 +160,7 @@ csp = {
 app = Flask(__name__)
 Talisman(
     app,
-    content_security_policy=csp,
+    content_security_policy={},
     content_security_policy_report_only=True,
     content_security_policy_report_uri=REPORT_URI,
 )
