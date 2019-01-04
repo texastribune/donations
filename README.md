@@ -41,6 +41,7 @@ Environment
 | `CELERY_RESULT_BACKEND`     |                           redis://redis:6379/0 |
 | `FLASK_SECRET_KEY`          | b'f;\xeb\x9bT2\xcd\xdb\xe1#z\xfb\xab\xf8(\x03' |
 | `ENABLE_SENTRY`             |                                          False |
+|  SENTRY_ENVIRONMENT         |                                     production |
 | `SENTRY_DSN`                |          https://user:pass@sentry/7?timeout=10 |
 | `ENABLE_SLACK`              |                                          False |
 | `SLACK_API_KEY`             |                                                |
@@ -55,7 +56,7 @@ Environment
 | `BUSINESS_MEMBER_RECIPIENT` |                                    foo@bar.org |
 | `REDIS_URL`                 |                             redis://redis:6379 |
 | `SALESFORCE_API_VERSION`    |                                          v43.0 |
-| `REPORT-URI`                |                                https://foo.bar |
+| `REPORT_URI`                |                                https://foo.bar |
 
 Running the Project
 -------------------
