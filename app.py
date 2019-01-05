@@ -882,7 +882,7 @@ def add_business_membership(form=None, customer=None):
         )
         logging.info(opportunity)
         charge(opportunity)
-        notify_slack(account=account, opportunity=opportunity)
+        notify_slack(account=account, contact=contact, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
@@ -896,7 +896,7 @@ def add_business_membership(form=None, customer=None):
             if opportunity.expected_giving_date == today
         ][0]
         charge(opp)
-        notify_slack(account=account, rdo=rdo)
+        notify_slack(account=account, contact=contact, rdo=rdo)
 
     logging.info("----Getting affiliation...")
 

@@ -46,57 +46,99 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     """
     Send a notification about a donation to Slack.
     """
-    message = construct_slack_message(
+
+    if rdo and opportunity:
+        raise SalesforceException("rdo and opportunity can't both be specified")
+    name = account.name if account else contact.name
+    source = rdo.lead_source if rdo else opportunity.lead_source
+    amount = rdo.amount if rdo else opportunity.amount
+    period = rdo.installment_period if rdo else "Single"
+    donation_type = rdo.record_type_name if rdo else opportunity.record_type_name
+
+    if rdo and rdo.encouraged_by:
+        reason = rdo.encouraged_by
+    elif opportunity and opportunity.encouraged_by:
+        reason = opportunity.encouraged_by
+    else:
+        reason = None
+
+    attachment = construct_slack_attachment(
+        email=contact.email,
+        donor=name,
+        source=source,
+        amount=amount,
+        period=period,
+        donation_type=donation_type,
+        reason=reason,
+    )
+    message = {
+        "channel": SLACK_CHANNEL,
+        "attachments": [attachment],
+        "icon_emoji": ":moneybag:",
+    }
+    send_slack_message(message=message)
+    return
+
+    text = construct_slack_message(
         contact=contact, opportunity=opportunity, rdo=rdo, account=account
     )
+    message = {
+        "text": text,
+        "channel": SLACK_CHANNEL,
+        "username": opportunity.lead_source,
+        "icon_emoji": ":moneybag:",
+    }
 
-    send_slack_message(text=message, username=opportunity.lead_source)
+    send_slack_message(message)
 
 
-def send_slack_message(
-    channel=SLACK_CHANNEL, text=None, username="moneybot", icon_emoji=":moneybag:"
-):
+def send_slack_message(message=None):
 
-    if not ENABLE_SLACK:
+    if not ENABLE_SLACK or not message:
         return
 
-    payload = {
-        "token": SLACK_API_KEY,
-        "channel": channel,
-        "text": text,
-        "username": username,
-        "icon_emoji": icon_emoji,
-    }
+    message["token"] = SLACK_API_KEY
     url = "https://slack.com/api/chat.postMessage"
     try:
-        requests.get(url, params=payload)
+        requests.get(url, params=message)
     except Exception as e:
         logging.error(f"Failed to send Slack notification: {e}")
 
 
-def make_slack_attachment(
-    email=None, donor=None, source=None, amount=None, period=None
+def construct_slack_attachment(
+    email=None,
+    donor=None,
+    source=None,
+    amount=None,
+    period=None,
+    donation_type=None,
+    reason=None,
 ):
+    attachment = {
+        # "pretext"
+        "fallback": "Donation",
+        "color": "good",
+        # "text": "text",
+        "author_name": donor,
+        # author_link
+        # author_icon
+        "title": email,
+        # title_link
+        "fields": [
+            {"title": "Source", "value": source, "short": False},
+            {"title": "Amount", "value": f"${amount}", "short": True},
+            {"title": "Period", "value": period, "short": False},
+            {"title": "Type", "value": donation_type, "short": False},
+            {"title": "Reason", "value": reason, "short": False},
+        ],
+    }
 
-    attachment = [
-        {
-            # "pretext"
-            "fallback": "Donation",
-            "color": "good",
-            # "text": "text",
-            "author_name": donor,
-            # author_link
-            # author_icon
-            "title": email,
-            # title_link
-            "fields": [
-                {"title": "Source", "value": source, "short": False},
-                {"title": "Amount", "value": f"${amount}", "short": True},
-                {"title": "Period", "value": period, "short": False},
-                {"title": "Type", "value": type, "short": False},
-            ],
-        }
-    ]
+    if reason:
+        attachment["fields"].append(
+            {"title": "Reason", "value": reason, "short": False}
+        )
+        pprint(attachment, indent=2)
+    return attachment
 
 
 def send_slack_attachment(
