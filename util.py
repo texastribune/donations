@@ -1,4 +1,5 @@
 import json
+import hashlib
 import logging
 import smtplib
 from collections import defaultdict
@@ -116,6 +117,9 @@ def construct_slack_attachment(
     donation_type=None,
     reason=None,
 ):
+
+    grav_hash = hashlib.md5(email.lower().encode("utf-8")).hexdigest()
+
     attachment = {
         "fallback": "Donation",
         "color": "good",
@@ -123,7 +127,7 @@ def construct_slack_attachment(
         # # "text": "text",
         "author_name": donor,
         # author_link
-        # author_icon
+        "author_icon": f"https://www.gravatar.com/avatar/{grav_hash}?s=16&r=g&default=robohash",
         "title": email,
         # "title_link":
         # "text": reason,
