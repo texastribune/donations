@@ -745,19 +745,18 @@ def add_recurring_donation(contact=None, form=None, customer=None):
 
     installments = form["installments"]
 
-    open_ended_status = form["openended_status"]
     installment_period = form["installment_period"]
-    rdo.open_ended_status = open_ended_status
     rdo.installments = installments
     rdo.installment_period = installment_period
 
-    if (
-        open_ended_status is None
-        and (installments == 3 or installments == 36)
-        and (installment_period == "yearly" or installment_period == "monthly")
+    if (installments == 3 or installments == 36) and (
+        installment_period == "yearly" or installment_period == "monthly"
     ):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
+        rdo.open_ended_status = "None"
+    else:
+        rdo.open_ended_status = "Open"
 
     apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
@@ -809,7 +808,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.lead_source = "Stripe"
     rdo.amount = form.get("amount", 0)
     rdo.installments = form["installments"]
-    rdo.open_ended_status = form["openended_status"]
+    rdo.open_ended_status = "Open"
     rdo.installment_period = form["installment_period"]
 
     apply_card_details(rdo=rdo, customer=customer)
