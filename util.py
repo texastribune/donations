@@ -18,7 +18,7 @@ from config import (
 
 import requests
 
-from npsp import SalesforceConnection, SalesforceException
+from npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
 
 
 def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
@@ -53,8 +53,10 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     name = account.name if account else contact.name
     source = rdo.lead_source if rdo else opportunity.lead_source
     amount = rdo.amount if rdo else opportunity.amount
-    period = rdo.installment_period if rdo else "Single"
-    donation_type = rdo.record_type_name if rdo else opportunity.record_type_name
+    period = rdo.installment_period if rdo else "single"
+    donation_type = rdo.type if rdo else opportunity.record_type_name
+    if donation_type == "Recurring Donation":
+        donation_type = DEFAULT_RDO_TYPE
 
     if rdo and rdo.encouraged_by:
         reason = rdo.encouraged_by
@@ -144,6 +146,8 @@ def construct_slack_attachment(
         # "footer_icon":
         # "ts":
     }
+    if reason:
+        attachment["text"] = reason
 
     return attachment
 
