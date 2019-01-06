@@ -846,7 +846,9 @@ def add_business_membership(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
-
+    if contact.work_email is None:
+        contact.work_email = email
+        contact.save()
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
