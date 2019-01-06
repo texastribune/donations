@@ -382,6 +382,7 @@ def test__format_contact():
     contact.first_name = "D"
     contact.last_name = "C"
     contact.lead_source = "Stripe"
+    contact.work_email = "dcraigmile+test6@texastribune.org"
 
     response = contact._format()
 
@@ -391,6 +392,7 @@ def test__format_contact():
         "LastName": "C",
         "LeadSource": "Stripe",
         "MailingPostalCode": None,
+        "npe01__WorkEmail__c": "dcraigmile+test6@texastribune.org",
     }
 
     assert response == expected_response
