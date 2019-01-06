@@ -403,7 +403,6 @@ class Opportunity(SalesforceObject):
         if not opportunities:
             raise SalesforceException("at least one Opportunity must be specified")
         sf = SalesforceConnection() if sf_connection is None else sf_connection
-        print(card_details)
         return sf.updates(opportunities, card_details)
 
     def __str__(self):

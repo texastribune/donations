@@ -668,18 +668,17 @@ def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
 
-    print(payload)
-    print(signature)
+    app.logger.info(payload)
 
     try:
         event = stripe.Webhook.construct_event(
             payload, signature, STRIPE_WEBHOOK_SECRET
         )
     except ValueError:
-        print("Error while decoding event!")
+        app.logger.warning("Error while decoding event!")
         return "Bad payload", 400
     except stripe.error.SignatureVerificationError:
-        print("Invalid signature!")
+        app.logger.warning("Invalid signature!")
         return "Bad signature", 400
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
