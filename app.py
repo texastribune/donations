@@ -667,7 +667,7 @@ def authorization_notification(payload):
     opportunity = Opportunity(contact=contact, stage_name="Closed Won")
     opportunity.amount = amount
     opportunity.description = description
-    opportunity.lead_source = "Amazon Pay"
+    opportunity.lead_source = "Amazon Alexa"
     opportunity.amazon_order_id = amzn_id
     opportunity.campaign_id = AMAZON_CAMPAIGN_ID
     opportunity.name = (
@@ -720,18 +720,17 @@ def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
 
-    print(payload)
-    print(signature)
+    app.logger.info(payload)
 
     try:
         event = stripe.Webhook.construct_event(
             payload, signature, STRIPE_WEBHOOK_SECRET
         )
     except ValueError:
-        print("Error while decoding event!")
+        app.logger.warning("Error while decoding event!")
         return "Bad payload", 400
     except stripe.error.SignatureVerificationError:
-        print("Invalid signature!")
+        app.logger.warning("Invalid signature!")
         return "Bad signature", 400
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
@@ -797,19 +796,18 @@ def add_recurring_donation(contact=None, form=None, customer=None):
 
     installments = form["installments"]
 
-    open_ended_status = form["openended_status"]
     installment_period = form["installment_period"]
-    rdo.open_ended_status = open_ended_status
     rdo.installments = installments
     rdo.installment_period = installment_period
 
-    if (
-        open_ended_status is None
-        and (installments == 3 or installments == 36)
-        and (installment_period == "yearly" or installment_period == "monthly")
+    if (installments == 3 or installments == 36) and (
+        installment_period == "yearly" or installment_period == "monthly"
     ):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
+        rdo.open_ended_status = "None"
+    else:
+        rdo.open_ended_status = "Open"
 
     apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
@@ -861,7 +859,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.lead_source = "Stripe"
     rdo.amount = form.get("amount", 0)
     rdo.installments = form["installments"]
-    rdo.open_ended_status = form["openended_status"]
+    rdo.open_ended_status = "Open"
     rdo.installment_period = form["installment_period"]
 
     apply_card_details(rdo=rdo, customer=customer)
@@ -900,7 +898,9 @@ def add_business_membership(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
-
+    if contact.work_email is None:
+        contact.work_email = email
+        contact.save()
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
@@ -934,7 +934,7 @@ def add_business_membership(form=None, customer=None):
         )
         logging.info(opportunity)
         charge(opportunity)
-        notify_slack(account=account, opportunity=opportunity)
+        notify_slack(account=account, contact=contact, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
@@ -948,7 +948,7 @@ def add_business_membership(form=None, customer=None):
             if opportunity.expected_giving_date == today
         ][0]
         charge(opp)
-        notify_slack(account=account, rdo=rdo)
+        notify_slack(account=account, contact=contact, rdo=rdo)
 
     logging.info("----Getting affiliation...")
 
