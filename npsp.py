@@ -594,7 +594,6 @@ class Opportunity(SalesforceObject):
         if not opportunities:
             raise SalesforceException("at least one Opportunity must be specified")
         sf = SalesforceConnection() if sf_connection is None else sf_connection
-        print(card_details)
         return sf.updates(opportunities, card_details)
 
     def __str__(self):
@@ -921,6 +920,7 @@ class Contact(SalesforceObject):
 
         self.id = id
         self.duplicate_found = False
+        self.work_email = None
 
     @staticmethod
     # TODO test
@@ -944,6 +944,7 @@ class Contact(SalesforceObject):
             "LastName": self.last_name,
             "LeadSource": self.lead_source,
             "MailingPostalCode": self.mailing_postal_code,
+            "npe01__WorkEmail__c": self.work_email,
         }
 
     @classmethod
@@ -974,7 +975,7 @@ class Contact(SalesforceObject):
             contact = super().get(id=id)
             return contact
             query = f"""
-                    SELECT Id, AccountId, FirstName, LastName, Email
+                    SELECT Id, AccountId, FirstName, LastName, LeadSource, Stripe_Customer_ID__c, MailingPostalCode, Email, npe01__WorkEmail__c
                     FROM Contact
                     WHERE id = '{id}'
                     """
@@ -990,10 +991,12 @@ class Contact(SalesforceObject):
             contact.email = response["Email"]
             contact.lead_source = response["LeadSource"]
             contact.mailing_postal_code = response["MailingPostalCode"]
+            contact.work_email = response["npe01__WorkEmail__c"]
+            contact.created = False
             return contact
 
         query = f"""
-                SELECT Id, AccountId, FirstName, LastName, Email
+                SELECT Id, AccountId, FirstName, LastName, LeadSource, MailingPostalCode, All_In_One_EMail__c, Email, npe01__WorkEmail__c
                 FROM Contact
                 WHERE All_In_One_EMail__c
                 LIKE '%{email}%'
@@ -1015,6 +1018,7 @@ class Contact(SalesforceObject):
         contact.last_name = response["LastName"]
         contact.email = response["Email"]
         contact.lead_source = response["LeadSource"]
+        contact.work_email = response["npe01__WorkEmail__c"]
         contact.mailing_postal_code = response["MailingPostalCode"]
 
         return contact

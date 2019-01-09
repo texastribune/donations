@@ -1,3 +1,5 @@
+import json
+import hashlib
 import logging
 import smtplib
 from collections import defaultdict
@@ -16,7 +18,7 @@ from config import (
 
 import requests
 
-from npsp import SalesforceConnection, SalesforceException
+from npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
 
 
 def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
@@ -45,24 +47,109 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     """
     Send a notification about a donation to Slack.
     """
-    message = construct_slack_message(
-        contact=contact, opportunity=opportunity, rdo=rdo, account=account
-    )
-    if not ENABLE_SLACK:
-        return
 
-    payload = {
-        "token": SLACK_API_KEY,
+    if rdo and opportunity:
+        raise SalesforceException("rdo and opportunity can't both be specified")
+    name = account.name if account else contact.name
+    source = rdo.lead_source if rdo else opportunity.lead_source
+    amount = rdo.amount if rdo else opportunity.amount
+    period = rdo.installment_period if rdo else "single"
+    donation_type = rdo.type if rdo else opportunity.record_type_name
+    if donation_type == "Recurring Donation":
+        donation_type = DEFAULT_RDO_TYPE
+
+    if rdo and rdo.encouraged_by:
+        reason = rdo.encouraged_by
+    elif opportunity and opportunity.encouraged_by:
+        reason = opportunity.encouraged_by
+    else:
+        reason = None
+
+    attachment = construct_slack_attachment(
+        email=contact.email,
+        donor=name,
+        source=source,
+        amount=amount,
+        period=period,
+        donation_type=donation_type,
+        reason=reason,
+    )
+    message = {
         "channel": SLACK_CHANNEL,
-        "text": message,
-        "username": "moneybot",
+        "attachments": json.dumps([attachment]),
         "icon_emoji": ":moneybag:",
     }
+    send_slack_message(message=message)
+
+    # text = construct_slack_message(
+    #     contact=contact, opportunity=opportunity, rdo=rdo, account=account
+    # )
+    # message = {
+    #     "text": text,
+    #     "channel": SLACK_CHANNEL,
+    #     "username": opportunity.lead_source,
+    #     "icon_emoji": ":moneybag:",
+    # }
+
+    # send_slack_message(message)
+
+
+def send_slack_message(message=None, username="moneybot"):
+
+    if not ENABLE_SLACK or not message:
+        return
+    message["token"] = SLACK_API_KEY
+    message["username"] = username
     url = "https://slack.com/api/chat.postMessage"
     try:
-        requests.get(url, params=payload)
+        response = requests.post(url, params=message)
+        slack_response = json.loads(response.text)
+        if not slack_response["ok"]:
+            raise Exception(slack_response["error"])
     except Exception as e:
         logging.error(f"Failed to send Slack notification: {e}")
+
+
+def construct_slack_attachment(
+    email=None,
+    donor=None,
+    source=None,
+    amount=None,
+    period=None,
+    donation_type=None,
+    reason=None,
+):
+
+    grav_hash = hashlib.md5(email.lower().encode("utf-8")).hexdigest()
+
+    attachment = {
+        "fallback": "Donation",
+        "color": "good",
+        # "pretext": "optional and appears above attachment"
+        # # "text": "text",
+        "author_name": donor,
+        # author_link
+        "author_icon": f"https://www.gravatar.com/avatar/{grav_hash}?s=16&r=g&default=robohash",
+        "title": email,
+        # "title_link":
+        # "text": reason,
+        # title_link
+        "fields": [
+            {"title": "Source", "value": source, "short": True},
+            {"title": "Amount", "value": f"${amount}", "short": True},
+            {"title": "Period", "value": period, "short": True},
+            {"title": "Type", "value": donation_type, "short": True},
+        ],
+        # "image_url":
+        # "thumb_url":
+        # "footer":
+        # "footer_icon":
+        # "ts":
+    }
+    if reason:
+        attachment["text"] = reason
+
+    return attachment
 
 
 def send_multiple_account_warning(contact):
