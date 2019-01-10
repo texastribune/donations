@@ -21,6 +21,12 @@ const actions = {
     commit('UPDATE_VALUE', { key, value });
   },
 
+  updateValues({ commit }, updates) {
+    Object.keys(updates).forEach(key => {
+      commit('UPDATE_VALUE', { key, value: updates[key] });
+    });
+  },
+
   updateValidity({ commit }, { key, isValid }) {
     commit('UPDATE_VALIDITY', { key, isValid });
   },
