@@ -3,7 +3,15 @@
 @import '3-generic/all';
 @import '4-elements/all';
 @import '5-objects/all';
-@import '6-components/all';
+
+// Include components as you need them
+@import '6-components/buttons';
+@import '6-components/contact';
+@import '6-components/footer';
+@import '6-components/forms';
+@import '6-components/hero';
+@import '6-components/navbar';
+
 @import '7-overrides/all';
 
 // Page specific components
