@@ -1,0 +1,66 @@
+// ELEMENTS - Raw tag styles
+
+// Set font root sizes for desktop, tablet, mobile
+html {
+  font-size: $font-root;
+  @extend %font-serif;
+  @include mq($until: bp-s) {
+    font-size: $font-root-mobile;
+  }
+}
+
+// Strip margin and padding from all headers a paragraphs
+html,
+body,
+dd,
+dl,
+div,
+dt,
+ul,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  padding: 0;
+}
+
+// Set base typography proportions for headers, paragraphs, etc.
+// sizing variables in settings/_breakpoints.scss
+h1 {
+  @extend %font-sansserif;
+  font-size: $size-xxl;
+  line-height: 1.2;
+}
+
+h2 {
+  @extend %font-sansserif;
+  font-size: $size-xl;
+}
+
+h3 {
+  @extend %font-sansserif;
+  font-size: $size-l;
+}
+
+h4 {
+  @extend %font-sansserif;
+  font-size: $size-m;
+}
+
+h5 {
+  @extend %font-sansserif;
+  font-size: $size-s;
+}
+
+p {
+  font-size: $size-b;
+}
+
+// We want all of our cite elements to not be italicized
+cite {
+  font-style: normal;
+}

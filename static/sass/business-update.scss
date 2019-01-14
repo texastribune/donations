@@ -1,0 +1,30 @@
+@import '1-settings/all';
+@import '2-tools/all';
+@import '3-generic/all';
+@import '4-elements/all';
+@import '5-objects/all';
+@import '6-components/all';
+@import '7-overrides/all';
+
+// Page specific components
+// @todo - Combine `business-form__bucket` with `circle-form__bucket`
+.business-form {
+  &__bucket {
+    border-width: 3px;
+    border-color: $color-white-off;
+    border-style: solid;
+    padding: $size-s;
+    transition: border-color 0.2s;
+
+    &.selected {
+      border-color: $color-yellow-tribune;
+    }
+  }
+
+  &__bucket-header {
+    @extend %font-serif;
+    font-size: $size-l;
+    font-weight: bold;
+    line-height: 1;
+  }
+}
