@@ -75,11 +75,6 @@
       display: none !important;
     }
   }
-  &__show {
-    @media print {
-      display: block !important;
-    }
-  }
 }
 
 .border {
