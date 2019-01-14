@@ -3,7 +3,7 @@
 // Set font root sizes for desktop, tablet, mobile
 html {
   font-size: $font-root;
-  @extend %font-serif;
+  font-family: $font-family-secondary;
   @include mq($until: bp-s) {
     font-size: $font-root-mobile;
   }
@@ -31,28 +31,23 @@ p {
 // Set base typography proportions for headers, paragraphs, etc.
 // sizing variables in settings/_breakpoints.scss
 h1 {
-  @extend %font-sansserif;
   font-size: $size-xxl;
   line-height: 1.2;
 }
 
 h2 {
-  @extend %font-sansserif;
   font-size: $size-xl;
 }
 
 h3 {
-  @extend %font-sansserif;
   font-size: $size-l;
 }
 
 h4 {
-  @extend %font-sansserif;
   font-size: $size-m;
 }
 
 h5 {
-  @extend %font-sansserif;
   font-size: $size-s;
 }
 
