@@ -1,26 +1,30 @@
-{% extends "new_layout.html" %} {% block title %}Business Membership | The Texas
-Tribune{% endblock %} {% block og_meta %}
-<meta
-  property="og:url"
-  content="https://support.texastribune.org/businessform"
-/>
-<meta
-  property="og:image"
-  content="https://support.texastribune.org{{ url_for('static', filename='img/business-social.jpg') }}"
-/>
-<meta property="og:title" content="Business Membership | The Texas Tribune" />
-<meta property="og:type" content="website" />
-<meta
-  property="og:description"
-  content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Business Member today."
-/>
-{% endblock %} {% block stylesheets %} {% for stylesheet in bundles['css'] %}
-<link rel="stylesheet" type="text/css" href="{{ stylesheet }}" /> {% endfor %}
-{% endblock %} {% block head_scripts %} {% if form_data and message %}
+{% extends "new_layout.html" %}
+
+{% block title %}Business Membership | The Texas Tribune{% endblock %}
+
+{% block og_meta %}
+<meta property="og:url" content="https://support.texastribune.org/businessform">
+<meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/business-social.jpg') }}">
+<meta property="og:title" content="Business Membership | The Texas Tribune">
+<meta property="og:type" content="website">
+<meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Business Member today.">
+{% endblock %}
+
+{% block stylesheets %}
+{% for stylesheet in bundles['css'] %}
+<link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
+{% endfor %}
+{% endblock %}
+
+{% block head_scripts %}
+{% if form_data and message %}
 <script>
   window.location.replace('#join-today');
 </script>
-{% endif %} {% endblock %} {% block content %}
+{% endif %}
+{% endblock %}
+
+{% block content %}
 <main class="main">
   <!-- where the router component attaches -->
   <div id="app" style="display:none;"></div>
@@ -38,6 +42,7 @@ Tribune{% endblock %} {% block og_meta %}
   <!-- for hash links when a form is invalid -->
   <div id="join-today"></div>
   <div class="grid_container grid_padded--xl">
+
     <section class="business-form grid_separator--l">
       <!-- where the form attaches -->
       <div id="business-form"></div>
@@ -56,14 +61,19 @@ Tribune{% endblock %} {% block og_meta %}
     </section>
   </div>
 </main>
-{% endblock %} {% block bottom_script %}
+{% endblock %}
+
+{% block bottom_script %}
 <script src="https://js.stripe.com/v3/"></script>
 
 {% if form_data and message %}
 <script>
-  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message|tojson }};
-  window.__BUSINESS_FORM_REHYDRATION__ = {{ form_data|tojson }};
+  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message | tojson }};
+  window.__BUSINESS_FORM_REHYDRATION__ = {{ form_data | tojson }};
 </script>
-{% endif %} {% for script in bundles['js'] %}
+{% endif %}
+
+{% for script in bundles['js'] %}
 <script src="{{ script }}"></script>
-{% endfor %} {% endblock %}
+{% endfor %}
+{% endblock %}
