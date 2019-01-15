@@ -1,0 +1,82 @@
+.splash {
+  background-color: $color-sand;
+  background-position-x: 50%;
+  // background-image: url('../img/TT-FMD18-BG_pattern-tile-grey.png');
+  background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
+  background-repeat: repeat;
+  padding-bottom: $size-giant * 2;
+  padding-top: $size-giant * 2;
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-b;
+    padding-top: $size-b;
+  }
+
+  &--headline {
+    @extend h1;
+    // color: $color-fmd-blue-dark;
+    color: $color-white-pure;
+    font-weight: bold;
+    padding-bottom: $size-l;
+
+    @include mq($from: bp-m) {
+      font-size: $size-xl;
+      padding-bottom: $size-m;
+    }
+
+    @include mq($from: bp-l) {
+      font-size: 2.3rem;
+      line-height: 1.25em;
+    }
+
+    @include mq($from: bp-xl) {
+      font-size: 2.75rem;
+    }
+
+    @include mq($until: $animation-single-line-bp) {
+      padding-bottom: 3.5rem;
+    }
+  }
+
+  &_actions {
+    align-items: center;
+  }
+
+  &--description {
+    @extend %link--blue;
+    // color: $color-fmd-blue-dark;
+    color: $color-white-pure;
+    font-size: $size-b;
+  }
+
+  &--buttons {
+    @include mq($from: bp-l) {
+      padding-left: $size-xs;
+    }
+
+    .button {
+      @include mq($from: bp-xl) {
+        width: 44%;
+      }
+    }
+
+    .button--yellow {
+      // background-color: $color-fmd-blue-light;
+      // border: 2px solid $color-fmd-blue-light;
+      // color: $color-white-pure;
+
+      @include mq($from: bp-l) {
+        line-height: 42px;
+        height: 44px;
+      }
+    }
+
+    .text {
+      // color: $color-fmd-blue-dark;
+      color: $color-white-pure;
+      font-size: $size-xs;
+      padding-left: $size-xxs/2;
+      padding-right: $size-xxs/2;
+    }
+  }
+}

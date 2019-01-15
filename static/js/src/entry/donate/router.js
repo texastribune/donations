@@ -61,20 +61,20 @@ function createRouter() {
   return new VueRouter({
     base: '/donate',
     mode: 'history',
-    routes: [
-      { path: '/', component: RouteHandler },
-    ],
+    routes: [{ path: '/', component: RouteHandler }],
   });
 }
 
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
-    const { currentRoute: { query } } = router;
+    const {
+      currentRoute: { query },
+    } = router;
 
     store.dispatch(
       'baseForm/createInitialState',
-      createInitialFormState(query),
+      createInitialFormState(query)
     );
 
     routeHandler.$mount('#app');

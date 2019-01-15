@@ -1,0 +1,12 @@
+@import '1-settings/all';
+@import '2-tools/all';
+@import '3-generic/all';
+@import '4-elements/all';
+@import '5-objects/all';
+
+// Include components as you need them
+@import '6-components/buttons';
+@import '6-components/footer';
+@import '6-components/navbar';
+
+@import '7-overrides/all';

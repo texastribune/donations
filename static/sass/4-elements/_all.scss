@@ -55,6 +55,10 @@ p {
   font-size: $size-b;
 }
 
+a {
+  text-decoration: none;
+}
+
 // We want all of our cite elements to not be italicized
 cite {
   font-style: normal;

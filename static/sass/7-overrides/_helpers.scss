@@ -1,6 +1,9 @@
 .section-padding {
   padding-bottom: $size-xl;
   padding-top: $size-xl;
+  &--filled {
+    background-color: $color-white-off;
+  }
 }
 
 // Standard clearfix to clear floats/grid
