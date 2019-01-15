@@ -1,6 +1,6 @@
 .prose {
   p {
-    @extend %font-serif;
+    @include font-setting('secondary');
     @extend %link--blue;
     color: $color-black-off;
     line-height: 1.4;
@@ -15,7 +15,6 @@
 // Smallhead: <h5>
 // Examples: Mini-headers, byline & button text
 .smallcaps {
-  @extend %font-sansserif;
   color: $color-black-pure;
   font-weight: 700;
   letter-spacing: .03em;
@@ -24,7 +23,6 @@
 
   // Byline
   &--light {
-    @extend %font-sansserif;
     color: $color-gray-medium;
     font-size: $size-xs;
     font-weight: 400;
@@ -76,7 +74,6 @@
 // Subtext: <p>
 // Examples: Grayed text below smallcaps, comment policy
 .subtext {
-  @extend %font-sansserif;
   @extend %link--blue;
   color: $color-gray-medium;
   font-size: $size-xs;
@@ -85,7 +82,7 @@
 }
 
 .list--bulleted {
-  @extend %font-serif;
+  @include font-setting('secondary');
 
   li {
     font-size: $size-b;

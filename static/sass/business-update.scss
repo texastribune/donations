@@ -18,6 +18,7 @@
 // @todo - Combine `business-form__bucket` with `circle-form__bucket`
 .business-form {
   &__bucket {
+    @include font-setting('secondary');
     border-width: 3px;
     border-color: $color-white-off;
     border-style: solid;
@@ -30,7 +31,6 @@
   }
 
   &__bucket-header {
-    @extend %font-serif;
     font-size: $size-l;
     font-weight: bold;
     line-height: 1;

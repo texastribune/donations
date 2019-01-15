@@ -2,8 +2,8 @@
 
 // Set font root sizes for desktop, tablet, mobile
 html {
+  @include font-setting('primary');
   font-size: $font-root;
-  font-family: $font-family-secondary;
   @include mq($until: bp-s) {
     font-size: $font-root-mobile;
   }

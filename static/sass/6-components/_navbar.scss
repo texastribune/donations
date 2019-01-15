@@ -1,5 +1,4 @@
 .navbar {
-  @extend %font-sansserif;
   background-color: $color-black-off;
   justify-content: space-between;
 
@@ -182,7 +181,6 @@
     }
 
     &--input {
-      @extend %font-sansserif;
       background-color: $color-black-off;
       border: none;
       color: $color-gray-light;
@@ -235,7 +233,6 @@
   margin: $size-xl 0;
 
   &__tagline {
-    @extend %font-sansserif;
     font-size: $size-s;
     font-weight: 700;
     line-height: 1.2;

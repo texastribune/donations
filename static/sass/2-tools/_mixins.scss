@@ -1,0 +1,8 @@
+// Add primary or secondary font styles
+@mixin font-setting($type: 'primary') {
+  @if $type == 'secondary' {
+    font-family: $font-family-secondary;
+  } @else {
+    font-family: $font-family-primary;
+  }
+}

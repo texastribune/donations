@@ -88,7 +88,6 @@ $button-border-width: 2px;
 $curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
 .button {
-  @extend %font-sansserif;
   @extend .smallcaps;
   cursor: pointer;
   font-size: $size-xxs;
@@ -151,7 +150,7 @@ $curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
     border-style: solid;
     border-width: 2px;
     cursor: pointer;
-    @extend %font-sansserif;
+   
     font-size: $size-xxs;
     font-weight: 700;
     letter-spacing: 0.05em;

@@ -12,9 +12,6 @@
   &--circle {
     background-image: url('../img/circle-bg.jpg');
   }
-  p {
-    @extend %font-sansserif;
-  }
 
   @include mq($until: bp-l) {
     padding-bottom: $size-b;
