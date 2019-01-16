@@ -1,11 +1,9 @@
+Software to collect donations for nonprofits. It integrates with Saleforce, Stripe, Amazon Pay and Sentry. 
+
 Donations
 =========
 
-Collecting donations for the Texas Tribune.
-
 - Python running Flask
-- integrates with Stripe
-- integrates with Salesforce
 - supports single and recurring donations
 - easily deployed on Heroku
 
