@@ -2,9 +2,10 @@
 @import '2-tools/all';
 @import '3-generic/all';
 @import '4-elements/all';
+
+// Include components & objects as needed
 @import '5-objects/all';
 
-// Include components as you need them
 @import '6-components/buttons';
 @import '6-components/contact';
 @import '6-components/footer';
@@ -15,3 +16,11 @@
 @import '6-components/rotate-words';
 
 @import '7-overrides/all';
+
+// This doesn't quite fit anywhere
+// @todo - Implement typography standard
+h2 {
+  @include mq($until: bp-m) {
+    font-size: 1.3rem;
+  }
+}

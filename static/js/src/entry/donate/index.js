@@ -7,7 +7,6 @@ import { createRouter, bindRouterEvents } from './router';
 import cssClasses from '../../mixins/global/cssClasses';
 import gtm from '../../mixins/global/gtm';
 
-// import '../../../../sass/donate.scss'
 import '../../../../sass/donate-update.scss';
 
 require('es6-promise').polyfill();

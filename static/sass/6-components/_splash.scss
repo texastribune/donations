@@ -1,22 +1,25 @@
 .splash {
   background-color: $color-sand;
   background-position-x: 50%;
-  // background-image: url('../img/TT-FMD18-BG_pattern-tile-grey.png');
   background-image: url('../img/TT-SMD18-BG_pattern-tile.png');
   background-repeat: repeat;
-  padding-bottom: $size-giant * 2;
-  padding-top: $size-giant * 2;
-
-  @include mq($until: bp-l) {
-    padding-bottom: $size-b;
-    padding-top: $size-b;
+  padding: 0 $size-b;
+  color: $color-white-pure;
+  &--blast {
+    background: $color-black-pure;
+    @include mq($until: bp-m) {
+      padding-bottom: $size-b;
+    }
+  }
+  &--tall {
+    padding: ($size-giant * 2) 0;
+    @include mq($until: bp-l) {
+      padding-bottom: $size-b;
+      padding-top: $size-b;
+    }
   }
 
-  &--headline {
-    @extend h1;
-    // color: $color-fmd-blue-dark;
-    color: $color-white-pure;
-    font-weight: bold;
+  &__headline {
     padding-bottom: $size-l;
 
     @include mq($from: bp-m) {
@@ -38,45 +41,24 @@
     }
   }
 
-  &_actions {
-    align-items: center;
-  }
-
-  &--description {
-    @extend %link--blue;
-    // color: $color-fmd-blue-dark;
-    color: $color-white-pure;
+  &__description {
     font-size: $size-b;
   }
 
-  &--buttons {
-    @include mq($from: bp-l) {
-      padding-left: $size-xs;
+  &__logo {
+    display: block;
+    margin: $size-b 0;
+    img {
+      max-width: 100%;
     }
-
-    .button {
-      @include mq($from: bp-xl) {
-        width: 44%;
-      }
+  }
+  
+  &__bug {
+    img {
+      max-width: 250px;
     }
-
-    .button--yellow {
-      // background-color: $color-fmd-blue-light;
-      // border: 2px solid $color-fmd-blue-light;
-      // color: $color-white-pure;
-
-      @include mq($from: bp-l) {
-        line-height: 42px;
-        height: 44px;
-      }
-    }
-
-    .text {
-      // color: $color-fmd-blue-dark;
-      color: $color-white-pure;
-      font-size: $size-xs;
-      padding-left: $size-xxs/2;
-      padding-right: $size-xxs/2;
+    @include mq($from: bp-m) {
+      text-align: right;
     }
   }
 }
