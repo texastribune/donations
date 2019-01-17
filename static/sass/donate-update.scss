@@ -3,19 +3,22 @@
 @import '3-generic/all';
 @import '4-elements/all';
 
-// Include components & objects as needed
-@import '5-objects/all';
+// Include components & typography as needed
+@import '5-typography/fontawesome';
+@import '5-typography/links';
+@import '5-typography/typography';
 
 @import '6-components/buttons';
 @import '6-components/contact';
 @import '6-components/footer';
 @import '6-components/forms';
+@import '6-components/images';
 @import '6-components/navbar';
 @import '6-components/splash';
 @import '6-components/quotes';
 @import '6-components/rotate-words';
 
-@import '7-overrides/all';
+@import '7-utilities/all';
 
 // This doesn't quite fit anywhere
 // @todo - Implement typography standard

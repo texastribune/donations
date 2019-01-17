@@ -35,3 +35,16 @@ $size-xxs: .7rem;
 // Animation breakpoints
 $animation-single-line-bp: 400px;
 $animation-single-line-bp: 550px;
+
+// Grid
+$grid-columns: 12;
+$grid-gutter: $size-b;
+$grid-gutter-px: 17.6;
+$grid-size-list: (
+  (s, bp-s, $bp-s),
+  (m, bp-m, $bp-m),
+  (l, bp-l, $bp-l),
+  (xl, bp-xl,$bp-xl),
+  (xxl, bp-xxl, $bp-xxl)
+);
+$column-slug: col !default;
