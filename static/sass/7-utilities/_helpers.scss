@@ -1,6 +1,9 @@
 .section-padding {
   padding-bottom: $size-xl;
   padding-top: $size-xl;
+  &--filled {
+    background-color: $color-white-off;
+  }
 }
 
 // Standard clearfix to clear floats/grid
@@ -49,6 +52,10 @@
 .horizontal_center {
   margin-left: auto;
   margin-right: auto;
+}
+// @todo: Create standardization around alignment
+.align-bottom {
+  align-items: baseline;
 }
 
 .text {

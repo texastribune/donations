@@ -2,14 +2,27 @@
 @import '2-tools/all';
 @import '3-generic/all';
 @import '4-elements/all';
-@import '5-objects/all';
-@import '6-components/all';
-@import '7-overrides/all';
+
+// Include components & typography as needed
+@import '5-typography/fontawesome';
+@import '5-typography/links';
+@import '5-typography/typography';
+
+@import '6-components/buttons';
+@import '6-components/contact';
+@import '6-components/footer';
+@import '6-components/forms';
+@import '6-components/hero';
+@import '6-components/images';
+@import '6-components/navbar';
+
+@import '7-utilities/all';
 
 // Page specific components
 // @todo - Combine `business-form__bucket` with `circle-form__bucket`
 .business-form {
   &__bucket {
+    @include font-setting('secondary');
     border-width: 3px;
     border-color: $color-white-off;
     border-style: solid;
@@ -22,7 +35,6 @@
   }
 
   &__bucket-header {
-    @extend %font-serif;
     font-size: $size-l;
     font-weight: bold;
     line-height: 1;

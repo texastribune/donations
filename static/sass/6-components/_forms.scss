@@ -1,5 +1,3 @@
-$color-error: #f51c1c;
-
 .form {
   // text/email inputs
   &__text {
@@ -11,7 +9,6 @@ $color-error: #f51c1c;
 
     input,
     select {
-      @extend %font-sansserif;
       background-color: #fbfbfb;
       border: 1px solid $color-gray-light;
       color: $color-black-pure;
@@ -27,7 +24,6 @@ $color-error: #f51c1c;
     }
 
     label {
-      @extend %font-sansserif;
       @extend .form__label;
       @extend .grid_separator--xs;
     }
@@ -107,7 +103,7 @@ $color-error: #f51c1c;
 
     &--serif {
       label {
-        @extend %font-serif;
+        @include font-setting('secondary');
       }
     }
 

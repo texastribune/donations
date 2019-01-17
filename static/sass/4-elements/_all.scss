@@ -2,8 +2,8 @@
 
 // Set font root sizes for desktop, tablet, mobile
 html {
+  @include font-setting('primary');
   font-size: $font-root;
-  font-family: $font-family-secondary;
   @include mq($until: bp-s) {
     font-size: $font-root-mobile;
   }
@@ -53,6 +53,10 @@ h5 {
 
 p {
   font-size: $size-b;
+}
+
+a {
+  text-decoration: none;
 }
 
 // We want all of our cite elements to not be italicized

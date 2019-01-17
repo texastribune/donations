@@ -9,7 +9,6 @@
 
 // <figcaption>
 .image_default--caption {
-  @extend %font-sansserif;
   @extend %link--blue;
   background-color: $color-white-off;
   color: $color-gray-dark;
@@ -18,7 +17,7 @@
   padding: $size-xs;
 
   p {
-    @extend %font-sansserif;
+
     font-size: $size-xs;
     margin: 0;
     i {
@@ -28,7 +27,6 @@
 }
 
 .photo_caption--small {
-  @extend %font-sansserif;
   color: $color-gray-dark;
   font-size: $size-xxs;
 

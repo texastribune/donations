@@ -9,7 +9,6 @@
   }
 
   &--header {
-    @extend %font-sansserif;
     color: $color-yellow-tribune;
     font-weight: 700;
     letter-spacing: 0.08em;
@@ -38,7 +37,6 @@
   }
 
   a {
-    @extend %font-sansserif;
     color: $color-white-pure;
     font-size: $size-xs;
     text-decoration: none;

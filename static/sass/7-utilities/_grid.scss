@@ -1,15 +1,3 @@
-$grid-columns: 12;
-$grid-gutter: $size-b;
-$grid-gutter-px: 17.6;
-$grid-size-list: (
-  (s, bp-s, $bp-s),
-  (m, bp-m, $bp-m),
-  (l, bp-l, $bp-l),
-  (xl, bp-xl,$bp-xl),
-  (xxl, bp-xxl, $bp-xxl)
-);
-$column-slug: col !default;
-
 @function get-col-percent($column-num) {
   @return percentage($column-num / $grid-columns);
 }
