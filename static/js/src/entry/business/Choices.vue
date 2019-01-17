@@ -1,18 +1,16 @@
 <template>
-  <div
-    class="grid_row grid_wrap--m"
-  >
+  <div class="grid_row grid_wrap--m">
     <div
       v-for="group in groups"
       :key="group.id"
       :class="{ selected: selectedGroup === group.bucket }"
-      class="business-form__bucket col_4 grid_separator"
+      class="form-bucket col_4 grid_separator"
     >
       <p
         :id="getGroupHeadingConnector(group)"
-        class="business-form__bucket-header grid_separator"
+        class="form-bucket__header grid_separator"
       >
-        {{ group.heading }}<br>
+        {{ group.heading }} <br />
       </p>
       <radios
         :options="group.options"
@@ -45,10 +43,7 @@ export default {
 
   components: { Radios },
 
-  mixins: [
-    getStoreValue,
-    updateStoreValues,
-  ],
+  mixins: [getStoreValue, updateStoreValues],
 
   data() {
     return {
@@ -85,7 +80,7 @@ export default {
       const options = [];
       const bucketsToIter = [];
 
-      bucketNames.forEach((name) => {
+      bucketNames.forEach(name => {
         bucketsToIter.push({
           ...BUSINESS_BUCKETS[name],
           name,
@@ -105,17 +100,15 @@ export default {
     },
 
     getInitialSelectedGroup() {
-      const level =
-        this.getStoreValue({ storeModule: 'businessForm', key: 'level' });
+      const level = this.getStoreValue({
+        storeModule: 'businessForm',
+        key: 'level',
+      });
       return BUSINESS_BUCKETS[level].bucket;
     },
 
     onUpdate(level) {
-      const {
-        amount,
-        bucket,
-        paymentDetails,
-      } = BUSINESS_BUCKETS[level];
+      const { amount, bucket, paymentDetails } = BUSINESS_BUCKETS[level];
 
       const updates = {
         installment_period: paymentDetails.installmentPeriod,
@@ -135,8 +128,6 @@ export default {
     getGroupHeadingConnector({ bucket, id }) {
       return `${bucket}-heading-${id}`;
     },
-
-
   },
 };
 </script>

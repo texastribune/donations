@@ -11,102 +11,11 @@
 @import '6-components/buttons';
 @import '6-components/contact';
 @import '6-components/footer';
+@import '6-components/form-bucket';
 @import '6-components/forms';
 @import '6-components/hero';
 @import '6-components/images';
 @import '6-components/navbar';
+@import '6-components/wall';
 
 @import '7-utilities/all';
-
-
-// Page specific components
-// @todo - Combine `circle-form__bucket` with `business-form__bucket`
-.circle-form {
-  &__bucket {
-    border-width: 3px;
-    border-color: $color-white-off;
-    border-style: solid;
-    padding: $size-s;
-    transition: border-color 0.2s;
-
-    &.selected {
-      border-color: $color-yellow-tribune;
-    }
-  }
-
-  &__bucket-header {
-    @include font-setting('secondary');
-    font-size: $size-l;
-    font-weight: bold;
-    line-height: 1;
-  }
-}
-
-.circle-wall {
-  &__logo {
-    margin: 0 $size-b $size-l;
-    text-align: center;
-
-    img {
-      max-width: 450px;
-      width: 100%;
-
-      @media print {
-        max-width: 175px;
-      }
-    }
-  }
-
-  &__heading {
-    @include mq($from: bp-s) {
-      text-align: center;
-    }
-
-    @media print {
-      font-size: $size-b;
-    }
-  }
-
-  &__list {
-    display: flex;
-    flex-wrap: wrap;
-    list-style: none;
-
-    @include mq($from: bp-s) {
-      justify-content: center;
-    }
-
-    @media print {
-      display: initial;
-    }
-  }
-
-  &__item {
-    margin: 0 $size-xxs/2 $size-xxs/2 0;
-
-    @include mq($until: bp-s) {
-      flex: 1 1 100%;
-    }
-
-    @media print {
-      display: inline-block;
-      margin-bottom: 0;
-      margin-right: 0.15rem;
-    }
-  }
-
-  &__star {
-    color: $color-yellow-tribune;
-    font-size: $size-xs;
-  }
-
-  &__name {
-    @include mq($from: bp-s) {
-      font-size: $size-xs;
-    }
-
-    @media print {
-      font-size: 0.6rem;
-    }
-  }
-}

@@ -4,19 +4,17 @@
       v-for="(group, index) in data"
       :key="group.id"
       :class="{ 'grid_separator--l': index !== data.length - 1 }"
-      class="circle-wall__group"
+      class="wall__group"
     >
-      <h2 class="circle-wall__heading grid_separator--s">
-        {{ group.heading }}
-      </h2>
-      <ul class="circle-wall__list">
+      <h2 class="wall__heading grid_separator--s">{{ group.heading }}</h2>
+      <ul class="wall__list">
         <li
           v-for="(member, memberIndex) in group.members"
           :key="memberIndex"
-          class="circle-wall__item"
+          class="wall__item"
         >
-          <span class="circle-wall__star fa fa-star" />
-          <span class="circle-wall__name"> {{ member }} </span>
+          <span class="wall__star fa fa-star" />
+          <span class="wall__name">{{ member }}</span>
         </li>
       </ul>
     </div>
