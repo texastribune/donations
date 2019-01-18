@@ -29,16 +29,16 @@
     <!-- where the router component attaches -->
     <div id="app" style="display:none;"></div>
 
-    <header class="circle-hero">
-      <div class="circle-hero__inner grid_container--m grid_padded">
-        <h1 class="circle-hero__title grid_separator">Join Our Circle</h1>
-        <p class="circle-hero__intro grid_separator">The Texas Tribune is the only member-supported, digitally focused, nonpartisan news organization that informs and engages with Texans about public policy, politics, government and statewide issues.</p>
-        <p class="circle-hero__cta">Our nonprofit newsroom depends on your support!</p>
-      </div>
-    </header>
+    <!-- hero component -->
+    {% with helperClass="hero--circle print__hide", title="Join Our Circle",
+    intro="The Texas Tribune is the only member-supported, digitally focused,
+    nonpartisan news organization that informs and engages with Texans about
+    public policy, politics, government and statewide issues.", cta="Our nonprofit
+    newsroom depends on your support!" %} {% include "includes/hero.html" %} {%
+    endwith %}
 
     <div class="grid_container grid_padded--xl">
-      <section class="circle-donate section-padding">
+      <section class="section-padding print__hide">
         <header class="circle-donate__header grid_container--m grid_separator">
           <div class="border--yellow_notch"></div>
           <h2 class="circle-donate__hed grid_separator">Your Circle Membership</h2>
@@ -58,7 +58,7 @@
         </div>
       </section>
 
-      <section class="grid_container--m circle-benefits section-padding grid_padded">
+      <section class="grid_container--m section-padding grid_padded print__hide">
         <header>
           <div class="border--yellow_notch"></div>
           <h4 class="link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</h4>
@@ -79,7 +79,7 @@
         </div>
       </section>
 
-      <section class="grid_container--m circle-benefits section-padding grid_padded">
+      <section class="grid_container--m section-padding grid_padded print__hide">
         <header>
           <div class="border--yellow_notch"></div>
           <h4 class="grid_separator circle-benefits__header">Questions?</h4>

@@ -1,0 +1,78 @@
+// <figure>
+.image_default {
+  margin: 0;
+
+  img {
+    width: 100%;
+  }
+}
+
+// <figcaption>
+.image_default--caption {
+  @extend %link--blue;
+  background-color: $color-white-off;
+  color: $color-gray-dark;
+  font-size: $size-xs;
+  margin-top: -5px;
+  padding: $size-xs;
+
+  p {
+
+    font-size: $size-xs;
+    margin: 0;
+    i {
+      color: lighten($color-gray-medium, 20%);
+    }
+  }
+}
+
+.photo_caption--small {
+  color: $color-gray-dark;
+  font-size: $size-xxs;
+
+  cite {
+    display: block;
+    font-size: $size-xxs;
+    margin-bottom: $size-b/4;
+
+    @include mq($from: bp-m) {
+      margin-top: $size-b/4;
+    }
+  }
+
+  cite p {
+    display: none;
+  }
+
+  i {
+    color: lighten($color-gray-medium, 20%);
+  }
+}
+
+.js-lazy-image {
+  .no-js & {
+    display: none;
+  }
+
+  &,
+  &--loading,
+  &--loaded {
+    backface-visibility: hidden;
+  }
+
+  &,
+  &--loading {
+    opacity: 0.1;
+
+    @supports (filter: blur(10px)) {
+      filter: blur(10px);
+      opacity: 0.5;
+    }
+  }
+
+  &--loaded {
+    filter: none;
+    opacity: 1;
+    transition: opacity 0.5s;
+  }
+}

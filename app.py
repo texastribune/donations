@@ -37,7 +37,13 @@ from flask_talisman import Talisman
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask import Flask, redirect, render_template, request, send_from_directory
-from forms import BlastForm, DonateForm, BusinessMembershipForm, CircleForm
+from forms import (
+    BlastForm,
+    BlastPromoForm,
+    DonateForm,
+    BusinessMembershipForm,
+    CircleForm,
+)
 from npsp import RDO, Contact, Opportunity, Affiliation, Account
 from amazon_pay.ipn_handler import IpnHandler
 from amazon_pay.client import AmazonPayClient
@@ -96,6 +102,23 @@ csp = {
         "www.gstatic.com",
         "www.google.iq",
         "www.google-analytics.com",
+        "www.google.md",
+        "www.google.com.qa",
+        "www.google.ca",
+        "www.google.es",
+        "www.google.am",
+        "www.google.de",
+        "www.google.jo",
+        "www.google.com.pr",
+        "www.google.com.ng",
+        "www.google.com.lb",
+        "www.google.be",
+        "www.google.se",
+        "www.google.co.uk",
+        "www.google.co.in",
+        "srclinkapp.biz",
+        "www.google.com.mx",
+        "*",
     ],
     "connect-src": [
         "*.stripe.com",
@@ -103,6 +126,8 @@ csp = {
         "www.google-analytics.com",
         "www.facebook.com",
         "stats.g.doubleclick.net",
+        "performance.typekit.net",
+        "*",
     ],
     "frame-src": [
         "'self'",
@@ -112,6 +137,10 @@ csp = {
         "bid.g.doubleclick.net",
         "bid.g.doubleclick.net",
         "fonts.gstatic.com",
+        "connect.facebook.net",
+        "wib.capitalone.com",
+        "api.pmmapads.com",
+        "*",
     ],
     "script-src": [
         "data:",
@@ -128,6 +157,8 @@ csp = {
         "checkout.stripe.com",
         "www.google-analytics.com",
         "googleads.g.doubleclick.net",
+        "watcher.risd.net",
+        "*",
     ],
 }
 
@@ -135,7 +166,7 @@ csp = {
 app = Flask(__name__)
 Talisman(
     app,
-    content_security_policy=csp,
+    content_security_policy={},
     content_security_policy_report_only=True,
     content_security_policy_report_uri=REPORT_URI,
 )
@@ -170,6 +201,7 @@ support.texastribune.org.
 
 
 @app.route("/blast-vip")
+# @app.route("/blast-promo")
 def the_blastvip_form():
     return redirect("/blastform", code=302)
 
@@ -406,6 +438,51 @@ def business_form():
     )
 
 
+@app.route("/blast-promo")
+def the_blast_promo_form():
+    bundles = get_bundles("old")
+    form = BlastPromoForm()
+
+    campaign_id = request.args.get("campaignId", default="")
+    referral_id = request.args.get("referralId", default="")
+
+    return render_template(
+        "blast-promo.html",
+        form=form,
+        campaign_id=campaign_id,
+        referral_id=referral_id,
+        installment_period="yearly",
+        key=app.config["STRIPE_KEYS"]["publishable_key"],
+        bundles=bundles,
+    )
+
+
+@app.route("/submit-blast-promo", methods=["POST"])
+def submit_blast_promo():
+    bundles = get_bundles("old")
+    app.logger.info(pformat(request.form))
+    form = BlastPromoForm(request.form)
+
+    email_is_valid = validate_email(request.form["stripeEmail"])
+
+    if email_is_valid:
+        customer = stripe.Customer.create(
+            email=request.form["stripeEmail"], card=request.form["stripeToken"]
+        )
+        app.logger.info(f"Customer id: {customer.id}")
+    else:
+        message = "There was an issue saving your email address."
+        return render_template("error.html", message=message, bundles=bundles)
+    if form.validate():
+        app.logger.info("----Adding Blast subscription...")
+        add_blast_subscription.delay(customer=customer, form=clean(request.form))
+        return render_template("blast-charge.html", bundles=bundles)
+    else:
+        app.logger.error("Failed to validate form")
+        message = "There was an issue saving your donation information."
+        return render_template("error.html", message=message, bundles=bundles)
+
+
 @app.route("/blastform")
 def the_blast_form():
     bundles = get_bundles("old")
@@ -590,7 +667,7 @@ def authorization_notification(payload):
     opportunity = Opportunity(contact=contact, stage_name="Closed Won")
     opportunity.amount = amount
     opportunity.description = description
-    opportunity.lead_source = "Amazon Pay"
+    opportunity.lead_source = "Amazon Alexa"
     opportunity.amazon_order_id = amzn_id
     opportunity.campaign_id = AMAZON_CAMPAIGN_ID
     opportunity.name = (
@@ -620,9 +697,8 @@ def get_zip(details=None):
 def amazonhook():
 
     payload = IpnHandler(request.data, request.headers)
-    # TODO: uncomment when done testing
-    #    if not payload.authenticate():
-    #        return payload.error
+    if not payload.authenticate():
+        return payload.error
 
     payload = json.loads(payload.to_json())
     app.logger.info(json.dumps(payload, indent=2))
@@ -643,18 +719,17 @@ def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
 
-    print(payload)
-    print(signature)
+    app.logger.info(payload)
 
     try:
         event = stripe.Webhook.construct_event(
             payload, signature, STRIPE_WEBHOOK_SECRET
         )
     except ValueError:
-        print("Error while decoding event!")
+        app.logger.warning("Error while decoding event!")
         return "Bad payload", 400
     except stripe.error.SignatureVerificationError:
-        print("Invalid signature!")
+        app.logger.warning("Invalid signature!")
         return "Bad signature", 400
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
@@ -720,19 +795,18 @@ def add_recurring_donation(contact=None, form=None, customer=None):
 
     installments = form["installments"]
 
-    open_ended_status = form["openended_status"]
     installment_period = form["installment_period"]
-    rdo.open_ended_status = open_ended_status
     rdo.installments = installments
     rdo.installment_period = installment_period
 
-    if (
-        open_ended_status is None
-        and (installments == 3 or installments == 36)
-        and (installment_period == "yearly" or installment_period == "monthly")
+    if (installments == 3 or installments == 36) and (
+        installment_period == "yearly" or installment_period == "monthly"
     ):
         rdo.type = "Giving Circle"
         rdo.description = "Texas Tribune Circle Membership"
+        rdo.open_ended_status = "None"
+    else:
+        rdo.open_ended_status = "Open"
 
     apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
@@ -784,7 +858,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.lead_source = "Stripe"
     rdo.amount = form.get("amount", 0)
     rdo.installments = form["installments"]
-    rdo.open_ended_status = form["openended_status"]
+    rdo.open_ended_status = "Open"
     rdo.installment_period = form["installment_period"]
 
     apply_card_details(rdo=rdo, customer=customer)
@@ -823,7 +897,9 @@ def add_business_membership(form=None, customer=None):
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name
     )
-
+    if contact.work_email is None:
+        contact.work_email = email
+        contact.save()
     logging.info(contact)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
@@ -857,7 +933,7 @@ def add_business_membership(form=None, customer=None):
         )
         logging.info(opportunity)
         charge(opportunity)
-        notify_slack(account=account, opportunity=opportunity)
+        notify_slack(account=account, contact=contact, opportunity=opportunity)
     else:
         logging.info("----Creating recurring business membership...")
         rdo = add_business_rdo(account=account, form=form, customer=customer)
@@ -871,7 +947,7 @@ def add_business_membership(form=None, customer=None):
             if opportunity.expected_giving_date == today
         ][0]
         charge(opp)
-        notify_slack(account=account, rdo=rdo)
+        notify_slack(account=account, contact=contact, rdo=rdo)
 
     logging.info("----Getting affiliation...")
 

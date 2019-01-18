@@ -1,0 +1,10 @@
+<header class="hero {{ helperClass|default('hero--default') }}">
+  <div class="hero__inner grid_container--m grid_padded">
+    <h1 class="hero__title grid_separator">{{ title|default('Welcome') }}</h1>
+    {% if intro %}
+    <p class="hero__intro grid_separator">{{ intro }}</p>
+    {% endif %} {% if cta %}
+    <p class="hero__cta">{{ cta }}</p>
+    {% endif %}
+  </div>
+</header>

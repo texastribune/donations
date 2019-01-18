@@ -1,0 +1,11 @@
+.contact {
+  @extend %link--blue;
+  p {
+    font-size: $size-s;
+  }
+  &--small {
+    p {
+      font-size: $size-xs;
+    }
+  }
+}
