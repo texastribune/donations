@@ -7,7 +7,7 @@ import { createRouter, bindRouterEvents } from './router';
 import cssClasses from '../../mixins/global/cssClasses';
 import gtm from '../../mixins/global/gtm';
 
-import '../../../../sass/business.scss';
+import '../../../../sass/business-update.scss';
 
 require('es6-promise').polyfill();
 
