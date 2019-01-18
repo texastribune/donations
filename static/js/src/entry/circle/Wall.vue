@@ -1,24 +1,29 @@
 <template>
-  <div v-if="!loading && !error">
-    <div
-      v-for="(group, index) in data"
-      :key="group.id"
-      :class="{ 'grid_separator--l': index !== data.length - 1 }"
-      class="wall__group"
-    >
-      <h2 class="wall__heading grid_separator--s">{{ group.heading }}</h2>
-      <ul class="wall__list">
-        <li
-          v-for="(member, memberIndex) in group.members"
-          :key="memberIndex"
-          class="wall__item"
-        >
-          <span class="wall__star fa fa-star" />
-          <span class="wall__name">{{ member }}</span>
-        </li>
-      </ul>
+  <section class="wall grid_separator--l">
+    <figure class="wall__logo grid_separator--l">
+      <img src="../../../../img/circle-logo.png" alt="Circle Membership logo" />
+    </figure>
+    <div v-if="!loading && !error">
+      <div
+        v-for="(group, index) in data"
+        :key="group.id"
+        :class="{ 'grid_separator--l': index !== data.length - 1 }"
+        class="wall__group"
+      >
+        <h2 class="wall__heading grid_separator--s">{{ group.heading }}</h2>
+        <ul class="wall__list">
+          <li
+            v-for="(member, memberIndex) in group.members"
+            :key="memberIndex"
+            class="wall__item"
+          >
+            <span class="wall__star fa fa-star" />
+            <span class="wall__name">{{ member }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
