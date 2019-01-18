@@ -1,0 +1,50 @@
+// sass-mq settings
+$mq-responsive: true;
+
+$bp-xs: 320px;
+$bp-s: 520px;
+$bp-m: 650px;
+$bp-l: 845px;
+$bp-xl: 1080px;
+$bp-xxl: 1300px;
+
+$bp-default: 960px;
+
+$mq-breakpoints: (
+  bp-xs: $bp-xs,
+  bp-s: $bp-s,
+  bp-m: $bp-m,
+  bp-l: $bp-l,
+  bp-xl: $bp-xl,
+  bp-xxl: $bp-xxl,
+  bp-default: $bp-default
+);
+
+// Sizes in comparison to 16px root
+$size-xxxl: 3rem;
+$size-giant: 2.5rem;
+$size-xxl: 2rem;
+$size-xl: 1.75rem;
+$size-l: 1.5rem;
+$size-m: 1.2rem;
+$size-b: 1.1rem;
+$size-s: .92rem;
+$size-xs: .85rem;
+$size-xxs: .7rem;
+
+// Animation breakpoints
+$animation-single-line-bp: 400px;
+$animation-single-line-bp: 550px;
+
+// Grid
+$grid-columns: 12;
+$grid-gutter: $size-b;
+$grid-gutter-px: 17.6;
+$grid-size-list: (
+  (s, bp-s, $bp-s),
+  (m, bp-m, $bp-m),
+  (l, bp-l, $bp-l),
+  (xl, bp-xl,$bp-xl),
+  (xxl, bp-xxl, $bp-xxl)
+);
+$column-slug: col !default;
