@@ -1,1 +1,1 @@
-import '../../../../sass/old-update.scss';
+import '../../../../sass/old.scss';
