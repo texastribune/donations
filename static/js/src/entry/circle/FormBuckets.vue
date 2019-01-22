@@ -1,14 +1,14 @@
 <template>
-  <div class="grid_row grid_wrap--m">
+  <div class="grid_row grid_wrap--m form-buckets">
     <div
       v-for="group in groups"
       :key="group.id"
-      :class="{ selected: selectedGroup === group.bucket }"
-      class="circle-form__bucket col_4 grid_separator"
+      :class="{
+        'form-buckets__item--selected': selectedGroup === group.bucket,
+      }"
+      class="form-buckets__item col_4 grid_separator"
     >
-      <p class="circle-form__bucket-header grid_separator">
-        {{ group.heading }}
-      </p>
+      <p class="form-buckets__header grid_separator">{{ group.heading }}</p>
       <radios
         :options="group.options"
         base-classes="form__radios form__radios--always-stack form__radios--serif"

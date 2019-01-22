@@ -11,32 +11,10 @@
 @import '6-components/buttons';
 @import '6-components/contact';
 @import '6-components/footer';
+@import '6-components/form-buckets';
 @import '6-components/forms';
 @import '6-components/hero';
 @import '6-components/images';
 @import '6-components/navbar';
 
 @import '7-utilities/all';
-
-// Page specific components
-// @todo - Combine `business-form__bucket` with `circle-form__bucket`
-.business-form {
-  &__bucket {
-    @include font-setting('secondary');
-    border-width: 3px;
-    border-color: $color-white-off;
-    border-style: solid;
-    padding: $size-s;
-    transition: border-color 0.2s;
-
-    &.selected {
-      border-color: $color-yellow-tribune;
-    }
-  }
-
-  &__bucket-header {
-    font-size: $size-l;
-    font-weight: bold;
-    line-height: 1;
-  }
-}

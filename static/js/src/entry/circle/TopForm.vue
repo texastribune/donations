@@ -21,7 +21,7 @@
 
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
-        <div class="col"><choices /></div>
+        <div class="col"><form-buckets /></div>
       </div>
     </div>
 
@@ -183,7 +183,7 @@ import TextInput from '../../elements/TextInput.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
-import Choices from './Choices.vue';
+import FormBuckets from './FormBuckets.vue';
 import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
@@ -198,7 +198,7 @@ export default {
     ManualPay,
     ManualSubmit,
     NativePay,
-    Choices,
+    FormBuckets,
   },
 
   mixins: [formStarter, updateStoreValue],
