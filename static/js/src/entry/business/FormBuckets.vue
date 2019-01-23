@@ -8,16 +8,11 @@
       }"
       class="form-buckets__item col_4 grid_separator"
     >
-      <p
-        :id="getGroupHeadingConnector(group)"
-        class="form-buckets__header grid_separator"
-      >
+      <p class="form-buckets__header grid_separator">
         {{ group.heading }} <br />
       </p>
       <radios
         :options="group.options"
-        :aria-labelledby="getGroupHeadingConnector(group)"
-        aria-describedby="business-form-hed business-form__intro"
         base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="businessForm"
@@ -125,10 +120,6 @@ export default {
 
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
-    },
-
-    getGroupHeadingConnector({ bucket, id }) {
-      return `${bucket}-heading-${id}`;
     },
   },
 };

@@ -3,15 +3,13 @@
     <li v-for="(option, index) in options" :key="option.id">
       <input
         :id="getConnector(index)"
-        :aria-labelledby="ariaLabelledby"
-        :aria-describedby="ariaDescribedby"
         :value="option.value"
         :name="name"
         :checked="value === option.value"
         type="radio"
         @change="updateSingleValue($event.target.value)"
       />
-      <label :for="getConnector(index)"> {{ option.text }} </label>
+      <label :for="getConnector(index)">{{ option.text }}</label>
     </li>
   </ul>
 </template>
@@ -19,12 +17,11 @@
 <script>
 import connectedElement from './mixins/connectedElement';
 import labelConnector from './mixins/labelConnector';
-import aria from './mixins/aria';
 
 export default {
   name: 'Frequency',
 
-  mixins: [aria, labelConnector, connectedElement],
+  mixins: [labelConnector, connectedElement],
 
   props: {
     options: {

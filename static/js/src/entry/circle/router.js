@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
-import CircleForm from './CircleForm.vue';
+import TopForm from './TopForm.vue';
 import Wall from './Wall.vue';
 import { CIRCLE_BUCKETS } from './constants';
 
@@ -16,11 +16,7 @@ function getStateFromParams(queryParams) {
 
   if (!CIRCLE_BUCKETS[level]) level = defaultLevel;
 
-  const {
-    amount,
-    installments,
-    installmentPeriod,
-  } = CIRCLE_BUCKETS[level];
+  const { amount, installments, installmentPeriod } = CIRCLE_BUCKETS[level];
 
   return {
     level,
@@ -56,21 +52,21 @@ function createRouter() {
   return new VueRouter({
     base: '/circleform',
     mode: 'history',
-    routes: [
-      { path: '/', component: RouteHandler },
-    ],
+    routes: [{ path: '/', component: RouteHandler }],
   });
 }
 
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
-    const topForm = new Vue({ ...CircleForm, store });
+    const topForm = new Vue({ ...TopForm, store });
     const wall = new Vue({ ...Wall });
-    const { currentRoute: { query } } = router;
+    const {
+      currentRoute: { query },
+    } = router;
 
     store.dispatch(
       'circleForm/createInitialState',
-      createInitialFormState(query),
+      createInitialFormState(query)
     );
 
     routeHandler.$mount('#app');

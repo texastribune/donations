@@ -1,7 +1,5 @@
 <template>
-  <div
-    :style="{ display: 'none' }"
-  />
+  <div :style="{ display: 'none' }" />
 </template>
 
 <script>
