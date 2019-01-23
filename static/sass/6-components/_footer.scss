@@ -49,10 +49,13 @@
       color: $color-blue-light;
       margin-top: $size-b;
     }
-
-    i {
-      padding-right: $size-b;
-      width: $size-m;
-    }
+}
+  &__icon {
+    display: inline-block;
+    fill: $color-white-pure;
+    height: 15px;
+    margin-right: 5px;
+    width: 15px;
+    vertical-align: sub;
   }
 }

@@ -52,11 +52,16 @@
   }
 
   &__star {
-    color: $color-yellow-tribune;
-    font-size: $size-xs;
+    display: inline-block;
+    fill: $color-yellow-tribune;
+    width: $size-xs;
+    height: $size-xs;
+    vertical-align: middle;
   }
 
   &__name {
+    display: inline-block;
+    vertical-align: middle;
     @include mq($from: bp-s) {
       font-size: $size-xs;
     }

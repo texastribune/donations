@@ -17,7 +17,10 @@
             :key="memberIndex"
             class="wall__item"
           >
-            <span class="wall__star fa fa-star" />
+            <svg class="wall__star" aria-hidden="true" focusable="true">
+              <use xlink:href="#star"></use>
+            </svg>
+            <!-- <span class="wall__star fa fa-star" /> -->
             <span class="wall__name">{{ member }}</span>
           </li>
         </ul>

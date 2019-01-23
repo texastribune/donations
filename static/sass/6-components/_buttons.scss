@@ -100,6 +100,13 @@ $curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
   transition: background-color 500ms ease;
   white-space: nowrap;
 
+  &__icon {
+    width: 15px;
+    height: 15px;
+    fill: $color-white-pure;
+    display: inline-block;
+    vertical-align: middle;
+  }
   // Default Button style
   // For user-input actions, i.e. "submit" or "search"
   &--yellow {
@@ -293,5 +300,13 @@ $curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
     padding: $size-xxs;
     height: $button-large-height;
     line-height: 20px;
+  }
+  // Hover state for icon
+  @include mq($from: bp-m) {
+    &:hover {
+      .button__icon--twitter {
+        fill: $color-twitter;
+      }
+    }
   }
 }
