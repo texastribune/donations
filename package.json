@@ -5,7 +5,7 @@
     "js:dev": "NODE_ENV=development webpack --config ./webpack/config.dev.js",
     "dev": "python3 app.py & yarn run js:dev",
     "postinstall": "NODE_ENV=production webpack --config ./webpack/config.prod.js",
-    "lint": "eslint --ext .js,.vue static/js/src/**"
+    "lint": "eslint --ext .js,.vue static/js/src"
   },
   "private": false,
   "repository": {

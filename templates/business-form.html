@@ -30,35 +30,28 @@
     <div id="app" style="display:none;"></div>
 
     <!-- hero component -->
-    {% with helperClass="hero--business", title="Join Our Business Membership
-    Program", intro="Make an annual contribution to The Texas Tribune in your
-    organization's name and join a roster of community-minded businesses." %} {%
-    include "includes/hero.html" %} {% endwith %}
-
+    {% with
+      helperClass="hero--business",
+      title="Join Our Business Membership Program",
+      intro="Make an annual contribution to The Texas Tribune in your organization's name and join a roster of community-minded businesses."
+    %}
+      {% include "includes/hero.html" %}
+    {% endwith %}
 
     <div class="grid_container grid_padded--xl section-padding">
-        {% include 'includes/business_opening_pitch.html' %}
-     </div>
+      {% include 'includes/business_opening_pitch.html' %}
+    </div>
 
     <!-- for hash links when a form is invalid -->
     <div id="join-today"></div>
     <div class="grid_container grid_padded--xl">
+      <section class="business-form grid_separator--l">
+        <!-- where the form attaches -->
+        <div id="business-form"></div>
+      </section>
 
-    <section class="business-form grid_separator--l">
-          <!-- where the form attaches -->
-      <div id="business-form"></div>
-     </section>
-
-     <section class="business-questions grid_separator--l">
+      <section class="business-questions grid_separator--l">
         {% include 'includes/business_questions.html' %}
-     </section>
-
-      <section class="business-wall grid_separator--l">
-        <figure class="business-wall__logo grid_separator--l">
-          <!-- <img src="{{ url_for('static', filename='img/business-logo.png')}}" alt="Business Membership logo"> -->
-        </figure>
-        <!-- where the wall component attaches -->
-        <div id="business-wall"></div>
       </section>
     </div>
   </main>
