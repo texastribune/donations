@@ -10,7 +10,19 @@ from wtforms.fields import (
 from wtforms.fields.html5 import EmailField
 
 
+def strip_filter(value):
+    if value is not None and hasattr(value, "strip"):
+        return value.strip()
+    return value
+
+
 class BaseForm(FlaskForm):
+    class Meta:
+        def bind_field(self, form, unbound_field, options):
+            filters = unbound_field.kwargs.get("filters", [])
+            filters.append(strip_filter)
+            return unbound_field.bind(form=form, filters=filters, **options)
+
     first_name = StringField(
         u"First name", [validators.required(message="Your first name is required.")]
     )
