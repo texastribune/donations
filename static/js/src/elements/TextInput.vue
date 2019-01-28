@@ -1,17 +1,8 @@
 <template>
-  <div
-    :class="classesWithValidation"
-  >
-    <label
-      v-if="hasLabel"
-      :for="connector"
-    >
-      {{ labelText }}
-    </label>
+  <div :class="classesWithValidation">
+    <label v-if="hasLabel" :for="connector">{{ labelText }}</label>
     <input
       :id="connector"
-      :aria-labelledby="ariaLabelledby"
-      :aria-describedby="ariaDescribedby"
       :aria-label="ariaLabel"
       :aria-invalid="!valid ? true : false"
       :aria-required="required"
@@ -20,29 +11,19 @@
       :placeholder="placeholder"
       :type="type"
       @input="updateSingleValue($event.target.value)"
-    >
-    <p
-      v-if="showError && !valid"
-      role="alert"
-    >
-      {{ errorMessage }}
-    </p>
+    />
+    <p v-if="showError && !valid" role="alert">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script>
 import connectedElement from './mixins/connectedElement';
 import labelConnector from './mixins/labelConnector';
-import aria from './mixins/aria';
 
 export default {
   name: 'TextInput',
 
-  mixins: [
-    aria,
-    connectedElement,
-    labelConnector,
-  ],
+  mixins: [connectedElement, labelConnector],
 
   props: {
     hasLabel: {

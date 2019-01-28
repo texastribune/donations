@@ -8,16 +8,9 @@
       }"
       class="form-buckets__item col_4 grid_separator"
     >
-      <p
-        :id="getGroupHeadingConnector(group)"
-        class="form-buckets__header grid_separator"
-      >
-        {{ group.heading }}
-      </p>
+      <p class="form-buckets__header grid_separator">{{ group.heading }}</p>
       <radios
         :options="group.options"
-        :aria-labelledby="getGroupHeadingConnector(group)"
-        aria-describedby="circle-donate-hed circle-donate-intro"
         base-classes="form__radios form__radios--always-stack form__radios--serif"
         name="level"
         store-module="circleForm"
@@ -125,10 +118,6 @@ export default {
 
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
-    },
-
-    getGroupHeadingConnector({ bucket, id }) {
-      return `${bucket}-heading-${id}`;
     },
   },
 };
