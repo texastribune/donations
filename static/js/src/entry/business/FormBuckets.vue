@@ -24,8 +24,8 @@
 
 <script>
 import Radios from '../../elements/Radios.vue';
-import getStoreValue from '../../elements/mixins/getStoreValue';
-import updateStoreValues from '../../elements/mixins/updateStoreValues';
+import getValue from '../../elements/mixins/getValue';
+import updateValues from '../../elements/mixins/updateValues';
 import addNumberCommas from '../../utils/addNumberCommas';
 import {
   BUSINESS_BUCKETS,
@@ -40,7 +40,7 @@ export default {
 
   components: { Radios },
 
-  mixins: [getStoreValue, updateStoreValues],
+  mixins: [getValue, updateValues],
 
   data() {
     return {
@@ -97,7 +97,7 @@ export default {
     },
 
     getInitialSelectedGroup() {
-      const level = this.getStoreValue({
+      const level = this.getValue({
         storeModule: 'businessForm',
         key: 'level',
       });
@@ -115,7 +115,7 @@ export default {
       };
 
       this.setSelectedGroup(bucket);
-      this.updateStoreValues({ storeModule: 'businessForm', updates });
+      this.updateValues({ storeModule: 'businessForm', updates });
     },
 
     setSelectedGroup(bucket) {

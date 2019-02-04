@@ -1,3 +1,5 @@
+import * as validators from '../../utils/validators';
+
 export const POSITION_ON_FORM_0 = 0;
 export const POSITION_ON_FORM_1 = 1;
 export const POSITION_ON_FORM_2 = 2;
@@ -188,3 +190,106 @@ export const US_STATES_SELECT_LIST = [
   { id: 49, value: 'WI', text: 'Wisconsin' },
   { id: 50, value: 'WY', text: 'Wyoming' },
 ];
+
+/*
+level,
+    amount,
+    pay_fees_value: payFees,
+    campaign_id: scrubbedQueryParams.campaignId,
+    referral_id: scrubbedQueryParams.referralId,
+    installment_period: scrubbedQueryParams.installment_period,
+    installments: scrubbedQueryParams.installments,
+    openended_status: scrubbedQueryParams.openended_status,
+*/
+
+export const BUSINESS_FORM_STATE = {
+  stripeEmail: {
+    value: '',
+    isValid: false,
+    validator: validators.isEmail,
+    message: 'Enter a valid email address',
+  },
+  business_name: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmptyAndIsMaxLength(255),
+    message: 'Enter a business name (255 characters or fewer)',
+  },
+  first_name: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmpty,
+    message: 'Enter contact first name',
+  },
+  website: {
+    value: '',
+    isValid: false,
+    validator: validators.isValidWebsite,
+    message: 'Enter a website, including https:// or http://',
+  },
+  last_name: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmpty,
+    message: 'Enter contact last name',
+  },
+  reason: {
+    value: '',
+    isValid: false,
+    validator: validators.isMaxLength(255),
+    message: 'Must be 255 characters or fewer',
+  },
+  shipping_postalcode: {
+    value: '',
+    isValid: false,
+    validator: validators.isZip,
+    message: 'Enter a 5-digit zip code',
+  },
+  shipping_street: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmptyAndIsMaxLength(255),
+    message: 'Enter a street/mailing address (255 characters or fewer)',
+  },
+  shipping_city: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmptyAndIsMaxLength(40),
+    message: 'Enter a city (40 characters or fewer)',
+  },
+  shipping_state: {
+    value: DEFAULT_STATE_SELECTED,
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  pay_fees_value: {
+    value: DEFAULT_PAY_FEES,
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  description: {
+    value: LONG_PROGRAM_NAME,
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  openended_status: {
+    value: '',
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  installment_period: {
+    value: '',
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  level: { value: '', isValid: true, validator: null, message: null },
+  campaign_id: { value: '', isValid: true, validator: null, message: null },
+  referral_id: { value: '', isValid: true, validator: null, message: null },
+  amount: { value: '', isValid: true, validator: null, message: null },
+  installments: { value: '', isValid: true, validator: null, message: null },
+};
