@@ -1,11 +1,9 @@
+Software to collect donations for nonprofits. It integrates with Saleforce, Stripe, Amazon Pay and Sentry. 
+
 Donations
 =========
 
-Collecting donations for the Texas Tribune.
-
 - Python running Flask
-- integrates with Stripe
-- integrates with Salesforce
 - supports single and recurring donations
 - easily deployed on Heroku
 
@@ -41,6 +39,7 @@ Environment
 | `CELERY_RESULT_BACKEND`     |                           redis://redis:6379/0 |
 | `FLASK_SECRET_KEY`          | b'f;\xeb\x9bT2\xcd\xdb\xe1#z\xfb\xab\xf8(\x03' |
 | `ENABLE_SENTRY`             |                                          False |
+|  SENTRY_ENVIRONMENT         |                                     production |
 | `SENTRY_DSN`                |          https://user:pass@sentry/7?timeout=10 |
 | `ENABLE_SLACK`              |                                          False |
 | `SLACK_API_KEY`             |                                                |
@@ -55,14 +54,14 @@ Environment
 | `BUSINESS_MEMBER_RECIPIENT` |                                    foo@bar.org |
 | `REDIS_URL`                 |                             redis://redis:6379 |
 | `SALESFORCE_API_VERSION`    |                                          v43.0 |
-| `REPORT-URI`                |                                https://foo.bar |
+| `REPORT_URI`                |                                https://foo.bar |
 
 Running the Project
 -------------------
 
 Run `make backing`. This will start RabbitMQ and Redis.
 Run `make`. This will drop you into the Flask app.
-Run `yarn run dev`. You should then be able to interact with the app at `local.texastribune.org:80`
+Run `yarn run dev`. You should then be able to interact with the app at `localhost:80`
 ```
 C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
 celery beat --app app.celery &
@@ -91,7 +90,7 @@ Deploy
 
 If you're not invited to the Trib's Heroku group, get someone to invite you. Log in to Heroku on your console. Follow [Heroku instructions](https://devcenter.heroku.com/articles/git) for deploying. Specifically, you'll run the command `heroku git:remote -a donations-prod` to add heroku to the project.
 
-Replace the `[remote "heroku"] stanza in your .git/config file with the following to tell Heroku/Git where to push your branch, production or test:
+Replace the `[remote "heroku"]` stanza in your `.git/config` file with the following to tell Heroku/Git where to push your branch, production or test:
 
 ```
 [remote "production"]
@@ -105,8 +104,6 @@ Replace the `[remote "heroku"] stanza in your .git/config file with the followin
 Then deploy to test with the command `git push test master` or production with `git push production master`.
 
 If you need to deploy a branch other than master to the test server, use the command `git push <server> <branch>:master`. For example `git push test your-branch-name:master`.
-
-Test URL: http://donations-testing.texastribune.org/
 
 Security
 --------

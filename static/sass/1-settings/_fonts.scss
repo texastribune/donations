@@ -1,0 +1,18 @@
+// Font families
+$font-family-primary: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-secondary: 'PT Serif', Georgia, serif;
+  
+
+// Font root sizes
+$font-root: 16px;
+$font-root-tablet: 16px;
+$font-root-mobile: 15px;
+
+// Silent class helpers
+%font-serif {
+  font-family: $font-family-primary;
+}
+
+%font-sansserif {
+  font-family: $font-family-secondary;
+}

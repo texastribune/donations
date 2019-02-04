@@ -1,0 +1,297 @@
+// this styles buttons and links that are supposed to look like buttons
+// NOTE: if it's a literal <button>, anything inside it will automatically get vertically centered
+// if it's a link, you'll need to put a span element with class "vertical_center" inside it
+// that span element should contain any icons, text, etc.
+
+@mixin button(
+  $bg-color,
+  $icon-color: $color-white-pure,
+  $icon-size: $size-s,
+  $inverse-text: white,
+  $toggle: false,
+  $mobile-only: false,
+  $inverse: false
+) {
+  background-color: $bg-color;
+  border: $button-border-width solid $bg-color;
+  color: $color-white-pure;
+
+  i {
+    color: $icon-color;
+    font-size: $icon-size;
+  }
+
+  // if mobile only, no need for hover styles
+  @if not $mobile-only {
+    @if $inverse-text == black {
+      color: $color-black-off;
+
+      &:hover,
+      &:active {
+        background-color: $color-white-pure;
+        color: $color-black-off;
+
+        i {
+          color: $color-black-off;
+        }
+      }
+    } @else if $inverse {
+      &:hover,
+      &:active {
+        background-color: transparent;
+        color: $color-white-pure;
+
+        i {
+          color: $bg-color;
+        }
+      }
+    } @else {
+      &:hover,
+      &:active {
+        background-color: transparent;
+        color: $bg-color;
+
+        i {
+          color: $bg-color;
+        }
+      }
+    }
+  }
+
+  @if $toggle {
+    color: $color-black-pure;
+
+    &:hover,
+    &:active {
+      background-color: $bg-color;
+      color: $color-white-pure;
+    }
+
+    &.button_active {
+      background-color: $color-white-pure;
+      color: $color-black-pure;
+    }
+  }
+}
+
+// dark buttons in mobile nav are a bit shorter so nav doesn't change height on scroll
+$button-nav-height: 24px;
+$button-default-height: 26px;
+$button-large-height: 44px;
+$button-border-width: 2px;
+
+// FYI: Some "links" are styled to look like buttons
+// Links styled to look like links live in _links.scss
+// Base styles for buttons
+// Always include .button + specific button settings below
+// Any line-height values you see are for vertical centering
+$curve-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+.button {
+  @extend .smallcaps;
+  cursor: pointer;
+  font-size: $size-xxs;
+  font-weight: 700;
+  padding: 0 $size-b/2;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 500ms ease;
+  white-space: nowrap;
+
+  // Default Button style
+  // For user-input actions, i.e. "submit" or "search"
+  &--yellow {
+    @include button($color-yellow-tribune, $inverse-text: black);
+    display: inline-block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  // Default "Link" Button styles
+  // Teal buttons are not full width
+  &--teal {
+    @include button($color-teal-gray);
+    display: inline-block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--gray {
+    @include button($color-gray-dark);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--light_gray {
+    @include button($color-gray-light);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--white_off {
+    @include button(
+      $bg-color: $color-white-off,
+      $icon-color: $color-black-pure,
+      $inverse-text: black
+    );
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--light_gray-inverse {
+    @extend .smallcaps--teal;
+    background-color: $color-white-pure;
+    border-color: $color-white-off;
+    border-style: solid;
+    border-width: 2px;
+    cursor: pointer;
+   
+    font-size: $size-xxs;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    padding: $size-b/4;
+    position: relative;
+    text-align: center;
+    text-decoration: none;
+    white-space: nowrap;
+    width: 100%;
+
+    span {
+      background-color: $color-white-pure;
+      padding: 0 $size-xxs;
+    }
+
+    &:hover {
+      border-color: $color-gray-light;
+    }
+  }
+
+  // Default "social" button (Colored box w/ white bg on hover)
+  &--comments {
+    @include button($color-teal-gray);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--fb {
+    @include button($color-facebook);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--twitter {
+    @include button($color-twitter);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  &--email {
+    @include button($color-yellow-tribune);
+    display: block;
+    height: $button-default-height;
+    line-height: $button-default-height - $button-border-width;
+  }
+
+  // Alternate "dark" social button
+  // Ex: Sticky nav header on mobile
+  &--comments-dark {
+    @include button(
+      $bg-color: $color-black-off,
+      $icon-color: $color-teal-gray,
+      $icon-size: $size-b,
+      $mobile-only: true
+    );
+    display: block;
+    height: $button-nav-height;
+    line-height: $button-nav-height;
+  }
+
+  &--fb-dark {
+    @include button(
+      $bg-color: $color-black-off,
+      $icon-color: $color-facebook,
+      $icon-size: $size-b,
+      $mobile-only: true
+    );
+    display: block;
+    height: $button-nav-height;
+    line-height: $button-nav-height;
+  }
+
+  &--home {
+    @include button($bg-color: $color-black-off, $mobile-only: true);
+    display: block;
+    height: $button-nav-height;
+
+    img {
+      display: block;
+      max-height: $size-b;
+      max-width: 100%;
+    }
+  }
+
+  &--twitter-dark {
+    @include button(
+      $bg-color: $color-black-off,
+      $icon-color: $color-twitter,
+      $icon-size: $size-b,
+      $mobile-only: true
+    );
+    display: block;
+    height: $button-nav-height;
+    line-height: $button-nav-height;
+  }
+
+  &--email-dark {
+    @include button(
+      $bg-color: $color-black-off,
+      $icon-color: $color-yellow-tribune,
+      $icon-size: $size-b,
+      $mobile-only: true
+    );
+    display: block;
+    height: $button-nav-height;
+    line-height: $button-nav-height;
+  }
+
+  // Toggle buttons
+  // Ex: Republish story page "toggle" between HTML and Plain Text
+  &_toggle,
+  &_toggle--yellow {
+    @include button($color-yellow-tribune, $inverse-text: black, $toggle: true);
+    height: $button-default-height;
+  }
+
+  // for rare cases (like next/prev buttons on site search)
+  // where the link button classes are used on actual <button> elements
+  // in that case, vertical centering happens by default, so we override line-height
+  &.button--natural {
+    line-height: normal;
+  }
+
+  &.button--s {
+    font-size: $size-s;
+    height: 40px;
+    line-height: normal;
+    padding: $size-b/2 $size-s;
+  }
+
+  // Display options
+  &--titlecase {
+    text-transform: none;
+  }
+  &--l {
+    font-size: $size-xs;
+    padding: $size-xxs;
+    height: $button-large-height;
+    line-height: 20px;
+  }
+}

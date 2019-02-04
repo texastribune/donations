@@ -29,29 +29,30 @@
     <!-- where the router component attaches -->
     <div id="app" style="display:none;"></div>
 
-    <header class="business-hero">
-      <div class="business-hero__inner grid_container--m grid_padded">
-        <h1 class="business-hero__title grid_separator">Join Our Business Membership Program</h1>
-        <p class="business-hero__intro grid_separator">Make an annual contribution to The Texas Tribune in your organization's name and join a roster of community-minded businesses.</p>
-      </div>
-    </header>
+    <!-- hero component -->
+    {% with
+      helperClass="hero--business",
+      title="Join Our Business Membership Program",
+      intro="Make an annual contribution to The Texas Tribune in your organization's name and join a roster of community-minded businesses."
+    %}
+      {% include "includes/hero.html" %}
+    {% endwith %}
 
-    <div class="opening-pitch section-padding">
+    <div class="grid_container grid_padded--xl section-padding">
       {% include 'includes/business_opening_pitch.html' %}
     </div>
 
     <!-- for hash links when a form is invalid -->
     <div id="join-today"></div>
     <div class="grid_container grid_padded--xl">
+      <section class="business-form grid_separator--l">
+        <!-- where the form attaches -->
+        <div id="business-form"></div>
+      </section>
 
-    <section class="business-form grid_separator--l">
-      <!-- where the form attaches -->
-      <div id="business-form"></div>
-     </section>
-
-     <section class="business-questions grid_separator--l">
-       {% include 'includes/business_questions.html' %}
-     </section>
+      <section class="business-questions grid_separator--l">
+        {% include 'includes/business_questions.html' %}
+      </section>
     </div>
   </main>
 {% endblock %}

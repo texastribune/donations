@@ -403,7 +403,6 @@ class Opportunity(SalesforceObject):
         if not opportunities:
             raise SalesforceException("at least one Opportunity must be specified")
         sf = SalesforceConnection() if sf_connection is None else sf_connection
-        print(card_details)
         return sf.updates(opportunities, card_details)
 
     def __str__(self):
@@ -755,6 +754,7 @@ class Contact(SalesforceObject):
         self.lead_source = "Stripe"
         self.mailing_postal_code = None
         self.duplicate_found = False
+        self.work_email = None
 
     @property
     def name(self):
@@ -781,6 +781,7 @@ class Contact(SalesforceObject):
             "LastName": self.last_name,
             "LeadSource": self.lead_source,
             "MailingPostalCode": self.mailing_postal_code,
+            "npe01__WorkEmail__c": self.work_email,
         }
 
     @classmethod
@@ -809,7 +810,7 @@ class Contact(SalesforceObject):
             raise SalesforceException("id and email can't both be specified")
         if id:
             query = f"""
-                    SELECT Id, AccountId, FirstName, LastName, LeadSource, Stripe_Customer_ID__c, MailingPostalCode, Email
+                    SELECT Id, AccountId, FirstName, LastName, LeadSource, Stripe_Customer_ID__c, MailingPostalCode, Email, npe01__WorkEmail__c
                     FROM Contact
                     WHERE id = '{id}'
                     """
@@ -825,11 +826,12 @@ class Contact(SalesforceObject):
             contact.email = response["Email"]
             contact.lead_source = response["LeadSource"]
             contact.mailing_postal_code = response["MailingPostalCode"]
+            contact.work_email = response["npe01__WorkEmail__c"]
             contact.created = False
             return contact
 
         query = f"""
-                SELECT Id, AccountId, FirstName, LastName, LeadSource, MailingPostalCode, All_In_One_EMail__c, Email
+                SELECT Id, AccountId, FirstName, LastName, LeadSource, MailingPostalCode, All_In_One_EMail__c, Email, npe01__WorkEmail__c
                 FROM Contact
                 WHERE All_In_One_EMail__c
                 LIKE '%{email}%'
@@ -851,6 +853,7 @@ class Contact(SalesforceObject):
         contact.last_name = response["LastName"]
         contact.email = response["Email"]
         contact.lead_source = response["LeadSource"]
+        contact.work_email = response["npe01__WorkEmail__c"]
         contact.mailing_postal_code = response["MailingPostalCode"]
         contact.created = False
 

@@ -1,0 +1,175 @@
+/*!
+ *  Font Awesome 4.4.0 by @davegandy - http://fontawesome.io - @fontawesome
+ *  License - http://fontawesome.io/license (Font: SIL OFL 1.1, CSS: MIT License)
+ */
+/* FONT PATH
+ * -------------------------- */
+
+// Note: To be deleted after SVG icon replacement
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/fonts/fontawesome-webfont.eot');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/fonts/fontawesome-webfont.eot') format('embedded-opentype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/fonts/fontawesome-webfont.woff2') format('woff2'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/fonts/fontawesome-webfont.woff') format('woff'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/fonts/fontawesome-webfont.ttf') format('truetype'), url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/fonts/fontawesome-webfont.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+.fa {
+  display: inline-block;
+  font: normal normal normal 14px/1 FontAwesome;
+  font-size: inherit;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* makes the font 33% larger relative to the icon container */
+.fa-lg {
+  font-size: 1.33333333em;
+  line-height: 0.75em;
+  vertical-align: -15%;
+}
+
+.fa-bars:before {
+  content: "\f0c9";
+}
+
+/* Icons we use */
+/* Move icons up here and uncomment as they're used */
+.fa-mail-forward:before,
+.fa-share:before {
+  content: "\f064";
+}
+
+// Brand Icons
+.fa-twitter:before {
+  content: "\f099";
+}
+.fa-facebook-f:before,
+.fa-facebook:before {
+  content: "\f09a";
+}
+.fa-instagram:before {
+  content: "\f16d";
+}
+.fa-linkedin:before {
+  content: "\f0e1";
+}
+.fa-youtube:before {
+  content: "\f167";
+}
+.fa-google-plus:before {
+  content: "\f0d5";
+}
+.fa-reddit:before {
+  content: "\f1a1";
+}
+.fa-apple:before {
+  content: "\f179";
+}
+.fa-google:before {
+  content: "\f1a0";
+}
+
+// Related Documents
+.fa-file-text-o:before {
+  content: "\f0f6";
+}
+
+// Email Icon
+.fa-envelope:before {
+  content: "\f0e0";
+}
+
+// Telephone
+.fa-phone:before {
+  content: "\f095";
+}
+
+// Comments Icons
+.fa-comments-o:before {
+  content: "\f0e6";
+}
+.fa-comments:before {
+  content: "\f086";
+}
+
+// Search Bar
+.fa-search:before {
+  content: "\f002";
+}
+
+// Toggle Carets
+.fa-caret-down:before {
+  content: "\f0d7";
+}
+.fa-caret-right:before {
+  content: "\f0da";
+}
+
+// Form <select>
+.fa-chevron-down:before {
+  content: "\f078";
+}
+
+.fa-angle-double-right:before {
+  content: "\f101";
+}
+
+// Back to top
+.fa-arrow-up:before {
+  content: "\f062";
+}
+
+// Direction Arrows
+.fa-long-arrow-left:before {
+  content: "\f177";
+}
+.fa-long-arrow-right:before {
+  content: "\f178";
+}
+
+// Close X
+// .fa-remove:before,
+// .fa-times:before,
+.fa-close:before {
+  content: "\f00d";
+}
+
+// Photo Credit
+.fa-camera:before {
+  content: "\f030";
+}
+
+.fa-feed:before,
+.fa-rss:before {
+  content: "\f09e";
+}
+
+.fa-map-marker:before {
+  content: "\f041";
+}
+
+.fa-user:before {
+  content: "\f007";
+}
+
+// Account Link
+.fa-user:before {
+  content: "\f007";
+}
+
+//Subscribe page
+.fa-reddit:before {
+  content: "\f1a1";
+}
+.fa-external-link:before {
+  content: "\f08e";
+}
+
+.fa-check:before {
+  content: "\f00c";
+}
+
+.fa-star:before {
+  content: "\f005";
+}
