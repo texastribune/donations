@@ -210,17 +210,17 @@ export const BUSINESS_FORM_STATE = {
     validator: validators.isNotEmpty,
     message: 'Enter contact first name',
   },
-  website: {
-    value: '',
-    isValid: false,
-    validator: validators.isValidWebsite,
-    message: 'Enter a website, including https:// or http://',
-  },
   last_name: {
     value: '',
     isValid: false,
     validator: validators.isNotEmpty,
     message: 'Enter contact last name',
+  },
+  website: {
+    value: '',
+    isValid: false,
+    validator: validators.isValidWebsite,
+    message: 'Enter a website, including https:// or http://',
   },
   reason: {
     value: '',
