@@ -191,17 +191,6 @@ export const US_STATES_SELECT_LIST = [
   { id: 50, value: 'WY', text: 'Wyoming' },
 ];
 
-/*
-level,
-    amount,
-    pay_fees_value: payFees,
-    campaign_id: scrubbedQueryParams.campaignId,
-    referral_id: scrubbedQueryParams.referralId,
-    installment_period: scrubbedQueryParams.installment_period,
-    installments: scrubbedQueryParams.installments,
-    openended_status: scrubbedQueryParams.openended_status,
-*/
-
 export const BUSINESS_FORM_STATE = {
   stripeEmail: {
     value: '',
