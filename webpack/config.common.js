@@ -11,7 +11,7 @@ module.exports = {
     donate: `${entryDir}/donate/index`,
     charge: `${entryDir}/charge/index`,
     circle: `${entryDir}/circle/index`,
-    // business: `${entryDir}/business/index`,
+    business: `${entryDir}/business/index`,
     old: `${entryDir}/old/index`,
   },
 
