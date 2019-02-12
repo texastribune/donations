@@ -22,21 +22,20 @@ from npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
 
 
 def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
-    reason = ""
+
     if rdo and opportunity:
         raise SalesforceException("rdo and opportunity can't both be specified")
 
-    if account:
-        amount = rdo.amount or opportunity.amount
-        message = f"*{account.name}* became a business member at the *${amount}* level."
-    elif opportunity:
-        if opportunity.encouraged_by:
-            reason = f" (encouraged by {opportunity.encouraged_by})"
-        message = f"*{contact.name}* ({contact.email}) pledged *${opportunity.amount}*{reason}"
-    elif rdo:
-        if rdo.encouraged_by:
-            reason = f" (encouraged by {rdo.encouraged_by})"
-        message = f"*{contact.name}* ({contact.email}) pledged *${rdo.amount}*{reason} [{rdo.installment_period}]"
+    reason = (
+        getattr(rdo, "encouraged_by", False)
+        or getattr(opportunity, "encouraged_by", False)
+        or ""
+    )
+    amount = getattr(rdo, "amount", False) or getattr(opportunity, "amount", "")
+    reason = f"({reason})" if reason else ""
+    entity = account.name if account else contact.name
+
+    message = f"{entity} pledged {amount} {reason}"
 
     logging.info(message)
 
@@ -48,50 +47,17 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     Send a notification about a donation to Slack.
     """
 
-    if rdo and opportunity:
-        raise SalesforceException("rdo and opportunity can't both be specified")
-    name = account.name if account else contact.name
-    source = rdo.lead_source if rdo else opportunity.lead_source
-    amount = rdo.amount if rdo else opportunity.amount
-    period = rdo.installment_period if rdo else "single"
-    donation_type = rdo.type if rdo else opportunity.record_type_name
-    if donation_type == "Recurring Donation":
-        donation_type = DEFAULT_RDO_TYPE
-
-    if rdo and rdo.encouraged_by:
-        reason = rdo.encouraged_by
-    elif opportunity and opportunity.encouraged_by:
-        reason = opportunity.encouraged_by
-    else:
-        reason = None
-
-    attachment = construct_slack_attachment(
-        email=contact.email,
-        donor=name,
-        source=source,
-        amount=amount,
-        period=period,
-        donation_type=donation_type,
-        reason=reason,
+    text = construct_slack_message(
+        contact=contact, opportunity=opportunity, rdo=rdo, account=account
     )
     message = {
+        "text": text,
         "channel": SLACK_CHANNEL,
-        "attachments": json.dumps([attachment]),
+        "username": opportunity.lead_source,
         "icon_emoji": ":moneybag:",
     }
-    send_slack_message(message=message)
 
-    # text = construct_slack_message(
-    #     contact=contact, opportunity=opportunity, rdo=rdo, account=account
-    # )
-    # message = {
-    #     "text": text,
-    #     "channel": SLACK_CHANNEL,
-    #     "username": opportunity.lead_source,
-    #     "icon_emoji": ":moneybag:",
-    # }
-
-    # send_slack_message(message)
+    send_slack_message(message)
 
 
 def send_slack_message(message=None, username="moneybot"):
@@ -119,6 +85,9 @@ def construct_slack_attachment(
     donation_type=None,
     reason=None,
 ):
+    """
+    Not currently in use.
+    """
 
     grav_hash = hashlib.md5(email.lower().encode("utf-8")).hexdigest()
 
