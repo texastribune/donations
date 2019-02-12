@@ -31,7 +31,7 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
         or getattr(opportunity, "encouraged_by", False)
         or ""
     )
-    period = f"[{rdo.installment_period}]" if rdo else "[single]"
+    period = f"[{rdo.installment_period}]" if rdo else "[one-time]"
     amount = getattr(rdo, "amount", False) or getattr(opportunity, "amount", "")
     amount = float(amount)
     reason = f"({reason})" if reason else ""
