@@ -52,14 +52,10 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     text = construct_slack_message(
         contact=contact, opportunity=opportunity, rdo=rdo, account=account
     )
-    message = {
-        "text": text,
-        "channel": SLACK_CHANNEL,
-        "username": opportunity.lead_source,
-        "icon_emoji": ":moneybag:",
-    }
+    username = rdo.lead_source if rdo else opportunity.lead_source
+    message = {"text": text, "channel": SLACK_CHANNEL, "icon_emoji": ":moneybag:"}
 
-    send_slack_message(message)
+    send_slack_message(message, username=username)
 
 
 def send_slack_message(message=None, username="moneybot"):
