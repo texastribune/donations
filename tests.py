@@ -169,7 +169,7 @@ def test__format_slack():
     actual = construct_slack_message(
         account=None, rdo=None, opportunity=opportunity, contact=contact
     )
-    expected = "D C pledged $9 [single] (Because I love the Trib!)"
+    expected = "D C pledged $9 [one-time] (Because I love the Trib!)"
 
     assert actual == expected
 
