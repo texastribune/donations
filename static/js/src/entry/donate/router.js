@@ -4,24 +4,20 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
+import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import { BASE_FORM_STATE } from './constants';
 
 Vue.use(VueRouter);
 
 function createInitialFormState(queryParams) {
+  // if form submission was invalid,
+  // rehydrate the store from the JSON blob in the template
   if (window.__BASE_FORM_REHYDRATION__) {
-    return window.__BASE_FORM_REHYDRATION__;
+    return mergeValuesIntoStartState(
+      BASE_FORM_STATE,
+      window.__BASE_FORM_REHYDRATION__
+    );
   }
-
-  const baseState = {
-    stripeEmail: '',
-    first_name: '',
-    last_name: '',
-    description: 'The Texas Tribune Membership',
-    reason: '',
-    zipcode: '',
-    installments: 'None',
-    pay_fees_value: 'False',
-  };
 
   let openEndedStatus;
   let { amount, installmentPeriod = 'monthly' } = queryParams;
@@ -47,14 +43,15 @@ function createInitialFormState(queryParams) {
       amount = amount || '35';
   }
 
-  return {
-    ...baseState,
+  // merge query-parameter values into full state object,
+  // which contains validation information
+  return mergeValuesIntoStartState(BASE_FORM_STATE, {
     amount,
     campaign_id: campaignId,
     referral_id: referralId,
     installment_period: installmentPeriod,
     openended_status: openEndedStatus,
-  };
+  });
 }
 
 function createRouter() {

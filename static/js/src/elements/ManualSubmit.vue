@@ -5,19 +5,15 @@
     :disabled="isFetchingToken"
     type="submit"
     @click="onClick"
-  >
+  />
 </template>
 
 <script>
 import Vue from 'vue';
 import { createToken } from 'vue-stripe-elements-plus';
 
-import updateValidity from './mixins/updateValidity';
-
 export default {
   name: 'ManualSubmit',
-
-  mixins: [updateValidity],
 
   props: {
     value: {
@@ -49,37 +45,43 @@ export default {
 
   methods: {
     markFetchingToken() {
-      this.$emit('setValue', { key: 'isFetchingToken', value: true });
+      this.$emit('setLocalValue', { key: 'isFetchingToken', value: true });
     },
 
     markNotFetchingToken() {
-      this.$emit('setValue', { key: 'isFetchingToken', value: false });
+      this.$emit('setLocalValue', { key: 'isFetchingToken', value: false });
     },
 
     onClick() {
       const updates = [
-        { key: 'showManualErrors', value: true },
-        { key: 'showNativeErrors', value: false },
+        { key: 'showErrors', value: true },
+        { key: 'showCardError', value: true },
         { key: 'serverErrorMessage', value: '' },
       ];
 
-      this.$emit('setValue', updates);
+      this.$emit('setLocalValue', updates);
 
       if (this.formIsValid) {
         this.markFetchingToken();
 
-        createToken().then((result) => {
+        createToken().then(result => {
           if (!result.error) {
-            const { token: { id } } = result;
+            const {
+              token: { id },
+            } = result;
 
-            this.$emit('setValue', {
+            this.$emit('setLocalValue', {
               key: 'stripeToken',
               value: id,
             });
 
-            Vue.nextTick(() => { this.$emit('onSubmit'); });
+            Vue.nextTick(() => {
+              this.$emit('onSubmit');
+            });
           } else {
-            const { error: { message, type } } = result;
+            const {
+              error: { message, type },
+            } = result;
             let messageToShow;
 
             this.markNotFetchingToken();
@@ -90,10 +92,10 @@ export default {
               messageToShow = this.blanketErrorMessage;
             }
 
-            this.markMessageAndInvalid({
-              element: 'card',
-              message: messageToShow,
-            });
+            this.$emit('setCardValue', [
+              { key: 'isValid', value: false },
+              { key: 'message', value: messageToShow },
+            ]);
           }
         });
       }

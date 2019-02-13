@@ -22,8 +22,8 @@
 
 <script>
 import Radios from '../../elements/Radios.vue';
-import getStoreValue from '../../elements/mixins/getStoreValue';
-import updateStoreValues from '../../elements/mixins/updateStoreValues';
+import getValue from '../../elements/mixins/getValue';
+import updateValues from '../../elements/mixins/updateValues';
 import addNumberCommas from '../../utils/addNumberCommas';
 import { CIRCLE_BUCKETS } from './constants';
 
@@ -32,7 +32,7 @@ export default {
 
   components: { Radios },
 
-  mixins: [getStoreValue, updateStoreValues],
+  mixins: [getValue, updateValues],
 
   data() {
     return {
@@ -90,7 +90,7 @@ export default {
     },
 
     getInitialSelectedGroup() {
-      const level = this.getStoreValue({
+      const level = this.getValue({
         storeModule: 'circleForm',
         key: 'level',
       });
@@ -113,7 +113,7 @@ export default {
       };
 
       this.setSelectedGroup(bucket);
-      this.updateStoreValues({ storeModule: 'circleForm', updates });
+      this.updateValues({ storeModule: 'circleForm', updates });
     },
 
     setSelectedGroup(bucket) {

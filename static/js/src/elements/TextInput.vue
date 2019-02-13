@@ -4,7 +4,7 @@
     <input
       :id="connector"
       :aria-label="ariaLabel"
-      :aria-invalid="!valid ? true : false"
+      :aria-invalid="!isValid ? true : false"
       :aria-required="required"
       :value="value"
       :name="name"
@@ -12,7 +12,7 @@
       :type="type"
       @input="updateSingleValue($event.target.value)"
     />
-    <p v-if="showError && !valid" role="alert">{{ errorMessage }}</p>
+    <p v-if="showError && !isValid" role="alert">{{ message }}</p>
   </div>
 </template>
 
@@ -65,7 +65,7 @@ export default {
 
     classesWithValidation() {
       const { classes } = this;
-      if (!this.showError || this.valid) return classes;
+      if (!this.showError || this.isValid) return classes;
       return `invalid ${classes}`;
     },
   },
