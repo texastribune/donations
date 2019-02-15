@@ -5,16 +5,14 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-
 import queryParamScrub from '../../utils/queryParamScrub';
+import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
 
 import {
   BUSINESS_BUCKETS,
-  DEFAULT_PAY_FEES,
+  BUSINESS_FORM_STATE,
   DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD,
   DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD,
-  DEFAULT_STATE_SELECTED,
-  LONG_PROGRAM_NAME,
   WL_DEFAULT_PARAMETERS,
   WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
   WL_QUERY_ESCAPE_THRESHOLD,
@@ -26,10 +24,8 @@ Vue.use(VueRouter);
 function mapInstallmentPeriodOncetoForm(finalSanitizedParams) {
   // set data for form submit
   finalSanitizedParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
-
   finalSanitizedParams.installment_period =
     QUERY_PARAMETERS_STRING_VALUES.noneStr;
-
   finalSanitizedParams.openended_status =
     QUERY_PARAMETERS_STRING_VALUES.noneStr;
 
@@ -78,26 +74,19 @@ function getStateFromParams(queryParams) {
 }
 
 function createInitialFormState(queryParams) {
+  // if form submission was invalid,
+  // rehydrate the store from the JSON blob in the template
   if (window.__BUSINESS_FORM_REHYDRATION__) {
-    return window.__BUSINESS_FORM_REHYDRATION__;
+    return mergeValuesIntoStartState(
+      BUSINESS_FORM_STATE,
+      window.__BUSINESS_FORM_REHYDRATION__
+    );
   }
-  const dynamicState = getStateFromParams(queryParams);
-  const staticState = {
-    stripeEmail: '',
-    business_name: '',
-    website: '',
-    shipping_street: '',
-    shipping_city: '',
-    shipping_state: DEFAULT_STATE_SELECTED,
-    shipping_postalcode: '',
-    first_name: '',
-    last_name: '',
-    description: LONG_PROGRAM_NAME,
-    reason: '',
-    pay_fees_value: DEFAULT_PAY_FEES,
-  };
 
-  return { ...staticState, ...dynamicState };
+  const paramState = getStateFromParams(queryParams);
+  // merge query-parameter values into full state object,
+  // which contains validation information
+  return mergeValuesIntoStartState(BUSINESS_FORM_STATE, paramState);
 }
 
 function createRouter() {

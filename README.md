@@ -1,4 +1,4 @@
-Software to collect donations for nonprofits. It integrates with Saleforce, Stripe, Amazon Pay and Sentry. 
+Software to collect donations for nonprofits. It integrates with Saleforce, Stripe, Amazon Pay, Slack and Sentry.
 
 Donations
 =========
@@ -84,26 +84,6 @@ Running tests
 
 To run the project tests, run
 `make test`
-
-Deploy
--------------------
-
-If you're not invited to the Trib's Heroku group, get someone to invite you. Log in to Heroku on your console. Follow [Heroku instructions](https://devcenter.heroku.com/articles/git) for deploying. Specifically, you'll run the command `heroku git:remote -a donations-prod` to add heroku to the project.
-
-Replace the `[remote "heroku"]` stanza in your `.git/config` file with the following to tell Heroku/Git where to push your branch, production or test:
-
-```
-[remote "production"]
-  url = https://git.heroku.com/donations-prod.git
-  fetch = +refs/heads/*:refs/remotes/production/*
-[remote "test"]
-  url = https://git.heroku.com/donations-testing.git
-  fetch = +refs/heads/*:refs/remotes/heroku/*
-```
-
-Then deploy to test with the command `git push test master` or production with `git push production master`.
-
-If you need to deploy a branch other than master to the test server, use the command `git push <server> <branch>:master`. For example `git push test your-branch-name:master`.
 
 Security
 --------

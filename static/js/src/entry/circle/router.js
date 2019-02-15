@@ -5,7 +5,8 @@ import VueRouter from 'vue-router';
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import Wall from './Wall.vue';
-import { CIRCLE_BUCKETS } from './constants';
+import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import { CIRCLE_BUCKETS, CIRCLE_FORM_STATE } from './constants';
 
 Vue.use(VueRouter);
 
@@ -29,28 +30,24 @@ function getStateFromParams(queryParams) {
 }
 
 function createInitialFormState(queryParams) {
+  // if form submission was invalid,
+  // rehydrate the store from the JSON blob in the template
   if (window.__CIRCLE_FORM_REHYDRATION__) {
-    return window.__CIRCLE_FORM_REHYDRATION__;
+    return mergeValuesIntoStartState(
+      CIRCLE_FORM_STATE,
+      window.__CIRCLE_FORM_REHYDRATION__
+    );
   }
 
-  const dynamicState = getStateFromParams(queryParams);
-  const staticState = {
-    stripeEmail: '',
-    first_name: '',
-    last_name: '',
-    description: 'The Texas Tribune Circle Membership',
-    reason: '',
-    zipcode: '',
-    pay_fees_value: 'False',
-    openended_status: 'None',
-  };
-
-  return { ...staticState, ...dynamicState };
+  const paramState = getStateFromParams(queryParams);
+  // merge query-parameter values into full state object,
+  // which contains validation information
+  return mergeValuesIntoStartState(CIRCLE_FORM_STATE, paramState);
 }
 
 function createRouter() {
   return new VueRouter({
-    base: '/circleform',
+    base: '/circle',
     mode: 'history',
     routes: [{ path: '/', component: RouteHandler }],
   });
