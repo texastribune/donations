@@ -6,8 +6,15 @@ from pytz import timezone
 
 import pytest
 from batch import amount_to_charge
-from npsp import RDO, Contact, Opportunity, SalesforceConnection, SalesforceObject
-from util import clean
+from npsp import (
+    RDO,
+    Contact,
+    Opportunity,
+    SalesforceConnection,
+    SalesforceObject,
+    Account,
+)
+from util import clean, construct_slack_message
 
 
 class SalesforceConnectionSubClass(SalesforceConnection):
@@ -82,6 +89,73 @@ def test_check_response():
 zone = timezone("US/Central")
 
 today = datetime.now(tz=zone).strftime("%Y-%m-%d")
+
+
+def test__format_slack():
+
+    opportunity = Opportunity(sf_connection=sf)
+    opportunity.account_id = "0011700000BpR8PAAV"
+    opportunity.amount = 9
+    opportunity.encouraged_by = "Because I love the Trib!"
+    opportunity.name = "D C (dcraigmile+test6@texastribune.org)"
+    opportunity.stripe_id = "cus_78MqJSBejMN9gn"
+    opportunity.agreed_to_pay_fees = True
+    opportunity.referral_id = "1234"
+    opportunity.lead_source = "Stripe"
+    opportunity.description = "The Texas Tribune Membership"
+    opportunity.stripe_customer = "cus_78MqJSBejMN9gn"
+
+    rdo = RDO(sf_connection=sf)
+    rdo.referral_id = "1234"
+    rdo.encouraged_by = "Because I love the Trib!"
+    rdo.lead_source = "Stripe"
+    rdo.contact_id = "0031700000BHQzBAAX"
+    rdo.installment_period = "yearly"
+    rdo.stripe_customer = "cus_78MqJSBejMN9gn"
+    rdo.amount = 100
+    rdo.name = "foo"
+    rdo.installments = 3
+    rdo.open_ended_status = None
+    rdo.description = "Texas Tribune Circle Membership"
+    rdo.agreed_to_pay_fees = True
+    rdo.type = "Giving Circle"
+
+    contact = Contact(sf_connection=sf)
+    contact.email = "dcraigmile+test6@texastribune.org"
+    contact.first_name = "D"
+    contact.last_name = "C"
+    contact.lead_source = "Stripe"
+    contact.work_email = "dcraigmile+test6@texastribune.org"
+
+    account = Account(sf_connection=sf)
+    account.name = "Acme Inc."
+    account.website = "http://acme.com"
+    account.shipping_street = "Street"
+    account.shipping_city = "Austin"
+    account.shipping_postalcode = "78701"
+    account.shipping_state = "TX"
+    account.record_type_name = "Household"
+
+    actual = construct_slack_message(
+        account=account, rdo=rdo, opportunity=None, contact=None
+    )
+    expected = "Acme Inc. pledged $100 [yearly] (Because I love the Trib!)"
+
+    assert actual == expected
+
+    actual = construct_slack_message(
+        account=None, rdo=rdo, opportunity=None, contact=contact
+    )
+    expected = "D C pledged $100 [yearly] (Because I love the Trib!)"
+
+    assert actual == expected
+
+    actual = construct_slack_message(
+        account=None, rdo=None, opportunity=opportunity, contact=contact
+    )
+    expected = "D C pledged $9 [one-time] (Because I love the Trib!)"
+
+    assert actual == expected
 
 
 @patch("npsp.SalesforceObject.get_schema")

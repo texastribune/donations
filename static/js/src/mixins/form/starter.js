@@ -1,19 +1,15 @@
-import validate from 'validate.js';
-
 export default {
   data() {
     return {
-      validation: {
-        card: {
-          manual: true,
-          native: false,
-          valid: false,
-          message: 'Your card number is incomplete',
-        },
+      // card input is the only input not stored
+      // at the Vuex level
+      card: {
+        isValid: false,
+        message: 'Your card number is incomplete',
       },
       stripeToken: '',
-      showManualErrors: false,
-      showNativeErrors: false,
+      showErrors: false,
+      showCardError: false,
       showManualPay: false,
       nativeIsSupported: false,
       isFetchingToken: false,
@@ -21,30 +17,24 @@ export default {
   },
 
   computed: {
-    manualIsValid() {
-      const manualErrors =
-        Object.keys(this.validation).filter((key) => {
-          const curr = this.validation[key];
-          return !curr.valid && curr.manual;
-        });
-      return manualErrors.length === 0;
+    // Returns true if all form values at the Vuex level are valid.
+    // This does NOT account for local `card` validity
+    isValid() {
+      const fields = this.$store.state[this.storeModule];
+      const invalids = Object.keys(fields).filter(key => !fields[key].isValid);
+
+      return invalids.length === 0;
     },
 
-    nativeIsValid() {
-      const nativeErrors =
-        Object.keys(this.validation).filter((key) => {
-          const curr = this.validation[key];
-          return !curr.valid && curr.native;
-        });
-      return nativeErrors.length === 0;
-    },
-
+    // whether to show "please correct errors above" below form
     showErrorClue() {
-      if (this.showManualErrors && !this.manualIsValid) return true;
-      if (this.showNativeErrors && !this.nativeIsValid) return true;
+      if (this.showCardError && !this.card.isValid) return true;
+      if (this.showErrors && !this.isValid) return true;
+
       return false;
     },
 
+    // whether to show card-failure message produced on the server
     showServerErrorMessage() {
       return !this.showErrorClue && this.serverErrorMessage;
     },
@@ -55,7 +45,7 @@ export default {
       this.$refs.form.submit();
     },
 
-    setValue(updates) {
+    setLocalValue(updates) {
       if (Array.isArray(updates)) {
         updates.forEach(({ key, value }) => {
           this[key] = value;
@@ -66,65 +56,15 @@ export default {
       }
     },
 
-    setValidationValue(updates) {
+    setCardValue(updates) {
       if (Array.isArray(updates)) {
-        updates.forEach(({ element, key, value }) => {
-          this.validation[element][key] = value;
+        updates.forEach(({ key, value }) => {
+          this.card[key] = value;
         });
       } else {
-        const { element, key, value } = updates;
-        this.validation[element][key] = value;
+        const { key, value } = updates;
+        this.card[key] = value;
       }
-    },
-
-    isEmail(value) {
-      const isValid = validate(
-        { email: value.trim() },
-        { email: { email: true } },
-      );
-      return typeof isValid === 'undefined';
-    },
-
-    isNumeric(value) {
-      const isValid = validate(
-        { value: value.trim() },
-        { value: { numericality: true } },
-      );
-      return typeof isValid === 'undefined';
-    },
-
-    isZip(value) {
-      return this.isNumeric(value) && value.trim().length === 5;
-    },
-
-    isNotEmpty(value) {
-      return !validate.isEmpty(value.trim());
-    },
-
-    isEmptyOrZip(value) {
-      if (!this.isNotEmpty(value)) return true;
-      return this.isZip(value);
-    },
-
-    isValidDonationAmount(value) {
-      const isValid = validate(
-        { value: value.trim() },
-        { value: { numericality: { greaterThanOrEqualTo: 1 } } },
-      );
-      return typeof isValid === 'undefined';
-    },
-
-    isMaxLength(maxLength) {
-      return value => (
-        value.trim().length <= maxLength
-      );
-    },
-
-    isNotEmptyAndIsMaxLength(maxLength) {
-      return value => (
-        this.isNotEmpty(value) &&
-        value.trim().length <= maxLength
-      );
     },
   },
 };

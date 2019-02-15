@@ -29,14 +29,12 @@
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
-            :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.stripeEmail"
+            :store-module="storeModule"
+            :show-error="showErrors"
             label-text="email address"
             type="email"
             base-classes="form__text form__text--standard"
             name="stripeEmail"
-            store-module="circleForm"
-            @setValidationValue="setValidationValue"
           />
         </div>
       </div>
@@ -44,24 +42,20 @@
       <div class="grid_row grid_wrap--s">
         <div class="col_6 grid_separator">
           <text-input
-            :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.first_name"
+            :store-module="storeModule"
+            :show-error="showErrors"
             label-text="first name"
             base-classes="form__text form__text--standard"
             name="first_name"
-            store-module="circleForm"
-            @setValidationValue="setValidationValue"
           />
         </div>
         <div class="col_6 grid_separator">
           <text-input
-            :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.last_name"
+            :store-module="storeModule"
+            :show-error="showErrors"
             label-text="last name"
             base-classes="form__text form__text--standard"
             name="last_name"
-            store-module="circleForm"
-            @setValidationValue="setValidationValue"
           />
         </div>
       </div>
@@ -70,48 +64,39 @@
         <div class="col_6 grid_separator">
           <text-input
             :required="false"
-            :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.reason"
+            :store-module="storeModule"
+            :show-error="showErrors"
             label-text="encouraged to give by"
             base-classes="form__text form__text--standard"
             name="reason"
-            store-module="circleForm"
-            @setValidationValue="setValidationValue"
           />
         </div>
         <div class="col_6 grid_separator">
           <text-input
             :required="false"
-            :show-error="showManualErrors || showNativeErrors"
-            :validation="validation.zipcode"
+            :store-module="storeModule"
+            :show-error="showErrors"
             label-text="zip code"
             base-classes="form__text form__text--standard"
             name="zipcode"
-            store-module="circleForm"
-            @setValidationValue="setValidationValue"
           />
         </div>
       </div>
 
       <div class="grid_row grid_separator">
         <div class="col">
-          <pay-fees
-            base-classes="form__fees"
-            amount-store-module="circleForm"
-            pay-fees-value-store-module="circleForm"
-            installment-period-store-module="circleForm"
-          />
+          <pay-fees :store-module="storeModule" base-classes="form__fees" />
         </div>
       </div>
 
       <div class="grid_row">
         <div class="col">
           <native-pay
-            :form-is-valid="nativeIsValid"
+            :store-module="storeModule"
+            :form-is-valid="isValid"
             :supported="nativeIsSupported"
             base-classes="form__native"
-            amount-store-module="circleForm"
-            @setValue="setValue"
+            @setLocalValue="setLocalValue"
             @onSubmit="onSubmit"
           />
         </div>
@@ -128,10 +113,10 @@
           <div class="grid_row">
             <div class="col">
               <manual-pay
-                :show-error="showManualErrors"
-                :validation="validation.card"
+                :show-error="showErrors && showCardError"
+                :card="card"
                 base-classes="form__manual"
-                @setValidationValue="setValidationValue"
+                @setCardValue="setCardValue"
               />
             </div>
           </div>
@@ -139,13 +124,13 @@
           <div class="grid_row">
             <div class="col">
               <manual-submit
-                :form-is-valid="manualIsValid"
+                :form-is-valid="isValid && card.isValid"
                 :is-fetching-token="isFetchingToken"
                 base-classes="form__submit button button--yellow button--l"
                 value="Donate"
+                @setLocalValue="setLocalValue"
+                @setCardValue="setCardValue"
                 @onSubmit="onSubmit"
-                @setValue="setValue"
-                @setValidationValue="setValidationValue"
               />
             </div>
           </div>
@@ -163,14 +148,14 @@
       </div>
 
       <local-hidden :value="stripeToken" name="stripeToken" />
-      <hidden name="amount" store-module="circleForm" />
-      <hidden name="installment_period" store-module="circleForm" />
-      <hidden name="installments" store-module="circleForm" />
-      <hidden name="description" store-module="circleForm" />
-      <hidden name="campaign_id" store-module="circleForm" />
-      <hidden name="referral_id" store-module="circleForm" />
-      <hidden name="openended_status" store-module="circleForm" />
-      <hidden name="pay_fees_value" store-module="circleForm" />
+      <hidden name="amount" :store-module="storeModule" />
+      <hidden name="installment_period" :store-module="storeModule" />
+      <hidden name="installments" :store-module="storeModule" />
+      <hidden name="description" :store-module="storeModule" />
+      <hidden name="campaign_id" :store-module="storeModule" />
+      <hidden name="referral_id" :store-module="storeModule" />
+      <hidden name="openended_status" :store-module="storeModule" />
+      <hidden name="pay_fees_value" :store-module="storeModule" />
     </div>
   </form>
 </template>
@@ -184,7 +169,6 @@ import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
 import FormBuckets from './FormBuckets.vue';
-import updateStoreValue from '../../elements/mixins/updateStoreValue';
 import formStarter from '../../mixins/form/starter';
 
 export default {
@@ -201,49 +185,13 @@ export default {
     FormBuckets,
   },
 
-  mixins: [formStarter, updateStoreValue],
+  mixins: [formStarter],
 
   data() {
     return {
       // eslint-disable-next-line no-underscore-dangle
       serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
-      validation: {
-        stripeEmail: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter a valid email address',
-          validator: this.isEmail,
-        },
-        first_name: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter your first name',
-          validator: this.isNotEmpty,
-        },
-        last_name: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter your last name',
-          validator: this.isNotEmpty,
-        },
-        zipcode: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Enter a 5-digit zip code',
-          validator: this.isEmptyOrZip,
-        },
-        reason: {
-          manual: true,
-          native: true,
-          valid: false,
-          message: 'Must be 255 characters or fewer',
-          validator: this.isMaxLength(255),
-        },
-      },
+      storeModule: 'circleForm',
     };
   },
 };
