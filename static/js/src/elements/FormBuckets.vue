@@ -4,7 +4,7 @@
       v-for="bucket in buckets"
       :key="bucket.id"
       :class="{
-        'form-buckets__item--selected': selectedBucket === bucket.bucket,
+        'form-buckets__item--selected': selectedBucket === bucket.name,
       }"
       class="form-buckets__item col_4 grid_separator"
     >
@@ -104,7 +104,7 @@ export default {
 
       return Object.keys(tempBuckets).map((bucketName, index) => ({
         id: index,
-        bucket: bucketName,
+        name: bucketName,
         heading: tempBuckets[bucketName].bucketFull,
         options: this.buildOptions([...tempBuckets[bucketName].levelNames]),
       }));
