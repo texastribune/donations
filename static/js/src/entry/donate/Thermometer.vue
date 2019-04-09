@@ -8,8 +8,8 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} new members</strong> <br />
-      toward goal of {{ data[1].label }}.
+      <strong>${{ data[0].label }}</strong> toward <br />
+      a goal of {{ data[1].label }}.
     </div>
   </div>
 </template>
