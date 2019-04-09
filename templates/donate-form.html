@@ -50,12 +50,10 @@
     {% include 'includes/smd-buckets.html' %}
     <!-- END: Member Drive Goals -->
 
+    <!-- Moving checkout form up during member drive -->
     <section class="grid_container grid_padded--xl grid_separator--xl">
       <div class="grid_row grid_wrap--l">
         <div class="col_8">
-          <div class="member_benefits section-padding">
-            {% include 'includes/benefits.html' %}
-          </div>
           <div id="join-today" class="donation_form section-padding">
             <!-- where the router component attaches -->
             <div id="app" style="display:none;"></div>
@@ -64,6 +62,19 @@
             <!-- where the form attaches -->
             <div id="top-form"></div>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid_container grid_padded--xl grid_separator--xl">
+      <div class="grid_row grid_wrap--l">
+        <div class="col_8">
+          <div class="member_benefits section-padding">
+            {% include 'includes/benefits.html' %}
+          </div>
+
+          <!-- Where checkout form goes when it's not member drive -->
+
         </div>
         <div class="col_1"></div>
         <div class="col_3">
