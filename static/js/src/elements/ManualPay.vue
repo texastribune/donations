@@ -1,19 +1,15 @@
 <template>
   <div :class="classesWithValidation">
-    <card :options="options" :stripe="stripeKey" @change="onChange" />
+    <div ref="manual" />
     <p v-if="showError && !isValid" role="alert">{{ message }}</p>
   </div>
 </template>
 
 <script>
-import { Card } from 'vue-stripe-elements-plus';
+/* global Stripe */
 
 export default {
   name: 'ManualPay',
-
-  components: {
-    Card,
-  },
 
   props: {
     showError: {
@@ -55,6 +51,20 @@ export default {
       if (!this.showError || this.isValid) return classes;
       return `invalid ${classes}`;
     },
+  },
+
+  mounted() {
+    const stripe = new Stripe(this.stripeKey);
+    window.stripe = stripe;
+
+    const elements = stripe.elements();
+    const card = elements.create('card');
+    window.stripeCard = card;
+
+    card.mount(this.$refs.manual, this.options);
+    card.addEventListener('change', event => {
+      this.onChange(event);
+    });
   },
 
   methods: {

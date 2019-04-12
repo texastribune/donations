@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export default {
   data() {
     return {
@@ -10,7 +12,7 @@ export default {
       stripeToken: '',
       showErrors: false,
       showCardError: false,
-      showManualPay: false,
+      showManualPay: true,
       nativeIsSupported: false,
       isFetchingToken: false,
     };
@@ -48,22 +50,22 @@ export default {
     setLocalValue(updates) {
       if (Array.isArray(updates)) {
         updates.forEach(({ key, value }) => {
-          this[key] = value;
+          Vue.set(this, key, value);
         });
       } else {
         const { key, value } = updates;
-        this[key] = value;
+        Vue.set(this, key, value);
       }
     },
 
     setCardValue(updates) {
       if (Array.isArray(updates)) {
         updates.forEach(({ key, value }) => {
-          this.card[key] = value;
+          Vue.set(this.card, key, value);
         });
       } else {
         const { key, value } = updates;
-        this.card[key] = value;
+        Vue.set(this.card, key, value);
       }
     },
   },

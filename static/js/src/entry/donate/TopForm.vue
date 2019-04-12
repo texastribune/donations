@@ -112,49 +112,26 @@
 
     <div class="grid_row">
       <div class="col">
-        <native-pay
-          :store-module="storeModule"
-          :form-is-valid="isValid"
-          :supported="nativeIsSupported"
-          base-classes="form__native"
-          @setLocalValue="setLocalValue"
-          @onSubmit="onSubmit"
+        <manual-pay
+          :show-error="showErrors && showCardError"
+          :card="card"
+          base-classes="form__manual"
+          @setCardValue="setCardValue"
         />
       </div>
     </div>
 
-    <div
-      v-if="nativeIsSupported && showManualPay"
-      class="grid_separator--l"
-      aria-hidden="true"
-    />
-
-    <div :aria-live="nativeIsSupported ? 'polite' : false">
-      <div v-if="showManualPay">
-        <div class="grid_row">
-          <div class="col">
-            <manual-pay
-              :show-error="showErrors && showCardError"
-              :card="card"
-              base-classes="form__manual"
-              @setCardValue="setCardValue"
-            />
-          </div>
-        </div>
-
-        <div class="grid_row">
-          <div class="col">
-            <manual-submit
-              :form-is-valid="isValid && card.isValid"
-              :is-fetching-token="isFetchingToken"
-              base-classes="form__submit button button--yellow button--l"
-              value="Donate"
-              @setLocalValue="setLocalValue"
-              @setCardValue="setCardValue"
-              @onSubmit="onSubmit"
-            />
-          </div>
-        </div>
+    <div class="grid_row">
+      <div class="col">
+        <manual-submit
+          :form-is-valid="isValid && card.isValid"
+          :is-fetching-token="isFetchingToken"
+          base-classes="form__submit button button--yellow button--l"
+          value="Donate"
+          @setLocalValue="setLocalValue"
+          @setCardValue="setCardValue"
+          @onSubmit="onSubmit"
+        />
       </div>
     </div>
 

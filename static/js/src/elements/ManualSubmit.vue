@@ -10,7 +10,6 @@
 
 <script>
 import Vue from 'vue';
-import { createToken } from 'vue-stripe-elements-plus';
 
 export default {
   name: 'ManualSubmit',
@@ -64,7 +63,7 @@ export default {
       if (this.formIsValid) {
         this.markFetchingToken();
 
-        createToken().then(result => {
+        window.stripe.createToken(window.stripeCard).then(result => {
           if (!result.error) {
             const {
               token: { id },
