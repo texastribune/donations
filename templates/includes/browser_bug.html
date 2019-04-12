@@ -1,0 +1,7 @@
+<div id="safariAlert" style="background-color: #223136; color: #fff; padding: 10px; position: -webkit-sticky; position: sticky; top: 0; z-index: 1; text-align: center;" class="hidden"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="#ffc200"><path d="M12 1l-12 22h24l-12-22zm-1 8h2v7h-2v-7zm1 11.25c-.69 0-1.25-.56-1.25-1.25s.56-1.25 1.25-1.25 1.25.56 1.25 1.25-.56 1.25-1.25 1.25z"/></svg>&nbsp;<strong>Please note:</strong> This version of Safari is not supported at this time. Our engineering team is working on a fix, but in the meantime try switching browsers to Chrome, Firefox, or Edge.</div>
+<script>
+var isSafari = navigator.userAgent.indexOf("Version/12.2 Safari") > -1;
+if(isSafari) {
+  document.getElementById('safariAlert').classList.remove('hidden')
+}
+</script>
