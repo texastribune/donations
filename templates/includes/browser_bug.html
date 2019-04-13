@@ -3,7 +3,7 @@
 var isSafari = window.ApplePaySession;
 var uaString = navigator.userAgent;
 var isVersion = false;
-if (uaString.indexOf("Version/12.1 Safari") > -1 || uaString.indexOf("Version/12.2 Safari") > -1) {
+if (uaString.indexOf("Version/12.1") > -1 || uaString.indexOf("Version/12.2") > -1) {
   isVersion = true;
 }
 if(isSafari && isVersion) {
