@@ -234,6 +234,8 @@ export default {
         key: 'openended_status',
         value: openEndedVal,
       });
+
+      this.$forceUpdate();
     },
   },
 };

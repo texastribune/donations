@@ -100,6 +100,7 @@ export default {
               value: true,
             });
             button.mount(this.$refs.native);
+            this.$forceUpdate();
           } else {
             throw new Error();
           }

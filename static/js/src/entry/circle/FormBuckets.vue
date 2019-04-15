@@ -114,10 +114,12 @@ export default {
 
       this.setSelectedGroup(bucket);
       this.updateValues({ storeModule: 'circleForm', updates });
+      this.$forceUpdate();
     },
 
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
+      this.$forceUpdate();
     },
   },
 };

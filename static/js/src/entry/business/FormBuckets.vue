@@ -116,10 +116,12 @@ export default {
 
       this.setSelectedGroup(bucket);
       this.updateValues({ storeModule: 'businessForm', updates });
+      this.$forceUpdate();
     },
 
     setSelectedGroup(bucket) {
       this.selectedGroup = bucket;
+      this.$forceUpdate();
     },
   },
 };

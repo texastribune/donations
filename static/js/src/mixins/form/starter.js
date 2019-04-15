@@ -54,6 +54,8 @@ export default {
         const { key, value } = updates;
         this[key] = value;
       }
+
+      this.$forceUpdate();
     },
 
     setCardValue(updates) {
@@ -65,6 +67,8 @@ export default {
         const { key, value } = updates;
         this.card[key] = value;
       }
+
+      this.$forceUpdate();
     },
   },
 };
