@@ -43,11 +43,6 @@ export default {
       type: String,
       required: true,
     },
-
-    shouldUpdateInstallments: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   data() {
@@ -121,15 +116,15 @@ export default {
     },
 
     onUpdate(newLevel) {
-      const { allLevels, storeModule, shouldUpdateInstallments } = this;
+      const { allLevels, storeModule } = this;
       const { amount, bucket, installmentPeriod, installments } = allLevels[
         newLevel
       ];
-      const updates = { installment_period: installmentPeriod, amount };
-
-      if (shouldUpdateInstallments) {
-        updates.installments = installments;
-      }
+      const updates = {
+        installment_period: installmentPeriod,
+        installments,
+        amount,
+      };
 
       this.setSelectedBucket(bucket);
       this.updateValues({ storeModule, updates });

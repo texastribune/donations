@@ -22,11 +22,7 @@
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
-          <form-buckets
-            :all-levels="allLevels"
-            :store-module="storeModule"
-            should-update-installments
-          />
+          <form-buckets :all-levels="allLevels" :store-module="storeModule" />
         </div>
       </div>
     </div>
