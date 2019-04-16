@@ -58,25 +58,21 @@ export default {
     },
 
     buildOptions(levelsInBucket) {
-      const options = [];
-      const levelsToIter = [];
       const { allLevels } = this;
+      const levelsToIter = levelsInBucket.map(levelName => ({
+        ...allLevels[levelName],
+        levelName,
+      }));
 
-      levelsInBucket.forEach(levelName => {
-        levelsToIter.push({ ...allLevels[levelName], levelName });
-      });
-
-      levelsToIter.forEach((level, index) => {
+      return levelsToIter.map((level, index) => {
         const { installmentPeriod, amount, levelName } = level;
 
-        options.push({
+        return {
           id: index,
           value: levelName,
           text: this.buildText({ installmentPeriod, amount }),
-        });
+        };
       });
-
-      return options;
     },
 
     buildBuckets() {
@@ -97,12 +93,15 @@ export default {
         }
       });
 
-      return Object.keys(tempBuckets).map((bucketName, index) => ({
-        id: index,
-        name: bucketName,
-        heading: tempBuckets[bucketName].bucketFull,
-        options: this.buildOptions([...tempBuckets[bucketName].levelNames]),
-      }));
+      return Object.keys(tempBuckets).map((bucketName, index) => {
+        const { bucketFull, levelNames } = tempBuckets[bucketName];
+        return {
+          id: index,
+          name: bucketName,
+          heading: bucketFull,
+          options: this.buildOptions(levelNames),
+        };
+      });
     },
 
     getInitialSelectedBucket() {
@@ -126,12 +125,8 @@ export default {
         amount,
       };
 
-      this.setSelectedBucket(bucket);
-      this.updateValues({ storeModule, updates });
-    },
-
-    setSelectedBucket(bucket) {
       this.selectedBucket = bucket;
+      this.updateValues({ storeModule, updates });
     },
   },
 };
