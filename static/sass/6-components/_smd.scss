@@ -1,13 +1,10 @@
 // @todo: 
 // 1. Update class names to use BEM
 // 2. Mirror the filename to component class name
+// 3. Rename this file "goals" or "drive goals" ... something along those lines. (Also rename the HTML include to match). 
 $color-navy-dark: #2f3640;
 $color-navy-medium: #404b56;
 $color-navy-light: #515f6b;
-
-.smd_buckets {
-  @extend .section-padding;
-}
 
 .bucket_card {
   border: 1px solid $color-yellow-tribune;
@@ -20,6 +17,10 @@ $color-navy-light: #515f6b;
     &:first-child {
       margin-bottom: $size-l;
     }
+  }
+
+  &--title {
+    font-size: $size-m;
   }
 
   &--goal {
@@ -41,7 +42,7 @@ $color-navy-light: #515f6b;
   }
 
   &--description {
-    @extend .font-sansserif;
+    @include font-setting('primary');
     @extend %link--blue;
     font-size: $size-s;
   }
