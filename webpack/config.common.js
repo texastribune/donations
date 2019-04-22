@@ -1,6 +1,7 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Autoprefixer = require('autoprefixer');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 const { buildDir } = require('./paths');
 const entries = require('./entries');
@@ -26,6 +27,7 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'styles.[chunkhash].css',
     }),
+    new VueLoaderPlugin(),
   ],
 
   optimization: {
