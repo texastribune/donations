@@ -2,6 +2,7 @@ const WebpackAssetsManifest = require('webpack-assets-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const Autoprefixer = require('autoprefixer');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { EnvironmentPlugin } = require('webpack');
 
 const { buildDir } = require('./paths');
 const entries = require('./entries');
@@ -12,8 +13,8 @@ module.exports = {
   entry: { ...entries },
 
   output: {
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].chunk.[chunkhash].js',
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].chunk.[contenthash].js',
     library: 'jsBundle',
     libraryTarget: 'umd',
     path: buildDir,
@@ -25,8 +26,10 @@ module.exports = {
       entrypoints: true,
     }),
     new MiniCssExtractPlugin({
-      filename: 'styles.[chunkhash].css',
+      filename: 'styles.[contenthash].css',
+      chunkFilename: '[name].chunk.[contenthash].css',
     }),
+    new EnvironmentPlugin(['NODE_ENV', 'AUTH0_DOMAIN', 'AUTH0_CLIENT_ID']),
     new VueLoaderPlugin(),
   ],
 
