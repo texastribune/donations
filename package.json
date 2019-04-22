@@ -27,7 +27,7 @@
     "babel-loader": "^8.0.0",
     "css-loader": "^0.28.11",
     "es6-promise": "^4.2.4",
-    "fast-async": "^6.3.8",
+    "fast-async": "7",
     "file-loader": "^1.1.11",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
@@ -63,7 +63,7 @@
     "> 0.5%",
     "last 2 versions",
     "Firefox ESR",
-    "iOS >= 10",
+    "iOS >= 11",
     "Safari >= 11",
     "not dead"
   ],

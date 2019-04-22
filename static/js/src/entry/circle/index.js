@@ -9,8 +9,6 @@ import gtm from '../../mixins/global/gtm';
 
 import '../../../../sass/circle.scss';
 
-require('es6-promise').polyfill();
-
 Vue.use(Vuex);
 Vue.mixin(cssClasses);
 Vue.mixin(gtm);

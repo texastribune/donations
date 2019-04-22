@@ -2,7 +2,7 @@ const Merge = require('webpack-merge');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const CommonConfig = require('./config.common.js');
-const { buildDir } = require('./base');
+const { buildDir } = require('./paths');
 
 module.exports = Merge(CommonConfig, {
   mode: 'development',
