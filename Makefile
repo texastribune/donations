@@ -59,7 +59,7 @@ restart:
 	-pkill celery
 	-pkill python
 	C_FORCE_ROOT=True celery -A app.celery worker --without-heartbeat --without-gossip --without-mingle --loglevel=${LOG_LEVEL} &
-	yarn run dev
+	python3 app.py & yarn run dev
 
 celery-restart:
 	-pkill celery
