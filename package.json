@@ -1,6 +1,6 @@
 {
   "name": "donations",
-  "description": "Salesforce - Stripe connector",
+  "description": "Collect donations for nonprofits",
   "scripts": {
     "js:dev": "NODE_ENV=development webpack --config ./webpack/config.dev.js",
     "dev": "yarn run js:dev",
