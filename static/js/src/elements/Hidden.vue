@@ -5,6 +5,7 @@
 <script>
 import connectedElement from './mixins/connectedElement';
 
+// eslint-disable-next-line
 console.log(process.env.AUTH0_DOMAIN);
 
 export default {
