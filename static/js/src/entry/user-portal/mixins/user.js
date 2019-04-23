@@ -18,36 +18,13 @@ export default {
   },
 
   methods: {
-    logIn() {
-      logIn();
-    },
-
-    logOut() {
-      logOut();
-    },
-
-    register() {
-      register();
-    },
-
-    resetPassword(opts, cb) {
-      resetPassword(opts, cb);
-    },
-
-    redirectAfterLogIn() {
-      redirectAfterLogIn();
-    },
-
-    redirectAfterLogOut() {
-      redirectAfterLogOut();
-    },
-
-    setFlag() {
-      setFlag();
-    },
-
-    clearFlag() {
-      clearFlag();
-    },
+    logIn,
+    logOut,
+    register,
+    resetPassword,
+    redirectAfterLogIn,
+    redirectAfterLogOut,
+    setFlag,
+    clearFlag,
   },
 };
