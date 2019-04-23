@@ -23,9 +23,9 @@
 </template>
 
 <script>
-import Radios from '../../elements/Radios.vue';
-import getValue from '../../elements/mixins/getValue';
-import updateValues from '../../elements/mixins/updateValues';
+import Radios from '../../connected-elements/Radios.vue';
+import getValue from '../../connected-elements/mixins/getValue';
+import updateValues from '../../connected-elements/mixins/updateValues';
 import addNumberCommas from '../../utils/addNumberCommas';
 import {
   BUSINESS_BUCKETS,
