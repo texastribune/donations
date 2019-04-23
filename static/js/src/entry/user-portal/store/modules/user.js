@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 
+import axios from 'axios';
+
 import auth from '../../utils/auth';
 import {
   extractUser,
@@ -34,24 +36,27 @@ const actions = {
   getUser: ({ commit }) =>
     new Promise((resolve, reject) => {
       if (isLoggedIn()) {
-        auth.checkSession({ responseType: 'id_token' }, (err, authResult) => {
-          const isValidResult = authResult && authResult.idToken;
+        auth.checkSession(
+          { responseType: 'id_token token' },
+          (err, authResult) => {
+            const { idToken, accessToken, idTokenPayload } = authResult;
 
-          if (err && err.error === 'login_required') {
-            clearFlag();
-            return reject(new LoggedOutError());
-          }
-          if (err || !isValidResult) {
-            clearFlag();
-            return reject(new Auth0Error());
-          }
+            if (err && err.error === 'login_required') {
+              clearFlag();
+              return reject(new LoggedOutError());
+            }
+            if (err || !idToken || !accessToken || !idTokenPayload) {
+              clearFlag();
+              return reject(new Auth0Error());
+            }
 
-          const user = extractUser(authResult.idTokenPayload);
-          commit('SET_TOKEN', authResult.idToken);
-          commit('SET_DETAILS', user);
-          setFlag();
-          return resolve(user);
-        });
+            commit('SET_TOKEN', idToken);
+            commit('SET_DETAILS', extractUser(idTokenPayload));
+            axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+            setFlag();
+            return resolve();
+          }
+        );
       } else {
         clearFlag();
         reject(new LoggedOutError());
