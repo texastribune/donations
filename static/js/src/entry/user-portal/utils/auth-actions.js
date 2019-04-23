@@ -4,6 +4,7 @@ import {
   AUTH_CLIENT_ID,
   AUTH_LOGOUT_COMPLETE_URL,
   LOGIN_REDIRECT_KEY,
+  NON_STAFF_CONNECTION,
 } from '../constants';
 
 export const clearFlag = () => {
@@ -49,8 +50,8 @@ export const register = () => {
   auth.authorize({ initial_screen: 'signUp' });
 };
 
-export const resetPassword = (opts, cb) => {
-  auth.changePassword(opts, cb);
+export const resetPassword = (email, cb) => {
+  auth.changePassword({ email, connection: NON_STAFF_CONNECTION }, cb);
 };
 
 export const redirectAfterLogIn = () => {
