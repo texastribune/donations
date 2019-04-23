@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>User Management Portal | The Texas Tribune</title>
+  </head>
+
+  <body>
+    <div id="user-portal-attach"></div>
+  </body>
+
+  {% for script in bundles['js'] %}
+  <script src="{{ script }}"></script>
+  {% endfor %}
+</html>

@@ -394,6 +394,12 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     )
 
 
+@app.route("/user-portal", defaults={"path": "/"})
+@app.route("/user-portal/<path>")
+def user_portal(path):
+    return render_template("user-portal.html", bundles=get_bundles("user-portal"))
+
+
 @app.route("/donate", methods=["GET", "POST"])
 def donate_form():
     bundles = get_bundles("donate")
