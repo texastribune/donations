@@ -5,7 +5,7 @@ import VueRouter from 'vue-router';
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import Wall from './Wall.vue';
-import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import { CIRCLE_BUCKETS, CIRCLE_FORM_STATE } from './constants';
 
 Vue.use(VueRouter);

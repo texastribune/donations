@@ -24,7 +24,7 @@
 import Radios from '../../connected-elements/Radios.vue';
 import getValue from '../../connected-elements/mixins/getValue';
 import updateValues from '../../connected-elements/mixins/updateValues';
-import addNumberCommas from '../../utils/addNumberCommas';
+import addNumberCommas from '../../utils/add-number-commas';
 import { CIRCLE_BUCKETS } from './constants';
 
 export default {

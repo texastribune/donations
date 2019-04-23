@@ -5,8 +5,8 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-import queryParamScrub from '../../utils/queryParamScrub';
-import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import queryParamScrub from '../../utils/query-param-scrub';
+import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 
 import {
   BUSINESS_BUCKETS,
