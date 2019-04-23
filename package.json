@@ -30,6 +30,7 @@
     "es6-promise": "^4.2.4",
     "fast-async": "7",
     "file-loader": "^1.1.11",
+    "fontfaceobserver": "^2.1.0",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
     "nodent-runtime": "^3.2.1",
