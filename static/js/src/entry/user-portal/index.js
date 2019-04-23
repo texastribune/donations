@@ -2,9 +2,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 
-import Portal from './Portal.vue';
+import App from './App.vue';
 import routes from './routes';
-import userModule from '../../store/modules/user';
+import userModule from './store/modules/user';
+import contextModule from './store/modules/context';
 
 import './styles.scss';
 
@@ -19,8 +20,9 @@ const router = new VueRouter({
 const store = new Vuex.Store({
   modules: {
     user: userModule,
+    context: contextModule,
   },
 });
-const instance = new Vue({ ...Portal, router, store });
+const instance = new Vue({ ...App, router, store });
 
 instance.$mount('#user-portal-attach');

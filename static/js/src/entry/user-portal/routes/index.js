@@ -7,6 +7,8 @@ import LoggedIn from './logged-in/Index.vue';
 import LoggedOut from './logged-out/Index.vue';
 
 const routes = [
+  { path: '/logged-in', name: 'logged-in', component: LoggedIn },
+  { path: '/logged-out', name: 'logged-out', component: LoggedOut },
   {
     path: '/',
     name: 'home',
@@ -20,8 +22,6 @@ const routes = [
         name: 'blast-payments',
         component: BlastPayments,
       },
-      { path: 'logged-in', name: 'logged-in', component: LoggedIn },
-      { path: 'logged-out', name: 'logged-out', component: LoggedOut },
       { path: '*', name: 'not-found', redirect: { name: 'home' } },
     ],
   },
