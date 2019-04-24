@@ -21,6 +21,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import axios from 'axios';
 
 import contextMixin from '../../mixins/context';
 import userMixin from '../../mixins/user';
@@ -48,6 +49,11 @@ export default {
       try {
         await this.getUser();
         this.isFetching = false;
+
+        // eslint-disable-next-line
+        const data = await axios.get(
+          'https://www.texastribune.org/api/v2/content/'
+        );
       } catch (err) {
         if (err instanceof LoggedOutError) {
           this.logIn();
