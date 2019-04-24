@@ -50,7 +50,7 @@ export default {
         await this.getUser();
         this.isFetching = false;
 
-        // eslint-disable-next-line
+        // eslint-disable-next-line no-unused-vars
         const data = await axios.get(
           'https://www.texastribune.org/api/v2/content/'
         );
