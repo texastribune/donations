@@ -394,6 +394,12 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     )
 
 
+@app.route("/robots.txt")
+def robots_txt():
+    root_dir = os.path.dirname(os.getcwd())
+    return send_from_directory(os.path.join(root_dir, "app"), "robots.txt")
+
+
 @app.route("/user-portal", defaults={"path": "/"})
 @app.route("/user-portal/<path>")
 def user_portal(path):
