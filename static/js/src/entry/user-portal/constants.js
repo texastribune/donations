@@ -1,5 +1,7 @@
 export const LOGIN_REDIRECT_KEY = 'postLoginRedirect';
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
+export const WELCOME_MESSAGE_KEY = 'umpWelcomeMessage';
+export const COMING_SOON_MESSAGE_KEY = 'umpComingSoonMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
 export const AUTH_CLIENT_ID = process.env.AUTH0_CLIENT_ID;

@@ -1,21 +1,35 @@
 <template>
-  <ul>
-    <li v-for="datum in data" :key="datum.id">{{ datum.headline }}</li>
-  </ul>
+  <div>
+    <message :name="welcomeMessageKey"> <p>Welcome message.</p> </message>
+    <message :name="comingSoonMessageKey">
+      <p>Coming soon message.</p>
+    </message>
+    <ul>
+      <li v-for="datum in data" :key="datum.id">{{ datum.headline }}</li>
+    </ul>
+  </div>
 </template>
 
 <script>
 import axios from 'axios';
 
 import routeMixin from '../../mixins/route';
+import Message from './components/Message.vue';
+import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 
 export default {
   name: 'Index',
 
+  components: { Message },
+
   mixins: [routeMixin],
 
   data() {
-    return { data: [] };
+    return {
+      data: [],
+      welcomeMessageKey: WELCOME_MESSAGE_KEY,
+      comingSoonMessageKey: COMING_SOON_MESSAGE_KEY,
+    };
   },
 
   methods: {
