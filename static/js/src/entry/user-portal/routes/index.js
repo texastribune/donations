@@ -1,4 +1,5 @@
 import Home from './home/Index.vue';
+import HomeExact from './home-exact/Index.vue';
 import Membership from './membership/Index.vue';
 import Payments from './payments/Index.vue';
 import Blast from './blast/Index.vue';
@@ -11,9 +12,9 @@ const routes = [
   { path: '/logged-out', name: 'logged-out', component: LoggedOut },
   {
     path: '/',
-    name: 'home',
     component: Home,
     children: [
+      { path: '', name: 'home', component: HomeExact },
       { path: 'membership', name: 'membership', component: Membership },
       { path: 'payments', name: 'payments', component: Payments },
       { path: 'blast', name: 'blast', component: Blast },
