@@ -9,3 +9,4 @@ export const AUTH_LOGOUT_COMPLETE_URL = `${
 export const AUTH_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/user-portal/logged-in`;
+export const TITLE_SUFFIX = ' | User Management Portal | The Texas Tribune';
