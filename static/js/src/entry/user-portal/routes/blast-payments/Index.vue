@@ -11,6 +11,7 @@ export default {
   mixins: [routeMixin],
 
   created() {
+    // temp
     throw new Error();
   },
 
