@@ -10,6 +10,10 @@ export default {
 
   mixins: [routeMixin],
 
+  created() {
+    throw new Error();
+  },
+
   methods: {
     async fetchData() {
       /* do nothing */
