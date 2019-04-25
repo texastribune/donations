@@ -11,8 +11,8 @@ export default {
   mixins: [userMixin],
 
   mounted() {
-    this.clearFlag();
-    this.redirectAfterLogOut();
+    this.user.clearFlag();
+    this.user.redirectAfterLogOut();
   },
 };
 </script>
