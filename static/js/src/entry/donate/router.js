@@ -7,8 +7,6 @@ import TopForm from './TopForm.vue';
 import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
 import { BASE_FORM_STATE } from './constants';
 
-import Thermometer from './Thermometer.vue';
-
 Vue.use(VueRouter);
 
 function createInitialFormState(queryParams) {
@@ -67,7 +65,6 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
-    const thermometer = new Vue({ ...Thermometer });
     const {
       currentRoute: { query },
     } = router;
@@ -79,7 +76,6 @@ function bindRouterEvents(router, routeHandler, store) {
 
     routeHandler.$mount('#app');
     topForm.$mount('#top-form');
-    thermometer.$mount('#thermometer');
   });
 }
 
