@@ -1,7 +1,5 @@
 /* eslint-disable no-param-reassign */
 
-import axios from 'axios';
-
 import auth from '../../utils/auth';
 import {
   extractUser,
@@ -13,7 +11,8 @@ import { LoggedOutError, Auth0Error } from '../../errors';
 
 function createDefaultState() {
   return {
-    token: '',
+    idToken: '',
+    accessToken: '',
     details: {
       nickname: '',
       email: '',
@@ -23,8 +22,12 @@ function createDefaultState() {
 }
 
 const mutations = {
-  SET_TOKEN(state, token) {
-    state.token = token;
+  SET_ID_TOKEN(state, idToken) {
+    state.idToken = idToken;
+  },
+
+  SET_ACCESS_TOKEN(state, accessToken) {
+    state.accessToken = accessToken;
   },
 
   SET_DETAILS(state, details) {
@@ -50,9 +53,9 @@ const actions = {
               return reject(new Auth0Error());
             }
 
-            commit('SET_TOKEN', idToken);
+            commit('SET_ID_TOKEN', idToken);
+            commit('SET_ACCESS_TOKEN', accessToken);
             commit('SET_DETAILS', extractUser(idTokenPayload));
-            axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
             setFlag();
             return resolve();
           }
