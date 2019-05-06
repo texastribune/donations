@@ -1,5 +1,6 @@
 from datetime import datetime
 from decimal import Decimal
+import json
 from unittest.mock import patch
 
 from pytz import timezone
@@ -463,11 +464,17 @@ Contact.field_to_attr_map = {
     "LeadSource": "lead_source",
     "MailingPostalCode": "mailing_postal_code",
 }
+import logging
+import sys
+
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+with open("Contact.json", "r") as f:
+    contact_schema = json.load(f)
 
 
-@patch("npsp.SalesforceObject.get_schema")
-def test__format_contact(get_schema):
-    get_schema.return_value = None
+@patch("npsp.SalesforceConnection.describe")
+def test__format_contact(describe):
+    describe.return_value = contact_schema
 
     contact = Contact(sf_connection=sf)
     contact.email = "dcraigmile+test6@texastribune.org"
@@ -483,10 +490,11 @@ def test__format_contact(get_schema):
         "FirstName": "D",
         "LastName": "C",
         "LeadSource": "Stripe",
-        "MailingPostalCode": None,
         "npe01__WorkEmail__c": "dcraigmile+test6@texastribune.org",
     }
+    import pprint
 
+    pprint.pprint(response)
     assert response == expected_response
 
 

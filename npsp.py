@@ -111,7 +111,7 @@ class SalesforceConnection:
         Call the Salesforce API to do SOQL queries.
         """
         if path is None:
-            path = f"/services/data/v{SALESFORCE_API_VERSION}/query"
+            path = f"/services/data/{SALESFORCE_API_VERSION}/query"
 
         url = f"{self.instance_url}{path}"
         if query is None:
@@ -162,10 +162,10 @@ class SalesforceConnection:
         Returns:
             json -- the schema
         """
-
         path = (
-            f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
+            f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{object_name}/describe/"
         )
+        log.debug(path)
         return self.get(path)
 
     def get(self, path, fields=None):
@@ -213,7 +213,7 @@ class SalesforceConnection:
                 record[k] = v
             records.append(record)
         data["records"] = records
-        path = f"/services/data/v{SALESFORCE_API_VERSION}/composite/sobjects/"
+        path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
         response = self.patch(path, data, expected_response=200)
         response = json.loads(response.text)
         log.debug(response)
@@ -238,7 +238,7 @@ class SalesforceConnection:
 
             log.info(f"{sf_object.api_name} object already exists; updating...")
             log.debug(sf_object.serialize())
-            path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
+            path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}/{sf_object.id}"
             try:
                 response = self.patch(path=path, data=sf_object.serialize())
             except SalesforceException as e:
@@ -247,7 +247,7 @@ class SalesforceConnection:
             return
 
         log.info(f"{sf_object.api_name} object doesn't exist; creating...")
-        path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{sf_object.api_name}"
         try:
             response = self.post(path=path, data=sf_object.serialize())
         except SalesforceException as e:
@@ -323,6 +323,7 @@ class SalesforceObject(object):
         return json.dumps(obj)
 
     def fetch(self, sf_connection=None):
+        # TODO document how this is different from get()
         cls = type(self)
         log.info(f"Calling fetch() on {cls}")
 
@@ -332,7 +333,7 @@ class SalesforceObject(object):
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         # TODO restrict by fields if present?
-        path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{self.api_name}/{self.id}"
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{self.api_name}/{self.id}"
         log.debug(path)
         response = sf.get(path)
         self.deserialize(response)
@@ -380,11 +381,12 @@ class SalesforceObject(object):
         # TODO don't taint it if it's already set to the same value?
         # TODO right now if we get the attr name wrong it will set it but will silently
         # skip/fail when serializing -- a way to fix this?
-        # TODO should we only add to tainted if the map exists and it's in there?
-        if attr in self.__dict__:
+        # TODO should we only add to tainted if the map exists and it's in there? That
+        # would avoid .created
+        if attr in self.__dict__:  # if we haven't seen it yet it can't be tainted
             super().__setattr__(attr, value)
             if attr != "id" and attr != "tainted":
-                logging.debug(f"Marking {self.api_name}.{attr} as tainted")
+                log.debug(f"Marking {self.api_name}.{attr} as tainted")
                 self.tainted.add(attr)
         else:
             super().__setattr__(attr, value)
@@ -400,7 +402,9 @@ class SalesforceObject(object):
         log.debug("called serialize")
         # TODO construct the reverse map here and in deserialize() on demand since here and deserialize() are
         # the only places we use it?
+        pprint(self.field_to_attr_map)
         if not hasattr(self, "field_to_attr_map"):
+            log.debug("calling get_schema()")
             self.get_schema()
         out = dict()
         if hasattr(self, "id") and self.id is not None:  # object exists; use tainted
@@ -409,6 +413,7 @@ class SalesforceObject(object):
                     # id is always in the URL not the body
                     continue
                 if attribute not in self.attr_to_field_map:
+                    log.debug(f"{attribute} not in attr_to_field_map")
                     # we don't want .created and .duplicate_found
                     continue
                 out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
@@ -458,7 +463,7 @@ class SalesforceObject(object):
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         # TODO restrict by fields if present
-        path = f"/services/data/v{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{id}"
+        path = f"/services/data/{SALESFORCE_API_VERSION}/sobjects/{cls.api_name}/{id}"
         log.debug(path)
         response = sf.get(path)
         obj = cls()
@@ -540,7 +545,8 @@ class Opportunity(SalesforceObject):
         self.expected_giving_date = None
         self.closed_lost_reason = None
         self.amazon_order_id = None
-        self.created = False
+
+    #        self.created = False
 
     @classmethod
     def list(
@@ -920,7 +926,8 @@ class Contact(SalesforceObject):
 
         self.id = id
         self.duplicate_found = False
-        self.work_email = None
+
+    #        self.work_email = None
 
     @staticmethod
     # TODO test

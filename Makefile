@@ -18,6 +18,14 @@ interactive: build backing
 		--link=redis:redis \
 		--name=${APP} ${NS}/${APP}:dev bash
 
+shell: build
+	-docker rm -f ${APP}-shell
+	docker run \
+		--volume=$$(pwd):/app \
+		--rm --interactive --tty \
+		--env-file=${DOCKER_ENV_FILE} \
+		--name=${APP}-shell ${NS}/${APP}:dev bash
+
 build:
 	docker build -f Dockerfile --tag=${NS}/${APP}:dev .
 
