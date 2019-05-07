@@ -4,11 +4,12 @@
 
 <script>
 import userMixin from '../../mixins/user';
+import routeMixin from '../../mixins/route';
 
 export default {
   name: 'Index',
 
-  mixins: [userMixin],
+  mixins: [userMixin, routeMixin],
 
   mounted() {
     this.user.setFlag();

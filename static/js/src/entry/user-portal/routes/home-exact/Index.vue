@@ -14,6 +14,7 @@
 import axios from 'axios';
 
 import routeMixin from '../../mixins/route';
+import routeFetchMixin from '../../mixins/route-fetch';
 import Message from './components/Message.vue';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 
@@ -22,7 +23,7 @@ export default {
 
   components: { Message },
 
-  mixins: [routeMixin],
+  mixins: [routeMixin, routeFetchMixin],
 
   data() {
     return {
