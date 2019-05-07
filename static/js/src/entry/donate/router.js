@@ -4,7 +4,7 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import { BASE_FORM_STATE } from './constants';
 
 Vue.use(VueRouter);

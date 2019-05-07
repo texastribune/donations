@@ -1,14 +1,10 @@
 <template>
-  <input
-    :value="value"
-    :name="name"
-    type="hidden"
-  >
+  <input :value="value" :name="name" type="hidden" />
 </template>
 
 <script>
 export default {
-  name: 'LocalHidden',
+  name: 'Hidden',
 
   props: {
     name: {
