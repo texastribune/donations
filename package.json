@@ -34,7 +34,7 @@
     "nodent-runtime": "^3.2.1",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
     "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.0.1",
+    "sass-loader": "^7.1.0",
     "style-loader": "^0.21.0",
     "validate.js": "^0.12.0",
     "vue": "^2.5.16",
