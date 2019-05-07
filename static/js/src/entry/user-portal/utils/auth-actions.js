@@ -63,6 +63,6 @@ export const redirectAfterLogIn = () => {
 
 export const redirectAfterLogOut = () => {
   setTimeout(() => {
-    window.location.href = '/donate';
+    window.location.href = 'https://www.texastribune.org/';
   }, 500);
 };
