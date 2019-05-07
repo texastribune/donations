@@ -13,18 +13,19 @@ export default {
   computed: {
     user() {
       const { token, details } = this.$store.state.user;
-      return { token, details };
-    },
-  },
 
-  methods: {
-    logIn,
-    logOut,
-    register,
-    resetPassword,
-    redirectAfterLogIn,
-    redirectAfterLogOut,
-    setFlag,
-    clearFlag,
+      return {
+        token,
+        details,
+        logIn,
+        logOut,
+        register,
+        resetPassword,
+        redirectAfterLogIn,
+        redirectAfterLogOut,
+        setFlag,
+        clearFlag,
+      };
+    },
   },
 };

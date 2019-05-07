@@ -1,4 +1,5 @@
 import Home from './home/Index.vue';
+import HomeExact from './home-exact/Index.vue';
 import Membership from './membership/Index.vue';
 import Payments from './payments/Index.vue';
 import Blast from './blast/Index.vue';
@@ -11,16 +12,37 @@ const routes = [
   { path: '/logged-out', name: 'logged-out', component: LoggedOut },
   {
     path: '/',
-    name: 'home',
     component: Home,
     children: [
-      { path: 'membership', name: 'membership', component: Membership },
-      { path: 'payments', name: 'payments', component: Payments },
-      { path: 'blast', name: 'blast', component: Blast },
+      {
+        path: '',
+        name: 'home',
+        component: HomeExact,
+        meta: { title: 'Home' },
+      },
+      {
+        path: 'membership',
+        name: 'membership',
+        component: Membership,
+        meta: { title: 'Membership' },
+      },
+      {
+        path: 'payments',
+        name: 'payments',
+        component: Payments,
+        meta: { title: 'Donation History' },
+      },
+      {
+        path: 'blast',
+        name: 'blast',
+        component: Blast,
+        meta: { title: 'The Blast' },
+      },
       {
         path: 'blast-payments',
         name: 'blast-payments',
         component: BlastPayments,
+        meta: { title: 'The Blast Payment History' },
       },
       { path: '*', name: 'not-found', redirect: { name: 'home' } },
     ],

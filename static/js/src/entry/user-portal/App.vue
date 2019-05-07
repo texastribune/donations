@@ -1,14 +1,21 @@
 <template>
-  <div v-if="context.hasError">Oh no! An error occurred.</div>
+  <error-view v-if="context.hasError" />
   <router-view v-else />
 </template>
 
 <script>
+import ErrorView from './ErrorView.vue';
 import contextMixin from './mixins/context';
 
 export default {
   name: 'App',
 
+  components: { ErrorView },
+
   mixins: [contextMixin],
+
+  errorCaptured() {
+    this.context.setError(true);
+  },
 };
 </script>
