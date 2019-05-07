@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <main>
     <h1>Sorry about that.</h1>
     <p>An error occurred, and we're working hard to fix it.</p>
     <p>
@@ -7,7 +7,7 @@
       <a href="mailto:community@texastribune.org">community@texastribune.org</a>
       if the issue persists.
     </p>
-  </div>
+  </main>
 </template>
 
 <script>

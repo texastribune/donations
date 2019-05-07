@@ -1,6 +1,9 @@
 <template>
-  <error-view v-if="context.hasError" />
-  <router-view v-else />
+  <div>
+    <nav />
+    <error-view v-if="context.hasError" />
+    <router-view v-else />
+  </div>
 </template>
 
 <script>

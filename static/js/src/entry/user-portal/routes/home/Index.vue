@@ -1,24 +1,11 @@
 <template>
   <div>
-    <div v-if="context.isFetching">Fetching data ...</div>
-    <div v-if="isCheckingUser">Checking user ...</div>
-    <div v-else>
-      <button @click="user.logOut">Log out</button>
-      <ul>
-        <li><router-link :to="{ name: 'home' }">Home</router-link></li>
-        <li>
-          <router-link :to="{ name: 'membership' }">Membership</router-link>
-        </li>
-        <li><router-link :to="{ name: 'payments' }">Payments</router-link></li>
-        <li><router-link :to="{ name: 'blast' }">Blast</router-link></li>
-        <li>
-          <router-link :to="{ name: 'blast-payments' }"
-            >Blast Payments</router-link
-          >
-        </li>
-      </ul>
+    <loader v-show="context.isFetching" /> <loader v-if="isCheckingUser" />
+
+    <main v-else>
+      <side-nav />
       <router-view />
-    </div>
+    </main>
   </div>
 </template>
 
@@ -27,10 +14,14 @@ import { mapActions } from 'vuex';
 
 import contextMixin from '../../mixins/context';
 import userMixin from '../../mixins/user';
+import Loader from './components/Loader.vue';
+import SideNav from './components/SideNav.vue';
 import { LoggedOutError, Auth0Error } from '../../errors';
 
 export default {
   name: 'Index',
+
+  components: { Loader, SideNav },
 
   mixins: [contextMixin, userMixin],
 

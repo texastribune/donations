@@ -1,9 +1,9 @@
 <template>
-  <div class="c-summary-box">
+  <section class="c-summary-box">
     <h2>{{ heading }}</h2>
     <slot name="content"></slot> <slot name="links"></slot>
     <div v-if="!!$slots.bottom" class=""><slot name="bottom"></slot></div>
-  </div>
+  </section>
 </template>
 
 <script>
