@@ -1,9 +1,5 @@
 <template>
-  <input
-    :value="value"
-    :name="name"
-    type="hidden"
-  >
+  <input :value="value" :name="name" type="hidden" />
 </template>
 
 <script>
