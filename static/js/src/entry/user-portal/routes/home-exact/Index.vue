@@ -1,7 +1,9 @@
 <template>
   <div>
-    <message :name="welcomeMessageKey"> <p>Welcome message.</p> </message>
-    <message :name="comingSoonMessageKey">
+    <message heading="Welcome" :name="welcomeMessageKey">
+      <p>Welcome message.</p>
+    </message>
+    <message heading="Coming soon" :name="comingSoonMessageKey">
       <p>Coming soon message.</p>
     </message>
     <ul>

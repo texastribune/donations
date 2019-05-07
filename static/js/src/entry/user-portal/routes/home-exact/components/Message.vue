@@ -1,6 +1,7 @@
 <template>
   <aside v-if="shouldShow">
-    <button @click="close">Close</button> <slot></slot>
+    <h2>{{ heading }}</h2>
+    <slot></slot> <button @click="close">Close</button>
   </aside>
 </template>
 
@@ -9,6 +10,11 @@ export default {
   name: 'Message',
 
   props: {
+    heading: {
+      type: String,
+      required: true,
+    },
+
     name: {
       type: String,
       required: true,
