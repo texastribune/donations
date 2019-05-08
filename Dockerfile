@@ -25,6 +25,7 @@ ARG AUTH0_CLIENT_ID=k66bypGeKUCCLHGrQt5BQHJWTltZ9OzQ
 
 COPY static /app/static
 COPY webpack /app/webpack
+COPY config /app/config
 COPY package.json /app/
 COPY yarn.lock /app/
 COPY .babelrc.js /app/

@@ -1,1 +1,1 @@
-import '../../../../sass/charge.scss';
+import '../../../../build/charge.css';

@@ -7,10 +7,6 @@ const CommonConfig = require('./config.common.js');
 module.exports = Merge(CommonConfig, {
   mode: 'production',
 
-  output: {
-    publicPath: '/static/prod/',
-  },
-
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new OptimizeCSSAssetsPlugin({}),
