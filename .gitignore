@@ -3,12 +3,11 @@ env-docker
 .env
 *.pyc
 /static/css/
-/static/build/
-/static/prod/*.js
-/static/prod/*.css
-/static/prod/*.jpg
-/static/prod/*.json
-/static/prod/*.png
+/static/build/*.js
+/static/build/*.css
+/static/build/*.jpg
+/static/build/*.json
+/static/build/*.png
 node_modules/
 *.DS_Store
 .cache
