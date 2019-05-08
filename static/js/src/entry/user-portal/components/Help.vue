@@ -1,14 +1,19 @@
 <template>
   <section>
     <h2>Need help?</h2>
-    <p v-if="withFeedback">
+    <p v-if="home">
       If you have questions about your Texas Tribune account or would like to
       give us feedback on this experience, please contact us at
       <a href="mailto:community@texastribune.org">community@texastribune.org</a
       >.
     </p>
-    <p v-else>
+    <p v-else-if="membership">
       To update your membership status, contact us at
+      <a href="mailto:community@texastribune.org">community@texastribune.org</a
+      >.
+    </p>
+    <p v-else-if="blast">
+      To update your subscription to The Blast, contact us at
       <a href="mailto:community@texastribune.org">community@texastribune.org</a
       >.
     </p>
@@ -20,7 +25,17 @@ export default {
   name: 'Help',
 
   props: {
-    withFeedback: {
+    home: {
+      type: Boolean,
+      default: false,
+    },
+
+    membership: {
+      type: Boolean,
+      default: false,
+    },
+
+    blast: {
       type: Boolean,
       default: false,
     },

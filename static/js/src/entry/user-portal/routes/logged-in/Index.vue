@@ -1,5 +1,8 @@
 <template>
-  <p>This is logged in.</p>
+  <main>
+    <h1>You're logged in</h1>
+    <p>Redirecting you back to your original location.</p>
+  </main>
 </template>
 
 <script>

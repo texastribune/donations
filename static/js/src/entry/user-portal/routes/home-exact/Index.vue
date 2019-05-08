@@ -64,7 +64,7 @@
       </template>
     </summary-box>
 
-    <help with-feedback />
+    <help home />
   </div>
 </template>
 

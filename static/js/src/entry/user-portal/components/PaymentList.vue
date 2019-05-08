@@ -11,9 +11,7 @@
       <tbody>
         <tr v-for="payment in payments" :key="payment.id">
           <td>
-            <slot name="payment" :date="payment.date">
-              {{ payment.date }}
-            </slot>
+            <slot name="date" :date="payment.date"> {{ payment.date }} </slot>
           </td>
           <td>
             <slot name="amount" :date="payment.amount">

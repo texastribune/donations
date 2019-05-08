@@ -1,24 +1,41 @@
 <template>
-  <p>This is Blast payments.</p>
+  <div>
+    <h1>The Blast Newsletter: Payment History</h1>
+
+    <section><payment-list :payments="payments" /></section>
+
+    <help blast />
+  </div>
 </template>
 
 <script>
 import routeMixin from '../../mixins/route';
 import routeFetchMixin from '../../mixins/route-fetch';
+import PaymentList from '../../components/PaymentList.vue';
+import Help from '../../components/Help.vue';
 
 export default {
   name: 'Index',
 
+  components: { PaymentList, Help },
+
   mixins: [routeMixin, routeFetchMixin],
 
-  created() {
-    // temp
-    throw new Error();
+  data() {
+    return {
+      payments: [
+        { id: 0, date: '03/29/18', amount: '$329', method: 'AMEX 8568' },
+        { id: 1, date: '03/29/18', amount: '$329', method: 'AMEX 8568' },
+        { id: 2, date: '03/29/18', amount: '$329', method: 'AMEX 8568' },
+        { id: 3, date: '03/29/18', amount: '$329', method: 'AMEX 8568' },
+        { id: 4, date: '03/29/18', amount: '$329', method: 'AMEX 8568' },
+      ],
+    };
   },
 
   methods: {
     async fetchData() {
-      /* do nothing */
+      return null;
     },
   },
 };
