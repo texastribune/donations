@@ -1,6 +1,5 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const Autoprefixer = require('autoprefixer');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { EnvironmentPlugin } = require('webpack');
 
@@ -17,6 +16,7 @@ module.exports = {
     chunkFilename: '[name].chunk.[contenthash].js',
     library: 'jsBundle',
     libraryTarget: 'umd',
+    publicPath: '/static/build/',
     path: buildDir,
   },
 
@@ -50,18 +50,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(scss|sass)$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: [Autoprefixer()],
-            },
-          },
-          'sass-loader',
-        ],
+        test: /\.css$/,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
 
       {
