@@ -19,3 +19,5 @@ celerybeat.pid
 yarn-error.log
 .pytest_cache
 .vscode
+# SVG sprite
+/templates/includes/base_icons.html

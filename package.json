@@ -4,8 +4,11 @@
   "scripts": {
     "js:dev": "NODE_ENV=development webpack --config webpack/config.dev.js",
     "dev": "yarn run js:dev",
-    "postinstall": "NODE_ENV=production webpack --config webpack/config.prod.js",
-    "lint": "eslint --ext .js,.vue static/js/src"
+    "postinstall": "yarn run ds-tasks-build && NODE_ENV=production webpack --config webpack/config.prod.js",
+    "lint": "eslint --ext .js,.vue static/js/src config/",
+    "ds-tasks-build": "NODE_ENV=production node ./config/tasks/build.js",
+    "ds-tasks-watch": "NODE_ENV=development node ./config/tasks/dev.js",
+    "start": "npm-run-all --parallel ds-tasks-watch dev"
   },
   "private": false,
   "repository": {
@@ -51,11 +54,15 @@
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
+    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#dependencies",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-vue": "^5.0.0",
+    "fast-glob": "^2.2.6",
+    "glob-watcher": "^5.0.3",
+    "npm-run-all": "^4.1.5",
     "vue-eslint-parser": "^4.0.2"
   },
   "license": "MIT",
