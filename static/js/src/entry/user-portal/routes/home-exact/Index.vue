@@ -1,10 +1,10 @@
 <template>
   <div>
     <message heading="Welcome" :name="welcomeMessageKey">
-      <p>Welcome message.</p>
+      <p>👋 Welcome message.</p>
     </message>
     <message heading="Coming soon" :name="comingSoonMessageKey">
-      <p>Coming soon message.</p>
+      <p>🎉 Coming soon message.</p>
     </message>
 
     <h1>Your Account</h1>
