@@ -53,7 +53,7 @@
   },
   "devDependencies": {
     "clean-webpack-plugin": "^0.1.19",
-    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#master",
+    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#dependencies",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
