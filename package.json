@@ -3,8 +3,9 @@
   "description": "Collect donations for nonprofits",
   "scripts": {
     "js:dev": "NODE_ENV=development webpack --config webpack/config.dev.js",
+    "js:prod": "NODE_ENV=production webpack --config webpack/config.prod.js",
     "dev": "npm-run-all --parallel ds-tasks-watch js:dev",
-    "postinstall": "yarn run ds-tasks-build && NODE_ENV=production webpack --config webpack/config.prod.js",
+    "postinstall": "yarn run ds-tasks-build && yarn run js:prod",
     "lint": "eslint --ext .js,.vue static/js/src config",
     "ds-tasks-build": "NODE_ENV=production node config/tasks/build.js",
     "ds-tasks-watch": "NODE_ENV=development node config/tasks/dev.js"
@@ -12,10 +13,10 @@
   "private": false,
   "repository": {
     "type": "git",
-    "url": "https://github.com/texastribune/salesforce-stripe"
+    "url": "https://github.com/texastribune/donations"
   },
   "bugs": {
-    "url": "https://github.com/texastribune/salesforce-stripe/issues"
+    "url": "https://github.com/texastribune/donations/issues"
   },
   "dependencies": {
     "@babel/cli": "^7.0.0",
@@ -24,19 +25,20 @@
     "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.4.3",
-    "autoprefixer": "^9.4.2",
     "axios": "^0.18.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^0.28.11",
+    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#dependencies",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
+    "fast-glob": "^2.2.6",
     "file-loader": "^1.1.11",
+    "glob-watcher": "^5.0.3",
     "mini-css-extract-plugin": "^0.4.0",
     "node-sass": "^4.9.0",
     "nodent-runtime": "^3.2.1",
+    "npm-run-all": "^4.1.5",
     "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "postcss-loader": "^3.0.0",
-    "sass-loader": "^7.0.1",
     "style-loader": "^0.21.0",
     "validate.js": "^0.12.0",
     "vue": "^2.5.16",
@@ -52,16 +54,12 @@
     "webpack-sources": "^1.0"
   },
   "devDependencies": {
-    "clean-webpack-plugin": "^0.1.19",
-    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#dependencies",
+    "clean-webpack-plugin": "^2.0.2",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-vue": "^5.0.0",
-    "fast-glob": "^2.2.6",
-    "glob-watcher": "^5.0.3",
-    "npm-run-all": "^4.1.5",
     "vue-eslint-parser": "^4.0.2"
   },
   "license": "MIT",
@@ -70,8 +68,7 @@
     "last 2 versions",
     "Firefox ESR",
     "iOS >= 11",
-    "Safari >= 11",
-    "not dead"
+    "Safari >= 11"
   ],
   "eslintConfig": {
     "env": {
