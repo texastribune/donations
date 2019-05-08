@@ -1,5 +1,7 @@
-// internal
+// lib
 const { series, logMessage } = require('ds-toolbox-test/tasks/utils');
+
+// internal
 const watch = require('./watch');
 
 async function develop() {
@@ -7,5 +9,4 @@ async function develop() {
   await runner();
 }
 
-// eslint-disable-next-line no-console
 develop().catch(e => logMessage(e));

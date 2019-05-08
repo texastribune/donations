@@ -1,8 +1,9 @@
-// lib
+// utility
 const stylesRunner = require('ds-toolbox-test/tasks/styles');
 const iconsRunner = require('ds-toolbox-test/tasks/icons');
 const { logMessage } = require('ds-toolbox-test/tasks/utils');
 
+// internal
 const { mappedStyles, mappedIcons } = require('../paths.js');
 
 async function build() {

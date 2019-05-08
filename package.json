@@ -3,12 +3,11 @@
   "description": "Collect donations for nonprofits",
   "scripts": {
     "js:dev": "NODE_ENV=development webpack --config webpack/config.dev.js",
-    "dev": "yarn run js:dev",
+    "dev": "npm-run-all --parallel ds-tasks-watch js:dev",
     "postinstall": "yarn run ds-tasks-build && NODE_ENV=production webpack --config webpack/config.prod.js",
-    "lint": "eslint --ext .js,.vue static/js/src config/",
-    "ds-tasks-build": "NODE_ENV=production node ./config/tasks/build.js",
-    "ds-tasks-watch": "NODE_ENV=development node ./config/tasks/dev.js",
-    "start": "npm-run-all --parallel ds-tasks-watch dev"
+    "lint": "eslint --ext .js,.vue static/js/src config",
+    "ds-tasks-build": "NODE_ENV=production node config/tasks/build.js",
+    "ds-tasks-watch": "NODE_ENV=development node config/tasks/dev.js"
   },
   "private": false,
   "repository": {

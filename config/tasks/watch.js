@@ -1,4 +1,4 @@
-// packages
+// utility
 const watch = require('glob-watcher');
 const iconsRunner = require('ds-toolbox-test/tasks/icons');
 const stylesRunner = require('ds-toolbox-test/tasks/styles');
