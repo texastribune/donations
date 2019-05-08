@@ -27,7 +27,7 @@
     "@babel/runtime": "^7.4.3",
     "axios": "^0.18.0",
     "babel-loader": "^8.0.0",
-    "css-loader": "^0.28.11",
+    "css-loader": "^1.0.0",
     "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#dependencies",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
@@ -68,7 +68,8 @@
     "last 2 versions",
     "Firefox ESR",
     "iOS >= 11",
-    "Safari >= 11"
+    "Safari >= 11",
+    "not dead"
   ],
   "eslintConfig": {
     "env": {
