@@ -10,10 +10,10 @@
     <h1>Your Account</h1>
 
     <summary-box heading="contact info">
-      <template v-slot="content">
+      <template v-slot:content>
         <info-list :items="data" />
       </template>
-      <template v-slot="links">
+      <template v-slot:links>
         <ul v-if="!pwResetSuccess && !pwResetFailure">
           <li>
             &rarr;&nbsp;
@@ -35,10 +35,10 @@
     </summary-box>
 
     <summary-box heading="membership">
-      <template v-slot="content">
+      <template v-slot:content>
         <info-list :items="data" />
       </template>
-      <template v-slot="links">
+      <template v-slot:links>
         <ul>
           <li>
             &rarr;&nbsp;
@@ -54,7 +54,7 @@
           </li>
         </ul>
       </template>
-      <template v-slot="bottom">
+      <template v-slot:bottom>
         <p>
           To update your membership status, contact us at
           <a href="mailto:community@texastribune.org"
