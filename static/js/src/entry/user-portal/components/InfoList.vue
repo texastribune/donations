@@ -1,11 +1,11 @@
 <template>
-  <ul class="c-info-list">
+  <ul class="c-info-list" :style="{ 'list-style': 'none' }">
     <li
       v-for="item in items"
       :key="item.id"
       class="c-info-list__item has-xs-padding"
     >
-      <h3 class="t-size-b">
+      <h3 class="t-size-s has-xxxs-btm-marg">
         <strong>{{ item.heading }}</strong>
       </h3>
       <p>

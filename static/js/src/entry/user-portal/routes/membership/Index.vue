@@ -34,9 +34,9 @@ export default {
   data() {
     return {
       data: [
-        { id: 0, heading: 'donation', text: '$35, monthly' },
-        { id: 1, heading: 'payment method', text: 'VISA ending in 4242' },
-        { id: 2, heading: 'next payment', text: 'March 29, 2019' },
+        { id: 0, heading: 'Donation', text: '$35, monthly' },
+        { id: 1, heading: 'Payment method', text: 'VISA ending in 4242' },
+        { id: 2, heading: 'Next payment', text: 'March 29, 2019' },
       ],
     };
   },
