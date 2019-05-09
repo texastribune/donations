@@ -1,10 +1,12 @@
 <template>
   <div>
     <message heading="Welcome" :name="welcomeMessageKey">
-      <p>👋 Welcome message.</p>
+      <icon name="camera" />
+      <p>Welcome message.</p>
     </message>
     <message heading="Coming soon" :name="comingSoonMessageKey">
-      <p>🎉 Coming soon message.</p>
+      <icon name="camera" />
+      <p>Coming soon message.</p>
     </message>
 
     <h1>Your Account</h1>
@@ -69,6 +71,7 @@
 </template>
 
 <script>
+import Icon from '../../components/Icon.vue';
 import Help from '../../components/Help.vue';
 import SummaryBox from '../../components/SummaryBox.vue';
 import InfoList from '../../components/InfoList.vue';
@@ -80,7 +83,7 @@ import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 export default {
   name: 'Index',
 
-  components: { Message, SummaryBox, InfoList, Help },
+  components: { Message, SummaryBox, InfoList, Help, Icon },
 
   mixins: [routeMixin, routeFetchMixin],
 
