@@ -1,22 +1,36 @@
 <template>
-  <nav>
-    <ul>
-      <li>
-        <router-link :to="{ name: 'home' }">Account Overview</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'membership' }">Membership</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'payments' }">Donation History</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'blast' }">The Blast Newsletter</router-link>
-      </li>
-      <li>
-        <router-link :to="{ name: 'blast-payments' }"
-          >Payment History</router-link
+  <nav class="c-side-nav">
+    <ul class="c-side-nav__outer">
+      <li class="has-xxs-btm-marg">
+        <router-link :to="{ name: 'home' }" exact active-class="is-active"
+          ><strong>Account Overview</strong></router-link
         >
+      </li>
+      <li class="has-xxs-btm-marg">
+        <router-link :to="{ name: 'membership' }" active-class="is-active"
+          ><strong>Membership</strong></router-link
+        >
+        <ul class="c-side-nav__inner">
+          <li>
+            <router-link :to="{ name: 'payments' }" active-class="is-active"
+              >Donation History</router-link
+            >
+          </li>
+        </ul>
+      </li>
+      <li class="has-xxs-btm-marg">
+        <router-link :to="{ name: 'blast' }" active-class="is-active"
+          ><strong>The Blast Newsletter</strong></router-link
+        >
+        <ul class="c-side-nav__inner">
+          <li class="c-side-nav__item c-side-nav__item--inside">
+            <router-link
+              :to="{ name: 'blast-payments' }"
+              active-class="is-active"
+              >Payment History</router-link
+            >
+          </li>
+        </ul>
       </li>
     </ul>
   </nav>

@@ -1,0 +1,12 @@
+.c-ump-content {
+  padding: 4rem $size-giant 0 $size-giant;
+
+  @include mq($until: bp-l) {
+    padding: 4rem $size-b $size-b;
+  }
+
+  @include mq($from: bp-l) {
+    background-color: $color-white-pure;
+    min-height: 100vh;
+  }
+}
