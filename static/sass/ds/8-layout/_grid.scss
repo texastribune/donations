@@ -13,5 +13,9 @@
   @include mq($until: bp-l) {
     grid-template-columns: 1fr;
     grid-auto-rows: auto;
+
+    &__content {
+      grid-column: 1;
+    }
   }
 }

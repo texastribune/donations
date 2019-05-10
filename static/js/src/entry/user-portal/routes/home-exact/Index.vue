@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="c-ump-top-route c-ump-top-route--mobile-gray-bg">
     <message heading="Welcome" :name="welcomeMessageKey">
       <icon name="camera" />
       <p>Welcome message.</p>

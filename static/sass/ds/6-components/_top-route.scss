@@ -1,4 +1,5 @@
-.c-ump-content {
+.c-ump-top-route {
+  background-color: $color-white-pure;
   padding: 4rem $size-giant 0 $size-giant;
 
   @include mq($until: bp-l) {
@@ -6,7 +7,12 @@
   }
 
   @include mq($from: bp-l) {
-    background-color: $color-white-pure;
     min-height: 100vh;
+  }
+
+  &--mobile-gray-bg {
+    @include mq($until: bp-l) {
+      background-color: $color-white-off;
+    }
   }
 }

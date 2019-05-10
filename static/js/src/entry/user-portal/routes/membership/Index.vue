@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="c-ump-top-route">
     <h1>Your Membership</h1>
 
     <section>

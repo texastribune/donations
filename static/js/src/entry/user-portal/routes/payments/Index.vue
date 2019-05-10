@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="c-ump-top-route">
     <h1>Your Donations</h1>
 
     <section>

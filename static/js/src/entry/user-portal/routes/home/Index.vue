@@ -1,13 +1,11 @@
 <template>
   <div>
     <loader v-show="context.isFetching" /> <loader v-if="isCheckingUser" />
-    <main v-else class="has-bg-white-off">
+    <main v-else class="has-white-off-bg-from-bp-l">
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l"><side-nav /></div>
-          <div class="l-ump-grid__content">
-            <div class="c-ump-content"><router-view /></div>
-          </div>
+          <div class="l-ump-grid__content"><router-view /></div>
         </div>
       </div>
     </main>
