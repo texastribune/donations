@@ -1,0 +1,43 @@
+
+
+.c-temp-messages {
+  &__message {
+    margin-bottom: $size-xxl;
+    position: relative;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include mq($until: bp-l) {
+      border-bottom: 2px solid $color-gray-light;
+      margin-bottom: 0;
+    }
+  }
+
+  &__top {
+    align-items: center;
+    display: flex;
+
+    .c-icon {
+      margin-right: $size-b;
+    }
+  }
+
+  &__close {
+    border: 1px solid $color-white-off;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: $size-xxxs;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+
+    @include mq($until: bp-l) {
+      background: none;
+      border: none;
+      transform: initial;
+    }
+  }
+}

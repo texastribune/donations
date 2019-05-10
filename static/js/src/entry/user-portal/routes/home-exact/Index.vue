@@ -1,13 +1,37 @@
 <template>
   <div class="c-ump-top-route c-ump-top-route--mobile-gray-bg">
-    <message heading="Welcome" :name="welcomeMessageKey">
-      <icon name="camera" />
-      <p>Welcome message.</p>
-    </message>
-    <message heading="Coming soon" :name="comingSoonMessageKey">
-      <icon name="camera" />
-      <p>Coming soon message.</p>
-    </message>
+    <div class="c-temp-messages has-xxl-btm-marg">
+      <message heading="Welcome" :name="welcomeMessageKey">
+        <template v-slot:icon>
+          <icon name="camera" size="m" />
+        </template>
+        <template v-slot:content>
+          <p class="has-text-black-off t-space-heading-m">
+            <em>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </em>
+          </p>
+        </template>
+      </message>
+      <message heading="Coming soon" :name="comingSoonMessageKey">
+        <template v-slot:icon>
+          <icon name="camera" size="m" />
+        </template>
+        <template v-slot:content>
+          <p class="has-text-black-off t-space-heading-m">
+            <em>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat.
+            </em>
+          </p>
+        </template>
+      </message>
+    </div>
 
     <h1>Your Account</h1>
 

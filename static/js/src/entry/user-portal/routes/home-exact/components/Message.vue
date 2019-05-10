@@ -1,13 +1,30 @@
 <template>
-  <aside v-if="shouldShow">
-    <h2>{{ heading }}</h2>
-    <slot></slot> <button @click="close">Close</button>
+  <aside
+    v-if="shouldShow"
+    class="c-temp-messages__message has-bg-white-off has-padding"
+  >
+    <div class="c-temp-messages__top has-xxs-btm-marg">
+      <slot name="icon"></slot>
+      <h2 class="t-size-m">{{ heading }}</h2>
+    </div>
+    <slot name="content"></slot>
+    <button
+      class="c-temp-messages__close has-bg-white has-text-gray"
+      aria-label="close"
+      @click="close"
+    >
+      <icon name="close" size="m" />
+    </button>
   </aside>
 </template>
 
 <script>
+import Icon from '../../../components/Icon.vue';
+
 export default {
   name: 'Message',
+
+  components: { Icon },
 
   props: {
     heading: {

@@ -1,5 +1,5 @@
 <template>
-  <span class="c-icon">
+  <span class="c-icon" :class="`t-size-${size}`">
     <svg aria-hidden="true"><use :xlink:href="`#${name}`" /></svg>
   </span>
 </template>
@@ -12,6 +12,11 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+
+    size: {
+      type: String,
+      default: 'b',
     },
   },
 };
