@@ -3022,7 +3022,7 @@ dot-prop@^4.1.1:
 
 "ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#master":
   version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#b6de86cc8d12b40d01fc60e651c3f9803a4cfa02"
+  resolved "https://github.com/texastribune/ds-toolbox.git#3638ce1cdfbaeb8e1d1e73e85fe17b4697b7a690"
   dependencies:
     ansi-colors "^3.2.4"
     autoprefixer "^9.5.1"

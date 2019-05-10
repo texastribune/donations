@@ -1,5 +1,5 @@
 <template>
-  <ul class="c-info-list" :style="{ 'list-style': 'none' }">
+  <ul class="c-info-list">
     <li
       v-for="item in items"
       :key="item.id"
