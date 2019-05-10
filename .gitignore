@@ -1,7 +1,7 @@
 env
+**/*.pyc
 env-docker
 .env
-*.pyc
 /static/css/
 /static/build/*.js
 /static/build/*.css
@@ -9,7 +9,6 @@ env-docker
 /static/build/*.json
 /static/build/*.png
 node_modules/
-*.DS_Store
 .cache
 .coverage
 htmlcov
@@ -17,6 +16,6 @@ celerybeat-schedule.db
 celerybeat.pid
 yarn-error.log
 .pytest_cache
-.vscode
 # SVG sprite
 /templates/includes/base_icons.html
+**/__pycache__
