@@ -7,9 +7,7 @@ import { createRouter, bindRouterEvents } from './router';
 import cssClasses from '../../mixins/global/cssClasses';
 import gtm from '../../mixins/global/gtm';
 
-import '../../../../sass/business.scss';
-
-require('es6-promise').polyfill();
+import '../../../../build/business.css';
 
 Vue.use(Vuex);
 Vue.mixin(cssClasses);
