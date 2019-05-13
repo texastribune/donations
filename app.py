@@ -237,26 +237,18 @@ def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
     build_dir = os.path.join("static", "build")
     asset_path = "/static/build/"
-    bundles = {"js": []}
+    bundles = {"css": "", "js": []}
     manifest_path = os.path.join(build_dir, "assets.json")
+    css_manifest_path = os.path.join(build_dir, "styles.json")
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets["entrypoints"][entry]
     for bundle in entrypoint["js"]:
         bundles["js"].append(asset_path + bundle)
+    with open(css_manifest_path) as manifest:
+        css_assets = json.load(manifest)
+    bundles["css"] = asset_path + css_assets[entry]
     return bundles
-
-
-def get_styles(entry):
-    root_dir = os.path.dirname(os.getcwd())
-    build_dir = os.path.join("static", "build")
-    asset_path = "/static/build/"
-    manifest_path = os.path.join(build_dir, "styles.json")
-    with open(manifest_path) as manifest:
-        assets = json.load(manifest)
-    css = assets[entry]
-    css_path = asset_path + css
-    return css_path
 
 
 def apply_card_details(rdo=None, customer=None):
@@ -373,9 +365,7 @@ def do_charge_or_show_errors(template, bundles, function):
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
     }
-    return render_template(
-        "charge.html", gtm=gtm, bundles=get_bundles("charge"), css=get_styles("charge")
-    )
+    return render_template("charge.html", gtm=gtm, bundles=get_bundles("charge"))
 
 
 def validate_form(FormType, bundles, template, function=add_donation.delay):
@@ -404,41 +394,32 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 @app.route("/donate", methods=["GET", "POST"])
 def donate_form():
     bundles = get_bundles("donate")
-    css = get_styles("donate")
     template = "donate-form.html"
 
     if request.method == "POST":
         return validate_form(DonateForm, bundles=bundles, template=template)
 
     return render_template(
-        template,
-        bundles=bundles,
-        css=css,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
 
 
 @app.route("/circle", methods=["GET", "POST"])
 def circle_form():
     bundles = get_bundles("circle")
-    css = get_styles("circle")
     template = "circle-form.html"
 
     if request.method == "POST":
         return validate_form(CircleForm, bundles=bundles, template=template)
 
     return render_template(
-        template,
-        bundles=bundles,
-        css=css,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
 
 
 @app.route("/business", methods=["GET", "POST"])
 def business_form():
     bundles = get_bundles("business")
-    css = get_styles("business")
     template = "business-form.html"
 
     if request.method == "POST":
@@ -450,17 +431,13 @@ def business_form():
         )
 
     return render_template(
-        template,
-        bundles=bundles,
-        css=css,
-        key=app.config["STRIPE_KEYS"]["publishable_key"],
+        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
     )
 
 
 @app.route("/blast-promo")
 def the_blast_promo_form():
     bundles = get_bundles("old")
-    css = get_styles("old")
     form = BlastPromoForm()
 
     campaign_id = request.args.get("campaignId", default="")
@@ -474,14 +451,12 @@ def the_blast_promo_form():
         installment_period="yearly",
         key=app.config["STRIPE_KEYS"]["publishable_key"],
         bundles=bundles,
-        css=css,
     )
 
 
 @app.route("/submit-blast-promo", methods=["POST"])
 def submit_blast_promo():
     bundles = get_bundles("old")
-    css = get_css("old")
     app.logger.info(pformat(request.form))
     form = BlastPromoForm(request.form)
 
@@ -494,21 +469,20 @@ def submit_blast_promo():
         app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message, bundles=bundles, css=css)
+        return render_template("error.html", message=message, bundles=bundles)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html", bundles=bundles, css=css)
+        return render_template("blast-charge.html", bundles=bundles)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message, bundles=bundles, css=css)
+        return render_template("error.html", message=message, bundles=bundles)
 
 
 @app.route("/blastform")
 def the_blast_form():
     bundles = get_bundles("old")
-    css = get_styles("old")
     form = BlastForm()
     if request.args.get("amount"):
         amount = request.args.get("amount")
@@ -529,14 +503,12 @@ def the_blast_form():
         amount=amount,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
         bundles=bundles,
-        css=css,
     )
 
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
     bundles = get_bundles("old")
-    css = get_styles("old")
     app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
@@ -549,31 +521,29 @@ def submit_blast():
         app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message, bundles=bundles, css=css)
+        return render_template("error.html", message=message, bundles=bundles)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html", bundles=bundles, css=css)
+        return render_template("blast-charge.html", bundles=bundles)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message, bundles=bundles, css=css)
+        return render_template("error.html", message=message, bundles=bundles)
 
 
 @app.route("/error")
 def error():
     bundles = get_bundles("old")
-    css = get_styles("old")
     message = "Something went wrong!"
-    return render_template("error.html", message=message, bundles=bundles, css=css)
+    return render_template("error.html", message=message, bundles=bundles)
 
 
 @app.errorhandler(404)
 def page_not_found(error):
     bundles = get_bundles("old")
-    css = get_styles("old")
     message = "The page you requested can't be found."
-    return render_template("error.html", message=message, bundles=bundles, css=css), 404
+    return render_template("error.html", message=message, bundles=bundles), 404
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
