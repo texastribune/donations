@@ -451,8 +451,8 @@ def business_form():
 
     return render_template(
         template,
-        css=css,
         bundles=bundles,
+        css=css,
         key=app.config["STRIPE_KEYS"]["publishable_key"],
     )
 
