@@ -20,11 +20,15 @@ RUN apt-get -yq update && \
 
 WORKDIR /app
 
+ARG AUTH0_DOMAIN=auth-test.texastribune.org
+ARG AUTH0_CLIENT_ID=k66bypGeKUCCLHGrQt5BQHJWTltZ9OzQ
+
 COPY static /app/static
 COPY webpack /app/webpack
+COPY config /app/config
 COPY package.json /app/
 COPY yarn.lock /app/
-COPY .babelrc /app/
+COPY .babelrc.js /app/
 RUN yarn
 
 RUN pip install --upgrade pip

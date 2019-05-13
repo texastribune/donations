@@ -7,9 +7,7 @@ import { createRouter, bindRouterEvents } from './router';
 import cssClasses from '../../mixins/global/cssClasses';
 import gtm from '../../mixins/global/gtm';
 
-import '../../../../sass/circle.scss';
-
-require('es6-promise').polyfill();
+import '../../../../build/circle.css';
 
 Vue.use(Vuex);
 Vue.mixin(cssClasses);
