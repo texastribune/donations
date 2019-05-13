@@ -10,7 +10,6 @@ import logging
 import os
 import re
 from config import (
-    FLASK_DEBUG,
     FLASK_SECRET_KEY,
     LOG_LEVEL,
     TIMEZONE,
@@ -236,12 +235,8 @@ why they're compiled to /static/js/build/ instead.
 
 def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
-    if FLASK_DEBUG:
-        build_dir = os.path.join("static", "build")
-        asset_path = "/static/build/"
-    else:
-        build_dir = os.path.join(root_dir, "app", "static", "prod")
-        asset_path = "/static/prod/"
+    build_dir = os.path.join("static", "build")
+    asset_path = "/static/build/"
     bundles = {"css": [], "js": []}
     manifest_path = os.path.join(build_dir, "assets.json")
     with open(manifest_path) as manifest:
