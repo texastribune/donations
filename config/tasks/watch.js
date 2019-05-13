@@ -5,7 +5,7 @@ const stylesRunner = require('ds-toolbox-test/tasks/styles');
 const { logMessage } = require('ds-toolbox-test/tasks/utils');
 
 // internal
-const { mappedStyles, mappedIcons } = require('../paths.js');
+const { mappedStyles, mappedIcons, mappedStylesManifest } = require('../paths.js');
 
 
 module.exports = async () => {
@@ -17,7 +17,7 @@ module.exports = async () => {
     }
     try {
       const mappedStylesArr = await mappedStyles();
-      await stylesRunner(mappedStylesArr);
+      await stylesRunner(mappedStylesArr, mappedStylesManifest);
     } catch (err) {
       logMessage('Error compiling CSS.', 'red');
       logMessage(err);

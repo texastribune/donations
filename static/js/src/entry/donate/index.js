@@ -7,7 +7,7 @@ import { createRouter, bindRouterEvents } from './router';
 import cssClasses from '../../mixins/global/cssClasses';
 import gtm from '../../mixins/global/gtm';
 
-import '../../../../build/donate.css';
+// import '../../../../build/donate.css';
 
 Vue.use(Vuex);
 Vue.mixin(cssClasses);

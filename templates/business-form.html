@@ -10,12 +10,6 @@
   <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Business Member today.">
 {% endblock %}
 
-{% block stylesheets %}
-  {% for stylesheet in bundles['css'] %}
-    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
-  {% endfor %}
-{% endblock %}
-
 {% block head_scripts %}
 {% if form_data and message %}
 <script>
