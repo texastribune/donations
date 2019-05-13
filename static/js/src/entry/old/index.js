@@ -1,1 +1,1 @@
-import '../../../../sass/old.scss';
+import '../../../../build/old.css';
