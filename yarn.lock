@@ -2988,7 +2988,7 @@ dot-prop@^4.1.1:
 
 "ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#cache-bust":
   version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#9e5be2679bab592bde413c1afee4a6594543326a"
+  resolved "https://github.com/texastribune/ds-toolbox.git#77d2e89f68f6f8852bb79137a4fa8a46a281224c"
   dependencies:
     ansi-colors "^3.2.4"
     autoprefixer "^9.5.1"
