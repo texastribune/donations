@@ -5,71 +5,29 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-import queryParamScrub from '../../utils/queryParamScrub';
 import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
-
 import {
-  BUSINESS_BUCKETS,
+  BUSINESS_LEVELS,
   BUSINESS_FORM_STATE,
-  DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD,
-  DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD,
-  WL_DEFAULT_PARAMETERS,
-  WL_QUERY_PARAMETERS_MAX_NBR_CHARS,
-  WL_QUERY_ESCAPE_THRESHOLD,
-  QUERY_PARAMETERS_STRING_VALUES,
+  DEFAULT_LEVEL,
 } from './constants';
 
 Vue.use(VueRouter);
 
-function mapInstallmentPeriodOncetoForm(finalSanitizedParams) {
-  // set data for form submit
-  finalSanitizedParams.installments = QUERY_PARAMETERS_STRING_VALUES.oneStr;
-  finalSanitizedParams.installment_period =
-    QUERY_PARAMETERS_STRING_VALUES.noneStr;
-  finalSanitizedParams.openended_status =
-    QUERY_PARAMETERS_STRING_VALUES.noneStr;
-
-  return finalSanitizedParams;
-}
-
 function getStateFromParams(queryParams) {
-  let level = DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD;
-  let scrubbedQueryParams;
+  const { campaignId = '', referralId = '' } = queryParams;
+  let { level = DEFAULT_LEVEL } = queryParams;
 
-  // if this query is within the threshold number of parameters
-  // filter input query oarams using the app whitelist
-  if (Object.keys(queryParams).length <= WL_QUERY_ESCAPE_THRESHOLD) {
-    scrubbedQueryParams = queryParamScrub(
-      queryParams,
-      WL_DEFAULT_PARAMETERS,
-      WL_QUERY_PARAMETERS_MAX_NBR_CHARS
-    );
-  } else {
-    scrubbedQueryParams = WL_DEFAULT_PARAMETERS;
-  }
+  if (!BUSINESS_LEVELS[level]) level = DEFAULT_LEVEL;
 
-  if (
-    scrubbedQueryParams.installmentPeriod.toLowerCase() ===
-    QUERY_PARAMETERS_STRING_VALUES.onceStr
-  ) {
-    // set data for form submit
-    scrubbedQueryParams = mapInstallmentPeriodOncetoForm(scrubbedQueryParams);
-    // set UI level with payment period selected state
-    level = DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD;
-  }
-
-  // set the choices form state from defaults + query parameters
-  const { amount, payFees } = BUSINESS_BUCKETS[level];
+  const { amount, installmentPeriod } = BUSINESS_LEVELS[level];
 
   return {
     level,
     amount,
-    pay_fees_value: payFees,
-    campaign_id: scrubbedQueryParams.campaignId,
-    referral_id: scrubbedQueryParams.referralId,
-    installment_period: scrubbedQueryParams.installment_period,
-    installments: scrubbedQueryParams.installments,
-    openended_status: scrubbedQueryParams.openended_status,
+    installment_period: installmentPeriod,
+    campaign_id: campaignId,
+    referral_id: referralId,
   };
 }
 

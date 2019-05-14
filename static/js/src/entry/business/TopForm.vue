@@ -21,7 +21,9 @@
 
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
-        <div class="col"><form-buckets /></div>
+        <div class="col">
+          <form-buckets :all-levels="allLevels" :store-module="storeModule" />
+        </div>
       </div>
     </div>
 
@@ -227,10 +229,10 @@ import SelectList from '../../elements/SelectList.vue';
 import ManualPay from '../../elements/ManualPay.vue';
 import ManualSubmit from '../../elements/ManualSubmit.vue';
 import NativePay from '../../elements/NativePay.vue';
-import FormBuckets from './FormBuckets.vue';
+import FormBuckets from '../../elements/FormBuckets.vue';
 import Benefits from './Benefits.vue';
 import formStarter from '../../mixins/form/starter';
-import { US_STATES_SELECT_LIST } from './constants';
+import { US_STATES_SELECT_LIST, BUSINESS_LEVELS } from './constants';
 
 export default {
   name: 'TopForm',
@@ -256,6 +258,7 @@ export default {
       serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       usStatesOptions: US_STATES_SELECT_LIST,
       storeModule: 'businessForm',
+      allLevels: BUSINESS_LEVELS,
     };
   },
 };
