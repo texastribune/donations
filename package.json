@@ -27,6 +27,7 @@
     "@babel/runtime": "^7.4.3",
     "axios": "^0.18.0",
     "babel-loader": "^8.0.0",
+    "css-loader": "^2.1.1",
     "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#master",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
