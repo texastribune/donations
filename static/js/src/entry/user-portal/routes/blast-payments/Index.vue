@@ -1,5 +1,5 @@
 <template>
-  <div class="c-ump-top-route">
+  <div class="c-top-route">
     <h1>The Blast Newsletter: Payment History</h1>
 
     <section><payment-list :payments="payments" /></section>

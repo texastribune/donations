@@ -1,6 +1,6 @@
-.c-ump-top-route {
+.c-top-route {
   background-color: $color-white-pure;
-  padding: 4rem $size-giant 0 $size-giant;
+  padding: 4rem $size-giant;
 
   @include mq($until: bp-l) {
     padding: 4rem $size-b $size-b;
@@ -10,7 +10,9 @@
     min-height: 100vh;
   }
 
-  &--mobile-gray-bg {
+  &--home {
+    min-height: 100vh;
+
     @include mq($until: bp-l) {
       background-color: $color-white-off;
     }

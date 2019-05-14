@@ -1,5 +1,5 @@
 <template>
-  <div class="c-ump-top-route c-ump-top-route--mobile-gray-bg">
+  <div class="c-top-route c-top-route--home">
     <div class="c-temp-messages">
       <message heading="Welcome" :name="welcomeMessageKey">
         <template v-slot:icon>
@@ -35,7 +35,7 @@
 
     <h1 class="has-xxl-btm-marg">Your Account</h1>
 
-    <div class="has-xxl-btm-marg">
+    <div class="c-summary-boxes has-xxl-btm-marg">
       <summary-box heading="contact info">
         <template v-slot:content>
           <info-list :items="data" />
@@ -44,7 +44,9 @@
           <ul v-if="!pwResetSuccess && !pwResetFailure">
             <li>
               &rarr;&nbsp;
-              <button @click="resetPassword">Reset your password</button>
+              <button class="c-button-link" @click="resetPassword">
+                Reset your password
+              </button>
             </li>
           </ul>
           <p v-else-if="pwResetSuccess">
@@ -60,37 +62,37 @@
           </p>
         </template>
       </summary-box>
-    </div>
 
-    <summary-box heading="membership">
-      <template v-slot:content>
-        <info-list :items="data" />
-      </template>
-      <template v-slot:links>
-        <ul>
-          <li>
-            &rarr;&nbsp;
-            <router-link :to="{ name: 'payments' }"
-              >See your donation history</router-link
-            >
-          </li>
-          <li>
-            &rarr;&nbsp;
-            <router-link :to="{ name: 'membership' }"
-              >More about your membership</router-link
-            >
-          </li>
-        </ul>
-      </template>
-      <template v-slot:bottom>
-        <p>
-          To update your membership status, contact us at
-          <a href="mailto:community@texastribune.org"
-            >community@texastribune.org</a
-          >.
-        </p>
-      </template>
-    </summary-box>
+      <summary-box heading="membership">
+        <template v-slot:content>
+          <info-list :items="data" />
+        </template>
+        <template v-slot:links>
+          <ul>
+            <li>
+              &rarr;&nbsp;
+              <router-link :to="{ name: 'payments' }"
+                >See your donation history</router-link
+              >
+            </li>
+            <li>
+              &rarr;&nbsp;
+              <router-link :to="{ name: 'membership' }"
+                >More about your membership</router-link
+              >
+            </li>
+          </ul>
+        </template>
+        <template v-slot:bottom>
+          <p class="has-text-gray-dark">
+            To update your membership status, contact us at
+            <a href="mailto:community@texastribune.org"
+              >community@texastribune.org</a
+            >.
+          </p>
+        </template>
+      </summary-box>
+    </div>
 
     <help home />
   </div>

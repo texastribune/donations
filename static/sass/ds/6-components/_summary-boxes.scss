@@ -1,0 +1,27 @@
+.c-summary-boxes {
+  &__box {
+    border-bottom: 2px solid $color-white-off;
+    margin-bottom: $size-xxl;
+    padding: 0 0 $size-xl 0;
+
+    > &:last-child {
+      margin-bottom: 0;
+    }
+
+    @include mq($until: bp-l) {
+      background: $color-white-pure;
+      border: 1px solid $color-gray-light;
+      border-radius: 4px;
+      padding: 0;
+
+      &__top {
+        padding: $size-xl $size-b $size-b;
+      }
+
+      &__bottom {
+        border-top: 1px solid $color-gray-light;
+        padding: $size-b;
+      }
+    }
+  }
+}
