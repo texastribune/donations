@@ -42,20 +42,24 @@ const actions = {
         auth.checkSession(
           { responseType: 'id_token token' },
           (err, authResult) => {
-            const { idToken, accessToken, idTokenPayload } = authResult;
-
             if (err && err.error === 'login_required') {
               clearFlag();
               return reject(new LoggedOutError());
             }
-            if (err || !idToken || !accessToken || !idTokenPayload) {
+            if (
+              err ||
+              !authResult ||
+              !authResult.idToken ||
+              !authResult.accessToken ||
+              !authResult.idTokenPayload
+            ) {
               clearFlag();
               return reject(new Auth0Error());
             }
 
-            commit('SET_ID_TOKEN', idToken);
-            commit('SET_ACCESS_TOKEN', accessToken);
-            commit('SET_DETAILS', extractUser(idTokenPayload));
+            commit('SET_ID_TOKEN', authResult.idToken);
+            commit('SET_ACCESS_TOKEN', authResult.accessToken);
+            commit('SET_DETAILS', extractUser(authResult.idTokenPayload));
             setFlag();
             return resolve();
           }
