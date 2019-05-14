@@ -246,10 +246,8 @@ def get_bundles(entry):
     for bundle in entrypoint["js"]:
         bundles["js"].append(asset_path + bundle)
     with open(css_manifest_path) as manifest:
-        if entry != "user-portal":  # temporary
-            css_assets = json.load(manifest)
-    if entry != "user-portal":  # temporary
-        bundles["css"] = asset_path + css_assets[entry]
+        css_assets = json.load(manifest)
+    bundles["css"] = asset_path + css_assets[entry]
     return bundles
 
 
