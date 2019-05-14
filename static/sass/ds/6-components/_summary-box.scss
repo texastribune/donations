@@ -1,0 +1,8 @@
+.c-summary-box {
+  @include mq($until: bp-l) {
+    background: $color-white-pure;
+    border: 1px solid $color-gray-light;
+    border-radius: 4px;
+    padding: $size-xl $size-b;
+  }
+}

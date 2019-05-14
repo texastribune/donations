@@ -1,7 +1,7 @@
 <template>
   <aside
     v-if="shouldShow"
-    class="c-temp-messages__message has-bg-white-off has-padding"
+    class="c-temp-messages__message has-bg-white-off has-padding has-xxl-btm-marg"
   >
     <div class="c-temp-messages__top has-xxs-btm-marg">
       <slot name="icon"></slot>

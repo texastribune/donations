@@ -1,6 +1,6 @@
 <template>
   <section>
-    <h2>Need help?</h2>
+    <h2 class="t-uppercase t-size-m has-m-btm-marg">Need help?</h2>
     <p v-if="home">
       If you have questions about your Texas Tribune account or would like to
       give us feedback on this experience, please contact us at

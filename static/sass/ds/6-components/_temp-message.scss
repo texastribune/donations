@@ -2,16 +2,10 @@
 
 .c-temp-messages {
   &__message {
-    margin-bottom: $size-xxl;
     position: relative;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
 
     @include mq($until: bp-l) {
       border-bottom: 2px solid $color-gray-light;
-      margin-bottom: 0;
     }
   }
 

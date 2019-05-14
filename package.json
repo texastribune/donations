@@ -29,7 +29,7 @@
     "axios": "^0.18.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^1.0.0",
-    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#master",
+    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#info-list",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
     "fast-glob": "^2.2.6",

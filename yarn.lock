@@ -3020,9 +3020,9 @@ dot-prop@^4.1.1:
   dependencies:
     is-obj "^1.0.0"
 
-"ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#master":
+"ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#info-list":
   version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#3638ce1cdfbaeb8e1d1e73e85fe17b4697b7a690"
+  resolved "https://github.com/texastribune/ds-toolbox.git#33500fbde6ab11de810dabd47211540cef5ddebd"
   dependencies:
     ansi-colors "^3.2.4"
     autoprefixer "^9.5.1"

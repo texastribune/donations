@@ -1,6 +1,6 @@
 <template>
   <div class="c-ump-top-route c-ump-top-route--mobile-gray-bg">
-    <div class="c-temp-messages has-xxl-btm-marg">
+    <div class="c-temp-messages">
       <message heading="Welcome" :name="welcomeMessageKey">
         <template v-slot:icon>
           <icon name="camera" size="m" />
@@ -33,32 +33,34 @@
       </message>
     </div>
 
-    <h1>Your Account</h1>
+    <h1 class="has-xxl-btm-marg">Your Account</h1>
 
-    <summary-box heading="contact info">
-      <template v-slot:content>
-        <info-list :items="data" />
-      </template>
-      <template v-slot:links>
-        <ul v-if="!pwResetSuccess && !pwResetFailure">
-          <li>
-            &rarr;&nbsp;
-            <button @click="resetPassword">Reset your password</button>
-          </li>
-        </ul>
-        <p v-else-if="pwResetSuccess">
-          Check your inbox for an email from The Texas Tribune with the subject
-          line &quot;Reset your password.&quot;
-        </p>
-        <p v-else>
-          There was an issue resetting your password. If you continue having
-          trouble, contact&nbsp;
-          <a href="mailto:community@texastribune.org">
-            community@texastribune.org </a
-          >.
-        </p>
-      </template>
-    </summary-box>
+    <div class="has-xxl-btm-marg">
+      <summary-box heading="contact info">
+        <template v-slot:content>
+          <info-list :items="data" />
+        </template>
+        <template v-slot:links>
+          <ul v-if="!pwResetSuccess && !pwResetFailure">
+            <li>
+              &rarr;&nbsp;
+              <button @click="resetPassword">Reset your password</button>
+            </li>
+          </ul>
+          <p v-else-if="pwResetSuccess">
+            Check your inbox for an email from The Texas Tribune with the
+            subject line &quot;Reset your password.&quot;
+          </p>
+          <p v-else>
+            There was an issue resetting your password. If you continue having
+            trouble, contact&nbsp;
+            <a href="mailto:community@texastribune.org">
+              community@texastribune.org </a
+            >.
+          </p>
+        </template>
+      </summary-box>
+    </div>
 
     <summary-box heading="membership">
       <template v-slot:content>
@@ -114,9 +116,9 @@ export default {
   data() {
     return {
       data: [
-        { id: 0, heading: 'name', text: 'Andrew Gibson' },
-        { id: 1, heading: 'email', text: 'agibson@texastribune.org' },
-        { id: 2, heading: 'zip', text: '78701' },
+        { id: 0, heading: 'Name', text: 'Andrew Gibson' },
+        { id: 1, heading: 'Email', text: 'agibson@texastribune.org' },
+        { id: 2, heading: 'Zip code', text: '78701' },
       ],
       welcomeMessageKey: WELCOME_MESSAGE_KEY,
       comingSoonMessageKey: COMING_SOON_MESSAGE_KEY,
