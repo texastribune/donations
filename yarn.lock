@@ -2774,7 +2774,25 @@ domutils@^1.5.1, domutils@^1.7.0:
 
 "ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#cache-bust":
   version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#77d2e89f68f6f8852bb79137a4fa8a46a281224c"
+  resolved "https://github.com/texastribune/ds-toolbox.git#22b966e0ec3ed78eebcd4d6e2e03060e296579e0"
+  dependencies:
+    ansi-colors "^3.2.4"
+    autoprefixer "^9.5.1"
+    clean-css "^4.2.1"
+    fast-glob "^2.2.6"
+    fs-extra "^7.0.1"
+    glob-watcher "^5.0.3"
+    node-sass "^4.11.0"
+    normalize.css "^8.0.1"
+    ora "^3.4.0"
+    postcss "^7.0.16"
+    sass-mq "^5.0.0"
+    svgo "^1.2.1"
+    svgstore "^3.0.0-2"
+
+"ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#master":
+  version "0.0.4"
+  resolved "https://github.com/texastribune/ds-toolbox.git#ad7d232e28c231c01c719ca4927544eb3be62625"
   dependencies:
     ansi-colors "^3.2.4"
     autoprefixer "^9.5.1"
