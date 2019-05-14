@@ -1,11 +1,5 @@
 {% extends "new_layout.html" %}
 
-{% block stylesheets %}
-  {% for stylesheet in bundles['css'] %}
-    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
-  {% endfor %}
-{% endblock %}
-
 {% block content %}
 <div id="charge" class="main grid_container--m grid_padded--m">
   <section class="section-padding">

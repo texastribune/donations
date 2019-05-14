@@ -4,12 +4,12 @@ const iconsRunner = require('ds-toolbox-test/tasks/icons');
 const { logMessage } = require('ds-toolbox-test/tasks/utils');
 
 // internal
-const { mappedStyles, mappedIcons } = require('../paths.js');
+const { mappedStyles, mappedIcons, mappedStylesManifest } = require('../paths.js');
 
 async function build() {
   // compile styles
   const mappedStylesArr = await mappedStyles();
-  await stylesRunner(mappedStylesArr);
+  await stylesRunner(mappedStylesArr, mappedStylesManifest);
 
   // compile icons
   await iconsRunner(mappedIcons);

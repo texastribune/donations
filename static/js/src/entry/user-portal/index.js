@@ -7,8 +7,6 @@ import routes from './routes';
 import userModule from './store/modules/user';
 import contextModule from './store/modules/context';
 
-import '../../../../build/user-portal.css';
-
 Vue.use(Vuex);
 Vue.use(VueRouter);
 
