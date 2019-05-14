@@ -26,7 +26,11 @@ const mappedIcons = [
   },
 ];
 
+const mappedStylesManifest = `${CSS_OUTPUT_DIR}styles.json`;
+
+
 module.exports = {
   mappedStyles,
   mappedIcons,
+  mappedStylesManifest
 };
