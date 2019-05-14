@@ -24,7 +24,7 @@
 import Radios from './Radios.vue';
 import getValue from './mixins/getValue';
 import updateValues from './mixins/updateValues';
-import addNumberCommas from '../utils/addNumberCommas';
+import addNumberCommas from '../utils/add-number-commas';
 
 export default {
   name: 'FormBuckets',
