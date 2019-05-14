@@ -237,15 +237,17 @@ def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
     build_dir = os.path.join("static", "build")
     asset_path = "/static/build/"
-    bundles = {"css": [], "js": []}
+    bundles = {"css": "", "js": []}
     manifest_path = os.path.join(build_dir, "assets.json")
+    css_manifest_path = os.path.join(build_dir, "styles.json")
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets["entrypoints"][entry]
     for bundle in entrypoint["js"]:
         bundles["js"].append(asset_path + bundle)
-    for bundle in entrypoint["css"]:
-        bundles["css"].append(asset_path + bundle)
+    with open(css_manifest_path) as manifest:
+        css_assets = json.load(manifest)
+    bundles["css"] = asset_path + css_assets[entry]
     return bundles
 
 
