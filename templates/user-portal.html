@@ -9,9 +9,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
-    {% for stylesheet in bundles['css'] %}
-      <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
-    {% endfor %}
+    <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
 
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
