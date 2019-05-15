@@ -1,21 +1,18 @@
 .l-ump-grid {
   display: grid;
+  grid-template-areas: 'side content';
   grid-template-columns: 20rem 1fr;
 
   &__side {
-    grid-column: 1;
+    grid-area: side;
   }
 
   &__content {
-    grid-column: 2;
+    grid-area: content;
   }
 
   @include mq($until: bp-l) {
+    grid-template-areas: 'content';
     grid-template-columns: 1fr;
-    grid-auto-rows: auto;
-
-    &__content {
-      grid-column: 1;
-    }
   }
 }

@@ -58,11 +58,11 @@ export const redirectAfterLogIn = () => {
   const url = localStorage.getItem(LOGIN_REDIRECT_KEY) || '/';
   setTimeout(() => {
     window.location.href = url;
-  }, 500);
+  }, 1000);
 };
 
 export const redirectAfterLogOut = () => {
   setTimeout(() => {
     window.location.href = 'https://www.texastribune.org/';
-  }, 500);
+  }, 1000);
 };

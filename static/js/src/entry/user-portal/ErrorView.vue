@@ -1,12 +1,19 @@
 <template>
-  <main>
-    <h1>Sorry about that.</h1>
-    <p>An error occurred, and we're working hard to fix it.</p>
-    <p>
-      You can return <a href="/user-portal">home</a> or email
-      <a href="mailto:community@texastribune.org">community@texastribune.org</a>
-      if the issue persists.
-    </p>
+  <main class="l-minimal has-white-off-bg has-xl-padding">
+    <div class="l-align-center-self l-align-center-x t-linkstyle--underlined">
+      <h1 class="has-xl-btm-marg">Sorry about that.</h1>
+      <p class="has-s-btm-marg">
+        An error occurred, and we're working hard to fix it.
+      </p>
+      <p>
+        You can return to your <a href="/user-portal">account overview</a> or
+        email
+        <a href="mailto:community@texastribune.org"
+          >community@texastribune.org</a
+        >
+        if the issue persists.
+      </p>
+    </div>
   </main>
 </template>
 
