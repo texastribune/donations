@@ -1,8 +1,11 @@
 <template>
-  <section class="c-summary-boxes__box">
+  <section
+    class="c-summary-boxes__box"
+    :class="{ 'is-expired': display.isExpired }"
+  >
     <div class="c-summary-boxes__top">
       <h2 class="t-uppercase t-size-m has-m-btm-marg">{{ heading }}</h2>
-      <div class="has-xl-btm-marg"><slot name="content"></slot></div>
+      <div class="has-xxl-btm-marg"><slot name="content"></slot></div>
       <slot name="links"></slot>
     </div>
     <div
@@ -22,6 +25,11 @@ export default {
     heading: {
       type: String,
       required: true,
+    },
+
+    display: {
+      type: Object,
+      default: () => ({ isExpired: false }),
     },
   },
 };

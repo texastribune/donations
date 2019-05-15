@@ -3,10 +3,10 @@
     <div class="c-temp-messages">
       <message heading="Welcome" :name="welcomeMessageKey">
         <template v-slot:icon>
-          <icon name="camera" size="m" />
+          <icon name="camera" :display="{ size: 'm' }" />
         </template>
         <template v-slot:content>
-          <p class="has-text-black-off t-space-heading-m">
+          <p class="has-text-gray-dark t-space-heading-m">
             <em>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -18,10 +18,10 @@
       </message>
       <message heading="Coming soon" :name="comingSoonMessageKey">
         <template v-slot:icon>
-          <icon name="camera" size="m" />
+          <icon name="camera" :display="{ size: 'm' }" />
         </template>
         <template v-slot:content>
-          <p class="has-text-black-off t-space-heading-m">
+          <p class="has-text-gray-dark t-space-heading-m">
             <em>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -38,15 +38,33 @@
     <div class="c-summary-boxes has-xxl-btm-marg">
       <summary-box heading="contact info">
         <template v-slot:content>
-          <info-list :items="data" />
+          <info-list :items="data">
+            <template v-slot="slotProps">
+              <span
+                class="has-text-gray-dark"
+                :class="{ 't-wrap-break': slotProps.item.heading === 'Email' }"
+              >
+                {{ slotProps.item.text }}
+              </span>
+            </template>
+          </info-list>
         </template>
+
         <template v-slot:links>
-          <ul v-if="!pwResetSuccess && !pwResetFailure">
+          <ul v-if="!pwResetSuccess && !pwResetFailure" class="c-link-list">
             <li>
-              &rarr;&nbsp;
-              <button class="c-button-link" @click="resetPassword">
-                Reset your password
-              </button>
+              <span class="c-link-list__arrow has-text-teal">
+                <strong>&rarr;</strong>
+              </span>
+              <span class="has-text-gray-dark">
+                <button
+                  :style="{ 'line-height': 'normal' }"
+                  class="c-link-button"
+                  @click="resetPassword"
+                >
+                  Reset your password
+                </button>
+              </span>
             </li>
           </ul>
           <p v-else-if="pwResetSuccess">
@@ -63,28 +81,45 @@
         </template>
       </summary-box>
 
-      <summary-box heading="membership">
+      <summary-box heading="membership" :display="{ isExpired: true }">
         <template v-slot:content>
-          <info-list :items="data" />
+          <p class="has-text-gray-dark t-space-heading-m">
+            <span class="has-text-error"
+              >Your membership expired on <strong>March 29, 2019</strong>.</span
+            >
+            Your last donation of <strong>$35</strong> was charged on
+            <strong>March 29, 2018</strong>, to your card ending in
+            <strong>5555</strong>.
+          </p>
         </template>
         <template v-slot:links>
-          <ul>
-            <li>
-              &rarr;&nbsp;
-              <router-link :to="{ name: 'payments' }"
-                >See your donation history</router-link
-              >
+          <ul class="c-link-list t-linkstyle--underlined">
+            <li class="has-xs-btm-marg">
+              <span class="c-link-list__arrow has-text-teal">
+                <strong>&rarr;</strong>
+              </span>
+              <span class="has-text-gray-dark">
+                <router-link :to="{ name: 'payments' }"
+                  >See your donation history</router-link
+                >
+              </span>
             </li>
             <li>
-              &rarr;&nbsp;
-              <router-link :to="{ name: 'membership' }"
-                >More about your membership</router-link
-              >
+              <span class="c-link-list__arrow has-text-teal">
+                <strong>&rarr;</strong>
+              </span>
+              <span class="has-text-gray-dark">
+                <router-link :to="{ name: 'membership' }"
+                  >More about your membership</router-link
+                >
+              </span>
             </li>
           </ul>
         </template>
         <template v-slot:bottom>
-          <p class="has-text-gray-dark">
+          <p
+            class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined"
+          >
             To update your membership status, contact us at
             <a href="mailto:community@texastribune.org"
               >community@texastribune.org</a

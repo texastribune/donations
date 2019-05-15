@@ -11,17 +11,23 @@
     @include mq($until: bp-l) {
       background: $color-white-pure;
       border: 1px solid $color-gray-light;
-      border-radius: 4px;
+      border-radius: 3px;
       padding: 0;
 
-      &__top {
-        padding: $size-xl $size-b $size-b;
+      &.is-expired {
+        border: 3px solid $color-error;
       }
+    }
+  }
 
-      &__bottom {
-        border-top: 1px solid $color-gray-light;
-        padding: $size-b;
-      }
+  @include mq($until: bp-l) {
+    &__top {
+      padding: $size-xl $size-b;
+    }
+
+    &__bottom {
+      border-top: 1px solid $color-gray-light;
+      padding: $size-b;
     }
   }
 }
