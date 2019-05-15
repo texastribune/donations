@@ -2,17 +2,7 @@
   background-color: $color-white-pure;
   padding: 4rem $size-giant;
 
-  @include mq($until: bp-l) {
-    padding: 4rem $size-b $size-b;
-  }
-
-  @include mq($from: bp-l) {
-    min-height: 100vh;
-  }
-
   &--home {
-    min-height: 100vh;
-
     @include mq($until: bp-l) {
       background-color: $color-white-off;
     }

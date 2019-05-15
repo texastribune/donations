@@ -3,17 +3,27 @@
     <h1 class="has-xxl-btm-marg">Your Donations</h1>
 
     <section class="has-xxl-btm-marg">
-      <payment-list :payments="payments" />
-      <ul>
-        <li>
-          &rarr;&nbsp;
+      <div class="has-xxl-btm-marg"><payment-list :payments="payments" /></div>
+
+      <ul class="c-link-list t-linkstyle--underlined">
+        <li class="has-xs-btm-marg">
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
           <router-link :to="{ name: 'membership' }"
             >See your membership status</router-link
           >
         </li>
-        <li>&rarr;&nbsp; <a href="">Download your 2018 tax receipt</a></li>
+        <li class="has-xs-btm-marg">
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
+          <a href="">Download your 2018 tax receipt</a>
+        </li>
         <li>
-          &rarr;&nbsp;
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
           <a href="/donate#join-today">Become a sustaining member</a>
         </li>
       </ul>

@@ -1,8 +1,9 @@
 <template>
   <div>
-    <nav />
+    <nav style="height:45px;background:#222;" />
     <error-view v-if="context.hasError" />
     <router-view v-else />
+    <footer style="height:300px;background:#222;" />
   </div>
 </template>
 

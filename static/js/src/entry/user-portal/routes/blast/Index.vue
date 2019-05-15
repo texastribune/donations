@@ -3,10 +3,13 @@
     <h1 class="has-xxl-btm-marg">The Blast Newsletter</h1>
 
     <section class="has-xxl-btm-marg">
-      <info-list :items="data" />
-      <ul>
+      <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
+
+      <ul class="c-link-list t-linkstyle--underlined">
         <li>
-          &rarr;&nbsp;
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
           <router-link :to="{ name: 'blast-payments' }"
             >See your payment history</router-link
           >

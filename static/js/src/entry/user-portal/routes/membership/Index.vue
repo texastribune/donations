@@ -3,10 +3,13 @@
     <h1 class="has-xxl-btm-marg">Your Membership</h1>
 
     <section class="has-xxl-btm-marg">
-      <info-list :items="data" />
-      <ul>
-        <li>
-          &rarr;&nbsp;
+      <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
+
+      <ul class="c-link-list t-linkstyle--underlined">
+        <li class="has-xs-btm-marg">
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
           <router-link :to="{ name: 'payments' }"
             >See your donation history</router-link
           >
