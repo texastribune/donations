@@ -1,8 +1,8 @@
 <template>
   <div class="c-top-route">
-    <h1>The Blast Newsletter</h1>
+    <h1 class="has-xxl-btm-marg">The Blast Newsletter</h1>
 
-    <section>
+    <section class="has-xxl-btm-marg">
       <info-list :items="data" />
       <ul>
         <li>

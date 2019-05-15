@@ -1,8 +1,10 @@
 <template>
   <div class="c-top-route">
-    <h1>The Blast Newsletter: Payment History</h1>
+    <h1 class="has-xxl-btm-marg">The Blast Newsletter: Payment History</h1>
 
-    <section><payment-list :payments="payments" /></section>
+    <section class="has-xxl-btm-marg">
+      <payment-list :payments="payments" />
+    </section>
 
     <help blast />
   </div>

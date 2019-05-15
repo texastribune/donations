@@ -1,8 +1,8 @@
 <template>
   <div class="c-top-route">
-    <h1>Your Membership</h1>
+    <h1 class="has-xxl-btm-marg">Your Membership</h1>
 
-    <section>
+    <section class="has-xxl-btm-marg">
       <info-list :items="data" />
       <ul>
         <li>
