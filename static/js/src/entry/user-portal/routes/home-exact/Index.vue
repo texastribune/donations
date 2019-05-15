@@ -1,37 +1,48 @@
 <template>
   <div class="c-top-route c-top-route--home">
-    <div class="c-temp-messages">
-      <message heading="Welcome" :name="welcomeMessageKey">
-        <template v-slot:icon>
-          <icon name="camera" :display="{ size: 'm' }" />
-        </template>
-        <template v-slot:content>
-          <p class="has-text-gray-dark t-space-heading-m">
-            <em>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </em>
-          </p>
-        </template>
-      </message>
-      <message heading="Coming soon" :name="comingSoonMessageKey">
-        <template v-slot:icon>
-          <icon name="camera" :display="{ size: 'm' }" />
-        </template>
-        <template v-slot:content>
-          <p class="has-text-gray-dark t-space-heading-m">
-            <em>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </em>
-          </p>
-        </template>
-      </message>
-    </div>
+    <messages :num-messages="2">
+      <template v-slot="slotProps">
+        <message
+          heading="Welcome"
+          :name="welcomeMessageKey"
+          @setMessageSeen="slotProps.setMessageSeen"
+        >
+          <template v-slot:icon>
+            <icon name="camera" :display="{ size: 'm' }" />
+          </template>
+          <template v-slot:content>
+            <p class="has-text-gray-dark t-space-heading-m">
+              <em>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </em>
+            </p>
+          </template>
+        </message>
+
+        <message
+          heading="Coming soon"
+          :name="comingSoonMessageKey"
+          @setMessageSeen="slotProps.setMessageSeen"
+        >
+          <template v-slot:icon>
+            <icon name="camera" :display="{ size: 'm' }" />
+          </template>
+          <template v-slot:content>
+            <p class="has-text-gray-dark t-space-heading-m">
+              <em>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat.
+              </em>
+            </p>
+          </template>
+        </message>
+      </template>
+    </messages>
 
     <h1 class="has-xxl-btm-marg">Your Account</h1>
 
@@ -141,13 +152,14 @@ import InfoList from '../../components/InfoList.vue';
 import routeMixin from '../../mixins/route';
 import userMixin from '../../mixins/user';
 import routeFetchMixin from '../../mixins/route-fetch';
+import Messages from './components/Messages.vue';
 import Message from './components/Message.vue';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 
 export default {
   name: 'Index',
 
-  components: { Message, SummaryBox, InfoList, Help, Icon },
+  components: { Messages, Message, SummaryBox, InfoList, Help, Icon },
 
   mixins: [routeMixin, routeFetchMixin, userMixin],
 

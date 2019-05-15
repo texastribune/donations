@@ -1,10 +1,8 @@
-.c-temp-messages {
-  &__message {
-    position: relative;
+.c-message {
+  position: relative;
 
-    @include mq($until: bp-l) {
-      border-bottom: 2px solid $color-gray-light;
-    }
+  @include mq($until: bp-l) {
+    border-bottom: 2px solid $color-gray-light;
   }
 
   &__top {
