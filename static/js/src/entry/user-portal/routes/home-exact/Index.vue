@@ -82,7 +82,7 @@
             Check your inbox for an email from The Texas Tribune with the
             subject line &quot;Reset your password.&quot;
           </p>
-          <p v-else class="t-size-xs has-text-gray t-linkstyle--underlined">
+          <p v-else class="t-size-xs has-text-gray">
             There was an issue resetting your password. If you continue having
             trouble, email
             <a href="mailto:community@texastribune.org"
@@ -104,7 +104,7 @@
           </p>
         </template>
         <template v-slot:links>
-          <ul class="c-link-list t-linkstyle--underlined">
+          <ul class="c-link-list">
             <li class="has-xs-btm-marg">
               <span class="c-link-list__arrow has-text-teal">
                 <strong>&rarr;</strong>

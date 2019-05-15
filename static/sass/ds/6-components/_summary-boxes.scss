@@ -1,33 +1,9 @@
 .c-summary-boxes {
-  &__box {
-    border-bottom: 2px solid $color-white-off;
+  > .c-summary-box {
     margin-bottom: $size-xxl;
-    padding: 0 0 $size-xl 0;
 
-    > &:last-child {
+    &:last-child {
       margin-bottom: 0;
-    }
-
-    @include mq($until: bp-l) {
-      background: $color-white-pure;
-      border: 1px solid $color-gray-light;
-      border-radius: 3px;
-      padding: 0;
-
-      &.is-expired {
-        border: 3px solid $color-error;
-      }
-    }
-  }
-
-  @include mq($until: bp-l) {
-    &__top {
-      padding: $size-xl $size-b;
-    }
-
-    &__bottom {
-      border-top: 1px solid $color-gray-light;
-      padding: $size-b;
     }
   }
 }
