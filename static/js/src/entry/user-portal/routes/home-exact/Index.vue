@@ -58,7 +58,7 @@
               </span>
               <span class="has-text-gray-dark">
                 <button
-                  :style="{ 'line-height': 'normal' }"
+                  :style="{ 'line-height': 'normal', cursor: 'pointer' }"
                   class="c-link-button"
                   @click="resetPassword"
                 >
@@ -67,15 +67,15 @@
               </span>
             </li>
           </ul>
-          <p v-else-if="pwResetSuccess">
+          <p v-else-if="pwResetSuccess" class="t-size-xs has-text-gray">
             Check your inbox for an email from The Texas Tribune with the
             subject line &quot;Reset your password.&quot;
           </p>
-          <p v-else>
+          <p v-else class="t-size-xs has-text-gray t-linkstyle--underlined">
             There was an issue resetting your password. If you continue having
-            trouble, contact&nbsp;
-            <a href="mailto:community@texastribune.org">
-              community@texastribune.org </a
+            trouble, email
+            <a href="mailto:community@texastribune.org"
+              >community@texastribune.org </a
             >.
           </p>
         </template>
@@ -139,6 +139,7 @@ import Help from '../../components/Help.vue';
 import SummaryBox from '../../components/SummaryBox.vue';
 import InfoList from '../../components/InfoList.vue';
 import routeMixin from '../../mixins/route';
+import userMixin from '../../mixins/user';
 import routeFetchMixin from '../../mixins/route-fetch';
 import Message from './components/Message.vue';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
@@ -148,7 +149,7 @@ export default {
 
   components: { Message, SummaryBox, InfoList, Help, Icon },
 
-  mixins: [routeMixin, routeFetchMixin],
+  mixins: [routeMixin, routeFetchMixin, userMixin],
 
   data() {
     return {
@@ -170,7 +171,13 @@ export default {
     },
 
     resetPassword() {
-      this.didResetPassword = true;
+      this.user.resetPassword('atgibson27@gmail.com', err => {
+        if (err) {
+          this.pwResetFailure = true;
+        } else {
+          this.pwResetSuccess = true;
+        }
+      });
     },
   },
 };
