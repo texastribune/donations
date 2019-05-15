@@ -68,11 +68,7 @@
                 <strong>&rarr;</strong>
               </span>
               <span class="has-text-gray-dark">
-                <button
-                  :style="{ 'line-height': 'normal', cursor: 'pointer' }"
-                  class="c-link-button"
-                  @click="resetPassword"
-                >
+                <button class="c-link-button" @click="resetPassword">
                   Reset your password
                 </button>
               </span>

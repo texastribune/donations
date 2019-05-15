@@ -2,6 +2,10 @@
   background-color: $color-white-pure;
   padding: 4rem $size-giant;
 
+  @include mq($until: bp-l) {
+    padding: 4rem $size-b;
+  }
+
   &--home {
     @include mq($until: bp-l) {
       background-color: $color-white-off;

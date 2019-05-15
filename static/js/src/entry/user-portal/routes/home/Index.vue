@@ -1,6 +1,7 @@
 <template>
   <div>
-    <loader v-show="context.isFetching" /> <loader v-if="isCheckingUser" />
+    <loader v-show="context.isFetching" />
+    <loader v-if="isCheckingUser" :display="{ isOpaque: true }" />
     <main v-else class="has-white-off-bg-from-bp-l">
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
