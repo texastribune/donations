@@ -2,7 +2,7 @@
   <div>
     <loader v-show="context.isFetching" />
     <loader v-if="isCheckingUser" :display="{ isOpaque: true }" />
-    <main v-else class="has-white-off-bg-from-bp-l">
+    <main v-else class="has-white-off-bg">
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l"><side-nav /></div>

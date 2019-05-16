@@ -1,5 +1,5 @@
 <template>
-  <div class="c-top-route c-top-route--home">
+  <div class="has-white-bg-from-bp-l has-ump-top-padding">
     <messages :num-messages="2">
       <template v-slot="slotProps">
         <message
@@ -44,9 +44,9 @@
       </template>
     </messages>
 
-    <h1 class="has-xxl-btm-marg">Your Account</h1>
+    <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Account</h1>
 
-    <div class="c-summary-boxes has-xxl-btm-marg">
+    <div class="c-summary-boxes has-xxl-btm-marg has-ump-side-padding">
       <summary-box heading="contact info">
         <template v-slot:content>
           <info-list :items="data">

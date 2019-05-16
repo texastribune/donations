@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="numMessagesSeen !== numMessages"
-    class="c-messages has-xxl-btm-marg"
+    class="c-messages has-xxl-btm-marg has-ump-side-padding"
   >
     <slot :setMessageSeen="setMessageSeen"></slot>
   </div>

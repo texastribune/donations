@@ -1,8 +1,8 @@
 <template>
-  <div class="c-top-route">
-    <h1 class="has-xxl-btm-marg">Your Membership</h1>
+  <div class="has-white-bg has-ump-top-padding">
+    <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Membership</h1>
 
-    <section class="has-xxl-btm-marg">
+    <section class="has-xxxl-btm-marg has-ump-side-padding">
       <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
 
       <ul class="c-link-list t-linkstyle--underlined">
