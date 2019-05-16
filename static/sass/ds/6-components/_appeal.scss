@@ -1,0 +1,16 @@
+.c-appeal {
+  list-style: none;
+
+  &__item {
+    align-items: center;
+    display: flex;
+
+    > .c-icon {
+      margin-right: $size-xs;
+    }
+
+    &--no {
+      opacity: .6;
+    }
+  }
+}

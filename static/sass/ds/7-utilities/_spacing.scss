@@ -21,3 +21,9 @@
 .has-ump-btm-padding {
   padding-bottom: $size-giant;
 }
+
+.has-xxl-btm-marg-from-bp-l {
+  @include mq($from: bp-l) {
+    margin-bottom: $size-xxl;
+  }
+}

@@ -1,5 +1,5 @@
 <template>
-  <section
+  <aside
     class="has-ump-side-padding has-ump-btm-padding has-ump-top-padding-until-bp-l has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-m has-s-btm-marg">Need help?</h2>
@@ -24,7 +24,7 @@
         >.
       </template>
     </p>
-  </section>
+  </aside>
 </template>
 
 <script>

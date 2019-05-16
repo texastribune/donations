@@ -74,11 +74,14 @@
               </span>
             </li>
           </ul>
-          <p v-else-if="pwResetSuccess" class="t-size-xs has-text-gray">
+          <p
+            v-else-if="pwResetSuccess"
+            class="t-size-xs t-space-heading-m has-text-gray"
+          >
             Check your inbox for an email from The Texas Tribune with the
             subject line &quot;Reset your password.&quot;
           </p>
-          <p v-else class="t-size-xs has-text-gray">
+          <p v-else class="t-size-xs t-space-heading-m has-text-gray">
             There was an issue resetting your password. If you continue having
             trouble, email
             <a href="mailto:community@texastribune.org"

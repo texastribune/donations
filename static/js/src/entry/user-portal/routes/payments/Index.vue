@@ -29,6 +29,8 @@
       </ul>
     </section>
 
+    <appeal />
+
     <help membership />
   </div>
 </template>
@@ -37,12 +39,13 @@
 import routeMixin from '../../mixins/route';
 import routeFetchMixin from '../../mixins/route-fetch';
 import PaymentList from '../../components/PaymentList.vue';
+import Appeal from '../../components/Appeal.vue';
 import Help from '../../components/Help.vue';
 
 export default {
   name: 'Index',
 
-  components: { PaymentList, Help },
+  components: { Appeal, PaymentList, Help },
 
   mixins: [routeMixin, routeFetchMixin],
 

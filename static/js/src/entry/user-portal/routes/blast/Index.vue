@@ -17,6 +17,8 @@
       </ul>
     </section>
 
+    <appeal />
+
     <help blast />
   </div>
 </template>
@@ -24,13 +26,14 @@
 <script>
 import routeMixin from '../../mixins/route';
 import routeFetchMixin from '../../mixins/route-fetch';
+import Appeal from '../../components/Appeal.vue';
 import Help from '../../components/Help.vue';
 import InfoList from '../../components/InfoList.vue';
 
 export default {
   name: 'Index',
 
-  components: { Help, InfoList },
+  components: { Appeal, Help, InfoList },
 
   mixins: [routeMixin, routeFetchMixin],
 
