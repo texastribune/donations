@@ -49,3 +49,13 @@
   </div>
 </div>
 {% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.dataLayer.push({
+      event: 'customBlastSuccess',
+      gaAction: 'submit payment',
+      gaLabel: '' // installment: annual, monthly, annual tax exempt
+    });
+  </script>
+{% endblock %}
