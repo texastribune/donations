@@ -55,7 +55,8 @@
     window.dataLayer.push({
       event: 'customBlastSuccess',
       gaAction: 'submit payment',
-      gaLabel: '' // installment: annual, monthly, annual tax exempt
+      gaLabel: '{{ gtm.event_label }}',
+      gaValue: '{{ gtm.event_value }}'
     });
   </script>
 {% endblock %}
