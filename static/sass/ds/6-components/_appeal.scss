@@ -1,5 +1,10 @@
 .c-appeal {
   list-style: none;
+  padding-bottom: $size-xxl;
+
+  @include mq($until: bp-l) {
+    padding-top: $size-xxl;
+  }
 
   &__item {
     align-items: center;

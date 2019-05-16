@@ -2,32 +2,36 @@
   <div class="has-white-bg has-ump-top-padding">
     <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Donations</h1>
 
-    <section class="has-xxxl-btm-marg has-ump-side-padding">
-      <div class="has-xxl-btm-marg"><payment-list :payments="payments" /></div>
+    <div class="has-ump-side-padding has-xl-btm-marg">
+      <section class="c-detail-box">
+        <div class="has-xxl-btm-marg">
+          <payment-list :payments="payments" />
+        </div>
 
-      <ul class="c-link-list t-linkstyle--underlined">
-        <li class="has-xs-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <router-link :to="{ name: 'membership' }"
-            >See your membership status</router-link
-          >
-        </li>
-        <li class="has-xs-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <a href="">Download your 2018 tax receipt</a>
-        </li>
-        <li>
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <a href="/donate#join-today">Become a sustaining member</a>
-        </li>
-      </ul>
-    </section>
+        <ul class="c-link-list t-linkstyle--underlined">
+          <li class="has-xs-btm-marg">
+            <span class="c-link-list__arrow has-text-teal">
+              <strong>&rarr;</strong>
+            </span>
+            <router-link :to="{ name: 'membership' }"
+              >See your membership status</router-link
+            >
+          </li>
+          <li class="has-xs-btm-marg">
+            <span class="c-link-list__arrow has-text-teal">
+              <strong>&rarr;</strong>
+            </span>
+            <a href="">Download your 2018 tax receipt</a>
+          </li>
+          <li>
+            <span class="c-link-list__arrow has-text-teal">
+              <strong>&rarr;</strong>
+            </span>
+            <a href="/donate#join-today">Become a sustaining member</a>
+          </li>
+        </ul>
+      </section>
+    </div>
 
     <appeal />
 

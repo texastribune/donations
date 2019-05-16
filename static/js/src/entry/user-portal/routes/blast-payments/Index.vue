@@ -4,9 +4,11 @@
       The Blast Newsletter: Payment History
     </h1>
 
-    <section class="has-xxxl-btm-marg has-ump-side-padding">
-      <payment-list :payments="payments" />
-    </section>
+    <div class="has-ump-side-padding has-xl-btm-marg">
+      <section class="c-detail-box">
+        <payment-list :payments="payments" />
+      </section>
+    </div>
 
     <appeal />
 

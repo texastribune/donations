@@ -1,12 +1,12 @@
 .c-summary-box {
   border-bottom: 2px solid $color-white-off;
-  padding: 0 0 $size-xl 0;
+  padding-bottom: $size-xl;
 
   @include mq($until: bp-l) {
     background: $color-white-pure;
     border: 1px solid $color-gray-light;
     border-radius: 3px;
-    padding: 0;
+    padding-bottom: 0;
 
     &.is-expired {
       border: 3px solid $color-error;

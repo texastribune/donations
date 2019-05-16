@@ -2,20 +2,22 @@
   <div class="has-white-bg has-ump-top-padding">
     <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Membership</h1>
 
-    <section class="has-xxxl-btm-marg has-ump-side-padding">
-      <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
+    <div class="has-ump-side-padding has-xl-btm-marg">
+      <section class="c-detail-box">
+        <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
 
-      <ul class="c-link-list t-linkstyle--underlined">
-        <li class="has-xs-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <router-link :to="{ name: 'payments' }"
-            >See your donation history</router-link
-          >
-        </li>
-      </ul>
-    </section>
+        <ul class="c-link-list t-linkstyle--underlined">
+          <li class="has-xs-btm-marg">
+            <span class="c-link-list__arrow has-text-teal">
+              <strong>&rarr;</strong>
+            </span>
+            <router-link :to="{ name: 'payments' }"
+              >See your donation history</router-link
+            >
+          </li>
+        </ul>
+      </section>
+    </div>
 
     <appeal />
 

@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="c-appeal t-space-heading-m t-linkstyle--underlined has-ump-side-padding has-ump-top-padding-until-bp-l has-xxl-btm-marg-from-bp-l has-white-off-bg-until-bp-l"
+    class="c-appeal t-space-heading-m t-linkstyle--underlined has-ump-side-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-m has-s-btm-marg">Member benefits</h2>
     <p class="has-b-btm-marg">
