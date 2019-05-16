@@ -90,7 +90,16 @@ const BENEFITS = [
         return h('span', [
           h('a', { attrs: { href: '#' } }, 'Involved Members '),
           'receive: Discounted rental rates for ',
-          h('a', { attrs: { href: '#' } }, 'Studio 919'),
+          h(
+            'a',
+            {
+              attrs: {
+                href:
+                  'https://www.texastribune.org/studio-919/downtown-austin-event-space-congress/',
+              },
+            },
+            'Studio 919'
+          ),
         ]);
       },
     },

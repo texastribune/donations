@@ -10,6 +10,9 @@
       <li
         v-for="(benefit, index) in benefits"
         :key="benefit.id"
+        :aria-label="
+          index > ceiling ? 'benefit not achieved' : 'benefit achieved'
+        "
         :class="{
           'has-xs-btm-marg': index !== benefits.length - 1,
           'c-appeal__item--no': index > ceiling,
