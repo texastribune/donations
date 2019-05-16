@@ -14,6 +14,7 @@ const router = new VueRouter({
   base: '/user-portal',
   mode: 'history',
   routes,
+  scrollBehavior: () => ({ x: 0, y: 0 }),
 });
 const store = new Vuex.Store({
   modules: {
