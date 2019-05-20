@@ -1,38 +1,46 @@
 import * as validators from '../../utils/validators';
 
-export const CIRCLE_BUCKETS = {
+export const DEFAULT_LEVEL = 'editorMonthly';
+
+export const CIRCLE_LEVELS = {
   editorMonthly: {
     bucket: 'editor',
+    bucketFull: "Editor's Circle",
     installmentPeriod: 'monthly',
     amount: '84',
     installments: '36',
   },
   editorYearly: {
     bucket: 'editor',
+    bucketFull: "Editor's Circle",
     installmentPeriod: 'yearly',
     amount: '1000',
     installments: '3',
   },
   leadershipMonthly: {
     bucket: 'leadership',
+    bucketFull: 'Leadership Circle',
     installmentPeriod: 'monthly',
     amount: '209',
     installments: '36',
   },
   leadershipYearly: {
     bucket: 'leadership',
+    bucketFull: 'Leadership Circle',
     installmentPeriod: 'yearly',
     amount: '2500',
     installments: '3',
   },
   chairmanMonthly: {
     bucket: 'chairman',
+    bucketFull: "Chairman's Circle",
     installmentPeriod: 'monthly',
     amount: '417',
     installments: '36',
   },
   chairmanYearly: {
     bucket: 'chairman',
+    bucketFull: "Chairman's Circle",
     installmentPeriod: 'yearly',
     amount: '5000',
     installments: '3',
