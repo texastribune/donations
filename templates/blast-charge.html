@@ -49,3 +49,14 @@
   </div>
 </div>
 {% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.dataLayer.push({
+      event: 'customBlastSuccess',
+      gaAction: 'submit payment',
+      gaLabel: '{{ gtm.event_label }}',
+      gaValue: '{{ gtm.event_value }}'
+    });
+  </script>
+{% endblock %}
