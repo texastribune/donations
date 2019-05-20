@@ -323,7 +323,7 @@ def add_donation(form=None, customer=None, donation_type=None):
 
     elif donation_type == "circle":
         logging.info("----Creating circle payment...")
-        rdo = add_circle_donation(contact=contact, form=form, customer=customer)
+        rdo = add_circle_membership(contact=contact, form=form, customer=customer)
     else:
         logging.info("----Creating recurring payment...")
         rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
@@ -853,29 +853,6 @@ def add_recurring_donation(contact=None, form=None, customer=None):
     return rdo
 
 
-def add_business_opportunity(
-    account=None, form=None, customer=None, donation_type=None
-):
-    """
-    Adds a single business membership to Salesforce.
-    """
-
-    year = datetime.now(tz=ZONE).strftime("%Y")
-    opportunity = Opportunity(account=account)
-    opportunity.record_type_name = "Business Membership"
-    opportunity.name = f"{year} Business {account.name} One time"
-    opportunity.amount = form.get("amount", 0)
-    opportunity.stripe_customer = customer["id"]
-    opportunity.campaign_id = form["campaign_id"]
-    opportunity.referral_id = form["referral_id"]
-    opportunity.description = "Texas Tribune Business Membership"
-    opportunity.agreed_to_pay_fees = form["pay_fees_value"]
-    opportunity.encouraged_by = form["reason"]
-    opportunity.lead_source = "Stripe"
-    opportunity.save()
-    return opportunity
-
-
 def add_business_rdo(account=None, form=None, customer=None):
     """
     Adds a recurring business membership to Salesforce.
@@ -909,7 +886,9 @@ def add_business_rdo(account=None, form=None, customer=None):
 
 
 @celery.task(name="app.add_business_membership")
-def add_business_membership(form=None, customer=None):
+def add_business_membership(
+    form=None, customer=None, donation_type="business_membership"
+):
     """
     Adds a business membership. Both single and recurring.
 
@@ -967,28 +946,22 @@ def add_business_membership(form=None, customer=None):
     )
     logging.info(account)
 
-    if form["installment_period"] is None:
-        logging.info("----Creating single business membership...")
-        opportunity = add_business_opportunity(
-            account=account, form=form, customer=customer
-        )
-        logging.info(opportunity)
-        charge(opportunity)
-        notify_slack(account=account, contact=contact, opportunity=opportunity)
-    else:
-        logging.info("----Creating recurring business membership...")
-        rdo = add_business_rdo(account=account, form=form, customer=customer)
-        logging.info(rdo)
-        # get opportunities
-        opportunities = rdo.opportunities()
-        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
-        opp = [
-            opportunity
-            for opportunity in opportunities
-            if opportunity.expected_giving_date == today
-        ][0]
-        charge(opp)
-        notify_slack(account=account, contact=contact, rdo=rdo)
+    if form["installment_period"] not in ["yearly", "monthly"]:
+        raise Exception("Business membership must be either yearly or monthly")
+
+    logging.info("----Creating recurring business membership...")
+    rdo = add_business_rdo(account=account, form=form, customer=customer)
+    logging.info(rdo)
+    # get opportunities
+    opportunities = rdo.opportunities()
+    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    opp = [
+        opportunity
+        for opportunity in opportunities
+        if opportunity.expected_giving_date == today
+    ][0]
+    charge(opp)
+    notify_slack(account=account, contact=contact, rdo=rdo)
 
     logging.info("----Getting affiliation...")
 
