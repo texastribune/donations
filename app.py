@@ -237,15 +237,17 @@ def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
     build_dir = os.path.join("static", "build")
     asset_path = "/static/build/"
-    bundles = {"css": [], "js": []}
+    bundles = {"css": "", "js": []}
     manifest_path = os.path.join(build_dir, "assets.json")
+    css_manifest_path = os.path.join(build_dir, "styles.json")
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets["entrypoints"][entry]
     for bundle in entrypoint["js"]:
         bundles["js"].append(asset_path + bundle)
-    for bundle in entrypoint["css"]:
-        bundles["css"].append(asset_path + bundle)
+    with open(css_manifest_path) as manifest:
+        css_assets = json.load(manifest)
+    bundles["css"] = asset_path + css_assets[entry]
     return bundles
 
 
@@ -471,7 +473,8 @@ def submit_blast_promo():
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html", bundles=bundles)
+        gtm = {"event_value": "200", "event_label": "annual discounted"}
+        return render_template("blast-charge.html", bundles=bundles, gtm=gtm)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
@@ -511,6 +514,7 @@ def submit_blast():
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
+    amount = request.form["amount"]
 
     if email_is_valid:
         customer = stripe.Customer.create(
@@ -523,7 +527,17 @@ def submit_blast():
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html", bundles=bundles)
+
+        if amount == "349":
+            event_label = "annual"
+        elif amount == "40":
+            event_label = "monthly"
+        elif amount == "325":
+            event_label = "annual tax exempt"
+
+        gtm = {"event_value": amount, "event_label": event_label}
+
+        return render_template("blast-charge.html", bundles=bundles, gtm=gtm)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."

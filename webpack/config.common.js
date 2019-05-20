@@ -1,5 +1,4 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { EnvironmentPlugin } = require('webpack');
 
@@ -25,10 +24,6 @@ module.exports = {
       output: 'assets.json',
       entrypoints: true,
     }),
-    new MiniCssExtractPlugin({
-      filename: 'styles.[contenthash].css',
-      chunkFilename: '[name].chunk.[contenthash].css',
-    }),
     new EnvironmentPlugin(['NODE_ENV', 'AUTH0_DOMAIN', 'AUTH0_CLIENT_ID']),
     new VueLoaderPlugin(),
   ],
@@ -49,11 +44,6 @@ module.exports = {
 
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
