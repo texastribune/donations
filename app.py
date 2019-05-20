@@ -485,7 +485,8 @@ def submit_blast_promo():
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html", bundles=bundles)
+        gtm = {"event_value": "200", "event_label": "annual discounted"}
+        return render_template("blast-charge.html", bundles=bundles, gtm=gtm)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
@@ -525,6 +526,7 @@ def submit_blast():
     form = BlastForm(request.form)
 
     email_is_valid = validate_email(request.form["stripeEmail"])
+    amount = request.form["amount"]
 
     if email_is_valid:
         customer = stripe.Customer.create(
@@ -537,7 +539,17 @@ def submit_blast():
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
-        return render_template("blast-charge.html", bundles=bundles)
+
+        if amount == "349":
+            event_label = "annual"
+        elif amount == "40":
+            event_label = "monthly"
+        elif amount == "325":
+            event_label = "annual tax exempt"
+
+        gtm = {"event_value": amount, "event_label": event_label}
+
+        return render_template("blast-charge.html", bundles=bundles, gtm=gtm)
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
