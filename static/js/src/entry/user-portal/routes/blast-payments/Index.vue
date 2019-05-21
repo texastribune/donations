@@ -1,5 +1,5 @@
 <template>
-  <div class="has-white-bg has-ump-top-padding">
+  <div class="has-bg-white has-ump-top-padding">
     <h1 class="has-xxl-btm-marg has-ump-side-padding">
       The Blast Newsletter: Payment History
     </h1>

@@ -1,5 +1,5 @@
 <template>
-  <main class="l-minimal has-white-off-bg has-xl-padding">
+  <main class="l-minimal has-bg-white-off has-xl-padding">
     <div class="l-align-center-self l-align-center-x t-linkstyle--underlined">
       <h1 class="has-xl-btm-marg">Sorry about that.</h1>
       <p class="has-s-btm-marg">
