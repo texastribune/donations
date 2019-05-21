@@ -2,7 +2,7 @@
   <div class="has-bg-white has-ump-top-padding">
     <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Donations</h1>
 
-    <div class="has-ump-side-padding has-xl-btm-marg">
+    <div class="has-ump-side-padding has-xxl-btm-marg">
       <section class="c-detail-box">
         <div class="has-xxl-btm-marg">
           <payment-list :payments="payments" />
