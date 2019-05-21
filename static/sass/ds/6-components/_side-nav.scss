@@ -6,10 +6,9 @@
   }
 
   a {
-    color: $color-gray-dark;
     transition: all .3s;
 
-    &:hover, &.is-active {
+    &.is-active {
       color: $color-gray-medium;
     }
   }
@@ -19,11 +18,10 @@
       border-left-color: $color-white-off;
       border-left-style: solid;
       border-left-width: 3px;
-      color: $color-black-off;
       display: block;
       padding: $size-b 0 $size-b $size-b;
 
-      &:hover, &.is-active {
+      &.is-active {
         border-left-color: $color-yellow-tribune;
       }
     }

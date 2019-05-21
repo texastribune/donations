@@ -3,7 +3,6 @@
   padding-bottom: $size-xl;
 
   @include mq($until: bp-l) {
-    background: $color-white-pure;
     border: 1px solid $color-gray-light;
     border-radius: 3px;
     padding-bottom: 0;

@@ -1,5 +1,8 @@
 <template>
-  <section class="c-summary-box" :class="{ 'is-expired': display.isExpired }">
+  <section
+    class="c-summary-box has-bg-white"
+    :class="{ 'is-expired': display.isExpired }"
+  >
     <div class="c-summary-box__top">
       <h2 class="t-uppercase t-size-m has-m-btm-marg">{{ heading }}</h2>
       <div class="has-xxl-btm-marg"><slot name="content"></slot></div>
