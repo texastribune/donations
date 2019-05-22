@@ -182,7 +182,7 @@ export default {
     },
 
     resetPassword() {
-      this.user.resetPassword('atgibson27@gmail.com', err => {
+      this.user.resetPassword('', err => {
         if (err) {
           this.pwResetFailure = true;
         } else {
