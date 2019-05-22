@@ -8,8 +8,18 @@ import LoggedIn from './logged-in/Index.vue';
 import LoggedOut from './logged-out/Index.vue';
 
 const routes = [
-  { path: '/logged-in', name: 'logged-in', component: LoggedIn },
-  { path: '/logged-out', name: 'logged-out', component: LoggedOut },
+  {
+    path: '/logged-in',
+    name: 'logged-in',
+    component: LoggedIn,
+    meta: { title: 'Logged In' },
+  },
+  {
+    path: '/logged-out',
+    name: 'logged-out',
+    component: LoggedOut,
+    meta: { title: 'Logged Out' },
+  },
   {
     path: '/',
     component: Home,

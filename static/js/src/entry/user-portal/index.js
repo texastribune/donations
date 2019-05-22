@@ -7,8 +7,6 @@ import routes from './routes';
 import userModule from './store/modules/user';
 import contextModule from './store/modules/context';
 
-import './styles.scss';
-
 Vue.use(Vuex);
 Vue.use(VueRouter);
 
@@ -16,6 +14,7 @@ const router = new VueRouter({
   base: '/user-portal',
   mode: 'history',
   routes,
+  scrollBehavior: () => ({ x: 0, y: 0 }),
 });
 const store = new Vuex.Store({
   modules: {

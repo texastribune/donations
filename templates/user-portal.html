@@ -9,6 +9,8 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
 
+    <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
+
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
@@ -37,9 +39,15 @@
       <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1570461443220689&ev=PageView&noscript=1" />
     </noscript>
 
-    <main>
-      <div id="user-portal-attach"></div>
-    </main>
+    <div style="display:none;">
+      {% include "includes/base_icons.html" %}
+    </div>
+
+    <div id="user-portal-attach" class="c-full-page-loader c-full-page-loader--opaque">
+      <div class="l-align-center-y">
+        <div class="c-loading c-loading--s" />
+      </div>
+    </div>
   </body>
 
   {% for script in bundles['js'] %}

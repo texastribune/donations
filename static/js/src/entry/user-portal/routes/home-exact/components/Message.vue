@@ -1,14 +1,36 @@
 <template>
-  <aside v-if="shouldShow">
-    <button @click="close">Close</button> <slot></slot>
+  <aside v-if="shouldShow" class="c-message has-bg-white-off has-padding">
+    <div class="c-message__top has-xxs-btm-marg">
+      <slot name="icon"></slot>
+      <h2 class="t-size-m">{{ heading }}</h2>
+    </div>
+
+    <slot name="content"></slot>
+
+    <button
+      class="c-message__close has-bg-white has-text-gray"
+      aria-label="close"
+      @click="close"
+    >
+      <icon name="close" :display="{ size: 'm' }" />
+    </button>
   </aside>
 </template>
 
 <script>
+import Icon from '../../../components/Icon.vue';
+
 export default {
   name: 'Message',
 
+  components: { Icon },
+
   props: {
+    heading: {
+      type: String,
+      required: true,
+    },
+
     name: {
       type: String,
       required: true,
@@ -16,15 +38,22 @@ export default {
   },
 
   data() {
-    return {
-      shouldShow: this.getFromStorage() !== 'true',
-    };
+    return { shouldShow: false };
+  },
+
+  mounted() {
+    if (this.getFromStorage() !== 'true') {
+      this.shouldShow = true;
+    } else {
+      this.$emit('setMessageSeen');
+    }
   },
 
   methods: {
     close() {
       this.shouldShow = false;
       this.setInStorage();
+      this.$emit('setMessageSeen');
     },
 
     getFromStorage() {

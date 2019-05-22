@@ -1,0 +1,33 @@
+.c-message {
+  position: relative;
+
+  @include mq($until: bp-l) {
+    border-bottom: 2px solid $color-gray-light;
+  }
+
+  &__top {
+    align-items: center;
+    display: flex;
+
+    .c-icon {
+      margin-right: $size-b;
+    }
+  }
+
+  &__close {
+    border: 1px solid $color-white-off;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: $size-xxxs;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+
+    @include mq($until: bp-l) {
+      background: none;
+      border: none;
+      transform: initial;
+    }
+  }
+}

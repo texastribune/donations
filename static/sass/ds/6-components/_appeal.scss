@@ -1,0 +1,21 @@
+.c-appeal {
+  list-style: none;
+  padding-bottom: $size-xxl;
+
+  @include mq($until: bp-l) {
+    padding-top: $size-xxl;
+  }
+
+  &__item {
+    align-items: center;
+    display: flex;
+
+    .c-icon {
+      margin-right: $size-xs;
+    }
+
+    &--no {
+      opacity: .6;
+    }
+  }
+}

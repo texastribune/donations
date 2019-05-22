@@ -1,6 +1,10 @@
 <template>
-  <error-view v-if="context.hasError" />
-  <router-view v-else />
+  <div>
+    <nav style="height:45px;background:#fff;border-bottom:1px solid #dcdcdc" />
+    <error-view v-if="context.hasError" />
+    <router-view v-else />
+    <footer style="height:300px;background:#222;" />
+  </div>
 </template>
 
 <script>
