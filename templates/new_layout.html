@@ -59,6 +59,13 @@
       <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z" height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
 
+    {% block icon_sprite %}
+      {# SVG sprite include #}
+      <div style="display:none;">
+        {% include "includes/base_icons.html" %}
+      </div>
+    {% endblock %}
+
     {% include 'includes/navbar_thin.html' %}
 
     {% block content %}{% endblock %}

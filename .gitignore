@@ -19,3 +19,4 @@ yarn-error.log
 # SVG sprite
 /templates/includes/base_icons.html
 **/__pycache__
+.DS_Store
