@@ -16,12 +16,11 @@ function getStateFromParams(queryParams) {
 
   if (!CIRCLE_LEVELS[level]) level = DEFAULT_LEVEL;
 
-  const { amount, installments, installmentPeriod } = CIRCLE_LEVELS[level];
+  const { amount, installmentPeriod } = CIRCLE_LEVELS[level];
 
   return {
     level,
     amount,
-    installments,
     installment_period: installmentPeriod,
     campaign_id: campaignId,
     referral_id: referralId,

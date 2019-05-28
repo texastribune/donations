@@ -38,12 +38,6 @@ export const BASE_FORM_STATE = {
     validator: validators.isValidDonationAmount,
     message: 'Enter numeric amount above $1',
   },
-  installments: {
-    value: 'None',
-    isValid: true,
-    validator: null,
-    message: null,
-  },
   pay_fees_value: {
     value: 'False',
     isValid: true,
@@ -64,10 +58,4 @@ export const BASE_FORM_STATE = {
   },
   campaign_id: { value: '', isValid: true, validator: null, message: null },
   referral_id: { value: '', isValid: true, validator: null, message: null },
-  openended_status: {
-    value: '',
-    isValid: true,
-    validator: null,
-    message: null,
-  },
 };

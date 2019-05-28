@@ -12,3 +12,7 @@ LICENSE
 .flake8
 .pylintrc
 .editorconfig
+env-docker
+templates/includes/base_icons.html
+static/build
+**/__pycache__
