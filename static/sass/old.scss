@@ -1,10 +1,11 @@
+@import 'ds-toolbox-base';
+
 @import '1-settings/all';
 @import '2-tools/all';
 @import '3-generic/all';
 @import '4-elements/all';
 
 // Include components & typography as needed
-@import '5-typography/fontawesome';
 @import '5-typography/links';
 @import '5-typography/typography';
 
