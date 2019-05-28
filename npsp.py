@@ -4,7 +4,6 @@ import re
 import json
 import logging
 import os
-from pprint import pprint  # TODO rm
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
@@ -402,7 +401,7 @@ class SalesforceObject(object):
         log.debug("called serialize")
         # TODO construct the reverse map here and in deserialize() on demand since here and deserialize() are
         # the only places we use it?
-        pprint(self.field_to_attr_map)
+        log.debug(self.field_to_attr_map)
         if not hasattr(self, "field_to_attr_map"):
             log.debug("calling get_schema()")
             self.get_schema()

@@ -35,7 +35,7 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
     amount = getattr(rdo, "amount", False) or getattr(opportunity, "amount", "")
     amount = float(amount)
     reason = f"({reason})" if reason else ""
-    entity = account.name if account else contact.name
+    entity = account.name if account else f"{contact.first_name} {contact.last_name}"
 
     message = f"{entity} pledged ${amount:.0f} {period} {reason}"
 

@@ -16,3 +16,4 @@ sentry-sdk==0.6.6
 blinker==1.4
 amazon-pay==2.5.2
 nameparser==1.0.2
+ptvsd

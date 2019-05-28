@@ -14,6 +14,7 @@ interactive: build backing
 		--rm --interactive --tty \
 		--env-file=${DOCKER_ENV_FILE} \
 		--publish=80:5000 \
+		--publish=5678:5678 \
 		--link=rabbitmq:rabbitmq \
 		--link=redis:redis \
 		--name=${APP} ${NS}/${APP}:dev bash
@@ -43,8 +44,9 @@ test: build
 	docker run \
 		--workdir=/app \
 		--rm \
+		--publish=5678:5678 \
 		--entrypoint=python \
-		texastribune/checkout:dev /usr/local/bin/py.test /app/tests.py --cov=/app
+		texastribune/checkout:dev /usr/local/bin/py.test -x /app/tests.py --cov=/app
 
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .

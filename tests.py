@@ -17,6 +17,11 @@ from npsp import (
 )
 from util import clean, construct_slack_message
 
+import ptvsd
+
+ptvsd.enable_attach()
+ptvsd.wait_for_attach()
+
 
 class SalesforceConnectionSubClass(SalesforceConnection):
     def __init__(self):
@@ -143,7 +148,6 @@ def test__format_slack():
     expected = "Acme Inc. pledged $100 [yearly] (Because I love the Trib!)"
 
     assert actual == expected
-
     actual = construct_slack_message(
         account=None, rdo=rdo, opportunity=None, contact=contact
     )
