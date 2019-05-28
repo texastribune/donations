@@ -50,10 +50,6 @@ class BaseForm(FlaskForm):
 
 
 class DonateForm(BaseForm):
-    installments = HiddenField(u"Installments", [validators.AnyOf(["None"])])
-    openended_status = HiddenField(
-        u"Openended Status", [validators.AnyOf(["None", "Open"])]
-    )
     installment_period = StringField(
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
@@ -61,8 +57,6 @@ class DonateForm(BaseForm):
 
 
 class CircleForm(BaseForm):
-    installments = HiddenField(u"Installments", [validators.AnyOf(["3", "36"])])
-    openended_status = HiddenField(u"Openended Status", [validators.AnyOf(["None"])])
     installment_period = StringField(
         u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
     )
@@ -78,11 +72,7 @@ class BusinessMembershipForm(BaseForm):
     shipping_state = StringField("Shipping State", [validators.Length(max=2)])
     shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
     shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
-    installments = HiddenField(u"Installments", [validators.AnyOf(["1", "None"])])
-    openended_status = HiddenField(
-        u"Openended Status", [validators.AnyOf(["None", "Open"])]
-    )
-    installment_period = StringField([validators.AnyOf(["yearly", "monthly", "None"])])
+    installment_period = StringField([validators.AnyOf(["yearly", "monthly"])])
 
 
 class BlastForm(FlaskForm):
@@ -102,8 +92,6 @@ class BlastForm(FlaskForm):
         "Subscriber Email address", [validators.DataRequired(), validators.Email()]
     )
     installment_period = HiddenField(u"Installment Period")
-    installments = HiddenField(u"Installments")
-    openended_status = HiddenField(u"Openended Status")
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
     description = HiddenField(u"Description")

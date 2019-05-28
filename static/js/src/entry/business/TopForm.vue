@@ -210,10 +210,8 @@
       <local-hidden :value="stripeToken" name="stripeToken" />
       <hidden name="campaign_id" :store-module="storeModule" />
       <hidden name="referral_id" :store-module="storeModule" />
-      <hidden name="installments" :store-module="storeModule" />
       <hidden name="description" :store-module="storeModule" />
       <hidden name="pay_fees_value" :store-module="storeModule" />
-      <hidden name="openended_status" :store-module="storeModule" />
       <hidden name="installment_period" :store-module="storeModule" />
       <hidden name="amount" :store-module="storeModule" />
     </div>
