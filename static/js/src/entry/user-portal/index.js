@@ -1,26 +1,21 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 
 import App from './App.vue';
 import routes from './routes';
-import userModule from './store/modules/user';
-import contextModule from './store/modules/context';
+import store from './store';
+import SiteFooter from './components/SiteFooter.vue';
+import Loader from './components/Loader.vue';
 
-Vue.use(Vuex);
 Vue.use(VueRouter);
+Vue.component('SiteFooter', SiteFooter);
+Vue.component('Loader', Loader);
 
 const router = new VueRouter({
   base: '/user-portal',
   mode: 'history',
   routes,
   scrollBehavior: () => ({ x: 0, y: 0 }),
-});
-const store = new Vuex.Store({
-  modules: {
-    user: userModule,
-    context: contextModule,
-  },
 });
 const instance = new Vue({ ...App, router, store });
 
