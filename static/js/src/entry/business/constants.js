@@ -3,8 +3,6 @@ import * as validators from '../../utils/validators';
 const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
 const DEFAULT_PAY_FEES = 'True';
 const DEFAULT_STATE_SELECTED = 'TX';
-const OPENENDED_STATUS = 'Open';
-const INSTALLMENTS = 'None';
 
 // master setting for default selection
 export const DEFAULT_LEVEL = 'bigTexYearly';
@@ -16,42 +14,36 @@ export const BUSINESS_LEVELS = {
     bucket: 'bigTex',
     bucketFull: 'Big Tex',
     installmentPeriod: 'yearly',
-    installments: INSTALLMENTS,
     amount: '2500',
   },
   bigTexMonthly: {
     bucket: 'bigTex',
     bucketFull: 'Big Tex',
     installmentPeriod: 'monthly',
-    installments: INSTALLMENTS,
     amount: '208',
   },
   loneStarYearly: {
     bucket: 'loneStar',
     bucketFull: 'Lone Star',
     installmentPeriod: 'yearly',
-    installments: INSTALLMENTS,
     amount: '1500',
   },
   loneStarMonthly: {
     bucket: 'loneStar',
     bucketFull: 'Lone Star',
     installmentPeriod: 'monthly',
-    installments: INSTALLMENTS,
     amount: '125',
   },
   hatsOffYearly: {
     bucket: 'hatsOff',
     bucketFull: "Hat's Off",
     installmentPeriod: 'yearly',
-    installments: INSTALLMENTS,
     amount: '500',
   },
   hatsOffMonthly: {
     bucket: 'hatsOff',
     bucketFull: "Hat's Off",
     installmentPeriod: 'monthly',
-    installments: INSTALLMENTS,
     amount: '42',
   },
 };
@@ -184,12 +176,6 @@ export const BUSINESS_FORM_STATE = {
     validator: null,
     message: null,
   },
-  openended_status: {
-    value: OPENENDED_STATUS,
-    isValid: true,
-    validator: null,
-    message: null,
-  },
   installment_period: {
     value: '',
     isValid: true,
@@ -216,12 +202,6 @@ export const BUSINESS_FORM_STATE = {
   },
   amount: {
     value: '',
-    isValid: true,
-    validator: null,
-    message: null,
-  },
-  installments: {
-    value: INSTALLMENTS,
     isValid: true,
     validator: null,
     message: null,

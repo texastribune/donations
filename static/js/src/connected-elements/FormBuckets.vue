@@ -116,12 +116,9 @@ export default {
 
     onUpdate(newLevel) {
       const { allLevels, storeModule } = this;
-      const { amount, bucket, installmentPeriod, installments } = allLevels[
-        newLevel
-      ];
+      const { amount, bucket, installmentPeriod } = allLevels[newLevel];
       const updates = {
         installment_period: installmentPeriod,
-        installments,
         amount,
       };
 

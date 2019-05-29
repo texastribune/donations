@@ -1,0 +1,17 @@
+// These assets come from our design system.
+// To make edits please use: https://github.com/texastribune/ds-toolbox
+
+// Variables etc. (no actual CSS output)
+@import "ds-toolbox-test/assets/scss/1-settings/all";
+
+// mixins and functions (no actual CSS output)
+@import "ds-toolbox-test/assets/scss/2-tools/all";
+
+// t-size helper for sizing fonts
+@import "ds-toolbox-test/assets/scss/5-typography/t-size";
+
+// c-icon component used for SVGs
+@import "ds-toolbox-test/assets/scss/6-components/icon/icon";
+
+// c-site-footer
+@import "ds-toolbox-test/assets/scss/6-components/site-footer/site-footer";
