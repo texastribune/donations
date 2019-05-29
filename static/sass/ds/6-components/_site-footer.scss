@@ -1,0 +1,46 @@
+.c-site-footer {
+  &__inner {
+    display: grid;
+    gap: $size-b;
+    grid-gap: $size-b;
+    grid-template-areas: 'logo account info';
+    grid-template-columns: repeat(3, 1fr);
+
+    @include mq($until: bp-s) {
+      column-gap: $size-xxxl;
+      grid-column-gap: $size-xxxl;
+      grid-template-areas:
+        'logo account'
+        'logo info';
+      grid-template-columns: auto 1fr;
+    }
+  }
+
+  &__logo-col {
+    grid-area: logo;
+  }
+
+  &__account-col {
+    grid-area: account;
+  }
+
+  &__info-col {
+    grid-area: info;
+  }
+
+  &__links {
+    li {
+      /*
+        Apply margin like this instead of with helpers directly on the
+        list items because the links are conditional based on user
+        (i.e. whether some is a Blast subscriber), and applying conditional
+        helpers via template logic in our Vue components sounds gross.
+      */
+      margin-bottom: $size-xxxs;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}
