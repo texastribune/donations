@@ -12,10 +12,11 @@ import {
 export default {
   computed: {
     user() {
-      const { token, details } = this.$store.state.user;
+      const { idToken, accessToken, details } = this.$store.state.user;
 
       return {
-        token,
+        idToken,
+        accessToken,
         details,
         logIn,
         logOut,
