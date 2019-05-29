@@ -17,6 +17,7 @@ const mappedStyles = async () => {
       replaceExtension(path.basename(file), '.css')
     ),
   }));
+
   return styleDirs;
 };
 
@@ -24,6 +25,7 @@ const mappedIcons = [
   {
     in: [
       `${SVG_LIB_DIR}bug.svg`,
+      `${SVG_LIB_DIR}camera.svg`,
       `${SVG_LIB_DIR}facebook.svg`,
       `${SVG_LIB_DIR}instagram.svg`,
       `${SVG_LIB_DIR}linkedin.svg`,
@@ -31,8 +33,8 @@ const mappedIcons = [
       `${SVG_LIB_DIR}twitter.svg`,
       `${SVG_LIB_DIR}your-texas.svg`,
       `${SVG_LIB_DIR}youtube.svg`,
-      './static/img/check.svg',
-      './static/img/star.svg'
+      `${SVG_LIB_DIR}check.svg`,
+      `${SVG_LIB_DIR}star.svg`,
     ],
     out: `${SVG_OUTPUT_DIR}/base_icons.html`,
   },
@@ -40,9 +42,8 @@ const mappedIcons = [
 
 const mappedStylesManifest = `${CSS_OUTPUT_DIR}styles.json`;
 
-
 module.exports = {
   mappedStyles,
   mappedIcons,
-  mappedStylesManifest
+  mappedStylesManifest,
 };
