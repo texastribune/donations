@@ -1,15 +1,18 @@
 <template>
   <div>
-    <nav style="height:45px;background:#fff;border-bottom:1px solid #dcdcdc" />
-    <error-view v-if="context.hasError" />
+    <loader v-show="context.isFetching" />
+    <loader v-if="isCheckingUser" :display="{ isOpaque: true }" />
+    <error-view v-else-if="context.hasError" />
     <router-view v-else />
-    <footer style="height:300px;background:#222;" />
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import ErrorView from './ErrorView.vue';
 import contextMixin from './mixins/context';
+import { Auth0Error } from './errors';
 
 export default {
   name: 'App',
@@ -17,6 +20,30 @@ export default {
   components: { ErrorView },
 
   mixins: [contextMixin],
+
+  data() {
+    return { isCheckingUser: true };
+  },
+
+  mounted() {
+    this.getUserOrRedirect();
+  },
+
+  methods: {
+    ...mapActions('user', ['getUser']),
+
+    async getUserOrRedirect() {
+      try {
+        await this.getUser();
+      } catch (err) {
+        if (err instanceof Auth0Error) {
+          this.context.setError(true);
+        }
+      } finally {
+        this.isCheckingUser = false;
+      }
+    },
+  },
 
   errorCaptured() {
     this.context.setError(true);

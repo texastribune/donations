@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <loader v-show="context.isFetching" />
-    <loader v-if="isCheckingUser" :display="{ isOpaque: true }" />
-    <main v-else class="has-bg-white-off">
+  <loader v-if="!canAccess" :display="{ isOpaque: true }" />
+  <div v-else>
+    <nav style="height:45px;background:#fff;border-bottom:1px solid #dcdcdc;" />
+    <main class="has-bg-white-off">
+      <button @click="user.logOut()">Log out</button>
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l"><side-nav /></div>
@@ -10,48 +11,35 @@
         </div>
       </div>
     </main>
+    <site-footer />
   </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
-import contextMixin from '../../mixins/context';
 import userMixin from '../../mixins/user';
-import Loader from './components/Loader.vue';
+import store from '../../store';
+import { logIn } from '../../utils/auth-actions';
 import SideNav from './components/SideNav.vue';
-import { LoggedOutError, Auth0Error } from '../../errors';
 
 export default {
   name: 'Index',
 
-  components: { Loader, SideNav },
+  components: { SideNav },
 
-  mixins: [contextMixin, userMixin],
+  mixins: [userMixin],
 
   data() {
-    return { isCheckingUser: true, data: [] };
+    return { canAccess: false };
   },
 
   mounted() {
-    this.getUserOrRedirect();
+    this.redirectIfLoggedOut();
   },
 
   methods: {
-    ...mapActions('user', ['getUser']),
-
-    async getUserOrRedirect() {
-      try {
-        await this.getUser();
-        this.isCheckingUser = false;
-      } catch (err) {
-        if (err instanceof LoggedOutError) {
-          this.user.logIn();
-        } else if (err instanceof Auth0Error) {
-          this.isCheckingUser = false;
-          this.context.setError(true);
-        }
-      }
+    redirectIfLoggedOut() {
+      if (!store.state.user.idToken) logIn();
+      else this.canAccess = true;
     },
   },
 };
