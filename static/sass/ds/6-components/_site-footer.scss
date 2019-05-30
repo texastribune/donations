@@ -1,31 +1,15 @@
 .c-site-footer {
+  padding: $size-xxl $size-xxl $size-giant $size-xxl;
+
   &__inner {
     display: grid;
     gap: $size-b;
     grid-gap: $size-b;
-    grid-template-areas: 'logo account info';
     grid-template-columns: repeat(3, 1fr);
 
     @include mq($until: bp-s) {
-      column-gap: $size-xxxl;
-      grid-column-gap: $size-xxxl;
-      grid-template-areas:
-        'logo account'
-        'logo info';
-      grid-template-columns: auto 1fr;
+      grid-template-columns: 1fr;
     }
-  }
-
-  &__logo-col {
-    grid-area: logo;
-  }
-
-  &__account-col {
-    grid-area: account;
-  }
-
-  &__info-col {
-    grid-area: info;
   }
 
   &__links {

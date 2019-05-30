@@ -1,18 +1,29 @@
 <template>
-  <footer class="c-site-footer has-bg-black-off has-xl-padding">
+  <footer class="c-site-footer has-bg-black-off">
     <div
       class="c-site-footer__inner l-container--xl l-align-center-x"
       style="max-width: 1080px;"
     >
       <div class="c-site-footer__logo-col">
-        <span class="c-site-footer__logo c-icon has-text-yellow">
-          <svg aria-hidden="true" focusable="false">
-            <use xlink:href="#bug"></use>
-          </svg>
-        </span>
+        <div class="has-b-btm-marg">
+          <span class="c-site-footer__logo c-icon has-text-yellow">
+            <svg aria-hidden="true" focusable="false">
+              <use xlink:href="#bug"></use>
+            </svg>
+          </span>
+        </div>
+
+        <div
+          class="has-notch has-bg-yellow has-b-btm-marg"
+          aria-hidden="true"
+        />
+
+        <p class="t-size-s has-text-white">
+          &copy; {{ thisYear }} The Texas Tribune
+        </p>
       </div>
 
-      <div class="c-site-footer__account-col t-size-xs">
+      <div class="c-site-footer__account-col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
@@ -45,7 +56,7 @@
         </ul>
       </div>
 
-      <div class="c-site-footer__info-col t-size-xs">
+      <div class="c-site-footer__info-col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
@@ -71,7 +82,15 @@
 </template>
 
 <script>
+import getYear from 'date-fns/get_year';
+
 export default {
   name: 'SiteFooter',
+
+  computed: {
+    thisYear() {
+      return getYear(new Date());
+    },
+  },
 };
 </script>
