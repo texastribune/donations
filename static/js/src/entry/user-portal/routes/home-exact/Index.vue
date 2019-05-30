@@ -178,7 +178,12 @@ export default {
 
   methods: {
     async fetchData() {
-      return 'foo';
+      const value = await new Promise(resolve => {
+        setTimeout(() => {
+          resolve('bleh');
+        }, 2000);
+      });
+      return value;
     },
 
     resetPassword() {
