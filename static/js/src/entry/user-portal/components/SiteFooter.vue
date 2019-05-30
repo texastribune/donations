@@ -4,7 +4,7 @@
       class="c-site-footer__inner l-container--xl l-align-center-x"
       style="max-width: 1080px;"
     >
-      <div class="c-site-footer__logo-col">
+      <div class="c-site-footer__col">
         <div class="has-b-btm-marg">
           <span class="c-site-footer__logo c-icon has-text-yellow">
             <svg aria-hidden="true" focusable="false">
@@ -14,7 +14,7 @@
         </div>
 
         <div
-          class="has-notch has-bg-yellow has-b-btm-marg"
+          class="has-notch has-notch--thin has-bg-yellow has-b-btm-marg"
           aria-hidden="true"
         />
 
@@ -23,13 +23,13 @@
         </p>
       </div>
 
-      <div class="c-site-footer__account-col t-size-s">
+      <div class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
           Your account
         </h4>
-        <ul class="c-site-footer__links">
+        <ul class="c-site-footer__links has-text-white">
           <li>
             <router-link :to="{ name: 'home' }">Account Overview</router-link>
           </li>
@@ -56,13 +56,13 @@
         </ul>
       </div>
 
-      <div class="c-site-footer__info-col t-size-s">
+      <div class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
           Info
         </h4>
-        <ul class="c-site-footer__links">
+        <ul class="c-site-footer__links has-text-white">
           <li>
             <a href="https://www.texastribune.org/about/community-guidelines/"
               >Community Guidelines</a
