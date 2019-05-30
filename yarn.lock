@@ -2843,9 +2843,9 @@ domutils@^1.5.1, domutils@^1.7.0:
     dom-serializer "0"
     domelementtype "1"
 
-"ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#master":
+"ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#footer":
   version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#ed77a5649718e3485ab573d1c81bf21d84c2603e"
+  resolved "https://github.com/texastribune/ds-toolbox.git#613a4cfae3509502129a96b6b2ab74ef193f37ca"
   dependencies:
     ansi-colors "^3.2.4"
     autoprefixer "^9.5.1"
