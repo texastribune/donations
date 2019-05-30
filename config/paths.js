@@ -33,6 +33,7 @@ const mappedIcons = [
       `${SVG_LIB_DIR}twitter.svg`,
       `${SVG_LIB_DIR}your-texas.svg`,
       `${SVG_LIB_DIR}youtube.svg`,
+      `${SVG_LIB_DIR}close.svg`,
       './static/svg/check.svg',
       './static/svg/star.svg',
     ],
