@@ -3,11 +3,9 @@ import contextMixin from './context';
 export default {
   mixins: [contextMixin],
 
-  beforeMount() {
+  async created() {
     this.context.setIsFetching(true);
-  },
 
-  async mounted() {
     try {
       await this.fetchData();
     } catch (err) {
