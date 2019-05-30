@@ -5,12 +5,12 @@ import App from './App.vue';
 import routes from './routes';
 import store from './store';
 import SiteFooter from './components/SiteFooter.vue';
-import Loader from './components/Loader.vue';
+import Icon from './components/Icon.vue';
 import { Auth0Error } from './errors';
 
 Vue.use(VueRouter);
 Vue.component('SiteFooter', SiteFooter);
-Vue.component('Loader', Loader);
+Vue.component('Icon', Icon);
 
 store
   .dispatch('user/getUser')
