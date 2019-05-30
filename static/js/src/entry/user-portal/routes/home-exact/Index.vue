@@ -178,7 +178,7 @@ export default {
 
   methods: {
     async fetchData() {
-      return 'foo';
+      return '';
     },
 
     resetPassword() {
