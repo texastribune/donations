@@ -1,6 +1,5 @@
 <template>
-  <loader v-if="!canAccess" :display="{ isOpaque: true }" />
-  <div v-else>
+  <div>
     <nav style="height:45px;background:#fff;border-bottom:1px solid #dcdcdc;" />
     <main class="has-bg-white-off">
       <button @click="user.logOut()">Log out</button>
@@ -16,9 +15,8 @@
 </template>
 
 <script>
+import protectedRouteMixin from '../../mixins/protected-route';
 import userMixin from '../../mixins/user';
-import store from '../../store';
-import { logIn } from '../../utils/auth-actions';
 import SideNav from './components/SideNav.vue';
 
 export default {
@@ -26,21 +24,6 @@ export default {
 
   components: { SideNav },
 
-  mixins: [userMixin],
-
-  data() {
-    return { canAccess: false };
-  },
-
-  mounted() {
-    this.redirectIfLoggedOut();
-  },
-
-  methods: {
-    redirectIfLoggedOut() {
-      if (!store.state.user.idToken) logIn();
-      else this.canAccess = true;
-    },
-  },
+  mixins: [protectedRouteMixin, userMixin],
 };
 </script>
