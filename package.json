@@ -30,7 +30,7 @@
     "babel-loader": "^8.0.0",
     "css-loader": "^1.0.0",
     "date-fns": "^1.30.1",
-    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#footer",
+    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#nav",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
     "fast-glob": "^2.2.6",

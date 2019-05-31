@@ -1,5 +1,5 @@
 <template>
-  <nav class="c-navbar c-navbar--standard c-navbar--light">
+  <nav class="c-navbar c-navbar--light">
     <div class="c-navbar__top l-align-center-x">
       <a
         href="https://www.texastribune.org"
