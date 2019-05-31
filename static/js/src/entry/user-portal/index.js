@@ -5,11 +5,13 @@ import App from './App.vue';
 import routes from './routes';
 import store from './store';
 import SiteFooter from './components/SiteFooter.vue';
+import NavBar from './components/NavBar.vue';
 import Icon from './components/Icon.vue';
 import { Auth0Error } from './errors';
 
 Vue.use(VueRouter);
 Vue.component('SiteFooter', SiteFooter);
+Vue.component('NavBar', NavBar);
 Vue.component('Icon', Icon);
 
 store

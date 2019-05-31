@@ -8,6 +8,7 @@ env-docker
 /static/build/*.jpg
 /static/build/*.json
 /static/build/*.png
+/static/build/*.svg
 node_modules/
 .cache
 .coverage

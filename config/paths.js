@@ -24,6 +24,7 @@ const mappedStyles = async () => {
 const mappedIcons = [
   {
     in: [
+      `${SVG_LIB_DIR}bars.svg`,
       `${SVG_LIB_DIR}bug.svg`,
       `${SVG_LIB_DIR}camera.svg`,
       `${SVG_LIB_DIR}facebook.svg`,
