@@ -1,5 +1,7 @@
 .c-side-nav {
-  padding: $size-giant $size-xxl 0 $size-xxl;
+  padding: $size-giant $size-xxl;
+  position: sticky;
+  top: 0;
 
   ul {
     list-style: none;
