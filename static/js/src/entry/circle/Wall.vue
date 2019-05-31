@@ -1,7 +1,7 @@
 <template>
   <section class="wall grid_separator--l">
     <figure class="wall__logo grid_separator--l">
-      <img src="../../../../img/circle-logo.png" alt="Circle Membership logo" />
+      <img src="./img/circle-logo.png" alt="Circle Membership logo" />
     </figure>
     <div v-if="!loading && !error">
       <div
