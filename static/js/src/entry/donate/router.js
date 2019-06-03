@@ -20,7 +20,14 @@ function createInitialFormState(queryParams) {
   }
 
   let { amount, installmentPeriod = 'monthly' } = queryParams;
-  const { campaignId = '', referralId = '' } = queryParams;
+  const {
+    campaignId = '',
+    referralId = '',
+    firstName = '',
+    lastName = '',
+    email = '',
+    zipcode = '',
+  } = queryParams;
 
   switch (installmentPeriod.toLowerCase()) {
     case 'once':
@@ -42,6 +49,10 @@ function createInitialFormState(queryParams) {
   // which contains validation information
   return mergeValuesIntoStartState(BASE_FORM_STATE, {
     amount,
+    zipcode,
+    first_name: firstName,
+    last_name: lastName,
+    stripeEmail: email,
     campaign_id: campaignId,
     referral_id: referralId,
     installment_period: installmentPeriod,
