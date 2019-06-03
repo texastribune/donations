@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import sanitizeParams from '../../utils/sanitize-params';
 import { BASE_FORM_STATE } from './constants';
 
 Vue.use(VueRouter);
@@ -19,7 +20,8 @@ function createInitialFormState(queryParams) {
     );
   }
 
-  let { amount, installmentPeriod = 'monthly' } = queryParams;
+  const cleanParams = sanitizeParams(queryParams);
+  let { amount, installmentPeriod = 'monthly' } = cleanParams;
   const {
     campaignId = '',
     referralId = '',
@@ -27,7 +29,7 @@ function createInitialFormState(queryParams) {
     lastName = '',
     email = '',
     zipcode = '',
-  } = queryParams;
+  } = cleanParams;
 
   switch (installmentPeriod.toLowerCase()) {
     case 'once':

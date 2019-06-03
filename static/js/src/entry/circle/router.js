@@ -6,11 +6,14 @@ import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import Wall from './Wall.vue';
 import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import sanitizeParams from '../../utils/sanitize-params';
 import { CIRCLE_LEVELS, CIRCLE_FORM_STATE, DEFAULT_LEVEL } from './constants';
 
 Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
+  const cleanParams = sanitizeParams(queryParams);
+  let { level = DEFAULT_LEVEL } = cleanParams;
   const {
     campaignId = '',
     referralId = '',
@@ -18,8 +21,7 @@ function getStateFromParams(queryParams) {
     lastName = '',
     email = '',
     zipcode = '',
-  } = queryParams;
-  let { level = DEFAULT_LEVEL } = queryParams;
+  } = cleanParams;
 
   if (!CIRCLE_LEVELS[level]) level = DEFAULT_LEVEL;
 
