@@ -10,6 +10,7 @@
       :name="name"
       :placeholder="placeholder"
       :type="type"
+      :inputmode="inputmode"
       @input="updateSingleValue($event.target.value)"
     />
     <p v-if="showError && !isValid" role="alert">{{ message }}</p>
@@ -49,6 +50,12 @@ export default {
     type: {
       type: String,
       default: 'text',
+    },
+
+    inputmode: {
+      type: String,
+      default: null,
+      required: false,
     },
   },
 
