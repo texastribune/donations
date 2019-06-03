@@ -144,7 +144,6 @@
 </template>
 
 <script>
-import Icon from '../../components/Icon.vue';
 import Help from '../../components/Help.vue';
 import SummaryBox from '../../components/SummaryBox.vue';
 import InfoList from '../../components/InfoList.vue';
@@ -158,7 +157,7 @@ import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 export default {
   name: 'Index',
 
-  components: { Messages, Message, SummaryBox, InfoList, Help, Icon },
+  components: { Messages, Message, SummaryBox, InfoList, Help },
 
   mixins: [routeMixin, routeFetchMixin, userMixin],
 

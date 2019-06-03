@@ -7,13 +7,14 @@
 </template>
 
 <script>
+import Loader from './components/Loader.vue';
 import ErrorView from './ErrorView.vue';
 import contextMixin from './mixins/context';
 
 export default {
   name: 'App',
 
-  components: { ErrorView },
+  components: { ErrorView, Loader },
 
   mixins: [contextMixin],
 

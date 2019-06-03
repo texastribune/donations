@@ -6,11 +6,7 @@
     >
       <div class="c-site-footer__col">
         <div class="has-b-btm-marg">
-          <span class="c-site-footer__logo c-icon has-text-yellow">
-            <svg aria-hidden="true" focusable="false">
-              <use xlink:href="#bug"></use>
-            </svg>
-          </span>
+          <icon name="bug" :display="{ color: 'yellow', inlineSize: '4rem' }" />
         </div>
 
         <div

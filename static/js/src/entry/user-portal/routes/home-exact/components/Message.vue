@@ -18,12 +18,8 @@
 </template>
 
 <script>
-import Icon from '../../../components/Icon.vue';
-
 export default {
   name: 'Message',
-
-  components: { Icon },
 
   props: {
     heading: {

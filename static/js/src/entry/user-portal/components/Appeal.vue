@@ -19,7 +19,7 @@
         }"
         class="c-appeal__item"
       >
-        <icon :name="index <= ceiling ? 'camera' : 'close'" />
+        <icon :name="index <= ceiling ? 'camera' : 'camera'" />
         <component :is="benefit.component" />
       </li>
     </ul>
@@ -28,12 +28,9 @@
 
 <script>
 import BENEFITS from '../benefits';
-import Icon from './Icon.vue';
 
 export default {
   name: 'Appeal',
-
-  components: { Icon },
 
   props: {
     ceiling: {

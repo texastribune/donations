@@ -1,8 +1,7 @@
 <template>
   <div>
-    <nav style="height:45px;background:#fff;border-bottom:1px solid #dcdcdc;" />
+    <nav-bar />
     <main class="has-bg-white-off">
-      <button @click="user.logOut()">Log out</button>
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l"><side-nav /></div>
@@ -16,14 +15,14 @@
 
 <script>
 import protectedRouteMixin from '../../mixins/protected-route';
-import userMixin from '../../mixins/user';
+import NavBar from '../../components/NavBar.vue';
 import SideNav from './components/SideNav.vue';
 
 export default {
   name: 'Index',
 
-  components: { SideNav },
+  components: { SideNav, NavBar },
 
-  mixins: [protectedRouteMixin, userMixin],
+  mixins: [protectedRouteMixin],
 };
 </script>

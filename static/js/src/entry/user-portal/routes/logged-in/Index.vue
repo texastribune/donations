@@ -1,5 +1,6 @@
 <template>
   <div>
+    <nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="t-align-center l-align-center-self l-align-center-x">
         <h1 class="has-xl-btm-marg">You're logged in.</h1>
