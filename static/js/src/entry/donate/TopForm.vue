@@ -33,6 +33,7 @@
           label-text="amount ($)"
           base-classes="form__text form__text--heavy"
           name="amount"
+          inputmode="decimal"
         />
       </div>
     </div>
@@ -55,6 +56,7 @@
           type="email"
           base-classes="form__text form__text--standard"
           name="stripeEmail"
+          inputmode="email"
         />
       </div>
     </div>
@@ -99,6 +101,7 @@
           label-text="zip code"
           base-classes="form__text form__text--standard"
           name="zipcode"
+          inputmode="numeric"
         />
       </div>
     </div>
