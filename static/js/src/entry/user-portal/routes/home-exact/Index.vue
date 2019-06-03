@@ -181,7 +181,7 @@ export default {
     },
 
     resetPassword() {
-      this.user.resetPassword('', err => {
+      this.user.resetPassword('TODO', err => {
         if (err) {
           this.pwResetFailure = true;
         } else {
