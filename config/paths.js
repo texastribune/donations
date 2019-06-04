@@ -36,6 +36,8 @@ const mappedIcons = [
       `${SVG_LIB_DIR}youtube.svg`,
       `${SVG_LIB_DIR}close.svg`,
       './static/svg/check.svg',
+      './static/svg/clock.svg',
+      './static/svg/hand.svg',
       './static/svg/star.svg',
     ],
     out: `${SVG_OUTPUT_DIR}/base_icons.html`,
