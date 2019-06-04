@@ -19,7 +19,7 @@
         </p>
       </div>
 
-      <div class="c-site-footer__col t-size-s">
+      <div v-if="!forErrorPage" class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
@@ -82,6 +82,13 @@ import getYear from 'date-fns/get_year';
 
 export default {
   name: 'SiteFooter',
+
+  props: {
+    forErrorPage: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   computed: {
     thisYear() {

@@ -8,7 +8,7 @@
         <img alt="The Texas Tribune" src="../svg/tt.svg" />
       </a>
 
-      <div class="c-navbar__content">
+      <div v-if="!forErrorPage" class="c-navbar__content">
         <ul class="c-navbar__items is-hidden-until-bp-l">
           <li class="c-navbar__item c-navbar__item--space-right">
             <router-link
@@ -35,7 +35,7 @@
               ><strong>The Blast</strong></router-link
             >
           </li>
-          <li class="c-navbar__item">
+          <li v-if="user.accessToken" class="c-navbar__item">
             <button
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
@@ -71,7 +71,10 @@
       </div>
     </div>
 
-    <div v-if="showDropdown" class="c-navbar__dropdown is-hidden-from-bp-l">
+    <div
+      v-if="showDropdown && !forErrorPage"
+      class="c-navbar__dropdown is-hidden-from-bp-l"
+    >
       <ul class="c-navbar__dropdown-items">
         <li class="c-navbar__dropdown-item">
           <router-link
@@ -118,6 +121,13 @@ export default {
   name: 'NavBar',
 
   mixins: [userMixin],
+
+  props: {
+    forErrorPage: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   data() {
     return {
