@@ -1,5 +1,6 @@
 .c-message {
   position: relative;
+  border-radius: 3px;
 
   @include mq($until: bp-l) {
     border-bottom: 2px solid $color-gray-light;
@@ -10,7 +11,7 @@
     display: flex;
 
     .c-icon {
-      margin-right: $size-b;
+      margin-right: $size-xxs;
     }
   }
 
@@ -18,7 +19,7 @@
     border: 1px solid $color-white-off;
     border-radius: 50%;
     cursor: pointer;
-    padding: $size-xxxs;
+    padding: .45rem .55rem;
     position: absolute;
     right: 0;
     top: 0;

@@ -8,10 +8,10 @@
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="camera" :display="{ size: 'm' }" />
+            <icon name="camera" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
-            <p class="has-text-gray-dark t-space-heading-m">
+            <p class="has-text-gray-dark t-space-heading-m t-size-s">
               <em>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -28,10 +28,10 @@
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="camera" :display="{ size: 'm' }" />
+            <icon name="camera" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
-            <p class="has-text-gray-dark t-space-heading-m">
+            <p class="has-text-gray-dark t-space-heading-m t-size-s">
               <em>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut

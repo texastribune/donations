@@ -2,7 +2,7 @@
   <aside v-if="shouldShow" class="c-message has-bg-white-off has-padding">
     <div class="c-message__top has-xxs-btm-marg">
       <slot name="icon"></slot>
-      <h2 class="t-size-m">{{ heading }}</h2>
+      <h2 class="t-size-s">{{ heading }}</h2>
     </div>
 
     <slot name="content"></slot>
@@ -12,7 +12,7 @@
       aria-label="close"
       @click="close"
     >
-      <icon name="close" :display="{ size: 'm' }" />
+      <icon name="close" :display="{ size: 's', color: 'gray' }" />
     </button>
   </aside>
 </template>
