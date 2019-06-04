@@ -5,7 +5,7 @@
         <router-link
           :to="{ name: 'home' }"
           exact
-          class="has-text-black-off has-text-hover-gray"
+          class="has-text-black-off has-text-hover-gray t-size-s"
           active-class="is-active"
           ><strong>Account Overview</strong></router-link
         >
@@ -13,7 +13,7 @@
       <li class="has-xxs-btm-marg">
         <router-link
           :to="{ name: 'membership' }"
-          class="has-text-black-off has-text-hover-gray"
+          class="has-text-black-off has-text-hover-gray t-size-s"
           active-class="is-active"
           ><strong>Membership</strong></router-link
         >
@@ -21,7 +21,7 @@
           <li>
             <router-link
               :to="{ name: 'payments' }"
-              class="has-text-gray-dark has-text-hover-gray"
+              class="has-text-gray-dark has-text-hover-gray t-size-s"
               active-class="is-active"
               >Donation History</router-link
             >
@@ -31,7 +31,7 @@
       <li class="has-xxs-btm-marg">
         <router-link
           :to="{ name: 'blast' }"
-          class="has-text-black-off has-text-hover-gray"
+          class="has-text-black-off has-text-hover-gray t-size-s"
           active-class="is-active"
           ><strong>The Blast Newsletter</strong></router-link
         >
@@ -39,7 +39,7 @@
           <li class="c-side-nav__item c-side-nav__item--inside">
             <router-link
               :to="{ name: 'blast-payments' }"
-              class="has-text-gray-dark has-text-hover-gray"
+              class="has-text-gray-dark has-text-hover-gray t-size-s"
               active-class="is-active"
               >Payment History</router-link
             >
