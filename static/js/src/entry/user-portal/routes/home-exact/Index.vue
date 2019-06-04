@@ -44,7 +44,7 @@
       </template>
     </messages>
 
-    <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Account</h1>
+    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
       <summary-box heading="contact info">
