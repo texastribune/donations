@@ -1,6 +1,6 @@
 <template>
   <div class="has-bg-white has-ump-top-padding">
-    <h1 class="has-xxl-btm-marg has-ump-side-padding t-size-xl">
+    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       Your Donations
     </h1>
 
