@@ -38,6 +38,7 @@
             type="email"
             base-classes="form__text form__text--standard"
             name="stripeEmail"
+            inputmode="email"
           />
         </div>
       </div>
@@ -59,6 +60,7 @@
             label-text="website"
             base-classes="form__text form__text--standard"
             name="website"
+            inputmode="url"
           />
         </div>
       </div>
@@ -101,6 +103,7 @@
             label-text="zip code"
             base-classes="form__text form__text--standard"
             name="shipping_postalcode"
+            inputmode="numeric"
           />
         </div>
       </div>
