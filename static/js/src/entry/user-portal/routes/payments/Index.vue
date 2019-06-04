@@ -6,7 +6,7 @@
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
       <section class="c-detail-box">
-        <div class="has-l-btm-marg has-ump-btm-padding">
+        <div class="has-b-btm-marg has-ump-btm-padding">
           <payment-list :payments="payments" />
         </div>
 
