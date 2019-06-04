@@ -14,7 +14,10 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 import protectedRouteMixin from '../../mixins/protected-route';
+// import routeFetchMixin from '../../mixins/route-fetch';
 import NavBar from '../../components/NavBar.vue';
 import SideNav from './components/SideNav.vue';
 
@@ -24,5 +27,13 @@ export default {
   components: { SideNav, NavBar },
 
   mixins: [protectedRouteMixin],
+
+  methods: {
+    ...mapActions('user', ['getUser']),
+
+    fetchData() {
+      // return this.getUser();
+    },
+  },
 };
 </script>

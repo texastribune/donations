@@ -15,21 +15,6 @@ export const setFlag = () => {
   localStorage.setItem(LOGGED_IN_FLAG_KEY, true);
 };
 
-export const extractUser = authResult => {
-  const keyMap = [
-    ['nickname', 'nickname'],
-    ['email', 'email'],
-    ['email_verified', 'emailVerified'],
-  ];
-  const user = {};
-
-  keyMap.forEach(group => {
-    user[group[1]] = authResult[group[0]];
-  });
-
-  return user;
-};
-
 export const logIn = () => {
   localStorage.setItem(LOGIN_REDIRECT_KEY, window.location.href);
   auth.authorize({ initial_screen: 'login' });

@@ -35,11 +35,11 @@
               ><strong>The Blast</strong></router-link
             >
           </li>
-          <li v-if="user.accessToken" class="c-navbar__item">
+          <li class="c-navbar__item">
             <button
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
-              @click="user.logOut"
+              @click="logOut"
             >
               <strong>Log Out</strong>
             </button>
@@ -115,12 +115,10 @@
 </template>
 
 <script>
-import userMixin from '../mixins/user';
+import { logOut } from '../utils/auth-actions';
 
 export default {
   name: 'NavBar',
-
-  mixins: [userMixin],
 
   props: {
     forErrorPage: {
@@ -139,6 +137,8 @@ export default {
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
     },
+
+    logOut,
   },
 };
 </script>

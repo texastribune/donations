@@ -15,10 +15,10 @@ Vue.component('NavBar', NavBar);
 Vue.component('Icon', Icon);
 
 store
-  .dispatch('user/getUser')
+  .dispatch('user/getToken')
   .catch(err => {
     if (err instanceof Auth0Error) {
-      this.context.setError(true);
+      store.dispatch('context/setError', true);
     }
   })
   .then(() => {

@@ -148,18 +148,18 @@ import Help from '../../components/Help.vue';
 import SummaryBox from '../../components/SummaryBox.vue';
 import InfoList from '../../components/InfoList.vue';
 import routeMixin from '../../mixins/route';
-import userMixin from '../../mixins/user';
 import routeFetchMixin from '../../mixins/route-fetch';
+import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
+import { resetPassword } from '../../utils/auth-actions';
 import Messages from './components/Messages.vue';
 import Message from './components/Message.vue';
-import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 
 export default {
   name: 'Index',
 
   components: { Messages, Message, SummaryBox, InfoList, Help },
 
-  mixins: [routeMixin, routeFetchMixin, userMixin],
+  mixins: [routeMixin, routeFetchMixin],
 
   data() {
     return {
@@ -181,7 +181,7 @@ export default {
     },
 
     resetPassword() {
-      this.user.resetPassword('TODO', err => {
+      resetPassword('TODO', err => {
         if (err) {
           this.pwResetFailure = true;
         } else {

@@ -1,31 +1,20 @@
 /* eslint-disable no-param-reassign */
 
+import axios from 'axios';
+
+import { PORTAL_API_URL } from '../../constants';
 import auth from '../../utils/auth';
-import {
-  extractUser,
-  setFlag,
-  clearFlag,
-  isLoggedIn,
-} from '../../utils/auth-actions';
+import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
 import { LoggedOutError, Auth0Error } from '../../errors';
 
 function createDefaultState() {
   return {
-    idToken: '',
     accessToken: '',
-    details: {
-      nickname: '',
-      email: '',
-      emailVerified: false,
-    },
+    details: {},
   };
 }
 
 const mutations = {
-  SET_ID_TOKEN(state, idToken) {
-    state.idToken = idToken;
-  },
-
   SET_ACCESS_TOKEN(state, accessToken) {
     state.accessToken = accessToken;
   },
@@ -36,34 +25,31 @@ const mutations = {
 };
 
 const actions = {
-  getUser: ({ commit }) =>
+  getUser: async ({ commit, state }) => {
+    const data = await axios.get(PORTAL_API_URL, {
+      headers: { Authorization: `Bearer ${state.accessToken}` },
+    });
+
+    commit('SET_DETAILS', data);
+  },
+
+  getToken: ({ commit }) =>
     new Promise((resolve, reject) => {
       if (isLoggedIn()) {
-        auth.checkSession(
-          { responseType: 'id_token token' },
-          (err, authResult) => {
-            if (err && err.error === 'login_required') {
-              clearFlag();
-              return reject(new LoggedOutError());
-            }
-            if (
-              err ||
-              !authResult ||
-              !authResult.idToken ||
-              !authResult.accessToken ||
-              !authResult.idTokenPayload
-            ) {
-              clearFlag();
-              return reject(new Auth0Error());
-            }
-
-            commit('SET_ID_TOKEN', authResult.idToken);
-            commit('SET_ACCESS_TOKEN', authResult.accessToken);
-            commit('SET_DETAILS', extractUser(authResult.idTokenPayload));
-            setFlag();
-            return resolve();
+        auth.checkSession({ responseType: 'token' }, (err, authResult) => {
+          if (err && err.error === 'login_required') {
+            clearFlag();
+            return reject(new LoggedOutError());
           }
-        );
+          if (err || !authResult || !authResult.accessToken) {
+            clearFlag();
+            return reject(new Auth0Error());
+          }
+
+          commit('SET_ACCESS_TOKEN', authResult.accessToken);
+          setFlag();
+          return resolve();
+        });
       } else {
         clearFlag();
         reject(new LoggedOutError());

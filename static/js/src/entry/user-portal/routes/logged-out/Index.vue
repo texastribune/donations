@@ -12,17 +12,17 @@
 </template>
 
 <script>
-import userMixin from '../../mixins/user';
+import { clearFlag, redirectAfterLogOut } from '../../utils/auth-actions';
 import routeMixin from '../../mixins/route';
 
 export default {
   name: 'Index',
 
-  mixins: [userMixin, routeMixin],
+  mixins: [routeMixin],
 
   mounted() {
-    this.user.clearFlag();
-    this.user.redirectAfterLogOut();
+    clearFlag();
+    redirectAfterLogOut();
   },
 };
 </script>
