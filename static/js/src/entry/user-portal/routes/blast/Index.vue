@@ -21,9 +21,7 @@
       </section>
     </div>
 
-    <appeal />
-
-    <help blast />
+    <help blast :display="{ hasTopPadding: true }" />
   </div>
 </template>
 
