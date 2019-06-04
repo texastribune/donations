@@ -104,7 +104,7 @@
         </template>
         <template v-slot:links>
           <ul class="c-link-list">
-            <li class="has-xs-btm-marg">
+            <li class="has-m-btm-marg">
               <span class="c-link-list__arrow has-text-teal">
                 <strong>&rarr;</strong>
               </span>

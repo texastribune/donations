@@ -1,8 +1,8 @@
 <template>
   <aside
-    class="c-appeal t-space-heading-m t-linkstyle--underlined has-ump-side-padding has-white-off-bg-until-bp-l"
+    class="c-appeal t-space-heading-m t-linkstyle--underlined has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
-    <h2 class="t-uppercase t-size-m has-s-btm-marg">Member benefits</h2>
+    <h2 class="t-uppercase t-size-b has-s-btm-marg">Member benefits</h2>
     <p class="has-b-btm-marg">
       As a thank you for supporting our journalism, you receive:
     </p>

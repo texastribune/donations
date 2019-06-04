@@ -1,6 +1,8 @@
 <template>
   <div class="has-bg-white has-ump-top-padding">
-    <h1 class="has-xxl-btm-marg has-ump-side-padding">The Blast Newsletter</h1>
+    <h1 class="has-xxl-btm-marg has-ump-side-padding t-size-xl">
+      The Blast Newsletter
+    </h1>
 
     <div class="has-ump-side-padding has-xl-btm-marg">
       <section class="c-detail-box">
@@ -28,14 +30,13 @@
 <script>
 import routeMixin from '../../mixins/route';
 import routeFetchMixin from '../../mixins/route-fetch';
-import Appeal from '../../components/Appeal.vue';
 import Help from '../../components/Help.vue';
 import InfoList from '../../components/InfoList.vue';
 
 export default {
   name: 'Index',
 
-  components: { Appeal, Help, InfoList },
+  components: { Help, InfoList },
 
   mixins: [routeMixin, routeFetchMixin],
 
