@@ -1,25 +1,32 @@
 <template>
   <div>
-    <loader v-show="context.isFetching" />
-    <error-view v-if="context.hasError" />
+    <loader v-show="isFetching" />
+    <error-view v-if="hasError" />
     <router-view v-else />
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+
 import Loader from './components/Loader.vue';
 import ErrorView from './ErrorView.vue';
-import contextMixin from './mixins/context';
 
 export default {
   name: 'App',
 
   components: { ErrorView, Loader },
 
-  mixins: [contextMixin],
+  computed: {
+    ...mapState('context', ['hasError', 'isFetching']),
+  },
+
+  methods: {
+    ...mapActions('context', ['setError']),
+  },
 
   errorCaptured() {
-    this.context.setError(true);
+    this.setError(true);
   },
 };
 </script>

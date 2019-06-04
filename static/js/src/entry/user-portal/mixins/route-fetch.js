@@ -1,17 +1,19 @@
-import contextMixin from './context';
+import { mapActions } from 'vuex';
 
 export default {
-  mixins: [contextMixin],
-
   async created() {
-    this.context.setIsFetching(true);
+    this.setIsFetching(true);
 
     try {
       await this.fetchData();
     } catch (err) {
-      this.context.setError(true);
+      this.setError(true);
     }
 
-    this.context.setIsFetching(false);
+    this.setIsFetching(false);
+  },
+
+  methods: {
+    ...mapActions('context', ['setIsFetching', 'setError']),
   },
 };
