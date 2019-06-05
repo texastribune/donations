@@ -3,8 +3,8 @@ const BENEFITS = [
     id: 0,
     component: {
       name: 'Decal',
-      render(createElement) {
-        return createElement('span', 'Official member decal');
+      render(h) {
+        return h('span', 'Official member decal');
       },
     },
   },
@@ -12,8 +12,8 @@ const BENEFITS = [
     id: 1,
     component: {
       name: 'Email',
-      render(createElement) {
-        return createElement('span', 'Monthly members-only email');
+      render(h) {
+        return h('span', 'Monthly members-only email');
       },
     },
   },
@@ -63,10 +63,10 @@ const BENEFITS = [
     component: {
       name: 'Informed',
       render(h) {
-        return h('span', [
-          h('a', { attrs: { href: '#' } }, 'Informed Members '),
-          'receive: Quarterly stakeholder report',
-        ]);
+        return h(
+          'span',
+          'Informed Members also receive: Quarterly stakeholder report'
+        );
       },
     },
   },
@@ -75,10 +75,10 @@ const BENEFITS = [
     component: {
       name: 'Engaged',
       render(h) {
-        return h('span', [
-          h('a', { attrs: { href: '#' } }, 'Engaged Members '),
-          'receive: Invite to exclusive events',
-        ]);
+        return h(
+          'span',
+          'Engaged Members also receive: Invite to exclusive events'
+        );
       },
     },
   },
@@ -88,8 +88,7 @@ const BENEFITS = [
       name: 'Involved',
       render(h) {
         return h('span', [
-          h('a', { attrs: { href: '#' } }, 'Involved Members '),
-          'receive: Discounted rental rates for ',
+          'Involved Members also receive: Discounted rental rates for ',
           h(
             'a',
             {
