@@ -7,13 +7,9 @@
 // mixins and functions (no actual CSS output)
 @import "ds-toolbox-test/assets/scss/2-tools/all";
 
-// // elements
-// @import "ds-toolbox-test/assets/scss/4-elements/all";
-
 // t-size helper for sizing fonts
 @import "ds-toolbox-test/assets/scss/5-typography/t-helpers";
 @import "ds-toolbox-test/assets/scss/5-typography/t-size";
-
 
 // c-icon component used for SVGs
 @import "ds-toolbox-test/assets/scss/6-components/icon/icon";
