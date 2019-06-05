@@ -7,11 +7,11 @@
   }
 
   &__item {
-    align-items: center;
     display: flex;
 
     .c-icon {
-      margin-right: $size-xs;
+      margin-right: $size-xxs;
+      margin-top: 0.25rem;
     }
 
     &--no {

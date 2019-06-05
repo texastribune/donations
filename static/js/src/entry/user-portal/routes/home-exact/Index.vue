@@ -8,7 +8,7 @@
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="camera" :display="{ size: 's' }" />
+            <icon name="hand" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
             <p class="has-text-gray-dark t-space-heading-m t-size-s">
@@ -28,7 +28,7 @@
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="camera" :display="{ size: 's' }" />
+            <icon name="clock" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
             <p class="has-text-gray-dark t-space-heading-m t-size-s">
