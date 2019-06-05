@@ -19,7 +19,7 @@
         </p>
       </div>
 
-      <div v-if="!forErrorPage" class="c-site-footer__col t-size-s">
+      <div v-if="showRouteLinks" class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
@@ -84,9 +84,9 @@ export default {
   name: 'SiteFooter',
 
   props: {
-    forErrorPage: {
+    showRouteLinks: {
       type: Boolean,
-      default: false,
+      required: true,
     },
   },
 

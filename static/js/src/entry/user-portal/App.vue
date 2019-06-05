@@ -1,6 +1,5 @@
 <template>
   <div>
-    <loader v-show="isFetching" />
     <error-view v-if="hasError" />
     <router-view v-else />
   </div>
@@ -9,16 +8,15 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 
-import Loader from './components/Loader.vue';
 import ErrorView from './ErrorView.vue';
 
 export default {
   name: 'App',
 
-  components: { ErrorView, Loader },
+  components: { ErrorView },
 
   computed: {
-    ...mapState('context', ['hasError', 'isFetching']),
+    ...mapState('context', ['hasError']),
   },
 
   methods: {

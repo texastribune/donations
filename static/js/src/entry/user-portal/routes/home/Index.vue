@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <loader v-if="isFetching" />
+  <div v-else>
     <nav-bar />
     <main class="has-bg-white-off">
       <div class="l-ump-container l-align-center-x">
@@ -18,26 +19,20 @@ import { mapActions } from 'vuex';
 
 import protectedRouteMixin from '../../mixins/protected-route';
 import routeFetchMixin from '../../mixins/route-fetch';
-import NavBar from '../../components/NavBar.vue';
 import SideNav from './components/SideNav.vue';
 
 export default {
   name: 'Index',
 
-  components: { SideNav, NavBar },
+  components: { SideNav },
 
   mixins: [protectedRouteMixin, routeFetchMixin],
 
   methods: {
     ...mapActions('user', ['getUser']),
 
-    fetchData() {
+    async fetchData() {
       return this.getUser();
-      /* return new Promise(resolve => {
-        setTimeout(() => {
-          resolve();
-        }, 1000);
-      }); */
     },
   },
 };

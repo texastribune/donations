@@ -27,7 +27,6 @@
 
 <script>
 import routeMixin from '../../mixins/route';
-import routeFetchMixin from '../../mixins/route-fetch';
 import Help from '../../components/Help.vue';
 import InfoList from '../../components/InfoList.vue';
 
@@ -36,7 +35,7 @@ export default {
 
   components: { Help, InfoList },
 
-  mixins: [routeMixin, routeFetchMixin],
+  mixins: [routeMixin],
 
   data() {
     return {

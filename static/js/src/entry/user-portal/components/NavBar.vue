@@ -8,7 +8,7 @@
         <img alt="The Texas Tribune" src="../svg/tt.svg" />
       </a>
 
-      <div v-if="!forErrorPage" class="c-navbar__content">
+      <div v-if="showRouteLinks" class="c-navbar__content">
         <ul class="c-navbar__items is-hidden-until-bp-l">
           <li class="c-navbar__item c-navbar__item--space-right">
             <router-link
@@ -121,9 +121,9 @@ export default {
   name: 'NavBar',
 
   props: {
-    forErrorPage: {
+    showRouteLinks: {
       type: Boolean,
-      default: false,
+      required: true,
     },
   },
 

@@ -1,13 +1,13 @@
 <template>
   <div>
-    <nav-bar />
+    <nav-bar :show-route-links="false" />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="t-align-center l-align-center-self l-align-center-x">
         <h1 class="has-xl-btm-marg">You're logged out.</h1>
         <p>Redirecting you to texastribune.org &hellip;</p>
       </div>
     </main>
-    <site-footer />
+    <site-footer :show-route-links="false" />
   </div>
 </template>
 

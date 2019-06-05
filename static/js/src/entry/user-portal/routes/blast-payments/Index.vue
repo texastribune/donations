@@ -29,7 +29,6 @@
 
 <script>
 import routeMixin from '../../mixins/route';
-import routeFetchMixin from '../../mixins/route-fetch';
 import PaymentList from '../../components/PaymentList.vue';
 import Help from '../../components/Help.vue';
 
@@ -38,7 +37,7 @@ export default {
 
   components: { PaymentList, Help },
 
-  mixins: [routeMixin, routeFetchMixin],
+  mixins: [routeMixin],
 
   data() {
     return {

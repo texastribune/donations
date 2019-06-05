@@ -1,7 +1,7 @@
 import { TITLE_SUFFIX } from '../constants';
 
 export default {
-  created() {
+  mounted() {
     this.setTitle();
   },
 

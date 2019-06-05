@@ -148,6 +148,7 @@ import Help from '../../components/Help.vue';
 import SummaryBox from '../../components/SummaryBox.vue';
 import InfoList from '../../components/InfoList.vue';
 import routeMixin from '../../mixins/route';
+import userMixin from '../../mixins/user';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 import { resetPassword } from '../../utils/auth-actions';
 import Messages from './components/Messages.vue';
@@ -158,7 +159,7 @@ export default {
 
   components: { Messages, Message, SummaryBox, InfoList, Help },
 
-  mixins: [routeMixin],
+  mixins: [routeMixin, userMixin],
 
   data() {
     return {
@@ -176,7 +177,9 @@ export default {
 
   methods: {
     resetPassword() {
-      resetPassword('TODO', err => {
+      const { email_addresses: identities } = this.user;
+
+      resetPassword(identities[0].email_address, err => {
         if (err) {
           this.pwResetFailure = true;
         } else {

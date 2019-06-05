@@ -1,19 +1,17 @@
-import { mapActions } from 'vuex';
-
 export default {
-  async created() {
-    this.setIsFetching(true);
+  data() {
+    return {
+      isFetching: true,
+    };
+  },
 
+  async created() {
     try {
       await this.fetchData();
     } catch (err) {
       this.setError(true);
     } finally {
-      this.setIsFetching(false);
+      this.isFetching = false;
     }
-  },
-
-  methods: {
-    ...mapActions('context', ['setIsFetching', 'setError']),
   },
 };
