@@ -148,7 +148,6 @@ import Help from '../../components/Help.vue';
 import SummaryBox from '../../components/SummaryBox.vue';
 import InfoList from '../../components/InfoList.vue';
 import routeMixin from '../../mixins/route';
-import routeFetchMixin from '../../mixins/route-fetch';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 import { resetPassword } from '../../utils/auth-actions';
 import Messages from './components/Messages.vue';
@@ -159,7 +158,7 @@ export default {
 
   components: { Messages, Message, SummaryBox, InfoList, Help },
 
-  mixins: [routeMixin, routeFetchMixin],
+  mixins: [routeMixin],
 
   data() {
     return {
@@ -176,10 +175,6 @@ export default {
   },
 
   methods: {
-    async fetchData() {
-      return '';
-    },
-
     resetPassword() {
       resetPassword('TODO', err => {
         if (err) {

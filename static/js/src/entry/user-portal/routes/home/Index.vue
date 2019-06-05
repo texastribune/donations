@@ -17,7 +17,7 @@
 import { mapActions } from 'vuex';
 
 import protectedRouteMixin from '../../mixins/protected-route';
-// import routeFetchMixin from '../../mixins/route-fetch';
+import routeFetchMixin from '../../mixins/route-fetch';
 import NavBar from '../../components/NavBar.vue';
 import SideNav from './components/SideNav.vue';
 
@@ -26,13 +26,18 @@ export default {
 
   components: { SideNav, NavBar },
 
-  mixins: [protectedRouteMixin],
+  mixins: [protectedRouteMixin, routeFetchMixin],
 
   methods: {
     ...mapActions('user', ['getUser']),
 
     fetchData() {
-      // return this.getUser();
+      return this.getUser();
+      /* return new Promise(resolve => {
+        setTimeout(() => {
+          resolve();
+        }, 1000);
+      }); */
     },
   },
 };

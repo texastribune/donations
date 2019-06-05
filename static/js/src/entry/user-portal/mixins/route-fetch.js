@@ -8,9 +8,9 @@ export default {
       await this.fetchData();
     } catch (err) {
       this.setError(true);
+    } finally {
+      this.setIsFetching(false);
     }
-
-    this.setIsFetching(false);
   },
 
   methods: {
