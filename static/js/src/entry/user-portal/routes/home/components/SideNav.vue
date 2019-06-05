@@ -1,6 +1,6 @@
 <template>
   <nav class="c-side-nav">
-    <ul class="c-side-nav__outer">
+    <ul class="c-side-nav__outer t-size-s">
       <li class="has-xxs-btm-marg">
         <router-link
           :to="{ name: 'home' }"

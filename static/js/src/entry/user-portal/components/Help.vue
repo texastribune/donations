@@ -1,8 +1,9 @@
 <template>
   <aside
-    class="has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
+    :class="display.hasTopPadding && 'c-help--has-top-padding'"
+    class="c-help has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
-    <h2 class="t-uppercase t-size-m has-s-btm-marg">Need help?</h2>
+    <h2 class="t-uppercase t-size-b has-s-btm-marg">Need help?</h2>
     <p class="t-space-heading-m t-linkstyle--underlined has-text-gray-dark">
       <template v-if="home">
         If you have questions about your Texas Tribune account or would like to
@@ -45,6 +46,11 @@ export default {
     blast: {
       type: Boolean,
       default: false,
+    },
+
+    display: {
+      type: Object,
+      default: () => ({ hasTopPadding: false }),
     },
   },
 };

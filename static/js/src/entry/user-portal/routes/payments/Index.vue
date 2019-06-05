@@ -1,15 +1,17 @@
 <template>
   <div class="has-bg-white has-ump-top-padding">
-    <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Donations</h1>
+    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
+      Your Donations
+    </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
       <section class="c-detail-box">
-        <div class="has-xxl-btm-marg">
+        <div class="has-xxxl-btm-marg">
           <payment-list :payments="payments" />
         </div>
 
         <ul class="c-link-list t-linkstyle--underlined">
-          <li class="has-xs-btm-marg">
+          <li class="has-m-btm-marg">
             <span class="c-link-list__arrow has-text-teal">
               <strong>&rarr;</strong>
             </span>
@@ -17,7 +19,7 @@
               >See your membership status</router-link
             >
           </li>
-          <li class="has-xs-btm-marg">
+          <li class="has-m-btm-marg">
             <span class="c-link-list__arrow has-text-teal">
               <strong>&rarr;</strong>
             </span>

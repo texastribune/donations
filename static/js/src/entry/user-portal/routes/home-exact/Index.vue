@@ -8,10 +8,10 @@
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="camera" :display="{ size: 'm' }" />
+            <icon name="camera" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
-            <p class="has-text-gray-dark t-space-heading-m">
+            <p class="has-text-gray-dark t-space-heading-m t-size-s">
               <em>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -28,10 +28,10 @@
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="camera" :display="{ size: 'm' }" />
+            <icon name="camera" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
-            <p class="has-text-gray-dark t-space-heading-m">
+            <p class="has-text-gray-dark t-space-heading-m t-size-s">
               <em>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -44,7 +44,7 @@
       </template>
     </messages>
 
-    <h1 class="has-xxl-btm-marg has-ump-side-padding">Your Account</h1>
+    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
       <summary-box heading="contact info">
@@ -104,7 +104,7 @@
         </template>
         <template v-slot:links>
           <ul class="c-link-list">
-            <li class="has-xs-btm-marg">
+            <li class="has-m-btm-marg">
               <span class="c-link-list__arrow has-text-teal">
                 <strong>&rarr;</strong>
               </span>

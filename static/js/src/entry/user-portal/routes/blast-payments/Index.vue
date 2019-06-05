@@ -1,18 +1,29 @@
 <template>
   <div class="has-bg-white has-ump-top-padding">
-    <h1 class="has-xxl-btm-marg has-ump-side-padding">
+    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter: Payment History
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
       <section class="c-detail-box">
-        <payment-list :payments="payments" />
+        <div class="has-xxxl-btm-marg">
+          <payment-list :payments="payments" />
+        </div>
+
+        <ul class="c-link-list t-linkstyle--underlined">
+          <li>
+            <span class="c-link-list__arrow has-text-teal">
+              <strong>&rarr;</strong>
+            </span>
+            <router-link :to="{ name: 'blast' }"
+              >More about your subscription</router-link
+            >
+          </li>
+        </ul>
       </section>
     </div>
 
-    <appeal />
-
-    <help blast />
+    <help blast :display="{ hasTopPadding: true }" />
   </div>
 </template>
 
@@ -20,13 +31,12 @@
 import routeMixin from '../../mixins/route';
 import routeFetchMixin from '../../mixins/route-fetch';
 import PaymentList from '../../components/PaymentList.vue';
-import Appeal from '../../components/Appeal.vue';
 import Help from '../../components/Help.vue';
 
 export default {
   name: 'Index',
 
-  components: { Appeal, PaymentList, Help },
+  components: { PaymentList, Help },
 
   mixins: [routeMixin, routeFetchMixin],
 
