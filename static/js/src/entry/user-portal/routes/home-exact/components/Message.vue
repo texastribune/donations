@@ -12,7 +12,7 @@
       aria-label="close"
       @click="close"
     >
-      <icon name="close" :display="{ size: 's', color: 'gray' }" />
+      <icon name="close" :display="{ size: 'xxs', color: 'gray' }" />
     </button>
   </aside>
 </template>
