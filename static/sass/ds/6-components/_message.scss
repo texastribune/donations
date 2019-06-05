@@ -1,7 +1,7 @@
 .c-message {
   border-radius: 3px;
   position: relative;
-  padding: $size-b; 
+  padding: $size-b;
 
   @include mq($until: bp-l) {
     border-bottom: 1px solid $color-gray-light;
