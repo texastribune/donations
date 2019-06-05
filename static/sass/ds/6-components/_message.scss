@@ -1,9 +1,12 @@
 .c-message {
-  position: relative;
   border-radius: 3px;
+  position: relative;
+  padding: $size-b;
 
   @include mq($until: bp-l) {
-    border-bottom: 2px solid $color-gray-light;
+    border-bottom: 1px solid $color-gray-light;
+    border-radius: 0px;
+    padding: $size-b 0;
   }
 
   &__top {
@@ -19,7 +22,7 @@
     border: 1px solid $color-white-off;
     border-radius: 50%;
     cursor: pointer;
-    padding: .45rem $size-xxxs;
+    padding: .25rem .45rem;
     position: absolute;
     right: 0;
     top: 0;
