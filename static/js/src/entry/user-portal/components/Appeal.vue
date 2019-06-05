@@ -19,10 +19,7 @@
         }"
         class="c-appeal__item"
       >
-        <icon
-          :name="index <= ceiling ? 'check' : 'close'"
-          :display="{ size: 'n' }"
-        />
+        <icon :name="index <= ceiling ? 'check' : 'close'" />
         <component :is="benefit.component" />
       </li>
     </ul>
