@@ -1,14 +1,5 @@
 .c-site-footer {
-  
-  &__logo {
-    font-size: 4rem;
-    margin-bottom: 2.6rem;
-  }
   &__icon {
     margin-right: $size-xxxs;
-  }
-  // To be replaced with DS global styles
-  &__list {
-    list-style: none;
   }
 }
