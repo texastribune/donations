@@ -10,7 +10,7 @@
           ><strong>Account Overview</strong></router-link
         >
       </li>
-      <li class="has-xxs-btm-marg">
+      <li v-if="!user.never_given" class="has-xxs-btm-marg">
         <router-link
           :to="{ name: 'membership' }"
           class="has-text-black-off has-text-hover-gray"
@@ -28,7 +28,7 @@
           </li>
         </ul>
       </li>
-      <li class="has-xxs-btm-marg">
+      <li v-if="user.is_blast_member" class="has-xxs-btm-marg">
         <router-link
           :to="{ name: 'blast' }"
           class="has-text-black-off has-text-hover-gray"
@@ -53,5 +53,12 @@
 <script>
 export default {
   name: 'SideNav',
+
+  props: {
+    user: {
+      type: Object,
+      required: true,
+    },
+  },
 };
 </script>

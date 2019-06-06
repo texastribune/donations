@@ -7,6 +7,11 @@ import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
 import { LoggedOutError, Auth0Error } from '../../errors';
 
+import response from '../../dummy/recurring.json';
+// import response from '../../dummy/one_time_blast_group.json';
+// import response from '../../dummy/never_given_blast_manager.json';
+// import response from '../../dummy/recurring_expired_and_blast.json';
+
 function createDefaultState() {
   return {
     accessToken: '',
@@ -26,11 +31,12 @@ const mutations = {
 
 const actions = {
   getUser: async ({ commit, state }) => {
-    const data = await axios.get(PORTAL_API_URL, {
+    /* const { data } = await axios.get(PORTAL_API_URL, {
       headers: { Authorization: `Bearer ${state.accessToken}` },
-    });
+    }); */
 
-    commit('SET_DETAILS', data);
+    // commit('SET_DETAILS', data);
+    commit('SET_DETAILS', response);
   },
 
   getToken: ({ commit }) =>

@@ -1,9 +1,6 @@
 <template>
   <footer class="c-site-footer has-bg-black-off">
-    <div
-      class="c-site-footer__inner l-container--xl l-align-center-x"
-      style="max-width: 1080px;"
-    >
+    <div class="c-site-footer__inner l-container--xl l-align-center-x">
       <div class="c-site-footer__col">
         <div class="has-b-btm-marg">
           <icon name="bug" :display="{ color: 'yellow', inlineSize: '4rem' }" />
@@ -29,22 +26,22 @@
           <li>
             <router-link :to="{ name: 'home' }">Account Overview</router-link>
           </li>
-          <li>
+          <li v-if="!user.never_given">
             <router-link :to="{ name: 'membership' }"
               >Membership Status</router-link
             >
           </li>
-          <li>
+          <li v-if="!user.never_given">
             <router-link :to="{ name: 'payments' }"
               >Donation History</router-link
             >
           </li>
-          <li>
+          <li v-if="user.is_blast_member">
             <router-link :to="{ name: 'blast' }"
               >The Blast Newsletter</router-link
             >
           </li>
-          <li>
+          <li v-if="user.is_blast_member">
             <router-link :to="{ name: 'blast-payments' }"
               >The Blast Payment History</router-link
             >
@@ -86,6 +83,11 @@ export default {
   props: {
     showRouteLinks: {
       type: Boolean,
+      required: true,
+    },
+
+    user: {
+      type: Object,
       required: true,
     },
   },

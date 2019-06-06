@@ -19,7 +19,7 @@ import { mapActions } from 'vuex';
 
 import protectedRouteMixin from '../../mixins/protected-route';
 import routeFetchMixin from '../../mixins/route-fetch';
-import SideNav from './components/SideNav.vue';
+import SideNav from './containers/SideNavContainer.vue';
 
 export default {
   name: 'Index',

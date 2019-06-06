@@ -1,14 +1,17 @@
 <template>
-  <site-footer :show-route-links="showRouteLinks" />
+  <site-footer :show-route-links="showRouteLinks" :user="user" />
 </template>
 
 <script>
 import SiteFooter from '../components/SiteFooter.vue';
+import userMixin from '../mixins/user';
 
 export default {
   name: 'SiteFooterContainer',
 
   components: { SiteFooter },
+
+  mixins: [userMixin],
 
   props: {
     showRouteLinks: {

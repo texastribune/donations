@@ -19,7 +19,10 @@
               ><strong>Account Overview</strong></router-link
             >
           </li>
-          <li class="c-navbar__item c-navbar__item--space-right">
+          <li
+            v-if="!user.never_given"
+            class="c-navbar__item c-navbar__item--space-right"
+          >
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
@@ -27,7 +30,10 @@
               ><strong>Membership</strong></router-link
             >
           </li>
-          <li class="c-navbar__item c-navbar__item--space-right">
+          <li
+            v-if="user.is_blast_member"
+            class="c-navbar__item c-navbar__item--space-right"
+          >
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
@@ -72,7 +78,7 @@
     </div>
 
     <div
-      v-if="showDropdown && !forErrorPage"
+      v-if="showDropdown && showRouteLinks"
       class="c-navbar__dropdown is-hidden-from-bp-l"
     >
       <ul class="c-navbar__dropdown-items">
@@ -85,7 +91,7 @@
             ><strong>Account Overview</strong></router-link
           >
         </li>
-        <li class="c-navbar__dropdown-item">
+        <li v-if="!user.never_given" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             :to="{ name: 'membership' }"
@@ -93,7 +99,7 @@
             ><strong>Membership</strong></router-link
           >
         </li>
-        <li class="c-navbar__dropdown-item">
+        <li v-if="user.is_blast_member" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             :to="{ name: 'blast' }"
@@ -123,6 +129,11 @@ export default {
   props: {
     showRouteLinks: {
       type: Boolean,
+      required: true,
+    },
+
+    user: {
+      type: Object,
       required: true,
     },
   },
