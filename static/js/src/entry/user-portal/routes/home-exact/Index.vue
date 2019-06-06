@@ -47,96 +47,11 @@
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
-      <summary-box heading="contact info">
-        <template v-slot:content>
-          <info-list :items="data">
-            <template v-slot="slotProps">
-              <span
-                class="has-text-gray-dark"
-                :class="{ 't-wrap-break': slotProps.item.heading === 'Email' }"
-              >
-                {{ slotProps.item.text }}
-              </span>
-            </template>
-          </info-list>
-        </template>
-
-        <template v-slot:links>
-          <ul v-if="!pwResetSuccess && !pwResetFailure" class="c-link-list">
-            <li>
-              <span class="c-link-list__arrow has-text-teal">
-                <strong>&rarr;</strong>
-              </span>
-              <span class="has-text-gray-dark">
-                <button class="c-link-button" @click="resetPassword">
-                  Reset your password
-                </button>
-              </span>
-            </li>
-          </ul>
-          <p
-            v-else-if="pwResetSuccess"
-            class="t-size-xs t-space-heading-m has-text-gray"
-          >
-            Check your inbox for an email from The Texas Tribune with the
-            subject line &quot;Reset your password.&quot;
-          </p>
-          <p v-else class="t-size-xs t-space-heading-m has-text-gray">
-            There was an issue resetting your password. If you continue having
-            trouble, email
-            <a href="mailto:community@texastribune.org"
-              >community@texastribune.org </a
-            >.
-          </p>
-        </template>
-      </summary-box>
-
-      <summary-box heading="membership" :display="{ isExpired: true }">
-        <template v-slot:content>
-          <p class="has-text-gray-dark t-space-heading-m">
-            <span class="has-text-error"
-              >Your membership expired on <strong>March 29, 2019</strong>.</span
-            >
-            Your last donation of <strong>$35</strong> was charged on
-            <strong>March 29, 2018</strong>, to your card ending in
-            <strong>5555</strong>.
-          </p>
-        </template>
-        <template v-slot:links>
-          <ul class="c-link-list">
-            <li class="has-m-btm-marg">
-              <span class="c-link-list__arrow has-text-teal">
-                <strong>&rarr;</strong>
-              </span>
-              <span class="has-text-gray-dark">
-                <router-link :to="{ name: 'payments' }"
-                  >See your donation history</router-link
-                >
-              </span>
-            </li>
-            <li>
-              <span class="c-link-list__arrow has-text-teal">
-                <strong>&rarr;</strong>
-              </span>
-              <span class="has-text-gray-dark">
-                <router-link :to="{ name: 'membership' }"
-                  >More about your membership</router-link
-                >
-              </span>
-            </li>
-          </ul>
-        </template>
-        <template v-slot:bottom>
-          <p
-            class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined"
-          >
-            To update your membership status, contact us at
-            <a href="mailto:community@texastribune.org"
-              >community@texastribune.org</a
-            >.
-          </p>
-        </template>
-      </summary-box>
+      <contact-info />
+      <membership /> <expired />
+      <one-time />
+      <never-given />
+      <blast />
     </div>
 
     <help home />
@@ -145,48 +60,40 @@
 
 <script>
 import Help from '../../components/Help.vue';
-import SummaryBox from '../../components/SummaryBox.vue';
-import InfoList from '../../components/InfoList.vue';
 import routeMixin from '../../mixins/route';
 import userMixin from '../../mixins/user';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
-import { resetPassword } from '../../utils/auth-actions';
+import ContactInfo from './containers/ContactInfoContainer.vue';
+import Membership from './containers/MembershipContainer.vue';
+import Expired from './containers/ExpiredContainer.vue';
+import OneTime from './containers/OneTimeContainer.vue';
+import NeverGiven from './containers/NeverGivenContainer.vue';
+import Blast from './containers/BlastContainer.vue';
 import Messages from './components/Messages.vue';
 import Message from './components/Message.vue';
 
 export default {
   name: 'Index',
 
-  components: { Messages, Message, SummaryBox, InfoList, Help },
+  components: {
+    ContactInfo,
+    Membership,
+    Expired,
+    OneTime,
+    NeverGiven,
+    Blast,
+    Messages,
+    Message,
+    Help,
+  },
 
   mixins: [routeMixin, userMixin],
 
   data() {
     return {
-      data: [
-        { id: 0, heading: 'Name', text: 'Andrew Gibson' },
-        { id: 1, heading: 'Email', text: 'agibson@texastribune.org' },
-        { id: 2, heading: 'Zip code', text: '78701' },
-      ],
       welcomeMessageKey: WELCOME_MESSAGE_KEY,
       comingSoonMessageKey: COMING_SOON_MESSAGE_KEY,
-      pwResetSuccess: false,
-      pwResetFailure: false,
     };
-  },
-
-  methods: {
-    resetPassword() {
-      const { email_addresses: identities } = this.user;
-
-      resetPassword(identities[0].email_address, err => {
-        if (err) {
-          this.pwResetFailure = true;
-        } else {
-          this.pwResetSuccess = true;
-        }
-      });
-    },
   },
 };
 </script>

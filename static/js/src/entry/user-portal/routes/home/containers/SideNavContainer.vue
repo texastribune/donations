@@ -7,7 +7,7 @@ import SideNav from '../components/SideNav.vue';
 import userMixin from '../../../mixins/user';
 
 export default {
-  name: 'NavBarContainer',
+  name: 'SideNavContainer',
 
   components: { SideNav },
 
