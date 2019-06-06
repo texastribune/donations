@@ -15,11 +15,11 @@
         "
         :class="{
           'has-xs-btm-marg': index !== benefits.length - 1,
-          'c-appeal__item--no': index >= ceiling,
+          'c-appeal__item--no': index > ceiling,
         }"
         class="c-appeal__item"
       >
-        <icon :name="index <= ceiling ? 'check' : 'close'" />
+        <icon :name="index > ceiling ? 'close' : 'check'" />
         <component :is="benefit.component" />
       </li>
     </ul>
@@ -53,10 +53,10 @@ export default {
   computed: {
     ceiling() {
       const mapping = {
-        member: 0,
-        informed: 5,
-        engaged: 6,
-        involved: 7,
+        member: 3,
+        informed: 4,
+        engaged: 5,
+        involved: 6,
         editors: 7,
         chairman: 7,
         leadership: 7,
