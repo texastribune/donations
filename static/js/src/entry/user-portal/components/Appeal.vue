@@ -40,7 +40,7 @@ export default {
   props: {
     level: {
       type: String,
-      default: 'informed',
+      default: 'involved',
     },
   },
 
@@ -57,9 +57,9 @@ export default {
         informed: 4,
         engaged: 5,
         involved: 6,
-        editors: 7,
-        chairman: 7,
-        leadership: 7,
+        editors: 6,
+        chairman: 6,
+        leadership: 6,
       };
 
       return mapping[this.level];
