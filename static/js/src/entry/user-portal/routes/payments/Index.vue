@@ -44,7 +44,7 @@
 <script>
 import routeMixin from '../../mixins/route';
 import PaymentList from '../../components/PaymentList.vue';
-import Appeal from '../../components/Appeal.vue';
+import Appeal from '../home/containers/AppealContainer.vue';
 import Help from '../../components/Help.vue';
 
 export default {

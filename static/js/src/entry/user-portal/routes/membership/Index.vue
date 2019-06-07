@@ -15,7 +15,7 @@
 <script>
 import Membership from './containers/MembershipContainer.vue';
 import routeMixin from '../../mixins/route';
-import Appeal from '../../components/Appeal.vue';
+import Appeal from '../home/containers/AppealContainer.vue';
 import Help from '../../components/Help.vue';
 
 export default {

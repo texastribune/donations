@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import BENEFITS from '../benefits';
+import BENEFITS from '../../../benefits';
 
 export default {
   name: 'Appeal',
@@ -40,7 +40,7 @@ export default {
   props: {
     level: {
       type: String,
-      default: 'involved',
+      required: true,
     },
   },
 
