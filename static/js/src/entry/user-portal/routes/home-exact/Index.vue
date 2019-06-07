@@ -1,34 +1,14 @@
 <template>
   <div class="has-white-bg-from-bp-l has-ump-top-padding">
-    <messages :num-messages="2">
+    <messages :num-messages="1">
       <template v-slot="slotProps">
         <message
           heading="Welcome"
-          :name="welcomeMessageKey"
+          :name="readOnlyWelcomeMessageKey"
           @setMessageSeen="slotProps.setMessageSeen"
         >
           <template v-slot:icon>
-            <icon name="hand" :display="{ size: 's' }" />
-          </template>
-          <template v-slot:content>
-            <p class="has-text-gray-dark t-space-heading-m t-size-s">
-              <em>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </em>
-            </p>
-          </template>
-        </message>
-
-        <message
-          heading="Coming soon"
-          :name="comingSoonMessageKey"
-          @setMessageSeen="slotProps.setMessageSeen"
-        >
-          <template v-slot:icon>
-            <icon name="clock" :display="{ size: 's' }" />
+            <icon name="bell" :display="{ size: 's' }" />
           </template>
           <template v-slot:content>
             <p class="has-text-gray-dark t-space-heading-m t-size-s">
@@ -62,7 +42,7 @@
 import Help from '../../components/Help.vue';
 import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
-import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
+import { READ_ONLY_WELCOME_MESSAGE_KEY } from '../../constants';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import Membership from './containers/MembershipContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
@@ -91,8 +71,7 @@ export default {
 
   data() {
     return {
-      welcomeMessageKey: WELCOME_MESSAGE_KEY,
-      comingSoonMessageKey: COMING_SOON_MESSAGE_KEY,
+      readOnlyWelcomeMessageKey: READ_ONLY_WELCOME_MESSAGE_KEY,
     };
   },
 };
