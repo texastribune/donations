@@ -8,12 +8,14 @@ export default {
   },
 
   async created() {
-    try {
-      await this.fetchData();
-    } catch (err) {
-      this.setError(true);
-    } finally {
-      this.isFetching = false;
+    if (!this.unauthorizedFetch) {
+      try {
+        await this.fetchData();
+      } catch (err) {
+        this.setError(true);
+      } finally {
+        this.isFetching = false;
+      }
     }
   },
 
