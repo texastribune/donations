@@ -8,9 +8,9 @@ import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
 import { LoggedOutError, Auth0Error } from '../../errors';
 
 // import response from '../../dummy/recurring.json';
-// import response from '../../dummy/one_time.json';
+import response from '../../dummy/one_time.json';
 // import response from '../../dummy/never_given.json';
-import response from '../../dummy/recurring_expired_and_blast.json';
+// import response from '../../dummy/recurring_expired_and_blast.json';
 
 function createDefaultState() {
   return {
