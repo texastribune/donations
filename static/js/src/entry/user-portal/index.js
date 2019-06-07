@@ -8,7 +8,7 @@ import SiteFooter from './containers/SiteFooterContainer.vue';
 import Loader from './components/Loader.vue';
 import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
-import { Auth0Error } from './errors';
+import { LoggedOutError } from './errors';
 
 Vue.use(VueRouter);
 Vue.component('SiteFooter', SiteFooter);
@@ -17,9 +17,9 @@ Vue.component('Loader', Loader);
 Vue.component('Icon', Icon);
 
 store
-  .dispatch('user/getToken')
+  .dispatch('user/getTokenUser')
   .catch(err => {
-    if (err instanceof Auth0Error) {
+    if (!(err instanceof LoggedOutError)) {
       store.dispatch('context/setError', true);
     }
   })
