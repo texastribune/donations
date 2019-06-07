@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 
-import axios from 'axios';
+// import axios from 'axios';
 
-import { PORTAL_API_URL } from '../../constants';
+// import { PORTAL_API_URL } from '../../constants';
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
 import { LoggedOutError, Auth0Error } from '../../errors';
@@ -30,7 +30,7 @@ const mutations = {
 };
 
 const actions = {
-  getUser: async ({ commit, state }) => {
+  getUser: async ({ commit }) => {
     /* const { data } = await axios.get(PORTAL_API_URL, {
       headers: { Authorization: `Bearer ${state.accessToken}` },
     }); */
