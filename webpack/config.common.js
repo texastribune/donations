@@ -26,6 +26,7 @@ module.exports = {
     }),
     new EnvironmentPlugin([
       'NODE_ENV',
+      'AUTH0_AUDIENCE',
       'AUTH0_DOMAIN',
       'AUTH0_CLIENT_ID',
       'PORTAL_API_DOMAIN',
