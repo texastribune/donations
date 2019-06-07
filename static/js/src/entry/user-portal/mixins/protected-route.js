@@ -1,12 +1,13 @@
-import store from '../store';
+import { mapState } from 'vuex';
+
 import { logIn } from '../utils/auth-actions';
 
 export default {
-  beforeRouteEnter(to, from, next) {
-    if (!store.state.user.accessToken) {
-      logIn();
-    } else {
-      next();
-    }
+  created() {
+    if (!this.accessToken) logIn();
+  },
+
+  computed: {
+    ...mapState('user', ['accessToken']),
   },
 };
