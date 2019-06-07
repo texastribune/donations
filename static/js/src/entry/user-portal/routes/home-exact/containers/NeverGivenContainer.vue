@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import userMixin from '../../../mixins/user';
+import userMixin from '../../home/mixins/user';
 
 export default {
   name: 'NeverGivenContainer',

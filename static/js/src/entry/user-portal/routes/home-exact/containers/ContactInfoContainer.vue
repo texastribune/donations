@@ -9,7 +9,7 @@
 
 <script>
 import ContactInfo from '../components/ContactInfo.vue';
-import userMixin from '../../../mixins/user';
+import userMixin from '../../home/mixins/user';
 import { resetPassword } from '../../../utils/auth-actions';
 
 export default {

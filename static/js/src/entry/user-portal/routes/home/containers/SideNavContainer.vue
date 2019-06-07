@@ -4,7 +4,7 @@
 
 <script>
 import SideNav from '../components/SideNav.vue';
-import userMixin from '../../../mixins/user';
+import userMixin from '../mixins/user';
 
 export default {
   name: 'SideNavContainer',

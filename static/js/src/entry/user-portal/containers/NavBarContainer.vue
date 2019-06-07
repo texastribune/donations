@@ -4,7 +4,7 @@
 
 <script>
 import NavBar from '../components/NavBar.vue';
-import userMixin from '../mixins/user';
+import userMixin from '../routes/home/mixins/user';
 
 export default {
   name: 'NavBarContainer',

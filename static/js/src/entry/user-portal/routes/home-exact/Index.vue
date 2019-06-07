@@ -61,7 +61,7 @@
 <script>
 import Help from '../../components/Help.vue';
 import routeMixin from '../../mixins/route';
-import userMixin from '../../mixins/user';
+import userMixin from '../home/mixins/user';
 import { WELCOME_MESSAGE_KEY, COMING_SOON_MESSAGE_KEY } from '../../constants';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import Membership from './containers/MembershipContainer.vue';

@@ -4,7 +4,7 @@
 
 <script>
 import Appeal from '../components/Appeal.vue';
-import userMixin from '../../../mixins/user';
+import userMixin from '../mixins/user';
 
 export default {
   name: 'AppealContainer',

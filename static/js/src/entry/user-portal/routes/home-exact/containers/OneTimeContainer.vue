@@ -8,7 +8,7 @@ import parse from 'date-fns/parse';
 
 import OneTime from '../components/OneTime.vue';
 import addNumberCommas from '../../../utils/add-number-commas';
-import userMixin from '../../../mixins/user';
+import userMixin from '../../home/mixins/user';
 
 export default {
   name: 'OneTimeContainer',
