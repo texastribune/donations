@@ -23,6 +23,12 @@
 
 <script>
 export default {
-  name: 'Error',
+  name: 'ErrorView',
+
+  mounted() {
+    window.onpopstate = () => {
+      window.location.reload();
+    };
+  },
 };
 </script>
