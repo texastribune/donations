@@ -13,7 +13,7 @@ const auth = new WebAuth({
   redirectUri: AUTH_LOGIN_COMPLETE_URL,
   clientID: AUTH_CLIENT_ID,
   responseType: 'code',
-  scope: 'read:self openid email profile',
+  scope: 'openid email profile',
 });
 
 export default auth;
