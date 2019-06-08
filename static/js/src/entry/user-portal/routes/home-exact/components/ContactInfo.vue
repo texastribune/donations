@@ -13,7 +13,7 @@
       </info-list>
     </template>
 
-    <template v-slot:links>
+    <template v-if="!isStaff" v-slot:links>
       <ul v-if="!pwResetSuccess && !pwResetFailure" class="c-link-list">
         <li>
           <span class="c-link-list__arrow has-text-teal">
@@ -65,6 +65,11 @@ export default {
     },
 
     pwResetFailure: {
+      type: Boolean,
+      required: true,
+    },
+
+    isStaff: {
       type: Boolean,
       required: true,
     },

@@ -2,10 +2,10 @@
 
 // import axios from 'axios';
 
-// import { PORTAL_API_URL } from '../../constants';
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
 import { LoggedOutError, Auth0Error } from '../../errors';
+// import { PORTAL_API_URL } from '../../constants';
 
 import response from '../../dummy/recurring.json';
 // import response from '../../dummy/one_time.json';
@@ -15,6 +15,7 @@ import response from '../../dummy/recurring.json';
 function createDefaultState() {
   return {
     accessToken: '',
+    tokenDetails: {},
     details: {},
   };
 }
@@ -24,6 +25,10 @@ const mutations = {
     state.accessToken = accessToken;
   },
 
+  SET_TOKEN_DETAILS(state, tokenDetails) {
+    state.tokenDetails = tokenDetails;
+  },
+
   SET_DETAILS(state, details) {
     state.details = details;
   },
@@ -31,7 +36,7 @@ const mutations = {
 
 const actions = {
   getUser: async ({ commit }) => {
-    /* const { data } = await axios.get(PORTAL_API_URL, {
+    /* await axios.get(PORTAL_API_URL, {
       headers: { Authorization: `Bearer ${state.accessToken}` },
     }); */
 
@@ -39,23 +44,32 @@ const actions = {
     commit('SET_DETAILS', response);
   },
 
-  getToken: ({ commit }) =>
+  getTokenUser: ({ commit }) =>
     new Promise((resolve, reject) => {
       if (isLoggedIn()) {
-        auth.checkSession({ responseType: 'token' }, (err, authResult) => {
-          if (err && err.error === 'login_required') {
-            clearFlag();
-            return reject(new LoggedOutError());
-          }
-          if (err || !authResult || !authResult.accessToken) {
-            clearFlag();
-            return reject(new Auth0Error());
-          }
+        auth.checkSession(
+          { responseType: 'token id_token' },
+          (err, authResult) => {
+            if (err && err.error === 'login_required') {
+              clearFlag();
+              return reject(new LoggedOutError());
+            }
+            if (
+              err ||
+              !authResult ||
+              !authResult.accessToken ||
+              !authResult.idTokenPayload
+            ) {
+              clearFlag();
+              return reject(new Auth0Error());
+            }
 
-          commit('SET_ACCESS_TOKEN', authResult.accessToken);
-          setFlag();
-          return resolve();
-        });
+            commit('SET_ACCESS_TOKEN', authResult.accessToken);
+            commit('SET_TOKEN_DETAILS', authResult.idTokenPayload);
+            setFlag();
+            return resolve();
+          }
+        );
       } else {
         clearFlag();
         reject(new LoggedOutError());
