@@ -110,7 +110,7 @@
         <li class="c-navbar__dropdown-item">
           <button
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
-            @click="user.logOut"
+            @click="logOut"
           >
             <strong>Log Out</strong>
           </button>
