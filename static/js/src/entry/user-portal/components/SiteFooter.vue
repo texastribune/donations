@@ -36,12 +36,12 @@
               >Donation History</router-link
             >
           </li>
-          <li v-if="user.is_blast_member">
+          <li v-if="user.is_blast_subscriber">
             <router-link :to="{ name: 'blast' }"
               >The Blast Newsletter</router-link
             >
           </li>
-          <li v-if="user.is_blast_member">
+          <li v-if="user.is_blast_subscriber">
             <router-link :to="{ name: 'blast-payments' }"
               >The Blast Payment History</router-link
             >

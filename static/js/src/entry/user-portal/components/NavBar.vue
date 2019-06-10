@@ -31,7 +31,7 @@
             >
           </li>
           <li
-            v-if="user.is_blast_member"
+            v-if="user.is_blast_subscriber"
             class="c-navbar__item c-navbar__item--space-right"
           >
             <router-link
@@ -99,7 +99,7 @@
             ><strong>Membership</strong></router-link
           >
         </li>
-        <li v-if="user.is_blast_member" class="c-navbar__dropdown-item">
+        <li v-if="user.is_blast_subscriber" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             :to="{ name: 'blast' }"

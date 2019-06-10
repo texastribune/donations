@@ -24,11 +24,11 @@ export default {
   computed: {
     isRecurringAndNotExpired() {
       // eslint-disable-next-line camelcase
-      const { active_recurring_donor, membership_expiration_date } = this.user;
+      const { recurring_donor, membership_expiration_date } = this.user;
       const expired = isPast(parse(membership_expiration_date));
 
       // eslint-disable-next-line camelcase
-      return active_recurring_donor && !expired;
+      return recurring_donor && !expired;
     },
 
     nextTransaction() {

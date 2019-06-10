@@ -20,10 +20,10 @@ export default {
   computed: {
     isOneTime() {
       // eslint-disable-next-line camelcase
-      const { active_recurring_donor, never_given } = this.user;
+      const { recurring_donor, never_given } = this.user;
 
       // eslint-disable-next-line camelcase
-      return !active_recurring_donor && !never_given;
+      return !recurring_donor && !never_given;
     },
 
     lastTransaction() {

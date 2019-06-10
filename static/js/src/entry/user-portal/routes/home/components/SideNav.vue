@@ -28,7 +28,7 @@
           </li>
         </ul>
       </li>
-      <li v-if="user.is_blast_member" class="has-xxs-btm-marg">
+      <li v-if="user.is_blast_subscriber" class="has-xxs-btm-marg">
         <router-link
           :to="{ name: 'blast' }"
           class="has-text-black-off has-text-hover-gray"

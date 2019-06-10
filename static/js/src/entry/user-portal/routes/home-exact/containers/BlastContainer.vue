@@ -20,7 +20,7 @@ export default {
   computed: {
     isBlast() {
       // eslint-disable-next-line camelcase
-      return this.user.is_blast_member;
+      return this.user.is_blast_subscriber;
     },
 
     nextTransaction() {

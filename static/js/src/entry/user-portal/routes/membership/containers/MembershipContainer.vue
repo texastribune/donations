@@ -22,7 +22,7 @@ export default {
 
   computed: {
     isOneTime() {
-      return !this.user.active_recurring_donor;
+      return !this.user.recurring_donor;
     },
 
     isExpired() {
@@ -36,14 +36,14 @@ export default {
         { id: 2 },
       ];
       const {
-        active_recurring_donor,
+        recurring_donor,
         membership_expiration_date,
         next_transaction,
         last_transaction,
       } = this.user;
       const expired = isPast(parse(membership_expiration_date));
 
-      if (!active_recurring_donor) {
+      if (!recurring_donor) {
         const {
           amount,
           date,
@@ -60,7 +60,7 @@ export default {
           parse(membership_expiration_date),
           'MMMM D, YYYY'
         )}.`;
-      } else if (active_recurring_donor && expired) {
+      } else if (recurring_donor && expired) {
         const {
           amount,
           date,
@@ -74,7 +74,7 @@ export default {
         data[1].text = `${brand} ending in ${last4}`;
         data[2].heading = 'Status';
         data[2].text = 'Your membership expired.';
-      } else if (active_recurring_donor && !expired) {
+      } else if (recurring_donor && !expired) {
         const {
           amount,
           date,
