@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
 
-// import axios from 'axios';
+import axios from 'axios';
 
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
 import { LoggedOutError, Auth0Error } from '../../errors';
-// import { PORTAL_API_URL } from '../../constants';
+import { PORTAL_API_URL } from '../../constants';
 
 // import response from '../../dummy/recurring.json';
 // import response from '../../dummy/one_time.json';
@@ -15,12 +15,17 @@ import response from '../../dummy/recurring_expired_and_blast.json';
 function createDefaultState() {
   return {
     accessToken: '',
+    expiryInSeconds: 0,
     tokenDetails: {},
     details: {},
   };
 }
 
 const mutations = {
+  SET_EXPIRY_IN_SECONDS(state, expiryInSeconds) {
+    state.expiryInSeconds = expiryInSeconds;
+  },
+
   SET_ACCESS_TOKEN(state, accessToken) {
     state.accessToken = accessToken;
   },
@@ -35,10 +40,10 @@ const mutations = {
 };
 
 const actions = {
-  getUser: async ({ commit }) => {
-    /* await axios.get(PORTAL_API_URL, {
+  getUser: async ({ commit, state }) => {
+    await axios.get(PORTAL_API_URL, {
       headers: { Authorization: `Bearer ${state.accessToken}` },
-    }); */
+    });
 
     // commit('SET_DETAILS', data);
     commit('SET_DETAILS', response);
@@ -51,14 +56,17 @@ const actions = {
           { responseType: 'token id_token' },
           (err, authResult) => {
             if (err && err.error === 'login_required') {
+              commit('SET_ACCESS_TOKEN', '');
               clearFlag();
               return reject(new LoggedOutError());
             }
+
             if (
               err ||
               !authResult ||
               !authResult.accessToken ||
-              !authResult.idTokenPayload
+              !authResult.idTokenPayload ||
+              !authResult.expiresIn
             ) {
               clearFlag();
               return reject(new Auth0Error());
@@ -66,6 +74,7 @@ const actions = {
 
             commit('SET_ACCESS_TOKEN', authResult.accessToken);
             commit('SET_TOKEN_DETAILS', authResult.idTokenPayload);
+            commit('SET_EXPIRY_IN_SECONDS', authResult.expiresIn);
             setFlag();
             return resolve();
           }

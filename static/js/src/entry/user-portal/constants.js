@@ -1,4 +1,5 @@
 export const LOGIN_REDIRECT_KEY = 'postLoginRedirect';
+export const LOGOUT_REDIRECT_KEY = 'postLogoutRedirect';
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
 export const READ_ONLY_WELCOME_MESSAGE_KEY = 'readOnlyWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';

@@ -1,6 +1,6 @@
 import { mapState, mapActions } from 'vuex';
 
-import { logIn } from '../utils/auth-actions';
+import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
 
 export default {
@@ -26,5 +26,11 @@ export default {
 
   methods: {
     ...mapActions('context', ['setUnverified']),
+  },
+
+  watch: {
+    accessToken(newToken, oldToken) {
+      if (oldToken && !newToken) logOut();
+    },
   },
 };

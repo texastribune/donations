@@ -4,6 +4,7 @@ import {
   AUTH_CLIENT_ID,
   AUTH_LOGOUT_COMPLETE_URL,
   LOGIN_REDIRECT_KEY,
+  LOGOUT_REDIRECT_KEY,
   NON_STAFF_CONNECTION,
 } from '../constants';
 
@@ -21,6 +22,7 @@ export const logIn = () => {
 };
 
 export const logOut = () => {
+  localStorage.setItem(LOGOUT_REDIRECT_KEY, window.location.href);
   auth.logout({
     clientID: AUTH_CLIENT_ID,
     returnTo: AUTH_LOGOUT_COMPLETE_URL,
@@ -40,14 +42,15 @@ export const resetPassword = (email, cb) => {
 };
 
 export const redirectAfterLogIn = () => {
-  const url = localStorage.getItem(LOGIN_REDIRECT_KEY) || '/';
+  const url = localStorage.getItem(LOGIN_REDIRECT_KEY) || '/account';
   setTimeout(() => {
     window.location.href = url;
   }, 1000);
 };
 
 export const redirectAfterLogOut = () => {
+  const url = localStorage.getItem(LOGOUT_REDIRECT_KEY) || '/account';
   setTimeout(() => {
-    window.location.href = 'https://www.texastribune.org/';
+    window.location.href = url;
   }, 1000);
 };
