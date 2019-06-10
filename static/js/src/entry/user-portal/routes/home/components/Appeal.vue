@@ -57,9 +57,6 @@ export default {
         informed: 4,
         engaged: 5,
         involved: 6,
-        editors: 6,
-        chairman: 6,
-        leadership: 6,
       };
 
       return mapping[this.level];
