@@ -30,7 +30,7 @@ export default {
       let name;
       let nameHeading;
       // eslint-disable-next-line camelcase
-      const { given_name, family_name, email, username } = this.tokenUser;
+      const { given_name, family_name, email, nickname } = this.tokenUser;
       // eslint-disable-next-line camelcase
       const { postal_code } = this.user;
 
@@ -41,7 +41,7 @@ export default {
         name = `${given_name} ${family_name}`;
       } else {
         nameHeading = 'Username';
-        name = username;
+        name = nickname;
       }
 
       const contactInfo = [
