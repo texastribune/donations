@@ -22,7 +22,8 @@ export default {
     data() {
       const { transactions } = this.user;
       const relevantTransactions = transactions.filter(
-        ({ type, date }) => type === 'blast' && !isFuture(parse(date))
+        ({ type, date }) =>
+          type.toLowerCase() === 'the blast' && !isFuture(parse(date))
       );
       const withDateObjects = relevantTransactions.map(
         ({ date, amount, credit_card: { brand, last4 } }, index) => ({
