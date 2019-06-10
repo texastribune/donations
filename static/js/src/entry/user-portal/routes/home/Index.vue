@@ -22,7 +22,7 @@ import routeFetchMixin from '../../mixins/route-fetch';
 import SideNav from './containers/SideNavContainer.vue';
 
 export default {
-  name: 'Index',
+  name: 'HomeRoute',
 
   components: { SideNav },
 

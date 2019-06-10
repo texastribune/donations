@@ -18,7 +18,7 @@ import { setFlag, redirectAfterLogIn } from '../../utils/auth-actions';
 import routeMixin from '../../mixins/route';
 
 export default {
-  name: 'Index',
+  name: 'LoggedInRoute',
 
   mixins: [routeMixin],
 

@@ -33,7 +33,7 @@ import PaymentList from '../../components/PaymentList.vue';
 import Help from '../../components/Help.vue';
 
 export default {
-  name: 'Index',
+  name: 'BlastPaymentsRoute',
 
   components: { PaymentList, Help },
 

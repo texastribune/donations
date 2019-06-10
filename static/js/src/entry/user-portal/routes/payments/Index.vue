@@ -48,7 +48,7 @@ import Appeal from '../home/containers/AppealContainer.vue';
 import Help from '../../components/Help.vue';
 
 export default {
-  name: 'Index',
+  name: 'PaymentsRoute',
 
   components: { Appeal, PaymentList, Help },
 

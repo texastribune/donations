@@ -53,7 +53,7 @@ import Messages from './components/Messages.vue';
 import Message from './components/Message.vue';
 
 export default {
-  name: 'Index',
+  name: 'HomeExactRoute',
 
   components: {
     ContactInfo,

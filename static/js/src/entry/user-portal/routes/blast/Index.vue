@@ -31,7 +31,7 @@ import Help from '../../components/Help.vue';
 import InfoList from '../../components/InfoList.vue';
 
 export default {
-  name: 'Index',
+  name: 'BlastRoute',
 
   components: { Help, InfoList },
 

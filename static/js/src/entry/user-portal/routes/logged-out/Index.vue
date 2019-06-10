@@ -18,7 +18,7 @@ import { clearFlag, redirectAfterLogOut } from '../../utils/auth-actions';
 import routeMixin from '../../mixins/route';
 
 export default {
-  name: 'Index',
+  name: 'LoggedOutRoute',
 
   mixins: [routeMixin],
 
