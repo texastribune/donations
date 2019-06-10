@@ -4,22 +4,7 @@
       The Blast Newsletter
     </h1>
 
-    <div class="has-ump-side-padding has-xl-btm-marg">
-      <section class="c-detail-box">
-        <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
-
-        <ul class="c-link-list t-linkstyle--underlined">
-          <li>
-            <span class="c-link-list__arrow has-text-teal">
-              <strong>&rarr;</strong>
-            </span>
-            <router-link :to="{ name: 'blast-payments' }"
-              >See your payment history</router-link
-            >
-          </li>
-        </ul>
-      </section>
-    </div>
+    <div class="has-ump-side-padding has-xl-btm-marg"><blast-detail /></div>
 
     <help blast :display="{ hasTopPadding: true }" />
   </div>
@@ -28,12 +13,12 @@
 <script>
 import routeMixin from '../../mixins/route';
 import Help from '../../components/Help.vue';
-import InfoList from '../../components/InfoList.vue';
+import BlastDetail from './containers/BlastDetailContainer.vue';
 
 export default {
   name: 'BlastRoute',
 
-  components: { Help, InfoList },
+  components: { Help, BlastDetail },
 
   mixins: [routeMixin],
 
