@@ -1,7 +1,7 @@
 <template>
   <div>
     <error-view v-if="hasError" />
-    <unverified-view v-else-if="!isUnverified" />
+    <unverified-view v-else-if="isUnverified" />
     <router-view v-else />
   </div>
 </template>
