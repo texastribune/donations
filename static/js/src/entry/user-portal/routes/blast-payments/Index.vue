@@ -15,9 +15,11 @@
             <span class="c-link-list__arrow has-text-teal">
               <strong>&rarr;</strong>
             </span>
-            <router-link :to="{ name: 'blast' }"
-              >More about your subscription</router-link
-            >
+            <span class="has-text-gray-dark">
+              <router-link :to="{ name: 'blast' }"
+                >More about your subscription</router-link
+              >
+            </span>
           </li>
         </ul>
       </section>

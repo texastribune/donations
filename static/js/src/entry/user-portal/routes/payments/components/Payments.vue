@@ -7,27 +7,35 @@
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
-        <a href="#">Download your 2018 tax receipt</a>
+        <span class="has-text-gray-dark">
+          <a href="#">Download your 2018 tax receipt</a>
+        </span>
       </li>
       <li v-if="isExpired && !isOneTime" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
-        <a href="#">Renew your membership</a>
+        <span class="has-text-gray-dark">
+          <a href="#">Renew your membership</a>
+        </span>
       </li>
       <li v-if="isOneTime" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
-        <a href="#">Become a sustaining member</a>
+        <span class="has-text-gray-dark">
+          <a href="#">Become a sustaining member</a>
+        </span>
       </li>
       <li>
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
-        <router-link :to="{ name: 'membership' }"
-          >See your membership status</router-link
-        >
+        <span class="has-text-gray-dark">
+          <router-link :to="{ name: 'membership' }"
+            >See your membership status</router-link
+          >
+        </span>
       </li>
     </ul>
   </section>
