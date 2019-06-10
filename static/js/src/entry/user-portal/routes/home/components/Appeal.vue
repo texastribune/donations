@@ -53,13 +53,14 @@ export default {
   computed: {
     ceiling() {
       const mapping = {
+        unknown: 3,
         member: 3,
         informed: 4,
         engaged: 5,
         involved: 6,
       };
 
-      return mapping[this.level];
+      return mapping[this.level.toLowerCase()];
     },
   },
 };
