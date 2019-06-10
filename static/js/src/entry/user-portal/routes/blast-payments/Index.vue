@@ -50,11 +50,5 @@ export default {
       ],
     };
   },
-
-  methods: {
-    async fetchData() {
-      return null;
-    },
-  },
 };
 </script>
