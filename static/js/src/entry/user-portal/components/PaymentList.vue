@@ -1,5 +1,8 @@
 <template>
-  <div class="c-payments has-more l-width-full">
+  <div
+    class="c-payments l-width-full"
+    :class="{ 'has-more': offset < payments.length }"
+  >
     <table class="c-table c-table--bordered l-width-full">
       <thead>
         <tr>
@@ -9,17 +12,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="payment in payments" :key="payment.id">
+        <tr v-for="payment in slicedPayments" :key="payment.id">
           <td>
             <slot name="date" :date="payment.date"> {{ payment.date }} </slot>
           </td>
           <td>
-            <slot name="amount" :date="payment.amount">
-              {{ payment.amount }}
+            <slot name="amount" :amount="payment.amount">
+              ${{ payment.amount }}
             </slot>
           </td>
           <td>
-            <slot name="method" :date="payment.method">
+            <slot name="method" :method="payment.method">
               {{ payment.method }}
             </slot>
           </td>
@@ -27,9 +30,10 @@
       </tbody>
     </table>
     <button
+      v-if="offset < payments.length"
       class="c-button c-button--s has-bg-white has-box-shadow"
       type="button"
-      @click="$emit('onLoadMore')"
+      @click="loadMore"
     >
       Load more
     </button>
@@ -44,6 +48,27 @@ export default {
     payments: {
       type: Array,
       required: true,
+    },
+
+    interval: {
+      type: Number,
+      default: 7,
+    },
+  },
+
+  data() {
+    return { offset: this.interval };
+  },
+
+  computed: {
+    slicedPayments() {
+      return this.payments.slice(0, this.offset);
+    },
+  },
+
+  methods: {
+    loadMore() {
+      this.offset += this.interval;
     },
   },
 };
