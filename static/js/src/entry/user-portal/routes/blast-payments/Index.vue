@@ -4,26 +4,7 @@
       The Blast Newsletter: Payment History
     </h1>
 
-    <div class="has-ump-side-padding has-xxl-btm-marg">
-      <section class="c-detail-box">
-        <div class="has-xxxl-btm-marg">
-          <payment-list :payments="payments" />
-        </div>
-
-        <ul class="c-link-list t-linkstyle--underlined">
-          <li>
-            <span class="c-link-list__arrow has-text-teal">
-              <strong>&rarr;</strong>
-            </span>
-            <span class="has-text-gray-dark">
-              <router-link :to="{ name: 'blast' }"
-                >More about your subscription</router-link
-              >
-            </span>
-          </li>
-        </ul>
-      </section>
-    </div>
+    <div class="has-ump-side-padding has-xxl-btm-marg"><blast-payments /></div>
 
     <help blast :display="{ hasTopPadding: true }" />
   </div>
@@ -31,13 +12,13 @@
 
 <script>
 import routeMixin from '../../mixins/route';
-import PaymentList from '../../components/PaymentList.vue';
 import Help from '../../components/Help.vue';
+import BlastPayments from './containers/BlastPaymentsContainer.vue';
 
 export default {
   name: 'BlastPaymentsRoute',
 
-  components: { PaymentList, Help },
+  components: { Help, BlastPayments },
 
   mixins: [routeMixin],
 
