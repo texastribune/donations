@@ -49,7 +49,7 @@
 import InfoList from '../../../components/InfoList.vue';
 
 export default {
-  name: 'Membership',
+  name: 'MembershipDetail',
 
   components: { InfoList },
 

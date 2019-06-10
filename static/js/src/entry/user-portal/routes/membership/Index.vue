@@ -4,7 +4,9 @@
       Your Membership
     </h1>
 
-    <div class="has-ump-side-padding has-xl-btm-marg"><membership /></div>
+    <div class="has-ump-side-padding has-xl-btm-marg">
+      <membership-detail />
+    </div>
 
     <appeal />
 
@@ -13,7 +15,7 @@
 </template>
 
 <script>
-import Membership from './containers/MembershipContainer.vue';
+import MembershipDetail from './containers/MembershipDetailContainer.vue';
 import routeMixin from '../../mixins/route';
 import Appeal from '../home/containers/AppealContainer.vue';
 import Help from '../../components/Help.vue';
@@ -21,7 +23,7 @@ import Help from '../../components/Help.vue';
 export default {
   name: 'MembershipRoute',
 
-  components: { Appeal, Help, Membership },
+  components: { Appeal, Help, MembershipDetail },
 
   mixins: [routeMixin],
 };

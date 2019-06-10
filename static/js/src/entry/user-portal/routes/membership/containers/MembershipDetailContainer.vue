@@ -1,5 +1,9 @@
 <template>
-  <membership :data="data" :is-expired="isExpired" :is-one-time="isOneTime" />
+  <membership-detail
+    :data="data"
+    :is-expired="isExpired"
+    :is-one-time="isOneTime"
+  />
 </template>
 
 <script>
@@ -9,14 +13,14 @@ import isPast from 'date-fns/is_past';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
-import Membership from '../components/Membership.vue';
+import MembershipDetail from '../components/MembershipDetail.vue';
 import addNumberCommas from '../../../utils/add-number-commas';
 import userMixin from '../../home/mixins/user';
 
 export default {
-  name: 'MembershipContainer',
+  name: 'MembershipDetailContainer',
 
-  components: { Membership },
+  components: { MembershipDetail },
 
   mixins: [userMixin],
 
