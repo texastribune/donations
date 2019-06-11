@@ -11,8 +11,8 @@ export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
 export const AUTH_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 export const AUTH_LOGOUT_COMPLETE_URL = `${
   window.location.origin
-}/user-portal/logged-out`;
+}/account/logged-out`;
 export const AUTH_LOGIN_COMPLETE_URL = `${
   window.location.origin
-}/user-portal/logged-in`;
-export const TITLE_SUFFIX = ' | User Management Portal | The Texas Tribune';
+}/account/logged-in`;
+export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';

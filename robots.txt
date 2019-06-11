@@ -1,2 +1,2 @@
 User-agent: *
-Disallow: /user-portal/*
+Disallow: /account/*

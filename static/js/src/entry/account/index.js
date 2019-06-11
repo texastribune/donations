@@ -52,14 +52,14 @@ store
   })
   .then(() => {
     const router = new VueRouter({
-      base: '/user-portal',
+      base: '/account',
       mode: 'history',
       routes,
       scrollBehavior: () => ({ x: 0, y: 0 }),
     });
 
     const instance = new Vue({ ...App, router, store });
-    instance.$mount('#user-portal-attach');
+    instance.$mount('#account-attach');
 
     const refreshAt = getRefreshInterval(store.state.user.expiryInSeconds);
     refreshToken(refreshAt);

@@ -8,7 +8,7 @@
           An error occurred, and we're working hard to fix it.
         </p>
         <p class="t-space-heading-m">
-          You can return to your <a href="/user-portal">account overview</a> or
+          You can return to your <a href="/account">account overview</a> or
           email
           <a href="mailto:community@texastribune.org"
             >community@texastribune.org</a
