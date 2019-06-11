@@ -417,9 +417,9 @@ def robots_txt():
     return send_from_directory(os.path.join(root_dir, "app"), "robots.txt")
 
 
-@app.route("/account", defaults={"path": "/"})
-@app.route("/account/<path>")
-def user_portal(path):
+@app.route("/account/", defaults={"path": ""})
+@app.route("/account/<path>/")
+def account(path):
     return render_template("account.html", bundles=get_bundles("account"))
 
 
