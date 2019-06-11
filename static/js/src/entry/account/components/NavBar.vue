@@ -20,7 +20,7 @@
             >
           </li>
           <li
-            v-if="!user.never_given"
+            v-if="showMembershipLinks"
             class="c-navbar__item c-navbar__item--space-right"
           >
             <router-link
@@ -31,7 +31,7 @@
             >
           </li>
           <li
-            v-if="user.is_blast_subscriber"
+            v-if="showBlastLinks"
             class="c-navbar__item c-navbar__item--space-right"
           >
             <router-link
@@ -91,7 +91,7 @@
             ><strong>Account Overview</strong></router-link
           >
         </li>
-        <li v-if="!user.never_given" class="c-navbar__dropdown-item">
+        <li v-if="showMembershipLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             :to="{ name: 'membership' }"
@@ -99,7 +99,7 @@
             ><strong>Membership</strong></router-link
           >
         </li>
-        <li v-if="user.is_blast_subscriber" class="c-navbar__dropdown-item">
+        <li v-if="showBlastLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             :to="{ name: 'blast' }"
@@ -132,8 +132,13 @@ export default {
       required: true,
     },
 
-    user: {
-      type: Object,
+    showBlastLinks: {
+      type: Boolean,
+      required: true,
+    },
+
+    showMembershipLinks: {
+      type: Boolean,
       required: true,
     },
   },

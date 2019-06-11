@@ -26,22 +26,22 @@
           <li>
             <router-link :to="{ name: 'home' }">Account Overview</router-link>
           </li>
-          <li v-if="!user.never_given">
+          <li v-if="showMembershipLinks">
             <router-link :to="{ name: 'membership' }"
               >Membership Status</router-link
             >
           </li>
-          <li v-if="!user.never_given">
+          <li v-if="showMembershipLinks">
             <router-link :to="{ name: 'payments' }"
               >Donation History</router-link
             >
           </li>
-          <li v-if="user.is_blast_subscriber">
+          <li v-if="showBlastLinks">
             <router-link :to="{ name: 'blast' }"
               >The Blast Newsletter</router-link
             >
           </li>
-          <li v-if="user.is_blast_subscriber">
+          <li v-if="showBlastLinks">
             <router-link :to="{ name: 'blast-payments' }"
               >The Blast Payment History</router-link
             >
@@ -86,8 +86,13 @@ export default {
       required: true,
     },
 
-    user: {
-      type: Object,
+    showBlastLinks: {
+      type: Boolean,
+      required: true,
+    },
+
+    showMembershipLinks: {
+      type: Boolean,
       required: true,
     },
   },
