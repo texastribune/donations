@@ -20,6 +20,14 @@
     </template>
     <template v-slot:links>
       <ul class="c-link-list">
+        <li class="has-xs-btm-marg">
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
+          <span class="has-text-gray-dark">
+            <a href="/blastform">Renew your subscription to The Blast</a>
+          </span>
+        </li>
         <li>
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>

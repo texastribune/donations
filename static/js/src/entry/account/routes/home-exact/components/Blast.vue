@@ -12,7 +12,7 @@
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
-        Your subscription to The Blast will renew on
+        Your subscription to The Blast is good through
         <strong>{{ nextTransaction.date }}</strong
         >.
       </p>
