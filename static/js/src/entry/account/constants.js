@@ -16,3 +16,6 @@ export const AUTH_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-in`;
 export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';
+export const CARD_PAYMENT_FLAG = 'credit card';
+export const BLAST_PAYMENT_FLAG = 'the blast';
+export const MEMBERSHIP_PAYMENT_FLAG = 'membership';

@@ -11,6 +11,7 @@ import isFuture from 'date-fns/is_future';
 import Payments from '../components/Payments.vue';
 import userMixin from '../../home/mixins/user';
 import addNumberCommas from '../../../utils/add-number-commas';
+import { MEMBERSHIP_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
   name: 'PaymentsContainer',
@@ -32,7 +33,8 @@ export default {
       const { transactions } = this.user;
       const relevantTransactions = transactions.filter(
         ({ type, date }) =>
-          type.toLowerCase() === 'membership' && !isFuture(parse(date))
+          type.toLowerCase() === MEMBERSHIP_PAYMENT_FLAG &&
+          !isFuture(parse(date))
       );
       const withDateObjects = relevantTransactions.map(
         // eslint-disable-next-line camelcase
@@ -41,7 +43,7 @@ export default {
           date: parse(date),
           amount: addNumberCommas(amount),
           method:
-            payment_type.toLowerCase() === 'credit card'
+            payment_type.toLowerCase() === CARD_PAYMENT_FLAG
               ? `${credit_card.brand} ending in ${credit_card.last4}`
               : '',
         })

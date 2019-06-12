@@ -13,6 +13,7 @@ import parse from 'date-fns/parse';
 import Membership from '../components/Membership.vue';
 import addNumberCommas from '../../../utils/add-number-commas';
 import userMixin from '../../home/mixins/user';
+import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
   name: 'MembershipContainer',
@@ -42,7 +43,7 @@ export default {
         period,
       };
 
-      if (payment_type.toLowerCase() === 'credit card') {
+      if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
         data.last4 = credit_card.last4;
       }
 

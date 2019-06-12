@@ -16,6 +16,7 @@ import parse from 'date-fns/parse';
 import MembershipDetail from '../components/MembershipDetail.vue';
 import addNumberCommas from '../../../utils/add-number-commas';
 import userMixin from '../../home/mixins/user';
+import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
   name: 'MembershipDetailContainer',
@@ -52,7 +53,7 @@ export default {
           'MMMM D, YYYY'
         )}`;
 
-        if (payment_type.toLowerCase() === 'credit card') {
+        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
@@ -71,7 +72,7 @@ export default {
           'MMMM D, YYYY'
         )}`;
 
-        if (payment_type.toLowerCase() === 'credit card') {
+        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
@@ -93,7 +94,7 @@ export default {
         data[0].heading = 'Donation';
         data[0].text = `$${addNumberCommas(amount)}, ${period}`;
 
-        if (payment_type.toLowerCase() === 'credit card') {
+        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
