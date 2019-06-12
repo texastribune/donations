@@ -55,9 +55,9 @@ export default {
       const mapping = {
         unknown: 3,
         member: 3,
-        informed: 4,
-        engaged: 5,
-        involved: 6,
+        'informed member': 4,
+        'engaged member': 5,
+        'involved member': 6,
       };
 
       return mapping[this.level.toLowerCase()];
