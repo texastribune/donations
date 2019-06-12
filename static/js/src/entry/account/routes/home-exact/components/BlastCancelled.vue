@@ -2,18 +2,19 @@
   <summary-box heading="the blast" :display="{ isExpired: false }">
     <template v-slot:content>
       <p
-        v-if="nextTransaction.last4"
+        v-if="lastTransaction.last4"
         class="has-text-gray-dark t-space-heading-m"
       >
-        Your subscription to The Blast will renew on
-        <strong>{{ nextTransaction.date }}</strong
-        >, charging <strong>${{ nextTransaction.amount }}</strong> to your card
-        ending in <strong>{{ nextTransaction.last4 }}</strong
+        Your subscription to The Blast was cancelled. Your last payment of
+        <strong>${{ lastTransaction.amount }}</strong> was charged to your card
+        ending in <strong>{{ lastTransaction.last4 }}</strong> on
+        <strong>{{ lastTransaction.date }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
-        Your subscription to The Blast will renew on
-        <strong>{{ nextTransaction.date }}</strong
+        Your subscription to The Blast was cancelled. Your last payment of
+        <strong>${{ lastTransaction.amount }}</strong> was on
+        <strong>{{ lastTransaction.date }}</strong
         >.
       </p>
     </template>
@@ -46,12 +47,12 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'Blast',
+  name: 'BlastCancelled',
 
   components: { SummaryBox },
 
   props: {
-    nextTransaction: {
+    lastTransaction: {
       type: Object,
       required: true,
     },

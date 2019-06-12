@@ -10,6 +10,7 @@
       <one-time />
       <never-given />
       <blast />
+      <blast-cancelled />
     </div>
 
     <help home />
@@ -25,19 +26,21 @@ import Expired from './containers/ExpiredContainer.vue';
 import OneTime from './containers/OneTimeContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
 import Blast from './containers/BlastContainer.vue';
+import BlastCancelled from './containers/BlastCancelledContainer.vue';
 import Messages from './containers/MessagesContainer.vue';
 
 export default {
   name: 'HomeExactRoute',
 
   components: {
+    Messages,
     ContactInfo,
     Membership,
     Expired,
     OneTime,
     NeverGiven,
     Blast,
-    Messages,
+    BlastCancelled,
     Help,
   },
 

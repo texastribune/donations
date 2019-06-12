@@ -45,8 +45,8 @@ const actions = {
       headers: { Authorization: `Bearer ${state.accessToken}` },
     });
 
-    // commit('SET_DETAILS', data);
-    commit('SET_DETAILS', response);
+    commit('SET_DETAILS', data);
+    // commit('SET_DETAILS', response);
   },
 
   getTokenUser: ({ commit }) =>

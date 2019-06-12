@@ -6,10 +6,19 @@
           >Your membership expired on <strong>{{ expirationDate }}</strong
           >.</span
         >
-        Your last donation of <strong>${{ lastTransaction.amount }}</strong> was
-        charged on <strong>{{ lastTransaction.date }}</strong> to your card
-        ending in <strong>{{ lastTransaction.last4 }}</strong
-        >.
+        <template v-if="lastTransaction.last4">
+          Your last donation of
+          <strong>${{ lastTransaction.amount }}</strong> was charged on
+          <strong>{{ lastTransaction.date }}</strong> to your card ending in
+          <strong>{{ lastTransaction.last4 }}</strong
+          >.
+        </template>
+        <template v-else>
+          Your last donation of
+          <strong>${{ lastTransaction.amount }}</strong> was charged on
+          <strong>{{ lastTransaction.date }}</strong
+          >.
+        </template>
       </p>
     </template>
     <template v-slot:links>

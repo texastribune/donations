@@ -28,18 +28,19 @@ export default {
 
     lastTransaction() {
       const {
-        last_transaction: {
-          amount,
-          date,
-          credit_card: { last4 },
-        },
+        // eslint-disable-next-line camelcase
+        last_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
-
-      return {
+      const data = {
         amount: addNumberCommas(amount),
         date: format(parse(date), 'MMMM D, YYYY'),
-        last4,
       };
+
+      if (payment_type.toLowerCase() === 'credit card') {
+        data.last4 = credit_card.last4;
+      }
+
+      return data;
     },
   },
 };

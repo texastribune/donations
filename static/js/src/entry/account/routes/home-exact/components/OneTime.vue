@@ -1,11 +1,20 @@
 <template>
   <summary-box heading="membership" :display="{ isExpired: false }">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
+      <p
+        v-if="lastTransaction.last4"
+        class="has-text-gray-dark t-space-heading-m"
+      >
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>${{ lastTransaction.amount }}</strong> was charged on
         <strong>{{ lastTransaction.date }}</strong> to your card ending in
         <strong>{{ lastTransaction.last4 }}</strong
+        >.
+      </p>
+      <p v-else class="has-text-gray-dark t-space-heading-m">
+        Thank you for being a Texas Tribune member! Your last donation of
+        <strong>${{ lastTransaction.amount }}</strong> was charged on
+        <strong>{{ lastTransaction.date }}</strong
         >.
       </p>
     </template>

@@ -20,23 +20,24 @@ export default {
   computed: {
     isBlast() {
       // eslint-disable-next-line camelcase
-      return this.user.is_blast_subscriber;
+      return this.user.is_current_blast_subscriber;
     },
 
     nextTransaction() {
       const {
-        next_blast_transaction: {
-          amount,
-          date,
-          credit_card: { last4 },
-        },
+        // eslint-disable-next-line camelcase
+        next_blast_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
-
-      return {
+      const data = {
         amount: addNumberCommas(amount),
         date: format(parse(date), 'MMMM D, YYYY'),
-        last4,
       };
+
+      if (payment_type.toLowerCase() === 'credit card') {
+        data.last4 = credit_card.last4;
+      }
+
+      return data;
     },
   },
 };
