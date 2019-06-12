@@ -9,6 +9,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import ContactInfo from '../components/ContactInfo.vue';
 import tokenUserMixin from '../../../mixins/token-user';
 import userMixin from '../../home/mixins/user';
@@ -29,27 +31,38 @@ export default {
     contactInfo() {
       let name;
       let nameHeading;
-      // eslint-disable-next-line camelcase
-      const { given_name, family_name, email, nickname } = this.tokenUser;
-      // eslint-disable-next-line camelcase
-      const { postal_code } = this.user;
+      let finalEmail;
+      let username;
 
-      // eslint-disable-next-line camelcase
-      if (given_name && family_name) {
+      const { email: tokenEmail } = this.tokenUser;
+      const { identities, postal_code, first_name, last_name } = this.user;
+      const [goodIdentity] = identities.filter(
+        ({ email: apiEmail }) => apiEmail === tokenEmail
+      );
+
+      try {
+        ({ email: finalEmail, username } = goodIdentity);
+      } catch (err) {
+        // we're viewing as someone else
+        finalEmail = identities[0].email;
+        // eslint-disable-next-line prefer-destructuring
+        username = identities[0].username;
+      }
+
+      if (first_name && last_name) {
         nameHeading = 'Name';
         // eslint-disable-next-line camelcase
-        name = `${given_name} ${family_name}`;
+        name = `${first_name} ${last_name}`;
       } else {
         nameHeading = 'Username';
-        name = nickname;
+        name = username;
       }
 
       const contactInfo = [
         { id: 0, heading: nameHeading, text: name },
-        { id: 1, heading: 'Email', text: email },
+        { id: 1, heading: 'Email', text: finalEmail },
       ];
 
-      // eslint-disable-next-line camelcase
       if (postal_code) {
         contactInfo.push({ id: 2, heading: 'ZIP code', text: postal_code });
       }

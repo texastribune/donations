@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
@@ -10,24 +11,29 @@ import { PORTAL_API_URL } from '../../constants';
 // import response from '../../dummy/recurring.json';
 // import response from '../../dummy/one_time_canceled_blast.json';
 // import response from '../../dummy/never_given.json';
-import response from '../../dummy/recurring_expired_and_blast.json';
+// import response from '../../dummy/recurring_expired_and_blast.json';
 
 function createDefaultState() {
   return {
     accessToken: '',
     expiryInSeconds: 0,
+    canViewAs: false,
     tokenDetails: {},
     details: {},
   };
 }
 
 const mutations = {
+  SET_ACCESS_TOKEN(state, accessToken) {
+    state.accessToken = accessToken;
+  },
+
   SET_EXPIRY_IN_SECONDS(state, expiryInSeconds) {
     state.expiryInSeconds = expiryInSeconds;
   },
 
-  SET_ACCESS_TOKEN(state, accessToken) {
-    state.accessToken = accessToken;
+  SET_CAN_VIEW_AS(state, canViewAs) {
+    state.canViewAs = canViewAs;
   },
 
   SET_TOKEN_DETAILS(state, tokenDetails) {
@@ -40,13 +46,21 @@ const mutations = {
 };
 
 const actions = {
-  getUser: async ({ commit, state }) => {
-    const { data } = await axios.get(PORTAL_API_URL, {
+  getOtherUser: async ({ commit, state }, email) => {
+    const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
+      params: { email },
       headers: { Authorization: `Bearer ${state.accessToken}` },
     });
 
     commit('SET_DETAILS', data);
-    // commit('SET_DETAILS', response);
+  },
+
+  getUser: async ({ commit, state }) => {
+    const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
+      headers: { Authorization: `Bearer ${state.accessToken}` },
+    });
+
+    commit('SET_DETAILS', data);
   },
 
   getTokenUser: ({ commit }) =>
@@ -72,6 +86,12 @@ const actions = {
               return reject(new Auth0Error());
             }
 
+            const { permissions } = jwt.decode(authResult.accessToken);
+            const filteredPerms = permissions.filter(
+              perm => perm === 'portal:view_as'
+            );
+
+            commit('SET_CAN_VIEW_AS', filteredPerms.length === 1);
             commit('SET_ACCESS_TOKEN', authResult.accessToken);
             commit('SET_TOKEN_DETAILS', authResult.idTokenPayload);
             commit('SET_EXPIRY_IN_SECONDS', authResult.expiresIn);

@@ -13,8 +13,15 @@
       </info-list>
     </template>
 
-    <template v-if="!isStaff" v-slot:links>
-      <ul v-if="!pwResetSuccess && !pwResetFailure" class="c-link-list">
+    <template v-slot:links>
+      <ul
+        v-if="!pwResetSuccess && !pwResetFailure"
+        :style="[
+          isStaff && { 'pointer-events': 'none' },
+          isStaff && { opacity: '.2' },
+        ]"
+        class="c-link-list"
+      >
         <li>
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>

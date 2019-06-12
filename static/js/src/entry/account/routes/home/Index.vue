@@ -10,6 +10,7 @@
         </div>
       </div>
     </main>
+    <view-as />
     <site-footer />
   </div>
 </template>
@@ -20,11 +21,12 @@ import { mapActions } from 'vuex';
 import protectedRouteMixin from '../../mixins/protected-route';
 import routeFetchMixin from '../../mixins/route-fetch';
 import SideNav from './containers/SideNavContainer.vue';
+import ViewAs from './containers/ViewAsContainer.vue';
 
 export default {
   name: 'HomeRoute',
 
-  components: { SideNav },
+  components: { SideNav, ViewAs },
 
   mixins: [protectedRouteMixin, routeFetchMixin],
 
