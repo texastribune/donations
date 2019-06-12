@@ -60,7 +60,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'Expired',
+  name: 'MembershipExpired',
 
   components: { SummaryBox },
 

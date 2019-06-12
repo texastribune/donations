@@ -1,5 +1,5 @@
 <template>
-  <expired
+  <membership-expired
     v-if="isRecurringAndExpired"
     :last-transaction="lastTransaction"
     :expiration-date="expirationDate"
@@ -11,14 +11,14 @@ import isPast from 'date-fns/is_past';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
-import Expired from '../components/Expired.vue';
+import MembershipExpired from '../components/MembershipExpired.vue';
 import addNumberCommas from '../../../utils/add-number-commas';
 import userMixin from '../../home/mixins/user';
 
 export default {
-  name: 'ExpiredContainer',
+  name: 'MembershipExpiredContainer',
 
-  components: { Expired },
+  components: { MembershipExpired },
 
   mixins: [userMixin],
 
