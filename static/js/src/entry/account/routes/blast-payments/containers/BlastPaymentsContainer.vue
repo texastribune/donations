@@ -26,11 +26,15 @@ export default {
           type.toLowerCase() === 'the blast' && !isFuture(parse(date))
       );
       const withDateObjects = relevantTransactions.map(
-        ({ date, amount, credit_card: { brand, last4 } }, index) => ({
+        // eslint-disable-next-line camelcase
+        ({ date, amount, payment_type, credit_card }, index) => ({
           id: index,
           date: parse(date),
           amount: addNumberCommas(amount),
-          method: `${brand} ending in ${last4}`,
+          method:
+            payment_type.toLowerCase() === 'credit card'
+              ? `${credit_card.brand} ending in ${credit_card.last4}`
+              : '',
         })
       );
       const sorted = withDateObjects.sort((a, b) => {
