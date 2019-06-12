@@ -3,6 +3,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
@@ -20,7 +22,6 @@ export default {
 
   computed: {
     isBlast() {
-      // eslint-disable-next-line camelcase
       return this.user.is_current_blast_subscriber;
     },
 
@@ -34,7 +35,7 @@ export default {
         date: format(parse(date), 'MMMM D, YYYY'),
       };
 
-      if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+      if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
         data.last4 = credit_card.last4;
       }
 

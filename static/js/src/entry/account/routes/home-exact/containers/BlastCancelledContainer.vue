@@ -6,6 +6,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
@@ -29,7 +31,6 @@ export default {
 
     lastTransaction() {
       const {
-        // eslint-disable-next-line camelcase
         last_blast_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
       const data = {
@@ -37,7 +38,7 @@ export default {
         date: format(parse(date), 'MMMM D, YYYY'),
       };
 
-      if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+      if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
         data.last4 = credit_card.last4;
       }
 

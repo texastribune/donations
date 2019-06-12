@@ -45,7 +45,7 @@ export default {
         data[0].heading = 'Subscription';
         data[0].text = `$${amount}, ${period}`;
 
-        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2].heading = 'Next payment';
@@ -65,7 +65,7 @@ export default {
         data[0].heading = 'Past subscription';
         data[0].text = `$${amount}, ${period}`;
 
-        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2].heading = 'Status';

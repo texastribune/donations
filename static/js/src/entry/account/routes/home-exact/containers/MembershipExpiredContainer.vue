@@ -7,6 +7,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import isPast from 'date-fns/is_past';
 import format from 'date-fns/format';
 import parse from 'date-fns/parse';
@@ -25,7 +27,6 @@ export default {
 
   computed: {
     isRecurringAndExpired() {
-      // eslint-disable-next-line camelcase
       const { recurring_donor, membership_expiration_date } = this.user;
       const expired = isPast(parse(membership_expiration_date));
 
@@ -34,7 +35,6 @@ export default {
     },
 
     expirationDate() {
-      // eslint-disable-next-line camelcase
       const { membership_expiration_date } = this.user;
 
       return format(parse(membership_expiration_date), 'MMMM D, YYYY');
@@ -42,7 +42,6 @@ export default {
 
     lastTransaction() {
       const {
-        // eslint-disable-next-line camelcase
         last_transaction: { amount, period, date, payment_type, credit_card },
       } = this.user;
       const data = {
@@ -51,7 +50,7 @@ export default {
         period,
       };
 
-      if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+      if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
         data.last4 = credit_card.last4;
       }
 

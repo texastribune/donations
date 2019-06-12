@@ -3,6 +3,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import parse from 'date-fns/parse';
 import format from 'date-fns/format';
 import isPast from 'date-fns/is_past';
@@ -37,16 +39,23 @@ export default {
           !isFuture(parse(date))
       );
       const withDateObjects = relevantTransactions.map(
-        // eslint-disable-next-line camelcase
-        ({ date, amount, payment_type, credit_card }, index) => ({
-          id: index,
-          date: parse(date),
-          amount: addNumberCommas(amount),
-          method:
+        ({ date, amount, payment_type, credit_card }, index) => {
+          let method = '';
+
+          if (
+            payment_type &&
             payment_type.toLowerCase() === CARD_PAYMENT_FLAG
-              ? `${credit_card.brand} ending in ${credit_card.last4}`
-              : '',
-        })
+          ) {
+            method = `${credit_card.brand} ending in ${credit_card.last4}`;
+          }
+
+          return {
+            id: index,
+            date: parse(date),
+            amount: addNumberCommas(amount),
+            method,
+          };
+        }
       );
       const sorted = withDateObjects.sort((a, b) => {
         if (a.date > b.date) return -1;

@@ -53,7 +53,7 @@ export default {
           'MMMM D, YYYY'
         )}`;
 
-        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
@@ -72,7 +72,7 @@ export default {
           'MMMM D, YYYY'
         )}`;
 
-        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
@@ -94,7 +94,7 @@ export default {
         data[0].heading = 'Donation';
         data[0].text = `$${addNumberCommas(amount)}, ${period}`;
 
-        if (payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
