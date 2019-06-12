@@ -7,8 +7,8 @@
       >
         Your subscription to The Blast will renew on
         <strong>{{ nextTransaction.date }}</strong
-        >, charging <strong>${{ nextTransaction.amount }}</strong> to your card
-        ending in <strong>{{ nextTransaction.last4 }}</strong
+        >, charging <strong>{{ nextTransaction.amount | currency }}</strong> to
+        your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">

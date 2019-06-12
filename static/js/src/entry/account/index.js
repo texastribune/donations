@@ -12,12 +12,16 @@ import Loader from './components/Loader.vue';
 import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
 import { LoggedOutError } from './errors';
+import formatCurrency from './utils/format-currency';
 
 Vue.use(VueRouter);
+
 Vue.component('SiteFooter', SiteFooter);
 Vue.component('NavBar', NavBar);
 Vue.component('Loader', Loader);
 Vue.component('Icon', Icon);
+
+Vue.filter('currency', formatCurrency);
 
 // https://itnext.io/managing-and-refreshing-auth0-tokens-in-a-vuejs-application-65eb29c309bc
 function getRefreshInterval(expiryInSeconds) {

@@ -18,7 +18,7 @@
           </td>
           <td>
             <slot name="amount" :amount="payment.amount">
-              ${{ payment.amount }}
+              {{ payment.amount | currency }}
             </slot>
           </td>
           <td>

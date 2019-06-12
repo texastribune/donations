@@ -7,15 +7,15 @@
       >
         Thank you for being a Texas Tribune member! Your next
         {{ nextTransaction.period }} donation of
-        <strong>${{ nextTransaction.amount }}</strong> will be charged on
-        <strong>{{ nextTransaction.date }}</strong> to your card ending in
+        <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
+        on <strong>{{ nextTransaction.date }}</strong> to your card ending in
         <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
         Thank you for being a Texas Tribune member! Your next
         {{ nextTransaction.period }} donation of
-        <strong>${{ nextTransaction.amount }}</strong> will be on
+        <strong>{{ nextTransaction.amount | currency }}</strong> will be on
         <strong>{{ nextTransaction.date }}</strong
         >.
       </p>

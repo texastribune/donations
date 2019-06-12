@@ -9,7 +9,6 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import Blast from '../components/Blast.vue';
-import addNumberCommas from '../../../utils/add-number-commas';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
@@ -31,7 +30,7 @@ export default {
         next_blast_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
       const data = {
-        amount: addNumberCommas(amount),
+        amount,
         date: format(parse(date), 'MMMM D, YYYY'),
       };
 

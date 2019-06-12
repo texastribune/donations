@@ -9,6 +9,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import BlastDetail from '../components/BlastDetail.vue';
+import formatCurrency from '../../../utils/format-currency';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
@@ -43,7 +44,7 @@ export default {
         } = next_blast_transaction;
 
         data[0].heading = 'Subscription';
-        data[0].text = `$${amount}, ${period}`;
+        data[0].text = `${formatCurrency(amount)}, ${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
@@ -63,7 +64,7 @@ export default {
         } = last_blast_transaction;
 
         data[0].heading = 'Past subscription';
-        data[0].text = `$${amount}, ${period}`;
+        data[0].text = `${formatCurrency(amount)}, ${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';

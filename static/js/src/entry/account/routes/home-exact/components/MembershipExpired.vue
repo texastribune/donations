@@ -8,15 +8,15 @@
         >
         <template v-if="lastTransaction.last4">
           Your last donation of
-          <strong>${{ lastTransaction.amount }}</strong> was charged on
+          <strong>${{ lastTransaction | currency }}</strong> was charged on
           <strong>{{ lastTransaction.date }}</strong> to your card ending in
           <strong>{{ lastTransaction.last4 }}</strong
           >.
         </template>
         <template v-else>
           Your last donation of
-          <strong>${{ lastTransaction.amount }}</strong> was charged on
-          <strong>{{ lastTransaction.date }}</strong
+          <strong>${{ lastTransaction.amount | currency }}</strong> was charged
+          on <strong>{{ lastTransaction.date }}</strong
           >.
         </template>
       </p>

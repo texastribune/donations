@@ -11,7 +11,6 @@ import isFuture from 'date-fns/is_future';
 
 import BlastPayments from '../components/BlastPayments.vue';
 import userMixin from '../../home/mixins/user';
-import addNumberCommas from '../../../utils/add-number-commas';
 import { BLAST_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
@@ -42,7 +41,7 @@ export default {
           return {
             id: index,
             date: parse(date),
-            amount: addNumberCommas(amount),
+            amount,
             method,
           };
         }

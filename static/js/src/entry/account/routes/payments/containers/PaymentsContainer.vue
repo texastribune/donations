@@ -12,7 +12,6 @@ import isFuture from 'date-fns/is_future';
 
 import Payments from '../components/Payments.vue';
 import userMixin from '../../home/mixins/user';
-import addNumberCommas from '../../../utils/add-number-commas';
 import { MEMBERSHIP_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
@@ -52,7 +51,7 @@ export default {
           return {
             id: index,
             date: parse(date),
-            amount: addNumberCommas(amount),
+            amount,
             method,
           };
         }

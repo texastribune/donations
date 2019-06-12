@@ -6,14 +6,14 @@
         class="has-text-gray-dark t-space-heading-m"
       >
         Your subscription to The Blast was cancelled. Your last payment of
-        <strong>${{ lastTransaction.amount }}</strong> was charged to your card
-        ending in <strong>{{ lastTransaction.last4 }}</strong> on
+        <strong>{{ lastTransaction.amount | currency }}</strong> was charged to
+        your card ending in <strong>{{ lastTransaction.last4 }}</strong> on
         <strong>{{ lastTransaction.date }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
         Your subscription to The Blast was cancelled. Your last payment of
-        <strong>${{ lastTransaction.amount }}</strong> was on
+        <strong>{{ lastTransaction.amount | currency }}</strong> was on
         <strong>{{ lastTransaction.date }}</strong
         >.
       </p>

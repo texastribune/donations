@@ -14,7 +14,7 @@ import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import MembershipDetail from '../components/MembershipDetail.vue';
-import addNumberCommas from '../../../utils/add-number-commas';
+import formatCurrency from '../../../utils/format-currency';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
@@ -48,7 +48,7 @@ export default {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Last donation';
-        data[0].text = `$${addNumberCommas(amount)}, ${format(
+        data[0].text = `${formatCurrency(amount)}, ${format(
           parse(date),
           'MMMM D, YYYY'
         )}`;
@@ -67,7 +67,7 @@ export default {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Last donation';
-        data[0].text = `$${addNumberCommas(amount)}, ${format(
+        data[0].text = `${formatCurrency(amount)}, ${format(
           parse(date),
           'MMMM D, YYYY'
         )}`;
@@ -92,7 +92,7 @@ export default {
         } = next_transaction;
 
         data[0].heading = 'Donation';
-        data[0].text = `$${addNumberCommas(amount)}, ${period}`;
+        data[0].text = `${formatCurrency(amount)}, ${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
