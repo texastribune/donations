@@ -9,3 +9,15 @@ export class Auth0Error extends Error {
     super('Auth0 error');
   }
 }
+
+export class MultiplePersonsError extends Error {
+  constructor() {
+    super('Multiple persons');
+  }
+}
+
+export class NoPersonsError extends Error {
+  constructor() {
+    super('No persons');
+  }
+}

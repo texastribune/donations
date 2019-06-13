@@ -5,7 +5,12 @@ import jwt from 'jsonwebtoken';
 
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
-import { LoggedOutError, Auth0Error } from '../../errors';
+import {
+  LoggedOutError,
+  Auth0Error,
+  MultiplePersonsError,
+  NoPersonsError,
+} from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
 // import response from '../../dummy/recurring.json';
@@ -52,7 +57,10 @@ const actions = {
       headers: { Authorization: `Bearer ${state.accessToken}` },
     });
 
-    commit('SET_DETAILS', data);
+    if (!data.length) throw new NoPersonsError();
+    if (data.length > 1) throw new MultiplePersonsError();
+
+    commit('SET_DETAILS', data[0]);
   },
 
   getUser: async ({ commit, state }) => {
