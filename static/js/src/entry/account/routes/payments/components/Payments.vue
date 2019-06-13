@@ -69,6 +69,11 @@ export default {
       required: true,
     },
 
+    informalGreeting: {
+      type: String,
+      required: true,
+    },
+
     totalGiftsLastYear: {
       type: Number,
       required: true,
@@ -85,9 +90,13 @@ export default {
     async buildReceipt() {
       try {
         const buildReceipt = await import(/* webpackChunkName: 'build-receipt' */ '../build-receipt');
-        const { lastYear, totalGiftsLastYear } = this;
+        const { lastYear, totalGiftsLastYear, informalGreeting } = this;
 
-        await buildReceipt.default({ lastYear, totalGiftsLastYear });
+        await buildReceipt.default({
+          lastYear,
+          totalGiftsLastYear,
+          informalGreeting,
+        });
       } catch (err) {
         this.$emit('setError', true);
       }

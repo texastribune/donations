@@ -4,9 +4,17 @@ import axios from 'axios';
 
 import formatCurrency from '../../utils/format-currency';
 
-export default async function buildReceipt({ lastYear, totalGiftsLastYear }) {
+export default async function buildReceipt({
+  lastYear,
+  totalGiftsLastYear,
+  informalGreeting,
+}) {
   // eslint-disable-next-line new-cap
-  const doc = new jsPDF({ unit: 'px', format: 'letter', lineHeight: 1.5 });
+  const doc = new jsPDF({
+    unit: 'px',
+    format: 'letter',
+    lineHeight: 1.5,
+  });
   const leftEdge = 40;
   const topEdge = 30;
   const response = await axios.get('/static/img/receipt-logo.png', {
@@ -40,7 +48,7 @@ export default async function buildReceipt({ lastYear, totalGiftsLastYear }) {
 
   doc.setFontSize(12);
   doc.text(`${format(new Date(), 'MMMM D, YYYY')}`, leftEdge, 130);
-  doc.text('Dear Andrew,', leftEdge, 155);
+  doc.text(`Dear ${informalGreeting},`, leftEdge, 155);
   doc.text(
     `Thank you for your support of The Texas Tribune — the only nonpartisan, member-supported, digitally focused news organization that covers Texas public policy, politics, government and statewide issues. Our nonprofit newsroom relies on the generosity of people like you, which is why your support helps us produce serious journalism about issues that matter to Texas. Please find your ${lastYear} giving summary below.`,
     leftEdge,
@@ -53,7 +61,7 @@ export default async function buildReceipt({ lastYear, totalGiftsLastYear }) {
 
   doc.text('Donor', leftEdge, 290);
   doc.setFontStyle('normal');
-  doc.text('Foo and Bar Gibson', leftEdge, 302);
+  doc.text(informalGreeting, leftEdge, 302);
 
   doc.setFontStyle('bold');
   doc.text('Total donation amount', leftEdge, 327);
