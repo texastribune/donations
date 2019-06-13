@@ -1,5 +1,11 @@
 <template>
-  <payments :data="data" :is-expired="isExpired" :is-one-time="isOneTime" />
+  <payments
+    :data="data"
+    :is-expired="isExpired"
+    :is-one-time="isOneTime"
+    :total-gifts-last-year="totalGiftsLastYear"
+    @setError="setError"
+  />
 </template>
 
 <script>
@@ -9,6 +15,7 @@ import parse from 'date-fns/parse';
 import format from 'date-fns/format';
 import isPast from 'date-fns/is_past';
 import isFuture from 'date-fns/is_future';
+import { mapActions } from 'vuex';
 
 import Payments from '../components/Payments.vue';
 import userMixin from '../../home/mixins/user';
@@ -28,6 +35,10 @@ export default {
 
     isExpired() {
       return isPast(parse(this.user.membership_expiration_date));
+    },
+
+    totalGiftsLastYear() {
+      return this.user.total_gifts_last_year;
     },
 
     data() {
@@ -68,6 +79,10 @@ export default {
 
       return formatted;
     },
+  },
+
+  methods: {
+    ...mapActions('context', ['setError']),
   },
 };
 </script>

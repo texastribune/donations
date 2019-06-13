@@ -38,6 +38,7 @@
     "fontfaceobserver": "^2.1.0",
     "glob-watcher": "^5.0.3",
     "jsonwebtoken": "^8.5.1",
+    "jspdf": "^1.5.3",
     "node-sass": "^4.9.0",
     "nodent-runtime": "^3.2.1",
     "npm-run-all": "^4.1.5",
@@ -97,6 +98,7 @@
       ]
     }
   },
+  "eslintIgnore": ["static/js/src/entry/account/routes/payments/components/Payments.vue"],
   "prettier": {
     "bracketSpacing": true,
     "printWidth": 80,

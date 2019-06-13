@@ -8,7 +8,9 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <a href="#">Download your {{ lastYear }} tax receipt</a>
+          <button class="c-link-button" @click="buildReceipt">
+            Download your {{ lastYear }} tax receipt
+          </button>
         </span>
       </li>
       <li v-if="isExpired && !isOneTime" class="has-m-btm-marg">
@@ -66,11 +68,29 @@ export default {
       type: Boolean,
       required: true,
     },
+
+    totalGiftsLastYear: {
+      type: Number,
+      required: true,
+    },
   },
 
   computed: {
     lastYear() {
       return getYear(new Date()) - 1;
+    },
+  },
+
+  methods: {
+    async buildReceipt() {
+      try {
+        const buildReceipt = await import(/* webpackChunkName: 'build-receipt' */ '../build-receipt');
+        const { lastYear, totalGiftsLastYear } = this;
+
+        await buildReceipt.default({ lastYear, totalGiftsLastYear });
+      } catch (err) {
+        this.$emit('setError', true);
+      }
     },
   },
 };
