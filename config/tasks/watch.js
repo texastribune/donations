@@ -1,8 +1,8 @@
 // utility
 const watch = require('glob-watcher');
-const iconsRunner = require('ds-toolbox-test/tasks/icons');
-const stylesRunner = require('ds-toolbox-test/tasks/styles');
-const { logMessage } = require('ds-toolbox-test/tasks/utils');
+const iconsRunner = require('@texastribune/ds-toolbox-tasks/icons');
+const stylesRunner = require('@texastribune/ds-toolbox-tasks/styles');
+const { logMessage } = require('@texastribune/ds-toolbox-tasks/utils');
 
 // internal
 const { mappedStyles, mappedIcons, mappedStylesManifest } = require('../paths.js');

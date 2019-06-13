@@ -1,10 +1,10 @@
 // utility
 const path = require('path');
 const glob = require('fast-glob');
-const { replaceExtension } = require('ds-toolbox-test/tasks/utils');
+const { replaceExtension } = require('@texastribune/ds-toolbox-tasks/utils');
 
 const CSS_OUTPUT_DIR = './static/build/';
-const SVG_LIB_DIR = './node_modules/ds-toolbox-test/assets/icons/base/';
+const SVG_LIB_DIR = './node_modules/@texastribune/ds-toolbox-assets/icons/base/';
 const SVG_OUTPUT_DIR = './templates/includes';
 
 const mappedStyles = async () => {

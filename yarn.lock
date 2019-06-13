@@ -676,6 +676,30 @@
   version "0.7.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.7.0.tgz#9a06f4f137ee84d7df0460c1fdb1135ffa6c50fd"
 
+"@texastribune/ds-toolbox-assets@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@texastribune/ds-toolbox-assets/-/ds-toolbox-assets-0.0.2.tgz#619faada23c4b7d4439c184ce63355e24ea0671e"
+  integrity sha512-yClYU85RFXBngkWd2vuZiVJVg8L1yTbqMj5x6F+AQf3b6dA5/WhHSMeMOgE/BXhFefDvNuuEN0KxmeFFEuHSxg==
+
+"@texastribune/ds-toolbox-tasks@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@texastribune/ds-toolbox-tasks/-/ds-toolbox-tasks-0.0.2.tgz#2ee4dfeebf89452b898f119b5ce200801373e082"
+  integrity sha512-3DUrGeE69S3QK01yMvlGnicNcVD+aIRDITxlV/MZaliMCpC31hGpK0qSv/ytOLutGgmkCRSSWJha3y1QvkUG2g==
+  dependencies:
+    ansi-colors "^3.2.4"
+    autoprefixer "^9.5.1"
+    clean-css "^4.2.1"
+    fast-glob "^2.2.6"
+    fs-extra "^7.0.1"
+    glob-watcher "^5.0.3"
+    node-sass "^4.11.0"
+    normalize.css "^8.0.1"
+    ora "^3.4.0"
+    postcss "^7.0.16"
+    sass-mq "^5.0.0"
+    svgo "^1.2.1"
+    svgstore "^3.0.0-2"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -2774,24 +2798,6 @@ domutils@^1.5.1, domutils@^1.7.0:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
-
-"ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#master":
-  version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#454250397cf479467cd0509c06c32d77720dd2ca"
-  dependencies:
-    ansi-colors "^3.2.4"
-    autoprefixer "^9.5.1"
-    clean-css "^4.2.1"
-    fast-glob "^2.2.6"
-    fs-extra "^7.0.1"
-    glob-watcher "^5.0.3"
-    node-sass "^4.11.0"
-    normalize.css "^8.0.1"
-    ora "^3.4.0"
-    postcss "^7.0.16"
-    sass-mq "^5.0.0"
-    svgo "^1.2.1"
-    svgstore "^3.0.0-2"
 
 duplexer3@^0.1.4:
   version "0.1.4"

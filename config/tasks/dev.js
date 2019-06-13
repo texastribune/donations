@@ -1,5 +1,5 @@
 // lib
-const { series, logMessage } = require('ds-toolbox-test/tasks/utils');
+const { series, logMessage } = require('@texastribune/ds-toolbox-tasks/utils');
 
 // internal
 const watch = require('./watch');

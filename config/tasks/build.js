@@ -1,7 +1,7 @@
 // utility
-const stylesRunner = require('ds-toolbox-test/tasks/styles');
-const iconsRunner = require('ds-toolbox-test/tasks/icons');
-const { logMessage } = require('ds-toolbox-test/tasks/utils');
+const stylesRunner = require('@texastribune/ds-toolbox-tasks/styles');
+const iconsRunner = require('@texastribune/ds-toolbox-tasks/icons');
+const { logMessage } = require('@texastribune/ds-toolbox-tasks/utils');
 
 // internal
 const { mappedStyles, mappedIcons, mappedStylesManifest } = require('../paths.js');
