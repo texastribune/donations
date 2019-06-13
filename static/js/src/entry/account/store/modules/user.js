@@ -13,11 +13,6 @@ import {
 } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
-// import response from '../../dummy/recurring.json';
-// import response from '../../dummy/one_time_canceled_blast.json';
-// import response from '../../dummy/never_given.json';
-// import response from '../../dummy/recurring_expired_and_blast.json';
-
 function createDefaultState() {
   return {
     accessToken: '',
