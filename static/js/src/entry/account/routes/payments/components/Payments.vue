@@ -8,7 +8,7 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <a href="#">Download your 2018 tax receipt</a>
+          <a href="#">Download your {{ lastYear }} tax receipt</a>
         </span>
       </li>
       <li v-if="isExpired && !isOneTime" class="has-m-btm-marg">
@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import getYear from 'date-fns/get_year';
+
 import PaymentList from '../../../components/PaymentList.vue';
 
 export default {
@@ -63,6 +65,12 @@ export default {
     isOneTime: {
       type: Boolean,
       required: true,
+    },
+  },
+
+  computed: {
+    lastYear() {
+      return getYear(new Date()) - 1;
     },
   },
 };
