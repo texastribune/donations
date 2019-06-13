@@ -49,6 +49,7 @@ export default {
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
+          data[2] = { id: 2 };
           data[2].heading = 'Next payment';
           data[2].text = format(parse(date), 'MMMM D, YYYY');
         } else {
@@ -69,6 +70,7 @@ export default {
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
+          data[2] = { id: 2 };
           data[2].heading = 'Status';
           data[2].text = 'Your subscription was cancelled.';
         } else {
