@@ -2,9 +2,7 @@ import { mapActions } from 'vuex';
 
 export default {
   data() {
-    return {
-      isFetching: true,
-    };
+    return { isFetching: true };
   },
 
   async created() {
