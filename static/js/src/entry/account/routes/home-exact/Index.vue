@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
 import routeMixin from '../../mixins/route';
+import Help from '../../components/Help.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import Membership from './containers/MembershipContainer.vue';
 import MembershipExpired from './containers/MembershipExpiredContainer.vue';
