@@ -61,7 +61,7 @@ export default {
             payment_type &&
             payment_type.toLowerCase() === CARD_PAYMENT_FLAG
           ) {
-            method = `${credit_card.brand} ending in ${credit_card.last4}`;
+            method = `${credit_card.brand} ${credit_card.last4}`;
           }
 
           return {
@@ -79,7 +79,7 @@ export default {
       });
       const formatted = sorted.map(item => ({
         ...item,
-        date: format(item.date, 'MM/DD/YYYY'),
+        date: format(item.date, 'MM/DD/YY'),
       }));
 
       return formatted;
