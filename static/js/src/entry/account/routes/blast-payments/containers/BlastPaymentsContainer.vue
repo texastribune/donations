@@ -1,5 +1,5 @@
 <template>
-  <blast-payments :data="data" @setError="setError" />
+  <blast-payments :data="data" :contact="contact" @setError="setError" />
 </template>
 
 <script>
@@ -22,6 +22,13 @@ export default {
   mixins: [userMixin],
 
   computed: {
+    contact() {
+      const { first_name, last_name } = this.user;
+
+      if (first_name && last_name) return `${first_name} ${last_name}`;
+      return 'Blast Subscriber';
+    },
+
     data() {
       const { transactions } = this.user;
       const relevantTransactions = transactions.filter(

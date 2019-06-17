@@ -44,13 +44,22 @@ export default {
       type: Array,
       required: true,
     },
+
+    contact: {
+      type: String,
+      required: true,
+    },
   },
 
   methods: {
-    async buildReceipt({ date, amount, contact = 'Foo Bar' }) {
+    async buildReceipt({ date, amount }) {
       try {
         const buildBlastReceipt = await import(/* webpackChunkName: 'build-blast-receipt' */ '../build-blast-receipt');
-        await buildBlastReceipt.default({ date, amount, contact });
+        await buildBlastReceipt.default({
+          date,
+          amount,
+          contact: this.contact,
+        });
       } catch (err) {
         this.$emit('setError', true);
       }
