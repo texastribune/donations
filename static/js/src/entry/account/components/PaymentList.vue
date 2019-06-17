@@ -10,7 +10,7 @@
           <th class="t-align-left"><strong>Amount</strong></th>
           <th class="t-align-left"><strong>Payment</strong></th>
           <th v-if="showReceipts" class="t-align-left is-hidden-until-bp-l">
-            <strong>Receipts</strong>
+            <strong>Receipt</strong>
           </th>
         </tr>
       </thead>

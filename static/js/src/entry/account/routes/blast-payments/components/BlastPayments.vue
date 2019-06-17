@@ -47,10 +47,10 @@ export default {
   },
 
   methods: {
-    async buildReceipt({ date, amount, method }) {
+    async buildReceipt({ date, amount, contact = 'Foo Bar' }) {
       try {
-        const buildReceipt = await import(/* webpackChunkName: 'build-receipt' */ '../build-receipt');
-        await buildReceipt.default({ date, amount, method });
+        const buildBlastReceipt = await import(/* webpackChunkName: 'build-blast-receipt' */ '../build-blast-receipt');
+        await buildBlastReceipt.default({ date, amount, contact });
       } catch (err) {
         this.$emit('setError', true);
       }
