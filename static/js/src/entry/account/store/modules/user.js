@@ -13,6 +13,8 @@ import {
 } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
+import response from '../../dummy/response.json';
+
 function createDefaultState() {
   return {
     accessToken: '',
@@ -59,11 +61,11 @@ const actions = {
   },
 
   getUser: async ({ commit, state }) => {
-    const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
+    /* const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
       headers: { Authorization: `Bearer ${state.accessToken}` },
-    });
+    }); */
 
-    commit('SET_DETAILS', data);
+    commit('SET_DETAILS', response);
   },
 
   getTokenUser: ({ commit }) =>
