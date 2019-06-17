@@ -3,6 +3,8 @@
     <div class="has-xxxl-btm-marg">
       <payment-list
         :payments="data"
+        :ga-receipt-action="ga.userPortal.actions['blast-receipt']"
+        :ga-receipt-label="ga.userPortal.labels['blast-payments']"
         show-receipts
         @buildReceipt="buildReceipt"
       />
@@ -14,9 +16,15 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <router-link :to="{ name: 'blast' }"
-            >More about your subscription</router-link
+          <router-link
+            ga-on="click"
+            :to="{ name: 'blast' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.inline"
+            :ga-event-label="ga.userPortalNav.labels.blast"
           >
+            More about your subscription
+          </router-link>
         </span>
       </li>
     </ul>

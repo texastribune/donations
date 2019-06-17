@@ -24,27 +24,59 @@
         </h4>
         <ul class="c-site-footer__links has-text-white">
           <li>
-            <router-link :to="{ name: 'home' }">Account Overview</router-link>
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels.home"
+              :to="{ name: 'home' }"
+            >
+              Account Overview
+            </router-link>
           </li>
           <li v-if="showMembershipLinks">
-            <router-link :to="{ name: 'membership' }"
-              >Membership Status</router-link
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels.membership"
+              :to="{ name: 'membership' }"
             >
+              Membership Status
+            </router-link>
           </li>
           <li v-if="showMembershipLinks">
-            <router-link :to="{ name: 'payments' }"
-              >Donation History</router-link
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels.payments"
+              :to="{ name: 'payments' }"
             >
+              Donation History
+            </router-link>
           </li>
           <li v-if="showBlastLinks">
-            <router-link :to="{ name: 'blast' }"
-              >The Blast Newsletter</router-link
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels.blast"
+              :to="{ name: 'blast' }"
             >
+              The Blast Newsletter
+            </router-link>
           </li>
           <li v-if="showBlastLinks">
-            <router-link :to="{ name: 'blast-payments' }"
-              >The Blast Payment History</router-link
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['blast-payments']"
+              :to="{ name: 'blast-payments' }"
             >
+              The Blast Payment History
+            </router-link>
           </li>
         </ul>
       </div>
@@ -57,17 +89,49 @@
         </h4>
         <ul class="c-site-footer__links has-text-white">
           <li>
-            <a href="https://www.texastribune.org/about/community-guidelines/"
-              >Community Guidelines</a
+            <a
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['community-guidelines']"
+              href="https://www.texastribune.org/about/community-guidelines/"
             >
+              Community Guidelines
+            </a>
           </li>
-          <li><a href="/donate">About Membership</a></li>
           <li>
-            <a href="https://www.texastribune.org/about/privacy-policy/"
-              >Privacy Policy</a
+            <a
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['support-landing']"
+              href="/donate"
             >
+              About Membership
+            </a>
           </li>
-          <li><a href="https://www.texastribune.org/">texastribune.org</a></li>
+          <li>
+            <a
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['privacy-policy']"
+              href="https://www.texastribune.org/about/privacy-policy/"
+            >
+              Privacy Policy
+            </a>
+          </li>
+          <li>
+            <a
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['texas-tribune-home']"
+              href="https://www.texastribune.org/"
+            >
+              texastribune.org
+            </a>
+          </li>
         </ul>
       </div>
     </div>

@@ -8,7 +8,15 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <a href="/blastform">Renew your subscription to The Blast</a>
+          <a
+            href="/blastform"
+            ga-on="click"
+            :ga-event-category="ga.blastIntent.category"
+            :ga-event-action="ga.blastIntent.actions['renew-blast']"
+            :ga-event-label="ga.blastIntent.labels['user-portal']"
+          >
+            Renew your subscription to The Blast
+          </a>
         </span>
       </li>
       <li>
@@ -16,9 +24,15 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <router-link :to="{ name: 'blast-payments' }"
-            >See your payment history</router-link
+          <router-link
+            ga-on="click"
+            :to="{ name: 'blast-payments' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.inline"
+            :ga-event-label="ga.userPortalNav.labels['blast-payments']"
           >
+            See your payment history
+          </router-link>
         </span>
       </li>
     </ul>

@@ -15,9 +15,14 @@
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
               exact
+              ga-on="click"
               :to="{ name: 'home' }"
-              ><strong>Account Overview</strong></router-link
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.top"
+              :ga-event-label="ga.userPortalNav.labels.home"
             >
+              <strong>Account Overview</strong>
+            </router-link>
           </li>
           <li
             v-if="showMembershipLinks"
@@ -26,9 +31,14 @@
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
+              ga-on="click"
               :to="{ name: 'membership' }"
-              ><strong>Membership</strong></router-link
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.top"
+              :ga-event-label="ga.userPortalNav.labels.membership"
             >
+              <strong>Membership</strong>
+            </router-link>
           </li>
           <li
             v-if="showBlastLinks"
@@ -37,9 +47,14 @@
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
+              ga-on="click"
               :to="{ name: 'blast' }"
-              ><strong>The Blast</strong></router-link
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.top"
+              :ga-event-label="ga.userPortalNav.labels.blast"
             >
+              <strong>The Blast</strong>
+            </router-link>
           </li>
           <li class="c-navbar__item">
             <button
@@ -85,27 +100,42 @@
         <li class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
-            :to="{ name: 'home' }"
             active-class="is-active"
             exact
-            ><strong>Account Overview</strong></router-link
+            ga-on="click"
+            :to="{ name: 'home' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.top"
+            :ga-event-label="ga.userPortalNav.labels.home"
           >
+            <strong>Account Overview</strong>
+          </router-link>
         </li>
         <li v-if="showMembershipLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
-            :to="{ name: 'membership' }"
             active-class="is-active"
-            ><strong>Membership</strong></router-link
+            ga-on="click"
+            :to="{ name: 'membership' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.top"
+            :ga-event-label="ga.userPortalNav.labels.membership"
           >
+            <strong>Membership</strong>
+          </router-link>
         </li>
         <li v-if="showBlastLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
-            :to="{ name: 'blast' }"
             active-class="is-active"
-            ><strong>The Blast</strong></router-link
+            ga-on="click"
+            :to="{ name: 'blast' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.top"
+            :ga-event-label="ga.userPortalNav.labels.blast"
           >
+            <strong>The Blast</strong>
+          </router-link>
         </li>
         <li class="c-navbar__dropdown-item">
           <button

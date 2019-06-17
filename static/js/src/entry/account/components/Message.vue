@@ -10,6 +10,10 @@
     <button
       class="c-message__close has-bg-white has-text-gray"
       aria-label="close"
+      ga-on="click"
+      :ga-event-category="ga.userPortal.category"
+      :ga-event-action="ga.userPortal.actions['clear-notification']"
+      :ga-event-label="gaCloseLabel"
       @click="close"
     >
       <icon name="close" :display="{ size: 'xxs', color: 'gray' }" />
@@ -28,6 +32,11 @@ export default {
     },
 
     name: {
+      type: String,
+      required: true,
+    },
+
+    gaCloseLabel: {
       type: String,
       required: true,
     },

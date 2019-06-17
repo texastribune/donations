@@ -17,3 +17,63 @@ export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';
 export const CARD_PAYMENT_FLAG = 'credit card';
 export const BLAST_PAYMENT_FLAG = 'the blast';
 export const MEMBERSHIP_PAYMENT_FLAG = 'membership';
+export const GA_USER_PORTAL_NAV = {
+  category: 'user portal navigation',
+  actions: {
+    side: 'side nav click',
+    top: 'top nav click',
+    footer: 'footer link click',
+    inline: 'inline link click',
+  },
+  labels: {
+    home: 'account overview',
+    membership: 'membership overview',
+    payments: 'donation history',
+    blast: 'the blast overview',
+    'blast-payments': 'the blast payment history',
+    // external starting here
+    'community-guidelines': 'community guidelines',
+    'support-landing': 'support landing',
+    'privacy-policy': 'privacy policy',
+    'texas-tribune-home': 'texas tribune home',
+  },
+};
+export const GA_USER_PORTAL = {
+  category: 'user portal',
+  actions: {
+    'reset-password': 'reset your password',
+    'contact-us': 'contact us',
+    'tax-receipt': 'download your tax receipt',
+    'blast-receipt': 'download your blast receipt',
+    'clear-notification': 'clear notification',
+  },
+  labels: {
+    home: 'account overview',
+    membership: 'membership overview',
+    payments: 'donation history',
+    blast: 'the blast overview',
+    'blast-payments': 'the blast payment history',
+  },
+};
+
+export const GA_DONATIONS = {
+  category: 'donations',
+  actions: {
+    'membership-intent': 'membership-intent',
+  },
+  labels: {
+    'upgrade-membership': 'user portal - sustaining',
+    'renew-membership': 'user portal - renew',
+    'upgrade-contact': 'user portal - upgrade contact',
+  },
+};
+
+export const GA_BLAST_INTENT = {
+  category: 'blast intent',
+  action: {
+    'renew-blast': 'user portal - renew link',
+  },
+  labels: {
+    'user-portal': 'user portal',
+  },
+};

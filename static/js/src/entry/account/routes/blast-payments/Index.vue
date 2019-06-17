@@ -6,7 +6,7 @@
 
     <div class="has-ump-side-padding has-xxl-btm-marg"><blast-payments /></div>
 
-    <help blast :display="{ hasTopPadding: true }" />
+    <help blast-payments :display="{ hasTopPadding: true }" />
   </div>
 </template>
 

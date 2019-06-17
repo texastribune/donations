@@ -4,6 +4,7 @@
       <message
         heading="Welcome"
         :name="readOnlyWelcomeMessageKey"
+        :ga-close-label="ga.userPortal.labels.home"
         @setMessageSeen="slotProps.setMessageSeen"
       >
         <template v-slot:icon>

@@ -27,7 +27,14 @@
             <strong>&rarr;</strong>
           </span>
           <span class="has-text-gray-dark">
-            <button class="c-link-button" @click="$emit('resetPassword')">
+            <button
+              class="c-link-button"
+              ga-on="click"
+              :ga-event-category="ga.userPortal.category"
+              :ga-event-action="ga.userPortal.actions['reset-password']"
+              :ga-event-label="ga.userPortal.labels.home"
+              @click="$emit('resetPassword')"
+            >
               Reset your password
             </button>
           </span>

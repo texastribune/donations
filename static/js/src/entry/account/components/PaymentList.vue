@@ -33,6 +33,10 @@
             <slot name="receipt" :payment="payment">
               <button
                 aria-label="download receipt"
+                ga-on="click"
+                :ga-event-category="ga.userPortal.category"
+                :ga-event-action="gaReceiptAction"
+                :ga-event-label="gaReceiptLabel"
                 @click="$emit('buildReceipt', payment)"
               >
                 <icon name="download" :display="{ size: 'b' }" />
@@ -71,6 +75,16 @@ export default {
     showReceipts: {
       type: Boolean,
       default: false,
+    },
+
+    gaReceiptAction: {
+      type: String,
+      default: '',
+    },
+
+    gaReceiptLabel: {
+      type: String,
+      default: '',
     },
   },
 

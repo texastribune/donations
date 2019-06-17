@@ -3,46 +3,71 @@
     <ul class="c-side-nav__outer t-size-s">
       <li class="has-xxs-btm-marg">
         <router-link
-          :to="{ name: 'home' }"
           exact
           class="has-text-black-off has-text-hover-gray"
           active-class="is-active"
-          ><strong>Account Overview</strong></router-link
+          ga-on="click"
+          :to="{ name: 'home' }"
+          :ga-event-category="ga.userPortalNav.category"
+          :ga-event-action="ga.userPortalNav.actions.side"
+          :ga-event-label="ga.userPortalNav.labels.home"
         >
+          <strong>Account Overview</strong>
+        </router-link>
       </li>
       <li v-if="showMembershipLinks" class="has-xxs-btm-marg">
         <router-link
-          :to="{ name: 'membership' }"
           class="has-text-black-off has-text-hover-gray"
           active-class="is-active"
-          ><strong>Membership</strong></router-link
+          ga-on="click"
+          :to="{ name: 'membership' }"
+          :ga-event-category="ga.userPortalNav.category"
+          :ga-event-action="ga.userPortalNav.actions.side"
+          :ga-event-label="ga.userPortalNav.labels.membership"
         >
+          <strong>Membership</strong>
+        </router-link>
         <ul class="c-side-nav__inner">
           <li>
             <router-link
-              :to="{ name: 'payments' }"
               class="has-text-gray-dark has-text-hover-gray"
               active-class="is-active"
-              >Donation History</router-link
+              ga-on="click"
+              :to="{ name: 'payments' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.side"
+              :ga-event-label="ga.userPortalNav.labels.payments"
             >
+              Donation History
+            </router-link>
           </li>
         </ul>
       </li>
       <li v-if="showBlastLinks" class="has-xxs-btm-marg">
         <router-link
-          :to="{ name: 'blast' }"
           class="has-text-black-off has-text-hover-gray"
           active-class="is-active"
-          ><strong>The Blast Newsletter</strong></router-link
+          ga-on="click"
+          :to="{ name: 'blast' }"
+          :ga-event-category="ga.userPortalNav.category"
+          :ga-event-action="ga.userPortalNav.actions.side"
+          :ga-event-label="ga.userPortalNav.labels.blast"
         >
+          <strong>The Blast Newsletter</strong>
+        </router-link>
         <ul class="c-side-nav__inner">
           <li class="c-side-nav__item c-side-nav__item--inside">
             <router-link
-              :to="{ name: 'blast-payments' }"
               class="has-text-gray-dark has-text-hover-gray"
               active-class="is-active"
-              >Payment History</router-link
+              ga-on="click"
+              :to="{ name: 'blast-payments' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.side"
+              :ga-event-label="ga.userPortalNav.labels['blast-payments']"
             >
+              Payment History
+            </router-link>
           </li>
         </ul>
       </li>

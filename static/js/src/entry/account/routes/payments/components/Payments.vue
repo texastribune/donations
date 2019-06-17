@@ -8,7 +8,14 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <button class="c-link-button" @click="buildReceipt">
+          <button
+            class="c-link-button"
+            ga-on="click"
+            :ga-event-category="ga.userPortal"
+            :ga-event-action="ga.userPortal.actions['tax-receipt']"
+            :ga-event-label="ga.userPortal.labels.payments"
+            @click="buildReceipt"
+          >
             Download your {{ lastYear }} tax receipt
           </button>
         </span>
@@ -18,7 +25,15 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <a href="#">Renew your membership</a>
+          <a
+            href="#"
+            ga-on="click"
+            :ga-event-category="ga.donations.category"
+            :ga-event-action="ga.donations.actions['membership-intent']"
+            :ga-event-label="ga.donations.labels['renew-membership']"
+          >
+            Renew your membership
+          </a>
         </span>
       </li>
       <li v-if="isOneTime" class="has-m-btm-marg">
@@ -26,7 +41,15 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <a href="#">Become a sustaining member</a>
+          <a
+            href="#"
+            ga-on="click"
+            :ga-event-category="ga.donations.category"
+            :ga-event-action="ga.donations.actions['membership-intent']"
+            :ga-event-label="ga.donations.labels['upgrade-membership']"
+          >
+            Become a sustaining member
+          </a>
         </span>
       </li>
       <li>
@@ -34,9 +57,15 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <router-link :to="{ name: 'membership' }"
-            >See your membership status</router-link
+          <router-link
+            ga-on="click"
+            :to="{ name: 'membership' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.inline"
+            :ga-event-label="ga.userPortalNav.labels.membership"
           >
+            See your membership status
+          </router-link>
         </span>
       </li>
     </ul>

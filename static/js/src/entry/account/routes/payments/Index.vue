@@ -8,7 +8,7 @@
 
     <appeal />
 
-    <help membership />
+    <help payments />
   </div>
 </template>
 

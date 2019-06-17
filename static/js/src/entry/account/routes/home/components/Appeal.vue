@@ -26,8 +26,13 @@
     <a
       class="c-button c-button--s has-text-white has-bg-teal l-width-full l-display-block"
       href="mailto:community@texastribune.org"
-      >Contact us for more membership information</a
+      ga-on="click"
+      :ga-event-category="ga.donations.category"
+      :ga-event-action="ga.donations.actions['membership-intent']"
+      :ga-event-label="ga.donations.labels['upgrade-contact']"
     >
+      Contact us for more membership information
+    </a>
   </aside>
 </template>
 

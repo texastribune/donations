@@ -13,8 +13,27 @@ import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
 import { LoggedOutError } from './errors';
 import formatCurrency from './utils/format-currency';
+import {
+  GA_USER_PORTAL_NAV,
+  GA_USER_PORTAL,
+  GA_DONATIONS,
+  GA_BLAST_INTENT,
+} from './constants';
 
 Vue.use(VueRouter);
+
+Vue.mixin({
+  data() {
+    return {
+      ga: {
+        userPortal: GA_USER_PORTAL,
+        userPortalNav: GA_USER_PORTAL_NAV,
+        donations: GA_DONATIONS,
+        blastIntent: GA_BLAST_INTENT,
+      },
+    };
+  },
+});
 
 Vue.component('SiteFooter', SiteFooter);
 Vue.component('NavBar', NavBar);
