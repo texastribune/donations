@@ -16,7 +16,6 @@ export const AUTH_LOGIN_COMPLETE_URL = `${
 export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';
 export const CARD_PAYMENT_FLAG = 'credit card';
 export const BLAST_PAYMENT_FLAG = 'the blast';
-export const MEMBERSHIP_PAYMENT_FLAG = 'membership';
 export const GA_USER_PORTAL_NAV = {
   category: 'user portal navigation',
   actions: {

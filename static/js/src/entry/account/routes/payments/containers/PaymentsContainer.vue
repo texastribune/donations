@@ -20,7 +20,7 @@ import { mapActions } from 'vuex';
 
 import Payments from '../components/Payments.vue';
 import userMixin from '../../home/mixins/user';
-import { MEMBERSHIP_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
+import { BLAST_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
   name: 'PaymentsContainer',
@@ -50,8 +50,7 @@ export default {
       const { transactions } = this.user;
       const relevantTransactions = transactions.filter(
         ({ type, date }) =>
-          type.toLowerCase() === MEMBERSHIP_PAYMENT_FLAG &&
-          !isFuture(parse(date))
+          type.toLowerCase() !== BLAST_PAYMENT_FLAG && !isFuture(parse(date))
       );
       const withDateObjects = relevantTransactions.map(
         ({ date, amount, payment_type, credit_card }, index) => {
