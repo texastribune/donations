@@ -15,7 +15,7 @@ export default {
 
     logPageView() {
       window.dataLayer.push({
-        event: 'accountPageview',
+        event: 'userPortalPageview',
         pagePath: window.location.pathname,
         pageTitle: document.title,
       });
