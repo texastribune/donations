@@ -3,7 +3,7 @@
     <div class="has-xxxl-btm-marg"><payment-list :payments="data" /></div>
 
     <ul class="c-link-list t-linkstyle--underlined">
-      <li class="has-m-btm-marg">
+      <li v-if="totalGiftsLastYear > 0" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
