@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import formatCurrency from '../../utils/format-currency';
 
-export default async function buildReceipt({
+export default async function buildTaxReceipt({
   lastYear,
   totalGiftsLastYear,
   informalGreeting,

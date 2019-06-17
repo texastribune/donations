@@ -98,7 +98,10 @@
       ]
     }
   },
-  "eslintIgnore": ["static/js/src/entry/account/routes/payments/components/Payments.vue"],
+  "eslintIgnore": [
+    "static/js/src/entry/account/routes/payments/components/Payments.vue",
+    "static/js/src/entry/account/routes/blast-payments/components/BlastPayments.vue"
+  ],
   "prettier": {
     "bracketSpacing": true,
     "printWidth": 80,

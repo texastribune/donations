@@ -89,10 +89,10 @@ export default {
   methods: {
     async buildReceipt() {
       try {
-        const buildReceipt = await import(/* webpackChunkName: 'build-receipt' */ '../build-receipt');
+        const buildTaxReceipt = await import(/* webpackChunkName: 'build-tax-receipt' */ '../build-tax-receipt');
         const { lastYear, totalGiftsLastYear, informalGreeting } = this;
 
-        await buildReceipt.default({
+        await buildTaxReceipt.default({
           lastYear,
           totalGiftsLastYear,
           informalGreeting,

@@ -1,6 +1,12 @@
 <template>
   <section class="c-detail-box">
-    <div class="has-xxxl-btm-marg"><payment-list :payments="data" /></div>
+    <div class="has-xxxl-btm-marg">
+      <payment-list
+        :payments="data"
+        show-receipts
+        @buildReceipt="buildReceipt"
+      />
+    </div>
 
     <ul class="c-link-list t-linkstyle--underlined">
       <li>
@@ -29,6 +35,17 @@ export default {
     data: {
       type: Array,
       required: true,
+    },
+  },
+
+  methods: {
+    async buildReceipt({ date, amount, method }) {
+      try {
+        const buildReceipt = await import(/* webpackChunkName: 'build-receipt' */ '../build-receipt');
+        await buildReceipt.default({ date, amount, method });
+      } catch (err) {
+        this.$emit('setError', true);
+      }
     },
   },
 };

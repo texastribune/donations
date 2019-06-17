@@ -1,5 +1,5 @@
 <template>
-  <blast-payments :data="data" />
+  <blast-payments :data="data" @setError="setError" />
 </template>
 
 <script>
@@ -8,6 +8,7 @@
 import parse from 'date-fns/parse';
 import format from 'date-fns/format';
 import isFuture from 'date-fns/is_future';
+import { mapActions } from 'vuex';
 
 import BlastPayments from '../components/BlastPayments.vue';
 import userMixin from '../../home/mixins/user';
@@ -58,6 +59,10 @@ export default {
 
       return formatted;
     },
+  },
+
+  methods: {
+    ...mapActions('context', ['setError']),
   },
 };
 </script>

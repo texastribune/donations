@@ -9,6 +9,9 @@
           <th class="t-align-left"><strong>Date</strong></th>
           <th class="t-align-left"><strong>Amount</strong></th>
           <th class="t-align-left"><strong>Payment</strong></th>
+          <th v-if="showReceipts" class="t-align-left is-hidden-until-bp-l">
+            <strong>Receipts</strong>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +27,16 @@
           <td>
             <slot name="method" :method="payment.method">
               {{ payment.method }}
+            </slot>
+          </td>
+          <td v-if="showReceipts">
+            <slot name="receipt" :payment="payment">
+              <button
+                aria-label="download receipt"
+                @click="$emit('buildReceipt', payment)"
+              >
+                <icon name="download" :display="{ size: 'b' }" />
+              </button>
             </slot>
           </td>
         </tr>
@@ -53,6 +66,11 @@ export default {
     interval: {
       type: Number,
       default: 7,
+    },
+
+    showReceipts: {
+      type: Boolean,
+      default: false,
     },
   },
 
