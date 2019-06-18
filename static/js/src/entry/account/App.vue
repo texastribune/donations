@@ -1,6 +1,6 @@
 <template>
   <div>
-    <error-view v-if="hasError" />
+    <error-view v-if="error" />
     <unverified-view v-else-if="isUnverified" />
     <router-view v-else />
   </div>
@@ -18,15 +18,15 @@ export default {
   components: { ErrorView, UnverifiedView },
 
   computed: {
-    ...mapState('context', ['hasError', 'isUnverified']),
+    ...mapState('context', ['error', 'isUnverified']),
   },
 
   methods: {
     ...mapActions('context', ['setError']),
   },
 
-  errorCaptured() {
-    this.setError(true);
+  errorCaptured(err) {
+    this.setError(err);
   },
 };
 </script>

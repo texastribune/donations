@@ -1,8 +1,30 @@
+/* eslint-disable import/first */
+
 import Vue from 'vue';
+import { init as initSentry } from '@sentry/browser';
+import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
 import addSeconds from 'date-fns/add_seconds';
 import subtractMinutes from 'date-fns/sub_minutes';
 import differenceInMilliSeconds from 'date-fns/difference_in_milliseconds';
+
+import {
+  SENTRY_DSN,
+  SENTRY_ENVIRONMENT,
+  ENABLE_SENTRY,
+  GA_USER_PORTAL_NAV,
+  GA_USER_PORTAL,
+  GA_DONATIONS,
+  GA_BLAST_INTENT,
+} from './constants';
+
+if (ENABLE_SENTRY) {
+  initSentry({
+    dsn: SENTRY_DSN,
+    environment: SENTRY_ENVIRONMENT,
+    integrations: [new VueIntegration({ Vue })],
+  });
+}
 
 import App from './App.vue';
 import routes from './routes';
@@ -15,12 +37,7 @@ import { LoggedOutError } from './errors';
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
-import {
-  GA_USER_PORTAL_NAV,
-  GA_USER_PORTAL,
-  GA_DONATIONS,
-  GA_BLAST_INTENT,
-} from './constants';
+import logError from './utils/log-error';
 
 Vue.use(VueRouter);
 
@@ -34,6 +51,12 @@ Vue.mixin({
         blastIntent: GA_BLAST_INTENT,
       },
     };
+  },
+
+  methods: {
+    logError(err, level) {
+      logError(err, level);
+    },
   },
 });
 
@@ -64,7 +87,7 @@ function refreshToken(refreshAt) {
       refreshToken(newRefreshAt);
     } catch (err) {
       if (!(err instanceof LoggedOutError)) {
-        store.dispatch('context/setError', true);
+        store.dispatch('context/setError', err);
       }
     }
   }, refreshAt);
@@ -74,7 +97,7 @@ store
   .dispatch('user/getTokenUser')
   .catch(err => {
     if (!(err instanceof LoggedOutError)) {
-      store.dispatch('context/setError', true);
+      store.dispatch('context/setError', err);
     }
   })
   .then(() => {

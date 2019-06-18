@@ -56,7 +56,7 @@ export default {
           method,
         });
       } catch (err) {
-        this.$emit('setError', true);
+        this.$emit('setError', err);
       }
     },
   },

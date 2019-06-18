@@ -16,6 +16,9 @@ export const AUTH_LOGIN_COMPLETE_URL = `${
 export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';
 export const CARD_PAYMENT_FLAG = 'credit card';
 export const BLAST_PAYMENT_FLAG = 'the blast';
+export const { SENTRY_DSN } = process.env;
+export const { SENTRY_ENVIRONMENT } = process.env;
+export const ENABLE_SENTRY = process.env.ENABLE_SENTRY.toLowerCase() === 'true';
 export const GA_USER_PORTAL_NAV = {
   category: 'user portal navigation',
   actions: {

@@ -10,7 +10,7 @@ export default {
       try {
         await this.fetchData();
       } catch (err) {
-        this.setError(true);
+        this.setError(err);
       } finally {
         this.isFetching = false;
       }

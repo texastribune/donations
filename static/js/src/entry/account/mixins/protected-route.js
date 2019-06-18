@@ -16,7 +16,7 @@ export default {
       logIn();
     } else if (!this.tokenUser.email_verified) {
       this.unauthorizedFetch = true;
-      this.setUnverified(true);
+      this.setUnverified();
     }
   },
 

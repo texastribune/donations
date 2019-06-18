@@ -127,7 +127,7 @@ export default {
           informalGreeting,
         });
       } catch (err) {
-        this.$emit('setError', true);
+        this.$emit('setError', err);
       }
     },
   },
