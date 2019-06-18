@@ -4,7 +4,7 @@
     :is-expired="isExpired"
     :is-one-time="isOneTime"
     :total-gifts-last-year="totalGiftsLastYear"
-    :informal-greeting="informalGreeting"
+    :greeting="greeting"
     @setError="setError"
   />
 </template>
@@ -41,8 +41,8 @@ export default {
       return this.user.total_gifts_last_year;
     },
 
-    informalGreeting() {
-      return this.user.informal_greeting || 'Placeholder';
+    greeting() {
+      return this.user.greeting || 'Placeholder';
     },
 
     data() {
