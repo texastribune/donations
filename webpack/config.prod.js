@@ -25,7 +25,7 @@ const config = Merge(CommonConfig, {
  Given that, it's also important to have ENABLE_SENTRY_RELEASE=False
  set in your local environment.
 */
-console.log(process.env);
+
 if (process.env.ENABLE_SENTRY_RELEASE.toLowerCase() === 'true') {
   config.plugins.push(
     new SentryWebpackPlugin({
