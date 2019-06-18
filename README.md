@@ -27,7 +27,7 @@ Environment
 -----------
 | Variable                    |                                        Example |
 |-----------------------------|-----------------------------------------------:|
-| `PUBLISABLE_KEY`            |                                  pk_test_12345 |
+| `PUBLISHABLE_KEY`           |                                  pk_test_12345 |
 | `SECRET_KEY`                |                                  sk_test_12335 |
 | `SALESFORCE_HOST`           |                            test.salesforce.com |
 | `SALESFORCE_CLIENT_ID`      |                                                |
@@ -39,8 +39,12 @@ Environment
 | `CELERY_RESULT_BACKEND`     |                           redis://redis:6379/0 |
 | `FLASK_SECRET_KEY`          | b'f;\xeb\x9bT2\xcd\xdb\xe1#z\xfb\xab\xf8(\x03' |
 | `ENABLE_SENTRY`             |                                          False |
-|  SENTRY_ENVIRONMENT         |                                     production |
+| `SENTRY_ENVIRONMENT`        |                                           test |
 | `SENTRY_DSN`                |          https://user:pass@sentry/7?timeout=10 |
+| `SENTRY_AUTH_TOKEN`         |                                                |
+| `SENTRY_ORG`                |                                       your-org |
+| `SENTRY_PROJECT`            |                                      donations |
+| `ENABLE_SENTRY_RELEASE`     |                                          False |
 | `ENABLE_SLACK`              |                                          False |
 | `SLACK_API_KEY`             |                                                |
 | `SLACK_CHANNEL`             |                                     #donations |

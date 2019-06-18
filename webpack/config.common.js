@@ -1,6 +1,7 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { EnvironmentPlugin } = require('webpack');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const { buildDir } = require('./paths');
 const entries = require('./entries');
@@ -35,6 +36,11 @@ module.exports = {
       'SENTRY_ENVIRONMENT',
     ]),
     new VueLoaderPlugin(),
+    new CleanWebpackPlugin({
+      root: process.cwd(),
+      verbose: false,
+      cleanOnceBeforeBuildPatterns: ['**/*', '!.gitkeep'],
+    }),
   ],
 
   optimization: {
