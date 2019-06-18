@@ -26,13 +26,13 @@ const config = Merge(CommonConfig, {
  set in your local environment.
 */
 
-/* if (process.env.ENABLE_SENTRY_RELEASE.toLowerCase() === 'true') {
+if (process.env.ENABLE_SENTRY_RELEASE.toLowerCase() === 'true') {
   config.plugins.push(
     new SentryWebpackPlugin({
       release: Date.now().toString(),
       include: buildDir,
     })
   );
-} */
+}
 
 module.exports = config;
