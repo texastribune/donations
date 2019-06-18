@@ -76,7 +76,7 @@ export default {
   filters: {
     amountAndPeriod(value) {
       const [amount, period] = value.split('|');
-      return `${formatCurrency(amount)}, ${period}`;
+      return `${formatCurrency(parseFloat(amount))}, ${period}`;
     },
   },
 
