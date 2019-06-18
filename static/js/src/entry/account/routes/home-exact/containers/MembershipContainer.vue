@@ -9,7 +9,6 @@
 /* eslint-disable camelcase */
 
 import isPast from 'date-fns/is_past';
-import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import Membership from '../components/Membership.vue';
@@ -37,9 +36,10 @@ export default {
       const {
         next_transaction: { amount, period, date, payment_type, credit_card },
       } = this.user;
+
       const data = {
         amount,
-        date: format(parse(date), 'MMMM D, YYYY'),
+        date,
         period,
       };
 

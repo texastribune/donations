@@ -6,14 +6,14 @@
         class="has-text-gray-dark t-space-heading-m"
       >
         Your subscription to The Blast will renew on
-        <strong>{{ nextTransaction.date }}</strong
+        <strong>{{ nextTransaction.date | longDate }}</strong
         >, charging <strong>{{ nextTransaction.amount | currency }}</strong> to
         your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
         Your subscription to The Blast is good through
-        <strong>{{ nextTransaction.date }}</strong
+        <strong>{{ nextTransaction.date | longDate }}</strong
         >.
       </p>
     </template>

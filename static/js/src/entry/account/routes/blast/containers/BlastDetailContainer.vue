@@ -5,11 +5,7 @@
 <script>
 /* eslint-disable camelcase */
 
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-
 import BlastDetail from '../components/BlastDetail.vue';
-import formatCurrency from '../../../utils/format-currency';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
@@ -44,17 +40,17 @@ export default {
         } = next_blast_transaction;
 
         data[0].heading = 'Subscription';
-        data[0].text = `${formatCurrency(amount)}, ${period}`;
+        data[0].text = `${amount}|${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
           data[2].heading = 'Next payment';
-          data[2].text = format(parse(date), 'MMMM D, YYYY');
+          data[2].text = date;
         } else {
           data[1].heading = 'Next payment';
-          data[1].text = format(parse(date), 'MMMM D, YYYY');
+          data[1].text = date;
         }
       } else if (is_former_blast_subscriber) {
         const {
@@ -65,7 +61,7 @@ export default {
         } = last_blast_transaction;
 
         data[0].heading = 'Past subscription';
-        data[0].text = `${formatCurrency(amount)}, ${period}`;
+        data[0].text = `${amount}|${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';

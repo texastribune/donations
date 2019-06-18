@@ -17,7 +17,9 @@
       <tbody>
         <tr v-for="payment in slicedPayments" :key="payment.id">
           <td>
-            <slot name="date" :date="payment.date"> {{ payment.date }} </slot>
+            <slot name="date" :date="payment.date">
+              {{ payment.date | shortDate }}
+            </slot>
           </td>
           <td>
             <slot name="amount" :amount="payment.amount">

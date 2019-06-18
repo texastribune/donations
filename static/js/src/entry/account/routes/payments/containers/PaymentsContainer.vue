@@ -13,7 +13,6 @@
 /* eslint-disable camelcase */
 
 import parse from 'date-fns/parse';
-import format from 'date-fns/format';
 import isPast from 'date-fns/is_past';
 import isFuture from 'date-fns/is_future';
 import { mapActions } from 'vuex';
@@ -76,12 +75,8 @@ export default {
         if (a.date < b.date) return 1;
         return 0;
       });
-      const formatted = sorted.map(item => ({
-        ...item,
-        date: format(item.date, 'MM/DD/YY'),
-      }));
 
-      return formatted;
+      return sorted;
     },
   },
 

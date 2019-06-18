@@ -13,6 +13,8 @@ import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
 import { LoggedOutError } from './errors';
 import formatCurrency from './utils/format-currency';
+import formatLongDate from './utils/format-long-date';
+import formatShortDate from './utils/format-short-date';
 import {
   GA_USER_PORTAL_NAV,
   GA_USER_PORTAL,
@@ -41,6 +43,8 @@ Vue.component('Loader', Loader);
 Vue.component('Icon', Icon);
 
 Vue.filter('currency', formatCurrency);
+Vue.filter('shortDate', formatShortDate);
+Vue.filter('longDate', formatLongDate);
 
 // https://itnext.io/managing-and-refreshing-auth0-tokens-in-a-vuejs-application-65eb29c309bc
 function getRefreshInterval(expiryInSeconds) {

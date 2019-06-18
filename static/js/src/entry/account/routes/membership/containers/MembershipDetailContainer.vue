@@ -10,11 +10,9 @@
 /* eslint-disable camelcase */
 
 import isPast from 'date-fns/is_past';
-import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import MembershipDetail from '../components/MembershipDetail.vue';
-import formatCurrency from '../../../utils/format-currency';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
@@ -48,10 +46,7 @@ export default {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Last donation';
-        data[0].text = `${formatCurrency(amount)}, ${format(
-          parse(date),
-          'MMMM D, YYYY'
-        )}`;
+        data[0].text = `${amount}|${date}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
@@ -67,10 +62,7 @@ export default {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Last donation';
-        data[0].text = `${formatCurrency(amount)}, ${format(
-          parse(date),
-          'MMMM D, YYYY'
-        )}`;
+        data[0].text = `${amount}|${date}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
@@ -92,17 +84,17 @@ export default {
         } = next_transaction;
 
         data[0].heading = 'Donation';
-        data[0].text = `${formatCurrency(amount)}, ${period}`;
+        data[0].text = `${amount}|${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
           data[2].heading = 'Next payment';
-          data[2].text = format(parse(date), 'MMMM D, YYYY');
+          data[2].text = date;
         } else {
           data[1].heading = 'Next payment';
-          data[1].text = format(parse(date), 'MMMM D, YYYY');
+          data[1].text = date;
         }
       }
 

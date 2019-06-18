@@ -5,12 +5,31 @@
         <template v-slot="slotProps">
           <span
             :class="
-              slotProps.item.text === 'Your membership expired.'
+              slotProps.item.text.toLowerCase() === 'your membership expired.'
                 ? 'has-text-error'
                 : 'has-text-gray-dark'
             "
           >
-            {{ slotProps.item.text }}
+            <template
+              v-if="slotProps.item.heading.toLowerCase() === 'last donation'"
+            >
+              {{ slotProps.item.text | amountAndDate }}
+            </template>
+            <template
+              v-else-if="slotProps.item.heading.toLowerCase() === 'donation'"
+            >
+              {{ slotProps.item.text | amountAndPeriod }}
+            </template>
+            <template
+              v-else-if="
+                slotProps.item.heading.toLowerCase() === 'next payment'
+              "
+            >
+              {{ slotProps.item.text | longDate }}
+            </template>
+            <template v-else>
+              {{ slotProps.item.text }}
+            </template>
           </span>
         </template>
       </info-list>
@@ -71,11 +90,25 @@
 
 <script>
 import InfoList from '../../../components/InfoList.vue';
+import formatCurrency from '../../../utils/format-currency';
+import formatLongDate from '../../../utils/format-long-date';
 
 export default {
   name: 'MembershipDetail',
 
   components: { InfoList },
+
+  filters: {
+    amountAndPeriod(value) {
+      const [amount, period] = value.split('|');
+      return `${formatCurrency(amount)}, ${period}`;
+    },
+
+    amountAndDate(value) {
+      const [amount, date] = value.split('|');
+      return `${formatCurrency(amount)}, ${formatLongDate(date)}`;
+    },
+  },
 
   props: {
     data: {

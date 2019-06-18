@@ -2,6 +2,7 @@ import jsPDF from 'jspdf';
 import axios from 'axios';
 
 import formatCurrency from '../../utils/format-currency';
+import formatShortDate from '../../utils/format-short-date';
 
 export default async function buildBlastReceipt({ date, amount, method }) {
   // eslint-disable-next-line new-cap
@@ -10,6 +11,7 @@ export default async function buildBlastReceipt({ date, amount, method }) {
     format: 'letter',
     lineHeight: 1.5,
   });
+  const formattedDate = formatShortDate(date);
   const leftEdge = 40;
   const topEdge = 30;
   const response = await axios.get('/static/img/receipt-logo.png', {
@@ -47,7 +49,7 @@ export default async function buildBlastReceipt({ date, amount, method }) {
   doc.setFontStyle('bold');
   doc.text('Date', leftEdge, 160);
   doc.setFontStyle('normal');
-  doc.text(date, leftEdge, 172);
+  doc.text(formattedDate, leftEdge, 172);
 
   doc.setFontStyle('bold');
   doc.text('Amount', leftEdge, 202);
@@ -74,5 +76,5 @@ export default async function buildBlastReceipt({ date, amount, method }) {
     );
   }
 
-  doc.save(`blast-receipt-${date}.pdf`);
+  doc.save(`blast-receipt-${formattedDate}.pdf`);
 }

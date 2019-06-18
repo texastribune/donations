@@ -10,7 +10,6 @@
 /* eslint-disable camelcase */
 
 import isPast from 'date-fns/is_past';
-import format from 'date-fns/format';
 import parse from 'date-fns/parse';
 
 import MembershipExpired from '../components/MembershipExpired.vue';
@@ -34,18 +33,17 @@ export default {
     },
 
     expirationDate() {
-      const { membership_expiration_date } = this.user;
-
-      return format(parse(membership_expiration_date), 'MMMM D, YYYY');
+      return this.user.membership_expiration_date;
     },
 
     lastTransaction() {
       const {
         last_transaction: { amount, period, date, payment_type, credit_card },
       } = this.user;
+
       const data = {
         amount,
-        date: format(parse(date), 'MMMM D, YYYY'),
+        date,
         period,
       };
 

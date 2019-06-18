@@ -5,9 +5,6 @@
 <script>
 /* eslint-disable camelcase */
 
-import format from 'date-fns/format';
-import parse from 'date-fns/parse';
-
 import Blast from '../components/Blast.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
@@ -29,9 +26,10 @@ export default {
         // eslint-disable-next-line camelcase
         next_blast_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
+
       const data = {
         amount,
-        date: format(parse(date), 'MMMM D, YYYY'),
+        date,
       };
 
       if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
