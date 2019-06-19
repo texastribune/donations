@@ -10,6 +10,7 @@
       <membership-expired />
       <one-time />
       <never-given />
+      <m-dev />
       <blast />
       <blast-cancelled />
     </div>
@@ -26,6 +27,7 @@ import Membership from './containers/MembershipContainer.vue';
 import MembershipExpired from './containers/MembershipExpiredContainer.vue';
 import OneTime from './containers/OneTimeContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
+import MDev from './containers/MDevContainer.vue';
 import Blast from './containers/BlastContainer.vue';
 import BlastCancelled from './containers/BlastCancelledContainer.vue';
 import Messages from './containers/MessagesContainer.vue';
@@ -40,11 +42,23 @@ export default {
     MembershipExpired,
     OneTime,
     NeverGiven,
+    MDev,
     Blast,
     BlastCancelled,
     Help,
   },
 
   mixins: [routeMixin],
+
+  computed: {
+    route() {
+      return {
+        isExact: true,
+        isProtected: false,
+        meetsCriteria: true,
+        title: 'Home',
+      };
+    },
+  },
 };
 </script>

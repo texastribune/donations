@@ -34,7 +34,7 @@
               Account Overview
             </router-link>
           </li>
-          <li v-if="showMembershipLinks">
+          <li v-if="showMembershipLink">
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -45,7 +45,7 @@
               Membership Status
             </router-link>
           </li>
-          <li v-if="showMembershipLinks">
+          <li v-if="showPaymentsLink">
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -155,7 +155,12 @@ export default {
       required: true,
     },
 
-    showMembershipLinks: {
+    showMembershipLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showPaymentsLink: {
       type: Boolean,
       required: true,
     },

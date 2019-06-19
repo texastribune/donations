@@ -9,9 +9,11 @@
 
   a {
     transition: all .3s;
+    font-weight: bold;
 
     &.is-active {
       color: $color-gray-medium;
+      font-weight: normal;
     }
   }
 
@@ -26,14 +28,6 @@
       &.is-active {
         border-left-color: $color-yellow-tribune;
       }
-    }
-  }
-
-  &__inner {
-    text-indent: 2.5rem;
-
-    > li {
-      margin-bottom: $size-b;
     }
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <membership-expired
-    v-if="isRecurringAndExpired"
+    v-if="shouldShow"
     :last-transaction="lastTransaction"
     :expiration-date="expirationDate"
   />
@@ -24,12 +24,15 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isRecurringAndExpired() {
-      const { recurring_donor, membership_expiration_date } = this.user;
+    shouldShow() {
+      const {
+        recurring_donor,
+        membership_expiration_date,
+        is_mdev,
+      } = this.user;
       const expired = isPast(parse(membership_expiration_date));
 
-      // eslint-disable-next-line camelcase
-      return recurring_donor && expired;
+      return recurring_donor && expired && !is_mdev;
     },
 
     expirationDate() {

@@ -18,8 +18,7 @@
 <script>
 import { mapActions } from 'vuex';
 
-import protectedRouteMixin from '../../mixins/protected-route';
-import routeFetchMixin from '../../mixins/route-fetch';
+import routeMixin from '../../mixins/route';
 import SideNav from './containers/SideNavContainer.vue';
 import ViewAs from './containers/ViewAsContainer.vue';
 
@@ -28,7 +27,18 @@ export default {
 
   components: { SideNav, ViewAs },
 
-  mixins: [protectedRouteMixin, routeFetchMixin],
+  mixins: [routeMixin],
+
+  computed: {
+    route() {
+      return {
+        isExact: false,
+        isProtected: true,
+        meetsCriteria: true,
+        title: null,
+      };
+    },
+  },
 
   methods: {
     ...mapActions('user', ['getUser']),
