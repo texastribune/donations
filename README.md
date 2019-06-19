@@ -61,23 +61,22 @@ Running the Project
 
 Run `make backing`. This will start RabbitMQ and Redis.
 Run `make`. This will drop you into the Flask app.
-Run `yarn run dev`. You should then be able to interact with the app at `localhost:80`
+Run `make restart`. You should then be able to interact with the app at `localhost:80`. This command will also build CSS and JS in watch mode, and allow you to make test transactions.
+
 ```
 C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
 celery beat --app app.celery &
 # gunicorn app:app --log-file=- --bind=0.0.0.0:5000 --access-logfile=-
 ```
 
-Front-end commands:
-+ `yarn run dev`: Start Flask development server and watch for JS and CSS changes
-+ `yarn run js:dev`: Just watch for JS and CSS changes
+Front end
+-------------------
+The easiest way to develop is by running `make restart`. Other more granular commands:
 
-Front-end notes:
-+ On `yarn run dev`, all files are built to `/static/js/build`, which **is** ignored from version control. That way you can make as many changes as you want when developing, Webpack will recompile the files, and they'll never show up in VC.
-+ On deploy, all files are built to `/static/js/prod/`. This is **not** ignored from VC because Heroku cannot create directories and thus needs it to exist in the repo. That's why it contains a `.gitkeep` file.
-+ On deploy, the production JS has to be built via the `postinstall` script. This means that, if you run `yarn` or `yarn add <package>` locally inside Docker, you'll get some compiled files in `/static/js/prod/` that show up in version control. **Delete them!**
-
-**Important note**: To build our JS on deployment, Heroku needs to run a `postinstall` script in `package.json`. This also means every time you run `yarn` or `yarn add <package>`, it's going to trigger that build and generate a bunch of files in `static/js/prod/`. Don't commit these!
++ `yarn run js:dev`: Build JS and put Webpack in watch mode
++ `yarn run ds-tasks-watch`: Build CSS and icons in watch mode
++ `yarn run dev`: Run above two commands together
++ `yarn run lint`: Run ESLint
 
 Running tests
 -------------

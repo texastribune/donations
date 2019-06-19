@@ -417,10 +417,10 @@ def robots_txt():
     return send_from_directory(os.path.join(root_dir, "app"), "robots.txt")
 
 
-@app.route("/user-portal", defaults={"path": "/"})
-@app.route("/user-portal/<path>")
-def user_portal(path):
-    return render_template("user-portal.html", bundles=get_bundles("user-portal"))
+@app.route("/account/", defaults={"path": ""})
+@app.route("/account/<path>/")
+def account(path):
+    return render_template("account.html", bundles=get_bundles("account"))
 
 
 @app.route("/donate", methods=["GET", "POST"])

@@ -1,0 +1,72 @@
+<template>
+  <aside
+    class="c-appeal t-space-heading-m has-ump-side-padding has-white-off-bg-until-bp-l"
+  >
+    <h2 class="t-uppercase t-size-b has-s-btm-marg">Member benefits</h2>
+    <p class="has-b-btm-marg">
+      As a thank you for supporting our journalism, you receive:
+    </p>
+    <ul class="t-linkstyle--underlined has-xs-btm-marg">
+      <li
+        v-for="(benefit, index) in benefits"
+        :key="benefit.id"
+        :aria-label="
+          index > ceiling ? 'benefit not achieved' : 'benefit achieved'
+        "
+        :class="{
+          'has-xs-btm-marg': index !== benefits.length - 1,
+          'c-appeal__item--no': index > ceiling,
+        }"
+        class="c-appeal__item"
+      >
+        <icon :name="index > ceiling ? 'close' : 'check'" />
+        <component :is="benefit.component" />
+      </li>
+    </ul>
+    <a
+      class="c-button c-button--s has-text-white has-bg-teal l-width-full l-display-block"
+      href="mailto:community@texastribune.org"
+      ga-on="click"
+      :ga-event-category="ga.donations.category"
+      :ga-event-action="ga.donations.actions['membership-intent']"
+      :ga-event-label="ga.donations.labels['upgrade-contact']"
+    >
+      Contact us for more membership information
+    </a>
+  </aside>
+</template>
+
+<script>
+import BENEFITS from '../../../benefits';
+
+export default {
+  name: 'Appeal',
+
+  props: {
+    level: {
+      type: String,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      benefits: BENEFITS,
+    };
+  },
+
+  computed: {
+    ceiling() {
+      const mapping = {
+        unknown: 3,
+        member: 3,
+        'informed member': 4,
+        'engaged member': 5,
+        'involved member': 6,
+      };
+
+      return mapping[this.level.toLowerCase()];
+    },
+  },
+};
+</script>

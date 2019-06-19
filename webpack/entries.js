@@ -6,7 +6,7 @@ const entriesNames = [
   'circle',
   'business',
   'old',
-  'user-portal',
+  'account',
 ];
 const polyfillPaths = ['es6-promise/auto', 'nodent-runtime'];
 

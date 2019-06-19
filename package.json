@@ -30,13 +30,15 @@
     "babel-loader": "^8.0.0",
     "css-loader": "^1.0.0",
     "date-fns": "^1.30.1",
-    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#development",
+    "ds-toolbox-test": "https://github.com/texastribune/ds-toolbox.git#master",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
     "fast-glob": "^2.2.6",
     "file-loader": "^1.1.11",
     "fontfaceobserver": "^2.1.0",
     "glob-watcher": "^5.0.3",
+    "jsonwebtoken": "^8.5.1",
+    "jspdf": "^1.5.3",
     "node-sass": "^4.12.0",
     "nodent-runtime": "^3.2.1",
     "npm-run-all": "^4.1.5",
@@ -96,6 +98,10 @@
       ]
     }
   },
+  "eslintIgnore": [
+    "static/js/src/entry/account/routes/payments/components/Payments.vue",
+    "static/js/src/entry/account/routes/blast-payments/components/BlastPayments.vue"
+  ],
   "prettier": {
     "bracketSpacing": true,
     "printWidth": 80,
