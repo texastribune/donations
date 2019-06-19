@@ -2871,7 +2871,7 @@ domutils@^1.5.1, domutils@^1.7.0:
 
 "ds-toolbox-test@https://github.com/texastribune/ds-toolbox.git#master":
   version "0.0.4"
-  resolved "https://github.com/texastribune/ds-toolbox.git#454250397cf479467cd0509c06c32d77720dd2ca"
+  resolved "https://github.com/texastribune/ds-toolbox.git#f3ed53238461e6336bf0650b768465ac013e564b"
   dependencies:
     ansi-colors "^3.2.4"
     autoprefixer "^9.5.1"
