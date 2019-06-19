@@ -25,6 +25,7 @@
     "@babel/plugin-transform-runtime": "^7.4.3",
     "@babel/preset-env": "^7.0.0",
     "@babel/runtime": "^7.4.3",
+    "@texastribune/queso-tools": "^0.0.1-4",
     "axios": "^0.19.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^2.1.1",
@@ -70,7 +71,8 @@
   ],
   "eslintConfig": {
     "env": {
-      "browser": true
+      "browser": true,
+      "node": true
     },
     "parser": "vue-eslint-parser",
     "extends": [
