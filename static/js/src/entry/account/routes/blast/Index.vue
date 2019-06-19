@@ -42,12 +42,5 @@ export default {
       };
     },
   },
-
-  methods: {
-    async fetchData() {
-      // await this.getUser();
-      this.$router.push({ name: 'membership' });
-    },
-  },
 };
 </script>
