@@ -71,8 +71,7 @@
   ],
   "eslintConfig": {
     "env": {
-      "browser": true,
-      "node": true
+      "browser": true
     },
     "parser": "vue-eslint-parser",
     "extends": [

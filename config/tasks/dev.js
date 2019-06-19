@@ -2,7 +2,6 @@ const watch = require('glob-watcher');
 const { styles, icons, utils } = require('@texastribune/queso-tools');
 const { css, svg, manifest } = require('../paths.js');
 
-
 async function dev() {
   const compileStyles = async showMsg => {
     const showMsgToggle = typeof showMsg !== 'undefined' ? showMsg : true;
@@ -38,6 +37,6 @@ async function dev() {
   // styles watching
   utils.logMessage('Success! Watching styles...', 'green');
   watch(['./**/*.scss'], compileStyles);
-};
+}
 
 dev().catch(e => utils.logMessage(e));

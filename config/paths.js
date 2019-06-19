@@ -23,10 +23,12 @@ const svgMap = () => {
   const localSet = SVG_LOCAL_FILES.map(file =>
     utils.resolveApp(`${SVG_LOCAL_DIR}/${file}.svg`)
   );
-  return [{
-    in: [...libSet, ...localSet],
-    out: utils.resolveApp(SVG_OUTPUT_SPRITE)
-  }];
+  return [
+    {
+      in: [...libSet, ...localSet],
+      out: utils.resolveApp(SVG_OUTPUT_SPRITE)
+    }
+  ];
 };
 
 const manifest = utils.resolveApp(`${CSS_OUTPUT_DIR}styles.json`);
