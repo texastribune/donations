@@ -8,6 +8,7 @@
 @import "ds-toolbox-test/assets/scss/2-tools/all";
 
 // t-size helper for sizing fonts
+@import "ds-toolbox-test/assets/scss/5-typography/t-helpers";
 @import "ds-toolbox-test/assets/scss/5-typography/t-size";
 
 // c-icon component used for SVGs
@@ -15,3 +16,8 @@
 
 // c-site-footer
 @import "ds-toolbox-test/assets/scss/6-components/site-footer/site-footer";
+
+// color-helpers
+@import "ds-toolbox-test/assets/scss/utilities/color-helpers";
+@import "ds-toolbox-test/assets/scss/utilities/notch";
+@import "ds-toolbox-test/assets/scss/utilities/spacing";

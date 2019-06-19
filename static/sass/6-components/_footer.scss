@@ -1,6 +1,6 @@
+// To be removed after this repo is set up to take the base ds-toolbox elements file
 .c-site-footer {
-  .border--yellow_notch {
-    border-top: 2px solid $color-yellow-tribune;
-    margin: $size-xs 0;
+  &__links {
+    list-style: none;
   }
 }
