@@ -1,5 +1,5 @@
 <template>
-  <one-time v-if="isOneTime" :last-transaction="lastTransaction" />
+  <one-time v-if="shouldShow" :last-transaction="lastTransaction" />
 </template>
 
 <script>
@@ -17,10 +17,10 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isOneTime() {
-      const { recurring_donor, never_given } = this.user;
+    shouldShow() {
+      const { recurring_donor, never_given, is_mdev } = this.user;
 
-      return !recurring_donor && !never_given;
+      return !recurring_donor && !never_given && !is_mdev;
     },
 
     lastTransaction() {

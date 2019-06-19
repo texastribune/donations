@@ -3,7 +3,7 @@
     v-if="isVisible"
     style="
       position: fixed;
-      bottom: 300px;
+      bottom: 100px;
       left: 0;
       background: rgba(255, 255, 255, 0.9);
       padding: 30px;

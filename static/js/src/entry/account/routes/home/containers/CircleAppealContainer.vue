@@ -1,17 +1,17 @@
 <template>
-  <appeal v-if="shouldShow" :level="user.membership_level" />
+  <circle-appeal v-if="shouldShow" />
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import Appeal from '../components/Appeal.vue';
+import CircleAppeal from '../components/CircleAppeal.vue';
 import userMixin from '../mixins/user';
 
 export default {
-  name: 'AppealContainer',
+  name: 'CircleAppealContainer',
 
-  components: { Appeal },
+  components: { CircleAppeal },
 
   mixins: [userMixin],
 
@@ -20,7 +20,7 @@ export default {
       const { membership_level, is_mdev } = this.user;
       const isCircle = membership_level.toLowerCase().indexOf('circle') !== -1;
 
-      return !is_mdev && !isCircle;
+      return isCircle && !is_mdev;
     },
   },
 };

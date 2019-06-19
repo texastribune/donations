@@ -1,6 +1,16 @@
 <template>
   <section class="c-detail-box">
-    <div class="has-xxxl-btm-marg"><payment-list :payments="data" /></div>
+    <div class="has-b-btm-marg"><payment-list :payments="data" /></div>
+
+    <p
+      class="t-size-xs t-linkstyle--underlined t-space-heading-m has-text-gray has-xxxl-btm-marg"
+    >
+      Note: Donation history does not include event sponsorships or ticket
+      purchases. To receive a {{ lastYear }} tax receipt with this information,
+      please contact
+      <a href="mailto:community@texastribune.org">community@texastribune.org</a
+      >.
+    </p>
 
     <ul class="c-link-list t-linkstyle--underlined">
       <li v-if="totalGiftsLastYear > 0" class="has-m-btm-marg">

@@ -25,7 +25,7 @@
             </router-link>
           </li>
           <li
-            v-if="showMembershipLinks"
+            v-if="showMembershipLink"
             class="c-navbar__item c-navbar__item--space-right"
           >
             <router-link
@@ -111,7 +111,7 @@
             <strong>Account Overview</strong>
           </router-link>
         </li>
-        <li v-if="showMembershipLinks" class="c-navbar__dropdown-item">
+        <li v-if="showMembershipLink" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             active-class="is-active"
@@ -167,7 +167,7 @@ export default {
       required: true,
     },
 
-    showMembershipLinks: {
+    showMembershipLink: {
       type: Boolean,
       required: true,
     },

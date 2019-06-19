@@ -2,7 +2,8 @@
   <site-footer
     :show-route-links="showRouteLinks"
     :show-blast-links="showBlastLinks"
-    :show-membership-links="showMembershipLinks"
+    :show-membership-link="showMembershipLink"
+    :show-payments-link="showPaymentsLink"
   />
 </template>
 
@@ -38,9 +39,20 @@ export default {
       return is_former_blast_subscriber || is_current_blast_subscriber;
     },
 
-    showMembershipLinks() {
+    showMembershipLink() {
       if (!this.showRouteLinks) return false;
-      return !this.user.never_given;
+
+      const { never_given, is_mdev } = this.user;
+
+      return !never_given && !is_mdev;
+    },
+
+    showPaymentsLink() {
+      if (!this.showRouteLinks) return false;
+
+      const { never_given } = this.user;
+
+      return !never_given;
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <blast v-if="isBlast" :next-transaction="nextTransaction" />
+  <blast v-if="shouldShow" :next-transaction="nextTransaction" />
 </template>
 
 <script>
@@ -17,13 +17,12 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isBlast() {
+    shouldShow() {
       return this.user.is_current_blast_subscriber;
     },
 
     nextTransaction() {
       const {
-        // eslint-disable-next-line camelcase
         next_blast_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
 

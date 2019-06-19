@@ -22,6 +22,17 @@ export default {
 
   mixins: [routeMixin],
 
+  computed: {
+    route() {
+      return {
+        isExact: true,
+        isProtected: false,
+        meetsCriteria: true,
+        title: 'Logged In',
+      };
+    },
+  },
+
   mounted() {
     setFlag();
     redirectAfterLogIn();

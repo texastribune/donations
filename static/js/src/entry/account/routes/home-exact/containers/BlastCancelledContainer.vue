@@ -1,8 +1,5 @@
 <template>
-  <blast-cancelled
-    v-if="isBlastCancelled"
-    :last-transaction="lastTransaction"
-  />
+  <blast-cancelled v-if="shouldShow" :last-transaction="lastTransaction" />
 </template>
 
 <script>
@@ -20,8 +17,7 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isBlastCancelled() {
-      // eslint-disable-next-line camelcase
+    shouldShow() {
       return this.user.is_former_blast_subscriber;
     },
 
