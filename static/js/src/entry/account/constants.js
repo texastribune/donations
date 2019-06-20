@@ -13,7 +13,7 @@ export const AUTH_LOGOUT_COMPLETE_URL = `${
 export const AUTH_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-in`;
-export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';
+export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
 export const CARD_PAYMENT_FLAG = 'credit card';
 export const BLAST_PAYMENT_FLAG = 'the blast';
 export const { SENTRY_DSN } = process.env;
@@ -38,6 +38,8 @@ export const GA_USER_PORTAL_NAV = {
     'support-landing': 'support landing',
     'privacy-policy': 'privacy policy',
     'texas-tribune-home': 'texas tribune home',
+    'circle-landing': 'circle landing',
+    'donor-wall': 'donor wall',
   },
 };
 export const GA_USER_PORTAL = {
@@ -64,15 +66,16 @@ export const GA_DONATIONS = {
     'membership-intent': 'membership-intent',
   },
   labels: {
-    'upgrade-membership': 'user portal - sustaining',
+    'upgrade-membership': 'user portal - become a sustainer',
     'renew-membership': 'user portal - renew',
-    'upgrade-contact': 'user portal - upgrade contact',
+    'upgrade-contact': 'user portal - contact to upgrade',
+    'never-given': 'user portal - never given',
   },
 };
 
 export const GA_BLAST_INTENT = {
   category: 'blast intent',
-  action: {
+  actions: {
     'renew-blast': 'user portal - renew link',
   },
   labels: {

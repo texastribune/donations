@@ -2,22 +2,23 @@
   <summary-box heading="membership" :display="{ isExpired: true }">
     <template v-slot:content>
       <p class="has-text-gray-dark t-space-heading-m">
+        Thanks for your previous support!
         <span class="has-text-error"
           >Your membership expired on
-          <strong>{{ expirationDate | longDate }}</strong
+          <strong>{{ membershipExpirationDate | longDate }}</strong
           >.</span
         >
         <template v-if="lastTransaction.last4">
           Your last donation of
-          <strong>${{ lastTransaction | currency }}</strong> was charged on
-          <strong>{{ lastTransaction.date | longDate }}</strong> to your card
-          ending in <strong>{{ lastTransaction.last4 }}</strong
+          <strong>{{ lastTransaction.amount | currency }}</strong> was charged
+          on <strong>{{ lastTransaction.date | longDate }}</strong
+          >, to your card ending in <strong>{{ lastTransaction.last4 }}</strong
           >.
         </template>
         <template v-else>
           Your last donation of
-          <strong>${{ lastTransaction.amount | currency }}</strong> was charged
-          on <strong>{{ lastTransaction.date | longDate }}</strong
+          <strong>{{ lastTransaction.amount | currency }}</strong> was on
+          <strong>{{ lastTransaction.date | longDate }}</strong
           >.
         </template>
       </p>
@@ -30,7 +31,11 @@
           </span>
           <span class="has-text-gray-dark">
             <a
-              href="#"
+              :href="
+                isCircle
+                  ? '/circle'
+                  : '/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
+              "
               ga-on="click"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
@@ -81,7 +86,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'MembershipExpired',
+  name: 'Expired',
 
   components: { SummaryBox },
 
@@ -91,8 +96,13 @@ export default {
       required: true,
     },
 
-    expirationDate: {
+    membershipExpirationDate: {
       type: String,
+      required: true,
+    },
+
+    isCircle: {
+      type: Boolean,
       required: true,
     },
   },

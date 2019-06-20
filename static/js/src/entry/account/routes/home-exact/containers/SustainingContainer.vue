@@ -1,5 +1,5 @@
 <template>
-  <membership v-if="shouldShow" :next-transaction="nextTransaction" />
+  <sustaining v-if="shouldShow" :next-transaction="nextTransaction" />
 </template>
 
 <script>
@@ -8,14 +8,14 @@
 import isPast from 'date-fns/is_past';
 import parse from 'date-fns/parse';
 
-import Membership from '../components/Membership.vue';
+import Sustaining from '../components/Sustaining.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
-  name: 'MembershipContainer',
+  name: 'SustainingContainer',
 
-  components: { Membership },
+  components: { Sustaining },
 
   mixins: [userMixin],
 
@@ -26,9 +26,9 @@ export default {
         membership_expiration_date,
         is_mdev,
       } = this.user;
-      const expired = isPast(parse(membership_expiration_date));
+      const isExpired = isPast(parse(membership_expiration_date));
 
-      return recurring_donor && !expired && !is_mdev;
+      return recurring_donor && !isExpired && !is_mdev;
     },
 
     nextTransaction() {

@@ -8,7 +8,13 @@
       Note: Donation history does not include event sponsorships or ticket
       purchases. To receive a {{ lastYear }} tax receipt with this information,
       please contact
-      <a href="mailto:community@texastribune.org">community@texastribune.org</a
+      <a
+        href="mailto:community@texastribune.org"
+        ga-on="click"
+        :ga-event-category="ga.userPortal.category"
+        :ga-event-action="ga.userPortal.actions['contact-us']"
+        :ga-event-label="ga.userPortal.labels.payments"
+        >community@texastribune.org</a
       >.
     </p>
 
@@ -30,13 +36,17 @@
           </button>
         </span>
       </li>
-      <li v-if="isExpired && !isOneTime" class="has-m-btm-marg">
+      <li v-if="isExpired && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="#"
+            :href="
+              isCircle
+                ? '/circle'
+                : '/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
+            "
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -46,13 +56,13 @@
           </a>
         </span>
       </li>
-      <li v-if="isOneTime" class="has-m-btm-marg">
+      <li v-if="!isExpired && isOneTime && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="#"
+            href="/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -104,6 +114,16 @@ export default {
     },
 
     isOneTime: {
+      type: Boolean,
+      required: true,
+    },
+
+    isCircle: {
+      type: Boolean,
+      required: true,
+    },
+
+    isMDev: {
       type: Boolean,
       required: true,
     },

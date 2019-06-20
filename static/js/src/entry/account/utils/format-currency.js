@@ -9,5 +9,6 @@ export default function formatCurrency(value) {
   }
 
   const withCommas = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
   return `$${withCommas}`;
 }

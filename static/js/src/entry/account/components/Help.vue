@@ -3,11 +3,10 @@
     :class="display.hasTopPadding && 'c-help--has-top-padding'"
     class="c-help has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
-    <h2 class="t-uppercase t-size-b has-s-btm-marg">Need help?</h2>
+    <h2 class="t-uppercase t-size-b has-s-btm-marg">Contact us</h2>
     <p class="t-space-heading-m t-linkstyle--underlined has-text-gray-dark">
       <template v-if="home">
-        If you have questions about your Texas Tribune account or would like to
-        give us feedback on this experience, please contact us at
+        Have questions about your account? Or feedback about this website? Email
         <a
           href="mailto:community@texastribune.org"
           ga-on="click"
@@ -21,7 +20,7 @@
       <template v-else-if="membership || payments">
         To update your membership status, contact us at
         <a
-          href="mailto:community@texastribune.org"
+          href="mailto:membership@texastribune.org"
           ga-on="click"
           :ga-event-category="ga.userPortal.category"
           :ga-event-action="ga.userPortal.actions['contact-us']"
@@ -31,13 +30,13 @@
               : ga.userPortal.labels.payments
           "
         >
-          community@texastribune.org </a
+          membership@texastribune.org </a
         >.
       </template>
       <template v-else-if="blast || blastPayments">
         To update your subscription to The Blast, contact us at
         <a
-          href="mailto:community@texastribune.org"
+          href="mailto:blast@texastribune.org"
           ga-on="click"
           :ga-event-category="ga.userPortal.category"
           :ga-event-action="ga.userPortal.actions['contact-us']"
@@ -47,7 +46,7 @@
               : ga.userPortal.labels['blast-payments']
           "
         >
-          community@texastribune.org </a
+          blast@texastribune.org </a
         >.
       </template>
     </p>

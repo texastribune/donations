@@ -3,11 +3,14 @@
     :show-route-links="showRouteLinks"
     :show-blast-links="showBlastLinks"
     :show-membership-link="showMembershipLink"
+    :is-logged-in="isLoggedIn"
   />
 </template>
 
 <script>
 /* eslint-disable camelcase */
+
+import { mapState } from 'vuex';
 
 import NavBar from '../components/NavBar.vue';
 import userMixin from '../routes/home/mixins/user';
@@ -27,6 +30,12 @@ export default {
   },
 
   computed: {
+    ...mapState('user', ['accessToken']),
+
+    isLoggedIn() {
+      return !!this.accessToken;
+    },
+
     showBlastLinks() {
       if (!this.showRouteLinks) return false;
 

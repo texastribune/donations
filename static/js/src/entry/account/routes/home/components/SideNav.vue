@@ -64,7 +64,7 @@
           :ga-event-action="ga.userPortalNav.actions.side"
           :ga-event-label="ga.userPortalNav.labels['blast-payments']"
         >
-          Blast Payment History
+          The Blast Payment History
         </router-link>
       </li>
     </ul>

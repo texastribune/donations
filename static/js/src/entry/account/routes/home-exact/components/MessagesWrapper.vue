@@ -11,34 +11,53 @@
           <icon name="bell" :display="{ size: 's' }" />
         </template>
         <template v-slot:content>
-          <p class="has-text-gray-dark t-space-heading-m t-size-s">
-            <em>
-              <template v-if="isRecurring && isBlast">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+          <div
+            class="has-text-gray-dark t-size-s t-linkstyle--underlined t-space-heading-m"
+          >
+            <p class="has-b-btm-marg">
+              <template v-if="isMDev">
+                Thanks for creating a Texas Tribune account. You can use this
+                login to comment on texastribune.org stories, view your donation
+                history or request a {{ lastYear }} tax receipt. Soon, you’ll
+                also be able to update your profile information and newsletter
+                preferences.
               </template>
-              <template v-else-if="isRecurring">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+              <template v-else-if="!isNeverGiven && isBlast">
+                Thanks for creating your Texas Tribune account! You can use this
+                login to comment on texastribune.org stories, view your donation
+                history, download your {{ lastYear }} tax receipt and view your
+                Blast payment history. Soon, you’ll also be able to update your
+                profile information and newsletter preferences.
+              </template>
+              <template v-else-if="!isNeverGiven">
+                Thanks for creating your Texas Tribune account! You can use this
+                login to comment on texastribune.org stories, view your donation
+                history and download a {{ lastYear }} tax receipt. Soon, you’ll
+                also be able to update your profile information and newsletter
+                preferences.
               </template>
               <template v-else-if="isBlast">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                Thanks for creating a Texas Tribune account! You can use this
+                login to comment on texastribune.org stories and view your Blast
+                payment history. Soon, you’ll also be able to update your
+                profile information and newsletter preferences.
               </template>
               <template v-else-if="isNeverGiven">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
+                Thanks for creating a Texas Tribune account. You can use this
+                login to comment on texastribune.org stories. Soon, you’ll also
+                be able to update your profile information and newsletter
+                preferences.
               </template>
-            </em>
-          </p>
+            </p>
+            <p>
+              Need to make a change now? Click "account" anytime to reset your
+              password, or email
+              <a href="mailto:community@texastribune.org"
+                >community@texastribune.org</a
+              >
+              with other questions.
+            </p>
+          </div>
         </template>
       </message>
     </template>
@@ -46,6 +65,8 @@
 </template>
 
 <script>
+import getYear from 'date-fns/get_year';
+
 import Messages from '../../../components/Messages.vue';
 import Message from '../../../components/Message.vue';
 import { READ_ONLY_WELCOME_MESSAGE_KEY } from '../../../constants';
@@ -56,11 +77,6 @@ export default {
   components: { Messages, Message },
 
   props: {
-    isRecurring: {
-      type: Boolean,
-      required: true,
-    },
-
     isBlast: {
       type: Boolean,
       required: true,
@@ -70,12 +86,23 @@ export default {
       type: Boolean,
       required: true,
     },
+
+    isMDev: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data() {
     return {
       readOnlyWelcomeMessageKey: READ_ONLY_WELCOME_MESSAGE_KEY,
     };
+  },
+
+  computed: {
+    lastYear() {
+      return getYear(new Date()) - 1;
+    },
   },
 };
 </script>

@@ -7,14 +7,18 @@
       >
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>${{ lastTransaction.amount | currency }}</strong> was charged on
-        <strong>{{ lastTransaction.date | longDate }}</strong> to your card
-        ending in <strong>{{ lastTransaction.last4 }}</strong
+        <strong>{{ lastTransaction.date | longDate }}</strong
+        >, to your card ending in <strong>{{ lastTransaction.last4 }}</strong
+        >. Your membership is good through
+        <strong>{{ membershipExpirationDate | longDate }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
         Thank you for being a Texas Tribune member! Your last donation of
-        <strong>${{ lastTransaction.amount | currency }}</strong> was charged on
+        <strong>${{ lastTransaction.amount | currency }}</strong> was on
         <strong>{{ lastTransaction.date | longDate }}</strong
+        >. Your membership is good through
+        <strong>{{ membershipExpirationDate | longDate }}</strong
         >.
       </p>
     </template>
@@ -58,7 +62,7 @@
           </span>
           <span class="has-text-gray-dark">
             <a
-              href="#"
+              href="/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today"
               ga-on="click"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
@@ -84,6 +88,11 @@ export default {
   props: {
     lastTransaction: {
       type: Object,
+      required: true,
+    },
+
+    membershipExpirationDate: {
+      type: String,
       required: true,
     },
   },
