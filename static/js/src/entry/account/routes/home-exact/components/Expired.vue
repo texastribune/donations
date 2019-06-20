@@ -11,8 +11,8 @@
         <template v-if="lastTransaction.last4">
           Your last donation of
           <strong>{{ lastTransaction.amount | currency }}</strong> was charged
-          on <strong>{{ lastTransaction.date | longDate }}</strong> to your card
-          ending in <strong>{{ lastTransaction.last4 }}</strong
+          on <strong>{{ lastTransaction.date | longDate }}</strong
+          >, to your card ending in <strong>{{ lastTransaction.last4 }}</strong
           >.
         </template>
         <template v-else>
@@ -86,7 +86,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'SustainingExpired',
+  name: 'Expired',
 
   components: { SummaryBox },
 

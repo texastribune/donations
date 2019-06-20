@@ -19,7 +19,7 @@
               ga-on="click"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['upgrade-membership']"
+              :ga-event-label="ga.donations.labels['never-given']"
             >
               Learn more and join now
             </a>

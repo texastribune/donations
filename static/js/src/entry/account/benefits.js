@@ -4,7 +4,19 @@ const BENEFITS = [
     component: {
       name: 'Decal',
       render(h) {
-        return h('span', 'Official member decal');
+        return h('span', [
+          'Our ',
+          h(
+            'a',
+            {
+              attrs: {
+                href:
+                  'https://twitter.com/TexasTribune/status/1058042543273848837/photo/1',
+              },
+            },
+            'official member decal'
+          ),
+        ]);
       },
     },
   },
@@ -13,7 +25,19 @@ const BENEFITS = [
     component: {
       name: 'Email',
       render(h) {
-        return h('span', 'Monthly members-only email');
+        return h('span', [
+          'Behind-the-scenes access to the Texas Tribune newsroom via our monthly ',
+          h(
+            'a',
+            {
+              attrs: {
+                href:
+                  'https://mailchi.mp/texastribune/your-april-membersonly-newsletter-356341',
+              },
+            },
+            'members-only newsletter'
+          ),
+        ]);
       },
     },
   },
@@ -52,7 +76,7 @@ const BENEFITS = [
                   'https://www.texastribune.org/support-us/donors-and-members/',
               },
             },
-            'donor wall'
+            'growing donor wall'
           ),
         ]);
       },
@@ -65,7 +89,7 @@ const BENEFITS = [
       render(h) {
         return h(
           'span',
-          'Informed Members also receive: Quarterly stakeholder report'
+          'Informed Members also receive: Quarterly stakeholder reports'
         );
       },
     },
@@ -77,7 +101,7 @@ const BENEFITS = [
       render(h) {
         return h(
           'span',
-          'Engaged Members also receive: Invite to exclusive events'
+          'Engaged Members also receive: Invites to exclusive events'
         );
       },
     },
@@ -88,7 +112,7 @@ const BENEFITS = [
       name: 'Involved',
       render(h) {
         return h('span', [
-          'Involved Members also receive: Discounted rental rates for ',
+          'Involved Members also receive: Discounted ',
           h(
             'a',
             {
@@ -99,6 +123,7 @@ const BENEFITS = [
             },
             'Studio 919'
           ),
+          ' rental rates',
         ]);
       },
     },

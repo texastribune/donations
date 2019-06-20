@@ -48,7 +48,7 @@ export default async function buildTaxReceipt({
 
   doc.setFontSize(12);
   doc.text(`${format(new Date(), 'MMMM D, YYYY')}`, leftEdge, 130);
-  doc.text(`Dear ${greeting},`, leftEdge, 155);
+  doc.text(`Dear ${greeting || 'Donor'},`, leftEdge, 155);
   doc.text(
     `Thank you for your support of The Texas Tribune — the only nonpartisan, member-supported, digitally focused news organization that covers Texas public policy, politics, government and statewide issues. Our nonprofit newsroom relies on the generosity of people like you, which is why your support helps us produce serious journalism about issues that matter to Texas. Please find your ${lastYear} giving summary below.`,
     leftEdge,
@@ -59,34 +59,64 @@ export default async function buildTaxReceipt({
   doc.setFontStyle('bold');
   doc.text(`${lastYear} GIVING SUMMARY`, leftEdge, 265);
 
-  doc.text('Donor', leftEdge, 290);
-  doc.setFontStyle('normal');
-  doc.text(greeting, leftEdge, 302);
+  if (greeting) {
+    doc.text('Donor', leftEdge, 290);
+    doc.setFontStyle('normal');
+    doc.text(greeting, leftEdge, 302);
 
-  doc.setFontStyle('bold');
-  doc.text('Total donation amount', leftEdge, 327);
-  doc.setFontStyle('normal');
-  doc.text(formatCurrency(totalGiftsLastYear), leftEdge, 340);
+    doc.setFontStyle('bold');
+    doc.text('Total donation amount', leftEdge, 327);
+    doc.setFontStyle('normal');
+    doc.text(formatCurrency(totalGiftsLastYear), leftEdge, 340);
 
-  doc.text(
-    "Thanks so much. We couldn't do this work without you!",
-    leftEdge,
-    365
-  );
+    doc.text(
+      "Thanks so much. We couldn't do this work without you!",
+      leftEdge,
+      365
+    );
 
-  doc.text('The Texas Tribune Team', leftEdge, 390);
-  doc.text(
-    'Questions: membership@texastribune.org / 512.716.8695',
-    leftEdge,
-    402
-  );
+    doc.text('The Texas Tribune Team', leftEdge, 390);
+    doc.text(
+      'Questions: membership@texastribune.org / 512.716.8695',
+      leftEdge,
+      402
+    );
 
-  doc.text(
-    'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-452709.',
-    leftEdge,
-    427,
-    { maxWidth: '385' }
-  );
+    doc.text(
+      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-452709.',
+      leftEdge,
+      427,
+      { maxWidth: '385' }
+    );
+  } else {
+    // have to repeat some logic because different spacing
+    // is required if greeting is missing
+
+    doc.setFontStyle('bold');
+    doc.text('Total donation amount', leftEdge, 290);
+    doc.setFontStyle('normal');
+    doc.text(formatCurrency(totalGiftsLastYear), leftEdge, 302);
+
+    doc.text(
+      "Thanks so much. We couldn't do this work without you!",
+      leftEdge,
+      327
+    );
+
+    doc.text('The Texas Tribune Team', leftEdge, 352);
+    doc.text(
+      'Questions: membership@texastribune.org / 512.716.8695',
+      leftEdge,
+      364
+    );
+
+    doc.text(
+      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-452709.',
+      leftEdge,
+      389,
+      { maxWidth: '385' }
+    );
+  }
 
   doc.save(`${lastYear}-texas-tribune-tax-receipt.pdf`);
 }

@@ -7,8 +7,8 @@
       >
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>${{ lastTransaction.amount | currency }}</strong> was charged on
-        <strong>{{ lastTransaction.date | longDate }}</strong> to your card
-        ending in <strong>{{ lastTransaction.last4 }}</strong
+        <strong>{{ lastTransaction.date | longDate }}</strong
+        >, to your card ending in <strong>{{ lastTransaction.last4 }}</strong
         >. Your membership is good through
         <strong>{{ membershipExpirationDate | longDate }}</strong
         >.

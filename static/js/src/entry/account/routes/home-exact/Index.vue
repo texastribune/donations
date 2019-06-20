@@ -6,8 +6,7 @@
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
       <contact-info />
-      <sustaining />
-      <sustaining-expired />
+      <sustaining /> <expired />
       <one-time />
       <never-given />
       <m-dev />
@@ -24,7 +23,7 @@ import routeMixin from '../../mixins/route';
 import Help from '../../components/Help.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import Sustaining from './containers/SustainingContainer.vue';
-import SustainingExpired from './containers/SustainingExpiredContainer.vue';
+import Expired from './containers/ExpiredContainer.vue';
 import OneTime from './containers/OneTimeContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
 import MDev from './containers/MDevContainer.vue';
@@ -39,7 +38,7 @@ export default {
     Messages,
     ContactInfo,
     Sustaining,
-    SustainingExpired,
+    Expired,
     OneTime,
     NeverGiven,
     MDev,

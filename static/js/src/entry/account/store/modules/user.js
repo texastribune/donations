@@ -13,8 +13,6 @@ import {
 } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
-import response from '../../dummy/response.json';
-
 function createDefaultState() {
   return {
     accessToken: '',
@@ -65,7 +63,7 @@ const actions = {
       headers: { Authorization: `Bearer ${state.accessToken}` },
     });
 
-    commit('SET_DETAILS', response);
+    commit('SET_DETAILS', data);
   },
 
   getTokenUser: ({ commit }) =>

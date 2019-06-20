@@ -1,5 +1,5 @@
 <template>
-  <sustaining-expired
+  <expired
     v-if="shouldShow"
     :last-transaction="lastTransaction"
     :is-circle="isCircle"
@@ -13,27 +13,23 @@
 import isPast from 'date-fns/is_past';
 import parse from 'date-fns/parse';
 
-import SustainingExpired from '../components/SustainingExpired.vue';
+import Expired from '../components/Expired.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
-  name: 'SustainingExpiredContainer',
+  name: 'ExpiredContainer',
 
-  components: { SustainingExpired },
+  components: { Expired },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      const {
-        recurring_donor,
-        membership_expiration_date,
-        is_mdev,
-      } = this.user;
-      const expired = isPast(parse(membership_expiration_date));
+      const { never_given, membership_expiration_date, is_mdev } = this.user;
+      const isExpired = isPast(parse(membership_expiration_date));
 
-      return recurring_donor && expired && !is_mdev;
+      return !never_given && isExpired && !is_mdev;
     },
 
     membershipExpirationDate() {
@@ -46,13 +42,12 @@ export default {
 
     lastTransaction() {
       const {
-        last_transaction: { amount, period, date, payment_type, credit_card },
+        last_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
 
       const data = {
         amount,
         date,
-        period,
       };
 
       if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {

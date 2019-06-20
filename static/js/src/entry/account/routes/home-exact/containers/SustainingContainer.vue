@@ -26,9 +26,9 @@ export default {
         membership_expiration_date,
         is_mdev,
       } = this.user;
-      const expired = isPast(parse(membership_expiration_date));
+      const isExpired = isPast(parse(membership_expiration_date));
 
-      return recurring_donor && !expired && !is_mdev;
+      return recurring_donor && !isExpired && !is_mdev;
     },
 
     nextTransaction() {

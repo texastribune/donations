@@ -5,7 +5,7 @@
       <div class="l-minimal__content t-linkstyle--underlined">
         <h1 class="has-xl-btm-marg">Sorry about that.</h1>
         <p class="has-s-btm-marg t-space-heading-m">
-          We’re having trouble loading your account information and we're
+          We’re having trouble loading your account information, and we're
           working hard to fix it.
         </p>
         <p class="t-space-heading-m">

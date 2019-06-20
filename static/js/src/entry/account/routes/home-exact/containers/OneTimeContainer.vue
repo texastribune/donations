@@ -9,6 +9,9 @@
 <script>
 /* eslint-disable camelcase */
 
+import isPast from 'date-fns/is_past';
+import parse from 'date-fns/parse';
+
 import OneTime from '../components/OneTime.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
@@ -22,9 +25,15 @@ export default {
 
   computed: {
     shouldShow() {
-      const { recurring_donor, never_given, is_mdev } = this.user;
+      const {
+        recurring_donor,
+        never_given,
+        is_mdev,
+        membership_expiration_date,
+      } = this.user;
+      const isExpired = isPast(parse(membership_expiration_date));
 
-      return !recurring_donor && !never_given && !is_mdev;
+      return !recurring_donor && !never_given && !is_mdev && !isExpired;
     },
 
     membershipExpirationDate() {

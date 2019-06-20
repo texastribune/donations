@@ -47,29 +47,9 @@ export default {
         next_transaction,
         last_transaction,
       } = this.user;
-      const expired = isPast(parse(membership_expiration_date));
+      const isExpired = isPast(parse(membership_expiration_date));
 
-      if (!recurring_donor) {
-        const { amount, date, payment_type, credit_card } = last_transaction;
-
-        data[0].heading = 'Donation';
-        data[0].text = `${formatCurrency(amount)}, ${formatLongDate(date)}`;
-
-        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
-          data[1].heading = 'Payment method';
-          data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
-          data[2] = { id: 2 };
-          data[2].heading = 'Status';
-          data[2].text = `Your membership is good through ${formatLongDate(
-            membership_expiration_date
-          )}.`;
-        } else {
-          data[1].heading = 'Status';
-          data[1].text = `Your membership is good through ${formatLongDate(
-            membership_expiration_date
-          )}.`;
-        }
-      } else if (recurring_donor && expired) {
+      if (isExpired) {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Last donation';
@@ -89,7 +69,27 @@ export default {
             membership_expiration_date
           )}.`;
         }
-      } else if (recurring_donor && !expired) {
+      } else if (!recurring_donor) {
+        const { amount, date, payment_type, credit_card } = last_transaction;
+
+        data[0].heading = 'Donation';
+        data[0].text = `${formatCurrency(amount)}, ${formatLongDate(date)}`;
+
+        if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
+          data[1].heading = 'Payment method';
+          data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
+          data[2] = { id: 2 };
+          data[2].heading = 'Status';
+          data[2].text = `Your membership is good through ${formatLongDate(
+            membership_expiration_date
+          )}.`;
+        } else {
+          data[1].heading = 'Status';
+          data[1].text = `Your membership is good through ${formatLongDate(
+            membership_expiration_date
+          )}.`;
+        }
+      } else if (recurring_donor) {
         const {
           amount,
           date,

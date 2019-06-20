@@ -51,7 +51,7 @@
             </p>
             <p>
               Need to make a change now? Click "account" anytime to reset your
-              password or email
+              password, or email
               <a href="mailto:community@texastribune.org"
                 >community@texastribune.org</a
               >

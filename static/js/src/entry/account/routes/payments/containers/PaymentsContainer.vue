@@ -52,7 +52,7 @@ export default {
     },
 
     greeting() {
-      return this.user.greeting || 'Placeholder';
+      return this.user.greeting;
     },
 
     data() {

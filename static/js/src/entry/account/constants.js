@@ -35,6 +35,8 @@ export const GA_USER_PORTAL_NAV = {
     'support-landing': 'support landing',
     'privacy-policy': 'privacy policy',
     'texas-tribune-home': 'texas tribune home',
+    'circle-landing': 'circle landing',
+    'donor-wall': 'donor wall',
   },
 };
 export const GA_USER_PORTAL = {
@@ -61,9 +63,10 @@ export const GA_DONATIONS = {
     'membership-intent': 'membership-intent',
   },
   labels: {
-    'upgrade-membership': 'user portal - sustaining',
+    'upgrade-membership': 'user portal - become a sustainer',
     'renew-membership': 'user portal - renew',
-    'upgrade-contact': 'user portal - upgrade contact',
+    'upgrade-contact': 'user portal - contact to upgrade',
+    'never-given': 'user portal - never given',
   },
 };
 

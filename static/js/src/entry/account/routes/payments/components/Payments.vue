@@ -8,7 +8,13 @@
       Note: Donation history does not include event sponsorships or ticket
       purchases. To receive a {{ lastYear }} tax receipt with this information,
       please contact
-      <a href="mailto:community@texastribune.org">community@texastribune.org</a
+      <a
+        href="mailto:community@texastribune.org"
+        ga-on="click"
+        :ga-event-category="ga.userPortal.category"
+        :ga-event-action="ga.userPortal.actions['contact-us']"
+        :ga-event-label="ga.userPortal.labels.payments"
+        >community@texastribune.org</a
       >.
     </p>
 
@@ -30,7 +36,7 @@
           </button>
         </span>
       </li>
-      <li v-if="isExpired && !isOneTime && !isMDev" class="has-m-btm-marg">
+      <li v-if="isExpired && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -50,7 +56,7 @@
           </a>
         </span>
       </li>
-      <li v-if="isOneTime && !isMDev" class="has-m-btm-marg">
+      <li v-if="!isExpired && isOneTime && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>

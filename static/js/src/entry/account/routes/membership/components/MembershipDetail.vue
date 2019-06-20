@@ -17,7 +17,7 @@
     </div>
 
     <ul class="c-link-list t-linkstyle--underlined">
-      <li v-if="isExpired && !isOneTime" class="has-xs-btm-marg">
+      <li v-if="isExpired" class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -37,7 +37,7 @@
           </a>
         </span>
       </li>
-      <li v-if="isOneTime" class="has-xs-btm-marg">
+      <li v-if="!isExpired && isOneTime" class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
