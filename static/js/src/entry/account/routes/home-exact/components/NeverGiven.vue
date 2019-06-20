@@ -15,7 +15,7 @@
           </span>
           <span class="has-text-gray-dark">
             <a
-              href="https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM"
+              href="/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM"
               ga-on="click"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"

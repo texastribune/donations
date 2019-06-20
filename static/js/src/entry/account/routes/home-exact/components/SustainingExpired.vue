@@ -33,8 +33,8 @@
             <a
               :href="
                 isCircle
-                  ? 'https://support.texastribune.org/circle'
-                  : 'https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
+                  ? '/circle'
+                  : '/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
               "
               ga-on="click"
               :ga-event-category="ga.donations.category"

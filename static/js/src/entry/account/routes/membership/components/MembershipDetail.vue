@@ -25,8 +25,8 @@
           <a
             :href="
               isCircle
-                ? 'https://support.texastribune.org/circle'
-                : 'https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
+                ? '/circle'
+                : '/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
             "
             ga-on="click"
             :ga-event-category="ga.donations.category"
@@ -43,7 +43,7 @@
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today"
+            href="/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
