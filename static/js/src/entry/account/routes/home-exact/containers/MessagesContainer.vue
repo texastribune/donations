@@ -1,8 +1,8 @@
 <template>
   <messages-wrapper
-    :is-recurring="isRecurring"
     :is-blast="isBlast"
     :is-never-given="isNeverGiven"
+    :is-m-dev="isMDev"
   />
 </template>
 
@@ -20,8 +20,8 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isRecurring() {
-      return this.user.recurring_donor;
+    isMDev() {
+      return this.user.is_mdev;
     },
 
     isBlast() {

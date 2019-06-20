@@ -16,14 +16,14 @@
         </p>
       </div>
 
-      <div v-if="showRouteLinks" class="c-site-footer__col t-size-s">
+      <div class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
           Your account
         </h4>
         <ul class="c-site-footer__links has-text-white">
-          <li>
+          <li v-if="showRouteLinks">
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"

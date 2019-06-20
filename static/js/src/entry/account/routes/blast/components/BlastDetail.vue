@@ -1,31 +1,6 @@
 <template>
   <section class="c-detail-box">
-    <div class="has-xxl-btm-marg">
-      <info-list :items="data">
-        <template v-slot="slotProps">
-          <span class="has-text-gray-dark">
-            <template
-              v-if="
-                slotProps.item.heading.toLowerCase() === 'subscription' ||
-                  slotProps.item.heading.toLowerCase() === 'past subscription'
-              "
-            >
-              {{ slotProps.item.text | amountAndPeriod }}
-            </template>
-            <template
-              v-else-if="
-                slotProps.item.heading.toLowerCase() === 'next payment'
-              "
-            >
-              {{ slotProps.item.text | longDate }}
-            </template>
-            <template v-else>
-              {{ slotProps.item.text }}
-            </template>
-          </span>
-        </template>
-      </info-list>
-    </div>
+    <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
 
     <ul class="c-link-list t-linkstyle--underlined">
       <li v-if="isCancelled" class="has-xs-btm-marg">
@@ -66,19 +41,11 @@
 
 <script>
 import InfoList from '../../../components/InfoList.vue';
-import formatCurrency from '../../../utils/format-currency';
 
 export default {
   name: 'BlastDetail',
 
   components: { InfoList },
-
-  filters: {
-    amountAndPeriod(value) {
-      const [amount, period] = value.split('|');
-      return `${formatCurrency(parseFloat(amount))}, ${period}`;
-    },
-  },
 
   props: {
     data: {

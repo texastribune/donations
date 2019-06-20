@@ -11,6 +11,22 @@
     </div>
 
     <ul class="c-link-list t-linkstyle--underlined">
+      <li v-if="isCancelled" class="has-xs-btm-marg">
+        <span class="c-link-list__arrow has-text-teal">
+          <strong>&rarr;</strong>
+        </span>
+        <span class="has-text-gray-dark">
+          <a
+            href="/blastform"
+            ga-on="click"
+            :ga-event-category="ga.blastIntent.category"
+            :ga-event-action="ga.blastIntent.actions['renew-blast']"
+            :ga-event-label="ga.blastIntent.labels['user-portal']"
+          >
+            Renew your subscription to The Blast
+          </a>
+        </span>
+      </li>
       <li>
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
@@ -42,6 +58,11 @@ export default {
   props: {
     data: {
       type: Array,
+      required: true,
+    },
+
+    isCancelled: {
+      type: Boolean,
       required: true,
     },
   },

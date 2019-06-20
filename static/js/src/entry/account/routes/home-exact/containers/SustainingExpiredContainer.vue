@@ -1,5 +1,10 @@
 <template>
-  <membership v-if="shouldShow" :next-transaction="nextTransaction" />
+  <sustaining-expired
+    v-if="shouldShow"
+    :last-transaction="lastTransaction"
+    :is-circle="isCircle"
+    :membership-expiration-date="membershipExpirationDate"
+  />
 </template>
 
 <script>
@@ -8,14 +13,14 @@
 import isPast from 'date-fns/is_past';
 import parse from 'date-fns/parse';
 
-import Membership from '../components/Membership.vue';
+import SustainingExpired from '../components/SustainingExpired.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
-  name: 'MembershipContainer',
+  name: 'SustainingExpiredContainer',
 
-  components: { Membership },
+  components: { SustainingExpired },
 
   mixins: [userMixin],
 
@@ -28,12 +33,20 @@ export default {
       } = this.user;
       const expired = isPast(parse(membership_expiration_date));
 
-      return recurring_donor && !expired && !is_mdev;
+      return recurring_donor && expired && !is_mdev;
     },
 
-    nextTransaction() {
+    membershipExpirationDate() {
+      return this.user.membership_expiration_date;
+    },
+
+    isCircle() {
+      return this.user.membership_level.toLowerCase().indexOf('circle') !== -1;
+    },
+
+    lastTransaction() {
       const {
-        next_transaction: { amount, period, date, payment_type, credit_card },
+        last_transaction: { amount, period, date, payment_type, credit_card },
       } = this.user;
 
       const data = {

@@ -1,5 +1,9 @@
 <template>
-  <one-time v-if="shouldShow" :last-transaction="lastTransaction" />
+  <one-time
+    v-if="shouldShow"
+    :last-transaction="lastTransaction"
+    :membership-expiration-date="membershipExpirationDate"
+  />
 </template>
 
 <script>
@@ -21,6 +25,10 @@ export default {
       const { recurring_donor, never_given, is_mdev } = this.user;
 
       return !recurring_donor && !never_given && !is_mdev;
+    },
+
+    membershipExpirationDate() {
+      return this.user.membership_expiration_date;
     },
 
     lastTransaction() {

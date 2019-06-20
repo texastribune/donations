@@ -23,12 +23,19 @@ export default {
 
     nextTransaction() {
       const {
-        next_blast_transaction: { amount, date, payment_type, credit_card },
+        next_blast_transaction: {
+          amount,
+          date,
+          payment_type,
+          period,
+          credit_card,
+        },
       } = this.user;
 
       const data = {
         amount,
         date,
+        period,
       };
 
       if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {

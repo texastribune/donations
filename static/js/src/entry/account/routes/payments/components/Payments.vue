@@ -30,13 +30,17 @@
           </button>
         </span>
       </li>
-      <li v-if="isExpired && !isOneTime" class="has-m-btm-marg">
+      <li v-if="isExpired && !isOneTime && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="#"
+            :href="
+              isCircle
+                ? 'https://support.texastribune.org/circle'
+                : 'https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
+            "
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -46,13 +50,13 @@
           </a>
         </span>
       </li>
-      <li v-if="isOneTime" class="has-m-btm-marg">
+      <li v-if="isOneTime && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="#"
+            href="https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -104,6 +108,16 @@ export default {
     },
 
     isOneTime: {
+      type: Boolean,
+      required: true,
+    },
+
+    isCircle: {
+      type: Boolean,
+      required: true,
+    },
+
+    isMDev: {
       type: Boolean,
       required: true,
     },

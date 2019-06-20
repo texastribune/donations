@@ -3,6 +3,8 @@
     :data="data"
     :is-expired="isExpired"
     :is-one-time="isOneTime"
+    :is-circle="isCircle"
+    :is-m-dev="isMDev"
     :total-gifts-last-year="totalGiftsLastYear"
     :greeting="greeting"
     @setError="setError"
@@ -35,6 +37,14 @@ export default {
 
     isExpired() {
       return isPast(parse(this.user.membership_expiration_date));
+    },
+
+    isMDev() {
+      return this.user.is_mdev;
+    },
+
+    isCircle() {
+      return this.user.membership_level.toLowerCase().indexOf('circle') !== -1;
     },
 
     totalGiftsLastYear() {

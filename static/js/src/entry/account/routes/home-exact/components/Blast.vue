@@ -5,15 +5,28 @@
         v-if="nextTransaction.last4"
         class="has-text-gray-dark t-space-heading-m"
       >
-        Your subscription to The Blast will renew on
-        <strong>{{ nextTransaction.date | longDate }}</strong
-        >, charging <strong>{{ nextTransaction.amount | currency }}</strong> to
-        your card ending in <strong>{{ nextTransaction.last4 }}</strong
+        Thanks for subscribing to The Blast! Your next
+        <strong>{{ nextTransaction.period }}</strong> payment of
+        <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
+        on <strong>{{ nextTransaction.date | longDate }}</strong> to your card
+        ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-space-heading-m">
-        Your subscription to The Blast is good through
+      <p
+        v-else
+        class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined"
+      >
+        Thanks for subscribing to The Blast! Your subscription is paid through
         <strong>{{ nextTransaction.date | longDate }}</strong
+        >. To update or extend your subscription, contact us at
+        <a
+          href="mailto:blast@texastribune.org"
+          ga-on="click"
+          :ga-event-category="ga.userPortal.category"
+          :ga-event-action="ga.userPortal.actions['contact-us']"
+          :ga-event-label="ga.userPortal.labels.home"
+        >
+          blast@texastribune.org </a
         >.
       </p>
     </template>
@@ -37,11 +50,17 @@
         </li>
       </ul>
     </template>
-    <template v-slot:bottom>
+    <template v-if="nextTransaction.last4" v-slot:bottom>
       <p class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined">
-        To update your subscription to The Blast, contact us at
-        <a href="mailto:community@texastribune.org"
-          >community@texastribune.org</a
+        Need to make a change? Contact us at
+        <a
+          href="mailto:blast@texastribune.org"
+          ga-on="click"
+          :ga-event-category="ga.userPortal.category"
+          :ga-event-action="ga.userPortal.actions['contact-us']"
+          :ga-event-label="ga.userPortal.labels.home"
+        >
+          blast@texastribune.org </a
         >.
       </p>
     </template>

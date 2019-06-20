@@ -5,31 +5,12 @@
         <template v-slot="slotProps">
           <span
             :class="
-              slotProps.item.text.toLowerCase() === 'your membership expired.'
+              slotProps.item.text.toLowerCase().indexOf('expired') !== -1
                 ? 'has-text-error'
                 : 'has-text-gray-dark'
             "
           >
-            <template
-              v-if="slotProps.item.heading.toLowerCase() === 'last donation'"
-            >
-              {{ slotProps.item.text | amountAndDate }}
-            </template>
-            <template
-              v-else-if="slotProps.item.heading.toLowerCase() === 'donation'"
-            >
-              {{ slotProps.item.text | amountAndPeriod }}
-            </template>
-            <template
-              v-else-if="
-                slotProps.item.heading.toLowerCase() === 'next payment'
-              "
-            >
-              {{ slotProps.item.text | longDate }}
-            </template>
-            <template v-else>
-              {{ slotProps.item.text }}
-            </template>
+            {{ slotProps.item.text }}
           </span>
         </template>
       </info-list>
@@ -42,7 +23,11 @@
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="#"
+            :href="
+              isCircle
+                ? 'https://support.texastribune.org/circle'
+                : 'https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
+            "
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -58,7 +43,7 @@
         </span>
         <span class="has-text-gray-dark">
           <a
-            href="#"
+            href="https://support.texastribune.org/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -90,25 +75,11 @@
 
 <script>
 import InfoList from '../../../components/InfoList.vue';
-import formatCurrency from '../../../utils/format-currency';
-import formatLongDate from '../../../utils/format-long-date';
 
 export default {
   name: 'MembershipDetail',
 
   components: { InfoList },
-
-  filters: {
-    amountAndPeriod(value) {
-      const [amount, period] = value.split('|');
-      return `${formatCurrency(parseFloat(amount))}, ${period}`;
-    },
-
-    amountAndDate(value) {
-      const [amount, date] = value.split('|');
-      return `${formatCurrency(parseFloat(amount))}, ${formatLongDate(date)}`;
-    },
-  },
 
   props: {
     data: {
@@ -122,6 +93,11 @@ export default {
     },
 
     isOneTime: {
+      type: Boolean,
+      required: true,
+    },
+
+    isCircle: {
       type: Boolean,
       required: true,
     },

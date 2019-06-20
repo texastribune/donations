@@ -1,5 +1,9 @@
 <template>
-  <blast-payments :data="data" @setError="setError" />
+  <blast-payments
+    :data="data"
+    :is-cancelled="isCancelled"
+    @setError="setError"
+  />
 </template>
 
 <script>
@@ -21,6 +25,10 @@ export default {
   mixins: [userMixin],
 
   computed: {
+    isCancelled() {
+      return this.user.is_former_blast_subscriber;
+    },
+
     data() {
       const { transactions } = this.user;
       const relevantTransactions = transactions.filter(

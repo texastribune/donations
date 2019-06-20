@@ -1,45 +1,27 @@
 <template>
-  <summary-box heading="membership" :display="{ isExpired: true }">
+  <summary-box heading="membership" :display="{ isExpired: false }">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
-        <span class="has-text-error"
-          >Your membership expired on
-          <strong>{{ expirationDate | longDate }}</strong
-          >.</span
-        >
-        <template v-if="lastTransaction.last4">
-          Your last donation of
-          <strong>${{ lastTransaction | currency }}</strong> was charged on
-          <strong>{{ lastTransaction.date | longDate }}</strong> to your card
-          ending in <strong>{{ lastTransaction.last4 }}</strong
-          >.
-        </template>
-        <template v-else>
-          Your last donation of
-          <strong>${{ lastTransaction.amount | currency }}</strong> was charged
-          on <strong>{{ lastTransaction.date | longDate }}</strong
-          >.
-        </template>
+      <p
+        v-if="nextTransaction.last4"
+        class="has-text-gray-dark t-space-heading-m"
+      >
+        Thank you for being a Texas Tribune member! Your next
+        {{ nextTransaction.period }} donation of
+        <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
+        on <strong>{{ nextTransaction.date | longDate }}</strong> to your card
+        ending in <strong>{{ nextTransaction.last4 }}</strong
+        >.
+      </p>
+      <p v-else class="has-text-gray-dark t-space-heading-m">
+        Thank you for being a Texas Tribune member! Your next
+        {{ nextTransaction.period }} donation of
+        <strong>{{ nextTransaction.amount | currency }}</strong> is due on
+        <strong>{{ nextTransaction.date | longDate }}</strong
+        >.
       </p>
     </template>
     <template v-slot:links>
       <ul class="c-link-list">
-        <li class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <a
-              href="#"
-              ga-on="click"
-              :ga-event-category="ga.donations.category"
-              :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['renew-membership']"
-            >
-              Renew your membership
-            </a>
-          </span>
-        </li>
         <li class="has-m-btm-marg">
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>
@@ -74,6 +56,20 @@
         </li>
       </ul>
     </template>
+    <template v-slot:bottom>
+      <p class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined">
+        To update your membership, contact us at
+        <a
+          href="mailto:membership@texastribune.org"
+          ga-on="click"
+          :ga-event-category="ga.donations.category"
+          :ga-event-action="ga.donations.actions['membership-intent']"
+          :ga-event-label="ga.donations.labels['upgrade-contact']"
+        >
+          membership@texastribune.org</a
+        >.
+      </p>
+    </template>
   </summary-box>
 </template>
 
@@ -81,18 +77,13 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'MembershipExpired',
+  name: 'Sustaining',
 
   components: { SummaryBox },
 
   props: {
-    lastTransaction: {
+    nextTransaction: {
       type: Object,
-      required: true,
-    },
-
-    expirationDate: {
-      type: String,
       required: true,
     },
   },

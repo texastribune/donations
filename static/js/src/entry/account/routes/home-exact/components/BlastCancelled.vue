@@ -5,15 +5,15 @@
         v-if="lastTransaction.last4"
         class="has-text-gray-dark t-space-heading-m"
       >
-        Your subscription to The Blast was cancelled. Your last payment of
+        Your subscription to The Blast is no longer active. Your last payment of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged to
         your card ending in <strong>{{ lastTransaction.last4 }}</strong> on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
-        Your subscription to The Blast was cancelled. Your last payment of
-        <strong>{{ lastTransaction.amount | currency }}</strong> was on
+        Your subscription to The Blast is no longer active. Your last payment of
+        <strong>{{ lastTransaction.amount | currency }}</strong> was made on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >.
       </p>
@@ -53,14 +53,6 @@
           </span>
         </li>
       </ul>
-    </template>
-    <template v-slot:bottom>
-      <p class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined">
-        To update your subscription to The Blast, contact us at
-        <a href="mailto:community@texastribune.org"
-          >community@texastribune.org</a
-        >.
-      </p>
     </template>
   </summary-box>
 </template>

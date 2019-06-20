@@ -7,6 +7,8 @@
 
 import BlastDetail from '../components/BlastDetail.vue';
 import userMixin from '../../home/mixins/user';
+import formatCurrency from '../../../utils/format-currency';
+import formatLongDate from '../../../utils/format-long-date';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
@@ -40,17 +42,17 @@ export default {
         } = next_blast_transaction;
 
         data[0].heading = 'Subscription';
-        data[0].text = `${amount}|${period}`;
+        data[0].text = `${formatCurrency(amount)}, ${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
           data[2].heading = 'Next payment';
-          data[2].text = date;
+          data[2].text = formatLongDate(date);
         } else {
           data[1].heading = 'Next payment';
-          data[1].text = date;
+          data[1].text = formatLongDate(date);
         }
       } else if (is_former_blast_subscriber) {
         const {
@@ -60,18 +62,18 @@ export default {
           credit_card,
         } = last_blast_transaction;
 
-        data[0].heading = 'Past subscription';
-        data[0].text = `${amount}|${period}`;
+        data[0].heading = 'subscription';
+        data[0].text = `${formatCurrency(amount)}, ${period}`;
 
         if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
           data[1].heading = 'Payment method';
           data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
           data[2] = { id: 2 };
           data[2].heading = 'Status';
-          data[2].text = 'Your subscription was cancelled.';
+          data[2].text = 'Your subscription is no longer active.';
         } else {
           data[1].heading = 'Status';
-          data[1].text = 'Your subscription was cancelled.';
+          data[1].text = 'Your subscription is no longer active.';
         }
       }
 

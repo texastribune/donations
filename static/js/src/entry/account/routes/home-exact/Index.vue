@@ -6,8 +6,8 @@
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
       <contact-info />
-      <membership />
-      <membership-expired />
+      <sustaining />
+      <sustaining-expired />
       <one-time />
       <never-given />
       <m-dev />
@@ -23,8 +23,8 @@
 import routeMixin from '../../mixins/route';
 import Help from '../../components/Help.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
-import Membership from './containers/MembershipContainer.vue';
-import MembershipExpired from './containers/MembershipExpiredContainer.vue';
+import Sustaining from './containers/SustainingContainer.vue';
+import SustainingExpired from './containers/SustainingExpiredContainer.vue';
 import OneTime from './containers/OneTimeContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
 import MDev from './containers/MDevContainer.vue';
@@ -38,8 +38,8 @@ export default {
   components: {
     Messages,
     ContactInfo,
-    Membership,
-    MembershipExpired,
+    Sustaining,
+    SustainingExpired,
     OneTime,
     NeverGiven,
     MDev,

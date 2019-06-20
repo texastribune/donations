@@ -8,9 +8,12 @@
         <img alt="The Texas Tribune" src="../svg/tt.svg" />
       </a>
 
-      <div v-if="showRouteLinks" class="c-navbar__content">
+      <div class="c-navbar__content">
         <ul class="c-navbar__items is-hidden-until-bp-l">
-          <li class="c-navbar__item c-navbar__item--space-right">
+          <li
+            v-if="showRouteLinks"
+            class="c-navbar__item c-navbar__item--space-right"
+          >
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
@@ -56,13 +59,22 @@
               <strong>The Blast</strong>
             </router-link>
           </li>
-          <li class="c-navbar__item">
+          <li v-if="isLoggedIn" class="c-navbar__item">
             <button
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
               @click="logOut"
             >
               <strong>Log Out</strong>
+            </button>
+          </li>
+          <li v-if="!isLoggedIn" class="c-navbar__item">
+            <button
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              active-class="is-active"
+              @click="logIn"
+            >
+              <strong>Log In</strong>
             </button>
           </li>
         </ul>
@@ -92,12 +104,9 @@
       </div>
     </div>
 
-    <div
-      v-if="showDropdown && showRouteLinks"
-      class="c-navbar__dropdown is-hidden-from-bp-l"
-    >
+    <div v-if="showDropdown" class="c-navbar__dropdown is-hidden-from-bp-l">
       <ul class="c-navbar__dropdown-items">
-        <li class="c-navbar__dropdown-item">
+        <li v-if="showRouteLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             active-class="is-active"
@@ -151,7 +160,7 @@
 </template>
 
 <script>
-import { logOut } from '../utils/auth-actions';
+import { logOut, logIn } from '../utils/auth-actions';
 
 export default {
   name: 'NavBar',
@@ -171,6 +180,11 @@ export default {
       type: Boolean,
       required: true,
     },
+
+    isLoggedIn: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data() {
@@ -185,6 +199,8 @@ export default {
     },
 
     logOut,
+
+    logIn,
   },
 };
 </script>

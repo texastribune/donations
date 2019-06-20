@@ -13,7 +13,7 @@ export const AUTH_LOGOUT_COMPLETE_URL = `${
 export const AUTH_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-in`;
-export const TITLE_SUFFIX = ' | Manage Your Account | The Texas Tribune';
+export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
 export const CARD_PAYMENT_FLAG = 'credit card';
 export const BLAST_PAYMENT_FLAG = 'the blast';
 export const GA_USER_PORTAL_NAV = {
@@ -69,7 +69,7 @@ export const GA_DONATIONS = {
 
 export const GA_BLAST_INTENT = {
   category: 'blast intent',
-  action: {
+  actions: {
     'renew-blast': 'user portal - renew link',
   },
   labels: {
