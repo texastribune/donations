@@ -58,21 +58,6 @@ export default {
   name: 'Help',
 
   props: {
-    home: {
-      type: Boolean,
-      default: false,
-    },
-
-    membership: {
-      type: Boolean,
-      default: false,
-    },
-
-    payments: {
-      type: Boolean,
-      default: false,
-    },
-
     blast: {
       type: Boolean,
       default: false,
@@ -86,6 +71,21 @@ export default {
     display: {
       type: Object,
       default: () => ({ hasTopPadding: false }),
+    },
+
+    home: {
+      type: Boolean,
+      default: false,
+    },
+
+    membership: {
+      type: Boolean,
+      default: false,
+    },
+
+    payments: {
+      type: Boolean,
+      default: false,
     },
   },
 };
