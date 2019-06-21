@@ -73,16 +73,17 @@ export default {
 
   methods: {
     submit() {
-      this.$emit('getOtherUser', this.email);
+      this.$emit('doViewAs', this.email);
     },
 
     reset() {
       this.email = '';
-      this.$emit('getUser');
+      this.$emit('undoViewAs');
     },
 
     close() {
       this.isVisible = false;
+      this.reset();
     },
   },
 };
