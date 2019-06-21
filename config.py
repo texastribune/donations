@@ -78,6 +78,11 @@ SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", "unknown")
 REPORT_URI = os.getenv("REPORT_URI")
 
+#######
+# Portal
+#
+ENABLE_PORTAL = bool_env("ENABLE_PORTAL")
+
 ########
 # Amazon
 #

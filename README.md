@@ -38,6 +38,7 @@ Environment
 | `CELERY_BROKER_URL`         |              amqp://guest:guest@rabbitmq:5672/ |
 | `CELERY_RESULT_BACKEND`     |                           redis://redis:6379/0 |
 | `FLASK_SECRET_KEY`          | b'f;\xeb\x9bT2\xcd\xdb\xe1#z\xfb\xab\xf8(\x03' |
+| `ENABLE_PORTAL`             |                                           True |
 | `ENABLE_SENTRY`             |                                          False |
 |  SENTRY_ENVIRONMENT         |                                     production |
 | `SENTRY_DSN`                |          https://user:pass@sentry/7?timeout=10 |
