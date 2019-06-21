@@ -5,9 +5,6 @@
 <script>
 /* eslint-disable camelcase */
 
-import isPast from 'date-fns/is_past';
-import parse from 'date-fns/parse';
-
 import Sustaining from '../components/Sustaining.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
@@ -21,14 +18,9 @@ export default {
 
   computed: {
     shouldShow() {
-      const {
-        recurring_donor,
-        membership_expiration_date,
-        is_mdev,
-      } = this.user;
-      const isExpired = isPast(parse(membership_expiration_date));
+      const { recurring_donor, is_expired, is_mdev } = this.user;
 
-      return recurring_donor && !isExpired && !is_mdev;
+      return recurring_donor && !is_expired && !is_mdev;
     },
 
     nextTransaction() {

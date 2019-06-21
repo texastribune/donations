@@ -37,7 +37,7 @@
           </a>
         </span>
       </li>
-      <li v-if="!isExpired && isOneTime" class="has-xs-btm-marg">
+      <li v-else-if="isOneTime" class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>

@@ -9,10 +9,10 @@ export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
 export const AUTH_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
 export const AUTH_LOGOUT_COMPLETE_URL = `${
   window.location.origin
-}/account/logged-out`;
+}/account/logged-out/`;
 export const AUTH_LOGIN_COMPLETE_URL = `${
   window.location.origin
-}/account/logged-in`;
+}/account/logged-in/`;
 export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
 export const CARD_PAYMENT_FLAG = 'credit card';
 export const BLAST_PAYMENT_FLAG = 'the blast';

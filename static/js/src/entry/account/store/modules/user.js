@@ -1,8 +1,10 @@
-/* eslint-disable no-param-reassign */
+/* eslint-disable no-param-reassign, camelcase */
 
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
+import parse from 'date-fns/parse';
+import isPast from 'date-fns/is_past';
 
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
@@ -13,6 +15,26 @@ import {
   NoPersonsError,
 } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
+
+function addFields(data) {
+  const {
+    recurring_donor,
+    membership_expiration_date,
+    membership_level,
+    never_given,
+  } = data;
+  const is_expired = isPast(parse(membership_expiration_date));
+  const is_one_time = !never_given && !recurring_donor;
+  const is_circle = membership_level.toLowerCase().indexOf('circle') !== -1;
+
+  return {
+    ...data,
+    is_expired,
+    is_one_time,
+    is_circle,
+    membership_level: membership_level.toLowerCase(),
+  };
+}
 
 function createDefaultState() {
   return {
@@ -56,7 +78,7 @@ const actions = {
     if (!data.length) throw new NoPersonsError();
     if (data.length > 1) throw new MultiplePersonsError();
 
-    commit('SET_DETAILS', data[0]);
+    commit('SET_DETAILS', addFields(data[0]));
   },
 
   getUser: async ({ commit, state }) => {
@@ -64,7 +86,7 @@ const actions = {
       headers: { Authorization: `Bearer ${state.accessToken}` },
     });
 
-    commit('SET_DETAILS', data);
+    commit('SET_DETAILS', addFields(data));
   },
 
   getTokenUser: ({ commit }) =>

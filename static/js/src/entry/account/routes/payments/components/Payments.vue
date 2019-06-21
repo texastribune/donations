@@ -56,7 +56,7 @@
           </a>
         </span>
       </li>
-      <li v-if="!isExpired && isOneTime && !isMDev" class="has-m-btm-marg">
+      <li v-else-if="isOneTime && !isMDev" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -72,7 +72,7 @@
           </a>
         </span>
       </li>
-      <li>
+      <li v-if="!isMDev">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>

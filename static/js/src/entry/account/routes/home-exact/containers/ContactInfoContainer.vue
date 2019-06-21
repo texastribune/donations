@@ -11,6 +11,8 @@
 <script>
 /* eslint-disable camelcase */
 
+import { mapState } from 'vuex';
+
 import ContactInfo from '../components/ContactInfo.vue';
 import tokenUserMixin from '../../../mixins/token-user';
 import userMixin from '../../home/mixins/user';
@@ -24,16 +26,51 @@ export default {
   mixins: [tokenUserMixin, userMixin],
 
   data() {
-    return { pwResetSuccess: false, pwResetFailure: false };
+    return {
+      pwResetSuccess: false,
+      pwResetFailure: false,
+      contactInfo: [],
+    };
   },
 
   computed: {
-    contactInfo() {
+    ...mapState('context', ['isViewingAs']),
+
+    isStaff() {
+      return this.tokenUser['https://texastribune.org/is_staff'];
+    },
+  },
+
+  watch: {
+    isViewingAs() {
+      this.contactInfo = this.getContactInfo();
+    },
+  },
+
+  created() {
+    this.contactInfo = this.getContactInfo();
+  },
+
+  methods: {
+    resetPassword() {
+      const { email } = this.tokenUser;
+
+      resetPassword(email, err => {
+        if (err) {
+          this.pwResetFailure = true;
+        } else {
+          this.pwResetSuccess = true;
+        }
+      });
+    },
+
+    getContactInfo() {
       let name;
       let nameHeading;
       let finalEmail;
       let username;
 
+      const { isViewingAs } = this;
       const { email: tokenEmail } = this.tokenUser;
       const { identities, postal_code, first_name, last_name } = this.user;
       const [goodIdentity] = identities.filter(
@@ -43,10 +80,15 @@ export default {
       try {
         ({ email: finalEmail, username } = goodIdentity);
       } catch (err) {
-        // we're viewing as someone else
-        finalEmail = identities[0].email;
-        // eslint-disable-next-line prefer-destructuring
-        username = identities[0].username;
+        // if we're using "view as" feature, it's expected that
+        // the ID-token email won't match up with the API email
+        if (isViewingAs) {
+          finalEmail = identities[0].email;
+          // eslint-disable-next-line prefer-destructuring
+          username = identities[0].username;
+        } else {
+          throw err;
+        }
       }
 
       if (first_name && last_name) {
@@ -68,24 +110,6 @@ export default {
       }
 
       return contactInfo;
-    },
-
-    isStaff() {
-      return this.tokenUser['https://texastribune.org/is_staff'];
-    },
-  },
-
-  methods: {
-    resetPassword() {
-      const { email } = this.tokenUser;
-
-      resetPassword(email, err => {
-        if (err) {
-          this.pwResetFailure = true;
-        } else {
-          this.pwResetSuccess = true;
-        }
-      });
     },
   },
 };

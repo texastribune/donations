@@ -17,6 +17,7 @@ from config import (
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
     ENABLE_SENTRY,
+    ENABLE_PORTAL,
     REPORT_URI,
     MWS_ACCESS_KEY,
     MWS_SECRET_KEY,
@@ -417,10 +418,12 @@ def robots_txt():
     return send_from_directory(os.path.join(root_dir, "app"), "robots.txt")
 
 
-@app.route("/account/", defaults={"path": ""})
-@app.route("/account/<path>/")
-def account(path):
-    return render_template("account.html", bundles=get_bundles("account"))
+if ENABLE_PORTAL:
+
+    @app.route("/account/", defaults={"path": ""})
+    @app.route("/account/<path>/")
+    def account(path):
+        return render_template("account.html", bundles=get_bundles("account"))
 
 
 @app.route("/donate", methods=["GET", "POST"])

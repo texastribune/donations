@@ -6,6 +6,7 @@ function createDefaultState() {
   return {
     error: null,
     isUnverified: false,
+    isViewingAs: false,
   };
 }
 
@@ -17,6 +18,10 @@ const mutations = {
   SET_UNVERIFIED(state) {
     state.isUnverified = true;
   },
+
+  SET_IS_VIEWING_AS(state, isViewingAs) {
+    state.isViewingAs = isViewingAs;
+  },
 };
 
 const actions = {
@@ -27,6 +32,10 @@ const actions = {
 
   setUnverified: ({ commit }) => {
     commit('SET_UNVERIFIED');
+  },
+
+  setIsViewingAs: ({ commit }, isViewingAs) => {
+    commit('SET_IS_VIEWING_AS', isViewingAs);
   },
 };
 

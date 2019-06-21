@@ -17,10 +17,9 @@ export default {
 
   computed: {
     shouldShow() {
-      const { membership_level, is_mdev } = this.user;
-      const isCircle = membership_level.toLowerCase().indexOf('circle') !== -1;
+      const { is_mdev, is_circle } = this.user;
 
-      return isCircle && !is_mdev;
+      return is_circle && !is_mdev;
     },
   },
 };

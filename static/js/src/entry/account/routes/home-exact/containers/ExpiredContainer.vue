@@ -10,9 +10,6 @@
 <script>
 /* eslint-disable camelcase */
 
-import isPast from 'date-fns/is_past';
-import parse from 'date-fns/parse';
-
 import Expired from '../components/Expired.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
@@ -26,10 +23,9 @@ export default {
 
   computed: {
     shouldShow() {
-      const { never_given, membership_expiration_date, is_mdev } = this.user;
-      const isExpired = isPast(parse(membership_expiration_date));
+      const { never_given, is_expired, is_mdev } = this.user;
 
-      return !never_given && isExpired && !is_mdev;
+      return !never_given && is_expired && !is_mdev;
     },
 
     membershipExpirationDate() {
@@ -37,7 +33,7 @@ export default {
     },
 
     isCircle() {
-      return this.user.membership_level.toLowerCase().indexOf('circle') !== -1;
+      return this.user.is_circle;
     },
 
     lastTransaction() {

@@ -5,9 +5,6 @@
 <script>
 /* eslint-disable camelcase */
 
-import isPast from 'date-fns/is_past';
-import parse from 'date-fns/parse';
-
 import Appeal from '../components/Appeal.vue';
 import userMixin from '../mixins/user';
 
@@ -20,18 +17,17 @@ export default {
 
   computed: {
     level() {
-      return this.user.membership_level.toLowerCase();
+      return this.user.membership_level;
     },
 
     isExpired() {
-      return isPast(parse(this.user.membership_expiration_date));
+      return this.user.is_expired;
     },
 
     shouldShow() {
-      const { membership_level, is_mdev } = this.user;
-      const isCircle = membership_level.toLowerCase().indexOf('circle') !== -1;
+      const { is_mdev, is_circle } = this.user;
 
-      return !is_mdev && !isCircle;
+      return !is_mdev && !is_circle;
     },
   },
 };

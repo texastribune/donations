@@ -10,9 +10,6 @@
 <script>
 /* eslint-disable camelcase */
 
-import isPast from 'date-fns/is_past';
-import parse from 'date-fns/parse';
-
 import MembershipDetail from '../components/MembershipDetail.vue';
 import userMixin from '../../home/mixins/user';
 import formatCurrency from '../../../utils/format-currency';
@@ -28,15 +25,15 @@ export default {
 
   computed: {
     isOneTime() {
-      return !this.user.recurring_donor;
+      return this.user.is_one_time;
     },
 
     isExpired() {
-      return isPast(parse(this.user.membership_expiration_date));
+      return this.user.is_expired;
     },
 
     isCircle() {
-      return this.user.membership_level.toLowerCase().indexOf('circle') !== -1;
+      return this.user.is_circle;
     },
 
     data() {
@@ -44,12 +41,13 @@ export default {
       const {
         recurring_donor,
         membership_expiration_date,
+        is_expired,
+        is_one_time,
         next_transaction,
         last_transaction,
       } = this.user;
-      const isExpired = isPast(parse(membership_expiration_date));
 
-      if (isExpired) {
+      if (is_expired) {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Last donation';
@@ -69,7 +67,7 @@ export default {
             membership_expiration_date
           )}.`;
         }
-      } else if (!recurring_donor) {
+      } else if (is_one_time) {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Donation';
