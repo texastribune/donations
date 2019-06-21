@@ -26,9 +26,10 @@ export default {
       this.setIsViewingAs(true);
     },
 
-    async undoViewAs() {
+    async undoViewAs(cb) {
       await this.getUser();
       this.setIsViewingAs(false);
+      cb();
     },
   },
 };

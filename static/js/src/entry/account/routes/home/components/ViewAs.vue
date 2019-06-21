@@ -34,6 +34,7 @@
           padding: 10px;
           background: #dcdcdc;
         "
+        :disabled="!allowSubmit"
         @click="submit"
       >
         View as
@@ -64,21 +65,36 @@
 </template>
 
 <script>
+/*
+ We disable the submit button after it's clicked
+ (and re-enable it after someone resets) so the store
+ value of context.isViewingAs toggles from false to true
+ every time an email address is entered.
+
+ This is so the watcher in ContactInfoContainer knows to
+ re-format the data. We have to mangle it differently
+ depending whether you're "viewing as," so we have to be
+ very explicit about when to update it.
+*/
+
 export default {
   name: 'ViewAs',
 
   data() {
-    return { email: '', isVisible: true };
+    return { email: '', isVisible: true, allowSubmit: true };
   },
 
   methods: {
     submit() {
+      this.allowSubmit = false;
       this.$emit('doViewAs', this.email);
     },
 
     reset() {
       this.email = '';
-      this.$emit('undoViewAs');
+      this.$emit('undoViewAs', () => {
+        this.allowSubmit = true;
+      });
     },
 
     close() {
