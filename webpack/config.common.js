@@ -1,7 +1,6 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const { EnvironmentPlugin } = require('webpack');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 const { buildDir } = require('./paths');
 const entries = require('./entries');
