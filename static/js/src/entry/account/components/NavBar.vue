@@ -194,11 +194,11 @@ export default {
   },
 
   methods: {
+    logOut,
+    logIn,
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
     },
-    logOut,
-    logIn,
   },
 };
 </script>

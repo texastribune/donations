@@ -15,6 +15,10 @@ import {
 } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
+/*
+  Add some convenience fields to our API response to make
+  conditionals easier throughout the app.
+*/
 function addFields(data) {
   const {
     recurring_donor,
@@ -22,16 +26,34 @@ function addFields(data) {
     membership_level,
     never_given,
   } = data;
-  const is_expired = isPast(parse(membership_expiration_date));
-  const is_one_time = !never_given && !recurring_donor;
-  const is_circle = membership_level.toLowerCase().indexOf('circle') !== -1;
+  let isCircle;
+  let membershipLevel;
+  let isExpired;
+
+  const isOneTime = !never_given && !recurring_donor;
+
+  // only false if never_given: true
+  if (membership_expiration_date) {
+    isExpired = isPast(parse(membership_expiration_date));
+  } else {
+    isExpired = null;
+  }
+
+  // only false if never_given: true
+  if (membership_level) {
+    membershipLevel = membership_level.toLowerCase();
+    isCircle = membershipLevel.indexOf('circle') !== -1;
+  } else {
+    isCircle = null;
+    membershipLevel = null;
+  }
 
   return {
     ...data,
-    is_expired,
-    is_one_time,
-    is_circle,
-    membership_level: membership_level.toLowerCase(),
+    is_one_time: isOneTime,
+    is_expired: isExpired,
+    is_circle: isCircle,
+    membership_level: membershipLevel,
   };
 }
 
