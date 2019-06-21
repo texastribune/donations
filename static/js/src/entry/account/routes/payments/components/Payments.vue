@@ -157,7 +157,7 @@ export default {
           greeting,
         });
       } catch (err) {
-        this.$emit('setError', true);
+        this.$emit('setError', err);
       }
     },
   },

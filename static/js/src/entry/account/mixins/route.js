@@ -24,7 +24,7 @@ export default {
     }
 
     if (!email_verified && isProtected) {
-      this.setUnverified(true);
+      this.setUnverified();
       return;
     }
 
@@ -44,7 +44,7 @@ export default {
 
         this.isFetching = false;
       } catch (err) {
-        this.setError(true);
+        this.setError(err);
       }
     } else if (isExact) {
       this.setTitle();

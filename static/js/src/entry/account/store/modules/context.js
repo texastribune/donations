@@ -1,20 +1,22 @@
 /* eslint-disable no-param-reassign */
 
+import logError from '../../utils/log-error';
+
 function createDefaultState() {
   return {
-    hasError: false,
+    error: null,
     isUnverified: false,
     isViewingAs: false,
   };
 }
 
 const mutations = {
-  SET_ERROR(state, hasError) {
-    state.hasError = hasError;
+  SET_ERROR(state, err) {
+    state.error = err;
   },
 
-  SET_UNVERIFIED(state, isUnverified) {
-    state.isUnverified = isUnverified;
+  SET_UNVERIFIED(state) {
+    state.isUnverified = true;
   },
 
   SET_IS_VIEWING_AS(state, isViewingAs) {
@@ -23,12 +25,13 @@ const mutations = {
 };
 
 const actions = {
-  setError: ({ commit }, hasError) => {
-    commit('SET_ERROR', hasError);
+  setError: ({ commit }, err) => {
+    logError(err);
+    commit('SET_ERROR', err);
   },
 
-  setUnverified: ({ commit }, isUnverified) => {
-    commit('SET_UNVERIFIED', isUnverified);
+  setUnverified: ({ commit }) => {
+    commit('SET_UNVERIFIED');
   },
 
   setIsViewingAs: ({ commit }, isViewingAs) => {

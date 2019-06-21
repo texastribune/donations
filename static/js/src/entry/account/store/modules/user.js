@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { setExtra } from '@sentry/browser';
 import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
@@ -138,7 +139,9 @@ const actions = {
             commit('SET_ACCESS_TOKEN', authResult.accessToken);
             commit('SET_TOKEN_DETAILS', authResult.idTokenPayload);
             commit('SET_EXPIRY_IN_SECONDS', authResult.expiresIn);
+            setExtra('auth', authResult);
             setFlag();
+
             return resolve();
           }
         );
