@@ -1,5 +1,10 @@
 <template>
-  <loader v-if="isFetching" />
+  <loader v-if="isFetching">
+    <template v-slot:text>
+      Hold tight, we're grabbing your account information
+    </template>
+  </loader>
+
   <div v-else>
     <nav-bar />
     <main class="has-bg-white-off">

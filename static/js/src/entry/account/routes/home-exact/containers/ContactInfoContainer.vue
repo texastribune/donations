@@ -43,10 +43,9 @@ export default {
       try {
         ({ email: finalEmail, username } = goodIdentity);
       } catch (err) {
-        // we're viewing as someone else
+        // only enters this block if we're using the "view as" feature
         finalEmail = identities[0].email;
-        // eslint-disable-next-line prefer-destructuring
-        username = identities[0].username;
+        username = identities[0].username; // eslint-disable-line prefer-destructuring
       }
 
       if (first_name && last_name) {

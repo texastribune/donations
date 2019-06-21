@@ -8,8 +8,8 @@
         Thanks for subscribing to The Blast! Your next
         <strong>{{ nextTransaction.period }}</strong> payment of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
-        on <strong>{{ nextTransaction.date | longDate }}</strong> to your card
-        ending in <strong>{{ nextTransaction.last4 }}</strong
+        on <strong>{{ nextTransaction.date | longDate }}</strong
+        >, to your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
       <p

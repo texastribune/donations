@@ -15,7 +15,6 @@
 /* eslint-disable camelcase */
 
 import parse from 'date-fns/parse';
-import isPast from 'date-fns/is_past';
 import isFuture from 'date-fns/is_future';
 import { mapActions } from 'vuex';
 
@@ -32,11 +31,11 @@ export default {
 
   computed: {
     isOneTime() {
-      return !this.user.recurring_donor;
+      return this.user.is_one_time;
     },
 
     isExpired() {
-      return isPast(parse(this.user.membership_expiration_date));
+      return this.user.is_expired;
     },
 
     isMDev() {
@@ -44,7 +43,7 @@ export default {
     },
 
     isCircle() {
-      return this.user.membership_level.toLowerCase().indexOf('circle') !== -1;
+      return this.user.is_circle;
     },
 
     totalGiftsLastYear() {
@@ -80,13 +79,12 @@ export default {
           };
         }
       );
-      const sorted = withDateObjects.sort((a, b) => {
+
+      return withDateObjects.sort((a, b) => {
         if (a.date > b.date) return -1;
         if (a.date < b.date) return 1;
         return 0;
       });
-
-      return sorted;
     },
   },
 

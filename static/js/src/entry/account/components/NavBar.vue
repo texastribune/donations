@@ -197,9 +197,7 @@ export default {
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
     },
-
     logOut,
-
     logIn,
   },
 };

@@ -52,9 +52,15 @@
             <p>
               Need to make a change now? Click "account" anytime to reset your
               password, or email
-              <a href="mailto:community@texastribune.org"
-                >community@texastribune.org</a
+              <a
+                href="mailto:community@texastribune.org"
+                ga-on="click"
+                :ga-event-category="ga.userPortal.category"
+                :ga-event-action="ga.userPortal.actions['contact-us']"
+                :ga-event-label="ga.userPortal.labels.home"
               >
+                community@texastribune.org
+              </a>
               with other questions.
             </p>
           </div>
