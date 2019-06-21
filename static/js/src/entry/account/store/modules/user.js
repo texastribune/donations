@@ -26,7 +26,6 @@ function addFields(data) {
     membership_level,
     never_given,
   } = data;
-  let isCircle;
   let membershipLevel;
   let isExpired;
 
@@ -42,9 +41,7 @@ function addFields(data) {
   // only false if never_given: true
   if (membership_level) {
     membershipLevel = membership_level.toLowerCase();
-    isCircle = membershipLevel.indexOf('circle') !== -1;
   } else {
-    isCircle = null;
     membershipLevel = null;
   }
 
@@ -52,7 +49,6 @@ function addFields(data) {
     ...data,
     is_one_time: isOneTime,
     is_expired: isExpired,
-    is_circle: isCircle,
     membership_level: membershipLevel,
   };
 }

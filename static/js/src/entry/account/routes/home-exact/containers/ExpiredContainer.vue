@@ -2,7 +2,7 @@
   <expired
     v-if="shouldShow"
     :last-transaction="lastTransaction"
-    :is-circle="isCircle"
+    :is-former-circle="isFormerCircle"
     :membership-expiration-date="membershipExpirationDate"
   />
 </template>
@@ -32,8 +32,8 @@ export default {
       return this.user.membership_expiration_date;
     },
 
-    isCircle() {
-      return this.user.is_circle;
+    isFormerCircle() {
+      return this.user.is_former_circle;
     },
 
     lastTransaction() {

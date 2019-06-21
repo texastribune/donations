@@ -43,7 +43,7 @@
         <span class="has-text-gray-dark">
           <a
             :href="
-              isCircle
+              isFormerCircle
                 ? '/circle'
                 : '/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM#join-today'
             "
@@ -118,7 +118,7 @@ export default {
       required: true,
     },
 
-    isCircle: {
+    isFormerCircle: {
       type: Boolean,
       required: true,
     },

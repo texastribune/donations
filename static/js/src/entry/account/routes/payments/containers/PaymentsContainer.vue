@@ -3,7 +3,7 @@
     :data="data"
     :is-expired="isExpired"
     :is-one-time="isOneTime"
-    :is-circle="isCircle"
+    :is-former-circle="isFormerCircle"
     :is-m-dev="isMDev"
     :total-gifts-last-year="totalGiftsLastYear"
     :greeting="greeting"
@@ -42,8 +42,8 @@ export default {
       return this.user.is_mdev;
     },
 
-    isCircle() {
-      return this.user.is_circle;
+    isFormerCircle() {
+      return this.user.is_former_circle;
     },
 
     totalGiftsLastYear() {
