@@ -3,7 +3,7 @@
     :data="data"
     :is-expired="isExpired"
     :is-one-time="isOneTime"
-    :is-circle="isCircle"
+    :is-former-circle="isFormerCircle"
   />
 </template>
 
@@ -32,8 +32,8 @@ export default {
       return this.user.is_expired;
     },
 
-    isCircle() {
-      return this.user.is_circle;
+    isFormerCircle() {
+      return this.user.is_former_circle;
     },
 
     data() {
