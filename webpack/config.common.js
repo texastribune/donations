@@ -36,11 +36,6 @@ module.exports = {
       'SENTRY_ENVIRONMENT',
     ]),
     new VueLoaderPlugin(),
-    new CleanWebpackPlugin({
-      root: process.cwd(),
-      verbose: false,
-      cleanOnceBeforeBuildPatterns: ['**/*', '!.gitkeep'],
-    }),
   ],
 
   optimization: {
