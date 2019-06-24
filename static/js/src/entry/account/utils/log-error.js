@@ -1,5 +1,8 @@
-import { captureException } from '@sentry/browser';
+import { captureException, withScope } from '@sentry/browser';
 
 export default function logError(err, level = 'error') {
-  captureException(err, level);
+  withScope(scope => {
+    scope.setExtra('pageTitle', document.title);
+    captureException(err, level);
+  });
 }
