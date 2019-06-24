@@ -29,7 +29,7 @@ const config = Merge(CommonConfig, {
 if (process.env.ENABLE_SENTRY_RELEASE.toLowerCase() === 'true') {
   config.plugins.push(
     new SentryWebpackPlugin({
-      release: Date.now().toString(),
+      release: `${new Date().toString()}-${process.env.SENTRY_ENVIRONMENT}`,
       include: buildDir,
     })
   );
