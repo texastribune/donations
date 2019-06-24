@@ -11,6 +11,10 @@
     grid-area: content;
   }
 
+  @include mq($from: bp-l) {
+    min-height: 70vh;
+  }
+
   @include mq($until: bp-l) {
     grid-template-areas: 'content';
     grid-template-columns: 1fr;

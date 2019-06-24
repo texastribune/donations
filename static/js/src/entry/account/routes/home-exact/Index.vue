@@ -1,5 +1,7 @@
 <template>
-  <div class="has-white-bg-from-bp-l has-ump-top-padding">
+  <div
+    class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l has-ump-top-padding"
+  >
     <messages />
 
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>

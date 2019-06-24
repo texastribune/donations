@@ -11,7 +11,7 @@
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l"><side-nav /></div>
-          <div class="l-ump-grid__content"><router-view /></div>
+          <div class="l-ump-grid__content has-bg-white"><router-view /></div>
         </div>
       </div>
     </main>

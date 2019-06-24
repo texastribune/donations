@@ -1,5 +1,5 @@
 <template>
-  <div v-if="route.meetsCriteria" class="has-bg-white has-ump-top-padding">
+  <div v-if="route.meetsCriteria" class="has-ump-top-padding">
     <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter
     </h1>

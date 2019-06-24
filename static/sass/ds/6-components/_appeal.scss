@@ -3,7 +3,7 @@
   padding-bottom: $size-giant;
 
   @include mq($until: bp-l) {
-    padding-top: $size-giant;
+    padding-top: $size-xxl;
   }
 
   &__item {
