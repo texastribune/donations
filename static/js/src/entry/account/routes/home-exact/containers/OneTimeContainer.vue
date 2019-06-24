@@ -35,11 +35,7 @@ export default {
       const {
         last_transaction: { amount, date, payment_type, credit_card },
       } = this.user;
-
-      const data = {
-        amount,
-        date,
-      };
+      const data = { amount, date };
 
       if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
         data.last4 = credit_card.last4;

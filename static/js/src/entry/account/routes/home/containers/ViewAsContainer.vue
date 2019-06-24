@@ -13,7 +13,7 @@ export default {
   components: { ViewAs },
 
   computed: {
-    ...mapState('user', ['canViewAs']),
+    ...mapState('tokenUser', ['canViewAs']),
   },
 
   methods: {

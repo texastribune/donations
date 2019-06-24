@@ -53,7 +53,7 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['accessToken']),
+    ...mapState('tokenUser', ['accessToken']),
   },
 
   methods: {

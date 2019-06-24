@@ -82,7 +82,7 @@ function getRefreshInterval(expiryInSeconds) {
 function refreshToken(refreshAt) {
   setTimeout(async () => {
     try {
-      await store.dispatch('user/getTokenUser');
+      await store.dispatch('tokenUser/getTokenUser');
       const newRefreshAt = getRefreshInterval(store.state.user.expiryInSeconds);
       refreshToken(newRefreshAt);
     } catch (err) {
@@ -94,7 +94,7 @@ function refreshToken(refreshAt) {
 }
 
 store
-  .dispatch('user/getTokenUser')
+  .dispatch('tokenUser/getTokenUser')
   .catch(err => {
     if (!(err instanceof LoggedOutError)) {
       store.dispatch('context/setError', err);
@@ -111,7 +111,7 @@ store
     const instance = new Vue({ ...App, router, store });
     instance.$mount('#account-attach');
 
-    const { expiryInSeconds, accessToken } = store.state.user;
+    const { expiryInSeconds, accessToken } = store.state.tokenUser;
 
     if (accessToken) {
       const refreshAt = getRefreshInterval(expiryInSeconds);

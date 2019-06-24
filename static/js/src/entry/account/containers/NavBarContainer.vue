@@ -30,7 +30,7 @@ export default {
   },
 
   computed: {
-    ...mapState('user', ['accessToken']),
+    ...mapState('tokenUser', ['accessToken']),
 
     isLoggedIn() {
       return !!this.accessToken;

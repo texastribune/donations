@@ -1,5 +1,5 @@
 <template>
-  <summary-box heading="join now" :display="{ isExpired: false }">
+  <summary-box heading="become a member" :display="{ isExpired: false }">
     <template v-slot:content>
       <p class="has-text-gray-dark t-space-heading-m">
         Our nonprofit newsroom relies on the support of readers like you to keep
