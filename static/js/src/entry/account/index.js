@@ -111,6 +111,10 @@ store
     const instance = new Vue({ ...App, router, store });
     instance.$mount('#account-attach');
 
-    const refreshAt = getRefreshInterval(store.state.user.expiryInSeconds);
-    refreshToken(refreshAt);
+    const { expiryInSeconds, accessToken } = store.state.user;
+
+    if (accessToken) {
+      const refreshAt = getRefreshInterval(expiryInSeconds);
+      refreshToken(refreshAt);
+    }
   });
