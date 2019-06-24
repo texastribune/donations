@@ -18,6 +18,8 @@ export default {
     const { email_verified } = this.tokenUser;
     const { accessToken } = this;
 
+    if (isExact) this.setTitle();
+
     if (!accessToken && isProtected) {
       logIn();
       return;
@@ -36,18 +38,12 @@ export default {
     if (this.fetchData) {
       try {
         await this.fetchData();
-
-        if (isExact) {
-          this.setTitle();
-          this.logPageView();
-        }
-
+        if (isExact) this.logPageView();
         this.isFetching = false;
       } catch (err) {
         this.setError(err);
       }
     } else if (isExact) {
-      this.setTitle();
       this.logPageView();
     }
   },
