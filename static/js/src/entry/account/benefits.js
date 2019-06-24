@@ -26,7 +26,7 @@ const BENEFITS = [
       name: 'Email',
       render(h) {
         return h('span', [
-          'Behind-the-scenes access to the Texas Tribune newsroom via our monthly ',
+          'Behind-the-scenes access to our newsroom via a monthly ',
           h(
             'a',
             {
