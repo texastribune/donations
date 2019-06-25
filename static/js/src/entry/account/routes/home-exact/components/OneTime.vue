@@ -6,7 +6,7 @@
         class="has-text-gray-dark t-space-heading-m"
       >
         Thank you for being a Texas Tribune member! Your last donation of
-        <strong>${{ lastTransaction.amount | currency }}</strong> was charged on
+        <strong>{{ lastTransaction.amount | currency }}</strong> was charged on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >, to your card ending in <strong>{{ lastTransaction.last4 }}</strong
         >. Your membership is good through
@@ -15,7 +15,7 @@
       </p>
       <p v-else class="has-text-gray-dark t-space-heading-m">
         Thank you for being a Texas Tribune member! Your last donation of
-        <strong>${{ lastTransaction.amount | currency }}</strong> was on
+        <strong>{{ lastTransaction.amount | currency }}</strong> was on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >. Your membership is good through
         <strong>{{ membershipExpirationDate | longDate }}</strong
