@@ -13,7 +13,7 @@ import { PORTAL_API_URL } from '../../constants';
 */
 function addFields(data) {
   const {
-    recurring_donor,
+    is_recurring_donor,
     membership_expiration_date,
     membership_level,
     never_given,
@@ -21,7 +21,7 @@ function addFields(data) {
   let membershipLevel;
   let isExpired;
 
-  const isOneTime = !never_given && !recurring_donor;
+  const isOneTime = !never_given && !is_recurring_donor;
 
   // only false if never_given: true
   if (membership_expiration_date) {

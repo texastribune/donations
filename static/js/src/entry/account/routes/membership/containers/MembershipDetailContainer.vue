@@ -39,7 +39,7 @@ export default {
     data() {
       const data = [{ id: 0 }, { id: 1 }];
       const {
-        recurring_donor,
+        is_recurring_donor,
         membership_expiration_date,
         is_expired,
         is_one_time,
@@ -87,7 +87,7 @@ export default {
             membership_expiration_date
           )}.`;
         }
-      } else if (recurring_donor) {
+      } else if (is_recurring_donor) {
         const {
           amount,
           date,

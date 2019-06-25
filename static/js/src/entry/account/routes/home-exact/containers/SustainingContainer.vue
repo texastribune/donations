@@ -18,9 +18,9 @@ export default {
 
   computed: {
     shouldShow() {
-      const { recurring_donor, is_expired, is_mdev } = this.user;
+      const { is_recurring_donor, is_expired, is_mdev } = this.user;
 
-      return recurring_donor && !is_expired && !is_mdev;
+      return is_recurring_donor && !is_expired && !is_mdev;
     },
 
     nextTransaction() {
