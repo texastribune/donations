@@ -9,14 +9,16 @@ import LoggedOut from './logged-out/Index.vue';
 
 const routes = [
   {
-    path: '/logged-in',
+    path: '/logged-in/',
     name: 'logged-in',
     component: LoggedIn,
+    pathToRegexpOptions: { strict: true },
   },
   {
-    path: '/logged-out',
+    path: '/logged-out/',
     name: 'logged-out',
     component: LoggedOut,
+    pathToRegexpOptions: { strict: true },
   },
   {
     path: '/',
@@ -28,24 +30,28 @@ const routes = [
         component: HomeExact,
       },
       {
-        path: 'membership',
+        path: 'membership/',
         name: 'membership',
         component: Membership,
+        pathToRegexpOptions: { strict: true },
       },
       {
-        path: 'payments',
+        path: 'payments/',
         name: 'payments',
         component: Payments,
+        pathToRegexpOptions: { strict: true },
       },
       {
-        path: 'blast',
+        path: 'blast/',
         name: 'blast',
         component: Blast,
+        pathToRegexpOptions: { strict: true },
       },
       {
-        path: 'blast-payments',
+        path: 'blast-payments/',
         name: 'blast-payments',
         component: BlastPayments,
+        pathToRegexpOptions: { strict: true },
       },
       { path: '*', name: 'not-found', redirect: { name: 'home' } },
     ],
