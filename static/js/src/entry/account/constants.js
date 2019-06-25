@@ -45,9 +45,9 @@ export const GA_USER_PORTAL_NAV = {
 export const GA_USER_PORTAL = {
   category: 'user portal',
   actions: {
-    'reset-password': 'reset your password',
+    'reset-password': 'reset password',
     'contact-us': 'contact us',
-    'tax-receipt': 'download your tax receipt',
+    'tax-receipt': 'download tax receipt',
     'blast-receipt': 'download your blast receipt',
     'clear-notification': 'clear notification',
   },
