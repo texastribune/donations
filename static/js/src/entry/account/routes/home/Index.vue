@@ -46,7 +46,6 @@ export default {
       return {
         isExact: false,
         isProtected: true,
-        meetsCriteria: true,
         title: null,
       };
     },
@@ -55,7 +54,7 @@ export default {
   methods: {
     ...mapActions('user', ['getUser']),
 
-    async fetchData() {
+    prepareRoute() {
       return this.getUser();
     },
   },

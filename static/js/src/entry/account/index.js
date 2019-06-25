@@ -33,7 +33,6 @@ import SiteFooter from './containers/SiteFooterContainer.vue';
 import Loader from './components/Loader.vue';
 import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
-import { LoggedOutError } from './errors';
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
@@ -86,9 +85,7 @@ function refreshToken(refreshAt) {
       const newRefreshAt = getRefreshInterval(store.state.user.expiryInSeconds);
       refreshToken(newRefreshAt);
     } catch (err) {
-      if (!(err instanceof LoggedOutError)) {
-        store.dispatch('context/setError', err);
-      }
+      store.dispatch('context/setError', err);
     }
   }, refreshAt);
 }
@@ -96,9 +93,7 @@ function refreshToken(refreshAt) {
 store
   .dispatch('tokenUser/getTokenUser')
   .catch(err => {
-    if (!(err instanceof LoggedOutError)) {
-      store.dispatch('context/setError', err);
-    }
+    store.dispatch('context/setError', err);
   })
   .then(() => {
     const router = new VueRouter({

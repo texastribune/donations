@@ -27,7 +27,6 @@ export default {
       return {
         isExact: true,
         isProtected: false,
-        meetsCriteria: true,
         title: 'Logged In',
       };
     },
@@ -36,6 +35,12 @@ export default {
   mounted() {
     setFlag();
     redirectAfterLogIn();
+  },
+
+  methods: {
+    async prepareRoute() {
+      return true;
+    },
   },
 };
 </script>

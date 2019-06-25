@@ -26,7 +26,6 @@ export default {
     route() {
       return {
         isExact: true,
-        isProtected: false,
         meetsCriteria: true,
         title: 'Logged Out',
       };
@@ -36,6 +35,12 @@ export default {
   mounted() {
     clearFlag();
     redirectAfterLogOut();
+  },
+
+  methods: {
+    async prepareRoute() {
+      return true;
+    },
   },
 };
 </script>

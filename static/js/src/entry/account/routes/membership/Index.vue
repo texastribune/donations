@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="route.meetsCriteria && !parentIsFetching"
-    class="has-ump-top-padding"
-  >
+  <div v-if="!isFetching" class="has-ump-top-padding">
     <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       Your Membership
     </h1>
@@ -26,6 +23,7 @@ import userMixin from '../home/mixins/user';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import Help from '../../components/Help.vue';
+import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'MembershipRoute',
@@ -34,24 +32,22 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  props: {
-    parentIsFetching: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
   computed: {
     route() {
-      const { is_mdev, never_given } = this.user;
-      const meetsCriteria = !is_mdev && !never_given;
-
       return {
         isExact: true,
         isProtected: false,
-        meetsCriteria,
         title: 'Membership',
       };
+    },
+  },
+
+  methods: {
+    async prepareRoute() {
+      const { is_mdev, never_given } = this.user;
+      const meetsCriteria = !is_mdev && !never_given;
+
+      if (!meetsCriteria) throw new InvalidRouteError();
     },
   },
 };

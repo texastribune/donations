@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="route.meetsCriteria && !parentIsFetching"
-    class="has-ump-top-padding"
-  >
+  <div v-if="!isFetching" class="has-ump-top-padding">
     <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter
     </h1>
@@ -20,6 +17,7 @@ import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
 import Help from '../../components/Help.vue';
 import BlastDetail from './containers/BlastDetailContainer.vue';
+import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastRoute',
@@ -28,15 +26,18 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  props: {
-    parentIsFetching: {
-      type: Boolean,
-      required: true,
+  computed: {
+    route() {
+      return {
+        isExact: true,
+        isProtected: false,
+        title: 'The Blast',
+      };
     },
   },
 
-  computed: {
-    route() {
+  methods: {
+    async prepareRoute() {
       const {
         is_former_blast_subscriber,
         is_current_blast_subscriber,
@@ -44,12 +45,7 @@ export default {
       const meetsCriteria =
         is_former_blast_subscriber || is_current_blast_subscriber;
 
-      return {
-        isExact: true,
-        isProtected: false,
-        meetsCriteria,
-        title: 'The Blast',
-      };
+      if (!meetsCriteria) throw new InvalidRouteError();
     },
   },
 };

@@ -5,7 +5,7 @@ import { setExtra } from '@sentry/browser';
 
 import auth from '../../utils/auth';
 import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
-import { LoggedOutError, Auth0Error } from '../../errors';
+import { Auth0Error } from '../../errors';
 
 function createDefaultState() {
   return {
@@ -44,7 +44,7 @@ const actions = {
             if (err && err.error === 'login_required') {
               commit('SET_ACCESS_TOKEN', '');
               clearFlag();
-              return reject(new LoggedOutError());
+              return resolve();
             }
 
             if (
@@ -55,7 +55,7 @@ const actions = {
               !authResult.expiresIn
             ) {
               clearFlag();
-              return reject(new Auth0Error());
+              return reject(new Auth0Error(err.error));
             }
 
             const { permissions } = jwt.decode(authResult.accessToken);
@@ -75,7 +75,7 @@ const actions = {
         );
       } else {
         clearFlag();
-        reject(new LoggedOutError());
+        return resolve();
       }
     }),
 };

@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="route.meetsCriteria && !parentIsFetching"
-    class="has-ump-top-padding"
-  >
+  <div v-if="!isFetching" class="has-ump-top-padding">
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       Your Donations
     </h1>
@@ -26,6 +23,7 @@ import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import MDevAppeal from '../home/containers/MDevAppealContainer.vue';
 import Help from '../../components/Help.vue';
 import Payments from './containers/PaymentsContainer.vue';
+import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'PaymentsRoute',
@@ -34,24 +32,22 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  props: {
-    parentIsFetching: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
   computed: {
     route() {
-      const { never_given } = this.user;
-      const meetsCriteria = !never_given;
-
       return {
         isExact: true,
         isProtected: false,
-        meetsCriteria,
         title: 'Donation History',
       };
+    },
+  },
+
+  methods: {
+    async prepareRoute() {
+      const { never_given } = this.user;
+      const meetsCriteria = !never_given;
+
+      if (!meetsCriteria) throw new InvalidRouteError();
     },
   },
 };

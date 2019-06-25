@@ -2,7 +2,7 @@
   <div>
     <error-view v-if="error" />
     <unverified-view v-else-if="isUnverified" />
-    <router-view v-else />
+    <router-view v-else :parent-is-fetching="false" />
   </div>
 </template>
 

@@ -1,12 +1,6 @@
-export class LoggedOutError extends Error {
-  constructor() {
-    super('Logged out');
-  }
-}
-
 export class Auth0Error extends Error {
-  constructor() {
-    super('Auth0 error');
+  constructor(message) {
+    super(`Auth0 error: ${message}`);
   }
 }
 
@@ -19,5 +13,11 @@ export class MultiplePersonsError extends Error {
 export class NoPersonsError extends Error {
   constructor() {
     super('No persons');
+  }
+}
+
+export class InvalidRouteError extends Error {
+  constructor() {
+    super('Invalid route');
   }
 }
