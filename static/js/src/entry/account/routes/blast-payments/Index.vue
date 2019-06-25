@@ -37,7 +37,7 @@ export default {
   },
 
   methods: {
-    async prepareRoute() {
+    async fetchData() {
       const {
         is_former_blast_subscriber,
         is_current_blast_subscriber,

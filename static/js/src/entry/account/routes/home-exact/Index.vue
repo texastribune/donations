@@ -63,7 +63,7 @@ export default {
   },
 
   methods: {
-    async prepareRoute() {
+    async fetchData() {
       return true;
     },
   },

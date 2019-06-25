@@ -43,7 +43,7 @@ export default {
   },
 
   methods: {
-    async prepareRoute() {
+    async fetchData() {
       const { is_mdev, never_given } = this.user;
       const meetsCriteria = !is_mdev && !never_given;
 

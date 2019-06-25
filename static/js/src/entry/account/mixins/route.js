@@ -18,22 +18,31 @@ export default {
   },
 
   data() {
-    return { isFetching: true };
+    return {
+      isFetching: true,
+      shouldLogPV: true,
+    };
   },
 
   async created() {
-    const { isProtected, isExact } = this.route;
+    const { isProtected, isExact, title } = this.route;
     const { email_verified } = this.tokenUser;
     const { accessToken, parentIsFetching } = this;
 
-    if (isExact) this.setTitle();
+    // sometimes title will be null in cases
+    // where it can't be set until a data fetch happens
+    if (isExact && title) this.setTitle();
 
+    // login-required route; user not logged in
     if (!accessToken && isProtected) {
       logIn();
+      // login-required route; user has not verified email
     } else if (!email_verified && isProtected) {
       this.setUnverified();
+      // top level route; do data fetch immediately
+      // because there's no parent fetch to wait on
     } else if (!parentIsFetching) {
-      await this.doRoutePrepare();
+      await this.doRouteFetch(this.$route);
     }
   },
 
@@ -45,7 +54,8 @@ export default {
     ...mapActions('context', ['setUnverified', 'setError']),
 
     setTitle() {
-      document.title = `${this.route.title} ${TITLE_SUFFIX}`;
+      const { title } = this.route;
+      document.title = `${title} ${TITLE_SUFFIX}`;
     },
 
     logPageView() {
@@ -56,20 +66,41 @@ export default {
       });
     },
 
-    async doRoutePrepare() {
+    async doRouteFetch(toRoute, next) {
       const { isExact } = this.route;
+      const { shouldLogPV } = this;
 
       try {
-        await this.prepareRoute();
-        if (isExact) this.logPageView();
+        if (next) {
+          // if a route's params have changed
+          await this.refetchData(toRoute);
+        } else {
+          await this.fetchData(toRoute);
+        }
+
+        if (next) next();
+        if (isExact && shouldLogPV) this.logPageView();
+
+        // we don't want to log a PV again if this
+        // data fetch is repeated (unless route params have changed)
+        this.shouldLogPV = false;
         this.isFetching = false;
       } catch (err) {
+        if (next) next();
+
+        // you're on a route that you're not supposed to be on
+        // like the Blast page if you're not a Blast subscriber
         if (err instanceof InvalidRouteError) {
           this.$router.push({ name: 'home' });
         } else {
           this.setError(err);
         }
       }
+    },
+
+    async repeatRouteFetch() {
+      this.isFetching = true;
+      await this.doRouteFetch(this.$route);
     },
   },
 
@@ -79,11 +110,31 @@ export default {
         route: { isProtected },
       } = this;
 
+      // if users have been logged out somewhere else
+      // log them out here too
       if (isProtected && oldToken && !newToken) logOut();
     },
 
-    async parentIsFetching() {
-      await this.doRoutePrepare();
+    async parentIsFetching(newIsFetching, oldIsFetching) {
+      // if a child route has a parent that's doing
+      // a data fetch, wait for the parent fetch to complete
+      // in case the child's fetch depends on data from it
+      if (oldIsFetching && !newIsFetching) {
+        await this.doRouteFetch(this.$route);
+      }
     },
+  },
+
+  async beforeRouteUpdate(to, from, next) {
+    // to refetch when route params have changed
+    // a refetchData method must be defined
+    if (!this.refetchData) {
+      next();
+    } else {
+      this.isFetching = true;
+      this.shouldLogPV = true;
+
+      await this.doRouteFetch(to, next);
+    }
   },
 };

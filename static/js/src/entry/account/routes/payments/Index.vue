@@ -43,7 +43,7 @@ export default {
   },
 
   methods: {
-    async prepareRoute() {
+    async fetchData() {
       const { never_given } = this.user;
       const meetsCriteria = !never_given;
 

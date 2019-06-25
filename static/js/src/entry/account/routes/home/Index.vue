@@ -21,7 +21,7 @@
       </div>
     </main>
 
-    <view-as />
+    <view-as v-if="!isFetching" />
 
     <site-footer v-if="!isFetching" />
   </div>
@@ -54,7 +54,7 @@ export default {
   methods: {
     ...mapActions('user', ['getUser']),
 
-    prepareRoute() {
+    fetchData() {
       return this.getUser();
     },
   },
