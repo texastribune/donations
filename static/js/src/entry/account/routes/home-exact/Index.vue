@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!parentIsFetching"
     class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l has-ump-top-padding"
   >
     <messages />
@@ -50,6 +51,13 @@ export default {
   },
 
   mixins: [routeMixin],
+
+  props: {
+    parentIsFetching: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   computed: {
     route() {

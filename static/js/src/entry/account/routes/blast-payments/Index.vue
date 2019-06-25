@@ -1,5 +1,8 @@
 <template>
-  <div v-if="route.meetsCriteria" class="has-ump-top-padding">
+  <div
+    v-if="route.meetsCriteria && !parentIsFetching"
+    class="has-ump-top-padding"
+  >
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter: Payment History
     </h1>
@@ -24,6 +27,13 @@ export default {
   components: { Help, BlastPayments },
 
   mixins: [routeMixin, userMixin],
+
+  props: {
+    parentIsFetching: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   computed: {
     route() {

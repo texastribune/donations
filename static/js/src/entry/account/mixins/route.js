@@ -22,20 +22,11 @@ export default {
 
     if (!accessToken && isProtected) {
       logIn();
-      return;
-    }
-
-    if (!email_verified && isProtected) {
+    } else if (!email_verified && isProtected) {
       this.setUnverified();
-      return;
-    }
-
-    if (!meetsCriteria) {
+    } else if (!meetsCriteria) {
       this.$router.push({ name: 'home' });
-      return;
-    }
-
-    if (this.fetchData) {
+    } else if (this.fetchData) {
       try {
         await this.fetchData();
         if (isExact) this.logPageView();

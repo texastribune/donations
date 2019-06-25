@@ -1,22 +1,29 @@
 <template>
-  <loader v-if="isFetching">
-    <template v-slot:text>
-      Hold tight, we're grabbing your account information
-    </template>
-  </loader>
+  <div>
+    <loader v-if="isFetching">
+      <template v-slot:text>
+        Hold tight, we're grabbing your account information
+      </template>
+    </loader>
 
-  <div v-else>
-    <nav-bar />
+    <nav-bar v-if="!isFetching" />
+
     <main class="has-bg-white-off">
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
-          <div class="l-ump-grid__side is-hidden-until-bp-l"><side-nav /></div>
-          <div class="l-ump-grid__content has-bg-white"><router-view /></div>
+          <div class="l-ump-grid__side is-hidden-until-bp-l">
+            <side-nav v-if="!isFetching" />
+          </div>
+          <div class="l-ump-grid__content has-bg-white">
+            <router-view :parent-is-fetching="isFetching" />
+          </div>
         </div>
       </div>
     </main>
+
     <view-as />
-    <site-footer />
+
+    <site-footer v-if="!isFetching" />
   </div>
 </template>
 

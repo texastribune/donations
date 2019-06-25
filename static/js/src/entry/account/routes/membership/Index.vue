@@ -1,5 +1,8 @@
 <template>
-  <div v-if="route.meetsCriteria" class="has-ump-top-padding">
+  <div
+    v-if="route.meetsCriteria && !parentIsFetching"
+    class="has-ump-top-padding"
+  >
     <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       Your Membership
     </h1>
@@ -30,6 +33,13 @@ export default {
   components: { Appeal, CircleAppeal, Help, MembershipDetail },
 
   mixins: [routeMixin, userMixin],
+
+  props: {
+    parentIsFetching: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   computed: {
     route() {
