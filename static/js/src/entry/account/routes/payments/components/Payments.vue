@@ -24,14 +24,7 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <button
-            class="c-link-button"
-            ga-on="click"
-            :ga-event-category="ga.userPortal"
-            :ga-event-action="ga.userPortal.actions['tax-receipt']"
-            :ga-event-label="ga.userPortal.labels.payments"
-            @click="buildReceipt"
-          >
+          <button class="c-link-button" @click="buildReceipt">
             Download your {{ lastYear }} tax receipt
           </button>
         </span>
@@ -154,6 +147,13 @@ export default {
         });
       } catch (err) {
         this.$emit('setError', err);
+      } finally {
+        window.dataLayer.push({
+          event: this.ga.customEventName,
+          gaCategory: this.ga.userPortal.category,
+          gaAction: this.ga.userPortal.actions['tax-receipt'],
+          gaLabel: this.ga.userPortal.labels.payments,
+        });
       }
     },
   },

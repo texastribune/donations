@@ -3,8 +3,6 @@
     <div class="has-xxxl-btm-marg">
       <payment-list
         :payments="data"
-        :ga-receipt-action="ga.userPortal.actions['blast-receipt']"
-        :ga-receipt-label="ga.userPortal.labels['blast-payments']"
         show-receipts
         @buildReceipt="buildReceipt"
       />
@@ -78,6 +76,13 @@ export default {
         });
       } catch (err) {
         this.$emit('setError', err);
+      } finally {
+        window.dataLayer.push({
+          event: this.ga.customEventName,
+          gaCategory: this.ga.userPortal.category,
+          gaAction: this.ga.userPortal.actions['blast-receipt'],
+          gaLabel: this.ga.userPortal.labels['blast-payments'],
+        });
       }
     },
   },

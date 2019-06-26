@@ -52,7 +52,7 @@ export const GA_USER_PORTAL = {
     'reset-password': 'reset password',
     'contact-us': 'contact us',
     'tax-receipt': 'download tax receipt',
-    'blast-receipt': 'download your blast receipt',
+    'blast-receipt': 'download blast receipt',
     'clear-notification': 'clear notification',
   },
   labels: {
@@ -63,7 +63,6 @@ export const GA_USER_PORTAL = {
     'blast-payments': 'the blast payment history',
   },
 };
-
 export const GA_DONATIONS = {
   category: 'donations',
   actions: {
@@ -76,7 +75,6 @@ export const GA_DONATIONS = {
     'never-given': 'user portal - never given',
   },
 };
-
 export const GA_BLAST_INTENT = {
   category: 'blast intent',
   actions: {
@@ -86,3 +84,4 @@ export const GA_BLAST_INTENT = {
     'user-portal': 'user portal',
   },
 };
+export const GA_CUSTOM_EVENT_NAME = 'customUserPortal';

@@ -9,11 +9,7 @@
 
     <button
       class="c-message__close has-bg-white has-text-gray"
-      aria-label="close"
-      ga-on="click"
-      :ga-event-category="ga.userPortal.category"
-      :ga-event-action="ga.userPortal.actions['clear-notification']"
-      :ga-event-label="gaCloseLabel"
+      aria-label="close message"
       @click="close"
     >
       <icon name="close" :display="{ size: 'xxs', color: 'gray' }" />
@@ -59,6 +55,13 @@ export default {
       this.shouldShow = false;
       this.setInStorage();
       this.$emit('setMessageSeen');
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['clear-notification'],
+        gaLabel: this.gaCloseLabel,
+      });
     },
 
     getFromStorage() {
