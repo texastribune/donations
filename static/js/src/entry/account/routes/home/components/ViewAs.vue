@@ -86,11 +86,13 @@ export default {
 
   methods: {
     submit() {
+      this.$router.push({ name: 'home' });
       this.allowSubmit = false;
       this.$emit('doViewAs', this.email);
     },
 
     reset() {
+      this.$router.push({ name: 'home' });
       this.email = '';
       this.$emit('undoViewAs', () => {
         this.allowSubmit = true;

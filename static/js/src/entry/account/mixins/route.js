@@ -66,6 +66,10 @@ export default {
       });
     },
 
+    setIsFetching(isFetching) {
+      this.isFetching = isFetching;
+    },
+
     async doRouteFetch(toRoute, next) {
       const { isExact } = this.route;
       const { shouldLogPV } = this;
@@ -96,11 +100,6 @@ export default {
           this.setError(err);
         }
       }
-    },
-
-    async repeatRouteFetch() {
-      this.isFetching = true;
-      await this.doRouteFetch(this.$route);
     },
   },
 
