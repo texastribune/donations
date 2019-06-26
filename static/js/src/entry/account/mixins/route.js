@@ -33,15 +33,15 @@ export default {
     // where it can't be set until a data fetch happens
     if (isExact && title) this.setTitle();
 
-    // login-required route; user not logged in
     if (!accessToken && isProtected) {
+      // login-required route; user not logged in
       logIn();
-      // login-required route; user has not verified email
     } else if (!email_verified && isProtected) {
+      // login-required route; user has not verified email
       this.setUnverified();
+    } else if (!parentIsFetching) {
       // top level route; do data fetch immediately
       // because there's no parent fetch to wait on
-    } else if (!parentIsFetching) {
       await this.doRouteFetch(this.$route);
     }
   },
