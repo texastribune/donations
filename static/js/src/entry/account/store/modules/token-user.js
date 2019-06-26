@@ -16,20 +16,27 @@ function createDefaultState() {
   };
 }
 
+const MUTATION_TYPES = {
+  setAccessToken: 'SET_ACCESS_TOKEN',
+  setExpiryInSeconds: 'SET_EXPIRY_IN_SECONDS',
+  setCanViewAs: 'SET_CAN_VIEW_AS',
+  setDetails: 'SET_DETAILS',
+};
+
 const mutations = {
-  SET_ACCESS_TOKEN(state, accessToken) {
+  [MUTATION_TYPES.setAccessToken](state, accessToken) {
     state.accessToken = accessToken;
   },
 
-  SET_EXPIRY_IN_SECONDS(state, expiryInSeconds) {
+  [MUTATION_TYPES.setExpiryInSeconds](state, expiryInSeconds) {
     state.expiryInSeconds = expiryInSeconds;
   },
 
-  SET_CAN_VIEW_AS(state, canViewAs) {
+  [MUTATION_TYPES.setCanViewAs](state, canViewAs) {
     state.canViewAs = canViewAs;
   },
 
-  SET_DETAILS(state, details) {
+  [MUTATION_TYPES.setDetails](state, details) {
     state.details = details;
   },
 };
@@ -42,7 +49,7 @@ const actions = {
           { responseType: 'token id_token' },
           (err, authResult) => {
             if (err && err.error === 'login_required') {
-              commit('SET_ACCESS_TOKEN', '');
+              commit(MUTATION_TYPES.setAccessToken, '');
               clearFlag();
               resolve();
             } else if (
@@ -60,10 +67,10 @@ const actions = {
                 perm => perm === 'portal:view_as'
               );
 
-              commit('SET_CAN_VIEW_AS', filteredPerms.length === 1);
-              commit('SET_ACCESS_TOKEN', authResult.accessToken);
-              commit('SET_DETAILS', authResult.idTokenPayload);
-              commit('SET_EXPIRY_IN_SECONDS', authResult.expiresIn);
+              commit(MUTATION_TYPES.setCanViewAs, filteredPerms.length === 1);
+              commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
+              commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
+              commit(MUTATION_TYPES.setExpiryInSeconds, authResult.expiresIn);
               setExtra('auth', authResult);
               setFlag();
               resolve();

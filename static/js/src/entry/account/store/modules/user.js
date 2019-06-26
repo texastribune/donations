@@ -49,8 +49,12 @@ function createDefaultState() {
   return { details: {} };
 }
 
+const MUTATION_TYPES = {
+  setDetails: 'SET_DETAILS',
+};
+
 const mutations = {
-  SET_DETAILS(state, details) {
+  [MUTATION_TYPES.setDetails](state, details) {
     state.details = details;
   },
 };
@@ -66,7 +70,7 @@ const actions = {
     if (!data.length) throw new NoPersonsError();
     if (data.length > 1) throw new MultiplePersonsError();
 
-    commit('SET_DETAILS', addFields(data[0]));
+    commit(MUTATION_TYPES.setDetails, addFields(data[0]));
   },
 
   getUser: async ({ commit, rootState }) => {
@@ -75,7 +79,7 @@ const actions = {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    commit('SET_DETAILS', addFields(data));
+    commit(MUTATION_TYPES.setDetails, addFields(data));
   },
 };
 

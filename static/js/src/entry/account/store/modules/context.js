@@ -10,16 +10,22 @@ function createDefaultState() {
   };
 }
 
+const MUTATION_TYPES = {
+  setError: 'SET_ERROR',
+  setUnverified: 'SET_UNVERIFIED',
+  setIsViewingAs: 'SET_IS_VIEWING_AS',
+};
+
 const mutations = {
-  SET_ERROR(state, err) {
+  [MUTATION_TYPES.setError](state, err) {
     state.error = err;
   },
 
-  SET_UNVERIFIED(state) {
+  [MUTATION_TYPES.setUnverified](state) {
     state.isUnverified = true;
   },
 
-  SET_IS_VIEWING_AS(state, isViewingAs) {
+  [MUTATION_TYPES.setIsViewingAs](state, isViewingAs) {
     state.isViewingAs = isViewingAs;
   },
 };
@@ -27,15 +33,15 @@ const mutations = {
 const actions = {
   setError: ({ commit }, err) => {
     logError(err);
-    commit('SET_ERROR', err);
+    commit(MUTATION_TYPES.setError, err);
   },
 
   setUnverified: ({ commit }) => {
-    commit('SET_UNVERIFIED');
+    commit(MUTATION_TYPES.setUnverified);
   },
 
   setIsViewingAs: ({ commit }, isViewingAs) => {
-    commit('SET_IS_VIEWING_AS', isViewingAs);
+    commit(MUTATION_TYPES.setIsViewingAs, isViewingAs);
   },
 };
 
