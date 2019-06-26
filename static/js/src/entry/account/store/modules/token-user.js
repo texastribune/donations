@@ -44,10 +44,8 @@ const actions = {
             if (err && err.error === 'login_required') {
               commit('SET_ACCESS_TOKEN', '');
               clearFlag();
-              return resolve();
-            }
-
-            if (
+              resolve();
+            } else if (
               err ||
               !authResult ||
               !authResult.accessToken ||
@@ -55,27 +53,26 @@ const actions = {
               !authResult.expiresIn
             ) {
               clearFlag();
-              return reject(new Auth0Error(err.error));
+              reject(new Auth0Error(err.error));
+            } else {
+              const { permissions } = jwt.decode(authResult.accessToken);
+              const filteredPerms = permissions.filter(
+                perm => perm === 'portal:view_as'
+              );
+
+              commit('SET_CAN_VIEW_AS', filteredPerms.length === 1);
+              commit('SET_ACCESS_TOKEN', authResult.accessToken);
+              commit('SET_DETAILS', authResult.idTokenPayload);
+              commit('SET_EXPIRY_IN_SECONDS', authResult.expiresIn);
+              setExtra('auth', authResult);
+              setFlag();
+              resolve();
             }
-
-            const { permissions } = jwt.decode(authResult.accessToken);
-            const filteredPerms = permissions.filter(
-              perm => perm === 'portal:view_as'
-            );
-
-            commit('SET_CAN_VIEW_AS', filteredPerms.length === 1);
-            commit('SET_ACCESS_TOKEN', authResult.accessToken);
-            commit('SET_DETAILS', authResult.idTokenPayload);
-            commit('SET_EXPIRY_IN_SECONDS', authResult.expiresIn);
-            setExtra('auth', authResult);
-            setFlag();
-
-            return resolve();
           }
         );
       } else {
         clearFlag();
-        return resolve();
+        resolve();
       }
     }),
 };
