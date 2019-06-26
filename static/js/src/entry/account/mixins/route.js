@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
@@ -44,10 +44,6 @@ export default {
     } else if (!parentIsFetching) {
       await this.doRouteFetch(this.$route);
     }
-  },
-
-  computed: {
-    ...mapState('tokenUser', ['accessToken']),
   },
 
   methods: {

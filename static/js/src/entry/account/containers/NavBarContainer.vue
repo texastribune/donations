@@ -10,17 +10,16 @@
 <script>
 /* eslint-disable camelcase */
 
-import { mapState } from 'vuex';
-
 import NavBar from '../components/NavBar.vue';
 import userMixin from '../routes/home/mixins/user';
+import tokenUserMixin from '../mixins/token-user';
 
 export default {
   name: 'NavBarContainer',
 
   components: { NavBar },
 
-  mixins: [userMixin],
+  mixins: [userMixin, tokenUserMixin],
 
   props: {
     showRouteLinks: {
@@ -30,8 +29,6 @@ export default {
   },
 
   computed: {
-    ...mapState('tokenUser', ['accessToken']),
-
     isLoggedIn() {
       return !!this.accessToken;
     },
