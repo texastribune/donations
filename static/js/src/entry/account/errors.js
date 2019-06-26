@@ -6,13 +6,13 @@ export class Auth0Error extends Error {
 
 export class MultiplePersonsError extends Error {
   constructor() {
-    super('Multiple persons');
+    super('Multiple persons returned from /persons/ endpoint');
   }
 }
 
 export class NoPersonsError extends Error {
   constructor() {
-    super('No persons');
+    super('Empty response from /persons/ endpoint');
   }
 }
 

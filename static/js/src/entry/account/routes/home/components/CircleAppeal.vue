@@ -9,8 +9,8 @@
       public events &mdash; so all Texans have access to nonpartisan news and
       information.
       <a
-        href="/circle"
         ga-on="click"
+        :href="circleUrl"
         :ga-event-category="ga.userPortalNav.category"
         :ga-event-action="ga.userPortalNav.actions.inline"
         :ga-event-label="ga.userPortalNav.labels['circle-landing']"

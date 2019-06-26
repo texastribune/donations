@@ -15,8 +15,8 @@
           </span>
           <span class="has-text-gray-dark">
             <a
-              href="/donate?installmentPeriod=monthly&amount=15&campaignId=7010f0000018KS8AAM"
               ga-on="click"
+              :href="donateUrl"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['never-given']"

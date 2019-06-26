@@ -4,6 +4,10 @@ export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
 export const READ_ONLY_WELCOME_MESSAGE_KEY = 'readOnlyWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
+export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${
+  process.env.PORTAL_CAMPAIGN_ID
+}#join-today`;
+export const CIRCLE_URL = '/circle';
 export const AUTH_AUDIENCE = process.env.AUTH0_AUDIENCE;
 export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
 export const AUTH_CLIENT_ID = process.env.AUTH0_CLIENT_ID;

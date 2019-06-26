@@ -27,6 +27,9 @@ Environment
 -----------
 | Variable                    |                                        Example |
 |-----------------------------|-----------------------------------------------:|
+| `AUTH0_AUDIENCE`            |                                      foobarbaz |
+| `AUTH0_DOMAIN`              |                                     domain.com |
+| `AUTH0_CLIENT_ID`           |                             stringstringstring |
 | `PUBLISHABLE_KEY`           |                                  pk_test_12345 |
 | `SECRET_KEY`                |                                  sk_test_12335 |
 | `SALESFORCE_HOST`           |                            test.salesforce.com |
@@ -35,17 +38,17 @@ Environment
 | `SALESFORCE_USERNAME`       |                                                |
 | `SALESFORCE_PASSWORD`       |                                                |
 | `SALESFORCE_TOKEN`          |                                                |
+| `SALESFORCE_API_VERSION`    |                                          v43.0 |
 | `CELERY_BROKER_URL`         |              amqp://guest:guest@rabbitmq:5672/ |
 | `CELERY_RESULT_BACKEND`     |                           redis://redis:6379/0 |
 | `FLASK_SECRET_KEY`          | b'f;\xeb\x9bT2\xcd\xdb\xe1#z\xfb\xab\xf8(\x03' |
-| `ENABLE_PORTAL`             |                                           True |
-| `ENABLE_SENTRY`             |                                          False |
+| `ENABLE_SENTRY`             |                                           True |
 | `SENTRY_ENVIRONMENT`        |                                           test |
 | `SENTRY_DSN`                |          https://user:pass@sentry/7?timeout=10 |
 | `SENTRY_AUTH_TOKEN`         |                                                |
 | `SENTRY_ORG`                |                                       your-org |
 | `SENTRY_PROJECT`            |                                      donations |
-| `ENABLE_SENTRY_RELEASE`     |                                          False |
+| `ENABLE_SENTRY_RELEASE`     |                                           True |
 | `ENABLE_SLACK`              |                                          False |
 | `SLACK_API_KEY`             |                                                |
 | `SLACK_CHANNEL`             |                                     #donations |
@@ -58,8 +61,10 @@ Environment
 | `ACCOUNTING_MAIL_RECIPIENT` |                                    foo@bar.org |
 | `BUSINESS_MEMBER_RECIPIENT` |                                    foo@bar.org |
 | `REDIS_URL`                 |                             redis://redis:6379 |
-| `SALESFORCE_API_VERSION`    |                                          v43.0 |
 | `REPORT_URI`                |                                https://foo.bar |
+| `ENABLE_PORTAL`             |                                           True |
+| `PORTAL_API_DOMAIN`         |                            https://foo.bar/api |
+| `PORTAL_CAMPAIGN_ID`        |                             stringstringstring |
 
 Running the Project
 -------------------

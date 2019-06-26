@@ -16,6 +16,8 @@ import {
   GA_USER_PORTAL,
   GA_DONATIONS,
   GA_BLAST_INTENT,
+  DONATE_URL,
+  CIRCLE_URL,
 } from './constants';
 
 if (ENABLE_SENTRY) {
@@ -49,6 +51,8 @@ Vue.mixin({
         donations: GA_DONATIONS,
         blastIntent: GA_BLAST_INTENT,
       },
+      donateUrl: DONATE_URL,
+      circleUrl: CIRCLE_URL,
     };
   },
 
