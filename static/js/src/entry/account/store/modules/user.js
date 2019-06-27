@@ -66,7 +66,6 @@ const actions = {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
       params: { email },
-      timeout: 5000,
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
@@ -79,7 +78,6 @@ const actions = {
   getUser: async ({ commit, rootState }) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
-      timeout: 5000,
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
