@@ -29,7 +29,7 @@
           </button>
         </span>
       </li>
-      <li v-if="isExpired && !isMDev" class="has-m-btm-marg">
+      <li v-if="!isMDev && isExpired" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -98,7 +98,7 @@ export default {
     },
 
     isExpired: {
-      type: Boolean,
+      validator: value => typeof value === 'boolean' || value === null,
       required: true,
     },
 
