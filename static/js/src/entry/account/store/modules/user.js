@@ -24,7 +24,7 @@ function addFields(data) {
   const isOneTime = !never_given && !is_recurring_donor;
 
   // only null if never_given: true
-  // or for some special mdevs
+  // or for some special mdevs (i.e. innovation fund)
   if (membership_expiration_date) {
     isExpired = isPast(parse(membership_expiration_date));
   } else {
@@ -32,7 +32,7 @@ function addFields(data) {
   }
 
   // only null if never_given: true
-  // or for some special mdevs
+  // or for some special mdevs (i.e. innovation fund)
   if (membership_level) {
     membershipLevel = membership_level.toLowerCase();
   } else {
