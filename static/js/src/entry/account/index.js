@@ -30,7 +30,7 @@ if (ENABLE_SENTRY) {
 }
 
 import App from './App.vue';
-import routes from './routes';
+import routes from './routes'; // eslint-disable-line
 import store from './store';
 import SiteFooter from './containers/SiteFooterContainer.vue';
 import Loader from './components/Loader.vue';

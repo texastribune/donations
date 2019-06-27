@@ -1,11 +1,19 @@
 import Home from './home/Index.vue';
-import HomeExact from './home-exact/Index.vue';
-import Membership from './membership/Index.vue';
-import Payments from './payments/Index.vue';
-import Blast from './blast/Index.vue';
-import BlastPayments from './blast-payments/Index.vue';
-import LoggedIn from './logged-in/Index.vue';
-import LoggedOut from './logged-out/Index.vue';
+
+const HomeExact = () =>
+  import(/* webpackChunkName: "home-exact-route" */ './home-exact/Index.vue');
+const Membership = () =>
+  import(/* webpackChunkName: "membership-route" */ './membership/Index.vue');
+const Payments = () =>
+  import(/* webpackChunkName: "payments-route" */ './payments/Index.vue');
+const Blast = () =>
+  import(/* webpackChunkName: "blast-route" */ './blast/Index.vue');
+const BlastPayments = () =>
+  import(/* webpackChunkName: "blast-payments-route" */ './blast-payments/Index.vue');
+const LoggedIn = () =>
+  import(/* webpackChunkName: "logged-in-route" */ './logged-in/Index.vue');
+const LoggedOut = () =>
+  import(/* webpackChunkName: "logged-out-route" */ './logged-out/Index.vue');
 
 const routes = [
   {
