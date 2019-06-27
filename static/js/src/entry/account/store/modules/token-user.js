@@ -71,7 +71,7 @@ const actions = {
               commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
               commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
               commit(MUTATION_TYPES.setExpiryInSeconds, authResult.expiresIn);
-              setExtra('auth', authResult);
+              setExtra('auth', authResult.idTokenPayload);
               setFlag();
               resolve();
             }
