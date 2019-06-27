@@ -6,11 +6,14 @@
 import { mapActions, mapState } from 'vuex';
 
 import ViewAs from '../components/ViewAs.vue';
+import contextMixin from '../../../mixins/context';
 
 export default {
   name: 'ViewAsContainer',
 
   components: { ViewAs },
+
+  mixins: [contextMixin],
 
   computed: {
     ...mapState('tokenUser', ['canViewAs']),
@@ -19,7 +22,7 @@ export default {
   methods: {
     ...mapActions('user', ['getUser', 'getOtherUser']),
 
-    ...mapActions('context', ['setIsViewingAs', 'setAppIsFetching']),
+    ...mapActions('context', ['setIsViewingAs']),
 
     async doViewAs(email) {
       this.setAppIsFetching(true);

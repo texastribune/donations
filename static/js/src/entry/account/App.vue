@@ -13,18 +13,21 @@ import { mapActions, mapState } from 'vuex';
 
 import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
+import contextMixin from './mixins/context';
 
 export default {
   name: 'App',
 
   components: { ErrorView, UnverifiedView },
 
+  mixins: [contextMixin],
+
   computed: {
-    ...mapState('context', ['error', 'isUnverified', 'appIsFetching']),
+    ...mapState('context', ['error', 'isUnverified']),
   },
 
   methods: {
-    ...mapActions('context', ['setError', 'setAppIsFetching']),
+    ...mapActions('context', ['setError']),
   },
 
   errorCaptured(err) {
