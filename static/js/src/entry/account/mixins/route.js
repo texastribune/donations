@@ -1,5 +1,7 @@
 /* eslint-disable camelcase */
 
+import { mapActions } from 'vuex';
+
 import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
 import { TITLE_SUFFIX } from '../constants';
@@ -45,6 +47,8 @@ export default {
   },
 
   methods: {
+    ...mapActions('context', ['setUnverified']),
+
     setTitle() {
       const { title } = this.route;
       document.title = `${title} ${TITLE_SUFFIX}`;
