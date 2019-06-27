@@ -1,9 +1,5 @@
 <template>
-  <blast-payments
-    :data="data"
-    :is-cancelled="isCancelled"
-    @setError="setError"
-  />
+  <blast-payments :data="data" :is-cancelled="isCancelled" />
 </template>
 
 <script>
@@ -11,7 +7,6 @@
 
 import parse from 'date-fns/parse';
 import isFuture from 'date-fns/is_future';
-import { mapActions } from 'vuex';
 
 import BlastPayments from '../components/BlastPayments.vue';
 import userMixin from '../../home/mixins/user';
@@ -61,10 +56,6 @@ export default {
         return 0;
       });
     },
-  },
-
-  methods: {
-    ...mapActions('context', ['setError']),
   },
 };
 </script>

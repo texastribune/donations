@@ -145,8 +145,6 @@ export default {
           totalGiftsLastYear,
           greeting,
         });
-      } catch (err) {
-        this.$emit('setError', err);
       } finally {
         window.dataLayer.push({
           event: this.ga.customEventName,

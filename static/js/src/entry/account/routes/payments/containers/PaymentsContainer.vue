@@ -7,7 +7,6 @@
     :is-m-dev="isMDev"
     :total-gifts-last-year="totalGiftsLastYear"
     :greeting="greeting"
-    @setError="setError"
   />
 </template>
 
@@ -16,7 +15,6 @@
 
 import parse from 'date-fns/parse';
 import isFuture from 'date-fns/is_future';
-import { mapActions } from 'vuex';
 
 import Payments from '../components/Payments.vue';
 import userMixin from '../../home/mixins/user';
@@ -86,10 +84,6 @@ export default {
         return 0;
       });
     },
-  },
-
-  methods: {
-    ...mapActions('context', ['setError']),
   },
 };
 </script>

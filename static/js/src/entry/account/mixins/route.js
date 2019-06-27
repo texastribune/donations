@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */
 
-import { mapActions } from 'vuex';
-
 import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
 import { TITLE_SUFFIX } from '../constants';
@@ -47,8 +45,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('context', ['setUnverified', 'setError']),
-
     setTitle() {
       const { title } = this.route;
       document.title = `${title} ${TITLE_SUFFIX}`;
@@ -93,7 +89,7 @@ export default {
         if (err instanceof InvalidRouteError) {
           this.$router.push({ name: 'home' });
         } else {
-          this.setError(err);
+          throw err;
         }
       }
     },
