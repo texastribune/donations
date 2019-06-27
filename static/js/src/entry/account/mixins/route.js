@@ -9,7 +9,7 @@ export default {
   mixins: [tokenUserMixin],
 
   props: {
-    parentIsFetching: {
+    parentRouteIsFetching: {
       type: Boolean,
       required: true,
     },
@@ -17,7 +17,7 @@ export default {
 
   data() {
     return {
-      isFetching: true,
+      routeIsFetching: true,
       shouldLogPV: true,
     };
   },
@@ -25,7 +25,7 @@ export default {
   async created() {
     const { isProtected, isExact, title } = this.route;
     const { email_verified } = this.tokenUser;
-    const { accessToken, parentIsFetching } = this;
+    const { accessToken, parentRouteIsFetching } = this;
 
     // sometimes title will be null in cases
     // where it can't be set until a data fetch happens
@@ -37,7 +37,7 @@ export default {
     } else if (!email_verified && isProtected) {
       // login-required route; user has not verified email
       this.setUnverified();
-    } else if (!parentIsFetching) {
+    } else if (!parentRouteIsFetching) {
       // top level route; do data fetch immediately
       // because there's no parent fetch to wait on
       await this.doRouteFetch(this.$route);
@@ -58,8 +58,8 @@ export default {
       });
     },
 
-    setIsFetching(isFetching) {
-      this.isFetching = isFetching;
+    setRouteIsFetching(routeIsFetching) {
+      this.routeIsFetching = routeIsFetching;
     },
 
     async doRouteFetch(toRoute, next) {
@@ -80,7 +80,7 @@ export default {
         // we don't want to log a PV again if this
         // data fetch is repeated (unless route params have changed)
         this.shouldLogPV = false;
-        this.isFetching = false;
+        this.routeIsFetching = false;
       } catch (err) {
         if (next) next();
 
@@ -106,11 +106,11 @@ export default {
       if (isProtected && oldToken && !newToken) logOut();
     },
 
-    async parentIsFetching(newIsFetching, oldIsFetching) {
+    async parentRouteIsFetching(newVal, oldVal) {
       // if a child route has a parent that's doing
       // a data fetch, wait for the parent fetch to complete
       // in case the child's fetch depends on data from it
-      if (oldIsFetching && !newIsFetching) {
+      if (oldVal && !newVal) {
         await this.doRouteFetch(this.$route);
       }
     },
@@ -122,7 +122,7 @@ export default {
     if (!this.refetchData) {
       next();
     } else {
-      this.isFetching = true;
+      this.routeIsFetching = true;
       this.shouldLogPV = true;
 
       await this.doRouteFetch(to, next);

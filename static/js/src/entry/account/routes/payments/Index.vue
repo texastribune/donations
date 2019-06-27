@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isFetching" class="has-ump-top-padding">
+  <div v-if="!routeIsFetching" class="has-ump-top-padding">
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       Your Donations
     </h1>

@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isFetching"
+    v-if="!routeIsFetching"
     class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l has-ump-top-padding"
   >
     <messages />
