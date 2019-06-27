@@ -1,5 +1,7 @@
 <template>
   <div>
+    <loader v-if="appIsFetching" />
+
     <error-view v-if="error" />
     <unverified-view v-else-if="isUnverified" />
     <router-view v-else :parent-is-fetching="false" />
@@ -18,14 +20,15 @@ export default {
   components: { ErrorView, UnverifiedView },
 
   computed: {
-    ...mapState('context', ['error', 'isUnverified']),
+    ...mapState('context', ['error', 'isUnverified', 'appIsFetching']),
   },
 
   methods: {
-    ...mapActions('context', ['setError']),
+    ...mapActions('context', ['setError', 'setAppIsFetching']),
   },
 
   errorCaptured(err) {
+    this.setAppIsFetching(false);
     this.setError(err);
   },
 };

@@ -19,16 +19,24 @@ export default {
   methods: {
     ...mapActions('user', ['getUser', 'getOtherUser']),
 
-    ...mapActions('context', ['setIsViewingAs']),
+    ...mapActions('context', ['setIsViewingAs', 'setAppIsFetching']),
 
     async doViewAs(email) {
+      this.setAppIsFetching(true);
+
       await this.getOtherUser(email);
+
       this.setIsViewingAs(true);
+      this.setAppIsFetching(false);
     },
 
     async undoViewAs(cb) {
+      this.setAppIsFetching(true);
+
       await this.getUser();
+
       this.setIsViewingAs(false);
+      this.setAppIsFetching(false);
       cb();
     },
   },
