@@ -5,7 +5,7 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import sanitizeParams from '../../utils/sanitize-params';
 import {
   BUSINESS_LEVELS,

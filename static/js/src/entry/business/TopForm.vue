@@ -222,17 +222,17 @@
 </template>
 
 <script>
-import Hidden from '../../elements/Hidden.vue';
-import LocalHidden from '../../elements/LocalHidden.vue';
-import PayFees from '../../elements/PayFees.vue';
-import TextInput from '../../elements/TextInput.vue';
-import SelectList from '../../elements/SelectList.vue';
-import ManualPay from '../../elements/ManualPay.vue';
-import ManualSubmit from '../../elements/ManualSubmit.vue';
-import NativePay from '../../elements/NativePay.vue';
-import FormBuckets from '../../elements/FormBuckets.vue';
+import Hidden from '../../connected-elements/Hidden.vue';
+import PayFees from '../../connected-elements/PayFees.vue';
+import TextInput from '../../connected-elements/TextInput.vue';
+import SelectList from '../../connected-elements/SelectList.vue';
+import ManualPay from '../../connected-elements/ManualPay.vue';
+import ManualSubmit from '../../connected-elements/ManualSubmit.vue';
+import NativePay from '../../connected-elements/NativePay.vue';
+import FormBuckets from '../../connected-elements/FormBuckets.vue';
+import LocalHidden from '../../local-elements/Hidden.vue';
 import Benefits from './Benefits.vue';
-import formStarter from '../../mixins/form/starter';
+import formStarter from '../../mixins/connected-form/starter';
 import { US_STATES_SELECT_LIST, BUSINESS_LEVELS } from './constants';
 
 export default {
