@@ -1,6 +1,6 @@
 <template>
   <nav class="c-side-nav">
-    <ul class="c-side-nav__outer t-size-s">
+    <ul v-if="showRouteLinks" class="c-side-nav__outer t-size-s">
       <li class="has-xxs-btm-marg">
         <router-link
           exact
@@ -87,6 +87,11 @@ export default {
     },
 
     showPaymentsLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showRouteLinks: {
       type: Boolean,
       required: true,
     },

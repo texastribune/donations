@@ -33,7 +33,7 @@ import App from './App.vue';
 import routes from './routes'; // eslint-disable-line
 import store from './store';
 import SiteFooter from './containers/SiteFooterContainer.vue';
-import Loader from './components/Loader.vue';
+import AppLoader from './components/AppLoader.vue';
 import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
 import formatCurrency from './utils/format-currency';
@@ -67,7 +67,7 @@ Vue.mixin({
 
 Vue.component('SiteFooter', SiteFooter);
 Vue.component('NavBar', NavBar);
-Vue.component('Loader', Loader);
+Vue.component('AppLoader', AppLoader);
 Vue.component('Icon', Icon);
 
 Vue.filter('currency', formatCurrency);
@@ -107,6 +107,14 @@ store
       mode: 'history',
       routes,
       scrollBehavior: () => ({ x: 0, y: 0 }),
+    });
+
+    router.beforeEach((to, from, next) => {
+      store.dispatch('context/setAppIsFetching', true);
+      next();
+    });
+    router.afterEach(() => {
+      store.dispatch('context/setAppIsFetching', false);
     });
 
     const instance = new Vue({ ...App, router, store });

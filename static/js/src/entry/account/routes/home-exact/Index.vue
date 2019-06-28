@@ -1,6 +1,12 @@
 <template>
+  <route-loader v-if="routeIsFetching">
+    <template v-slot:text
+      >Hold tight, we're grabbing your account information</template
+    >
+  </route-loader>
+
   <div
-    v-if="!routeIsFetching"
+    v-else
     class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l has-ump-top-padding"
   >
     <messages />
@@ -24,6 +30,7 @@
 <script>
 import routeMixin from '../../mixins/route';
 import Help from '../../components/Help.vue';
+import RouteLoader from '../home/components/RouteLoader.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import Sustaining from './containers/SustainingContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
@@ -48,6 +55,7 @@ export default {
     Blast,
     BlastCancelled,
     Help,
+    RouteLoader,
   },
 
   mixins: [routeMixin],

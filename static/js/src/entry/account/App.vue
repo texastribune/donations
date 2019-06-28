@@ -1,6 +1,6 @@
 <template>
   <div>
-    <loader v-if="appIsFetching" />
+    <app-loader v-show="appIsFetching" />
 
     <error-view v-if="error" />
     <unverified-view v-else-if="isUnverified" />

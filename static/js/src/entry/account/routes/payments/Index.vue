@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!routeIsFetching" class="has-ump-top-padding">
+  <route-loader v-if="routeIsFetching">
+    <template v-slot:text
+      >Hold tight, we're grabbing your donation history</template
+    >
+  </route-loader>
+
+  <div v-else class="has-ump-top-padding">
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       Your Donations
     </h1>
@@ -18,6 +24,7 @@
 
 import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
+import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import MDevAppeal from '../home/containers/MDevAppealContainer.vue';
@@ -28,7 +35,7 @@ import { InvalidRouteError } from '../../errors';
 export default {
   name: 'PaymentsRoute',
 
-  components: { Appeal, CircleAppeal, MDevAppeal, Payments, Help },
+  components: { Appeal, CircleAppeal, MDevAppeal, Payments, Help, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 
