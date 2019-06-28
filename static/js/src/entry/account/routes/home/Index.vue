@@ -25,7 +25,9 @@ import { mapActions } from 'vuex';
 
 import routeMixin from '../../mixins/route';
 import SideNav from './containers/SideNavContainer.vue';
-import ViewAs from './containers/ViewAsContainer.vue';
+
+const ViewAs = () =>
+  import(/* webpackChunkName: "view-as" */ './containers/ViewAsContainer.vue');
 
 export default {
   name: 'HomeRoute',
