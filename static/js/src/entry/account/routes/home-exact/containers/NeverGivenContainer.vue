@@ -1,5 +1,5 @@
 <template>
-  <never-given v-if="shouldShow" />
+  <transition name="has-fade"> <never-given v-if="shouldShow" /> </transition>
 </template>
 
 <script>

@@ -1,5 +1,7 @@
 <template>
-  <sustaining v-if="shouldShow" :next-transaction="nextTransaction" />
+  <transition name="has-fade">
+    <sustaining v-if="shouldShow" :next-transaction="nextTransaction" />
+  </transition>
 </template>
 
 <script>

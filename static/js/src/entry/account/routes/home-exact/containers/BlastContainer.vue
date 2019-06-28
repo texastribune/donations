@@ -1,5 +1,7 @@
 <template>
-  <blast v-if="shouldShow" :next-transaction="nextTransaction" />
+  <transition name="has-fade">
+    <blast v-if="shouldShow" :next-transaction="nextTransaction" />
+  </transition>
 </template>
 
 <script>

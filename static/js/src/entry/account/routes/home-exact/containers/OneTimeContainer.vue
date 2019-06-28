@@ -1,9 +1,11 @@
 <template>
-  <one-time
-    v-if="shouldShow"
-    :last-transaction="lastTransaction"
-    :membership-expiration-date="membershipExpirationDate"
-  />
+  <transition name="has-fade">
+    <one-time
+      v-if="shouldShow"
+      :last-transaction="lastTransaction"
+      :membership-expiration-date="membershipExpirationDate"
+    />
+  </transition>
 </template>
 
 <script>

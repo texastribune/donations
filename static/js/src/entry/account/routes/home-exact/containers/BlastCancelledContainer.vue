@@ -1,5 +1,7 @@
 <template>
-  <blast-cancelled v-if="shouldShow" :last-transaction="lastTransaction" />
+  <transition name="has-fade">
+    <blast-cancelled v-if="shouldShow" :last-transaction="lastTransaction" />
+  </transition>
 </template>
 
 <script>

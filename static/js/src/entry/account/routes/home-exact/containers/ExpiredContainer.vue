@@ -1,10 +1,12 @@
 <template>
-  <expired
-    v-if="shouldShow"
-    :last-transaction="lastTransaction"
-    :is-former-circle="isFormerCircle"
-    :membership-expiration-date="membershipExpirationDate"
-  />
+  <transition name="has-fade">
+    <expired
+      v-if="shouldShow"
+      :last-transaction="lastTransaction"
+      :is-former-circle="isFormerCircle"
+      :membership-expiration-date="membershipExpirationDate"
+    />
+  </transition>
 </template>
 
 <script>

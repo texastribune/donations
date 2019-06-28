@@ -1,6 +1,8 @@
 <template>
   <div>
-    <app-loader v-show="appIsFetching" />
+    <transition name="has-fade">
+      <app-loader v-show="appIsFetching" />
+    </transition>
 
     <error-view v-if="error" />
     <unverified-view v-else-if="isUnverified" />

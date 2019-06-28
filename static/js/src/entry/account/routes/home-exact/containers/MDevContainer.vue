@@ -1,5 +1,5 @@
 <template>
-  <m-dev v-if="shouldShow" />
+  <transition name="has-fade"> <m-dev v-if="shouldShow" /> </transition>
 </template>
 
 <script>
