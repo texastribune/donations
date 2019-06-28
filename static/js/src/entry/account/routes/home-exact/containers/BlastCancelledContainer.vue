@@ -5,9 +5,11 @@
 <script>
 /* eslint-disable camelcase */
 
-import BlastCancelled from '../components/BlastCancelled.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
+
+const BlastCancelled = () =>
+  import(/* webpackChunkName: "blast-cancelled-summary" */ '../components/BlastCancelled.vue');
 
 export default {
   name: 'BlastCancelledContainer',

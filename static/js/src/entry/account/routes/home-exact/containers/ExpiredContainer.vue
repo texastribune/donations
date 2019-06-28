@@ -10,9 +10,11 @@
 <script>
 /* eslint-disable camelcase */
 
-import Expired from '../components/Expired.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
+
+const Expired = () =>
+  import(/* webpackChunkName: "expired-summary" */ '../components/Expired.vue');
 
 export default {
   name: 'ExpiredContainer',

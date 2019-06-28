@@ -9,9 +9,11 @@
 <script>
 /* eslint-disable camelcase */
 
-import OneTime from '../components/OneTime.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
+
+const OneTime = () =>
+  import(/* webpackChunkName: "one-time-summary" */ '../components/OneTime.vue');
 
 export default {
   name: 'OneTimeContainer',

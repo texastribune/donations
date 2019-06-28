@@ -4,7 +4,9 @@
 
 <script>
 import userMixin from '../../home/mixins/user';
-import NeverGiven from '../components/NeverGiven.vue';
+
+const NeverGiven = () =>
+  import(/* webpackChunkName: "never-given-summary" */ '../components/NeverGiven.vue');
 
 export default {
   name: 'NeverGivenContainer',

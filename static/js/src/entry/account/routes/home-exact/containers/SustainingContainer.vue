@@ -5,9 +5,11 @@
 <script>
 /* eslint-disable camelcase */
 
-import Sustaining from '../components/Sustaining.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
+
+const Sustaining = () =>
+  import(/* webpackChunkName: "sustaining-summary" */ '../components/Sustaining.vue');
 
 export default {
   name: 'SustainingContainer',

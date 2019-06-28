@@ -5,8 +5,10 @@
 <script>
 /* eslint-disable camelcase */
 
-import MDev from '../components/MDev.vue';
 import userMixin from '../../home/mixins/user';
+
+const MDev = () =>
+  import(/* webpackChunkName: "m-dev-summary" */ '../components/MDev.vue');
 
 export default {
   name: 'MDevContainer',
