@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import sanitizeParams from '../../utils/sanitize-params';
 import { BASE_FORM_STATE } from './constants';
 
 import Thermometer from './Thermometer.vue';
@@ -21,8 +22,16 @@ function createInitialFormState(queryParams) {
     );
   }
 
-  let { amount, installmentPeriod = 'monthly' } = queryParams;
-  const { campaignId = '', referralId = '' } = queryParams;
+  const cleanParams = sanitizeParams(queryParams);
+  let { amount, installmentPeriod = 'monthly' } = cleanParams;
+  const {
+    campaignId = '',
+    referralId = '',
+    firstName = '',
+    lastName = '',
+    email = '',
+    zipcode = '',
+  } = cleanParams;
 
   switch (installmentPeriod.toLowerCase()) {
     case 'once':
@@ -44,6 +53,10 @@ function createInitialFormState(queryParams) {
   // which contains validation information
   return mergeValuesIntoStartState(BASE_FORM_STATE, {
     amount,
+    zipcode,
+    first_name: firstName,
+    last_name: lastName,
+    stripeEmail: email,
     campaign_id: campaignId,
     referral_id: referralId,
     installment_period: installmentPeriod,
