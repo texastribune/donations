@@ -17,6 +17,12 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-P5L2Z5Z');</script>
 
+    <style>
+      @media screen and (max-width: 52.8025em) {
+        .c-view-as { display: none; }
+      }
+    </style>
+
     {% include "includes/font_load.html" %}
   </head>
 
@@ -32,7 +38,10 @@
 
     <div id="account-attach" class="c-full-page-loader c-full-page-loader--opaque">
       <div class="l-align-center-y has-xl-padding">
-        <div class="c-loading c-loading--tight"></div>
+        <div class="c-loading c-loading--tight has-b-btm-marg"></div>
+        <p class="has-text-gray t-align-center t-size-m">
+          <strong>Hold tight, we're grabbing your account information</strong>
+        </p>
       </div>
     </div>
   </body>

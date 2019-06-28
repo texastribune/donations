@@ -1,7 +1,7 @@
 <template>
   <route-loader v-if="routeIsFetching">
     <template v-slot:text
-      >Hold tight, we're grabbing your donation history</template
+      >Grabbing your donation history</template
     >
   </route-loader>
 

@@ -1,7 +1,7 @@
 <template>
   <route-loader v-if="routeIsFetching">
     <template v-slot:text
-      >Hold tight, we're grabbing your Blast payment history</template
+      >Grabbing your Blast payment history</template
     >
   </route-loader>
 

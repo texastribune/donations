@@ -1,7 +1,7 @@
 <template>
   <route-loader v-if="routeIsFetching">
     <template v-slot:text
-      >Hold tight, we're grabbing your Blast information</template
+      >Grabbing your Blast information</template
     >
   </route-loader>
 
