@@ -24,7 +24,17 @@ module.exports = {
       output: 'assets.json',
       entrypoints: true,
     }),
-    new EnvironmentPlugin(['NODE_ENV', 'AUTH0_DOMAIN', 'AUTH0_CLIENT_ID']),
+    new EnvironmentPlugin([
+      'NODE_ENV',
+      'AUTH0_AUDIENCE',
+      'AUTH0_DOMAIN',
+      'AUTH0_CLIENT_ID',
+      'PORTAL_API_DOMAIN',
+      'PORTAL_CAMPAIGN_ID',
+      'ENABLE_SENTRY',
+      'SENTRY_DSN',
+      'SENTRY_ENVIRONMENT',
+    ]),
     new VueLoaderPlugin(),
   ],
 

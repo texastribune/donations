@@ -5,7 +5,8 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
-import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
+import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
+import sanitizeParams from '../../utils/sanitize-params';
 import {
   BUSINESS_LEVELS,
   BUSINESS_FORM_STATE,
@@ -15,8 +16,9 @@ import {
 Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
-  const { campaignId = '', referralId = '' } = queryParams;
-  let { level = DEFAULT_LEVEL } = queryParams;
+  const cleanParams = sanitizeParams(queryParams);
+  const { campaignId = '', referralId = '' } = cleanParams;
+  let { level = DEFAULT_LEVEL } = cleanParams;
 
   if (!BUSINESS_LEVELS[level]) level = DEFAULT_LEVEL;
 

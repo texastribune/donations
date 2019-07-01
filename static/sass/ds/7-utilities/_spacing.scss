@@ -1,0 +1,22 @@
+/*
+  Use these to add consistent padding to elements
+  contained within .l-ump-grid__content
+*/
+
+.has-ump-side-padding {
+  padding-left: $size-giant;
+  padding-right: $size-giant;
+
+  @include mq($until: bp-l) {
+    padding-left: $size-b;
+    padding-right: $size-b;
+  }
+}
+
+.has-ump-top-padding {
+  padding-top: $size-giant;
+}
+
+.has-ump-btm-padding {
+  padding-bottom: $size-giant;
+}

@@ -1,48 +1,40 @@
-// utility
-const path = require('path');
-const glob = require('fast-glob');
-const { replaceExtension } = require('ds-toolbox-test/tasks/utils');
+const { utils } = require('@texastribune/queso-tools');
+const {
+  SCSS_DIR,
+  CSS_OUTPUT_DIR,
+  SVG_LOCAL_DIR,
+  SVG_LIB_DIR,
+  SVG_OUTPUT_SPRITE,
+  SCSS_FILES,
+  SVG_LIB_FILES,
+  SVG_LOCAL_FILES,
+} = require('./constants');
 
-const CSS_OUTPUT_DIR = './static/build/';
-const SVG_LIB_DIR = './node_modules/ds-toolbox-test/assets/icons/base/';
-const SVG_OUTPUT_DIR = './templates/includes';
-
-const mappedStyles = async () => {
-  // note: ignore '_' prefixed files
-  const sassDirs = await glob(['./static/sass/[^_]*.scss']);
-  const styleDirs = sassDirs.map(file => ({
-    in: file,
-    out: path.join(
-      CSS_OUTPUT_DIR,
-      replaceExtension(path.basename(file), '.css')
-    ),
+const cssMap = () =>
+  SCSS_FILES.map(file => ({
+    in: utils.resolveApp(`${SCSS_DIR}/${file}.scss`),
+    out: utils.resolveApp(`${CSS_OUTPUT_DIR}/${file}.css`),
   }));
-  return styleDirs;
+
+const svgMap = () => {
+  const libSet = SVG_LIB_FILES.map(file =>
+    utils.resolveApp(`${SVG_LIB_DIR}/${file}.svg`)
+  );
+  const localSet = SVG_LOCAL_FILES.map(file =>
+    utils.resolveApp(`${SVG_LOCAL_DIR}/${file}.svg`)
+  );
+  return [
+    {
+      in: [...libSet, ...localSet],
+      out: utils.resolveApp(SVG_OUTPUT_SPRITE),
+    },
+  ];
 };
 
-const mappedIcons = [
-  {
-    in: [
-      `${SVG_LIB_DIR}bug.svg`,
-      `${SVG_LIB_DIR}facebook.svg`,
-      `${SVG_LIB_DIR}instagram.svg`,
-      `${SVG_LIB_DIR}linkedin.svg`,
-      `${SVG_LIB_DIR}reddit.svg`,
-      `${SVG_LIB_DIR}twitter.svg`,
-      `${SVG_LIB_DIR}your-texas.svg`,
-      `${SVG_LIB_DIR}youtube.svg`,
-      './static/img/check.svg',
-      './static/img/star.svg'
-    ],
-    out: `${SVG_OUTPUT_DIR}/base_icons.html`,
-  },
-];
-
-const mappedStylesManifest = `${CSS_OUTPUT_DIR}styles.json`;
-
+const manifest = utils.resolveApp(`${CSS_OUTPUT_DIR}styles.json`);
 
 module.exports = {
-  mappedStyles,
-  mappedIcons,
-  mappedStylesManifest
+  css: cssMap(),
+  svg: svgMap(),
+  manifest,
 };

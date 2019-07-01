@@ -1,0 +1,37 @@
+.c-message {
+  border-radius: 3px;
+  position: relative;
+  padding: $size-b;
+
+  @include mq($until: bp-l) {
+    border-bottom: 1px solid $color-gray-light;
+    border-radius: 0px;
+    padding: $size-b 0;
+  }
+
+  &__top {
+    align-items: center;
+    display: flex;
+
+    .c-icon {
+      margin-right: $size-xxs;
+    }
+  }
+
+  &__close {
+    border: 1px solid $color-white-off;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: .25rem .45rem;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+
+    @include mq($until: bp-l) {
+      background: none;
+      border: none;
+      transform: initial;
+    }
+  }
+}
