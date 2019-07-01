@@ -39,6 +39,9 @@
     "ENABLE_SENTRY": {
       "required": true
     },
+    "ENABLE_SENTRY_RELEASE": {
+      "required": true
+    },
     "ENABLE_SLACK": {
       "required": true
     },
