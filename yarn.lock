@@ -788,10 +788,10 @@
     svgo "^1.2.2"
     svgstore "^3.0.0-2"
 
-"@texastribune/queso-ui@^0.0.1-0":
-  version "0.0.1-0"
-  resolved "https://registry.yarnpkg.com/@texastribune/queso-ui/-/queso-ui-0.0.1-0.tgz#1157aed3a7e7d25610e86ffc215e0f8ea96bb618"
-  integrity sha512-gK8Zumd0nWAJ1f9R7KYrGtMHfwgOUZ2UWVcnJ0XaY0bhBf+Xlwewyso8bMBAjm/t9Cfoh9S/D67o9Kh35tW/UQ==
+"@texastribune/queso-ui@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@texastribune/queso-ui/-/queso-ui-1.0.0.tgz#76d6d5dee5707c4274ee78ace16d939c74fbef7a"
+  integrity sha512-YSKkJuUF8P/rGYbkQV1mYt1l06BNm+MltBtkKvGux6juBIvx8eTR9KNWGDaV9AJV7B/q4U2GexcFPD4TxZeR3g==
   dependencies:
     normalize.css "^8.0.1"
     sass-mq "^5.0.0"
