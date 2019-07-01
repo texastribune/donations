@@ -1,0 +1,9 @@
+.c-summary-boxes {
+  > .c-summary-box {
+    margin-bottom: $size-xl;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

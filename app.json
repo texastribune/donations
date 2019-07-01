@@ -12,6 +12,15 @@
     "AMAZON_SANDBOX": {
       "required": true
     },
+    "AUTH0_AUDIENCE": {
+      "required": true
+    },
+    "AUTH0_CLIENT_ID": {
+      "required": true
+    },
+    "AUTH0_DOMAIN": {
+      "required": true
+    },
     "BATCH_HOURS": {
       "required": true
     },
@@ -36,7 +45,13 @@
     "DEFAULT_MAIL_SENDER": {
       "required": true
     },
+    "ENABLE_PORTAL": {
+      "required": true
+    },    
     "ENABLE_SENTRY": {
+      "required": true
+    },
+    "ENABLE_SENTRY_RELEASE": {
       "required": true
     },
     "ENABLE_SLACK": {
@@ -99,6 +114,12 @@
     "PAPERTRAIL_API_TOKEN": {
       "required": true
     },
+    "PORTAL_API_DOMAIN": {
+      "required": true
+    },
+    "PORTAL_CAMPAIGN_ID": {
+      "required": true
+    },
     "PUBLISHABLE_KEY": {
       "required": true
     },
@@ -129,10 +150,19 @@
     "SECRET_KEY": {
       "required": true
     },
+    "SENTRY_AUTH_TOKEN": {
+      "required": true
+    },
     "SENTRY_DSN": {
       "required": true
     },
     "SENTRY_ENVIRONMENT": {
+      "required": true
+    },
+    "SENTRY_ORG": {
+      "required": true
+    },
+    "SENTRY_PROJECT": {
       "required": true
     },
     "SLACK_API_KEY": {

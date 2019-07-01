@@ -12,7 +12,7 @@ fuzzywuzzy==0.17.0
 python-Levenshtein==0.12.0
 flask-talisman==0.5.1
 flask-limiter==1.0.1
-sentry-sdk==0.6.6
+sentry-sdk==0.9.5
 blinker==1.4
 amazon-pay==2.5.2
 nameparser==1.0.2
