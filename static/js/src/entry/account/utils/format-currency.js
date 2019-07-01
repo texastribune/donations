@@ -1,6 +1,8 @@
 export default function formatCurrency(value) {
   const hasDecimal = value.toString().indexOf('.') !== -1;
 
+  throw new Error('oh no!');
+
   if (hasDecimal) {
     const withZeroes = value.toFixed(2);
     const withCommas = withZeroes.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
