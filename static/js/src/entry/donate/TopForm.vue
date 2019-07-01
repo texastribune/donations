@@ -179,16 +179,16 @@
 </template>
 
 <script>
-import Hidden from '../../elements/Hidden.vue';
-import LocalHidden from '../../elements/LocalHidden.vue';
-import Radios from '../../elements/Radios.vue';
-import PayFees from '../../elements/PayFees.vue';
-import TextInput from '../../elements/TextInput.vue';
-import ManualPay from '../../elements/ManualPay.vue';
-import ManualSubmit from '../../elements/ManualSubmit.vue';
-import NativePay from '../../elements/NativePay.vue';
-import updateValue from '../../elements/mixins/updateValue';
-import formStarter from '../../mixins/form/starter';
+import Hidden from '../../connected-elements/Hidden.vue';
+import LocalHidden from '../../local-elements/Hidden.vue';
+import Radios from '../../connected-elements/Radios.vue';
+import PayFees from '../../connected-elements/PayFees.vue';
+import TextInput from '../../connected-elements/TextInput.vue';
+import ManualPay from '../../connected-elements/ManualPay.vue';
+import ManualSubmit from '../../connected-elements/ManualSubmit.vue';
+import NativePay from '../../connected-elements/NativePay.vue';
+import updateValue from '../../connected-elements/mixins/updateValue';
+import formStarter from '../../mixins/connected-form/starter';
 
 export default {
   name: 'TopForm',

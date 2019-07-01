@@ -1,0 +1,6 @@
+.c-detail-box {
+  @include mq($from: bp-l) {
+    border-bottom: 2px solid $color-white-off;
+    padding-bottom: $size-xxl;
+  }
+}
