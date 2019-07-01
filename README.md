@@ -84,6 +84,7 @@ Front end
 The easiest way to develop is by running `make restart`. Other more granular commands:
 
 + `yarn run js:dev`: Build JS and put Webpack in watch mode
++ `yarn run ds-tasks-build`: Build CSS and icons
 + `yarn run ds-tasks-watch`: Build CSS and icons in watch mode
 + `yarn run dev`: Run above two commands together
 + `yarn run lint`: Run ESLint
