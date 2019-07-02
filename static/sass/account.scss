@@ -1,8 +1,8 @@
-@import 'ds-toolbox-test/assets/scss/base-v2';
+@import '@texastribune/queso-ui/assets/scss/base-v2';
 
-@import 'ds-toolbox-test/assets/scss/6-components/full-page-loader/full-page-loader';
-@import 'ds-toolbox-test/assets/scss/6-components/info-list/info-list';
-@import 'ds-toolbox-test/assets/scss/6-components/loading/loading';
+@import '@texastribune/queso-ui/assets/scss/6-components/full-page-loader/full-page-loader';
+@import '@texastribune/queso-ui/assets/scss/6-components/info-list/info-list';
+@import '@texastribune/queso-ui/assets/scss/6-components/loading/loading';
 
 @import './ds/6-components/appeal';
 @import './ds/6-components/payments';
