@@ -15,16 +15,22 @@
     }
   }
 
+  > .c-table {
+    @include fixed-table-widths(33% 33% 33%);
+    table-layout: fixed;
+  }
+
+  &--receipts {
+    > .c-table {
+      @include fixed-table-widths(25% 25% 30% 20%);
+    }
+  }
+
   > .c-button {
     bottom: 0;
     left: 50%;
     position: absolute;
     transform: translate(-50%, 50%);
     z-index: 2;
-  }
-
-  > .c-table {
-    @include fixed-table-widths(33% 33% 33%);
-    table-layout: fixed;
   }
 }
