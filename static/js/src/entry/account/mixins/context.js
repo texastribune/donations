@@ -6,6 +6,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('context', ['setAppIsFetching']),
+    ...mapActions('context', ['setAppIsFetching', 'setError']),
   },
 };

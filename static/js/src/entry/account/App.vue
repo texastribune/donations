@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 
 import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
@@ -26,10 +26,6 @@ export default {
 
   computed: {
     ...mapState('context', ['error', 'isUnverified']),
-  },
-
-  methods: {
-    ...mapActions('context', ['setError']),
   },
 
   errorCaptured(err) {
