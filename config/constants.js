@@ -1,7 +1,7 @@
 const SCSS_DIR = './static/sass';
 const CSS_OUTPUT_DIR = './static/build/';
 const SVG_LOCAL_DIR = './static/svg';
-const SVG_LIB_DIR = './node_modules/ds-toolbox-test/assets/icons/base/';
+const SVG_LIB_DIR = './node_modules/@texastribune/queso-ui/assets/icons/base/';
 const SVG_OUTPUT_SPRITE = './templates/includes/base_icons.html';
 
 const SCSS_FILES = ['account', 'business', 'charge', 'circle', 'donate', 'old'];
