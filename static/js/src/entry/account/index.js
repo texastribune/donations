@@ -113,6 +113,7 @@ store
       store.dispatch('context/setAppIsFetching', true);
       next();
     });
+
     router.afterEach(() => {
       store.dispatch('context/setAppIsFetching', false);
     });
