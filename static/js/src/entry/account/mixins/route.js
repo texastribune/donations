@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 
-import { mapActions } from 'vuex';
+import { mapState } from 'vuex';
 
 import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
 import { TITLE_SUFFIX } from '../constants';
-import { InvalidRouteError } from '../errors';
+import { InvalidRouteError, UnverifiedError } from '../errors';
 
 export default {
   mixins: [tokenUserMixin],
@@ -27,18 +27,20 @@ export default {
   async created() {
     const { isProtected, isExact, title } = this.route;
     const { email_verified } = this.tokenUser;
-    const { accessToken, parentRouteIsFetching } = this;
+    const { accessToken, tokenUserError, parentRouteIsFetching } = this;
 
     // sometimes title will be null in cases
     // where it can't be set until a data fetch happens
     if (isExact && title) this.setTitle();
 
-    if (!accessToken && isProtected) {
+    if (tokenUserError && isProtected) {
+      throw tokenUserError;
+    } else if (!accessToken && isProtected) {
       // login-required route; user not logged in
       logIn();
     } else if (!email_verified && isProtected) {
       // login-required route; user has not verified email
-      this.setUnverified();
+      throw new UnverifiedError();
     } else if (!parentRouteIsFetching) {
       // top level route; do data fetch immediately
       // because there's no parent fetch to wait on
@@ -46,9 +48,11 @@ export default {
     }
   },
 
-  methods: {
-    ...mapActions('context', ['setUnverified']),
+  computed: {
+    ...mapState('tokenUser', { tokenUserError: 'error' }),
+  },
 
+  methods: {
     setTitle() {
       const { title } = this.route;
       document.title = `${title} ${TITLE_SUFFIX}`;
@@ -108,6 +112,14 @@ export default {
       // if users have been logged out somewhere else
       // log them out here too
       if (isProtected && oldToken && !newToken) logOut();
+    },
+
+    tokenUserError(newError, oldError) {
+      const {
+        route: { isProtected },
+      } = this;
+
+      if (isProtected && !oldError && newError) throw newError;
     },
 
     async parentRouteIsFetching(newVal, oldVal) {

@@ -29,7 +29,7 @@ export const logOut = () => {
   });
 };
 
-export const isLoggedIn = () =>
+export const hasLoggedInFlag = () =>
   localStorage.getItem(LOGGED_IN_FLAG_KEY) === 'true';
 
 export const register = () => {

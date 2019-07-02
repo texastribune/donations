@@ -4,32 +4,28 @@ import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
 import auth from '../../utils/auth';
-import { setFlag, clearFlag, isLoggedIn } from '../../utils/auth-actions';
+import { setFlag, clearFlag, hasLoggedInFlag } from '../../utils/auth-actions';
 import { Auth0Error } from '../../errors';
 
 function createDefaultState() {
   return {
     accessToken: '',
-    expiryInSeconds: 0,
     canViewAs: false,
+    error: null,
     details: {},
   };
 }
 
 const MUTATION_TYPES = {
   setAccessToken: 'SET_ACCESS_TOKEN',
-  setExpiryInSeconds: 'SET_EXPIRY_IN_SECONDS',
   setCanViewAs: 'SET_CAN_VIEW_AS',
   setDetails: 'SET_DETAILS',
+  setError: 'SET_ERROR',
 };
 
 const mutations = {
   [MUTATION_TYPES.setAccessToken](state, accessToken) {
     state.accessToken = accessToken;
-  },
-
-  [MUTATION_TYPES.setExpiryInSeconds](state, expiryInSeconds) {
-    state.expiryInSeconds = expiryInSeconds;
   },
 
   [MUTATION_TYPES.setCanViewAs](state, canViewAs) {
@@ -39,28 +35,28 @@ const mutations = {
   [MUTATION_TYPES.setDetails](state, details) {
     state.details = details;
   },
+
+  [MUTATION_TYPES.setError](state, error) {
+    state.error = new Auth0Error(error.error);
+  },
 };
 
 const actions = {
   getTokenUser: ({ commit }) =>
-    new Promise((resolve, reject) => {
-      if (isLoggedIn()) {
+    new Promise(resolve => {
+      if (hasLoggedInFlag()) {
         auth.checkSession(
           { responseType: 'token id_token' },
           (err, authResult) => {
             if (err && err.error === 'login_required') {
+              // reset because of refresh polling
               commit(MUTATION_TYPES.setAccessToken, '');
               clearFlag();
               resolve();
-            } else if (
-              err ||
-              !authResult ||
-              !authResult.accessToken ||
-              !authResult.idTokenPayload ||
-              !authResult.expiresIn
-            ) {
+            } else if (err) {
+              commit(MUTATION_TYPES.setError, err);
               clearFlag();
-              reject(new Auth0Error(err.error));
+              resolve();
             } else {
               const { permissions } = jwt.decode(authResult.accessToken);
               const filteredPerms = permissions.filter(
@@ -70,7 +66,6 @@ const actions = {
               commit(MUTATION_TYPES.setCanViewAs, filteredPerms.length === 1);
               commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
               commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
-              commit(MUTATION_TYPES.setExpiryInSeconds, authResult.expiresIn);
               setExtra('auth', authResult.idTokenPayload);
               setFlag();
               resolve();
@@ -78,7 +73,6 @@ const actions = {
           }
         );
       } else {
-        clearFlag();
         resolve();
       }
     }),
