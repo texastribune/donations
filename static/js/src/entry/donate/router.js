@@ -8,7 +8,7 @@ import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state
 import sanitizeParams from '../../utils/sanitize-params';
 import { BASE_FORM_STATE } from './constants';
 
-// import Thermometer from './Thermometer.vue';
+/* import Thermometer from './Thermometer.vue'; */
 
 Vue.use(VueRouter);
 
