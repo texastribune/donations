@@ -45,12 +45,12 @@ export const redirectAfterLogIn = () => {
   const url = localStorage.getItem(LOGIN_REDIRECT_KEY) || '/account';
   setTimeout(() => {
     window.location.href = url;
-  }, 1000);
+  }, 1800);
 };
 
 export const redirectAfterLogOut = () => {
   const url = localStorage.getItem(LOGOUT_REDIRECT_KEY) || '/account';
   setTimeout(() => {
     window.location.href = url;
-  }, 1000);
+  }, 1800);
 };
