@@ -107,7 +107,8 @@ export default {
     // it every 15 minutes
     accessToken(newToken, oldToken) {
       const {
-        route: { isProtected, tokenUserError },
+        route: { isProtected },
+        tokenUserError,
       } = this;
 
       if (isProtected && oldToken && !newToken) {
@@ -116,7 +117,7 @@ export default {
           // log-in-required route; show error page
           // TODO: show modal
           throw tokenUserError;
-        } else if (isProtected) {
+        } else {
           // user is on a login-required route and
           // either their session has expired or they
           // have logged out elsewhere; log them out here too
