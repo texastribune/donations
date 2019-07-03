@@ -55,13 +55,18 @@ const actions = {
           { responseType: 'token id_token' },
           (err, authResult) => {
             if (err) {
+              const { error, error_description } = err;
               // TODO: show fly-in
-              if (err.error !== 'login_required') {
+              if (error && error !== 'login_required') {
                 // instead of throwing this up now so user gets
                 // the error page, store it and only throw it when
                 // user enters a login-required route; that logic is
                 // handled in our route mixin
-                commit(MUTATION_TYPES.setError, err.error_description);
+                commit(MUTATION_TYPES.setError, error_description);
+              } else if (!error) {
+                // from Auth0 docs: you can also get a generic 403 error
+                // without an error or error_description property.
+                commit(MUTATION_TYPES.setError, 'Auth0 unknown 403 error');
               }
               commit(MUTATION_TYPES.setAccessToken, '');
               clearFlag();
