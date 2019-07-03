@@ -51,8 +51,8 @@ export default {
 
   methods: {
     async fetchData() {
-      const { is_mdev, never_given } = this.user;
-      const meetsCriteria = !is_mdev && !never_given;
+      const { is_custom, never_given } = this.user;
+      const meetsCriteria = !is_custom && !never_given;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

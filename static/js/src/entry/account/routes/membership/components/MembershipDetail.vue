@@ -33,7 +33,7 @@
           </a>
         </span>
       </li>
-      <li v-else-if="isOneTime" class="has-xs-btm-marg">
+      <li v-else-if="isSingleDonor" class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -88,7 +88,7 @@ export default {
       required: true,
     },
 
-    isOneTime: {
+    isSingleDonor: {
       type: Boolean,
       required: true,
     },

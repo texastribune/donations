@@ -2,7 +2,7 @@
   <membership-detail
     :data="data"
     :is-expired="isExpired"
-    :is-one-time="isOneTime"
+    :is-single-donor="isSingleDonor"
     :is-former-circle="isFormerCircle"
   />
 </template>
@@ -24,8 +24,8 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isOneTime() {
-      return this.user.is_one_time;
+    isSingleDonor() {
+      return this.user.is_single_donor;
     },
 
     isExpired() {
@@ -39,10 +39,10 @@ export default {
     data() {
       const data = [{ id: 0 }, { id: 1 }];
       const {
-        is_recurring_donor,
         membership_expiration_date,
         is_expired,
-        is_one_time,
+        is_recurring_donor,
+        is_single_donor,
         next_transaction,
         last_transaction,
       } = this.user;
@@ -67,7 +67,7 @@ export default {
             membership_expiration_date
           )}.`;
         }
-      } else if (is_one_time) {
+      } else if (is_single_donor) {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
         data[0].heading = 'Donation';

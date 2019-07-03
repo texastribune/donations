@@ -27,9 +27,9 @@ export default {
 
   computed: {
     shouldShow() {
-      const { never_given, is_expired, is_mdev } = this.user;
+      const { is_recurring_donor, is_single_donor, is_expired } = this.user;
 
-      return !never_given && is_expired && !is_mdev;
+      return (is_recurring_donor || is_single_donor) && is_expired;
     },
 
     membershipExpirationDate() {

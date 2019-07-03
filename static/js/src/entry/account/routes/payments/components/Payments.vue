@@ -29,7 +29,7 @@
           </button>
         </span>
       </li>
-      <li v-if="!isMDev && isExpired" class="has-m-btm-marg">
+      <li v-if="!isCustom && isExpired" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -45,7 +45,7 @@
           </a>
         </span>
       </li>
-      <li v-else-if="isOneTime && !isMDev" class="has-m-btm-marg">
+      <li v-else-if="isSingleDonor" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -61,7 +61,7 @@
           </a>
         </span>
       </li>
-      <li v-if="!isMDev">
+      <li v-if="!isCustom">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -102,7 +102,7 @@ export default {
       required: true,
     },
 
-    isOneTime: {
+    isSingleDonor: {
       type: Boolean,
       required: true,
     },
@@ -112,7 +112,7 @@ export default {
       required: true,
     },
 
-    isMDev: {
+    isCustom: {
       type: Boolean,
       required: true,
     },

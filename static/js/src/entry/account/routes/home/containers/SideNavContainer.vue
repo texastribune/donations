@@ -42,9 +42,9 @@ export default {
     showMembershipLink() {
       if (!this.showRouteLinks) return false;
 
-      const { never_given, is_mdev } = this.user;
+      const { never_given, is_custom } = this.user;
 
-      return !never_given && !is_mdev;
+      return !never_given && !is_custom;
     },
 
     showPaymentsLink() {

@@ -14,13 +14,12 @@
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
-      <contact-info />
-      <sustaining /> <expired />
-      <one-time />
-      <never-given />
-      <m-dev />
       <blast />
       <blast-cancelled />
+      <contact-info />
+      <recurring /> <expired /> <single />
+      <never-given />
+      <custom />
     </div>
 
     <help home />
@@ -32,11 +31,11 @@ import routeMixin from '../../mixins/route';
 import Help from '../../components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
-import Sustaining from './containers/SustainingContainer.vue';
+import Recurring from './containers/RecurringContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
-import OneTime from './containers/OneTimeContainer.vue';
+import Single from './containers/SingleContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
-import MDev from './containers/MDevContainer.vue';
+import Custom from './containers/CustomContainer.vue';
 import Blast from './containers/BlastContainer.vue';
 import BlastCancelled from './containers/BlastCancelledContainer.vue';
 import Messages from './containers/MessagesContainer.vue';
@@ -47,11 +46,11 @@ export default {
   components: {
     Messages,
     ContactInfo,
-    Sustaining,
+    Recurring,
     Expired,
-    OneTime,
+    Single,
     NeverGiven,
-    MDev,
+    Custom,
     Blast,
     BlastCancelled,
     Help,

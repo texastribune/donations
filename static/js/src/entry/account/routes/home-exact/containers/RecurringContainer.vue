@@ -1,6 +1,6 @@
 <template>
   <transition name="has-fade">
-    <sustaining v-if="shouldShow" :next-transaction="nextTransaction" />
+    <recurring v-if="shouldShow" :next-transaction="nextTransaction" />
   </transition>
 </template>
 
@@ -10,21 +10,21 @@
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-const Sustaining = () =>
-  import(/* webpackChunkName: "sustaining-summary" */ '../components/Sustaining.vue');
+const Recurring = () =>
+  import(/* webpackChunkName: "recurring-summary" */ '../components/Recurring.vue');
 
 export default {
-  name: 'SustainingContainer',
+  name: 'RecurringContainer',
 
-  components: { Sustaining },
+  components: { Recurring },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      const { is_recurring_donor, is_expired, is_mdev } = this.user;
+      const { is_recurring_donor, is_expired } = this.user;
 
-      return is_recurring_donor && !is_expired && !is_mdev;
+      return is_recurring_donor && !is_expired;
     },
 
     nextTransaction() {

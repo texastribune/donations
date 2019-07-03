@@ -2,9 +2,9 @@
   <payments
     :data="data"
     :is-expired="isExpired"
-    :is-one-time="isOneTime"
+    :is-single-donor="isSingleDonor"
     :is-former-circle="isFormerCircle"
-    :is-m-dev="isMDev"
+    :is-custom="isCustom"
     :total-gifts-last-year="totalGiftsLastYear"
     :greeting="greeting"
   />
@@ -28,16 +28,16 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isOneTime() {
-      return this.user.is_one_time;
+    isSingleDonor() {
+      return this.user.is_single_donor;
     },
 
     isExpired() {
       return this.user.is_expired;
     },
 
-    isMDev() {
-      return this.user.is_mdev;
+    isCustom() {
+      return this.user.is_custom;
     },
 
     isFormerCircle() {

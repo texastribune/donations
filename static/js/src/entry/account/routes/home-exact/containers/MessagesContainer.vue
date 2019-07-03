@@ -2,7 +2,7 @@
   <messages-wrapper
     :is-blast="isBlast"
     :is-never-given="isNeverGiven"
-    :is-m-dev="isMDev"
+    :is-custom="isCustom"
   />
 </template>
 
@@ -20,8 +20,8 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isMDev() {
-      return this.user.is_mdev;
+    isCustom() {
+      return this.user.is_custom;
     },
 
     isBlast() {

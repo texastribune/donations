@@ -17,32 +17,49 @@ function addFields(data) {
     membership_expiration_date,
     membership_level,
     never_given,
+    is_mdev,
   } = data;
   let membershipLevel;
   let isExpired;
 
-  const isOneTime = !never_given && !is_recurring_donor;
+  const isSingleDonor =
+    !never_given &&
+    !is_recurring_donor &&
+    membership_expiration_date &&
+    membership_level &&
+    !is_mdev;
 
-  // only null if never_given: true
-  // or for some special mdevs (i.e. innovation fund)
+  const isRecurringDonor =
+    is_recurring_donor &&
+    membership_expiration_date &&
+    membership_level &&
+    !is_mdev;
+
+  const isCustom =
+    is_mdev ||
+    (!never_given && !membership_expiration_date) ||
+    (!never_given && !membership_level);
+
   if (membership_expiration_date) {
     isExpired = isPast(parse(membership_expiration_date));
   } else {
     isExpired = null;
   }
 
-  // only null if never_given: true
-  // or for some special mdevs (i.e. innovation fund)
   if (membership_level) {
     membershipLevel = membership_level.toLowerCase();
   } else {
     membershipLevel = null;
   }
 
+  delete data.is_mdev;
+
   return {
     ...data,
-    is_one_time: isOneTime,
+    is_single_donor: isSingleDonor,
     is_expired: isExpired,
+    is_recurring_donor: isRecurringDonor,
+    is_custom: isCustom,
     membership_level: membershipLevel,
   };
 }

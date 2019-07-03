@@ -14,7 +14,7 @@
 
     <appeal />
     <circle-appeal />
-    <m-dev-appeal />
+    <custom-appeal />
     <help payments />
   </div>
 </template>
@@ -27,7 +27,7 @@ import userMixin from '../home/mixins/user';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
-import MDevAppeal from '../home/containers/MDevAppealContainer.vue';
+import CustomAppeal from '../home/containers/CustomAppealContainer.vue';
 import Help from '../../components/Help.vue';
 import Payments from './containers/PaymentsContainer.vue';
 import { InvalidRouteError } from '../../errors';
@@ -35,7 +35,14 @@ import { InvalidRouteError } from '../../errors';
 export default {
   name: 'PaymentsRoute',
 
-  components: { Appeal, CircleAppeal, MDevAppeal, Payments, Help, RouteLoader },
+  components: {
+    Appeal,
+    CircleAppeal,
+    CustomAppeal,
+    Payments,
+    Help,
+    RouteLoader,
+  },
 
   mixins: [routeMixin, userMixin],
 

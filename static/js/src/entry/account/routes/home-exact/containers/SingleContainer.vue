@@ -1,6 +1,6 @@
 <template>
   <transition name="has-fade">
-    <one-time
+    <single
       v-if="shouldShow"
       :last-transaction="lastTransaction"
       :membership-expiration-date="membershipExpirationDate"
@@ -14,21 +14,21 @@
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-const OneTime = () =>
-  import(/* webpackChunkName: "one-time-summary" */ '../components/OneTime.vue');
+const Single = () =>
+  import(/* webpackChunkName: "single-summary" */ '../components/Single.vue');
 
 export default {
-  name: 'OneTimeContainer',
+  name: 'SingleContainer',
 
-  components: { OneTime },
+  components: { Single },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      const { is_one_time, is_mdev, is_expired } = this.user;
+      const { is_single_donor, is_expired } = this.user;
 
-      return is_one_time && !is_mdev && !is_expired;
+      return is_single_donor && !is_expired;
     },
 
     membershipExpirationDate() {
