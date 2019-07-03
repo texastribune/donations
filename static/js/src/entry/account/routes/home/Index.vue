@@ -21,9 +21,8 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-
 import routeMixin from '../../mixins/route';
+import userMixin from './mixins/user';
 import SideNav from './containers/SideNavContainer.vue';
 
 const ViewAs = () =>
@@ -34,7 +33,7 @@ export default {
 
   components: { SideNav, ViewAs },
 
-  mixins: [routeMixin],
+  mixins: [routeMixin, userMixin],
 
   computed: {
     route() {
@@ -47,8 +46,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('user', ['getUser']),
-
     fetchData() {
       return this.getUser();
     },

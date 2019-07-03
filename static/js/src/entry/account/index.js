@@ -67,6 +67,9 @@ Vue.filter('currency', formatCurrency);
 Vue.filter('shortDate', formatShortDate);
 Vue.filter('longDate', formatLongDate);
 
+// we refresh at a 15-minute interval instead of when
+// the access token expires because we want to regularly
+// check whether a user has logged out of Auth0 in another app
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch('tokenUser/getTokenUser');

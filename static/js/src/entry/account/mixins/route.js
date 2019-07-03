@@ -1,7 +1,5 @@
 /* eslint-disable camelcase */
 
-import { mapState } from 'vuex';
-
 import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
 import { TITLE_SUFFIX } from '../constants';
@@ -47,10 +45,6 @@ export default {
       // because there's no parent fetch to wait on
       await this.doRouteFetch(this.$route);
     }
-  },
-
-  computed: {
-    ...mapState('tokenUser', { tokenUserError: 'error' }),
   },
 
   methods: {
