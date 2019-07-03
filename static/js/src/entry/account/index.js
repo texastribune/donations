@@ -70,8 +70,8 @@ Vue.filter('longDate', formatLongDate);
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch('tokenUser/getTokenUser');
-    const { accessToken, error } = store.state.tokenUser;
-    if (accessToken && !error) refreshToken();
+    const { accessToken } = store.state.tokenUser;
+    if (accessToken) refreshToken();
   }, 15 * 60 * 1000); // 15 minutes
 }
 

@@ -48,13 +48,15 @@ const actions = {
         auth.checkSession(
           { responseType: 'token id_token' },
           (err, authResult) => {
-            if (err && err.error === 'login_required') {
-              // reset because of refresh polling
+            if (err) {
+              if (err.error !== 'login_required') {
+                // instead of throwing this up now so user gets
+                // the error page, store it and only throw it when
+                // user enters a login-required route; that logic is
+                // handled in our route mixin
+                commit(MUTATION_TYPES.setError, err);
+              }
               commit(MUTATION_TYPES.setAccessToken, '');
-              clearFlag();
-              resolve();
-            } else if (err) {
-              commit(MUTATION_TYPES.setError, err);
               clearFlag();
               resolve();
             } else {

@@ -34,6 +34,7 @@ export default {
     if (isExact && title) this.setTitle();
 
     if (tokenUserError && isProtected) {
+      // Auth0 error encountered during checkSession call
       throw tokenUserError;
     } else if (!accessToken && isProtected) {
       // login-required route; user not logged in
@@ -76,7 +77,7 @@ export default {
 
       try {
         if (next) {
-          // if a route's params have changed
+          // if an active route's params have changed
           await this.refetchData(toRoute);
         } else {
           await this.fetchData(toRoute);
@@ -104,22 +105,24 @@ export default {
   },
 
   watch: {
+    // watch the value of accessToken as we refresh
+    // it every 15 minutes
     accessToken(newToken, oldToken) {
       const {
-        route: { isProtected },
+        route: { isProtected, tokenUserError },
       } = this;
 
-      // if users have been logged out somewhere else
-      // log them out here too
-      if (isProtected && oldToken && !newToken) logOut();
-    },
-
-    tokenUserError(newError, oldError) {
-      const {
-        route: { isProtected },
-      } = this;
-
-      if (isProtected && !oldError && newError) throw newError;
+      if (isProtected && oldToken && !newToken) {
+        if (tokenUserError) {
+          // Auth0 error encountered; throw it up
+          // so user gets the error page
+          throw tokenUserError;
+        } else {
+          // user has been logged out somewhere else or
+          // their session has expired; log them out here too
+          logOut();
+        }
+      }
     },
 
     async parentRouteIsFetching(newVal, oldVal) {
