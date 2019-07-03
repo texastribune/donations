@@ -24,8 +24,12 @@ export default {
 
   async created() {
     const { isProtected, isExact, title } = this.route;
-    const { email_verified } = this.tokenUser;
-    const { accessToken, tokenUserError, parentRouteIsFetching } = this;
+    const {
+      accessToken,
+      tokenUserError,
+      isVerified,
+      parentRouteIsFetching,
+    } = this;
 
     // sometimes title will be null in cases
     // where it can't be set until a data fetch happens
@@ -37,7 +41,7 @@ export default {
     } else if (!accessToken && isProtected) {
       // login-required route; user not logged in
       logIn();
-    } else if (!email_verified && isProtected) {
+    } else if (!isVerified && isProtected) {
       // login-required route; user has not verified email
       throw new UnverifiedError();
     } else if (!parentRouteIsFetching) {
@@ -108,12 +112,15 @@ export default {
 
       if (isProtected && oldToken && !newToken) {
         if (tokenUserError) {
-          // Auth0 error encountered; throw it up
-          // so user gets the error page
+          // Auth0 error encountered and user is on a
+          // log-in-required route; show error page
+          // TODO: show modal
           throw tokenUserError;
-        } else {
-          // user has been logged out somewhere else or
-          // their session has expired; log them out here too
+        } else if (isProtected) {
+          // user is on a login-required route and
+          // either their session has expired or they
+          // have logged out elsewhere; log them out here too
+          // TODO: show modal
           logOut();
         }
       }
