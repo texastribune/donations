@@ -14,10 +14,12 @@
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
+      <contact-info />
       <blast />
       <blast-cancelled />
-      <contact-info />
-      <recurring /> <expired /> <single />
+      <recurring />
+      <single />
+      <expired />
       <never-given />
       <custom />
     </div>
