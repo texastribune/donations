@@ -2,22 +2,22 @@
 // To make edits please use: https://github.com/texastribune/ds-toolbox
 
 // Variables etc. (no actual CSS output)
-@import "ds-toolbox-test/assets/scss/1-settings/all";
+@import "@texastribune/queso-ui/assets/scss/1-settings/all";
 
 // mixins and functions (no actual CSS output)
-@import "ds-toolbox-test/assets/scss/2-tools/all";
+@import "@texastribune/queso-ui/assets/scss/2-tools/all";
 
 // t-size helper for sizing fonts
-@import "ds-toolbox-test/assets/scss/5-typography/t-helpers";
-@import "ds-toolbox-test/assets/scss/5-typography/t-size";
+@import "@texastribune/queso-ui/assets/scss/5-typography/t-helpers";
+@import "@texastribune/queso-ui/assets/scss/5-typography/t-size";
 
 // c-icon component used for SVGs
-@import "ds-toolbox-test/assets/scss/6-components/icon/icon";
+@import "@texastribune/queso-ui/assets/scss/6-components/icon/icon";
 
 // c-site-footer
-@import "ds-toolbox-test/assets/scss/6-components/site-footer/site-footer";
+@import "@texastribune/queso-ui/assets/scss/6-components/site-footer/site-footer";
 
 // color-helpers
-@import "ds-toolbox-test/assets/scss/utilities/color-helpers";
-@import "ds-toolbox-test/assets/scss/utilities/notch";
-@import "ds-toolbox-test/assets/scss/utilities/spacing";
+@import "@texastribune/queso-ui/assets/scss/utilities/color-helpers";
+@import "@texastribune/queso-ui/assets/scss/utilities/notch";
+@import "@texastribune/queso-ui/assets/scss/utilities/spacing";
