@@ -4,6 +4,9 @@ NS=texastribune
 DOCKER_ENV_FILE?=env-docker
 LOG_LEVEL?=INFO
 
+dev:
+	docker-compose run --service-ports donations --build
+
 interactive: build backing
 	-docker rm -f ${APP}
 	-docker volume rm ${APP}_node_modules-vol

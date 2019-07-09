@@ -17,10 +17,10 @@ from npsp import (
 )
 from util import clean, construct_slack_message
 
-import ptvsd
-
-ptvsd.enable_attach()
-ptvsd.wait_for_attach()
+# import ptvsd
+#
+# ptvsd.enable_attach()
+# ptvsd.wait_for_attach()
 
 
 class SalesforceConnectionSubClass(SalesforceConnection):
@@ -29,6 +29,8 @@ class SalesforceConnectionSubClass(SalesforceConnection):
 
 
 sf = SalesforceConnectionSubClass()
+
+from pprint import pprint
 
 
 def test__clean():
@@ -547,19 +549,36 @@ def test_amount_to_charge_just_fees_true():
 
 
 def test_make_maps():
-    fields = ["Id", "IsDeleted", "AccountId", "RecordTypeId"]
+    fields = [
+        "Id",
+        "IsDeleted",
+        "AccountId",
+        "RecordTypeId",
+        "Foo_Bar_Baz__c",
+        "Fizzle",
+        "swazzle",
+        "Jambalaya_c",
+    ]
     expected = (
         {
             "id": "Id",
             "is_deleted": "IsDeleted",
             "account_id": "AccountId",
             "record_type_id": "RecordTypeId",
+            "foo_bar_baz": "Foo_Bar_Baz__c",
+            "fizzle": "Fizzle",
+            "swazzle": "swazzle",
+            "jambalaya_c": "Jambalaya_c",
         },
         {
             "Id": "id",
             "IsDeleted": "is_deleted",
             "AccountId": "account_id",
             "RecordTypeId": "record_type_id",
+            "Foo_Bar_Baz__c": "foo_bar_baz",
+            "Fizzle": "fizzle",
+            "swazzle": "swazzle",
+            "Jambalaya_c": "jambalaya_c",
         },
     )
     actual = Opportunity.make_maps(fields)
