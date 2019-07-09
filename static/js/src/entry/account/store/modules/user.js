@@ -25,14 +25,14 @@ function addFields(data) {
   const isSingleDonor =
     !never_given &&
     !is_recurring_donor &&
-    membership_expiration_date &&
-    membership_level &&
+    !!membership_expiration_date &&
+    !!membership_level &&
     !is_mdev;
 
   const isRecurringDonor =
     is_recurring_donor &&
-    membership_expiration_date &&
-    membership_level &&
+    !!membership_expiration_date &&
+    !!membership_level &&
     !is_mdev;
 
   const isCustom =
