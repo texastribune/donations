@@ -19,7 +19,7 @@ export default {
 
   computed: {
     shouldShow() {
-      return this.user.is_custom;
+      return this.user.is_custom_donor;
     },
   },
 };

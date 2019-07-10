@@ -1,10 +1,11 @@
 <template>
   <payments
     :data="data"
-    :is-expired="isExpired"
     :is-single-donor="isSingleDonor"
-    :is-former-circle="isFormerCircle"
-    :is-custom="isCustom"
+    :is-recurring-donor="isRecurringDonor"
+    :is-circle-donor="isCircleDonor"
+    :is-custom-donor="isCustomDonor"
+    :is-expired="isExpired"
     :total-gifts-last-year="totalGiftsLastYear"
     :greeting="greeting"
   />
@@ -32,16 +33,20 @@ export default {
       return this.user.is_single_donor;
     },
 
+    isRecurringDonor() {
+      return this.user.is_recurring_donor;
+    },
+
+    isCircleDonor() {
+      return this.user.is_circle_donor;
+    },
+
+    isCustomDonor() {
+      return this.user.is_custom_donor;
+    },
+
     isExpired() {
       return this.user.is_expired;
-    },
-
-    isCustom() {
-      return this.user.is_custom;
-    },
-
-    isFormerCircle() {
-      return this.user.is_former_circle;
     },
 
     totalGiftsLastYear() {

@@ -18,7 +18,10 @@ function addFields(data) {
     membership_level,
     never_given,
     is_mdev,
+    is_current_circle,
+    is_former_circle,
   } = data;
+
   let membershipLevel;
   let isExpired;
 
@@ -26,19 +29,21 @@ function addFields(data) {
     !never_given &&
     !is_recurring_donor &&
     !!membership_expiration_date &&
-    !!membership_level &&
     !is_mdev;
 
   const isRecurringDonor =
     is_recurring_donor &&
     !!membership_expiration_date &&
-    !!membership_level &&
-    !is_mdev;
+    !is_mdev &&
+    !is_current_circle &&
+    !is_former_circle;
 
-  const isCustom =
-    is_mdev ||
-    (!never_given && !membership_expiration_date) ||
-    (!never_given && !membership_level);
+  const isCircleDonor =
+    (is_current_circle || is_former_circle) && !!membership_expiration_date;
+
+  const isCustomDonor =
+    (is_mdev && !is_current_circle && !is_former_circle) ||
+    (!never_given && !membership_expiration_date);
 
   if (membership_expiration_date) {
     isExpired = isPast(parse(membership_expiration_date));
@@ -53,13 +58,16 @@ function addFields(data) {
   }
 
   delete data.is_mdev;
+  delete data.is_former_circle;
+  delete data.is_current_circle;
 
   return {
     ...data,
     is_single_donor: isSingleDonor,
-    is_expired: isExpired,
     is_recurring_donor: isRecurringDonor,
-    is_custom: isCustom,
+    is_circle_donor: isCircleDonor,
+    is_custom_donor: isCustomDonor,
+    is_expired: isExpired,
     membership_level: membershipLevel,
   };
 }

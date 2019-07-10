@@ -2,8 +2,8 @@
   <transition name="has-fade">
     <expired
       v-if="shouldShow"
+      :is-circle-donor="isCircleDonor"
       :last-transaction="lastTransaction"
-      :is-former-circle="isFormerCircle"
       :membership-expiration-date="membershipExpirationDate"
     />
   </transition>
@@ -27,17 +27,24 @@ export default {
 
   computed: {
     shouldShow() {
-      const { is_recurring_donor, is_single_donor, is_expired } = this.user;
+      const {
+        is_recurring_donor,
+        is_single_donor,
+        is_circle_donor,
+        is_expired,
+      } = this.user;
 
-      return (is_recurring_donor || is_single_donor) && is_expired;
+      return (
+        (is_recurring_donor || is_single_donor || is_circle_donor) && is_expired
+      );
     },
 
     membershipExpirationDate() {
       return this.user.membership_expiration_date;
     },
 
-    isFormerCircle() {
-      return this.user.is_former_circle;
+    isCircleDonor() {
+      return this.user.is_circle_donor;
     },
 
     lastTransaction() {

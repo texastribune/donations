@@ -23,7 +23,7 @@
         </span>
         <span class="has-text-gray-dark">
           <a
-            :href="isFormerCircle ? circleUrl : donateUrl"
+            :href="isCircleDonor ? circleUrl : donateUrl"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -93,7 +93,7 @@ export default {
       required: true,
     },
 
-    isFormerCircle: {
+    isCircleDonor: {
       type: Boolean,
       required: true,
     },

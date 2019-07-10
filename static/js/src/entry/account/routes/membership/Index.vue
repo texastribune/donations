@@ -51,8 +51,14 @@ export default {
 
   methods: {
     async fetchData() {
-      const { is_custom, never_given } = this.user;
-      const meetsCriteria = !is_custom && !never_given;
+      const {
+        is_recurring_donor,
+        is_single_donor,
+        is_circle_donor,
+      } = this.user;
+
+      const meetsCriteria =
+        is_recurring_donor || is_single_donor || is_circle_donor;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

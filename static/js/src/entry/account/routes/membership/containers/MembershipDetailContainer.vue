@@ -3,7 +3,7 @@
     :data="data"
     :is-expired="isExpired"
     :is-single-donor="isSingleDonor"
-    :is-former-circle="isFormerCircle"
+    :is-circle-donor="isCircleDonor"
   />
 </template>
 
@@ -28,12 +28,12 @@ export default {
       return this.user.is_single_donor;
     },
 
-    isExpired() {
-      return this.user.is_expired;
+    isCircleDonor() {
+      return this.user.is_circle_donor;
     },
 
-    isFormerCircle() {
-      return this.user.is_former_circle;
+    isExpired() {
+      return this.user.is_expired;
     },
 
     data() {
@@ -43,6 +43,7 @@ export default {
         is_expired,
         is_recurring_donor,
         is_single_donor,
+        is_circle_donor,
         next_transaction,
         last_transaction,
       } = this.user;
@@ -87,7 +88,7 @@ export default {
             membership_expiration_date
           )}.`;
         }
-      } else if (is_recurring_donor) {
+      } else if (is_recurring_donor || is_circle_donor) {
         const {
           amount,
           date,
