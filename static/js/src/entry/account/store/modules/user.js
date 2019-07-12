@@ -7,10 +7,6 @@ import isPast from 'date-fns/is_past';
 import { MultiplePersonsError, NoPersonsError } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
-/*
-  Add some convenience fields to our API response to make
-  conditionals easier throughout the app.
-*/
 function addFields(data) {
   const {
     is_recurring_donor,
@@ -21,7 +17,6 @@ function addFields(data) {
     is_current_circle,
     is_former_circle,
   } = data;
-
   let membershipLevel;
   let isExpired;
 
@@ -60,6 +55,11 @@ function addFields(data) {
   delete data.is_mdev;
   delete data.is_former_circle;
   delete data.is_current_circle;
+
+  // The following booleans are mutually exclusive:
+  // is_single_donor, is_recurring_donor, is_circle_donor, is_custom_donor
+  // the first three are guaranteed to have a string expiration date
+  // all are guaranteed to have never_given: false
 
   return {
     ...data,
