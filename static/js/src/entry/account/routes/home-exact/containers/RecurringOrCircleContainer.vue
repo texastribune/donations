@@ -1,6 +1,9 @@
 <template>
   <transition name="has-fade">
-    <circle-z v-if="shouldShow" :next-transaction="nextTransaction" />
+    <recurring-or-circle
+      v-if="shouldShow"
+      :next-transaction="nextTransaction"
+    />
   </transition>
 </template>
 
@@ -10,21 +13,28 @@
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-const CircleZ = () =>
-  import(/* webpackChunkName: "circle-summary" */ '../components/Circle.vue');
+const RecurringOrCircle = () =>
+  import(/* webpackChunkName: "recurring-or-circle-summary" */ '../components/RecurringOrCircle.vue');
 
 export default {
-  name: 'CircleContainer',
+  name: 'RecurringOrCircleContainer',
 
-  components: { CircleZ },
+  components: { RecurringOrCircle },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      const { is_circle_donor, is_expired } = this.user;
+      const {
+        is_recurring_donor,
+        is_circle_donor,
+        is_expired,
+        will_expire,
+      } = this.user;
 
-      return is_circle_donor && !is_expired;
+      return (
+        (is_recurring_donor || is_circle_donor) && !is_expired && !will_expire
+      );
     },
 
     nextTransaction() {

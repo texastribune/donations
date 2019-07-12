@@ -13,12 +13,14 @@ function addFields(data) {
     membership_expiration_date,
     membership_level,
     never_given,
+    next_transaction,
     is_mdev,
     is_current_circle,
     is_former_circle,
   } = data;
   let membershipLevel;
   let isExpired;
+  let willExpire;
 
   const isSingleDonor =
     !never_given &&
@@ -42,8 +44,10 @@ function addFields(data) {
 
   if (membership_expiration_date) {
     isExpired = isPast(parse(membership_expiration_date));
+    willExpire = !next_transaction && !isExpired;
   } else {
     isExpired = null;
+    willExpire = null;
   }
 
   if (membership_level) {
@@ -68,6 +72,7 @@ function addFields(data) {
     is_circle_donor: isCircleDonor,
     is_custom_donor: isCustomDonor,
     is_expired: isExpired,
+    will_expire: willExpire,
     membership_level: membershipLevel,
   };
 }

@@ -48,6 +48,11 @@ export default {
         last_transaction,
       } = this.user;
 
+      // single
+      // will expire
+      // expired
+      // not expired: circle or recurring
+
       if (is_expired) {
         const { amount, date, payment_type, credit_card } = last_transaction;
 
