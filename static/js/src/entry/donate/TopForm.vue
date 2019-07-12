@@ -187,7 +187,7 @@ import TextInput from '../../connected-elements/TextInput.vue';
 import ManualPay from '../../connected-elements/ManualPay.vue';
 import ManualSubmit from '../../connected-elements/ManualSubmit.vue';
 import NativePay from '../../connected-elements/NativePay.vue';
-import updateValue from '../../connected-elements/mixins/updateValue';
+import updateValue from '../../connected-elements/mixins/update-value';
 import formStarter from '../../mixins/connected-form/starter';
 
 export default {

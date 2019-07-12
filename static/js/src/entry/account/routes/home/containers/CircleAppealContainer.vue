@@ -17,9 +17,7 @@ export default {
 
   computed: {
     shouldShow() {
-      const { is_mdev, is_current_circle, is_former_circle } = this.user;
-
-      return (is_current_circle || is_former_circle) && !is_mdev;
+      return this.user.is_circle_donor;
     },
   },
 };

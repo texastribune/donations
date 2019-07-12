@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!routeIsFetching" class="has-ump-top-padding">
+  <route-loader v-if="routeIsFetching">
+    <template v-slot:text
+      >Grabbing your Blast payment history</template
+    >
+  </route-loader>
+
+  <div v-else class="has-ump-top-padding">
     <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter: Payment History
     </h1>
@@ -16,13 +22,14 @@
 import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
 import Help from '../../components/Help.vue';
+import RouteLoader from '../home/components/RouteLoader.vue';
 import BlastPayments from './containers/BlastPaymentsContainer.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastPaymentsRoute',
 
-  components: { Help, BlastPayments },
+  components: { Help, BlastPayments, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 

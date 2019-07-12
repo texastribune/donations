@@ -3,25 +3,21 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions } from 'vuex';
 
 import ViewAs from '../components/ViewAs.vue';
+import userMixin from '../mixins/user';
 import contextMixin from '../../../mixins/context';
+import tokenUserMixin from '../../../mixins/token-user';
 
 export default {
   name: 'ViewAsContainer',
 
   components: { ViewAs },
 
-  mixins: [contextMixin],
-
-  computed: {
-    ...mapState('tokenUser', ['canViewAs']),
-  },
+  mixins: [contextMixin, userMixin, tokenUserMixin],
 
   methods: {
-    ...mapActions('user', ['getUser', 'getOtherUser']),
-
     ...mapActions('context', ['setIsViewingAs']),
 
     async doViewAs(email) {

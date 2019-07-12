@@ -1,11 +1,9 @@
 /* eslint-disable camelcase */
 
-import { mapActions } from 'vuex';
-
 import { logIn, logOut } from '../utils/auth-actions';
 import tokenUserMixin from './token-user';
 import { TITLE_SUFFIX } from '../constants';
-import { InvalidRouteError } from '../errors';
+import { InvalidRouteError, UnverifiedError } from '../errors';
 
 export default {
   mixins: [tokenUserMixin],
@@ -26,19 +24,26 @@ export default {
 
   async created() {
     const { isProtected, isExact, title } = this.route;
-    const { email_verified } = this.tokenUser;
-    const { accessToken, parentRouteIsFetching } = this;
+    const {
+      accessToken,
+      tokenUserError,
+      isVerified,
+      parentRouteIsFetching,
+    } = this;
 
     // sometimes title will be null in cases
     // where it can't be set until a data fetch happens
     if (isExact && title) this.setTitle();
 
-    if (!accessToken && isProtected) {
+    if (tokenUserError && isProtected) {
+      // Auth0 error encountered during checkSession call
+      throw tokenUserError;
+    } else if (!accessToken && isProtected) {
       // login-required route; user not logged in
       logIn();
-    } else if (!email_verified && isProtected) {
+    } else if (!isVerified && isProtected) {
       // login-required route; user has not verified email
-      this.setUnverified();
+      throw new UnverifiedError();
     } else if (!parentRouteIsFetching) {
       // top level route; do data fetch immediately
       // because there's no parent fetch to wait on
@@ -47,8 +52,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('context', ['setUnverified']),
-
     setTitle() {
       const { title } = this.route;
       document.title = `${title} ${TITLE_SUFFIX}`;
@@ -72,7 +75,7 @@ export default {
 
       try {
         if (next) {
-          // if a route's params have changed
+          // if an active route's params have changed
           await this.refetchData(toRoute);
         } else {
           await this.fetchData(toRoute);
@@ -100,14 +103,28 @@ export default {
   },
 
   watch: {
+    // watch the value of accessToken as we refresh
+    // it every 15 minutes
     accessToken(newToken, oldToken) {
       const {
         route: { isProtected },
+        tokenUserError,
       } = this;
 
-      // if users have been logged out somewhere else
-      // log them out here too
-      if (isProtected && oldToken && !newToken) logOut();
+      if (isProtected && oldToken && !newToken) {
+        if (tokenUserError) {
+          // Auth0 error encountered and user is on a
+          // log-in-required route; show error page
+          // TODO: show modal
+          throw tokenUserError;
+        } else {
+          // user is on a login-required route and
+          // either their session has expired or they
+          // have logged out elsewhere; log them out here too
+          // TODO: show modal
+          logOut();
+        }
+      }
     },
 
     async parentRouteIsFetching(newVal, oldVal) {

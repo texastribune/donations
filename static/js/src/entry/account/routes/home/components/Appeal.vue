@@ -72,7 +72,7 @@ export default {
 
   props: {
     level: {
-      type: String,
+      validator: value => typeof value === 'string' || value === null,
       required: true,
     },
 

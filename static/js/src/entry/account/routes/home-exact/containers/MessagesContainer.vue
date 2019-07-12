@@ -1,8 +1,8 @@
 <template>
   <messages-wrapper
     :is-blast="isBlast"
+    :is-custom-donor="isCustomDonor"
     :is-never-given="isNeverGiven"
-    :is-m-dev="isMDev"
   />
 </template>
 
@@ -20,8 +20,12 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isMDev() {
-      return this.user.is_mdev;
+    isNeverGiven() {
+      return this.user.never_given;
+    },
+
+    isCustomDonor() {
+      return this.user.is_custom_donor;
     },
 
     isBlast() {
@@ -31,10 +35,6 @@ export default {
       } = this.user;
 
       return is_former_blast_subscriber || is_current_blast_subscriber;
-    },
-
-    isNeverGiven() {
-      return this.user.never_given;
     },
   },
 };

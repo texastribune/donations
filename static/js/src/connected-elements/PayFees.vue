@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import updateValue from './mixins/updateValue';
-import getValue from './mixins/getValue';
+import updateValue from './mixins/update-value';
+import getValue from './mixins/get-value';
 import { isValidDonationAmount } from '../utils/validators';
 
 export default {
