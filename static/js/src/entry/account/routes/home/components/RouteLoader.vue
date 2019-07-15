@@ -1,5 +1,5 @@
 <template>
-  <div class="c-full-page-loader">
+  <div class="c-home-route-loader">
     <div class="l-align-center-y has-xl-padding">
       <div class="c-loading c-loading--tight has-b-btm-marg" />
       <p class="has-text-gray t-align-center t-size-m">
@@ -11,6 +11,6 @@
 
 <script>
 export default {
-  name: 'Loader',
+  name: 'RouteLoader',
 };
 </script>

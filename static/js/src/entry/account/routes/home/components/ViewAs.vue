@@ -1,6 +1,7 @@
 <template>
   <aside
     v-if="isVisible"
+    class="c-view-as"
     style="
       position: fixed;
       bottom: 100px;

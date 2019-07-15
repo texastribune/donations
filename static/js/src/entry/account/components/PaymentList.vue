@@ -1,7 +1,10 @@
 <template>
   <div
     class="c-payments l-width-full"
-    :class="{ 'has-more': offset < payments.length }"
+    :class="{
+      'has-more': offset < payments.length,
+      'c-payments--receipts': showReceipts,
+    }"
   >
     <table class="c-table c-table--bordered l-width-full">
       <thead>

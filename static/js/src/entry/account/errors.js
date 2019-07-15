@@ -4,6 +4,12 @@ export class Auth0Error extends Error {
   }
 }
 
+export class UnverifiedError extends Error {
+  constructor() {
+    super('Unverified email address');
+  }
+}
+
 export class MultiplePersonsError extends Error {
   constructor() {
     super('Multiple persons returned from /persons/ endpoint');

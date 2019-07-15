@@ -3,6 +3,7 @@
     :show-blast-links="showBlastLinks"
     :show-membership-link="showMembershipLink"
     :show-payments-link="showPaymentsLink"
+    :show-route-links="showRouteLinks"
   />
 </template>
 
@@ -19,8 +20,17 @@ export default {
 
   mixins: [userMixin],
 
+  props: {
+    showRouteLinks: {
+      type: Boolean,
+      required: true,
+    },
+  },
+
   computed: {
     showBlastLinks() {
+      if (!this.showRouteLinks) return false;
+
       const {
         is_former_blast_subscriber,
         is_current_blast_subscriber,
@@ -30,12 +40,20 @@ export default {
     },
 
     showMembershipLink() {
-      const { never_given, is_mdev } = this.user;
+      if (!this.showRouteLinks) return false;
 
-      return !never_given && !is_mdev;
+      const {
+        is_single_donor,
+        is_recurring_donor,
+        is_circle_donor,
+      } = this.user;
+
+      return is_single_donor || is_recurring_donor || is_circle_donor;
     },
 
     showPaymentsLink() {
+      if (!this.showRouteLinks) return false;
+
       const { never_given } = this.user;
 
       return !never_given;

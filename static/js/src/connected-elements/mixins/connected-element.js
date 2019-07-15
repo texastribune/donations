@@ -1,9 +1,9 @@
-import getValue from './getValue';
-import getValidator from './getValidator';
-import getValidity from './getValidity';
-import getMessage from './getMessage';
-import updateValue from './updateValue';
-import updateValidity from './updateValidity';
+import getValue from './get-value';
+import getValidator from './get-validator';
+import getValidity from './get-validity';
+import getMessage from './get-message';
+import updateValue from './update-value';
+import updateValidity from './update-validity';
 
 export default {
   mixins: [

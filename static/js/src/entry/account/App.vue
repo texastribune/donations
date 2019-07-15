@@ -1,6 +1,8 @@
 <template>
   <div>
-    <loader v-if="appIsFetching" />
+    <transition name="has-fade">
+      <app-loader v-show="appIsFetching" />
+    </transition>
 
     <error-view v-if="error" />
     <unverified-view v-else-if="isUnverified" />
@@ -9,11 +11,10 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-
 import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
 import contextMixin from './mixins/context';
+import { UnverifiedError } from './errors';
 
 export default {
   name: 'App',
@@ -22,17 +23,18 @@ export default {
 
   mixins: [contextMixin],
 
-  computed: {
-    ...mapState('context', ['error', 'isUnverified']),
-  },
-
-  methods: {
-    ...mapActions('context', ['setError']),
+  data() {
+    return { error: null, isUnverified: false };
   },
 
   errorCaptured(err) {
     this.setAppIsFetching(false);
-    this.setError(err);
+
+    if (err instanceof UnverifiedError) {
+      this.isUnverified = true;
+    } else {
+      this.error = err;
+    }
   },
 };
 </script>
