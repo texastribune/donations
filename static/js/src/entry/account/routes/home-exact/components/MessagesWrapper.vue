@@ -15,7 +15,7 @@
             class="has-text-gray-dark t-size-s t-linkstyle--underlined t-space-heading-m"
           >
             <p class="has-b-btm-marg">
-              <template v-if="isMDev">
+              <template v-if="isCustomDonor">
                 Thanks for creating a Texas Tribune account. You can use this
                 login to comment on texastribune.org stories, view your donation
                 history or request a {{ lastYear }} tax receipt.
@@ -75,7 +75,7 @@ export default {
   components: { Messages, Message },
 
   props: {
-    isBlast: {
+    isCustomDonor: {
       type: Boolean,
       required: true,
     },
@@ -85,7 +85,7 @@ export default {
       required: true,
     },
 
-    isMDev: {
+    isBlast: {
       type: Boolean,
       required: true,
     },

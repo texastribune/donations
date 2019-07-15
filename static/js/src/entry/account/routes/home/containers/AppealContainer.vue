@@ -25,9 +25,9 @@ export default {
     },
 
     shouldShow() {
-      const { is_mdev, is_current_circle, is_former_circle } = this.user;
+      const { is_recurring_donor, is_single_donor } = this.user;
 
-      return !is_mdev && !is_current_circle && !is_former_circle;
+      return is_recurring_donor || is_single_donor;
     },
   },
 };

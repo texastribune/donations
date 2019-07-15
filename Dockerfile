@@ -20,9 +20,6 @@ RUN apt-get -yq update && \
 
 WORKDIR /app
 
-ARG AUTH0_DOMAIN=texastribune-test.auth0.com
-ARG AUTH0_CLIENT_ID=qvJrp8C7M6UqOUpLAEh53fhpRA2O77mV
-ARG PORTAL_API_DOMAIN=portal-api-test.herokuapp.com
 ARG ENABLE_SENTRY_RELEASE=False
 
 COPY static /app/static

@@ -1,23 +1,23 @@
 <template>
-  <m-dev-appeal v-if="shouldShow" />
+  <custom-appeal v-if="shouldShow" />
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import MDevAppeal from '../components/MDevAppeal.vue';
+import CustomAppeal from '../components/CustomAppeal.vue';
 import userMixin from '../mixins/user';
 
 export default {
-  name: 'MDevAppealContainer',
+  name: 'CustomAppealContainer',
 
-  components: { MDevAppeal },
+  components: { CustomAppeal },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      return this.user.is_mdev;
+      return this.user.is_custom_donor;
     },
   },
 };

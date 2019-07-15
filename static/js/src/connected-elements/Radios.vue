@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import connectedElement from './mixins/connectedElement';
-import labelConnector from './mixins/labelConnector';
+import connectedElement from './mixins/connected-element';
+import labelConnector from './mixins/label-connector';
 
 export default {
   name: 'Frequency',

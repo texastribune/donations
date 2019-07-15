@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import connectedElement from './mixins/connectedElement';
+import connectedElement from './mixins/connected-element';
 
 export default {
   name: 'HiddenInput',

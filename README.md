@@ -71,7 +71,7 @@ Running the Project
 
 Run `make backing`. This will start RabbitMQ and Redis.
 Run `make`. This will drop you into the Flask app.
-Run `make restart`. You should then be able to interact with the app at `localhost:80`. This command will also build CSS and JS in watch mode, and allow you to make test transactions.
+Run `make restart`. You can interact with the app at `localhost:80`. This command will also build CSS and JS in watch mode and allow you to make test transactions.
 
 ```
 C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &

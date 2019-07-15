@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!routeIsFetching" class="has-ump-top-padding">
+  <route-loader v-if="routeIsFetching">
+    <template v-slot:text
+      >Grabbing your Blast information</template
+    >
+  </route-loader>
+
+  <div v-else class="has-ump-top-padding">
     <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter
     </h1>
@@ -15,6 +21,7 @@
 
 import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
+import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../../components/Help.vue';
 import BlastDetail from './containers/BlastDetailContainer.vue';
 import { InvalidRouteError } from '../../errors';
@@ -22,7 +29,7 @@ import { InvalidRouteError } from '../../errors';
 export default {
   name: 'BlastRoute',
 
-  components: { Help, BlastDetail },
+  components: { Help, BlastDetail, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 

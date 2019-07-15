@@ -1,26 +1,30 @@
 <template>
-  <sustaining v-if="shouldShow" :next-transaction="nextTransaction" />
+  <transition name="has-fade">
+    <circle-z v-if="shouldShow" :next-transaction="nextTransaction" />
+  </transition>
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import Sustaining from '../components/Sustaining.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-export default {
-  name: 'SustainingContainer',
+const CircleZ = () =>
+  import(/* webpackChunkName: "circle-summary" */ '../components/Circle.vue');
 
-  components: { Sustaining },
+export default {
+  name: 'CircleContainer',
+
+  components: { CircleZ },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      const { is_recurring_donor, is_expired, is_mdev } = this.user;
+      const { is_circle_donor, is_expired } = this.user;
 
-      return is_recurring_donor && !is_expired && !is_mdev;
+      return is_circle_donor && !is_expired;
     },
 
     nextTransaction() {

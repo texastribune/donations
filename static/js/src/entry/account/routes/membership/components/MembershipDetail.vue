@@ -23,7 +23,7 @@
         </span>
         <span class="has-text-gray-dark">
           <a
-            :href="isFormerCircle ? circleUrl : donateUrl"
+            :href="isCircleDonor ? circleUrl : donateUrl"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -33,7 +33,7 @@
           </a>
         </span>
       </li>
-      <li v-else-if="isOneTime" class="has-xs-btm-marg">
+      <li v-else-if="isSingleDonor" class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -88,12 +88,12 @@ export default {
       required: true,
     },
 
-    isOneTime: {
+    isSingleDonor: {
       type: Boolean,
       required: true,
     },
 
-    isFormerCircle: {
+    isCircleDonor: {
       type: Boolean,
       required: true,
     },

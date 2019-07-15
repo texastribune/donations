@@ -1,5 +1,11 @@
 <template>
-  <div v-if="!routeIsFetching" class="has-ump-top-padding">
+  <route-loader v-if="routeIsFetching">
+    <template v-slot:text
+      >Grabbing your membership information</template
+    >
+  </route-loader>
+
+  <div v-else class="has-ump-top-padding">
     <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       Your Membership
     </h1>
@@ -20,6 +26,7 @@
 import MembershipDetail from './containers/MembershipDetailContainer.vue';
 import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
+import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import Help from '../../components/Help.vue';
@@ -28,7 +35,7 @@ import { InvalidRouteError } from '../../errors';
 export default {
   name: 'MembershipRoute',
 
-  components: { Appeal, CircleAppeal, Help, MembershipDetail },
+  components: { Appeal, CircleAppeal, Help, MembershipDetail, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 
@@ -44,8 +51,14 @@ export default {
 
   methods: {
     async fetchData() {
-      const { is_mdev, never_given } = this.user;
-      const meetsCriteria = !is_mdev && !never_given;
+      const {
+        is_recurring_donor,
+        is_single_donor,
+        is_circle_donor,
+      } = this.user;
+
+      const meetsCriteria =
+        is_recurring_donor || is_single_donor || is_circle_donor;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },
