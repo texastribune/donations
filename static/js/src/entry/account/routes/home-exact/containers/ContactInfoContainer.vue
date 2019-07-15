@@ -72,11 +72,10 @@ export default {
     },
 
     getContactInfo() {
-      let name;
-      let nameHeading;
-      let finalEmail;
+      let email;
       let username;
 
+      const contactInfo = [];
       const { isViewingAs } = this;
       const { email: tokenEmail } = this.tokenUser;
       const { identities, postal_code, first_name, last_name } = this.user;
@@ -85,32 +84,32 @@ export default {
       );
 
       try {
-        ({ email: finalEmail, username } = goodIdentity);
+        ({ email, username } = goodIdentity);
       } catch (err) {
         // if we're using "view as" feature, it's expected that
         // the ID-token email won't match up with the API email
         if (isViewingAs) {
-          finalEmail = identities[0].email;
-          // eslint-disable-next-line prefer-destructuring
-          username = identities[0].username;
+          ({ email, username } = identities[0]);
         } else {
           throw err;
         }
       }
 
       if (first_name && last_name) {
-        nameHeading = 'Name';
-        // eslint-disable-next-line camelcase
-        name = `${first_name} ${last_name}`;
+        contactInfo.push({
+          id: 0,
+          heading: 'Name',
+          text: `${first_name} ${last_name}`,
+        });
       } else {
-        nameHeading = 'Username';
-        name = username;
+        contactInfo.push({
+          id: 0,
+          heading: 'Username',
+          text: username,
+        });
       }
 
-      const contactInfo = [
-        { id: 0, heading: nameHeading, text: name },
-        { id: 1, heading: 'Email', text: finalEmail },
-      ];
+      contactInfo.push({ id: 1, heading: 'Email', text: email });
 
       if (postal_code) {
         contactInfo.push({ id: 2, heading: 'ZIP code', text: postal_code });
