@@ -4,9 +4,6 @@ import Vue from 'vue';
 import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
-import addSeconds from 'date-fns/add_seconds';
-import subtractMinutes from 'date-fns/sub_minutes';
-import differenceInMilliSeconds from 'date-fns/difference_in_milliseconds';
 
 import {
   SENTRY_DSN,
@@ -33,7 +30,7 @@ import App from './App.vue';
 import routes from './routes'; // eslint-disable-line
 import store from './store';
 import SiteFooter from './containers/SiteFooterContainer.vue';
-import Loader from './components/Loader.vue';
+import AppLoader from './components/AppLoader.vue';
 import NavBar from './containers/NavBarContainer.vue';
 import Icon from './components/Icon.vue';
 import formatCurrency from './utils/format-currency';
@@ -58,64 +55,49 @@ Vue.mixin({
     };
   },
 
-  methods: {
-    logError(err, level) {
-      logError(err, level);
-    },
-  },
+  methods: { logError },
 });
 
 Vue.component('SiteFooter', SiteFooter);
 Vue.component('NavBar', NavBar);
-Vue.component('Loader', Loader);
+Vue.component('AppLoader', AppLoader);
 Vue.component('Icon', Icon);
 
 Vue.filter('currency', formatCurrency);
 Vue.filter('shortDate', formatShortDate);
 Vue.filter('longDate', formatLongDate);
 
-// https://itnext.io/managing-and-refreshing-auth0-tokens-in-a-vuejs-application-65eb29c309bc
-function getRefreshInterval(expiryInSeconds) {
-  const tokenExpiryDate = addSeconds(new Date(), expiryInSeconds);
-  const tenMinutesBeforeExpiry = subtractMinutes(tokenExpiryDate, 10);
-  const now = new Date();
-  const interval = differenceInMilliSeconds(tenMinutesBeforeExpiry, now);
-
-  return interval;
-}
-
-function refreshToken(refreshAt) {
+// we refresh at a 15-minute interval instead of when
+// the access token expires because we want to regularly
+// check whether a user has logged out of Auth0 in another app
+function refreshToken() {
   setTimeout(async () => {
-    try {
-      await store.dispatch('tokenUser/getTokenUser');
-      const newRefreshAt = getRefreshInterval(store.state.user.expiryInSeconds);
-      refreshToken(newRefreshAt);
-    } catch (err) {
-      store.dispatch('context/setError', err);
-    }
-  }, refreshAt);
+    await store.dispatch('tokenUser/getTokenUser');
+    const { accessToken } = store.state.tokenUser;
+    if (accessToken) refreshToken();
+  }, 15 * 60 * 1000); // 15 minutes
 }
 
-store
-  .dispatch('tokenUser/getTokenUser')
-  .catch(err => {
-    store.dispatch('context/setError', err);
-  })
-  .then(() => {
-    const router = new VueRouter({
-      base: '/account',
-      mode: 'history',
-      routes,
-      scrollBehavior: () => ({ x: 0, y: 0 }),
-    });
-
-    const instance = new Vue({ ...App, router, store });
-    instance.$mount('#account-attach');
-
-    const { expiryInSeconds, accessToken } = store.state.tokenUser;
-
-    if (accessToken) {
-      const refreshAt = getRefreshInterval(expiryInSeconds);
-      refreshToken(refreshAt);
-    }
+store.dispatch('tokenUser/getTokenUser').then(() => {
+  const router = new VueRouter({
+    base: '/account',
+    mode: 'history',
+    routes,
+    scrollBehavior: () => ({ x: 0, y: 0 }),
   });
+
+  router.beforeEach((to, from, next) => {
+    store.dispatch('context/setAppIsFetching', true);
+    next();
+  });
+
+  router.afterEach(() => {
+    store.dispatch('context/setAppIsFetching', false);
+  });
+
+  const instance = new Vue({ ...App, router, store });
+  instance.$mount('#account-attach');
+
+  const { accessToken } = store.state.tokenUser;
+  if (accessToken) refreshToken();
+});

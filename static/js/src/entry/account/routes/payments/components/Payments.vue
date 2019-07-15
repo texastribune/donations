@@ -29,13 +29,16 @@
           </button>
         </span>
       </li>
-      <li v-if="!isMDev && isExpired" class="has-m-btm-marg">
+      <li
+        v-if="(isRecurringDonor || isSingleDonor || isCircleDonor) && isExpired"
+        class="has-m-btm-marg"
+      >
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
           <a
-            :href="isFormerCircle ? circleUrl : donateUrl"
+            :href="isCircleDonor ? circleUrl : donateUrl"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -45,7 +48,7 @@
           </a>
         </span>
       </li>
-      <li v-else-if="isOneTime && !isMDev" class="has-m-btm-marg">
+      <li v-else-if="isSingleDonor" class="has-m-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -61,7 +64,7 @@
           </a>
         </span>
       </li>
-      <li v-if="!isMDev">
+      <li v-if="isRecurringDonor || isSingleDonor || isCircleDonor">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -97,33 +100,38 @@ export default {
       required: true,
     },
 
+    isSingleDonor: {
+      type: Boolean,
+      required: true,
+    },
+
+    isRecurringDonor: {
+      type: Boolean,
+      required: true,
+    },
+
+    isCircleDonor: {
+      type: Boolean,
+      required: true,
+    },
+
+    isCustomDonor: {
+      type: Boolean,
+      required: true,
+    },
+
     isExpired: {
       validator: value => typeof value === 'boolean' || value === null,
       required: true,
     },
 
-    isOneTime: {
-      type: Boolean,
-      required: true,
-    },
-
-    isFormerCircle: {
-      type: Boolean,
-      required: true,
-    },
-
-    isMDev: {
-      type: Boolean,
+    totalGiftsLastYear: {
+      type: Number,
       required: true,
     },
 
     greeting: {
       type: String,
-      required: true,
-    },
-
-    totalGiftsLastYear: {
-      type: Number,
       required: true,
     },
   },

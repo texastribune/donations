@@ -1,18 +1,22 @@
 <template>
-  <expired
-    v-if="shouldShow"
-    :last-transaction="lastTransaction"
-    :is-former-circle="isFormerCircle"
-    :membership-expiration-date="membershipExpirationDate"
-  />
+  <transition name="has-fade">
+    <expired
+      v-if="shouldShow"
+      :is-circle-donor="isCircleDonor"
+      :last-transaction="lastTransaction"
+      :membership-expiration-date="membershipExpirationDate"
+    />
+  </transition>
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import Expired from '../components/Expired.vue';
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
+
+const Expired = () =>
+  import(/* webpackChunkName: "expired-summary" */ '../components/Expired.vue');
 
 export default {
   name: 'ExpiredContainer',
@@ -23,17 +27,24 @@ export default {
 
   computed: {
     shouldShow() {
-      const { never_given, is_expired, is_mdev } = this.user;
+      const {
+        is_recurring_donor,
+        is_single_donor,
+        is_circle_donor,
+        is_expired,
+      } = this.user;
 
-      return !never_given && is_expired && !is_mdev;
+      return (
+        (is_recurring_donor || is_single_donor || is_circle_donor) && is_expired
+      );
     },
 
     membershipExpirationDate() {
       return this.user.membership_expiration_date;
     },
 
-    isFormerCircle() {
-      return this.user.is_former_circle;
+    isCircleDonor() {
+      return this.user.is_circle_donor;
     },
 
     lastTransaction() {

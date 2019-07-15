@@ -22,8 +22,8 @@
 
 <script>
 import Radios from './Radios.vue';
-import getValue from './mixins/getValue';
-import updateValues from './mixins/updateValues';
+import getValue from './mixins/get-value';
+import updateValues from './mixins/update-values';
 import addNumberCommas from '../utils/add-number-commas';
 
 export default {

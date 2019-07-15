@@ -17,31 +17,56 @@ function addFields(data) {
     membership_expiration_date,
     membership_level,
     never_given,
+    is_mdev,
+    is_current_circle,
+    is_former_circle,
   } = data;
+
   let membershipLevel;
   let isExpired;
 
-  const isOneTime = !never_given && !is_recurring_donor;
+  const isSingleDonor =
+    !never_given &&
+    !is_recurring_donor &&
+    !!membership_expiration_date &&
+    !is_mdev;
 
-  // only null if never_given: true
-  // or for some special mdevs (i.e. innovation fund)
+  const isRecurringDonor =
+    is_recurring_donor &&
+    !!membership_expiration_date &&
+    !is_mdev &&
+    !is_current_circle &&
+    !is_former_circle;
+
+  const isCircleDonor =
+    (is_current_circle || is_former_circle) && !!membership_expiration_date;
+
+  const isCustomDonor =
+    (is_mdev && !is_current_circle && !is_former_circle) ||
+    (!never_given && !membership_expiration_date);
+
   if (membership_expiration_date) {
     isExpired = isPast(parse(membership_expiration_date));
   } else {
     isExpired = null;
   }
 
-  // only null if never_given: true
-  // or for some special mdevs (i.e. innovation fund)
   if (membership_level) {
     membershipLevel = membership_level.toLowerCase();
   } else {
     membershipLevel = null;
   }
 
+  delete data.is_mdev;
+  delete data.is_former_circle;
+  delete data.is_current_circle;
+
   return {
     ...data,
-    is_one_time: isOneTime,
+    is_single_donor: isSingleDonor,
+    is_recurring_donor: isRecurringDonor,
+    is_circle_donor: isCircleDonor,
+    is_custom_donor: isCustomDonor,
     is_expired: isExpired,
     membership_level: membershipLevel,
   };

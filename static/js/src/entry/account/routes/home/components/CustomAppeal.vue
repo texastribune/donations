@@ -22,6 +22,6 @@
 
 <script>
 export default {
-  name: 'MDevAppeal',
+  name: 'CustomAppeal',
 };
 </script>

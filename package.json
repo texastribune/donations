@@ -2,13 +2,13 @@
   "name": "donations",
   "description": "Collect donations for nonprofits",
   "scripts": {
+    "css:dev": "NODE_ENV=development node config/tasks/dev.js",
+    "css:prod": "NODE_ENV=production node config/tasks/build.js",
     "js:dev": "NODE_ENV=development webpack --config webpack/config.dev.js",
     "js:prod": "NODE_ENV=production webpack --config webpack/config.prod.js",
-    "dev": "npm-run-all --parallel ds-tasks-watch js:dev",
-    "postinstall": "yarn run ds-tasks-build && yarn run js:prod",
-    "lint": "eslint --ext .js,.vue static/js/src config",
-    "ds-tasks-build": "NODE_ENV=production node config/tasks/build.js",
-    "ds-tasks-watch": "NODE_ENV=development node config/tasks/dev.js"
+    "dev": "npm-run-all --parallel css:dev js:dev",
+    "postinstall": "yarn run css:prod && yarn run js:prod",
+    "lint": "eslint --ext .js,.vue static/js/src config"
   },
   "private": false,
   "repository": {
@@ -28,8 +28,8 @@
     "@sentry/browser": "^5.4.0",
     "@sentry/integrations": "^5.4.1",
     "@sentry/webpack-plugin": "^1.6.2",
-    "@texastribune/queso-tools": "^0.0.1-4",
-    "@texastribune/queso-ui": "^1.0.0",
+    "@texastribune/queso-tools": "1.0.1",
+    "@texastribune/queso-ui": "^1.1.1",
     "auth0-js": "^9.10.2",
     "axios": "^0.19.0",
     "babel-loader": "^8.0.0",
@@ -39,13 +39,11 @@
     "dompurify": "^1.0.10",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
-    "fast-glob": "^2.2.6",
     "file-loader": "^1.1.11",
     "fontfaceobserver": "^2.1.0",
     "glob-watcher": "^5.0.3",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^1.5.3",
-    "node-sass": "^4.12.0",
     "nodent-runtime": "^3.2.1",
     "npm-run-all": "^4.1.5",
     "validate.js": "^0.12.0",
@@ -55,7 +53,7 @@
     "vue-stripe-elements-plus": "0.2.8",
     "vue-template-compiler": "^2.6.0",
     "vuex": "^3.0.1",
-    "webpack": "^4.5.0",
+    "webpack": "^4.35.3",
     "webpack-assets-manifest": "^3.0.1",
     "webpack-cli": "^3.3.4",
     "webpack-merge": "^4.1.2",
@@ -104,6 +102,8 @@
     }
   },
   "eslintIgnore": [
+    "static/js/src/entry/account/routes/home-exact/containers",
+    "static/js/src/entry/account/routes/home/Index.vue",
     "static/js/src/entry/account/routes/payments/components/Payments.vue",
     "static/js/src/entry/account/routes/blast-payments/components/BlastPayments.vue",
     "static/js/src/entry/account/routes/index.js"

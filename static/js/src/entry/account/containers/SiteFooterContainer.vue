@@ -42,9 +42,13 @@ export default {
     showMembershipLink() {
       if (!this.showRouteLinks) return false;
 
-      const { never_given, is_mdev } = this.user;
+      const {
+        is_single_donor,
+        is_recurring_donor,
+        is_circle_donor,
+      } = this.user;
 
-      return !never_given && !is_mdev;
+      return is_single_donor || is_recurring_donor || is_circle_donor;
     },
 
     showPaymentsLink() {

@@ -1,6 +1,6 @@
 <template>
   <transition name="has-fade">
-    <blast v-if="shouldShow" :next-transaction="nextTransaction" />
+    <recurring v-if="shouldShow" :next-transaction="nextTransaction" />
   </transition>
 </template>
 
@@ -10,30 +10,26 @@
 import userMixin from '../../home/mixins/user';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-const Blast = () =>
-  import(/* webpackChunkName: "blast-summary" */ '../components/Blast.vue');
+const Recurring = () =>
+  import(/* webpackChunkName: "recurring-summary" */ '../components/Recurring.vue');
 
 export default {
-  name: 'BlastContainer',
+  name: 'RecurringContainer',
 
-  components: { Blast },
+  components: { Recurring },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      return this.user.is_current_blast_subscriber;
+      const { is_recurring_donor, is_expired } = this.user;
+
+      return is_recurring_donor && !is_expired;
     },
 
     nextTransaction() {
       const {
-        next_blast_transaction: {
-          amount,
-          date,
-          payment_type,
-          period,
-          credit_card,
-        },
+        next_transaction: { amount, period, date, payment_type, credit_card },
       } = this.user;
 
       const data = {

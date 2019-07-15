@@ -5,6 +5,9 @@ export default {
     ...mapState('tokenUser', {
       tokenUser: 'details',
       accessToken: 'accessToken',
+      canViewAs: 'canViewAs',
+      isVerified: 'isVerified',
+      tokenUserError: 'error',
     }),
   },
 };
