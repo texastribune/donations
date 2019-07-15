@@ -37,6 +37,7 @@ clean:
 	-docker stop ${APP} && docker rm ${APP}
 	-docker stop redis && docker rm redis
 	-docker stop rabbitmq && docker rm rabbitmq
+	rm -rf .mypy_cache
 
 backing:
 	-docker rm -f rabbitmq redis
@@ -44,12 +45,13 @@ backing:
 	docker run --detach --name redis redis
 
 test: build
-	docker run \
-		--workdir=/app \
-		--rm \
-		--publish=5678:5678 \
-		--entrypoint=python \
-		texastribune/checkout:dev /usr/local/bin/py.test -x /app/tests.py --cov=/app
+	DEBUG=False docker run -it --env-file=env-docker --rm --volume=$$(pwd):/app --entrypoint=/app/test-entrypoint.sh ${NS}/${APP}:dev
+# 	docker run \
+# 		--workdir=/app \
+# 		--rm \
+# 		--entrypoint=python \
+# 		texastribune/checkout:dev /app/test-entrypoint.sh
+# #		texastribune/checkout:dev /usr/local/bin/py.test -x /app/test_all.py --cov=/app
 
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .

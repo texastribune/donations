@@ -275,8 +275,14 @@ class SalesforceObject(object):
         for field in fields:
             attr = SalesforceObject.snake_case(field)
             if attr in attr_to_field_map.keys():
-                log.warning(f"Duplicate attribute name: {attr} ({field})")
-                attr = field.lower()
+                log.warning(
+                    f"Duplicate attribute name: {attr} ({field}); using orignal names for both"
+                )
+                field_name = attr_to_field_map[attr]
+                attr_to_field_map[field_name] = field_name
+                del attr_to_field_map[attr]
+                attr_to_field_map[field] = field
+                continue
             attr_to_field_map[attr] = field
         field_to_attr_map = {v: k for k, v in attr_to_field_map.items()}
         return attr_to_field_map, field_to_attr_map
