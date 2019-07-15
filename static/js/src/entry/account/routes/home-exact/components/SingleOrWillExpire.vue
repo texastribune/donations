@@ -40,23 +40,7 @@
             </router-link>
           </span>
         </li>
-        <li class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'membership' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.membership"
-            >
-              More about your membership
-            </router-link>
-          </span>
-        </li>
-        <li>
+        <li v-if="isSingleDonor" class="has-m-btm-marg">
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>
           </span>
@@ -72,6 +56,22 @@
             </a>
           </span>
         </li>
+        <li>
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
+          <span class="has-text-gray-dark">
+            <router-link
+              ga-on="click"
+              :to="{ name: 'membership' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.inline"
+              :ga-event-label="ga.userPortalNav.labels.membership"
+            >
+              More about your membership
+            </router-link>
+          </span>
+        </li>
       </ul>
     </template>
   </summary-box>
@@ -81,13 +81,18 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'Single',
+  name: 'SingleOrWillExpire',
 
   components: { SummaryBox },
 
   props: {
     lastTransaction: {
       type: Object,
+      required: true,
+    },
+
+    isSingleDonor: {
+      type: Boolean,
       required: true,
     },
 

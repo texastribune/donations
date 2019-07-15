@@ -18,8 +18,8 @@
       <blast />
       <blast-cancelled />
       <recurring-or-circle />
-      <single /> <expired />
-      <will-expire />
+      <single-or-will-expire />
+      <expired />
       <never-given />
       <custom />
     </div>
@@ -35,8 +35,7 @@ import RouteLoader from '../home/components/RouteLoader.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
-import WillExpire from './containers/WillExpireContainer.vue';
-import Single from './containers/SingleContainer.vue';
+import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
 import Custom from './containers/CustomContainer.vue';
 import Blast from './containers/BlastContainer.vue';
@@ -51,8 +50,7 @@ export default {
     ContactInfo,
     RecurringOrCircle,
     Expired,
-    WillExpire,
-    Single,
+    SingleOrWillExpire,
     NeverGiven,
     Custom,
     Blast,
