@@ -102,7 +102,6 @@ export default {
 
     close() {
       this.isVisible = false;
-      this.reset();
     },
   },
 };
