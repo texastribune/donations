@@ -29,7 +29,6 @@ export default {
     return {
       pwResetSuccess: false,
       pwResetFailure: false,
-      contactInfo: [],
     };
   },
 
@@ -39,16 +38,36 @@ export default {
     isStaff() {
       return this.tokenUser['https://texastribune.org/is_staff'];
     },
-  },
 
-  watch: {
-    isViewingAs() {
-      this.contactInfo = this.getContactInfo();
+    contactInfo() {
+      let email;
+
+      const contactInfo = [];
+      const { isViewingAs } = this;
+      const { identities, postal_code, first_name, last_name } = this.user;
+
+      if (isViewingAs) {
+        email = identities[0].email;
+      } else {
+        email = this.tokenUser.email;
+      }
+
+      if (first_name && last_name) {
+        contactInfo.push({
+          id: 0,
+          heading: 'Name',
+          text: `${first_name} ${last_name}`,
+        });
+      }
+
+      contactInfo.push({ id: 1, heading: 'Email', text: email });
+
+      if (postal_code) {
+        contactInfo.push({ id: 2, heading: 'ZIP code', text: postal_code });
+      }
+
+      return contactInfo;
     },
-  },
-
-  created() {
-    this.contactInfo = this.getContactInfo();
   },
 
   methods: {
@@ -69,53 +88,6 @@ export default {
         gaAction: this.ga.userPortal.actions['reset-password'],
         gaLabel: this.ga.userPortal.labels.home,
       });
-    },
-
-    getContactInfo() {
-      let email;
-      let username;
-
-      const contactInfo = [];
-      const { isViewingAs } = this;
-      const { email: tokenEmail } = this.tokenUser;
-      const { identities, postal_code, first_name, last_name } = this.user;
-      const [goodIdentity] = identities.filter(
-        ({ email: apiEmail }) => apiEmail === tokenEmail
-      );
-
-      try {
-        ({ email, username } = goodIdentity);
-      } catch (err) {
-        // if we're using "view as" feature, it's expected that
-        // the ID-token email won't match up with the API email
-        if (isViewingAs) {
-          ({ email, username } = identities[0]);
-        } else {
-          throw err;
-        }
-      }
-
-      if (first_name && last_name) {
-        contactInfo.push({
-          id: 0,
-          heading: 'Name',
-          text: `${first_name} ${last_name}`,
-        });
-      } else {
-        contactInfo.push({
-          id: 0,
-          heading: 'Username',
-          text: username,
-        });
-      }
-
-      contactInfo.push({ id: 1, heading: 'Email', text: email });
-
-      if (postal_code) {
-        contactInfo.push({ id: 2, heading: 'ZIP code', text: postal_code });
-      }
-
-      return contactInfo;
     },
   },
 };
