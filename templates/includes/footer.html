@@ -1,97 +1,99 @@
+{% from "./includes/icon.html" import icon %}
 <footer>
-    <div id="site_footer" class="site_footer">
+    <div id="site_footer" class="c-site-footer has-bg-black-off has-text-white t-size-xs">
         <div class="grid_container grid_row">
             <div class="col">
-                <figure class="site_footer--logo">
-                    <img src="../static/img/TxTrib-bug-logo.svg" alt="">
-                </figure>
-                <ul>
-                    <div class="border--yellow_notch"></div>
-                    <li>
-                        <a href="https://www.texastribune.org/contact/" title="Contact Us">Contact Us</a>
+                {{ icon('bug', extra_classes='c-icon c-icon--yellow c-site-footer__logo has-giant-btm-marg', custom_size='4rem') }}
+                <div class="has-notch has-notch--thin has-bg-yellow has-b-btm-marg" aria-hidden="true"></div>
+                <ul class="c-site-footer__links">
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/contact/" title="Contact Us" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="contact us">Contact Us</a>
                     </li>
-                    <li>
-                        <a href="https://mediakit.texastribune.org/" title="Advertise" class="advertise">Advertise</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://mediakit.texastribune.org/" title="Advertise" class="advertise" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="advertise">Advertise</a>
                     </li>
-                    <li><a href="https://texastribune.org">&copy; 2019 The Texas Tribune</a></li>
+                    <li class="has-tiny-btm-marg"><a href="https://texastribune.org" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="copyright">&copy; 2019 The Texas Tribune</a></li>
                 </ul>
             </div>
             <div id="footer-sections" class="col hide_until--s">
-                <h5 class="site_footer--header">Topics</h5>
-                <ul>
+                <h5 class="c-site-footer__header t-size-xs has-text-yellow t-uppercase has-xs-btm-marg">Topics</h5>
+                <ul class="c-site-footer__links">
                     {% include "./includes/section_list_items.html" %}
                 </ul>
             </div>
             <div class="col">
-                <h5 class="site_footer--header">Info</h5>
-                <ul>
-                    <li>
-                        <a href="https://www.texastribune.org/about/" title="About Us">About Us</a>
+                <h5 class="c-site-footer__header t-size-xs has-text-yellow t-uppercase has-xs-btm-marg">Info</h5>
+                <ul class="c-site-footer__links">
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/" title="About Us" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="about us">About Us</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/about/staff/">Our Staff</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/staff/" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="our staff">Our Staff</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/support-us/donors-and-members/" title="Who Funds Us?">Who
-                            Funds Us?</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/support-us/donors-and-members/" title="Who Funds Us?" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="who funds us">Who Funds Us?</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/republishing-guidelines/" title="Republishing Guidelines">Republishing
-                            Guidelines</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/texas-tribune-strategic-plan/" title="Strategic Plan" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="strategic plan">Strategic Plan</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/about/ethics/" title="Code of Ethics">Code of Ethics</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/republishing-guidelines/" title="Republishing Guidelines" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="republishing guidelines">Republishing Guidelines</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/about/terms-of-service/" title="Terms of Service">Terms
-                            of Service</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/ethics/" title="Code of Ethics" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="code of ethics">Code of Ethics</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/about/privacy-policy/" title="Privacy Policy">Privacy
-                            Policy</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/terms-of-service/" title="Terms of Service" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="terms of service">Terms of Service</a>
+                    </li>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/privacy-policy/" title="Privacy Policy" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="privacy policy">Privacy Policy</a>
                     </li>
 
-                    <li>
-                        <a href="https://www.texastribune.org/about/tips/" title="Send a Tip">Send us a confidential
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/tips/" title="Send a Tip" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="send us a confidential tip">Send us a confidential
                             tip</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/corrections/" title="Corrections">Corrections</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/corrections/" title="Corrections" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="corrections">Corrections</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/about/feeds/" title="Feeds">Feeds</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/feeds/" title="Feeds" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="feeds">Feeds</a>
                     </li>
-                    <li>
-                        <a href="https://www.texastribune.org/about/subscribe/" title="Newsletters">Newsletters</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/about/subscribe/" title="Newsletters" ga-event-category="subscribe intent" ga-event-action="footer link">Newsletters</a>
+                    </li>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/podcasts/" title="Podcasts" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="podcasts">Podcasts</a>
+                    </li>
+                    <li class="has-tiny-btm-marg">
+                        <a href="https://www.texastribune.org/video/" title="Video" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="video">Video</a>
                     </li>
                 </ul>
             </div>
             <div class="col">
-                <h5 class="site_footer--header">Social Media</h5>
-                <ul>
-                    <li>
-                        <a href="http://facebook.com/texastribune" title="Facebook" class="external"><i class="fa fa-facebook"></i>Facebook</a>
+                <h5 class="c-site-footer__header t-size-xs has-text-yellow t-uppercase has-xs-btm-marg">Social Media</h5>
+                <ul class="c-site-footer__links">
+                    <li class="has-tiny-btm-marg">
+                        <a href="http://facebook.com/texastribune" title="Facebook" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="facebook">{{ icon('facebook', align_base=True,  extra_classes='c-site-footer__icon') }}Facebook</a>
                     </li>
-                    <li>
-                        <a href="http://twitter.com/texastribune" title="Twitter" class="external"><i class="fa fa-twitter"></i>Twitter</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="http://twitter.com/texastribune" title="Twitter" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="twitter">{{ icon('twitter', align_base=True,  extra_classes='c-site-footer__icon') }}Twitter</a>
                     </li>
-                    <li>
-                        <a href="http://youtube.com/user/thetexastribune" title="YouTube" class="external"><i class="fa fa-youtube"></i>YouTube</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="http://youtube.com/user/thetexastribune" title="YouTube" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="youtube">{{ icon('youtube', align_base=True,  extra_classes='c-site-footer__icon') }}YouTube</a>
                     </li>
-                    <li>
-                        <a href="http://instagram.com/texas_tribune" title="Instagram" class="external"><i class="fa fa-instagram"></i>Instagram</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="http://instagram.com/texas_tribune" title="Instagram" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="instagram">{{ icon('instagram', align_base=True,  extra_classes='c-site-footer__icon') }}Instagram</a>
                     </li>
-                    <li>
-                        <a href="http://www.linkedin.com/company/texas-tribune" title="LinkedIn" class="external"><i
-                                class="fa fa-linkedin"></i>LinkedIn</a>
+                    <li class="has-tiny-btm-marg">
+                        <a href="http://www.linkedin.com/company/texas-tribune" title="LinkedIn" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="linkedin">{{ icon('linkedin', align_base=True,  extra_classes='c-site-footer__icon') }}LinkedIn</a>
                     </li>
-                    <li>
-                        <a href="https://www.reddit.com/user/texastribune" title="Reddit" class="external"><i class="fa fa-reddit"></i>Reddit</a>
+                    <li class="has-b-btm-marg">
+                        <a href="https://www.reddit.com/user/texastribune" title="Reddit" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="reddit">{{ icon('reddit', align_base=True,  extra_classes='c-site-footer__icon') }}Reddit</a>
                     </li>
-                    <div class="border--yellow_notch"></div>
-                    <li>
-                        <a href="https://www.facebook.com/groups/thisisyourtexas/" title="This is Your Texas" class="external"><i
-                                class="fa fa-facebook"></i>Join our Facebook Group, This Is Your Texas.</a>
+                    <div class="has-notch has-notch--thin has-bg-yellow has-b-btm-marg" aria-hidden="true"></div>
+                    <li class="has-tiny-btm-marg t-space-heading-s">
+                        <a href="https://www.facebook.com/groups/thisisyourtexas/" title="This is Your Texas" class="external" ga-event-category="navigation" ga-event-action="footer link click" ga-event-label="this is your texas">{{ icon('your-texas', align_base=True,  extra_classes='c-site-footer__icon') }}Join our Facebook Group, This Is Your Texas.</a>
                     </li>
                 </ul>
             </div>

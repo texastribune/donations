@@ -1,0 +1,3 @@
+{% macro icon(icon, align_base=False, extra_classes='', sr_hide='true', custom_size='') %}
+    <span class="c-icon{% if align_base == True %} c-icon--baseline{% endif %}{%if extra_classes %} {{extra_classes}}{% endif %}" {%if custom_size %} style="font-size: {{custom_size}}"{% endif %}><svg aria-hidden="{{sr_hide|default('true')}}"><use xlink:href="#{{icon}}"></use></svg></span>
+{% endmacro %}

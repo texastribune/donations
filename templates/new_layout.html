@@ -22,7 +22,9 @@
     <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://static.texastribune.org/media/icons/iPhone_Icon_120x120.png">
     <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://static.texastribune.org/media/icons/iPad_Icon_152x152.png">
 
-    {% block stylesheets %}{% endblock %}
+    {% block stylesheets %}
+      <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
+    {% endblock %}
 
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -41,40 +43,6 @@
 
     {% block adwords_conversion_code %}{% endblock %}
 
-    <script>
-      (function() {
-        var _fbq = window._fbq || (window._fbq = []);
-        if (!_fbq.loaded) {
-          var fbds = document.createElement('script');
-          fbds.async = true;
-          fbds.src = '//connect.facebook.net/en_US/fbds.js';
-          var s = document.getElementsByTagName('script')[0];
-          s.parentNode.insertBefore(fbds, s);
-          _fbq.loaded = true;
-        }
-      })();
-      window._fbq = window._fbq || [];
-      window._fbq.push(['track', '6025650813658', {
-        'value': '0.00',
-        'currency': 'USD'
-      }]);
-    </script>
-
-    <!-- Facebook Pixel Code -->
-    <script>
-      !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-      n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-      n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-      t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-      document,'script','https://connect.facebook.net/en_US/fbevents.js');
-
-      fbq('init', '1570461443220689');
-      fbq('track', "PageView");
-      fbq('track', 'ViewContent');
-      fbq('track', 'Search');
-    </script>
-    <!-- End Facebook Pixel Code -->
-
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
     <script>
       WebFont.load({
@@ -89,8 +57,14 @@
   <body>
     <noscript>
       <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1570461443220689&ev=PageView&noscript=1" />
     </noscript>
+
+    {% block icon_sprite %}
+      {# SVG sprite include #}
+      <div style="display:none;">
+        {% include "includes/base_icons.html" %}
+      </div>
+    {% endblock %}
 
     {% include 'includes/navbar_thin.html' %}
 

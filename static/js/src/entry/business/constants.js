@@ -1,140 +1,52 @@
 import * as validators from '../../utils/validators';
 
-export const POSITION_ON_FORM_0 = 0;
-export const POSITION_ON_FORM_1 = 1;
-export const POSITION_ON_FORM_2 = 2;
-export const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
+const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
+const DEFAULT_PAY_FEES = 'True';
+const DEFAULT_STATE_SELECTED = 'TX';
 
-// to reorder the buckets (donation levels) on the page, reorder this array
-// the logic automatically follows
-export const MEMBERSHIP_LEVELS = [
-  { header: 'Big Tex', amount: 2500 },
-  { header: 'Lone Star', amount: 1500 },
-  { header: "Hat's Off!", amount: 500 },
-];
-
-// query related
-export const QUERY_PARAMETERS_STRING_VALUES = {
-  oneStr: '1',
-  onceStr: 'once',
-  oneTimeStr: 'one-time',
-  openStr: 'Open',
-  noneStr: 'None',
-  monthlyStr: 'monthly',
-  yearlyStr: 'yearly',
-  annuallyStr: 'annually',
-};
-
-// back-end form to UI translations for the different payment options (common radio buttons)
-const MONTHLY_PAYMENTS = {
-  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
-  installmentsPerYear: 12,
-  installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
-  openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
-  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.monthlyStr,
-};
-const YEARLY_PAYMENT = {
-  installmentPeriod: QUERY_PARAMETERS_STRING_VALUES.yearlyStr,
-  installmentsPerYear: 1,
-  installments: QUERY_PARAMETERS_STRING_VALUES.noneStr,
-  openEndedStatus: QUERY_PARAMETERS_STRING_VALUES.openStr,
-  uiInstallmentPeriod: QUERY_PARAMETERS_STRING_VALUES.annuallyStr,
-};
-
-// common structure and var names used by the donation apps
-// plugs into the common donate app code
-export const DEFAULT_PAY_FEES = 'True';
+// master setting for default selection
+export const DEFAULT_LEVEL = 'bigTexYearly';
 
 // no order dependency in code for these.
 // the key is the bucket
-export const BUSINESS_BUCKETS = {
-  levelAMonthly: {
-    bucket: 'levelA',
-    amount: Math.round(
-      MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount /
-        MONTHLY_PAYMENTS.installmentsPerYear
-    ).toString(),
-    paymentDetails: MONTHLY_PAYMENTS,
-    payFees: DEFAULT_PAY_FEES,
+export const BUSINESS_LEVELS = {
+  bigTexYearly: {
+    bucket: 'bigTex',
+    bucketFull: 'Big Tex',
+    installmentPeriod: 'yearly',
+    amount: '2500',
   },
-  levelAYearly: {
-    bucket: 'levelA',
-    amount: (
-      MEMBERSHIP_LEVELS[POSITION_ON_FORM_0].amount /
-      YEARLY_PAYMENT.installmentsPerYear
-    ).toString(),
-    paymentDetails: YEARLY_PAYMENT,
-    payFees: DEFAULT_PAY_FEES,
+  bigTexMonthly: {
+    bucket: 'bigTex',
+    bucketFull: 'Big Tex',
+    installmentPeriod: 'monthly',
+    amount: '208',
   },
-  levelBMonthly: {
-    bucket: 'levelB',
-    amount: Math.round(
-      MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount /
-        MONTHLY_PAYMENTS.installmentsPerYear
-    ).toString(),
-    paymentDetails: MONTHLY_PAYMENTS,
-    payFees: DEFAULT_PAY_FEES,
+  loneStarYearly: {
+    bucket: 'loneStar',
+    bucketFull: 'Lone Star',
+    installmentPeriod: 'yearly',
+    amount: '1500',
   },
-  levelBYearly: {
-    bucket: 'levelB',
-    amount: (
-      MEMBERSHIP_LEVELS[POSITION_ON_FORM_1].amount /
-      YEARLY_PAYMENT.installmentsPerYear
-    ).toString(),
-    paymentDetails: YEARLY_PAYMENT,
-    payFees: DEFAULT_PAY_FEES,
+  loneStarMonthly: {
+    bucket: 'loneStar',
+    bucketFull: 'Lone Star',
+    installmentPeriod: 'monthly',
+    amount: '125',
   },
-  levelCMonthly: {
-    bucket: 'levelC',
-    amount: Math.round(
-      MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount /
-        MONTHLY_PAYMENTS.installmentsPerYear
-    ).toString(),
-    paymentDetails: MONTHLY_PAYMENTS,
-    payFees: DEFAULT_PAY_FEES,
+  hatsOffYearly: {
+    bucket: 'hatsOff',
+    bucketFull: "Hat's Off",
+    installmentPeriod: 'yearly',
+    amount: '500',
   },
-  levelCYearly: {
-    bucket: 'levelC',
-    amount: (
-      MEMBERSHIP_LEVELS[POSITION_ON_FORM_2].amount /
-      YEARLY_PAYMENT.installmentsPerYear
-    ).toString(),
-    paymentDetails: YEARLY_PAYMENT,
-    payFees: DEFAULT_PAY_FEES,
+  hatsOffMonthly: {
+    bucket: 'hatsOff',
+    bucketFull: "Hat's Off",
+    installmentPeriod: 'monthly',
+    amount: '42',
   },
 };
-
-// master setting for default selection
-export const DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD = 'levelAYearly';
-export const DEFAULT_ONCE_DONATION_LEVEL_WITH_INSTALL_PERIOD = 'levelAOneTime';
-
-// Texas will be default selection on state list
-export const DEFAULT_STATE_SELECTED = 'TX'; // Texas
-
-// whitelisting and query params
-// add new query parameters here to whitelist them
-export const WL_DEFAULT_PARAMETERS = {
-  campaignId: '',
-  referralId: '',
-  installments:
-    BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].paymentDetails
-      .installments,
-  installmentPeriod:
-    BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].paymentDetails
-      .installmentPeriod,
-  // special processing for these
-  // (looks redundant but this is per backend and requestor requirements
-  installment_period:
-    BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].paymentDetails
-      .installmentPeriod,
-  openended_status:
-    BUSINESS_BUCKETS[DEFAULT_DONATION_LEVEL_WITH_INSTALL_PERIOD].paymentDetails
-      .openEndedStatus,
-};
-
-// guard against processing insanely long query strings from spec
-export const WL_QUERY_PARAMETERS_MAX_NBR_CHARS = 18;
-export const WL_QUERY_ESCAPE_THRESHOLD = 6;
 
 // for select list
 export const US_STATES_SELECT_LIST = [
@@ -264,21 +176,34 @@ export const BUSINESS_FORM_STATE = {
     validator: null,
     message: null,
   },
-  openended_status: {
-    value: '',
-    isValid: true,
-    validator: null,
-    message: null,
-  },
   installment_period: {
     value: '',
     isValid: true,
     validator: null,
     message: null,
   },
-  level: { value: '', isValid: true, validator: null, message: null },
-  campaign_id: { value: '', isValid: true, validator: null, message: null },
-  referral_id: { value: '', isValid: true, validator: null, message: null },
-  amount: { value: '', isValid: true, validator: null, message: null },
-  installments: { value: '', isValid: true, validator: null, message: null },
+  level: {
+    value: '',
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  campaign_id: {
+    value: '',
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  referral_id: {
+    value: '',
+    isValid: true,
+    validator: null,
+    message: null,
+  },
+  amount: {
+    value: '',
+    isValid: true,
+    validator: null,
+    message: null,
+  },
 };

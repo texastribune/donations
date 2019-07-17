@@ -1,25 +1,21 @@
 const WebpackAssetsManifest = require('webpack-assets-manifest');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const Autoprefixer = require('autoprefixer');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const { EnvironmentPlugin } = require('webpack');
 
-const { entryDir, buildDir } = require('./base');
+const { buildDir } = require('./paths');
+const entries = require('./entries');
 
 module.exports = {
   context: process.cwd(),
 
-  entry: {
-    donate: `${entryDir}/donate/index`,
-    charge: `${entryDir}/charge/index`,
-    circle: `${entryDir}/circle/index`,
-    business: `${entryDir}/business/index`,
-    old: `${entryDir}/old/index`,
-  },
+  entry: { ...entries },
 
   output: {
-    filename: '[name].[chunkhash].js',
-    chunkFilename: '[name].chunk.[chunkhash].js',
+    filename: '[name].[contenthash].js',
+    chunkFilename: '[name].chunk.[contenthash].js',
     library: 'jsBundle',
     libraryTarget: 'umd',
+    publicPath: '/static/build/',
     path: buildDir,
   },
 
@@ -28,9 +24,18 @@ module.exports = {
       output: 'assets.json',
       entrypoints: true,
     }),
-    new MiniCssExtractPlugin({
-      filename: 'styles.[chunkhash].css',
-    }),
+    new EnvironmentPlugin([
+      'NODE_ENV',
+      'AUTH0_AUDIENCE',
+      'AUTH0_DOMAIN',
+      'AUTH0_CLIENT_ID',
+      'PORTAL_API_DOMAIN',
+      'PORTAL_CAMPAIGN_ID',
+      'ENABLE_SENTRY',
+      'SENTRY_DSN',
+      'SENTRY_ENVIRONMENT',
+    ]),
+    new VueLoaderPlugin(),
   ],
 
   optimization: {
@@ -49,21 +54,6 @@ module.exports = {
 
   module: {
     rules: [
-      {
-        test: /\.(scss|sass)$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: [Autoprefixer()],
-            },
-          },
-          'sass-loader',
-        ],
-      },
-
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,

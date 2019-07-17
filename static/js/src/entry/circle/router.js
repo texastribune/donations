@@ -5,24 +5,35 @@ import VueRouter from 'vue-router';
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import Wall from './Wall.vue';
-import mergeValuesIntoStartState from '../../utils/mergeValuesIntoStartState';
-import { CIRCLE_BUCKETS, CIRCLE_FORM_STATE } from './constants';
+import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
+import sanitizeParams from '../../utils/sanitize-params';
+import { CIRCLE_LEVELS, CIRCLE_FORM_STATE, DEFAULT_LEVEL } from './constants';
 
 Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
-  const defaultLevel = 'editorMonthly';
-  const { campaignId = '', referralId = '' } = queryParams;
-  let { level = defaultLevel } = queryParams;
+  const cleanParams = sanitizeParams(queryParams);
+  let { level = DEFAULT_LEVEL } = cleanParams;
+  const {
+    campaignId = '',
+    referralId = '',
+    firstName = '',
+    lastName = '',
+    email = '',
+    zipcode = '',
+  } = cleanParams;
 
-  if (!CIRCLE_BUCKETS[level]) level = defaultLevel;
+  if (!CIRCLE_LEVELS[level]) level = DEFAULT_LEVEL;
 
-  const { amount, installments, installmentPeriod } = CIRCLE_BUCKETS[level];
+  const { amount, installmentPeriod } = CIRCLE_LEVELS[level];
 
   return {
     level,
     amount,
-    installments,
+    zipcode,
+    first_name: firstName,
+    last_name: lastName,
+    stripeEmail: email,
     installment_period: installmentPeriod,
     campaign_id: campaignId,
     referral_id: referralId,

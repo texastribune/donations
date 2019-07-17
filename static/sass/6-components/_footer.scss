@@ -1,58 +1,6 @@
-.site_footer {
-  @extend .print__hide;
-  background-color: $color-black-off;
-  padding: $size-b $size-b $size-giant;
-
-  &--logo {
-    margin: $size-xs 0 $size-giant;
-    max-width: 60px;
-  }
-
-  &--header {
-    color: $color-yellow-tribune;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    margin: $size-b/2 0;
-    text-align: left;
-    text-transform: uppercase;
-  }
-
-  .border--yellow_notch {
-    border-top: 2px solid $color-yellow-tribune;
-    margin: $size-xs 0;
-  }
-
-  // .col {
-  //   border-right: 1px solid $color-black-pure;
-  // }
-
-  ul {
-    list-style-type: none;
-  }
-
-  li {
-    clear: both;
-    padding: 2px 0;
-    text-align: left;
-  }
-
-  a {
-    color: $color-white-pure;
-    font-size: $size-xs;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-
-    &.donate {
-      color: $color-blue-light;
-      margin-top: $size-b;
-    }
-
-    i {
-      padding-right: $size-b;
-      width: $size-m;
-    }
+// To be removed after this repo is set up to take the base ds-toolbox elements file
+.c-site-footer {
+  &__links {
+    list-style: none;
   }
 }

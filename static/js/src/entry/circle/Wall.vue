@@ -1,7 +1,7 @@
 <template>
   <section class="wall grid_separator--l">
     <figure class="wall__logo grid_separator--l">
-      <img src="../../../../img/circle-logo.png" alt="Circle Membership logo" />
+      <img src="./img/circle-logo.png" alt="Circle Membership logo" />
     </figure>
     <div v-if="!loading && !error">
       <div
@@ -17,7 +17,9 @@
             :key="memberIndex"
             class="wall__item"
           >
-            <span class="wall__star fa fa-star" />
+            <span class="wall__star c-icon c-icon--yellow c-icon--baseline"
+              ><svg aria-hidden="true"><use xlink:href="#star"></use></svg
+            ></span>
             <span class="wall__name">{{ member }}</span>
           </li>
         </ul>

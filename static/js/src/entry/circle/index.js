@@ -2,14 +2,10 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 
 import App from '../../App.vue';
-import FormModule from '../../store/modules/form';
+import connectedFormModule from '../../store/modules/connected-form';
 import { createRouter, bindRouterEvents } from './router';
-import cssClasses from '../../mixins/global/cssClasses';
+import cssClasses from '../../mixins/global/css-classes';
 import gtm from '../../mixins/global/gtm';
-
-import '../../../../sass/circle.scss';
-
-require('es6-promise').polyfill();
 
 Vue.use(Vuex);
 Vue.mixin(cssClasses);
@@ -17,7 +13,7 @@ Vue.mixin(gtm);
 
 const store = new Vuex.Store({
   modules: {
-    circleForm: FormModule,
+    circleForm: connectedFormModule,
   },
 });
 const router = createRouter();

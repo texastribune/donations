@@ -21,7 +21,6 @@
           :store-module="storeModule"
           base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
-          @updateCallback="onFrequencyUpdate"
         />
       </div>
     </div>
@@ -34,6 +33,7 @@
           label-text="amount ($)"
           base-classes="form__text form__text--heavy"
           name="amount"
+          inputmode="decimal"
         />
       </div>
     </div>
@@ -56,6 +56,7 @@
           type="email"
           base-classes="form__text form__text--standard"
           name="stripeEmail"
+          inputmode="email"
         />
       </div>
     </div>
@@ -100,6 +101,7 @@
           label-text="zip code"
           base-classes="form__text form__text--standard"
           name="zipcode"
+          inputmode="numeric"
         />
       </div>
     </div>
@@ -169,26 +171,24 @@
     </div>
 
     <local-hidden :value="stripeToken" name="stripeToken" />
-    <hidden name="installments" :store-module="storeModule" />
     <hidden name="description" :store-module="storeModule" />
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
-    <hidden name="openended_status" :store-module="storeModule" />
     <hidden name="pay_fees_value" :store-module="storeModule" />
   </form>
 </template>
 
 <script>
-import Hidden from '../../elements/Hidden.vue';
-import LocalHidden from '../../elements/LocalHidden.vue';
-import Radios from '../../elements/Radios.vue';
-import PayFees from '../../elements/PayFees.vue';
-import TextInput from '../../elements/TextInput.vue';
-import ManualPay from '../../elements/ManualPay.vue';
-import ManualSubmit from '../../elements/ManualSubmit.vue';
-import NativePay from '../../elements/NativePay.vue';
-import updateValue from '../../elements/mixins/updateValue';
-import formStarter from '../../mixins/form/starter';
+import Hidden from '../../connected-elements/Hidden.vue';
+import LocalHidden from '../../local-elements/Hidden.vue';
+import Radios from '../../connected-elements/Radios.vue';
+import PayFees from '../../connected-elements/PayFees.vue';
+import TextInput from '../../connected-elements/TextInput.vue';
+import ManualPay from '../../connected-elements/ManualPay.vue';
+import ManualSubmit from '../../connected-elements/ManualSubmit.vue';
+import NativePay from '../../connected-elements/NativePay.vue';
+import updateValue from '../../connected-elements/mixins/update-value';
+import formStarter from '../../mixins/connected-form/starter';
 
 export default {
   name: 'TopForm',
@@ -217,24 +217,6 @@ export default {
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
     };
-  },
-
-  methods: {
-    onFrequencyUpdate(newValue) {
-      let openEndedVal = '';
-
-      if (newValue === 'yearly' || newValue === 'monthly') {
-        openEndedVal = 'Open';
-      } else if (newValue === 'None') {
-        openEndedVal = 'None';
-      }
-
-      this.updateValue({
-        storeModule: this.storeModule,
-        key: 'openended_status',
-        value: openEndedVal,
-      });
-    },
   },
 };
 </script>

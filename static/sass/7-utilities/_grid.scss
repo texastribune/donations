@@ -287,12 +287,6 @@
       }
     }
   }
-
-  &--left_until--#{$size} {
-    @include mq($from: $bp) {
-      order: -2;
-    }
-  }
 }
 
 .col_omega {

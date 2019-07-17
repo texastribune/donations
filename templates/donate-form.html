@@ -1,11 +1,5 @@
 {% extends "new_layout.html" %}
 
-{% block stylesheets %}
-  {% for stylesheet in bundles['css'] %}
-    <link rel="stylesheet" type="text/css" href="{{ stylesheet }}">
-  {% endfor %}
-{% endblock %}
-
 {% block head_scripts %}
 {% if form_data and message %}
 <script>
@@ -15,6 +9,8 @@
 {% endblock %}
 
 {% block content %}
+
+  <!-- {# include 'includes/thermometer.html' #} -->
 
   <section class="splash splash--tall grid_separator">
     <div class="grid_container grid_padded--xl">
