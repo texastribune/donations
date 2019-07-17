@@ -35,7 +35,7 @@ function createInitialFormState(queryParams) {
   let amount;
   let installmentPeriod;
 
-  if (code) {
+  if (code && AMBASSADOR_CODES[code]) {
     ({ amount, installmentPeriod } = AMBASSADOR_CODES[code]);
   } else {
     ({ amount, installmentPeriod = 'monthly' } = cleanParams);
