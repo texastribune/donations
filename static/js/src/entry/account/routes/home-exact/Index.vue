@@ -17,8 +17,9 @@
       <contact-info />
       <blast />
       <blast-cancelled />
-      <circle-z />
-      <recurring /> <single /> <expired />
+      <recurring-or-circle />
+      <single-or-will-expire />
+      <expired />
       <never-given />
       <custom />
     </div>
@@ -32,10 +33,9 @@ import routeMixin from '../../mixins/route';
 import Help from '../../components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
-import Recurring from './containers/RecurringContainer.vue';
-import CircleZ from './containers/CircleContainer.vue';
+import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
-import Single from './containers/SingleContainer.vue';
+import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
 import NeverGiven from './containers/NeverGivenContainer.vue';
 import Custom from './containers/CustomContainer.vue';
 import Blast from './containers/BlastContainer.vue';
@@ -48,10 +48,9 @@ export default {
   components: {
     Messages,
     ContactInfo,
-    CircleZ,
-    Recurring,
+    RecurringOrCircle,
     Expired,
-    Single,
+    SingleOrWillExpire,
     NeverGiven,
     Custom,
     Blast,

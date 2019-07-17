@@ -11,7 +11,9 @@
     </h1>
 
     <div class="has-ump-side-padding has-xl-btm-marg">
-      <membership-detail />
+      <membership-expired />
+      <membership-recurring-or-circle />
+      <membership-single-or-will-expire />
     </div>
 
     <appeal />
@@ -23,7 +25,9 @@
 <script>
 /* eslint-disable camelcase */
 
-import MembershipDetail from './containers/MembershipDetailContainer.vue';
+import MembershipExpired from './containers/MembershipExpiredContainer.vue';
+import MembershipRecurringOrCircle from './containers/MembershipRecurringOrCircleContainer.vue';
+import MembershipSingleOrWillExpire from './containers/MembershipSingleOrWillExpireContainer.vue';
 import routeMixin from '../../mixins/route';
 import userMixin from '../home/mixins/user';
 import RouteLoader from '../home/components/RouteLoader.vue';
@@ -35,7 +39,15 @@ import { InvalidRouteError } from '../../errors';
 export default {
   name: 'MembershipRoute',
 
-  components: { Appeal, CircleAppeal, Help, MembershipDetail, RouteLoader },
+  components: {
+    RouteLoader,
+    MembershipExpired,
+    MembershipRecurringOrCircle,
+    MembershipSingleOrWillExpire,
+    Appeal,
+    CircleAppeal,
+    Help,
+  },
 
   mixins: [routeMixin, userMixin],
 
