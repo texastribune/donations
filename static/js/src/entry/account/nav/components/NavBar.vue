@@ -5,13 +5,16 @@
         href="https://www.texastribune.org"
         class="c-navbar__logo l-align-center-self"
       >
-        <img alt="The Texas Tribune" src="../svg/tt.svg" />
+        <img alt="The Texas Tribune" src="../../svg/tt.svg" />
       </a>
 
       <div class="c-navbar__content">
-        <ul class="c-navbar__items is-hidden-until-bp-l">
+        <ul
+          v-if="userFetchComplete"
+          class="c-navbar__items is-hidden-until-bp-l"
+        >
           <li
-            v-if="showRouteLinks"
+            v-if="showHomeLink"
             class="c-navbar__item c-navbar__item--space-right"
           >
             <router-link
@@ -44,7 +47,7 @@
             </router-link>
           </li>
           <li
-            v-if="showBlastLinks"
+            v-if="showBlastLink"
             class="c-navbar__item c-navbar__item--space-right"
           >
             <router-link
@@ -62,7 +65,6 @@
           <li v-if="isLoggedIn" class="c-navbar__item">
             <button
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
-              active-class="is-active"
               @click="logOut"
             >
               <strong>Log Out</strong>
@@ -71,7 +73,6 @@
           <li v-if="!isLoggedIn" class="c-navbar__item">
             <button
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
-              active-class="is-active"
               @click="logIn"
             >
               <strong>Log In</strong>
@@ -105,8 +106,8 @@
     </div>
 
     <div v-if="showDropdown" class="c-navbar__dropdown is-hidden-from-bp-l">
-      <ul class="c-navbar__dropdown-items">
-        <li v-if="showRouteLinks" class="c-navbar__dropdown-item">
+      <ul v-if="userFetchComplete" class="c-navbar__dropdown-items">
+        <li v-if="showHomeLink" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             active-class="is-active"
@@ -133,7 +134,7 @@
             <strong>Membership</strong>
           </router-link>
         </li>
-        <li v-if="showBlastLinks" class="c-navbar__dropdown-item">
+        <li v-if="showBlastLink" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             active-class="is-active"
@@ -146,12 +147,20 @@
             <strong>The Blast</strong>
           </router-link>
         </li>
-        <li class="c-navbar__dropdown-item">
+        <li v-if="isLoggedIn" class="c-navbar__dropdown-item">
           <button
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             @click="logOut"
           >
             <strong>Log Out</strong>
+          </button>
+        </li>
+        <li v-if="!isLoggedIn" class="c-navbar__dropdown-item">
+          <button
+            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            @click="logIn"
+          >
+            <strong>Log In</strong>
           </button>
         </li>
       </ul>
@@ -160,23 +169,30 @@
 </template>
 
 <script>
-import { logOut, logIn } from '../utils/auth-actions';
+// TODO: Make this more generic w/ slots and move to base components directory
+
+import { logOut, logIn } from '../../utils/auth-actions';
 
 export default {
   name: 'NavBar',
 
   props: {
-    showRouteLinks: {
+    showHomeLink: {
       type: Boolean,
       required: true,
     },
 
-    showBlastLinks: {
+    showBlastLink: {
       type: Boolean,
       required: true,
     },
 
     showMembershipLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    userFetchComplete: {
       type: Boolean,
       required: true,
     },

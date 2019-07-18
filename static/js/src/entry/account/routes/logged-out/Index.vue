@@ -1,15 +1,15 @@
 <template>
   <div>
-    <nav-bar :show-route-links="false" />
+    <no-routes-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-align-center">
         <h1 class="has-xl-btm-marg">You're logged out.</h1>
         <p class="t-space-heading-m">
-          Redirecting you to texastribune.org &hellip;
+          Redirecting you to support.texastribune.org &hellip;
         </p>
       </div>
     </main>
-    <site-footer :show-route-links="false" />
+    <no-routes-site-footer />
   </div>
 </template>
 
@@ -38,6 +38,7 @@ export default {
   },
 
   methods: {
+    // eslint-disable-next-line
     async fetchData() {},
   },
 };

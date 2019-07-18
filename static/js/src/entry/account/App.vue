@@ -13,13 +13,14 @@
 <script>
 import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
+import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
 import { UnverifiedError } from './errors';
 
 export default {
   name: 'App',
 
-  components: { ErrorView, UnverifiedView },
+  components: { ErrorView, UnverifiedView, AppLoader },
 
   mixins: [contextMixin],
 

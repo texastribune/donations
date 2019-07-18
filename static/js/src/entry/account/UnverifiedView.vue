@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav-bar :show-route-links="false" />
+    <no-routes-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-linkstyle--underlined">
         <h1 class="has-xl-btm-marg">Please verify your account</h1>
@@ -18,7 +18,7 @@
         </p>
       </div>
     </main>
-    <site-footer :show-route-links="false" />
+    <no-routes-site-footer />
   </div>
 </template>
 

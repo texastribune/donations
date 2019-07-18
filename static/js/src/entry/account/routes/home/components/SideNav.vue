@@ -1,8 +1,8 @@
 <template>
   <nav class="c-side-nav">
     <transition name="has-fade">
-      <ul v-if="showRouteLinks" class="c-side-nav__outer t-size-s">
-        <li class="has-xxs-btm-marg">
+      <ul v-if="userFetchComplete" class="c-side-nav__outer t-size-s">
+        <li v-if="showHomeLink" class="has-xxs-btm-marg">
           <router-link
             exact
             class="has-text-black-off has-text-hover-gray"
@@ -78,7 +78,7 @@ export default {
   name: 'SideNav',
 
   props: {
-    showBlastLinks: {
+    showHomeLink: {
       type: Boolean,
       required: true,
     },
@@ -93,7 +93,12 @@ export default {
       required: true,
     },
 
-    showRouteLinks: {
+    showBlastLinks: {
+      type: Boolean,
+      required: true,
+    },
+
+    userFetchComplete: {
       type: Boolean,
       required: true,
     },
