@@ -72,9 +72,8 @@ export default {
   },
 
   methods: {
-    async fetchData() {
-      return true;
-    },
+    // eslint-disable-next-line
+    async fetchData() {},
   },
 };
 </script>
