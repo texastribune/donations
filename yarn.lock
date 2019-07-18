@@ -1285,13 +1285,13 @@ atob@^2.1.1:
   resolved "https://registry.yarnpkg.com/atob/-/atob-2.1.2.tgz#6d9517eb9e030d2436666651e86bd9f6f13533c9"
   integrity sha512-Wm6ukoaOGJi/73p/cl2GvLjTI5JM1k/O14isD73YML8StrH/7/lRFgmg8nICZgD3bZZvjwCGxtMOD3wWNAu8cg==
 
-auth0-js@^9.10.2:
-  version "9.11.1"
-  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-9.11.1.tgz#32fe5fc3a11b5c58096c1ce083a5361fa61ab1b9"
-  integrity sha512-0w8SuSKyJqQOQ6ft5nvlMqRdIo6mMw7zcaP35I1nF9bVzItYxqt8B1MEGDKd/N638sPuMjSendJLG+wPYmicYg==
+auth0-js@^9.11.2:
+  version "9.11.2"
+  resolved "https://registry.yarnpkg.com/auth0-js/-/auth0-js-9.11.2.tgz#8fa0324318ce3b427cfc1732a255c3049337092a"
+  integrity sha512-DP70OnHWapQ5gCwA1kgLpj9henNhwBZUKIR4Bi1pZcSD+1z5oosHvqNkRIreHaq4SGvZd9Mgus5WYsw8vTTMXg==
   dependencies:
     base64-js "^1.2.0"
-    idtoken-verifier "^1.4.0"
+    idtoken-verifier "^1.4.1"
     js-cookie "^2.2.0"
     qs "^6.4.0"
     superagent "^3.8.3"
@@ -3425,7 +3425,7 @@ icss-utils@^2.1.0:
   dependencies:
     postcss "^6.0.1"
 
-idtoken-verifier@^1.4.0:
+idtoken-verifier@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/idtoken-verifier/-/idtoken-verifier-1.4.1.tgz#032d7720fdd091830d22f694eb94b5f6644b0d3b"
   integrity sha512-BoJc00Gj37hrNlx7NYmd8uJFvvC9/FiWDKugDluP4JmgOGT/AfNlPfnRmi9fHEEqSatnIIr3WTyf0dlhHfSHnA==
