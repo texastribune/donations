@@ -7,6 +7,16 @@ import isPast from 'date-fns/is_past';
 import { MultiplePersonsError, NoPersonsError } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
+const MUTATION_TYPES = {
+  setDetails: 'SET_DETAILS',
+};
+
+const mutations = {
+  [MUTATION_TYPES.setDetails](state, details) {
+    state.details = details;
+  },
+};
+
 function addFields(data) {
   const {
     is_recurring_donor,
@@ -80,16 +90,6 @@ function addFields(data) {
 function createDefaultState() {
   return { details: {} };
 }
-
-const MUTATION_TYPES = {
-  setDetails: 'SET_DETAILS',
-};
-
-const mutations = {
-  [MUTATION_TYPES.setDetails](state, details) {
-    state.details = details;
-  },
-};
 
 const actions = {
   getOtherUser: async ({ commit, rootState }, email) => {

@@ -1,16 +1,16 @@
 /* eslint-disable no-param-reassign */
 
+const MUTATION_TYPES = {
+  setIsViewingAs: 'SET_IS_VIEWING_AS',
+  setAppIsFetching: 'SET_APP_IS_FETCHING',
+};
+
 function createDefaultState() {
   return {
     isViewingAs: false,
     appIsFetching: false,
   };
 }
-
-const MUTATION_TYPES = {
-  setIsViewingAs: 'SET_IS_VIEWING_AS',
-  setAppIsFetching: 'SET_APP_IS_FETCHING',
-};
 
 const mutations = {
   [MUTATION_TYPES.setIsViewingAs](state, isViewingAs) {
