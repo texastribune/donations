@@ -29,14 +29,13 @@ export default {
       this.setAppIsFetching(false);
     },
 
-    async undoViewAs(cb) {
+    async undoViewAs() {
       this.setAppIsFetching(true);
 
       await this.getUser();
 
       this.setIsViewingAs(false);
       this.setAppIsFetching(false);
-      cb();
     },
   },
 };
