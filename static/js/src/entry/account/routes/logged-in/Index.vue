@@ -38,9 +38,7 @@ export default {
   },
 
   methods: {
-    async fetchData() {
-      return true;
-    },
+    async fetchData() {},
   },
 };
 </script>
