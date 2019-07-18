@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { logIn, logOut } from '../utils/auth-actions';
-import tokenUserMixin from './token-user';
+import tokenUserMixin from '../store/token-user/mixin';
 import { TITLE_SUFFIX } from '../constants';
 import { InvalidRouteError, UnverifiedError } from '../errors';
 

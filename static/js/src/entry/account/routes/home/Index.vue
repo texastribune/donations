@@ -22,7 +22,7 @@
 
 <script>
 import routeMixin from '../../mixins/route';
-import userMixin from './mixins/user';
+import userMixin from '../../store/user/mixin';
 import SideNav from './containers/SideNavContainer.vue';
 
 const ViewAs = () =>

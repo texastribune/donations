@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import tokenUser from './mixins/token-user';
+import tokenUser from './store/token-user/mixin';
 
 export default {
   name: 'UnverifiedView',

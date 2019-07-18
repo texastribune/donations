@@ -13,7 +13,7 @@
 <script>
 import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
-import contextMixin from './mixins/context';
+import contextMixin from './store/context/mixin';
 import { UnverifiedError } from './errors';
 
 export default {

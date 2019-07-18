@@ -11,7 +11,7 @@
 /* eslint-disable camelcase */
 
 import SiteFooter from '../components/SiteFooter.vue';
-import userMixin from '../routes/home/mixins/user';
+import userMixin from '../store/user/mixin';
 
 export default {
   name: 'SiteFooterContainer',

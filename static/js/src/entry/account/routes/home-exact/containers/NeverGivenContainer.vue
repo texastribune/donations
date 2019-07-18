@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import userMixin from '../../home/mixins/user';
+import userMixin from '../../../store/user/mixin';
 
 const NeverGiven = () =>
   import(/* webpackChunkName: "never-given-summary" */ '../components/NeverGiven.vue');

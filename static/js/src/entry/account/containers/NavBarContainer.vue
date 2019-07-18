@@ -11,8 +11,8 @@
 /* eslint-disable camelcase */
 
 import NavBar from '../components/NavBar.vue';
-import userMixin from '../routes/home/mixins/user';
-import tokenUserMixin from '../mixins/token-user';
+import userMixin from '../store/user/mixin';
+import tokenUserMixin from '../store/token-user/mixin';
 
 export default {
   name: 'NavBarContainer',

@@ -20,7 +20,7 @@
 /* eslint-disable camelcase */
 
 import routeMixin from '../../mixins/route';
-import userMixin from '../home/mixins/user';
+import userMixin from '../../store/user/mixin';
 import Help from '../../components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import BlastPayments from './containers/BlastPaymentsContainer.vue';

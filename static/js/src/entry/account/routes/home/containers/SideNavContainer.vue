@@ -11,7 +11,7 @@
 /* eslint-disable camelcase */
 
 import SideNav from '../components/SideNav.vue';
-import userMixin from '../mixins/user';
+import userMixin from '../../../store/user/mixin';
 
 export default {
   name: 'SideNavContainer',

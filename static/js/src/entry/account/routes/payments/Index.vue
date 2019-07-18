@@ -23,7 +23,7 @@
 /* eslint-disable camelcase */
 
 import routeMixin from '../../mixins/route';
-import userMixin from '../home/mixins/user';
+import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
