@@ -2,7 +2,7 @@
   <user-nav-container>
     <template v-slot="slotProps">
       <nav-bar
-        :user-fetch-complete="slotProps.userFetchComplete"
+        :user-is-fetching="slotProps.userIsFetching"
         :show-home-link="slotProps.showHomeLink"
         :show-blast-link="slotProps.showBlastLinks"
         :show-membership-link="slotProps.showMembershipLink"

@@ -22,10 +22,7 @@
         >
           Your account
         </h4>
-        <ul
-          v-if="userFetchComplete"
-          class="c-site-footer__links has-text-white"
-        >
+        <ul v-if="!userIsFetching" class="c-site-footer__links has-text-white">
           <li v-if="showHomeLink">
             <router-link
               ga-on="click"
@@ -170,7 +167,7 @@ export default {
       required: true,
     },
 
-    userFetchComplete: {
+    userIsFetching: {
       type: Boolean,
       required: true,
     },
