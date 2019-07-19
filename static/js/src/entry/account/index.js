@@ -4,6 +4,7 @@ import Vue from 'vue';
 import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
+import VueMeta from 'vue-meta';
 
 import {
   SENTRY_DSN,
@@ -38,10 +39,12 @@ import Icon from './components/Icon.vue';
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
+import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
+import { UnverifiedError } from './errors';
 
 Vue.use(VueRouter);
-
+Vue.use(VueMeta);
 Vue.mixin({
   data() {
     return {
@@ -89,8 +92,28 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
 
+  // if (store.state.tokenUser.accessToken) refreshToken();
+
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setAppIsFetching', true);
+
+    /* const isProtected = to.matched.filter(({ isProt }) => isProt).length > 0;
+    const {
+      accessToken,
+      isVerified,
+      error: tokenUserError,
+    } = store.state.tokenUser;
+
+    if (isProtected) {
+      if (tokenUserError) {
+        throw tokenUserError;
+      } else if (!isVerified) {
+        throw new UnverifiedError();
+      } else if (!accessToken) {
+        logIn();
+      }
+    } */
+
     next();
   });
 
@@ -100,7 +123,4 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
 
   const instance = new Vue({ ...App, router, store });
   instance.$mount('#account-attach');
-
-  const { accessToken } = store.state.tokenUser;
-  if (accessToken) refreshToken();
 });

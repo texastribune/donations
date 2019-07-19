@@ -22,24 +22,9 @@ export default {
 
   mixins: [routeMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        meetsCriteria: true,
-        title: 'Logged Out',
-      };
-    },
-  },
-
   mounted() {
     clearFlag();
     redirectAfterLogOut();
-  },
-
-  methods: {
-    // eslint-disable-next-line
-    async fetchData() {},
   },
 };
 </script>

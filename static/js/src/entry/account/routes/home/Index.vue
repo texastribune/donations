@@ -44,16 +44,6 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: false,
-        isProtected: true,
-        title: null,
-      };
-    },
-  },
-
   methods: {
     fetchData() {
       return this.getUser();

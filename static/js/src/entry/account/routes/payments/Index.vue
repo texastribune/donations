@@ -46,16 +46,6 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'Donation History',
-      };
-    },
-  },
-
   methods: {
     async fetchData() {
       const { never_given } = this.user;

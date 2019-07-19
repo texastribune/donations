@@ -33,16 +33,6 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'The Blast',
-      };
-    },
-  },
-
   methods: {
     async fetchData() {
       const {

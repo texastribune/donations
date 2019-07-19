@@ -22,24 +22,9 @@ export default {
 
   mixins: [routeMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'Logged In',
-      };
-    },
-  },
-
   mounted() {
     setFlag();
     redirectAfterLogIn();
-  },
-
-  methods: {
-    // eslint-disable-next-line
-    async fetchData() {},
   },
 };
 </script>

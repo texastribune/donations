@@ -37,5 +37,10 @@ export default {
       this.error = err;
     }
   },
+
+  metaInfo: {
+    title: 'Loading ...',
+    titleTemplate: '%s | Your Texas Tribune Account',
+  },
 };
 </script>

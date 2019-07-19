@@ -51,16 +51,6 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'Membership',
-      };
-    },
-  },
-
   methods: {
     async fetchData() {
       const {

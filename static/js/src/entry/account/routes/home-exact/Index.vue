@@ -60,20 +60,5 @@ export default {
   },
 
   mixins: [routeMixin],
-
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'Home',
-      };
-    },
-  },
-
-  methods: {
-    // eslint-disable-next-line
-    async fetchData() {},
-  },
 };
 </script>
