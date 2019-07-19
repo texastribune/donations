@@ -41,6 +41,15 @@ sf = SalesforceConnectionSubClass()
 from pprint import pprint
 
 
+def test_setattr():
+    obj = Opportunity()
+    obj.foo = "bar"
+    assert obj.tainted == set()
+    obj.foo = "baz"
+    assert "foo" in obj.tainted
+    assert len(obj.tainted) == 1
+
+
 def test__clean():
     form = {
         "a": "None",
@@ -85,7 +94,41 @@ class Response(object):
 def test_get_schema():
 
     Opportunity.get_schema()
-    print(Opportunity.attr_to_field_map)
+    assert Opportunity.attr_to_field_map
+    assert Opportunity.field_to_attr_map
+
+
+def test_deserialize():
+    obj = SalesforceObject()
+    response = {"foo": "bar", "baz": "quux"}
+    obj.deserialize(response)
+    assert obj.foo == "bar"
+    assert obj.baz == "quux"
+
+
+def test_deserialize_group():
+    response1 = {"foo": "bar"}
+    response2 = {"foo": "bar"}
+    objects = SalesforceObject.deserialize_group([response1, response2])
+    assert objects[0].foo == "bar"
+    assert objects[1].foo == "bar"
+
+
+def test_getattr():
+    obj = SalesforceObject()
+    SalesforceObject.attr_to_field_map, SalesforceObject.field_to_attr_map = obj.make_maps(
+        ["foo", "bar", "baz"]
+    )
+    with pytest.raises(AttributeError):
+        obj.quux
+    with pytest.raises(AttributeError):
+        obj.foo  # fails because there's no 'id' attribune
+    obj2 = SalesforceObject()
+    response = {"id": "a0wS0000002hugV", "baz": "quux"}
+    obj2.deserialize(response)
+    assert obj2.baz == "quux"
+    with pytest.raises(AttributeError):
+        obj2.fizzle  # fails because field doesn't exist
 
 
 def test_check_response():

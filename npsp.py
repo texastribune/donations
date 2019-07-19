@@ -1,4 +1,4 @@
-import builtins
+from typing import List
 import csv
 import re
 import json
@@ -302,6 +302,7 @@ class SalesforceObject(object):
         raise NotImplementedError
 
     def deserialize(self, response):
+        # given an SF response (JSON/dict) turn it into an object
         cls = type(self)
         cls.attr_to_field_map, cls.field_to_attr_map = cls.make_maps(response.keys())
         for field, value in response.items():
@@ -316,7 +317,6 @@ class SalesforceObject(object):
     @classmethod
     def deserialize_group(cls, response):
         group = list()
-        # TODO make this a list comprehension
         for item in response:
             obj = cls()
             obj.deserialize(item)
@@ -357,6 +357,7 @@ class SalesforceObject(object):
         #    have to test if it exists?
         name = f"{type(self).__name__}.{attr}"
         log.debug(f"Getting {attr} from {type(self).__name__}")
+
         if (
             "attr_to_field_map" in type(self).__dict__
             and attr not in self.attr_to_field_map.keys()
