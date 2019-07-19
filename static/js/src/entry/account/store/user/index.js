@@ -4,7 +4,6 @@ import axios from 'axios';
 import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
-import { MultiplePersonsError, NoPersonsError } from '../../errors';
 import { PORTAL_API_URL } from '../../constants';
 
 const MUTATION_TYPES = {
@@ -98,9 +97,6 @@ const actions = {
       params: { email },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-
-    if (!data.length) throw new NoPersonsError();
-    if (data.length > 1) throw new MultiplePersonsError();
 
     commit(MUTATION_TYPES.setDetails, addFields(data[0]));
   },
