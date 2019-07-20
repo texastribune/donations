@@ -2,10 +2,7 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState('user', {
-      user: 'details',
-      userIsFetching: 'isFetching',
-    }),
+    ...mapState('user', { user: 'details' }),
   },
 
   methods: {

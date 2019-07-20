@@ -8,7 +8,7 @@
             <user-nav-container>
               <template v-slot="slotProps">
                 <side-nav
-                  :user-is-fetching="slotProps.userIsFetching"
+                  :user-fetch-complete="slotProps.userFetchComplete"
                   :show-home-link="slotProps.showHomeLink"
                   :show-blast-links="slotProps.showBlastLinks"
                   :show-membership-link="slotProps.showMembershipLink"
@@ -43,6 +43,10 @@ export default {
   components: { UserNavContainer, SideNav, ViewAs },
 
   mixins: [routeMixin, userMixin],
+
+  data() {
+    return { title: null };
+  },
 
   methods: {
     fetchData() {

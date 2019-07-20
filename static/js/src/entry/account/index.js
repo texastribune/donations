@@ -4,7 +4,6 @@ import Vue from 'vue';
 import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
-import VueMeta from 'vue-meta';
 
 import {
   SENTRY_DSN,
@@ -44,7 +43,6 @@ import logError from './utils/log-error';
 import { UnverifiedError } from './errors';
 
 Vue.use(VueRouter);
-Vue.use(VueMeta);
 Vue.mixin({
   data() {
     return {
@@ -92,29 +90,35 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
 
-  // if (store.state.tokenUser.accessToken) refreshToken();
+  if (store.state.tokenUser.accessToken) refreshToken();
 
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setAppIsFetching', true);
 
-    /* const isProtected = to.matched.filter(({ isProt }) => isProt).length > 0;
     const {
       accessToken,
       isVerified,
       error: tokenUserError,
     } = store.state.tokenUser;
 
-    if (isProtected) {
+    if (to.meta.isProtected) {
       if (tokenUserError) {
-        throw tokenUserError;
-      } else if (!isVerified) {
-        throw new UnverifiedError();
-      } else if (!accessToken) {
-        logIn();
+        logError(tokenUserError);
+        store.dispatch('context/setError', tokenUserError);
+        return next();
       }
-    } */
+      if (!accessToken) {
+        return logIn();
+      }
+      if (!isVerified) {
+        const err = new UnverifiedError();
+        logError(err);
+        store.dispatch('context/setError', err);
+        return next();
+      }
+    }
 
-    next();
+    return next();
   });
 
   router.afterEach(() => {

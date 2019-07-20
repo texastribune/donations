@@ -2,7 +2,7 @@
   <div>
     <slot
       show-home-link
-      :user-is-fetching="userIsFetching"
+      :user-fetch-complete="userFetchComplete"
       :show-blast-links="showBlastLinks"
       :show-membership-link="showMembershipLink"
       :show-payments-link="showPaymentsLink"
@@ -23,6 +23,10 @@ export default {
   mixins: [userMixin, tokenUserMixin],
 
   computed: {
+    userFetchComplete() {
+      return Object.keys(this.user).length > 0;
+    },
+
     isLoggedIn() {
       return !!this.accessToken;
     },

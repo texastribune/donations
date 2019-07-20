@@ -1,7 +1,7 @@
 <template>
   <nav class="c-side-nav">
     <transition name="has-fade">
-      <ul v-if="!userIsFetching" class="c-side-nav__outer t-size-s">
+      <ul v-if="userFetchComplete" class="c-side-nav__outer t-size-s">
         <li v-if="showHomeLink" class="has-xxs-btm-marg">
           <router-link
             exact
@@ -98,7 +98,7 @@ export default {
       required: true,
     },
 
-    userIsFetching: {
+    userFetchComplete: {
       type: Boolean,
       required: true,
     },

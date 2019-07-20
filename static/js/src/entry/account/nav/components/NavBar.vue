@@ -9,7 +9,10 @@
       </a>
 
       <div class="c-navbar__content">
-        <ul v-if="!userIsFetching" class="c-navbar__items is-hidden-until-bp-l">
+        <ul
+          v-if="userFetchComplete"
+          class="c-navbar__items is-hidden-until-bp-l"
+        >
           <li
             v-if="showHomeLink"
             class="c-navbar__item c-navbar__item--space-right"
@@ -103,7 +106,7 @@
     </div>
 
     <div v-if="showDropdown" class="c-navbar__dropdown is-hidden-from-bp-l">
-      <ul v-if="!userIsFetching" class="c-navbar__dropdown-items">
+      <ul v-if="userFetchComplete" class="c-navbar__dropdown-items">
         <li v-if="showHomeLink" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
@@ -189,7 +192,7 @@ export default {
       required: true,
     },
 
-    userIsFetching: {
+    userFetchComplete: {
       type: Boolean,
       required: true,
     },

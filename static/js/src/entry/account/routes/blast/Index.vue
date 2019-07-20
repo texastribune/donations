@@ -33,6 +33,10 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
+  data() {
+    return { title: 'The Blast' };
+  },
+
   methods: {
     async fetchData() {
       const {

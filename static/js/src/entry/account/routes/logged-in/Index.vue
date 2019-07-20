@@ -22,6 +22,10 @@ export default {
 
   mixins: [routeMixin],
 
+  data() {
+    return { title: 'Logged In' };
+  },
+
   mounted() {
     setFlag();
     redirectAfterLogIn();

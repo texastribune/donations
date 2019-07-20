@@ -51,6 +51,10 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
+  data() {
+    return { title: 'Membership' };
+  },
+
   methods: {
     async fetchData() {
       const {

@@ -60,5 +60,9 @@ export default {
   },
 
   mixins: [routeMixin],
+
+  data() {
+    return { title: 'Home' };
+  },
 };
 </script>

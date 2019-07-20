@@ -1,11 +1,11 @@
 <template>
   <div>
     <transition name="has-fade">
-      <app-loader v-show="appIsFetching" />
+      <app-loader v-show="showLoader" />
     </transition>
 
-    <error-view v-if="error" />
-    <unverified-view v-else-if="isUnverified" />
+    <unverified-view v-if="showUnverified" />
+    <error-view v-else-if="showError" />
     <router-view v-else :parent-route-is-fetching="false" />
   </div>
 </template>
@@ -16,6 +16,7 @@ import UnverifiedView from './UnverifiedView.vue';
 import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
 import { UnverifiedError } from './errors';
+import { TITLE_SUFFIX } from './constants';
 
 export default {
   name: 'App',
@@ -24,23 +25,40 @@ export default {
 
   mixins: [contextMixin],
 
-  data() {
-    return { error: null, isUnverified: false };
+  computed: {
+    showLoader() {
+      return this.appIsFetching && !this.error;
+    },
+
+    showUnverified() {
+      return this.error instanceof UnverifiedError;
+    },
+
+    showError() {
+      return !!this.error;
+    },
+  },
+
+  watch: {
+    error(newError) {
+      if (newError) {
+        if (newError instanceof UnverifiedError) {
+          this.setTitle('Unverified email address');
+        } else {
+          this.setTitle('Error');
+        }
+      }
+    },
+  },
+
+  methods: {
+    setTitle(title) {
+      document.title = `${title} ${TITLE_SUFFIX}`;
+    },
   },
 
   errorCaptured(err) {
-    this.setAppIsFetching(false);
-
-    if (err instanceof UnverifiedError) {
-      this.isUnverified = true;
-    } else {
-      this.error = err;
-    }
-  },
-
-  metaInfo: {
-    title: 'Loading ...',
-    titleTemplate: '%s | Your Texas Tribune Account',
+    this.setError(err);
   },
 };
 </script>

@@ -46,6 +46,10 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
+  data() {
+    return { title: 'Donation History' };
+  },
+
   methods: {
     async fetchData() {
       const { never_given } = this.user;

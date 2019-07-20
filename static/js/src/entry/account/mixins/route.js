@@ -1,11 +1,11 @@
-/* eslint-disable camelcase */
-
 import { logOut } from '../utils/auth-actions';
 import tokenUserMixin from '../store/token-user/mixin';
+import contextMixin from '../store/context/mixin';
 import { InvalidRouteError } from '../errors';
+import { TITLE_SUFFIX } from '../constants';
 
 export default {
-  mixins: [tokenUserMixin],
+  mixins: [tokenUserMixin, contextMixin],
 
   props: {
     parentRouteIsFetching: {
@@ -20,7 +20,6 @@ export default {
 
   async created() {
     if (!this.parentRouteIsFetching) {
-      console.log('created', this.$route);
       // top level route; do data fetch immediately
       // because there's no parent fetch to wait on
       await this.doRouteFetch();
@@ -28,6 +27,10 @@ export default {
   },
 
   methods: {
+    setTitle() {
+      document.title = `${this.title} ${TITLE_SUFFIX}`;
+    },
+
     logPageView() {
       window.dataLayer.push({
         event: 'userPortalPageview',
@@ -37,22 +40,24 @@ export default {
     },
 
     async doRouteFetch() {
-      console.log('hi');
+      this.routeIsFetching = true;
+
       try {
-        this.routeIsFetching = true;
+        await this.fetchData();
 
-        await this.fetchData(this.$route);
-
-        if (this.$route.meta.isExact) this.logPageView();
+        if (this.title) {
+          this.setTitle();
+          this.logPageView();
+        }
 
         this.routeIsFetching = false;
       } catch (err) {
-        // you're on a route that you're not supposed to be on
-        // like the Blast page if you're not a Blast subscriber
         if (err instanceof InvalidRouteError) {
           this.$router.push({ name: 'home' });
         } else {
-          throw err;
+          // TODO: throw to errorCaptured in <App />
+          this.setError(err);
+          this.logError(err);
         }
       }
     },
@@ -89,15 +94,8 @@ export default {
       // a data fetch, wait for the parent fetch to complete
       // in case the child's fetch depends on data from it
       if (oldParentIsFetching && !newParentIsFetching) {
-        console.log('parent', this.$route);
         await this.doRouteFetch();
       }
     },
-  },
-
-  metaInfo() {
-    return {
-      title: this.$route.meta.title,
-    };
   },
 };
