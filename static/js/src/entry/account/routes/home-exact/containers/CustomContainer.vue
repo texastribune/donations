@@ -5,7 +5,7 @@
 <script>
 /* eslint-disable camelcase */
 
-import userMixin from '../../home/mixins/user';
+import userMixin from '../../../store/user/mixin';
 
 const Custom = () =>
   import(/* webpackChunkName: "custom-summary" */ '../components/Custom.vue');

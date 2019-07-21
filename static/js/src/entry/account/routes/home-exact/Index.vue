@@ -61,20 +61,8 @@ export default {
 
   mixins: [routeMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'Home',
-      };
-    },
-  },
-
-  methods: {
-    async fetchData() {
-      return true;
-    },
+  data() {
+    return { title: 'Home' };
   },
 };
 </script>

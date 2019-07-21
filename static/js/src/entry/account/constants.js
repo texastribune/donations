@@ -1,5 +1,3 @@
-export const LOGIN_REDIRECT_KEY = 'postLoginRedirect';
-export const LOGOUT_REDIRECT_KEY = 'postLogoutRedirect';
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
 export const READ_ONLY_WELCOME_MESSAGE_KEY = 'readOnlyWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
@@ -8,13 +6,13 @@ export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignI
   process.env.PORTAL_CAMPAIGN_ID
 }#join-today`;
 export const CIRCLE_URL = '/circle';
-export const AUTH_AUDIENCE = process.env.AUTH0_AUDIENCE;
 export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
-export const AUTH_CLIENT_ID = process.env.AUTH0_CLIENT_ID;
-export const AUTH_LOGOUT_COMPLETE_URL = `${
+export const AUTH_PORTAL_AUDIENCE = process.env.AUTH0_PORTAL_AUDIENCE;
+export const AUTH_PORTAL_CLIENT_ID = process.env.AUTH0_PORTAL_CLIENT_ID;
+export const AUTH_PORTAL_LOGOUT_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-out/`;
-export const AUTH_LOGIN_COMPLETE_URL = `${
+export const AUTH_PORTAL_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-in/`;
 export const TITLE_SUFFIX = ' | Your Texas Tribune Account';

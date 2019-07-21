@@ -14,8 +14,8 @@
 import { mapState } from 'vuex';
 
 import ContactInfo from '../components/ContactInfo.vue';
-import tokenUserMixin from '../../../mixins/token-user';
-import userMixin from '../../home/mixins/user';
+import tokenUserMixin from '../../../store/token-user/mixin';
+import userMixin from '../../../store/user/mixin';
 import { resetPassword } from '../../../utils/auth-actions';
 
 export default {

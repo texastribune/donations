@@ -7,6 +7,14 @@ import auth from '../../utils/auth';
 import { setFlag, clearFlag, hasLoggedInFlag } from '../../utils/auth-actions';
 import { Auth0Error } from '../../errors';
 
+const MUTATION_TYPES = {
+  setAccessToken: 'SET_ACCESS_TOKEN',
+  setIsVerified: 'SET_IS_VERIFIED',
+  setCanViewAs: 'SET_CAN_VIEW_AS',
+  setDetails: 'SET_DETAILS',
+  setError: 'SET_ERROR',
+};
+
 function createDefaultState() {
   return {
     accessToken: '',
@@ -16,14 +24,6 @@ function createDefaultState() {
     details: {},
   };
 }
-
-const MUTATION_TYPES = {
-  setAccessToken: 'SET_ACCESS_TOKEN',
-  setIsVerified: 'SET_IS_VERIFIED',
-  setCanViewAs: 'SET_CAN_VIEW_AS',
-  setDetails: 'SET_DETAILS',
-  setError: 'SET_ERROR',
-};
 
 const mutations = {
   [MUTATION_TYPES.setAccessToken](state, accessToken) {

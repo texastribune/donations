@@ -1,13 +1,9 @@
 /* eslint-disable no-param-reassign, camelcase */
 
-import axios from 'axios';
 import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
-import { MultiplePersonsError, NoPersonsError } from '../../errors';
-import { PORTAL_API_URL } from '../../constants';
-
-function addFields(data) {
+export default function addFields(data) {
   const {
     is_recurring_donor,
     membership_expiration_date,
@@ -76,49 +72,3 @@ function addFields(data) {
     membership_level: membershipLevel,
   };
 }
-
-function createDefaultState() {
-  return { details: {} };
-}
-
-const MUTATION_TYPES = {
-  setDetails: 'SET_DETAILS',
-};
-
-const mutations = {
-  [MUTATION_TYPES.setDetails](state, details) {
-    state.details = details;
-  },
-};
-
-const actions = {
-  getOtherUser: async ({ commit, rootState }, email) => {
-    const { accessToken } = rootState.tokenUser;
-    const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
-      params: { email },
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-
-    if (!data.length) throw new NoPersonsError();
-    if (data.length > 1) throw new MultiplePersonsError();
-
-    commit(MUTATION_TYPES.setDetails, addFields(data[0]));
-  },
-
-  getUser: async ({ commit, rootState }) => {
-    const { accessToken } = rootState.tokenUser;
-    const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-
-    commit(MUTATION_TYPES.setDetails, addFields(data));
-  },
-};
-
-export default {
-  namespaced: true,
-  state: createDefaultState(),
-  mutations,
-  actions,
-  getters: {},
-};
