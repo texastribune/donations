@@ -1,4 +1,5 @@
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
+export const CHANGED_EMAIL_FLAG_KEY = 'changedEmail';
 export const READ_ONLY_WELCOME_MESSAGE_KEY = 'readOnlyWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;

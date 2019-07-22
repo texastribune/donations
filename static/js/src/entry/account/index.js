@@ -4,6 +4,7 @@ import Vue from 'vue';
 import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
+import VeeValidate, { Validator } from 'vee-validate';
 
 import {
   SENTRY_DSN,
@@ -42,7 +43,33 @@ import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
 import { UnverifiedError } from './errors';
 
+Validator.localize('en', {
+  custom: {
+    email: {
+      required: 'Email address is required',
+    },
+
+    confirmedEmail: {
+      required: 'Email addresses do not match',
+      is: 'Email addresses do not match',
+    },
+
+    firstName: {
+      required: 'First name is required',
+    },
+
+    lastName: {
+      required: 'Last name is required',
+    },
+
+    zip: {
+      required: 'ZIP code is required',
+    },
+  },
+});
+
 Vue.use(VueRouter);
+Vue.use(VeeValidate);
 Vue.mixin({
   data() {
     return {

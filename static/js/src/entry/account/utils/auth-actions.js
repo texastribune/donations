@@ -5,6 +5,7 @@ import {
   AUTH_PORTAL_LOGOUT_COMPLETE_URL,
   NON_STAFF_CONNECTION,
 } from '../constants';
+import { hasChangedEmailFlag } from './change-email';
 
 export const clearFlag = () => {
   localStorage.removeItem(LOGGED_IN_FLAG_KEY);
@@ -44,6 +45,10 @@ export const redirectAfterLogIn = () => {
 
 export const redirectAfterLogOut = () => {
   setTimeout(() => {
-    window.location.href = '/donate';
+    if (hasChangedEmailFlag) {
+      window.location.href = '/account/changed-email/';
+    } else {
+      window.location.href = '/donate';
+    }
   }, 1800);
 };
