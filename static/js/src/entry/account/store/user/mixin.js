@@ -6,6 +6,12 @@ export default {
   },
 
   methods: {
-    ...mapActions('user', ['getUser', 'getOtherUser']),
+    ...mapActions('user', [
+      'getUser',
+      'getOtherUser',
+      'updateUser',
+      'updateIdentity',
+      'linkIdentity',
+    ]),
   },
 };

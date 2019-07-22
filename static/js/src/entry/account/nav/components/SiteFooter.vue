@@ -37,6 +37,11 @@
               Account Overview
             </router-link>
           </li>
+          <li v-if="showEditContactInfoLink">
+            <router-link :to="{ name: 'edit-contact-info' }">
+              Edit Contact Info
+            </router-link>
+          </li>
           <li v-if="showMembershipLink">
             <router-link
               ga-on="click"
@@ -151,6 +156,11 @@ export default {
 
   props: {
     showHomeLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showEditContactInfoLink: {
       type: Boolean,
       required: true,
     },

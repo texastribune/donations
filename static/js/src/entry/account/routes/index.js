@@ -2,6 +2,8 @@ import Home from './home/Index.vue';
 
 const HomeExact = () =>
   import(/* webpackChunkName: "home-exact-route" */ './home-exact/Index.vue');
+const EditContactInfo = () =>
+  import(/* webpackChunkName: "edit-contact-info-route" */ './edit-contact-info/Index.vue');
 const Membership = () =>
   import(/* webpackChunkName: "membership-route" */ './membership/Index.vue');
 const Payments = () =>
@@ -40,6 +42,13 @@ const routes = [
         path: '',
         name: 'home',
         component: HomeExact,
+        pathToRegexpOptions: { strict: true },
+        meta: { isProtected: true },
+      },
+      {
+        path: 'edit-contact-info/',
+        name: 'edit-contact-info',
+        component: EditContactInfo,
         pathToRegexpOptions: { strict: true },
         meta: { isProtected: true },
       },

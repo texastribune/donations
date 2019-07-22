@@ -2,8 +2,8 @@
   <user-nav-container>
     <template v-slot="slotProps">
       <nav-bar
+        show-home-link
         :user-fetch-complete="slotProps.userFetchComplete"
-        :show-home-link="slotProps.showHomeLink"
         :show-blast-link="slotProps.showBlastLinks"
         :show-membership-link="slotProps.showMembershipLink"
         :is-logged-in="slotProps.isLoggedIn"

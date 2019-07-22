@@ -1,7 +1,6 @@
 <template>
   <div>
     <slot
-      show-home-link
       :user-fetch-complete="userFetchComplete"
       :show-blast-links="showBlastLinks"
       :show-membership-link="showMembershipLink"

@@ -16,6 +16,16 @@
             Account Overview
           </router-link>
         </li>
+        <li v-if="showEditContactInfoLink" class="has-xxs-btm-marg">
+          <router-link
+            exact
+            class="has-text-black-off has-text-hover-gray"
+            active-class="is-active"
+            :to="{ name: 'edit-contact-info' }"
+          >
+            Profile Settings
+          </router-link>
+        </li>
         <li v-if="showMembershipLink" class="has-xxs-btm-marg">
           <router-link
             class="has-text-black-off has-text-hover-gray"
@@ -79,6 +89,11 @@ export default {
 
   props: {
     showHomeLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showEditContactInfoLink: {
       type: Boolean,
       required: true,
     },
