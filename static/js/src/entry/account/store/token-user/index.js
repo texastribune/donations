@@ -4,7 +4,11 @@ import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
 import auth from '../../utils/auth';
-import { setFlag, clearFlag, hasLoggedInFlag } from '../../utils/auth-actions';
+import {
+  setLoggedInFlag,
+  clearLoggedInFlag,
+  getLoggedInFlag,
+} from '../../utils/storage';
 import { Auth0Error } from '../../errors';
 
 const MUTATION_TYPES = {
@@ -50,7 +54,7 @@ const mutations = {
 const actions = {
   getTokenUser: ({ commit }) =>
     new Promise(resolve => {
-      if (hasLoggedInFlag()) {
+      if (getLoggedInFlag() === 'true') {
         auth.checkSession(
           { responseType: 'token id_token' },
           (err, authResult) => {
@@ -69,7 +73,7 @@ const actions = {
                 commit(MUTATION_TYPES.setError, 'Auth0 unknown 403 error');
               }
               commit(MUTATION_TYPES.setAccessToken, '');
-              clearFlag();
+              clearLoggedInFlag();
               resolve();
             } else {
               const { email_verified } = authResult.idTokenPayload;
@@ -83,7 +87,7 @@ const actions = {
               commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
               commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
               setExtra('auth', authResult.idTokenPayload);
-              setFlag();
+              setLoggedInFlag();
               resolve();
             }
           }

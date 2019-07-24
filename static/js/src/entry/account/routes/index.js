@@ -16,6 +16,8 @@ const LoggedIn = () =>
   import(/* webpackChunkName: "logged-in-route" */ './logged-in/Index.vue');
 const LoggedOut = () =>
   import(/* webpackChunkName: "logged-out-route" */ './logged-out/Index.vue');
+const ChangedEmail = () =>
+  import(/* webpackChunkName: "changed-email-route" */ './changed-email/Index.vue');
 
 const routes = [
   {
@@ -29,6 +31,13 @@ const routes = [
     path: '/logged-out/',
     name: 'logged-out',
     component: LoggedOut,
+    pathToRegexpOptions: { strict: true },
+    meta: { isProtected: false },
+  },
+  {
+    path: '/changed-email/',
+    name: 'changed-email',
+    component: ChangedEmail,
     pathToRegexpOptions: { strict: true },
     meta: { isProtected: false },
   },

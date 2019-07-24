@@ -1,33 +1,30 @@
 import auth from './auth';
 import {
-  LOGGED_IN_FLAG_KEY,
   AUTH_PORTAL_CLIENT_ID,
   AUTH_PORTAL_LOGOUT_COMPLETE_URL,
   NON_STAFF_CONNECTION,
 } from '../constants';
-import { hasChangedEmailFlag } from './change-email';
-
-export const clearFlag = () => {
-  localStorage.removeItem(LOGGED_IN_FLAG_KEY);
-};
-
-export const setFlag = () => {
-  localStorage.setItem(LOGGED_IN_FLAG_KEY, true);
-};
+import {
+  setPostLogOutRedirect,
+  getPostLogOutRedirect,
+  clearPostLogOutRedirect,
+  setPostLogInRedirect,
+  getPostLogInRedirect,
+  clearPostLogInRedirect,
+} from './storage';
 
 export const logIn = () => {
+  setPostLogInRedirect();
   auth.authorize({ initial_screen: 'login' });
 };
 
 export const logOut = () => {
+  setPostLogOutRedirect();
   auth.logout({
     clientID: AUTH_PORTAL_CLIENT_ID,
     returnTo: AUTH_PORTAL_LOGOUT_COMPLETE_URL,
   });
 };
-
-export const hasLoggedInFlag = () =>
-  localStorage.getItem(LOGGED_IN_FLAG_KEY) === 'true';
 
 export const register = () => {
   auth.authorize({ initial_screen: 'signUp' });
@@ -39,16 +36,16 @@ export const resetPassword = (email, cb) => {
 
 export const redirectAfterLogIn = () => {
   setTimeout(() => {
-    window.location.href = '/account/';
+    const url = getPostLogInRedirect();
+    clearPostLogInRedirect();
+    window.location.href = url || '/account/';
   }, 1800);
 };
 
 export const redirectAfterLogOut = () => {
   setTimeout(() => {
-    if (hasChangedEmailFlag) {
-      window.location.href = '/account/changed-email/';
-    } else {
-      window.location.href = '/donate';
-    }
+    const url = getPostLogOutRedirect();
+    clearPostLogOutRedirect();
+    window.location.href = url || '/donate';
   }, 1800);
 };

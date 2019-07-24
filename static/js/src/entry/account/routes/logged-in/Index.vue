@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import { setFlag, redirectAfterLogIn } from '../../utils/auth-actions';
+import { redirectAfterLogIn } from '../../utils/auth-actions';
+import { setLoggedInFlag } from '../../utils/storage';
 import routeMixin from '../../mixins/route';
 
 export default {
@@ -27,7 +28,7 @@ export default {
   },
 
   mounted() {
-    setFlag();
+    setLoggedInFlag();
     redirectAfterLogIn();
   },
 };

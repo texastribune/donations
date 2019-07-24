@@ -81,7 +81,7 @@
         announcements and membership opportunities.
       </label>
     </div>
-    <input :disabled="invalid" type="submit" value="Submit" />
+    <submit :disabled="invalid" />
   </validation-observer>
 </template>
 
@@ -89,11 +89,12 @@
 import { ValidationObserver, ValidationProvider } from 'vee-validate';
 
 import TextInput from '../../../components/TextInput.vue';
+import Submit from '../../../components/Submit.vue';
 
 export default {
   name: 'ContactInfoForm',
 
-  components: { TextInput, ValidationObserver, ValidationProvider },
+  components: { TextInput, Submit, ValidationObserver, ValidationProvider },
 
   props: {
     initialValues: {
