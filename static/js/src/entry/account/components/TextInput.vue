@@ -13,6 +13,7 @@
     <ul v-if="errorMessages.length">
       <li v-for="message in errorMessages" :key="message">{{ message }}</li>
     </ul>
+    <slot></slot>
   </div>
 </template>
 

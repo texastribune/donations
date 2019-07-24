@@ -11,7 +11,7 @@
       immediate
     >
       <text-input
-        v-model="firstName"
+        v-model="formFields.firstName"
         :error-messages="errors"
         label="First name"
         name="firstName"
@@ -24,7 +24,7 @@
       immediate
     >
       <text-input
-        v-model="lastName"
+        v-model="formFields.lastName"
         :error-messages="errors"
         label="Last name"
         name="lastName"
@@ -38,11 +38,23 @@
       immediate
     >
       <text-input
-        v-model="email"
+        v-model="formFields.email"
         :error-messages="errors"
         label="Email"
         name="email"
-      />
+      >
+        <p v-show="showEmailConfirmation" class="has-text-error">
+          <strong>Are you sure?</strong> Changing this will log you out of your
+          account, and you won't be able to log back in with
+          <strong>{{ originalValues.email }}</strong
+          >. Changing your account email will not affect your email
+          subscriptions.
+        </p>
+        <p v-show="!showEmailConfirmation">
+          Notice: This email is for logging into your account. Changing it will
+          not affect your email newsletters.
+        </p>
+      </text-input>
     </validation-provider>
     <validation-provider
       v-if="showEmailConfirmation"
@@ -52,7 +64,7 @@
       immediate
     >
       <text-input
-        v-model="confirmedEmail"
+        v-model="formFields.confirmedEmail"
         :error-messages="errors"
         label="Type your email again to confirm the change"
         name="confirmedEmail"
@@ -66,7 +78,7 @@
       immediate
     >
       <text-input
-        v-model="zip"
+        v-model="formFields.zip"
         :error-messages="errors"
         label="ZIP code"
         name="zip"
@@ -77,7 +89,7 @@
       <label for="marketing">
         <input
           id="marketing"
-          v-model="marketing"
+          v-model="formFields.marketing"
           type="checkbox"
           name="marketing"
         />
@@ -85,7 +97,7 @@
         announcements and membership opportunities.
       </label>
     </div>
-    <submit :disabled="invalid === undefined ? true : invalid" />
+    <submit v-if="invalid !== undefined" :disabled="invalid" />
   </validation-observer>
 </template>
 
@@ -109,33 +121,43 @@ export default {
 
   data() {
     return {
-      ...this.initialValues,
-      confirmedEmail: '',
+      formFields: { ...this.initialValues, confirmedEmail: '' },
+      originalValues: { ...this.initialValues },
       showEmailConfirmation: false,
     };
+  },
+
+  computed: {
+    emailChanged() {
+      const { email: newEmail } = this.formFields;
+      const { email: originalEmail } = this.originalValues;
+      return newEmail !== originalEmail;
+    },
+
+    email() {
+      // just for the watcher
+      return this.formFields.email;
+    },
   },
 
   watch: {
     async email() {
       const { valid } = await this.$refs.email.validate();
+      const { emailChanged } = this;
 
-      if (this.emailDidChange() && valid) {
+      if (emailChanged && valid) {
         this.showEmailConfirmation = true;
       } else {
         this.showEmailConfirmation = false;
-        this.confirmedEmail = '';
+        this.formFields.confirmedEmail = '';
       }
     },
   },
 
   methods: {
-    emailDidChange() {
-      const { value, initialValue } = this.$refs.email;
-      return value !== initialValue;
-    },
-
     async onSubmit() {
-      const { email, firstName, lastName, zip, marketing } = this;
+      const { emailChanged } = this;
+      const { email, firstName, lastName, zip, marketing } = this.formFields;
       const identityPayload = { tribune_offers_consent: marketing };
       const userPayload = {
         first_name: firstName,
@@ -143,7 +165,7 @@ export default {
         postal_code: zip,
       };
 
-      if (this.emailDidChange()) identityPayload.email = email;
+      if (emailChanged) identityPayload.email = email;
 
       this.$emit('updateContactInfo', { userPayload, identityPayload });
     },
