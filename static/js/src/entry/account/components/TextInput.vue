@@ -3,6 +3,7 @@
     <label :for="name">{{ label }}</label>
     <input
       :id="name"
+      :key="name"
       :name="name"
       :value="value"
       type="text"

@@ -8,6 +8,7 @@
       v-slot="{ errors }"
       name="firstName"
       :rules="{ required: true }"
+      immediate
     >
       <text-input
         v-model="firstName"
@@ -20,6 +21,7 @@
       v-slot="{ errors }"
       name="lastName"
       :rules="{ required: true }"
+      immediate
     >
       <text-input
         v-model="lastName"
@@ -33,6 +35,7 @@
       v-slot="{ errors }"
       name="email"
       :rules="{ required: true, email: true }"
+      immediate
     >
       <text-input
         v-model="email"
@@ -60,6 +63,7 @@
       v-slot="{ errors }"
       name="zip"
       :rules="{ required: true }"
+      immediate
     >
       <text-input
         v-model="zip"
@@ -81,7 +85,7 @@
         announcements and membership opportunities.
       </label>
     </div>
-    <submit :disabled="invalid" />
+    <submit :disabled="invalid === undefined ? true : invalid" />
   </validation-observer>
 </template>
 
