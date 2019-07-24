@@ -1,66 +1,73 @@
 <template>
-  <form @submit.prevent="onSubmit">
-    <div>
-      <label for="first-name">First name</label>
-      <input
-        id="first-name"
+  <validation-observer
+    v-slot="{ invalid }"
+    tag="form"
+    @submit.prevent="onSubmit"
+  >
+    <validation-provider
+      v-slot="{ errors }"
+      name="firstName"
+      :rules="{ required: true }"
+    >
+      <text-input
         v-model="firstName"
-        v-validate.initial="firstNameValidation"
-        type="text"
+        :error-messages="errors"
+        label="First name"
         name="firstName"
       />
-      <span>{{ errors.first('firstName') }}</span>
-    </div>
-    <div>
-      <label for="last-name">Last name</label>
-      <input
-        id="last-name"
+    </validation-provider>
+    <validation-provider
+      v-slot="{ errors }"
+      name="lastName"
+      :rules="{ required: true }"
+    >
+      <text-input
         v-model="lastName"
-        v-validate.initial="lastNameValidation"
-        type="text"
+        :error-messages="errors"
+        label="Last name"
         name="lastName"
       />
-      <span>{{ errors.first('lastName') }}</span>
-    </div>
-    <div>
-      <label for="email">Email</label>
-      <input
-        id="email"
+    </validation-provider>
+    <validation-provider
+      ref="email"
+      v-slot="{ errors }"
+      name="email"
+      :rules="{ required: true, email: true }"
+    >
+      <text-input
         v-model="email"
-        v-validate.initial="emailValidation"
-        type="email"
+        :error-messages="errors"
+        label="Email"
         name="email"
       />
-      <span>{{ errors.first('email') }}</span>
-    </div>
-    <div v-show="showEmailConfirmation">
-      <label for="confirmed-email"
-        >Type your email again to confirm the change</label
-      >
-      <input
-        id="confirmed-email"
-        key="confirmed-email"
+    </validation-provider>
+    <validation-provider
+      v-if="showEmailConfirmation"
+      v-slot="{ errors }"
+      name="confirmedEmail"
+      :rules="{ required: true, is: email }"
+      immediate
+    >
+      <text-input
         v-model="confirmedEmail"
-        v-validate.initial="
-          showEmailConfirmation ? confirmedEmailValidation : false
-        "
-        type="text"
+        :error-messages="errors"
+        label="Type your email again to confirm the change"
         name="confirmedEmail"
-        @paste.prevent
+        prevent-paste
       />
-      <span>{{ errors.first('confirmedEmail') }}</span>
-    </div>
-    <div>
-      <label for="zip">ZIP code</label>
-      <input
-        id="zip"
+    </validation-provider>
+    <validation-provider
+      v-slot="{ errors }"
+      name="zip"
+      :rules="{ required: true }"
+    >
+      <text-input
         v-model="zip"
-        v-validate.initial="zipValidation"
-        type="text"
+        :error-messages="errors"
+        label="ZIP code"
         name="zip"
       />
-      <span>{{ errors.first('zip') }}</span>
-    </div>
+    </validation-provider>
     <div>
       <label for="marketing">News & Offers</label>
       <label for="marketing">
@@ -74,13 +81,19 @@
         announcements and membership opportunities.
       </label>
     </div>
-    <input :disabled="isDisabled" type="submit" value="Submit" />
-  </form>
+    <input :disabled="invalid" type="submit" value="Submit" />
+  </validation-observer>
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider } from 'vee-validate';
+
+import TextInput from '../../../components/TextInput.vue';
+
 export default {
   name: 'ContactInfoForm',
+
+  components: { TextInput, ValidationObserver, ValidationProvider },
 
   props: {
     initialValues: {
@@ -93,52 +106,30 @@ export default {
     return {
       ...this.initialValues,
       confirmedEmail: '',
+      showEmailConfirmation: false,
     };
   },
 
-  computed: {
-    showEmailConfirmation() {
-      const { fields } = this;
-      if (!fields || !Object.keys(fields).length) return false;
-
-      const { changed, valid } = fields.email;
-      return changed && valid;
-    },
-
-    isDisabled() {
-      return this.errors.items.length > 0;
-    },
-
-    firstNameValidation() {
-      return { required: true };
-    },
-
-    lastNameValidation() {
-      return { required: true };
-    },
-
-    emailValidation() {
-      return { required: true, email: true };
-    },
-
-    confirmedEmailValidation() {
-      return { required: true, is: this.email };
-    },
-
-    zipValidation() {
-      return { required: true };
-    },
-  },
-
   watch: {
-    showEmailConfirmation() {
-      this.confirmedEmail = '';
+    async email() {
+      const { valid } = await this.$refs.email.validate();
+
+      if (this.emailDidChange() && valid) {
+        this.showEmailConfirmation = true;
+      } else {
+        this.showEmailConfirmation = false;
+        this.confirmedEmail = '';
+      }
     },
   },
 
   methods: {
+    emailDidChange() {
+      const { value, initialValue } = this.$refs.email;
+      return value !== initialValue;
+    },
+
     async onSubmit() {
-      const { changed: emailChanged } = this.fields.email;
       const { email, firstName, lastName, zip, marketing } = this;
       const identityPayload = { tribune_offers_consent: marketing };
       const userPayload = {
@@ -147,12 +138,9 @@ export default {
         postal_code: zip,
       };
 
-      if (emailChanged) identityPayload.email = email;
+      if (this.emailDidChange()) identityPayload.email = email;
 
-      this.$emit('updateContactInfo', {
-        userPayload,
-        identityPayload,
-      });
+      this.$emit('updateContactInfo', { userPayload, identityPayload });
     },
   },
 };
