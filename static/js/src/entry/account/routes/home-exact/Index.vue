@@ -24,7 +24,7 @@
       <custom />
     </div>
 
-    <help home />
+    <help basic />
   </div>
 </template>
 

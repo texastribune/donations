@@ -39,12 +39,7 @@ export default {
 
   methods: {
     async fetchData() {
-      const {
-        is_former_blast_subscriber,
-        is_current_blast_subscriber,
-      } = this.user;
-      const meetsCriteria =
-        is_former_blast_subscriber || is_current_blast_subscriber;
+      const meetsCriteria = this.user.is_blast_subscriber;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

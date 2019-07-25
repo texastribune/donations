@@ -11,20 +11,32 @@
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
-      <contact-info-form-container />
+      <div class="c-detail-box">
+        <div class="has-xxl-btm-marg"><contact-info-form-container /></div>
+        <edit-contact-info-links />
+      </div>
     </div>
+
+    <help basic :display="{ hasTopPadding: true }" />
   </div>
 </template>
 
 <script>
 import routeMixin from '../../mixins/route';
+import Help from '../../components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
+import EditContactInfoLinks from './containers/EditContactInfoLinksContainer.vue';
 import ContactInfoFormContainer from './containers/ContactInfoFormContainer.vue';
 
 export default {
   name: 'EditContactInfoRoute',
 
-  components: { RouteLoader, ContactInfoFormContainer },
+  components: {
+    RouteLoader,
+    EditContactInfoLinks,
+    ContactInfoFormContainer,
+    Help,
+  },
 
   mixins: [routeMixin],
 

@@ -20,7 +20,7 @@
                 login to comment on texastribune.org stories, view your donation
                 history or request a {{ lastYear }} tax receipt.
               </template>
-              <template v-else-if="!isNeverGiven && isBlast">
+              <template v-else-if="!isNeverGiven && isBlastSubscriber">
                 Thanks for creating your Texas Tribune account! You can use this
                 login to comment on texastribune.org stories, view your donation
                 history, download your {{ lastYear }} tax receipt and view your
@@ -31,7 +31,7 @@
                 login to comment on texastribune.org stories, view your donation
                 history and download a {{ lastYear }} tax receipt.
               </template>
-              <template v-else-if="isBlast">
+              <template v-else-if="isBlastSubscriber">
                 Thanks for creating a Texas Tribune account! You can use this
                 login to comment on texastribune.org stories and view your Blast
                 payment history.
@@ -85,7 +85,7 @@ export default {
       required: true,
     },
 
-    isBlast: {
+    isBlastSubscriber: {
       type: Boolean,
       required: true,
     },

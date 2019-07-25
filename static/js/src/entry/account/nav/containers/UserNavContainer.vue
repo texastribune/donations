@@ -31,12 +31,7 @@ export default {
     },
 
     showBlastLinks() {
-      const {
-        is_former_blast_subscriber,
-        is_current_blast_subscriber,
-      } = this.user;
-
-      return !!(is_former_blast_subscriber || is_current_blast_subscriber);
+      return !!this.user.is_blast_subscriber;
     },
 
     showMembershipLink() {

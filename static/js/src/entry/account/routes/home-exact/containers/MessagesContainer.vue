@@ -1,6 +1,6 @@
 <template>
   <messages-wrapper
-    :is-blast="isBlast"
+    :is-blast-subscriber="isBlastSubscriber"
     :is-custom-donor="isCustomDonor"
     :is-never-given="isNeverGiven"
   />
@@ -28,13 +28,8 @@ export default {
       return this.user.is_custom_donor;
     },
 
-    isBlast() {
-      const {
-        is_former_blast_subscriber,
-        is_current_blast_subscriber,
-      } = this.user;
-
-      return is_former_blast_subscriber || is_current_blast_subscriber;
+    isBlastSubscriber() {
+      return this.user.is_blast_subscriber;
     },
   },
 };

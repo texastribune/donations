@@ -13,10 +13,15 @@ export default function addFields(data) {
     is_mdev,
     is_current_circle,
     is_former_circle,
+    is_current_blast_subscriber,
+    is_former_blast_subscriber,
   } = data;
   let membershipLevel;
   let isExpired;
   let willExpire;
+
+  const isBlastSubscriber =
+    is_current_blast_subscriber || is_former_blast_subscriber;
 
   const isSingleDonor =
     !never_given &&
@@ -68,6 +73,7 @@ export default function addFields(data) {
     is_circle_donor: isCircleDonor,
     is_custom_donor: isCustomDonor,
     is_expired: isExpired,
+    is_blast_subscriber: isBlastSubscriber,
     will_expire: willExpire,
     membership_level: membershipLevel,
   };

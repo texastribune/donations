@@ -5,7 +5,7 @@
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">Contact us</h2>
     <p class="t-space-heading-m t-linkstyle--underlined has-text-gray-dark">
-      <template v-if="home">
+      <template v-if="basic">
         Have questions about your account? Or feedback about this website? Email
         <a
           href="mailto:community@texastribune.org"
@@ -68,12 +68,7 @@ export default {
       default: false,
     },
 
-    display: {
-      type: Object,
-      default: () => ({ hasTopPadding: false }),
-    },
-
-    home: {
+    basic: {
       type: Boolean,
       default: false,
     },
@@ -86,6 +81,11 @@ export default {
     payments: {
       type: Boolean,
       default: false,
+    },
+
+    display: {
+      type: Object,
+      default: () => ({ hasTopPadding: false }),
     },
   },
 };
