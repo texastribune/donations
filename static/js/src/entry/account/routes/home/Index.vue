@@ -1,6 +1,7 @@
 <template>
   <div>
     <routes-nav-bar />
+
     <main class="has-bg-white-off">
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
@@ -22,8 +23,10 @@
         </div>
       </div>
     </main>
-    <view-as />
+
     <routes-site-footer />
+
+    <view-as />
   </div>
 </template>
 

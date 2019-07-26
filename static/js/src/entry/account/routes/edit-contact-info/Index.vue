@@ -5,8 +5,10 @@
     </template>
   </route-loader>
 
-  <div v-else class="has-ump-top-padding">
-    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
+  <div v-else>
+    <h1
+      class="has-ump-side-padding has-ump-top-padding has-l-btm-marg t-size-xl"
+    >
       Your Contact Info
     </h1>
 
@@ -76,7 +78,7 @@ export default {
     },
   },
 
-  async beforeRouteLeave(to, from, next) {
+  beforeRouteLeave(to, from, next) {
     if (this.showModal) {
       this.$modal.show('modal');
       this.next = next;

@@ -1,12 +1,14 @@
 <template>
   <route-loader v-if="routeIsFetching">
-    <template v-slot:text
-      >Grabbing your membership information</template
-    >
+    <template v-slot:text>
+      Grabbing your membership information
+    </template>
   </route-loader>
 
-  <div v-else class="has-ump-top-padding">
-    <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
+  <div v-else>
+    <h1
+      class="has-ump-top-padding has-ump-side-padding has-xl-btm-marg t-size-xl"
+    >
       Your Membership
     </h1>
 

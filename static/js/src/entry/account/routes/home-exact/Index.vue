@@ -1,17 +1,18 @@
 <template>
   <route-loader v-if="routeIsFetching">
-    <template v-slot:text
-      >Grabbing your account information</template
-    >
+    <template v-slot:text>
+      Grabbing your account information
+    </template>
   </route-loader>
 
-  <div
-    v-else
-    class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l has-ump-top-padding"
-  >
+  <div v-else class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l ">
     <messages />
 
-    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
+    <h1
+      class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
+    >
+      Your Account
+    </h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
       <contact-info />

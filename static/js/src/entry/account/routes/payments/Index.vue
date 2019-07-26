@@ -1,12 +1,14 @@
 <template>
   <route-loader v-if="routeIsFetching">
-    <template v-slot:text
-      >Grabbing your donation history</template
-    >
+    <template v-slot:text>
+      Grabbing your donation history
+    </template>
   </route-loader>
 
-  <div v-else class="has-ump-top-padding">
-    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
+  <div v-else>
+    <h1
+      class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
+    >
       Your Donations
     </h1>
 
@@ -15,6 +17,7 @@
     <appeal />
     <circle-appeal />
     <custom-appeal />
+
     <help payments />
   </div>
 </template>

@@ -1,12 +1,14 @@
 <template>
   <route-loader v-if="routeIsFetching">
-    <template v-slot:text
-      >Grabbing your Blast information</template
-    >
+    <template v-slot:text>
+      Grabbing your Blast information
+    </template>
   </route-loader>
 
-  <div v-else class="has-ump-top-padding">
-    <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
+  <div v-else>
+    <h1
+      class="has-xl-btm-marg has-ump-side-padding has-ump-top-padding t-size-xl"
+    >
       The Blast Newsletter
     </h1>
 
