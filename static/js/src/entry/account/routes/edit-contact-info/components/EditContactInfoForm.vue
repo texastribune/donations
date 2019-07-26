@@ -1,54 +1,57 @@
 <template>
   <validation-observer
-    v-slot="{ invalid }"
     tag="form"
-    @submit.prevent="onSubmit"
+    @submit.prevent="$emit('onSubmit', currentFields)"
   >
     <validation-provider
-      v-slot="{ errors }"
+      v-slot="{ errors, flags }"
       name="firstName"
       :rules="{ required: true }"
       immediate
     >
       <text-input
-        v-model="formFields.firstName"
+        v-model="currentFields.firstName.value"
         :error-messages="errors"
+        :flags="flags"
         label="First name"
         name="firstName"
+        @addFlags="addFlags"
       />
     </validation-provider>
     <validation-provider
-      v-slot="{ errors }"
+      v-slot="{ errors, flags }"
       name="lastName"
       :rules="{ required: true }"
       immediate
     >
       <text-input
-        v-model="formFields.lastName"
+        v-model="currentFields.lastName.value"
         :error-messages="errors"
+        :flags="flags"
         label="Last name"
         name="lastName"
+        @addFlags="addFlags"
       />
     </validation-provider>
     <validation-provider
-      ref="email"
-      v-slot="{ errors }"
+      v-slot="{ errors, flags }"
       name="email"
       :rules="{ required: true, email: true }"
       immediate
     >
       <text-input
-        v-model="formFields.email"
+        v-model="currentFields.email.value"
         :error-messages="errors"
+        :flags="flags"
         label="Email"
         name="email"
+        @addFlags="addFlags"
       >
         <p v-show="showEmailConfirmation" class="has-text-error">
           <strong>Are you sure?</strong> Changing this will log you out of your
           account, and you won't be able to log back in with
-          <strong>{{ originalValues.email }}</strong
-          >. Changing your account email will not affect your email
-          subscriptions.
+          <strong>Foobar</strong>. Changing your account email will not affect
+          your email subscriptions.
         </p>
         <p v-show="!showEmailConfirmation">
           Notice: This email is for logging into your account. Changing it will
@@ -58,30 +61,34 @@
     </validation-provider>
     <validation-provider
       v-if="showEmailConfirmation"
-      v-slot="{ errors }"
+      v-slot="{ errors, flags }"
       name="confirmedEmail"
-      :rules="{ required: true, is: email }"
+      :rules="{ required: true, is: currentFields.email.value }"
       immediate
     >
       <text-input
-        v-model="formFields.confirmedEmail"
+        v-model="currentFields.confirmedEmail.value"
         :error-messages="errors"
+        :flags="flags"
         label="Type your email again to confirm the change"
         name="confirmedEmail"
         prevent-paste
+        @addFlags="addFlags"
       />
     </validation-provider>
     <validation-provider
-      v-slot="{ errors }"
+      v-slot="{ errors, flags }"
       name="zip"
-      :rules="{ required: true }"
+      :rules="{ required: true, numeric: true }"
       immediate
     >
       <text-input
-        v-model="formFields.zip"
+        v-model="currentFields.zip.value"
         :error-messages="errors"
+        :flags="flags"
         label="ZIP code"
         name="zip"
+        @addFlags="addFlags"
       />
     </validation-provider>
     <div>
@@ -89,7 +96,7 @@
       <label for="marketing">
         <input
           id="marketing"
-          v-model="formFields.marketing"
+          v-model="currentFields.marketing.value"
           type="checkbox"
           name="marketing"
         />
@@ -97,7 +104,7 @@
         announcements and membership opportunities.
       </label>
     </div>
-    <submit v-if="invalid !== undefined" :disabled="invalid" />
+    <submit :disabled="!isValid" />
   </validation-observer>
 </template>
 
@@ -108,12 +115,12 @@ import TextInput from '../../../components/TextInput.vue';
 import Submit from '../../../components/Submit.vue';
 
 export default {
-  name: 'ContactInfoForm',
+  name: 'EditContactInfoForm',
 
   components: { TextInput, Submit, ValidationObserver, ValidationProvider },
 
   props: {
-    initialValues: {
+    initialFields: {
       type: Object,
       required: true,
     },
@@ -121,53 +128,64 @@ export default {
 
   data() {
     return {
-      formFields: { ...this.initialValues, confirmedEmail: '' },
-      originalValues: { ...this.initialValues },
-      showEmailConfirmation: false,
+      currentFields: this.buildCurrentFields(),
     };
   },
 
   computed: {
-    emailChanged() {
-      const { email: newEmail } = this.formFields;
-      const { email: originalEmail } = this.originalValues;
-      return newEmail !== originalEmail;
+    showEmailConfirmation() {
+      return this.currentFields.email.flags.changed;
     },
 
-    email() {
-      // just for the watcher
-      return this.formFields.email;
+    hasChanged() {
+      const haveChanged = Object.keys(this.currentFields).filter(
+        key => this.currentFields[key].flags.changed
+      );
+
+      return haveChanged.length > 0;
+    },
+
+    isValid() {
+      const areNotValid = Object.keys(this.currentFields).filter(
+        key => !this.currentFields[key].flags.valid
+      );
+
+      return areNotValid.length === 0;
     },
   },
 
   watch: {
-    async email() {
-      const { valid } = await this.$refs.email.validate();
-      const { emailChanged } = this;
+    showEmailConfirmation() {
+      this.currentFields.confirmedEmail.value = '';
+    },
 
-      if (emailChanged && valid) {
-        this.showEmailConfirmation = true;
-      } else {
-        this.showEmailConfirmation = false;
-        this.formFields.confirmedEmail = '';
+    hasChanged(newHasChanged, oldHasChanged) {
+      if (newHasChanged !== oldHasChanged) {
+        this.$emit('onHasChangedToggle', newHasChanged);
       }
+    },
+
+    initialFields() {
+      this.currentFields = this.buildCurrentFields();
     },
   },
 
   methods: {
-    async onSubmit() {
-      const { emailChanged } = this;
-      const { email, firstName, lastName, zip, marketing } = this.formFields;
-      const identityPayload = { tribune_offers_consent: marketing };
-      const userPayload = {
-        first_name: firstName,
-        last_name: lastName,
-        postal_code: zip,
-      };
+    buildCurrentFields() {
+      const final = {};
 
-      if (emailChanged) identityPayload.email = email;
+      Object.keys(this.initialFields).forEach(key => {
+        final[key] = {
+          value: this.initialFields[key],
+          flags: { changed: false, valid: true },
+        };
+      });
 
-      this.$emit('updateContactInfo', { userPayload, identityPayload });
+      return final;
+    },
+
+    addFlags(name, flags) {
+      this.currentFields[name].flags = { ...flags };
     },
   },
 };

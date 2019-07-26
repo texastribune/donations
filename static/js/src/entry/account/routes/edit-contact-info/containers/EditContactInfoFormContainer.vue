@@ -1,7 +1,8 @@
 <template>
-  <contact-info-form
-    :initial-values="initialValues"
-    @updateContactInfo="updateContactInfo"
+  <edit-contact-info-form
+    :initial-fields="initialFields"
+    @onSubmit="onSubmit"
+    @onHasChangedToggle="setShowModal"
   />
 </template>
 
@@ -14,17 +15,17 @@ import contextMixin from '../../../store/context/mixin';
 import getTokenIdentity from '../../../utils/get-token-identity';
 import { setChangedEmail } from '../../../utils/storage';
 import { logOut } from '../../../utils/auth-actions';
-import ContactInfoForm from '../components/ContactInfoForm.vue';
+import EditContactInfoForm from '../components/EditContactInfoForm.vue';
 
 export default {
-  name: 'AccountFormContainer',
+  name: 'EditContactInfoFormContainer',
 
-  components: { ContactInfoForm },
+  components: { EditContactInfoForm },
 
   mixins: [userMixin, tokenUserMixin, contextMixin],
 
   computed: {
-    initialValues() {
+    initialFields() {
       const { first_name, last_name, postal_code, identities } = this.user;
       const { email: tokenEmail } = this.tokenUser;
       const { tribune_offers_consent } = getTokenIdentity(
@@ -37,12 +38,34 @@ export default {
         lastName: last_name,
         zip: postal_code,
         email: tokenEmail,
+        confirmedEmail: '',
         marketing: tribune_offers_consent,
       };
     },
   },
 
   methods: {
+    setShowModal(shouldShow) {
+      this.$emit('setShowModal', shouldShow);
+    },
+
+    async onSubmit(fields) {
+      const userPayload = {
+        first_name: fields.firstName.value,
+        last_name: fields.lastName.value,
+        postal_code: fields.zip.value,
+      };
+      const identityPayload = {
+        tribune_offers_consent: fields.marketing.value,
+      };
+
+      if (fields.email.flags.changed) {
+        identityPayload.email = fields.email.value;
+      }
+
+      await this.updateContactInfo({ userPayload, identityPayload });
+    },
+
     async updateContactInfo({ userPayload, identityPayload }) {
       this.setAppIsFetching(true);
 

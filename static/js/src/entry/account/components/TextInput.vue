@@ -37,6 +37,11 @@ export default {
       required: true,
     },
 
+    flags: {
+      type: Object,
+      required: true,
+    },
+
     errorMessages: {
       type: Array,
       required: true,
@@ -45,6 +50,26 @@ export default {
     preventPaste: {
       type: Boolean,
       default: false,
+    },
+  },
+
+  computed: {
+    changed() {
+      return this.flags.changed;
+    },
+
+    valid() {
+      return this.flags.valid;
+    },
+  },
+
+  watch: {
+    changed() {
+      this.addFlags();
+    },
+
+    valid() {
+      this.addFlags();
     },
   },
 
@@ -57,6 +82,11 @@ export default {
       if (this.preventPaste) {
         e.preventDefault();
       }
+    },
+
+    addFlags() {
+      const { changed, valid } = this;
+      this.$emit('addFlags', this.name, { changed, valid });
     },
   },
 };
