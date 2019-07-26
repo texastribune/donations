@@ -1,11 +1,11 @@
 <template>
   <aside
-    :class="display.hasTopPadding && 'c-help--has-top-padding'"
+    :class="hasTopPadding && 'c-help--has-top-padding'"
     class="c-help has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">Contact us</h2>
     <p class="t-space-heading-m t-linkstyle--underlined has-text-gray-dark">
-      <template v-if="basic">
+      <template v-if="home || edit || ambassador">
         Have questions about your account? Or feedback about this website? Email
         <a
           href="mailto:community@texastribune.org"
@@ -58,6 +58,11 @@ export default {
   name: 'Help',
 
   props: {
+    home: {
+      type: Boolean,
+      default: false,
+    },
+
     blast: {
       type: Boolean,
       default: false,
@@ -68,7 +73,12 @@ export default {
       default: false,
     },
 
-    basic: {
+    edit: {
+      type: Boolean,
+      default: false,
+    },
+
+    ambassador: {
       type: Boolean,
       default: false,
     },
@@ -82,10 +92,12 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
 
-    display: {
-      type: Object,
-      default: () => ({ hasTopPadding: false }),
+  computed: {
+    hasTopPadding() {
+      const { blast, blastPayments, edit, ambassador } = this;
+      return blast || blastPayments || edit || ambassador;
     },
   },
 };

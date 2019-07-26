@@ -24,13 +24,13 @@
       <custom />
     </div>
 
-    <help basic />
+    <help home />
   </div>
 </template>
 
 <script>
 import routeMixin from '../../mixins/route';
-import Help from '../../components/Help.vue';
+import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import ContactInfo from './containers/ContactInfoContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';

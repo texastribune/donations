@@ -12,7 +12,7 @@
 
     <div class="has-ump-side-padding has-xxl-btm-marg"><blast-payments /></div>
 
-    <help blast-payments :display="{ hasTopPadding: true }" />
+    <help blast-payments />
   </div>
 </template>
 
@@ -21,7 +21,7 @@
 
 import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
-import Help from '../../components/Help.vue';
+import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import BlastPayments from './containers/BlastPaymentsContainer.vue';
 import { InvalidRouteError } from '../../errors';

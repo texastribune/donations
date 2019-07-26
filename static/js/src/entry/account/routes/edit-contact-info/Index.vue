@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <help basic :display="{ hasTopPadding: true }" />
+    <help edit />
 
     <edit-contact-info-modal @onLeave="onLeave" @onReturn="onReturn" />
   </div>
@@ -27,7 +27,7 @@
 
 <script>
 import routeMixin from '../../mixins/route';
-import Help from '../../components/Help.vue';
+import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import EditContactInfoLinks from './containers/EditContactInfoLinksContainer.vue';
 import EditContactInfoForm from './containers/EditContactInfoFormContainer.vue';

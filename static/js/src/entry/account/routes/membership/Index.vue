@@ -33,7 +33,7 @@ import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
-import Help from '../../components/Help.vue';
+import Help from '../home/components/Help.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {

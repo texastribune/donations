@@ -12,7 +12,7 @@
 
     <div class="has-ump-side-padding has-xl-btm-marg"><blast-detail /></div>
 
-    <help blast :display="{ hasTopPadding: true }" />
+    <help blast />
   </div>
 </template>
 
@@ -22,7 +22,7 @@
 import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Help from '../../components/Help.vue';
+import Help from '../home/components/Help.vue';
 import BlastDetail from './containers/BlastDetailContainer.vue';
 import { InvalidRouteError } from '../../errors';
 
