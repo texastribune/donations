@@ -5,14 +5,13 @@
     </template>
   </route-loader>
 
-  <div v-else class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l ">
+  <div
+    v-else
+    class="has-ump-top-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
+  >
     <messages />
 
-    <h1
-      class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
-    >
-      Your Account
-    </h1>
+    <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
       <contact-info />
