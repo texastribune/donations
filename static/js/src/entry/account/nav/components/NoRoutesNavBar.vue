@@ -1,14 +1,12 @@
 <template>
-  <user-nav-container>
-    <template v-slot="slotProps">
-      <nav-bar
-        user-fetch-complete
-        :show-home-link="false"
-        :show-blast-link="false"
-        :show-membership-link="false"
-        :is-logged-in="slotProps.isLoggedIn"
-      />
-    </template>
+  <user-nav-container v-slot="slotProps">
+    <nav-bar
+      user-fetch-complete
+      :show-home-link="false"
+      :show-blast-link="false"
+      :show-membership-link="false"
+      :is-logged-in="slotProps.isLoggedIn"
+    />
   </user-nav-container>
 </template>
 

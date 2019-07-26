@@ -5,17 +5,15 @@
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l">
-            <user-nav-container>
-              <template v-slot="slotProps">
-                <side-nav
-                  show-home-link
-                  show-edit-contact-info-link
-                  :user-fetch-complete="slotProps.userFetchComplete"
-                  :show-blast-links="slotProps.showBlastLinks"
-                  :show-membership-link="slotProps.showMembershipLink"
-                  :show-payments-link="slotProps.showPaymentsLink"
-                />
-              </template>
+            <user-nav-container v-slot="slotProps">
+              <side-nav
+                show-home-link
+                show-edit-contact-info-link
+                :user-fetch-complete="slotProps.userFetchComplete"
+                :show-blast-links="slotProps.showBlastLinks"
+                :show-membership-link="slotProps.showMembershipLink"
+                :show-payments-link="slotProps.showPaymentsLink"
+              />
             </user-nav-container>
           </div>
           <div class="l-ump-grid__content has-bg-white">

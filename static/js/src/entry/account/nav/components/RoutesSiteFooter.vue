@@ -1,15 +1,13 @@
 <template>
-  <user-nav-container>
-    <template v-slot="slotProps">
-      <site-footer
-        show-home-link
-        show-edit-contact-info-link
-        :user-fetch-complete="slotProps.userFetchComplete"
-        :show-blast-links="slotProps.showBlastLinks"
-        :show-membership-link="slotProps.showMembershipLink"
-        :show-payments-link="slotProps.showPaymentsLink"
-      />
-    </template>
+  <user-nav-container v-slot="slotProps">
+    <site-footer
+      show-home-link
+      show-edit-contact-info-link
+      :user-fetch-complete="slotProps.userFetchComplete"
+      :show-blast-links="slotProps.showBlastLinks"
+      :show-membership-link="slotProps.showMembershipLink"
+      :show-payments-link="slotProps.showPaymentsLink"
+    />
   </user-nav-container>
 </template>
 

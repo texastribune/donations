@@ -1,15 +1,3 @@
-<template>
-  <div>
-    <slot
-      :user-fetch-complete="userFetchComplete"
-      :show-blast-links="showBlastLinks"
-      :show-membership-link="showMembershipLink"
-      :show-payments-link="showPaymentsLink"
-      :is-logged-in="isLoggedIn"
-    ></slot>
-  </div>
-</template>
-
 <script>
 /* eslint-disable camelcase */
 
@@ -49,6 +37,24 @@ export default {
 
       return !never_given;
     },
+  },
+
+  render() {
+    const {
+      userFetchComplete,
+      showBlastLinks,
+      showMembershipLink,
+      showPaymentsLink,
+      isLoggedIn,
+    } = this;
+
+    return this.$scopedSlots.default({
+      userFetchComplete,
+      showBlastLinks,
+      showMembershipLink,
+      showPaymentsLink,
+      isLoggedIn,
+    });
   },
 };
 </script>
