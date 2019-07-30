@@ -1,5 +1,5 @@
 <template>
-  <summary-box heading="membership" :display="{ isExpired: false }">
+  <summary-box heading="membership">
     <template v-slot:content>
       <p
         v-if="nextTransaction.last4"

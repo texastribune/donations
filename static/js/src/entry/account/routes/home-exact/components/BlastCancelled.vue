@@ -1,5 +1,5 @@
 <template>
-  <summary-box heading="the blast" :display="{ isExpired: false }">
+  <summary-box heading="the blast">
     <template v-slot:content>
       <p
         v-if="lastTransaction.last4"

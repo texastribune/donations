@@ -2,7 +2,7 @@
   <edit-contact-info-form
     :initial-fields="initialFields"
     @onSubmit="onSubmit"
-    @onHasChangedToggle="setShowModal"
+    @onFormHasChangedToggle="setShowModal"
   />
 </template>
 
@@ -34,19 +34,43 @@ export default {
       );
 
       return {
-        firstName: first_name,
-        lastName: last_name,
-        zip: postal_code,
-        email: tokenEmail,
-        confirmedEmail: '',
-        marketing: tribune_offers_consent,
+        firstName: {
+          value: first_name,
+          isVisible: true,
+          shouldValidate: true,
+        },
+        lastName: {
+          value: last_name,
+          isVisible: true,
+          shouldValidate: true,
+        },
+        zip: {
+          value: postal_code,
+          isVisible: true,
+          shouldValidate: true,
+        },
+        email: {
+          value: tokenEmail,
+          isVisible: true,
+          shouldValidate: true,
+        },
+        confirmedEmail: {
+          value: '',
+          isVisible: false,
+          shouldValidate: true,
+        },
+        marketing: {
+          value: tribune_offers_consent,
+          isVisible: true,
+          shouldValidate: false,
+        },
       };
     },
   },
 
   methods: {
-    setShowModal(shouldShow) {
-      this.$emit('setShowModal', shouldShow);
+    setShowModal(formHasChanged) {
+      this.$emit('setShowModal', formHasChanged);
     },
 
     async onSubmit(fields) {
@@ -59,7 +83,7 @@ export default {
         tribune_offers_consent: fields.marketing.value,
       };
 
-      if (fields.email.flags.changed) {
+      if (fields.email.changed) {
         identityPayload.email = fields.email.value;
       }
 

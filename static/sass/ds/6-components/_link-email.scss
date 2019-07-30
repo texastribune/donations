@@ -1,0 +1,7 @@
+.c-link-email {
+  @include mq($from: bp-l) {
+    background-color: $color-white-off;
+    border-radius: 5px;
+    padding: $size-b;
+  }
+}

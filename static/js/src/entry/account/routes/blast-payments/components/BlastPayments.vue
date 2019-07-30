@@ -1,5 +1,5 @@
 <template>
-  <section class="c-detail-box">
+  <section class="c-detail-box c-detail-box--from-l">
     <div class="has-xxxl-btm-marg">
       <payment-list
         :payments="data"

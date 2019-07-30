@@ -1,5 +1,5 @@
 <template>
-  <summary-box heading="membership" :display="{ isExpired: false }">
+  <summary-box heading="membership">
     <template v-slot:content>
       <p class="has-text-gray-dark t-space-heading-m">
         Thank you for being a Texas Tribune member!

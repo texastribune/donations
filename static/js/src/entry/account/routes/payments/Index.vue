@@ -12,7 +12,10 @@
       Your Donations
     </h1>
 
-    <div class="has-ump-side-padding has-xxl-btm-marg"><payments /></div>
+    <div class="has-ump-side-padding has-xxl-btm-marg">
+      <div class="has-xxl-btm-marg"><payments /></div>
+      <link-email />
+    </div>
 
     <appeal />
     <circle-appeal />
@@ -31,6 +34,7 @@ import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import CustomAppeal from '../home/containers/CustomAppealContainer.vue';
+import LinkEmail from '../home/components/LinkEmail.vue';
 import Help from '../home/components/Help.vue';
 import Payments from './containers/PaymentsContainer.vue';
 import { InvalidRouteError } from '../../errors';
@@ -39,6 +43,7 @@ export default {
   name: 'PaymentsRoute',
 
   components: {
+    LinkEmail,
     Appeal,
     CircleAppeal,
     CustomAppeal,

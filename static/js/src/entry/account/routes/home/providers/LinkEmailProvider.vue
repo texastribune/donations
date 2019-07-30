@@ -1,0 +1,52 @@
+<script>
+import userMixin from '../../../store/user/mixin';
+import contextMixin from '../../../store/context/mixin';
+import LinkEmail from '../components/LinkEmail.vue';
+
+export default {
+  name: 'LinkEmailProvider',
+
+  components: { LinkEmail },
+
+  mixins: [userMixin, contextMixin],
+
+  data() {
+    return { submittedEmail: '' };
+  },
+
+  computed: {
+    initialFields() {
+      return {
+        email: { value: '', shouldValidate: true, isVisible: true },
+      };
+    },
+
+    linkedEmails() {
+      return this.user.identities.map(({ email }) => email);
+    },
+  },
+
+  methods: {
+    async linkEmail({ email: { value } }) {
+      this.setAppIsFetching(true);
+
+      await this.linkIdentity({ email: value });
+      await this.getUser();
+
+      this.setAppIsFetching(false);
+      this.submittedEmail = value;
+    },
+  },
+
+  render() {
+    const { initialFields, linkedEmails, linkEmail, submittedEmail } = this;
+
+    return this.$scopedSlots.default({
+      initialFields,
+      linkedEmails,
+      linkEmail,
+      submittedEmail,
+    });
+  },
+};
+</script>

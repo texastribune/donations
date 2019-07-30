@@ -1,0 +1,85 @@
+<template>
+  <link-email-provider
+    v-slot="{ linkedEmails, initialFields, linkEmail, submittedEmail }"
+  >
+    <div class="c-link-email t-linkstyle--underlined">
+      <template v-if="submittedEmail">
+        <h2 class="t-size-b has-b-btm-marg">Verify your linked email</h2>
+        <p class="t-size-xs t-space-heading-m has-text-gray has-s-btm-marg">
+          To keep your information safe, we need you to verify your linked
+          email: <strong>{{ submittedEmail }}</strong
+          >.
+        </p>
+        <p class="t-size-xs t-space-heading-m has-text-gray">
+          Check your inbox for an email from The Texas Tribune with subject line
+          "Link your account," then click to verify. Having trouble? Email
+          <a href="mailto:community@texastribune.org"
+            >community@texastribune.org</a
+          >.
+        </p>
+      </template>
+      <template v-else>
+        <div class="has-xxxs-btm-marg">
+          <slot name="heading">
+            <h2 class="t-size-b">Not seeing your donations?</h2>
+          </slot>
+        </div>
+        <div class="has-b-btm-marg">
+          <slot name="text" :linked-emails="linkedEmails | formatLinkedEmails">
+            <p class="t-size-xs t-space-heading-m has-text-gray">
+              You're seeing donations for
+              {{ linkedEmails | formatLinkedEmails }}. You may have donated with
+              a different email address. Enter another email below to link your
+              accounts.
+            </p>
+          </slot>
+        </div>
+        <div class="has-b-btm-marg">
+          <text-input-and-button
+            :rules="{ required: true, email: true }"
+            :initial-fields="initialFields"
+            :show-error-immediately="false"
+            name="email"
+            label="email address to link"
+            @onSubmit="linkEmail"
+          />
+        </div>
+        <p class="t-size-xs t-space-heading-m has-text-gray">
+          Already tried this? Still not seeing your donations? Contact us at
+          <a href="mailto:membership@texastribune.org"
+            >membership@texastribune.org</a
+          >.
+        </p>
+      </template>
+    </div>
+  </link-email-provider>
+</template>
+
+<script>
+import LinkEmailProvider from '../providers/LinkEmailProvider.vue';
+import TextInputAndButton from '../../../components/TextInputAndButton.vue';
+
+export default {
+  name: 'LinkEmail',
+
+  components: { LinkEmailProvider, TextInputAndButton },
+
+  filters: {
+    formatLinkedEmails(emails) {
+      let formatted = '';
+
+      emails.forEach((email, index) => {
+        if (emails.length === 1) {
+          formatted += email;
+        } else if (index === emails.length - 1) {
+          formatted += ` and ${email}`;
+        } else {
+          formatted += `${email}, `;
+        }
+      });
+
+      return formatted;
+    },
+  },
+};
+</script>

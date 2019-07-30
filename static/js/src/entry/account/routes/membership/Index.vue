@@ -13,9 +13,13 @@
     </h1>
 
     <div class="has-ump-side-padding has-xl-btm-marg">
-      <membership-expired />
-      <membership-recurring-or-circle />
-      <membership-single-or-will-expire />
+      <div class="has-xxl-btm-marg">
+        <membership-expired />
+        <membership-recurring-or-circle />
+        <membership-single-or-will-expire />
+      </div>
+
+      <link-email />
     </div>
 
     <appeal />
@@ -33,6 +37,7 @@ import MembershipSingleOrWillExpire from './containers/MembershipSingleOrWillExp
 import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
+import LinkEmail from '../home/components/LinkEmail.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import Help from '../home/components/Help.vue';
@@ -49,6 +54,7 @@ export default {
     Appeal,
     CircleAppeal,
     Help,
+    LinkEmail,
   },
 
   mixins: [routeMixin, userMixin],

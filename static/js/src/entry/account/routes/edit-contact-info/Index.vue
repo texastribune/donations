@@ -13,7 +13,7 @@
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
-      <div class="c-detail-box">
+      <div class="c-detail-box c-detail-box--from-l">
         <div class="has-xxl-btm-marg">
           <edit-contact-info-form @setShowModal="setShowModal" />
         </div>

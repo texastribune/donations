@@ -1,16 +1,16 @@
 <template>
   <div>
-    <label :for="name">{{ label }}</label>
+    <label v-if="showLabel" :for="name">{{ label }}</label>
     <input
       :id="name"
-      :key="name"
       :name="name"
       :value="value"
+      :aria-label="showLabel ? false : label"
       type="text"
       @input="onInput"
       @paste="onPaste"
     />
-    <ul v-if="errorMessages.length">
+    <ul v-show="showErrorMessages">
       <li v-for="message in errorMessages" :key="message">{{ message }}</li>
     </ul>
     <slot></slot>
@@ -51,6 +51,16 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    showLabel: {
+      type: Boolean,
+      default: true,
+    },
+
+    showErrorImmediately: {
+      type: Boolean,
+      default: true,
+    },
   },
 
   computed: {
@@ -61,15 +71,32 @@ export default {
     valid() {
       return this.flags.valid;
     },
+
+    dirty() {
+      return this.flags.dirty;
+    },
+
+    showErrorMessages() {
+      const { errorMessages, dirty, showErrorImmediately } = this;
+
+      return (
+        (errorMessages.length && !showErrorImmediately && dirty) ||
+        (errorMessages.length && showErrorImmediately)
+      );
+    },
   },
 
   watch: {
     changed() {
-      this.addFlags();
+      this.updateFlags();
     },
 
     valid() {
-      this.addFlags();
+      this.updateFlags();
+    },
+
+    dirty() {
+      this.updateFlags();
     },
   },
 
@@ -79,14 +106,12 @@ export default {
     },
 
     onPaste(e) {
-      if (this.preventPaste) {
-        e.preventDefault();
-      }
+      if (this.preventPaste) e.preventDefault();
     },
 
-    addFlags() {
-      const { changed, valid } = this;
-      this.$emit('addFlags', this.name, { changed, valid });
+    updateFlags() {
+      const { changed, valid, dirty } = this;
+      this.$emit('updateFlags', this.name, { changed, valid, dirty });
     },
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <section class="c-detail-box">
+  <section class="c-detail-box c-detail-box--from-l">
     <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
 
     <ul class="c-link-list t-linkstyle--underlined">
