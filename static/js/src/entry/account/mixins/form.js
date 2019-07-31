@@ -62,11 +62,9 @@ export default {
 
       Object.keys(this.initialFields).forEach(fieldKey => {
         updateKeys.forEach(updateKey => {
-          this.$set(
-            this.currentFields[fieldKey],
-            updateKey,
-            this.initialFields[fieldKey][updateKey]
-          );
+          this.currentFields[fieldKey][updateKey] = this.initialFields[
+            fieldKey
+          ][updateKey];
         });
       });
     },
