@@ -12,6 +12,7 @@ export default {
       'updateUser',
       'updateIdentity',
       'linkIdentity',
+      'confirmLinkedIdentity',
     ]),
   },
 };

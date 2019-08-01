@@ -85,6 +85,21 @@ const actions = {
       }
     );
   },
+
+  confirmLinkedIdentity: async ({ state, rootState }, ticket) => {
+    const {
+      accessToken,
+      details: { email: tokenEmail },
+    } = rootState.tokenUser;
+    const { id: personId } = state.details;
+
+    await axios.put(
+      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}?ticket=${ticket}`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+  },
 };
 
 export default {
