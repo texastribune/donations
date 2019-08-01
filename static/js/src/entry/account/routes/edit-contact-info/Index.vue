@@ -15,15 +15,15 @@
     <div class="has-ump-side-padding has-xxl-btm-marg">
       <div class="c-detail-box c-detail-box--from-l">
         <div class="has-xxl-btm-marg">
-          <edit-contact-info-form @setShowModal="setShowModal" />
+          <edit-form @setShowModal="setShowModal" />
         </div>
-        <edit-contact-info-links />
+        <links />
       </div>
     </div>
 
     <help edit />
 
-    <edit-contact-info-modal @onLeave="onLeave" @onReturn="onReturn" />
+    <confirm-modal @onLeave="onLeave" @onReturn="onReturn" />
   </div>
 </template>
 
@@ -31,18 +31,18 @@
 import routeMixin from '../../mixins/route';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import EditContactInfoLinks from './containers/EditContactInfoLinksContainer.vue';
-import EditContactInfoForm from './containers/EditContactInfoFormContainer.vue';
-import EditContactInfoModal from './components/EditContactInfoModal.vue';
+import Links from './containers/LinksContainer.vue';
+import EditForm from './containers/EditFormContainer.vue';
+import ConfirmModal from './components/ConfirmModal.vue';
 
 export default {
   name: 'EditContactInfoRoute',
 
   components: {
     RouteLoader,
-    EditContactInfoLinks,
-    EditContactInfoForm,
-    EditContactInfoModal,
+    Links,
+    EditForm,
+    ConfirmModal,
     Help,
   },
 

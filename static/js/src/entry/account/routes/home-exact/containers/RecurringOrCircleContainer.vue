@@ -14,10 +14,10 @@ import userMixin from '../../../store/user/mixin';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 const RecurringOrCircle = () =>
-  import(/* webpackChunkName: "recurring-or-circle-summary" */ '../components/RecurringOrCircle.vue');
+  import(/* webpackChunkName: "summary-recurring-or-circle" */ '../components/RecurringOrCircle.vue');
 
 export default {
-  name: 'RecurringOrCircleContainer',
+  name: 'SummaryRecurringOrCircleContainer',
 
   components: { RecurringOrCircle },
 

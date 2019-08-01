@@ -1,5 +1,5 @@
 <template>
-  <messages-wrapper
+  <messages
     :is-blast-subscriber="isBlastSubscriber"
     :is-custom-donor="isCustomDonor"
     :is-never-given="isNeverGiven"
@@ -10,12 +10,12 @@
 /* eslint-disable camelcase */
 
 import userMixin from '../../../store/user/mixin';
-import MessagesWrapper from '../components/MessagesWrapper.vue';
+import Messages from '../components/Messages.vue';
 
 export default {
-  name: 'MessagesContainer',
+  name: 'HomeMessagesContainer',
 
-  components: { MessagesWrapper },
+  components: { Messages },
 
   mixins: [userMixin],
 

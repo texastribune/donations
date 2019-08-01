@@ -1,5 +1,5 @@
 <template>
-  <payments
+  <detail
     :data="data"
     :is-single-donor="isSingleDonor"
     :is-recurring-donor="isRecurringDonor"
@@ -17,14 +17,14 @@
 import parse from 'date-fns/parse';
 import isFuture from 'date-fns/is_future';
 
-import Payments from '../components/Payments.vue';
+import Detail from '../components/Detail.vue';
 import userMixin from '../../../store/user/mixin';
 import { BLAST_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
-  name: 'PaymentsContainer',
+  name: 'PaymentsDetailContainer',
 
-  components: { Payments },
+  components: { Detail },
 
   mixins: [userMixin],
 

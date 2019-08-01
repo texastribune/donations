@@ -61,7 +61,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'BlastCancelled',
+  name: 'SummaryBlastCancelled',
 
   components: { SummaryBox },
 

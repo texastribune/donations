@@ -1,5 +1,5 @@
 <template>
-  <edit-contact-info-links
+  <links
     :is-blast-subscriber="isBlastSubscriber"
     :is-single-donor="isSingleDonor"
     :is-recurring-donor="isRecurringDonor"
@@ -14,7 +14,7 @@
 <script>
 /* eslint-disable camelcase */
 
-import EditContactInfoLinks from '../components/EditContactInfoLinks.vue';
+import Links from '../components/Links.vue';
 import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import { resetPassword } from '../../../utils/auth-actions';
@@ -22,7 +22,7 @@ import { resetPassword } from '../../../utils/auth-actions';
 export default {
   name: 'EditContactInfoLinksContainer',
 
-  components: { EditContactInfoLinks },
+  components: { Links },
 
   mixins: [userMixin, tokenUserMixin],
 

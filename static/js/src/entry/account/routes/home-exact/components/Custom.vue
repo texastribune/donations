@@ -32,7 +32,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'Custom',
+  name: 'SummaryCustom',
 
   components: { SummaryBox },
 };

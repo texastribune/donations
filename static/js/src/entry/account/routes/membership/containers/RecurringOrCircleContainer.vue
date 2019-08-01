@@ -1,6 +1,6 @@
 <template>
   <transition name="has-fade">
-    <membership-recurring-or-circle v-if="shouldShow" :data="data" />
+    <recurring-or-circle v-if="shouldShow" :data="data" />
   </transition>
 </template>
 
@@ -12,13 +12,13 @@ import formatCurrency from '../../../utils/format-currency';
 import formatLongDate from '../../../utils/format-long-date';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-const MembershipRecurringOrCircle = () =>
-  import(/* webpackChunkName: "membership-recurring-or-circle" */ '../components/MembershipRecurringOrCircle.vue');
+const RecurringOrCircle = () =>
+  import(/* webpackChunkName: "membership-recurring-or-circle" */ '../components/RecurringOrCircle.vue');
 
 export default {
   name: 'MembershipRecurringOrCircleContainer',
 
-  components: { MembershipRecurringOrCircle },
+  components: { RecurringOrCircle },
 
   mixins: [userMixin],
 

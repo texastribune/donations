@@ -8,10 +8,10 @@
 import userMixin from '../../../store/user/mixin';
 
 const Custom = () =>
-  import(/* webpackChunkName: "custom-summary" */ '../components/Custom.vue');
+  import(/* webpackChunkName: "summary-custom" */ '../components/Custom.vue');
 
 export default {
-  name: 'CustomContainer',
+  name: 'SummaryCustomContainer',
 
   components: { Custom },
 

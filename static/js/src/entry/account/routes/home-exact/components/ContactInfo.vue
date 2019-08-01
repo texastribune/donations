@@ -56,7 +56,7 @@ import SummaryBox from '../../../components/SummaryBox.vue';
 import InfoList from '../../../components/InfoList.vue';
 
 export default {
-  name: 'ContactInfo',
+  name: 'SummaryContactInfo',
 
   components: { SummaryBox, InfoList },
 

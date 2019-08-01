@@ -49,7 +49,7 @@
 import PaymentList from '../../../components/PaymentList.vue';
 
 export default {
-  name: 'BlastPayments',
+  name: 'BlastPaymentsDetail',
 
   components: { PaymentList },
 

@@ -12,7 +12,7 @@
       The Blast Newsletter: Payment History
     </h1>
 
-    <div class="has-ump-side-padding has-xxl-btm-marg"><blast-payments /></div>
+    <div class="has-ump-side-padding has-xxl-btm-marg"><detail /></div>
 
     <help blast-payments />
   </div>
@@ -25,13 +25,13 @@ import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import BlastPayments from './containers/BlastPaymentsContainer.vue';
+import Detail from './containers/DetailContainer.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastPaymentsRoute',
 
-  components: { Help, BlastPayments, RouteLoader },
+  components: { Help, Detail, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 

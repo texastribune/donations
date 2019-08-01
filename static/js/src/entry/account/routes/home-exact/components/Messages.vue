@@ -70,7 +70,7 @@ import Message from '../../../components/Message.vue';
 import { READ_ONLY_WELCOME_MESSAGE_KEY } from '../../../constants';
 
 export default {
-  name: 'MessagesWrapper',
+  name: 'HomeMessages',
 
   components: { Messages, Message },
 

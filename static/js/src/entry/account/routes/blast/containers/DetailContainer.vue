@@ -1,11 +1,11 @@
 <template>
-  <blast-detail :data="data" :is-cancelled="isCancelled" />
+  <detail :data="data" :is-cancelled="isCancelled" />
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import BlastDetail from '../components/BlastDetail.vue';
+import Detail from '../components/Detail.vue';
 import userMixin from '../../../store/user/mixin';
 import formatCurrency from '../../../utils/format-currency';
 import formatLongDate from '../../../utils/format-long-date';
@@ -14,7 +14,7 @@ import { CARD_PAYMENT_FLAG } from '../../../constants';
 export default {
   name: 'BlastDetailContainer',
 
-  components: { BlastDetail },
+  components: { Detail },
 
   mixins: [userMixin],
 

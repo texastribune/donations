@@ -19,7 +19,7 @@ import userMixin from '../../../store/user/mixin';
 import { resetPassword } from '../../../utils/auth-actions';
 
 export default {
-  name: 'ContactInfoContainer',
+  name: 'SummaryContactInfoContainer',
 
   components: { ContactInfo },
 

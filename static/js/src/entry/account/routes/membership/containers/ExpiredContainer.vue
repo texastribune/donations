@@ -1,9 +1,10 @@
 <template>
   <transition name="has-fade">
-    <membership-single-or-will-expire
+    <expired
       v-if="shouldShow"
       :data="data"
       :is-single-donor="isSingleDonor"
+      :is-circle-donor="isCircleDonor"
     />
   </transition>
 </template>
@@ -16,34 +17,27 @@ import formatCurrency from '../../../utils/format-currency';
 import formatLongDate from '../../../utils/format-long-date';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
-const MembershipSingleOrWillExpire = () =>
-  import(/* webpackChunkName: "membership-single-or-will-expire" */ '../components/MembershipSingleOrWillExpire.vue');
+const Expired = () =>
+  import(/* webpackChunkName: "membership-expired" */ '../components/Expired.vue');
 
 export default {
-  name: 'MembershipSingleOrWillExpireContainer',
+  name: 'MembershipExpiredContainer',
 
-  components: { MembershipSingleOrWillExpire },
+  components: { Expired },
 
   mixins: [userMixin],
 
   computed: {
     shouldShow() {
-      const {
-        is_single_donor,
-        is_recurring_donor,
-        is_circle_donor,
-        will_expire,
-        is_expired,
-      } = this.user;
-
-      return (
-        (is_single_donor && !is_expired) ||
-        ((is_recurring_donor || is_circle_donor) && will_expire)
-      );
+      return this.user.is_expired;
     },
 
     isSingleDonor() {
       return this.user.is_single_donor;
+    },
+
+    isCircleDonor() {
+      return this.user.is_circle_donor;
     },
 
     data() {
@@ -51,7 +45,7 @@ export default {
       const { last_transaction, membership_expiration_date } = this.user;
       const { amount, date, payment_type, credit_card } = last_transaction;
 
-      data[0].heading = 'Donation';
+      data[0].heading = 'Last donation';
       data[0].text = `${formatCurrency(amount)}, ${formatLongDate(date)}`;
 
       if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
@@ -59,12 +53,12 @@ export default {
         data[1].text = `${credit_card.brand} ending in ${credit_card.last4}`;
         data[2] = { id: 2 };
         data[2].heading = 'Status';
-        data[2].text = `Your membership is good through ${formatLongDate(
+        data[2].text = `Your membership expired on ${formatLongDate(
           membership_expiration_date
         )}.`;
       } else {
         data[1].heading = 'Status';
-        data[1].text = `Your membership is good through ${formatLongDate(
+        data[1].text = `Your membership expired on ${formatLongDate(
           membership_expiration_date
         )}.`;
       }

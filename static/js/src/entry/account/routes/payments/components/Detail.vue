@@ -90,7 +90,7 @@ import getYear from 'date-fns/get_year';
 import PaymentList from '../../../components/PaymentList.vue';
 
 export default {
-  name: 'Payments',
+  name: 'PaymentsDetail',
 
   components: { PaymentList },
 

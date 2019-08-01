@@ -77,7 +77,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'RecurringOrCircle',
+  name: 'SummaryRecurringOrCircle',
 
   components: { SummaryBox },
 

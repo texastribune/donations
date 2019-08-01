@@ -81,7 +81,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'SingleOrWillExpire',
+  name: 'SummarySingleOrWillExpire',
 
   components: { SummaryBox },
 

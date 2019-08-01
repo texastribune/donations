@@ -14,9 +14,9 @@
 
     <div class="has-ump-side-padding has-xl-btm-marg">
       <div class="has-xxl-btm-marg">
-        <membership-expired />
-        <membership-recurring-or-circle />
-        <membership-single-or-will-expire />
+        <expired />
+        <recurring-or-circle />
+        <single-or-will-expire />
       </div>
 
       <link-email />
@@ -31,9 +31,9 @@
 <script>
 /* eslint-disable camelcase */
 
-import MembershipExpired from './containers/MembershipExpiredContainer.vue';
-import MembershipRecurringOrCircle from './containers/MembershipRecurringOrCircleContainer.vue';
-import MembershipSingleOrWillExpire from './containers/MembershipSingleOrWillExpireContainer.vue';
+import Expired from './containers/ExpiredContainer.vue';
+import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
+import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
 import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
@@ -48,9 +48,9 @@ export default {
 
   components: {
     RouteLoader,
-    MembershipExpired,
-    MembershipRecurringOrCircle,
-    MembershipSingleOrWillExpire,
+    Expired,
+    RecurringOrCircle,
+    SingleOrWillExpire,
     Appeal,
     CircleAppeal,
     Help,

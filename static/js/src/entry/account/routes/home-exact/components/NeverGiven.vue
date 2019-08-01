@@ -48,7 +48,7 @@ import SummaryBox from '../../../components/SummaryBox.vue';
 import LinkEmail from '../../home/components/LinkEmail.vue';
 
 export default {
-  name: 'NeverGiven',
+  name: 'SummaryNeverGiven',
 
   components: { SummaryBox, LinkEmail },
 };

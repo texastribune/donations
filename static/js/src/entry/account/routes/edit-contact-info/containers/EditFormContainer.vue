@@ -1,5 +1,5 @@
 <template>
-  <edit-contact-info-form
+  <edit-form
     :initial-fields="initialFields"
     @onSubmit="onSubmit"
     @onFormHasChangedToggle="setShowModal"
@@ -14,12 +14,12 @@ import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
 import getTokenIdentity from '../../../utils/get-token-identity';
 import { logOut } from '../../../utils/auth-actions';
-import EditContactInfoForm from '../components/EditContactInfoForm.vue';
+import EditForm from '../components/EditForm.vue';
 
 export default {
   name: 'EditContactInfoFormContainer',
 
-  components: { EditContactInfoForm },
+  components: { EditForm },
 
   mixins: [userMixin, tokenUserMixin, contextMixin],
 

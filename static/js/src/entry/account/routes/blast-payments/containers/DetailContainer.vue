@@ -1,5 +1,5 @@
 <template>
-  <blast-payments :data="data" :is-cancelled="isCancelled" />
+  <detail :data="data" :is-cancelled="isCancelled" />
 </template>
 
 <script>
@@ -8,14 +8,14 @@
 import parse from 'date-fns/parse';
 import isFuture from 'date-fns/is_future';
 
-import BlastPayments from '../components/BlastPayments.vue';
+import Detail from '../components/Detail.vue';
 import userMixin from '../../../store/user/mixin';
 import { BLAST_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
-  name: 'BlastPaymentsContainer',
+  name: 'BlastPaymentsDetailContainer',
 
-  components: { BlastPayments },
+  components: { Detail },
 
   mixins: [userMixin],
 
