@@ -3,10 +3,8 @@
     <no-routes-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-align-center">
-        <h1 class="has-xl-btm-marg">You're logged in.</h1>
-        <p class="t-space-heading-m">
-          Redirecting to your account overview &hellip;
-        </p>
+        <h1 class="has-xl-btm-marg">You're logged in</h1>
+        <p class="t-space-heading-m">Redirecting &hellip;</p>
       </div>
     </main>
     <no-routes-site-footer />
@@ -14,8 +12,8 @@
 </template>
 
 <script>
-import { redirectAfterLogIn } from '../../utils/auth-actions';
 import { setLoggedInFlag } from '../../utils/storage';
+import { redirect } from '../../utils/auth-actions';
 import routeMixin from '../../mixins/route';
 
 export default {
@@ -29,7 +27,7 @@ export default {
 
   mounted() {
     setLoggedInFlag();
-    redirectAfterLogIn();
+    redirect(this.$route.query.next);
   },
 };
 </script>

@@ -3,7 +3,7 @@
     <no-routes-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-align-center">
-        <h1 class="has-xl-btm-marg">You're logged out.</h1>
+        <h1 class="has-xl-btm-marg">You're logged out</h1>
         <p class="t-space-heading-m">Redirecting &hellip;</p>
       </div>
     </main>
@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import { redirectAfterLogOut } from '../../utils/auth-actions';
 import { clearLoggedInFlag } from '../../utils/storage';
+import { redirect } from '../../utils/auth-actions';
 import routeMixin from '../../mixins/route';
 
 export default {
@@ -27,7 +27,7 @@ export default {
 
   mounted() {
     clearLoggedInFlag();
-    redirectAfterLogOut();
+    redirect(this.$route.query.next);
   },
 };
 </script>

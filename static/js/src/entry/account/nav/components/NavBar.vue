@@ -210,8 +210,14 @@ export default {
   },
 
   methods: {
-    logOut,
-    logIn,
+    logOut() {
+      logOut();
+    },
+
+    logIn() {
+      logIn();
+    },
+
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
     },

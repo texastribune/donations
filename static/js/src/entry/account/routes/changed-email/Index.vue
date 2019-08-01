@@ -29,9 +29,7 @@
 </template>
 
 <script>
-import { getChangedEmail, clearChangedEmail } from '../../utils/storage';
 import routeMixin from '../../mixins/route';
-import { ChangedEmailRouteError } from '../../errors';
 
 export default {
   name: 'ChangedEmailRoute',
@@ -44,21 +42,7 @@ export default {
 
   computed: {
     newEmail() {
-      return getChangedEmail();
-    },
-  },
-
-  mounted() {
-    window.addEventListener('beforeunload', () => {
-      clearChangedEmail();
-    });
-  },
-
-  methods: {
-    async fetchData() {
-      if (!getChangedEmail()) {
-        throw new ChangedEmailRouteError();
-      }
+      return this.$route.query.email;
     },
   },
 };

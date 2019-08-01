@@ -13,7 +13,6 @@ import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
 import getTokenIdentity from '../../../utils/get-token-identity';
-import { setChangedEmail } from '../../../utils/storage';
 import { logOut } from '../../../utils/auth-actions';
 import EditContactInfoForm from '../components/EditContactInfoForm.vue';
 
@@ -101,8 +100,7 @@ export default {
       const { email } = identityPayload;
 
       if (email) {
-        setChangedEmail(email);
-        logOut();
+        logOut(`/account/changed-email?email=${email}`);
       } else {
         await this.getUser();
       }

@@ -15,9 +15,3 @@ export class InvalidRouteError extends Error {
     super('Invalid route');
   }
 }
-
-export class ChangedEmailRouteError extends Error {
-  constructor() {
-    super('Visited changed-email route directly');
-  }
-}

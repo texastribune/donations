@@ -4,11 +4,7 @@ import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
 import auth from '../../utils/auth';
-import {
-  setLoggedInFlag,
-  clearLoggedInFlag,
-  getLoggedInFlag,
-} from '../../utils/storage';
+import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/storage';
 import { Auth0Error } from '../../errors';
 
 const MUTATION_TYPES = {
@@ -87,7 +83,6 @@ const actions = {
               commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
               commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
               setExtra('auth', authResult.idTokenPayload);
-              setLoggedInFlag();
               resolve();
             }
           }
