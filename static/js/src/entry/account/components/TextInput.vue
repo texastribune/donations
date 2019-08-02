@@ -6,6 +6,7 @@
       :name="name"
       :value="value"
       :aria-label="showLabel ? false : label"
+      :readonly="readOnly"
       type="text"
       @input="onInput"
       @paste="onPaste"
@@ -48,6 +49,11 @@ export default {
     },
 
     preventPaste: {
+      type: Boolean,
+      default: false,
+    },
+
+    readOnly: {
       type: Boolean,
       default: false,
     },

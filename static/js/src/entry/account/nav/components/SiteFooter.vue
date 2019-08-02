@@ -64,6 +64,11 @@
               Donation History
             </router-link>
           </li>
+          <li v-if="showAmbassadorLink">
+            <router-link :to="{ name: 'ambassador' }">
+              Tribune Ambassadors
+            </router-link>
+          </li>
           <li v-if="showBlastLinks">
             <router-link
               ga-on="click"
@@ -161,6 +166,11 @@ export default {
     },
 
     showEditContactInfoLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showAmbassadorLink: {
       type: Boolean,
       required: true,
     },

@@ -4,6 +4,8 @@ const HomeExact = () =>
   import(/* webpackChunkName: "home-exact-route" */ './home-exact/Index.vue');
 const EditContactInfo = () =>
   import(/* webpackChunkName: "edit-contact-info-route" */ './edit-contact-info/Index.vue');
+const Ambassador = () =>
+  import(/* webpackChunkName: "ambassador-route" */ './ambassador/Index.vue');
 const Membership = () =>
   import(/* webpackChunkName: "membership-route" */ './membership/Index.vue');
 const Payments = () =>
@@ -67,6 +69,13 @@ const routes = [
         path: 'edit-contact-info/',
         name: 'edit-contact-info',
         component: EditContactInfo,
+        pathToRegexpOptions: { strict: true },
+        meta: { isProtected: true },
+      },
+      {
+        path: 'ambassador/',
+        name: 'ambassador',
+        component: Ambassador,
         pathToRegexpOptions: { strict: true },
         meta: { isProtected: true },
       },

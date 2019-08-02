@@ -4,6 +4,7 @@
       user-fetch-complete
       :show-home-link="false"
       :show-edit-contact-info-link="false"
+      :show-ambassador-link="false"
       :show-blast-links="false"
       :show-membership-link="false"
       :show-payments-link="false"

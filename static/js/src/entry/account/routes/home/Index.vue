@@ -10,8 +10,9 @@
               <side-nav
                 show-home-link
                 show-edit-contact-info-link
+                show-ambassador-link
                 :user-fetch-complete="slotProps.userFetchComplete"
-                :show-blast-links="slotProps.showBlastLinks"
+                :show-blast-link="slotProps.showBlastLinks"
                 :show-membership-link="slotProps.showMembershipLink"
                 :show-payments-link="slotProps.showPaymentsLink"
               />

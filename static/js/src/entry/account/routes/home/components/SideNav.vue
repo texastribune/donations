@@ -52,7 +52,17 @@
             Donation History
           </router-link>
         </li>
-        <li v-if="showBlastLinks" class="has-xxs-btm-marg">
+        <li v-if="showAmbassadorLink" class="has-xxs-btm-marg">
+          <router-link
+            exact
+            class="has-text-black-off has-text-hover-gray"
+            active-class="is-active"
+            :to="{ name: 'ambassador' }"
+          >
+            Tribune Ambassadors
+          </router-link>
+        </li>
+        <li v-if="showBlastLink">
           <router-link
             class="has-text-black-off has-text-hover-gray"
             active-class="is-active"
@@ -63,19 +73,6 @@
             :ga-event-label="ga.userPortalNav.labels.blast"
           >
             The Blast Newsletter
-          </router-link>
-        </li>
-        <li v-if="showBlastLinks">
-          <router-link
-            class="has-text-black-off has-text-hover-gray"
-            active-class="is-active"
-            ga-on="click"
-            :to="{ name: 'blast-payments' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.side"
-            :ga-event-label="ga.userPortalNav.labels['blast-payments']"
-          >
-            The Blast Payment History
           </router-link>
         </li>
       </ul>
@@ -108,7 +105,12 @@ export default {
       required: true,
     },
 
-    showBlastLinks: {
+    showAmbassadorLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showBlastLink: {
       type: Boolean,
       required: true,
     },

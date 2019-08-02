@@ -6,6 +6,7 @@ import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
 import VeeValidate, { Validator } from 'vee-validate';
 import VModal from 'vue-js-modal';
+import VueClipboard from 'vue-clipboard2';
 
 import {
   SENTRY_DSN,
@@ -72,6 +73,7 @@ Validator.localize('en', {
 Vue.use(VModal);
 Vue.use(VueRouter);
 Vue.use(VeeValidate);
+Vue.use(VueClipboard);
 Vue.mixin({
   data() {
     return {

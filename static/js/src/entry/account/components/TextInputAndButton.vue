@@ -14,10 +14,11 @@
         :label="label"
         :show-label="false"
         :show-error-immediately="showErrorImmediately"
+        :read-only="readOnly"
         @updateFlags="updateFlags"
       />
     </validation-provider>
-    <submit :disabled="!formIsValid" value="Save" />
+    <submit :disabled="!formIsValid" :value="submitText" />
   </form>
 </template>
 
@@ -43,6 +44,16 @@ export default {
     name: {
       type: String,
       required: true,
+    },
+
+    submitText: {
+      type: String,
+      default: 'Save',
+    },
+
+    readOnly: {
+      type: Boolean,
+      default: false,
     },
 
     showErrorImmediately: {
