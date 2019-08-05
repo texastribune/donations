@@ -56,7 +56,7 @@
             </a>
           </span>
         </li>
-        <li>
+        <li class="has-m-btm-marg">
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>
           </span>
@@ -69,6 +69,22 @@
               :ga-event-label="ga.userPortalNav.labels.membership"
             >
               More about your membership
+            </router-link>
+          </span>
+        </li>
+        <li>
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
+          <span class="has-text-gray-dark">
+            <router-link
+              ga-on="click"
+              :to="{ name: 'ambassador' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.inline"
+              :ga-event-label="ga.userPortalNav.labels.ambassador"
+            >
+              Become a Tribune ambassador
             </router-link>
           </span>
         </li>

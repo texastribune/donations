@@ -1,5 +1,11 @@
 <template>
-  <logged-out v-if="shouldShow" @logIn="logIn" />
+  <logged-out
+    v-if="shouldShow"
+    :existing-email="existingEmail"
+    :email-to-link="emailToLink"
+    @logIn="logIn"
+    @goHome="goHome"
+  />
 </template>
 
 <script>
@@ -15,6 +21,16 @@ export default {
   mixins: [tokenUserMixin],
 
   props: {
+    existingEmail: {
+      type: String,
+      required: true,
+    },
+
+    emailToLink: {
+      type: String,
+      required: true,
+    },
+
     ticket: {
       type: String,
       required: true,
@@ -30,6 +46,10 @@ export default {
   methods: {
     logIn() {
       logIn(`/account/confirm-linked-identity?ticket=${this.ticket}`);
+    },
+
+    goHome() {
+      this.$emit('goHome');
     },
   },
 };

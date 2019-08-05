@@ -10,8 +10,8 @@
       If you don't own both of the above email addresses, or you didn't mean to
       do this, click <strong>CANCEL</strong>.
     </p>
-    <button @click="$emit('goHome')">Cancel</button>
-    <button @click="$emit('confirm')">Yes, link emails</button>
+    <button @click="onCancel">Cancel</button>
+    <button @click="onConfirm">Yes, link emails</button>
   </div>
 </template>
 
@@ -28,6 +28,30 @@ export default {
     emailToLink: {
       type: String,
       required: true,
+    },
+  },
+
+  methods: {
+    onCancel() {
+      this.$emit('goHome');
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['cancel-linked-email'],
+        gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
+      });
+    },
+
+    onConfirm() {
+      this.$emit('confirm');
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['confirm-linked-email'],
+        gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
+      });
     },
   },
 };

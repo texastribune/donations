@@ -19,7 +19,7 @@
         <single-or-will-expire />
       </div>
 
-      <link-email />
+      <link-email :ga-label="ga.userPortal.labels.membership" />
     </div>
 
     <appeal />

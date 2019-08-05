@@ -12,7 +12,7 @@
           ga-on="click"
           :ga-event-category="ga.userPortal.category"
           :ga-event-action="ga.userPortal.actions['contact-us']"
-          :ga-event-label="ga.userPortal.labels.home"
+          :ga-event-label="gaEventLabel"
         >
           community@texastribune.org </a
         >.
@@ -24,11 +24,7 @@
           ga-on="click"
           :ga-event-category="ga.userPortal.category"
           :ga-event-action="ga.userPortal.actions['contact-us']"
-          :ga-event-label="
-            membership
-              ? ga.userPortal.labels.membership
-              : ga.userPortal.labels.payments
-          "
+          :ga-event-label="gaEventLabel"
         >
           membership@texastribune.org </a
         >.
@@ -40,11 +36,7 @@
           ga-on="click"
           :ga-event-category="ga.userPortal.category"
           :ga-event-action="ga.userPortal.actions['contact-us']"
-          :ga-event-label="
-            blast
-              ? ga.userPortal.labels.blast
-              : ga.userPortal.labels['blast-payments']
-          "
+          :ga-event-label="gaEventLabel"
         >
           blast@texastribune.org </a
         >.
@@ -98,6 +90,27 @@ export default {
     hasTopPadding() {
       const { blast, blastPayments, edit, ambassador } = this;
       return blast || blastPayments || edit || ambassador;
+    },
+
+    // eslint-disable-next-line consistent-return, vue/return-in-computed-property
+    gaEventLabel() {
+      const {
+        home,
+        blast,
+        blastPayments,
+        edit,
+        ambassador,
+        membership,
+        payments,
+      } = this;
+
+      if (home) return this.ga.userPortal.labels.home;
+      if (blast) return this.ga.userPortal.labels.blast;
+      if (blastPayments) return this.ga.userPortal.labels['blast-payments'];
+      if (edit) return this.ga.userPortal.labels['edit-contact-info'];
+      if (ambassador) return this.ga.userPortal.labels.ambassador;
+      if (membership) return this.ga.userPortal.labels.membership;
+      if (payments) return this.ga.userPortal.labels.payments;
     },
   },
 };

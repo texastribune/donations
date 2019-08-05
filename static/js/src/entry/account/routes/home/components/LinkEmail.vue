@@ -1,6 +1,7 @@
 <template>
   <link-email-provider
-    v-slot="{ linkedEmails, initialFields, linkEmail, submittedEmail }"
+    ref="provider"
+    v-slot="{ linkedEmails, initialFields, submittedEmail }"
   >
     <div class="c-link-email t-linkstyle--underlined">
       <template v-if="submittedEmail">
@@ -78,6 +79,26 @@ export default {
       });
 
       return formatted;
+    },
+  },
+
+  props: {
+    gaLabel: {
+      type: String,
+      required: true,
+    },
+  },
+
+  methods: {
+    linkEmail(fields) {
+      this.$refs.provider.linkEmail(fields);
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['submit-linked-email'],
+        gaLabel: this.gaLabel,
+      });
     },
   },
 };

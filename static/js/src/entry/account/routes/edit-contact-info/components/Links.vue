@@ -9,7 +9,13 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <router-link :to="{ name: 'membership' }">
+          <router-link
+            ga-on="click"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.inline"
+            :ga-event-label="ga.userPortalNav.labels.membership"
+            :to="{ name: 'membership' }"
+          >
             See your membership status
           </router-link>
         </span>
@@ -19,7 +25,13 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <router-link :to="{ name: 'blast' }">
+          <router-link
+            ga-on="click"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.inline"
+            :ga-event-label="ga.userPortalNav.labels.blast"
+            :to="{ name: 'blast' }"
+          >
             See your subscription to The Blast
           </router-link>
         </span>
@@ -35,7 +47,7 @@
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
-          <button class="c-link-button" @click="$emit('resetPassword')">
+          <button class="c-link-button" @click="resetPassword">
             Reset your password
           </button>
         </span>
@@ -93,6 +105,19 @@ export default {
     isCircleDonor: {
       type: Boolean,
       required: true,
+    },
+  },
+
+  methods: {
+    resetPassword() {
+      this.$emit('resetPassword');
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['reset-password'],
+        gaLabel: this.ga.userPortal.labels['edit-contact-info'],
+      });
     },
   },
 };

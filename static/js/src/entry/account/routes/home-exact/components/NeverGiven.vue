@@ -28,7 +28,7 @@
       </ul>
     </template>
     <template v-slot:bottom>
-      <link-email>
+      <link-email :ga-label="ga.userPortal.labels.home">
         <template v-slot:heading>
           <h2 class="t-size-s">Already a member?</h2>
         </template>

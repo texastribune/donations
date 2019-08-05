@@ -38,7 +38,13 @@
             </router-link>
           </li>
           <li v-if="showEditContactInfoLink">
-            <router-link :to="{ name: 'edit-contact-info' }">
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
+              :to="{ name: 'edit-contact-info' }"
+            >
               Edit Contact Info
             </router-link>
           </li>
@@ -65,7 +71,13 @@
             </router-link>
           </li>
           <li v-if="showAmbassadorLink">
-            <router-link :to="{ name: 'ambassador' }">
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels.ambassador"
+              :to="{ name: 'ambassador' }"
+            >
               Tribune Ambassadors
             </router-link>
           </li>

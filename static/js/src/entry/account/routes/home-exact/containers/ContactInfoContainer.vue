@@ -62,13 +62,6 @@ export default {
           this.pwResetSuccess = true;
         }
       });
-
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['reset-password'],
-        gaLabel: this.ga.userPortal.labels.home,
-      });
     },
 
     getContactInfo() {

@@ -34,7 +34,10 @@ export const GA_USER_PORTAL_NAV = {
     membership: 'membership overview',
     payments: 'donation history',
     blast: 'the blast overview',
+    ambassador: 'ambassador profile',
     'blast-payments': 'the blast payment history',
+    'edit-contact-info': 'profile editor',
+    'confirm-linked-identity': 'link email confirmation',
     // external starting here
     'community-guidelines': 'community guidelines',
     'support-landing': 'support landing',
@@ -52,13 +55,19 @@ export const GA_USER_PORTAL = {
     'tax-receipt': 'download tax receipt',
     'blast-receipt': 'download blast receipt',
     'clear-notification': 'clear notification',
+    'submit-linked-email': 'lookup linked email',
+    'confirm-linked-email': 'confirm linked email',
+    'cancel-linked-email': 'cancel linked email',
   },
   labels: {
     home: 'account overview',
     membership: 'membership overview',
     payments: 'donation history',
     blast: 'the blast overview',
+    ambassador: 'ambassador profile',
     'blast-payments': 'the blast payment history',
+    'edit-contact-info': 'profile editor',
+    'confirm-linked-identity': 'link email confirmation',
   },
 };
 export const GA_DONATIONS = {
@@ -80,6 +89,18 @@ export const GA_BLAST_INTENT = {
   },
   labels: {
     'user-portal': 'user portal',
+  },
+};
+export const GA_TRIBUNE_AMBASSADORS = {
+  category: 'tribune ambassadors',
+  actions: {
+    facebook: 'membership share - facebook',
+    twitter: 'membership share - twitter',
+    email: 'membership share - email',
+    link: 'membership share - copy link',
+  },
+  labels: {
+    ambassador: 'ambassador profile',
   },
 };
 export const GA_CUSTOM_EVENT_NAME = 'customUserPortal';

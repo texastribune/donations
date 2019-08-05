@@ -9,10 +9,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
-import jwt from 'jsonwebtoken';
-
 import tokenUserMixin from '../../../store/token-user/mixin';
 import userMixin from '../../../store/user/mixin';
 import contextMixin from '../../../store/context/mixin';
@@ -26,7 +22,12 @@ export default {
   mixins: [tokenUserMixin, userMixin, contextMixin],
 
   props: {
-    ticket: {
+    existingEmail: {
+      type: String,
+      required: true,
+    },
+
+    emailToLink: {
       type: String,
       required: true,
     },
@@ -35,16 +36,6 @@ export default {
   computed: {
     shouldShow() {
       return !!this.accessToken;
-    },
-
-    existingEmail() {
-      const { existing_email } = jwt.decode(this.ticket);
-      return existing_email;
-    },
-
-    emailToLink() {
-      const { email_to_link } = jwt.decode(this.ticket);
-      return email_to_link;
     },
   },
 

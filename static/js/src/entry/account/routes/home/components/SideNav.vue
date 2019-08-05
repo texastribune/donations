@@ -22,6 +22,9 @@
             class="has-text-black-off has-text-hover-gray"
             active-class="is-active"
             :to="{ name: 'edit-contact-info' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.side"
+            :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
           >
             Profile Settings
           </router-link>
@@ -58,6 +61,9 @@
             class="has-text-black-off has-text-hover-gray"
             active-class="is-active"
             :to="{ name: 'ambassador' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.side"
+            :ga-event-label="ga.userPortalNav.labels.ambassador"
           >
             Tribune Ambassadors
           </router-link>

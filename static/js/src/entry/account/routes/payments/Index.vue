@@ -14,7 +14,7 @@
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
       <div class="has-xxl-btm-marg"><detail /></div>
-      <link-email />
+      <link-email :ga-label="ga.userPortal.labels.payments" />
     </div>
 
     <appeal />
