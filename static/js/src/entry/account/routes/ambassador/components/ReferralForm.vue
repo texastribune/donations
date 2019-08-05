@@ -1,13 +1,18 @@
 <template>
-  <text-input-and-button
-    :rules="{ url: true, required: true }"
-    :initial-fields="initialFields"
-    :read-only="true"
-    :submit-text="submitText"
-    name="url"
-    label="personal referral link"
-    @onSubmit="copyUrl"
-  />
+  <div>
+    <p class="has-xxxs-btm-marg has-text-gray-dark t-size-s t-space-heading-m">
+      Or, copy your personal referral link:
+    </p>
+    <text-input-and-button
+      :rules="{ url: true, required: true }"
+      :initial-fields="initialFields"
+      :submit-text="submitText"
+      read-only
+      name="url"
+      label="personal referral link"
+      @onSubmit="copyUrl"
+    />
+  </div>
 </template>
 
 <script>
