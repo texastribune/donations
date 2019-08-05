@@ -36,7 +36,6 @@
         </div>
         <div class="has-b-btm-marg">
           <text-input-and-button
-            :rules="{ required: true, email: true }"
             :initial-fields="initialFields"
             :show-error-immediately="false"
             name="email"

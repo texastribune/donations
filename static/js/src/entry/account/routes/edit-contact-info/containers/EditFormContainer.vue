@@ -26,40 +26,43 @@ export default {
   computed: {
     initialFields() {
       const { first_name, last_name, postal_code, identities } = this.user;
-      const { email: tokenEmail } = this.tokenUser;
-      const { tribune_offers_consent } = getTokenIdentity(
-        identities,
-        tokenEmail
-      );
+      const { email } = this.tokenUser;
+      const { tribune_offers_consent } = getTokenIdentity(identities, email);
 
       return {
         firstName: {
           value: first_name,
+          rules: { required: true },
           isVisible: true,
           shouldValidate: true,
         },
         lastName: {
           value: last_name,
+          rules: { required: true },
           isVisible: true,
           shouldValidate: true,
         },
         zip: {
           value: postal_code,
+          rules: { required: true, numeric: true },
           isVisible: true,
           shouldValidate: true,
         },
         email: {
-          value: tokenEmail,
+          value: email,
+          rules: { required: true, email: true },
           isVisible: true,
           shouldValidate: true,
         },
         confirmedEmail: {
           value: '',
+          rules: null,
           isVisible: false,
           shouldValidate: true,
         },
         marketing: {
           value: tribune_offers_consent,
+          rules: null,
           isVisible: true,
           shouldValidate: false,
         },

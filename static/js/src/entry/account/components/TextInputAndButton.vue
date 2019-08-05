@@ -3,7 +3,7 @@
     <validation-provider
       v-slot="{ errors, flags }"
       :name="name"
-      :rules="rules"
+      :rules="currentFields[name].rules"
       immediate
     >
       <text-input
@@ -31,11 +31,6 @@ export default {
   mixins: [formMixin],
 
   props: {
-    rules: {
-      type: Object,
-      required: true,
-    },
-
     label: {
       type: String,
       required: true,

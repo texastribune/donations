@@ -2,8 +2,8 @@
   <form :key="formKey" @submit.prevent="$emit('onSubmit', currentFields)">
     <validation-provider
       v-slot="{ errors, flags }"
+      :rules="currentFields.firstName.rules"
       name="firstName"
-      :rules="{ required: true }"
       immediate
     >
       <text-input
@@ -17,8 +17,8 @@
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
+      :rules="currentFields.lastName.rules"
       name="lastName"
-      :rules="{ required: true }"
       immediate
     >
       <text-input
@@ -32,8 +32,8 @@
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
+      :rules="currentFields.email.rules"
       name="email"
-      :rules="{ required: true, email: true }"
       immediate
     >
       <text-input
@@ -59,8 +59,8 @@
     <validation-provider
       v-show="showConfirmedEmail"
       v-slot="{ errors, flags }"
+      :rules="confirmedEmailRules"
       name="confirmedEmail"
-      :rules="{ required: true, is: currentFields.email.value }"
       immediate
     >
       <text-input
@@ -75,8 +75,8 @@
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
+      :rules="currentFields.zip.rules"
       name="zip"
-      :rules="{ required: true, numeric: true }"
       immediate
     >
       <text-input
@@ -128,6 +128,10 @@ export default {
       set(isVisible) {
         this.currentFields.confirmedEmail.isVisible = isVisible;
       },
+    },
+
+    confirmedEmailRules() {
+      return { required: true, is: this.currentFields.email.value };
     },
   },
 

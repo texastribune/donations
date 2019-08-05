@@ -17,7 +17,12 @@ export default {
   computed: {
     initialFields() {
       return {
-        email: { value: '', shouldValidate: true, isVisible: true },
+        email: {
+          value: '',
+          shouldValidate: true,
+          isVisible: true,
+          rules: { required: true, email: true },
+        },
       };
     },
 

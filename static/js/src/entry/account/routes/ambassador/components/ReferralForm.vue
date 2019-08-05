@@ -4,7 +4,6 @@
       Or, copy your personal referral link:
     </p>
     <text-input-and-button
-      :rules="{ url: true, required: true }"
       :initial-fields="initialFields"
       :submit-text="submitText"
       read-only

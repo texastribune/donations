@@ -17,26 +17,29 @@ export default {
     return {
       currentFields: this.buildCurrentFields(),
       formKey: Date.now().toString(),
+      keysInField: [],
     };
   },
 
   computed: {
     formHasChanged() {
       const haveChanged = Object.keys(this.currentFields).filter(
-        key => this.currentFields[key].changed
+        fieldName => this.currentFields[fieldName].changed
       );
 
       return haveChanged.length > 0;
     },
 
     formIsValid() {
-      const fieldsToValidate = Object.keys(this.currentFields).filter(key => {
-        const { shouldValidate, isVisible } = this.currentFields[key];
-        return shouldValidate && isVisible;
-      });
+      const fieldsToValidate = Object.keys(this.currentFields).filter(
+        fieldName => {
+          const { shouldValidate, isVisible } = this.currentFields[fieldName];
+          return shouldValidate && isVisible;
+        }
+      );
 
       const areNotValid = fieldsToValidate.filter(
-        key => !this.currentFields[key].valid
+        fieldName => !this.currentFields[fieldName].valid
       );
 
       return areNotValid.length === 0;
@@ -58,13 +61,11 @@ export default {
 
   methods: {
     updateCurrentFields() {
-      const updateKeys = ['isVisible', 'shouldValidate', 'value'];
-
-      Object.keys(this.initialFields).forEach(fieldKey => {
-        updateKeys.forEach(updateKey => {
-          this.currentFields[fieldKey][updateKey] = this.initialFields[
-            fieldKey
-          ][updateKey];
+      Object.keys(this.initialFields).forEach(fieldName => {
+        this.keysInField.forEach(keyInField => {
+          this.currentFields[fieldName][keyInField] = this.initialFields[
+            fieldName
+          ][keyInField];
         });
       });
     },
@@ -72,17 +73,24 @@ export default {
     buildCurrentFields() {
       const final = {};
 
-      Object.keys(this.initialFields).forEach(key => {
-        const { value, shouldValidate, isVisible } = this.initialFields[key];
+      Object.keys(this.initialFields).forEach((fieldName, index) => {
+        const { value, shouldValidate, isVisible, rules } = this.initialFields[
+          fieldName
+        ];
 
-        final[key] = {
+        final[fieldName] = {
           value,
+          rules,
           isVisible,
           shouldValidate,
           changed: null,
           dirty: null,
           valid: null,
         };
+
+        if (index === 0) {
+          this.keysInField = [...Object.keys(final[fieldName])];
+        }
       });
 
       return final;

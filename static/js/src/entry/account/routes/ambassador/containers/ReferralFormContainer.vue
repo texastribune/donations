@@ -26,6 +26,7 @@ export default {
       return {
         url: {
           value: this.user.ambassador_url,
+          rules: { url: true, required: true },
           shouldValidate: true,
           isVisible: true,
         },
