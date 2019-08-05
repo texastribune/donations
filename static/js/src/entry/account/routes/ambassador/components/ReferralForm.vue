@@ -45,7 +45,7 @@ export default {
       this.$emit('copyUrl', value);
 
       window.dataLayer.push({
-        event: this.ga.customEventName,
+        event: this.ga.ambassadorsCustomEventName,
         gaCategory: this.ga.tribuneAmbassadors.category,
         gaAction: this.ga.tribuneAmbassadors.actions.link,
         gaLabel: this.ga.tribuneAmbassadors.labels.ambassador,

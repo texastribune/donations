@@ -104,3 +104,4 @@ export const GA_TRIBUNE_AMBASSADORS = {
   },
 };
 export const GA_CUSTOM_EVENT_NAME = 'customUserPortal';
+export const GA_AMBASSADORS_CUSTOM_EVENT_NAME = 'customTribuneAmbassadors';
