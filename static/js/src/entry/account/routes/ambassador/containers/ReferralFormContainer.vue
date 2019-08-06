@@ -26,9 +26,11 @@ export default {
       return {
         url: {
           value: this.user.ambassador_url,
+          name: 'url',
+          label: 'personal referral link',
           rules: { url: true, required: true },
-          shouldValidate: true,
           isVisible: true,
+          readOnly: true,
         },
       };
     },

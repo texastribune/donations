@@ -19,27 +19,16 @@
 </template>
 
 <script>
+import formElementMixin from '../mixins/form-element';
+
 export default {
   name: 'TextInput',
+
+  mixins: [formElementMixin],
 
   props: {
     value: {
       type: String,
-      required: true,
-    },
-
-    name: {
-      type: String,
-      required: true,
-    },
-
-    label: {
-      type: String,
-      required: true,
-    },
-
-    flags: {
-      type: Object,
       required: true,
     },
 
@@ -70,18 +59,6 @@ export default {
   },
 
   computed: {
-    changed() {
-      return this.flags.changed;
-    },
-
-    valid() {
-      return this.flags.valid;
-    },
-
-    dirty() {
-      return this.flags.dirty;
-    },
-
     showErrorMessages() {
       const { errorMessages, dirty, showErrorImmediately } = this;
 
@@ -92,20 +69,6 @@ export default {
     },
   },
 
-  watch: {
-    changed() {
-      this.updateFlags();
-    },
-
-    valid() {
-      this.updateFlags();
-    },
-
-    dirty() {
-      this.updateFlags();
-    },
-  },
-
   methods: {
     onInput(e) {
       this.$emit('input', e.target.value);
@@ -113,11 +76,6 @@ export default {
 
     onPaste(e) {
       if (this.preventPaste) e.preventDefault();
-    },
-
-    updateFlags() {
-      const { changed, valid, dirty } = this;
-      this.$emit('updateFlags', this.name, { changed, valid, dirty });
     },
   },
 };

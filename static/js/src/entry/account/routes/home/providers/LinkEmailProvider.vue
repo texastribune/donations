@@ -18,10 +18,11 @@ export default {
     initialFields() {
       return {
         email: {
+          name: 'email',
           value: '',
-          shouldValidate: true,
-          isVisible: true,
+          label: 'email address to link',
           rules: { required: true, email: true },
+          isVisible: true,
         },
       };
     },

@@ -31,40 +31,47 @@ export default {
 
       return {
         firstName: {
+          name: 'firstName',
+          label: 'First name',
           value: first_name,
           rules: { required: true },
           isVisible: true,
-          shouldValidate: true,
         },
         lastName: {
+          name: 'lastName',
+          label: 'Last name',
           value: last_name,
           rules: { required: true },
           isVisible: true,
-          shouldValidate: true,
         },
         zip: {
+          name: 'zip',
+          label: 'ZIP code',
           value: postal_code,
           rules: { required: true, numeric: true },
           isVisible: true,
-          shouldValidate: true,
         },
         email: {
+          name: 'email',
+          label: 'Email',
           value: email,
           rules: { required: true, email: true },
           isVisible: true,
-          shouldValidate: true,
         },
         confirmedEmail: {
+          name: 'confirmedEmail',
+          label: 'Type your email again to confirm the change',
           value: '',
           rules: null,
           isVisible: false,
-          shouldValidate: true,
         },
         marketing: {
+          name: 'marketing',
+          label:
+            'Yes, I would like to receive emails with special promotions, product announcements and membership opportunities.',
           value: tribune_offers_consent,
-          rules: null,
+          rules: {},
           isVisible: true,
-          shouldValidate: false,
         },
       };
     },

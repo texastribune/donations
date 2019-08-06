@@ -3,45 +3,45 @@
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.firstName.rules"
-      name="firstName"
+      :name="currentFields.firstName.name"
       immediate
     >
       <text-input
         v-model="currentFields.firstName.value"
         :error-messages="errors"
         :flags="flags"
-        label="First name"
-        name="firstName"
+        :name="currentFields.firstName.name"
+        :label="currentFields.firstName.label"
         @updateFlags="updateFlags"
       />
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.lastName.rules"
-      name="lastName"
+      :name="currentFields.lastName.name"
       immediate
     >
       <text-input
         v-model="currentFields.lastName.value"
         :error-messages="errors"
         :flags="flags"
-        label="Last name"
-        name="lastName"
+        :name="currentFields.lastName.name"
+        :label="currentFields.lastName.label"
         @updateFlags="updateFlags"
       />
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.email.rules"
-      name="email"
+      :name="currentFields.email.name"
       immediate
     >
       <text-input
         v-model="currentFields.email.value"
         :error-messages="errors"
         :flags="flags"
-        label="Email"
-        name="email"
+        :name="currentFields.email.name"
+        :label="currentFields.email.label"
         @updateFlags="updateFlags"
       >
         <p v-show="showConfirmedEmail" class="has-text-error">
@@ -60,15 +60,15 @@
       v-show="showConfirmedEmail"
       v-slot="{ errors, flags }"
       :rules="confirmedEmailRules"
-      name="confirmedEmail"
+      :name="currentFields.confirmedEmail.name"
       immediate
     >
       <text-input
         v-model="currentFields.confirmedEmail.value"
         :error-messages="errors"
         :flags="flags"
-        label="Type your email again to confirm the change"
-        name="confirmedEmail"
+        :name="currentFields.confirmedEmail.name"
+        :label="currentFields.confirmedEmail.label"
         prevent-paste
         @updateFlags="updateFlags"
       />
@@ -76,31 +76,32 @@
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.zip.rules"
-      name="zip"
+      :name="currentFields.zip.name"
       immediate
     >
       <text-input
         v-model="currentFields.zip.value"
         :error-messages="errors"
         :flags="flags"
-        label="ZIP code"
-        name="zip"
+        :name="currentFields.zip.name"
+        :label="currentFields.zip.label"
         @updateFlags="updateFlags"
       />
     </validation-provider>
-    <div>
-      <label for="marketing">News & Offers</label>
-      <label for="marketing">
-        <input
-          id="marketing"
-          v-model="currentFields.marketing.value"
-          type="checkbox"
-          name="marketing"
-        />
-        Yes, I would like to receive emails with special promotions, product
-        announcements and membership opportunities.
-      </label>
-    </div>
+    <validation-provider
+      v-slot="{ flags }"
+      :rules="currentFields.marketing.rules"
+      :name="currentFields.marketing.name"
+      immediate
+    >
+      <checkbox
+        v-model="currentFields.marketing.value"
+        :flags="flags"
+        :name="currentFields.marketing.name"
+        :label="currentFields.marketing.label"
+        @updateFlags="updateFlags"
+      />
+    </validation-provider>
     <submit :disabled="!formIsValid" />
   </form>
 </template>

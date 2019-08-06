@@ -8,13 +8,13 @@
     >
       <text-input
         v-model="currentFields[name].value"
+        :name="currentFields[name].name"
+        :label="currentFields[name].label"
+        :read-only="currentFields[name].readOnly"
         :error-messages="errors"
         :flags="flags"
-        :name="name"
-        :label="label"
         :show-label="false"
-        :show-error-immediately="showErrorImmediately"
-        :read-only="readOnly"
+        :show-error-immediately="false"
         @updateFlags="updateFlags"
       />
     </validation-provider>
@@ -26,21 +26,11 @@
 import formMixin from '../mixins/form';
 
 export default {
-  name: 'TextInputAndButton',
+  name: 'TextInputAndSubmit',
 
   mixins: [formMixin],
 
   props: {
-    label: {
-      type: String,
-      required: true,
-    },
-
-    name: {
-      type: String,
-      required: true,
-    },
-
     submitText: {
       type: String,
       default: 'Save',
@@ -50,10 +40,12 @@ export default {
       type: Boolean,
       default: false,
     },
+  },
 
-    showErrorImmediately: {
-      type: Boolean,
-      default: true,
+  computed: {
+    name() {
+      const [onlyFieldKey] = Object.keys(this.initialFields);
+      return this.initialFields[onlyFieldKey].name;
     },
   },
 };

@@ -38,9 +38,6 @@
         <div class="has-b-btm-marg">
           <text-input-and-button
             :initial-fields="initialFields"
-            :show-error-immediately="false"
-            name="email"
-            label="email address to link"
             @onSubmit="linkEmail"
           />
         </div>

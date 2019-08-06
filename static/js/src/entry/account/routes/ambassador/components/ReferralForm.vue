@@ -7,8 +7,6 @@
       :initial-fields="initialFields"
       :submit-text="submitText"
       read-only
-      name="url"
-      label="personal referral link"
       @onSubmit="copyUrl"
     />
   </div>

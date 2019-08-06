@@ -1,10 +1,11 @@
 import { ValidationProvider } from 'vee-validate';
 
 import TextInput from '../components/TextInput.vue';
+import Checkbox from '../components/Checkbox.vue';
 import Submit from '../components/Submit.vue';
 
 export default {
-  components: { TextInput, Submit, ValidationProvider },
+  components: { TextInput, Checkbox, Submit, ValidationProvider },
 
   props: {
     initialFields: {
@@ -33,8 +34,8 @@ export default {
     formIsValid() {
       const fieldsToValidate = Object.keys(this.currentFields).filter(
         fieldName => {
-          const { shouldValidate, isVisible } = this.currentFields[fieldName];
-          return shouldValidate && isVisible;
+          const { isVisible } = this.currentFields[fieldName];
+          return isVisible;
         }
       );
 
@@ -74,15 +75,22 @@ export default {
       const final = {};
 
       Object.keys(this.initialFields).forEach((fieldName, index) => {
-        const { value, shouldValidate, isVisible, rules } = this.initialFields[
-          fieldName
-        ];
+        const {
+          name,
+          label,
+          value,
+          isVisible,
+          readOnly,
+          rules,
+        } = this.initialFields[fieldName];
 
         final[fieldName] = {
+          name,
+          label,
           value,
           rules,
           isVisible,
-          shouldValidate,
+          readOnly,
           changed: null,
           dirty: null,
           valid: null,
