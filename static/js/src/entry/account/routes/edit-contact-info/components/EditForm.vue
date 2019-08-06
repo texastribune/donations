@@ -47,8 +47,9 @@
         <p v-show="showConfirmedEmail" class="has-text-error">
           <strong>Are you sure?</strong> Changing this will log you out of your
           account, and you won't be able to log back in with
-          <strong>Foobar</strong>. Changing your account email will not affect
-          your email subscriptions.
+          <strong>{{ initialFields.email.value }}</strong
+          >. Changing your account email will not affect your email
+          subscriptions.
         </p>
         <p v-show="!showConfirmedEmail">
           Notice: This email is for logging into your account. Changing it will
