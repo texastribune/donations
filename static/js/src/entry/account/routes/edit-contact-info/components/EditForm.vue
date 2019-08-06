@@ -1,5 +1,5 @@
 <template>
-  <form :key="formKey" @submit.prevent="$emit('onSubmit', currentFields)">
+  <form :key="formKey" @submit.prevent="onSubmit">
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.firstName.rules"
@@ -144,6 +144,63 @@ export default {
         this.showConfirmedEmail = false;
         this.resetValue('confirmedEmail');
       }
+    },
+  },
+
+  methods: {
+    onSubmit() {
+      this.$emit('onSubmit', this.currentFields);
+      this.logToGtm();
+    },
+
+    logToGtm() {
+      const allEvents = [];
+      const baseEvent = {
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaLabel: this.ga.userPortal.labels['edit-contact-info'],
+      };
+
+      if (this.currentFields.email.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-email'],
+        });
+      }
+      if (
+        this.currentFields.firstName.changed ||
+        this.currentFields.lastName.changed
+      ) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-name'],
+        });
+      }
+      if (this.currentFields.zip.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-zip'],
+        });
+      }
+
+      const { changed, value } = this.currentFields.marketing;
+
+      if (changed && value) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['marketing-opt-in'],
+        });
+      }
+      if (changed && !value) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['marketing-opt-out'],
+        });
+      }
+
+      allEvents.forEach(event => {
+        window.dataLayer.push(event);
+      });
     },
   },
 };

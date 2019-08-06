@@ -75,22 +75,10 @@ export default {
       const final = {};
 
       Object.keys(this.initialFields).forEach((fieldName, index) => {
-        const {
-          name,
-          label,
-          value,
-          isVisible,
-          readOnly,
-          rules,
-        } = this.initialFields[fieldName];
+        const { ...allValues } = this.initialFields[fieldName];
 
         final[fieldName] = {
-          name,
-          label,
-          value,
-          rules,
-          isVisible,
-          readOnly,
+          ...allValues,
           changed: null,
           dirty: null,
           valid: null,

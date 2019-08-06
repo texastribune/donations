@@ -62,7 +62,6 @@ export default {
           name: 'confirmedEmail',
           label: 'Type your email again to confirm the change',
           value: '',
-          rules: null,
           isVisible: false,
         },
         marketing: {

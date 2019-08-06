@@ -58,6 +58,11 @@ export const GA_USER_PORTAL = {
     'submit-linked-email': 'lookup linked email',
     'confirm-linked-email': 'confirm linked email',
     'cancel-linked-email': 'cancel linked email',
+    'edit-name': 'edit name',
+    'edit-email': 'edit account email',
+    'edit-zip': 'edit zip',
+    'marketing-opt-in': 'marketing opt-in',
+    'marketing-opt-out': 'marketing opt-out',
   },
   labels: {
     home: 'account overview',
