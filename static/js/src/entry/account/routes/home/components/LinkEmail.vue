@@ -36,7 +36,7 @@
           </slot>
         </div>
         <div class="has-b-btm-marg">
-          <text-input-and-button
+          <text-input-and-submit
             :initial-fields="initialFields"
             @onSubmit="linkEmail"
           />
@@ -54,12 +54,12 @@
 
 <script>
 import LinkEmailProvider from '../providers/LinkEmailProvider.vue';
-import TextInputAndButton from '../../../components/TextInputAndButton.vue';
+import TextInputAndSubmit from '../../../components/TextInputAndSubmit.vue';
 
 export default {
   name: 'LinkEmail',
 
-  components: { LinkEmailProvider, TextInputAndButton },
+  components: { LinkEmailProvider, TextInputAndSubmit },
 
   filters: {
     formatLinkedEmails(emails) {

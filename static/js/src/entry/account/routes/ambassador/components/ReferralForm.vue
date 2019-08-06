@@ -3,7 +3,7 @@
     <p class="has-xxxs-btm-marg has-text-gray-dark t-size-s t-space-heading-m">
       Or, copy your personal referral link:
     </p>
-    <text-input-and-button
+    <text-input-and-submit
       :initial-fields="initialFields"
       :submit-text="submitText"
       read-only
@@ -13,12 +13,12 @@
 </template>
 
 <script>
-import TextInputAndButton from '../../../components/TextInputAndButton.vue';
+import TextInputAndSubmit from '../../../components/TextInputAndSubmit.vue';
 
 export default {
   name: 'ReferralForm',
 
-  components: { TextInputAndButton },
+  components: { TextInputAndSubmit },
 
   props: {
     initialFields: {
