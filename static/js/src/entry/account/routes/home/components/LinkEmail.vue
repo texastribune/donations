@@ -87,8 +87,8 @@ export default {
   },
 
   methods: {
-    linkEmail(fields) {
-      this.$refs.provider.linkEmail(fields);
+    async linkEmail(fields) {
+      await this.$refs.provider.linkEmail(fields);
 
       window.dataLayer.push({
         event: this.ga.customEventName,

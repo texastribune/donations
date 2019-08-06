@@ -39,8 +39,8 @@ export default {
       await this.linkIdentity({ email: value });
       await this.getUser();
 
-      this.setAppIsFetching(false);
       this.submittedEmail = value;
+      this.setAppIsFetching(false);
     },
   },
 
