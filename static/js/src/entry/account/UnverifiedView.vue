@@ -4,7 +4,7 @@
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-linkstyle--underlined">
         <h1 class="has-xl-btm-marg">Please verify your account</h1>
-        <p class="t-space-heading-m">
+        <p>
           Thanks for creating a Texas Tribune account &mdash; you’re almost
           done! To view your account, we need you to verify your email address:
           <strong>{{ email }}</strong

@@ -54,11 +54,11 @@
       </li>
     </ul>
 
-    <p v-if="pwResetSuccess" class="t-size-xs t-space-heading-m has-text-gray">
+    <p v-if="pwResetSuccess" class="t-size-xs has-text-gray">
       Check your inbox for an email from The Texas Tribune with the subject line
       &quot;Reset your password.&quot;
     </p>
-    <p v-if="pwResetFailure" class="t-size-xs t-space-heading-m has-text-gray">
+    <p v-if="pwResetFailure" class="t-size-xs has-text-gray">
       There was an issue resetting your password. If you continue having
       trouble, email
       <a href="mailto:community@texastribune.org">community@texastribune.org </a

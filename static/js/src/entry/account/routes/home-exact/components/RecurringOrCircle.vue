@@ -1,10 +1,7 @@
 <template>
   <summary-box heading="membership">
     <template v-slot:content>
-      <p
-        v-if="nextTransaction.last4"
-        class="has-text-gray-dark t-space-heading-m"
-      >
+      <p v-if="nextTransaction.last4" class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your next
         <strong>{{ nextTransaction.period }}</strong> donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
@@ -12,7 +9,7 @@
         >, to your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-space-heading-m">
+      <p v-else class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your next
         {{ nextTransaction.period }} donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> is due on
@@ -73,7 +70,7 @@
       </ul>
     </template>
     <template v-slot:bottom>
-      <p class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined">
+      <p class="has-text-gray-dark t-linkstyle--underlined">
         To update your membership, contact us at
         <a
           href="mailto:membership@texastribune.org"

@@ -11,9 +11,7 @@
           <icon name="bell" :display="{ size: 's' }" />
         </template>
         <template v-slot:content>
-          <div
-            class="has-text-gray-dark t-size-s t-linkstyle--underlined t-space-heading-m"
-          >
+          <div class="has-text-gray-dark t-size-s t-linkstyle--underlined">
             <p class="has-b-btm-marg">
               <template v-if="isCustomDonor">
                 Thanks for creating a Texas Tribune account. You can use this

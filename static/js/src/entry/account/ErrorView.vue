@@ -4,11 +4,11 @@
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-linkstyle--underlined">
         <h1 class="has-xl-btm-marg">Sorry about that.</h1>
-        <p class="has-s-btm-marg t-space-heading-m">
+        <p class="has-s-btm-marg">
           We’re having trouble loading your account information, and we're
           working hard to fix it.
         </p>
-        <p class="t-space-heading-m">
+        <p>
           Click here to return to your <a href="/account">account overview</a>.
           If the issue persists, contact us at
           <a

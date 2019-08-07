@@ -1,7 +1,7 @@
 <template>
   <summary-box heading="become a member" :display="{ hasMobileBottom: false }">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
+      <p class="has-text-gray-dark">
         Our nonprofit newsroom relies on the support of readers like you to keep
         our stories free and accessible for all. Are you ready to join our
         member community?
@@ -33,7 +33,7 @@
           <h2 class="t-size-s">Already a member?</h2>
         </template>
         <template v-slot:text>
-          <p class="t-size-xs t-space-heading-m has-text-gray">
+          <p class="t-size-xs has-text-gray">
             You may have donated with a different email address. Enter another
             email below to link your accounts.
           </p>

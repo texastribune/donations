@@ -1,10 +1,7 @@
 <template>
   <summary-box heading="the blast">
     <template v-slot:content>
-      <p
-        v-if="nextTransaction.last4"
-        class="has-text-gray-dark t-space-heading-m"
-      >
+      <p v-if="nextTransaction.last4" class="has-text-gray-dark">
         Thanks for subscribing to The Blast! Your next
         <strong>{{ nextTransaction.period }}</strong> payment of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
@@ -12,10 +9,7 @@
         >, to your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
-      <p
-        v-else
-        class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined"
-      >
+      <p v-else class="has-text-gray-dark t-linkstyle--underlined">
         Thanks for subscribing to The Blast! Your subscription is paid through
         <strong>{{ nextTransaction.date | longDate }}</strong
         >. To update or extend your subscription, contact us at
@@ -51,7 +45,7 @@
       </ul>
     </template>
     <template v-if="nextTransaction.last4" v-slot:bottom>
-      <p class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined">
+      <p class="has-text-gray-dark t-linkstyle--underlined">
         Need to make a change? Contact us at
         <a
           href="mailto:blast@texastribune.org"

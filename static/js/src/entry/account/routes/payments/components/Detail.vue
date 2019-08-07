@@ -3,7 +3,7 @@
     <div class="has-xxl-btm-marg"><payment-list :payments="data" /></div>
 
     <p
-      class="t-size-xs t-linkstyle--underlined t-space-heading-m has-text-gray has-xxxl-btm-marg"
+      class="t-size-xs t-linkstyle--underlined has-text-gray has-xxxl-btm-marg"
     >
       Note: Donation history does not include event sponsorships or ticket
       purchases. To receive a {{ lastYear }} tax receipt with this information,

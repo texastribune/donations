@@ -13,7 +13,7 @@
     </h1>
 
     <div class="has-ump-side-padding has-xxxl-btm-marg">
-      <p class="has-xl-btm-marg has-text-gray-dark t-size-s t-space-heading-m">
+      <p class="has-xl-btm-marg has-text-gray-dark t-size-s">
         Thank you for being a Texas Tribune member! You can help ensure the rest
         of Texas knows about our mission to inform and engage the public in
         politics and policy news by sharing your membership story.

@@ -4,7 +4,7 @@
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-align-center">
         <h1 class="has-xl-btm-marg">You're logged in</h1>
-        <p class="t-space-heading-m">Redirecting&hellip;</p>
+        <p>Redirecting&hellip;</p>
       </div>
     </main>
     <no-routes-site-footer />

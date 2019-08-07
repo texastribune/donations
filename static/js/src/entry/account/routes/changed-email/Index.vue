@@ -7,13 +7,13 @@
     >
       <div class="l-minimal__content t-linkstyle--underlined">
         <h1 class="has-xl-btm-marg">Please verify your email address change</h1>
-        <p class="t-space-heading-m has-b-btm-marg">
+        <p class="has-b-btm-marg">
           Thanks for updating your email address! To log back into your account,
           we need you to verify your new email address:
           <strong>{{ newEmail }}</strong
           >.
         </p>
-        <p class="t-space-heading-m">
+        <p>
           Check your inbox for an email from The Texas Tribune with the subject
           line "Please confirm your account," then click to verify your email.
           Having trouble? Contact

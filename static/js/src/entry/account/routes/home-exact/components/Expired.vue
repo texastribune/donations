@@ -1,7 +1,7 @@
 <template>
   <summary-box heading="membership" :display="{ isExpired: true }">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
+      <p class="has-text-gray-dark">
         Thanks for your previous support!
         <span class="has-text-error"
           >Your membership expired on

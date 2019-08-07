@@ -1,10 +1,7 @@
 <template>
   <summary-box heading="membership">
     <template v-slot:content>
-      <p
-        v-if="lastTransaction.last4"
-        class="has-text-gray-dark t-space-heading-m"
-      >
+      <p v-if="lastTransaction.last4" class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged on
         <strong>{{ lastTransaction.date | longDate }}</strong
@@ -13,7 +10,7 @@
         <strong>{{ membershipExpirationDate | longDate }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-space-heading-m">
+      <p v-else class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was on
         <strong>{{ lastTransaction.date | longDate }}</strong

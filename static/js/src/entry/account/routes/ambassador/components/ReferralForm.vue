@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p class="has-xxxs-btm-marg has-text-gray-dark t-size-s t-space-heading-m">
+    <p class="has-xxxs-btm-marg has-text-gray-dark t-size-s">
       Or, copy your personal referral link:
     </p>
     <text-input-and-submit
