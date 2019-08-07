@@ -19,7 +19,7 @@
         politics and policy news by sharing your membership story.
       </p>
       <section class="has-xl-btm-marg">
-        <h2 class="has-s-btm-marg t-size-m">
+        <h2 class="has-s-btm-marg t-size-b">
           Why do you support The Texas Tribune?
         </h2>
         <div class="has-xl-btm-marg"><referral-links /></div>

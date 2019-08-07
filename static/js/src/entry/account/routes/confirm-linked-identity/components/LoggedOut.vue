@@ -6,12 +6,29 @@
       created with <strong>{{ existingEmail }}</strong
       >, please log into your account.
     </p>
-    <p>
+    <p class="has-xl-btm-marg">
       If you don't own both of the above email addresses, or you didn't mean to
       do this, click <strong>CANCEL</strong> or simply ignore this.
     </p>
-    <button @click="onLogIn">Log in</button>
-    <button @click="onCancel">Cancel</button>
+    <div class="c-btn-or-btn">
+      <div class="c-btn-or-btn__first">
+        <base-button
+          :display="{ bg: 'gray-light', color: 'black' }"
+          text="Log in"
+          @onClick="onLogIn"
+        />
+      </div>
+      <span class="c-btn-or-btn__word t-align-center l-align-center-self"
+        >or</span
+      >
+      <div class="c-btn-or-btn__last">
+        <base-button
+          :display="{ bg: 'gray-light', color: 'black' }"
+          text="Cancel"
+          @onClick="onCancel"
+        />
+      </div>
+    </div>
   </div>
 </template>
 

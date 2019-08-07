@@ -1,24 +1,29 @@
 <template>
-  <form @submit.prevent="$emit('onSubmit', currentFields)">
+  <form class="c-mini-form" @submit.prevent="$emit('onSubmit', currentFields)">
     <validation-provider
       v-slot="{ errors, flags }"
       :name="name"
       :rules="currentFields[name].rules"
       immediate
+      slim
     >
-      <text-input
-        v-model="currentFields[name].value"
-        :name="currentFields[name].name"
-        :label="currentFields[name].label"
-        :read-only="currentFields[name].readOnly"
-        :error-messages="errors"
-        :flags="flags"
-        :show-label="false"
-        :show-error-immediately="false"
-        @updateFlags="updateFlags"
-      />
+      <div class="c-mini-form__input">
+        <text-input
+          v-model="currentFields[name].value"
+          :name="currentFields[name].name"
+          :label="currentFields[name].label"
+          :read-only="currentFields[name].readOnly"
+          :error-messages="errors"
+          :flags="flags"
+          :show-label="false"
+          :show-error-immediately="false"
+          @updateFlags="updateFlags"
+        />
+      </div>
     </validation-provider>
-    <submit :disabled="!formIsValid" :value="submitText" />
+    <div class="c-mini-form__submit">
+      <submit :disabled="!formIsValid" :value="submitText" />
+    </div>
   </form>
 </template>
 
@@ -33,7 +38,7 @@ export default {
   props: {
     submitText: {
       type: String,
-      default: 'Save',
+      default: 'Submit',
     },
 
     readOnly: {

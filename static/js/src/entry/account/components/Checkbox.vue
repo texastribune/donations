@@ -1,10 +1,11 @@
 <template>
-  <div>
-    <label :for="name">
-      <input :id="name" :checked="value" type="checkbox" @change="onChange" />
-      {{ label }}
-    </label>
-  </div>
+  <label
+    :for="name"
+    class="c-checkbox t-size-s has-text-gray-dark l-display-block"
+  >
+    <input :id="name" :checked="value" type="checkbox" @change="onChange" />
+    {{ label }}
+  </label>
 </template>
 
 <script>

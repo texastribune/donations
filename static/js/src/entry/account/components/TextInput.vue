@@ -1,20 +1,42 @@
 <template>
   <div>
-    <label v-if="showLabel" :for="name">{{ label }}</label>
+    <label
+      v-if="showLabel"
+      :for="name"
+      class="l-display-block has-xxxs-btm-marg t-size-s"
+    >
+      <strong>{{ label }}</strong>
+    </label>
     <input
       :id="name"
       :name="name"
       :value="value"
       :aria-label="showLabel ? false : label"
+      :aria-invalid="showErrors"
       :readonly="readOnly"
+      :class="{
+        'is-invalid': showErrors,
+        'has-xxxs-btm-marg': showErrors || (!showErrors && !!$slots.extra),
+      }"
+      class="c-text-input l-display-block l-width-full has-text-gray-dark"
       type="text"
       @input="onInput"
       @paste="onPaste"
     />
-    <ul v-show="showErrorMessages">
-      <li v-for="message in errorMessages" :key="message">{{ message }}</li>
+    <ul
+      v-show="showErrors"
+      :class="{ 'has-xs-btm-marg': showErrors && !!$slots.extra }"
+    >
+      <li
+        v-for="(message, index) in errorMessages"
+        :key="message"
+        :class="{ 'has-xs-btm-marg': index !== errorMessages.length - 1 }"
+        class="has-text-error t-size-xs"
+      >
+        {{ message }}
+      </li>
     </ul>
-    <slot></slot>
+    <slot name="extra"></slot>
   </div>
 </template>
 
@@ -59,12 +81,12 @@ export default {
   },
 
   computed: {
-    showErrorMessages() {
-      const { errorMessages, dirty, showErrorImmediately } = this;
+    showErrors() {
+      const { valid, dirty, showErrorImmediately } = this;
 
       return (
-        (errorMessages.length && !showErrorImmediately && dirty) ||
-        (errorMessages.length && showErrorImmediately)
+        (!valid && !showErrorImmediately && dirty) ||
+        (!valid && showErrorImmediately)
       );
     },
   },

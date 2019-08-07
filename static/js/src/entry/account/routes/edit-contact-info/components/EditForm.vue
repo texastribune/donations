@@ -5,57 +5,68 @@
       :rules="currentFields.firstName.rules"
       :name="currentFields.firstName.name"
       immediate
+      slim
     >
-      <text-input
-        v-model="currentFields.firstName.value"
-        :error-messages="errors"
-        :flags="flags"
-        :name="currentFields.firstName.name"
-        :label="currentFields.firstName.label"
-        @updateFlags="updateFlags"
-      />
+      <div class="has-b-btm-marg">
+        <text-input
+          v-model="currentFields.firstName.value"
+          :error-messages="errors"
+          :flags="flags"
+          :name="currentFields.firstName.name"
+          :label="currentFields.firstName.label"
+          @updateFlags="updateFlags"
+        />
+      </div>
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.lastName.rules"
       :name="currentFields.lastName.name"
       immediate
+      slim
     >
-      <text-input
-        v-model="currentFields.lastName.value"
-        :error-messages="errors"
-        :flags="flags"
-        :name="currentFields.lastName.name"
-        :label="currentFields.lastName.label"
-        @updateFlags="updateFlags"
-      />
+      <div class="has-b-btm-marg">
+        <text-input
+          v-model="currentFields.lastName.value"
+          :error-messages="errors"
+          :flags="flags"
+          :name="currentFields.lastName.name"
+          :label="currentFields.lastName.label"
+          @updateFlags="updateFlags"
+        />
+      </div>
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.email.rules"
       :name="currentFields.email.name"
       immediate
+      slim
     >
-      <text-input
-        v-model="currentFields.email.value"
-        :error-messages="errors"
-        :flags="flags"
-        :name="currentFields.email.name"
-        :label="currentFields.email.label"
-        @updateFlags="updateFlags"
-      >
-        <p v-show="showConfirmedEmail" class="has-text-error">
-          <strong>Are you sure?</strong> Changing this will log you out of your
-          account, and you won't be able to log back in with
-          <strong>{{ initialFields.email.value }}</strong
-          >. Changing your account email will not affect your email
-          subscriptions.
-        </p>
-        <p v-show="!showConfirmedEmail">
-          Notice: This email is for logging into your account. Changing it will
-          not affect your email newsletters.
-        </p>
-      </text-input>
+      <div class="has-b-btm-marg">
+        <text-input
+          v-model="currentFields.email.value"
+          :error-messages="errors"
+          :flags="flags"
+          :name="currentFields.email.name"
+          :label="currentFields.email.label"
+          @updateFlags="updateFlags"
+        >
+          <template v-slot:extra>
+            <p v-show="showConfirmedEmail" class="t-size-xs has-text-error">
+              <strong>Are you sure?</strong> Changing this will log you out of
+              your account, and you won't be able to log back in with
+              <strong>{{ initialFields.email.value }}</strong
+              >. Changing your account email will not affect your email
+              subscriptions.
+            </p>
+            <p v-show="!showConfirmedEmail" class="t-size-xs has-text-gray">
+              Note: This email is for logging into your account. Changing it
+              will not affect your email newsletters.
+            </p>
+          </template>
+        </text-input>
+      </div>
     </validation-provider>
     <validation-provider
       v-show="showConfirmedEmail"
@@ -63,47 +74,56 @@
       :rules="confirmedEmailRules"
       :name="currentFields.confirmedEmail.name"
       immediate
+      slim
     >
-      <text-input
-        v-model="currentFields.confirmedEmail.value"
-        :error-messages="errors"
-        :flags="flags"
-        :name="currentFields.confirmedEmail.name"
-        :label="currentFields.confirmedEmail.label"
-        prevent-paste
-        @updateFlags="updateFlags"
-      />
+      <div class="has-b-btm-marg">
+        <text-input
+          v-model="currentFields.confirmedEmail.value"
+          :error-messages="errors"
+          :flags="flags"
+          :name="currentFields.confirmedEmail.name"
+          :label="currentFields.confirmedEmail.label"
+          prevent-paste
+          @updateFlags="updateFlags"
+        />
+      </div>
     </validation-provider>
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.zip.rules"
       :name="currentFields.zip.name"
       immediate
+      slim
     >
-      <text-input
-        v-model="currentFields.zip.value"
-        :error-messages="errors"
-        :flags="flags"
-        :name="currentFields.zip.name"
-        :label="currentFields.zip.label"
-        @updateFlags="updateFlags"
-      />
+      <div class="has-b-btm-marg">
+        <text-input
+          v-model="currentFields.zip.value"
+          :error-messages="errors"
+          :flags="flags"
+          :name="currentFields.zip.name"
+          :label="currentFields.zip.label"
+          @updateFlags="updateFlags"
+        />
+      </div>
     </validation-provider>
     <validation-provider
       v-slot="{ flags }"
       :rules="currentFields.marketing.rules"
       :name="currentFields.marketing.name"
       immediate
+      slim
     >
-      <checkbox
-        v-model="currentFields.marketing.value"
-        :flags="flags"
-        :name="currentFields.marketing.name"
-        :label="currentFields.marketing.label"
-        @updateFlags="updateFlags"
-      />
+      <div class="has-b-btm-marg">
+        <checkbox
+          v-model="currentFields.marketing.value"
+          :flags="flags"
+          :name="currentFields.marketing.name"
+          :label="currentFields.marketing.label"
+          @updateFlags="updateFlags"
+        />
+      </div>
     </validation-provider>
-    <submit :disabled="!formIsValid" />
+    <submit :disabled="!formIsValid" value="Save" />
   </form>
 </template>
 

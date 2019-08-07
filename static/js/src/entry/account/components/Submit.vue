@@ -1,5 +1,10 @@
 <template>
-  <input type="submit" :value="value" :disabled="disabled" />
+  <input
+    type="submit"
+    class="c-button c-button--s has-text-white has-bg-teal l-width-full l-display-block"
+    :value="value"
+    :disabled="disabled"
+  />
 </template>
 
 <script>

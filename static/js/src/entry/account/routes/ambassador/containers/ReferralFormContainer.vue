@@ -40,7 +40,12 @@ export default {
     async copyUrl(url) {
       try {
         await this.$copyText(url);
+
         this.didCopy = true;
+
+        setTimeout(() => {
+          this.didCopy = false;
+        }, 1000);
       } catch (err) {
         // do nothing; just prevent
         // error page from appearing

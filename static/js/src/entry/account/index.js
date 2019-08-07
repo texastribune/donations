@@ -40,6 +40,7 @@ import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
 import RoutesNavBar from './nav/components/RoutesNavBar.vue';
 import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
 import Icon from './components/Icon.vue';
+import BaseButton from './components/BaseButton.vue';
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
@@ -101,6 +102,7 @@ Vue.component('NoRoutesSiteFooter', NoRoutesSiteFooter);
 Vue.component('RoutesNavBar', RoutesNavBar);
 Vue.component('NoRoutesNavBar', NoRoutesNavBar);
 Vue.component('Icon', Icon);
+Vue.component('BaseButton', BaseButton);
 
 Vue.filter('currency', formatCurrency);
 Vue.filter('shortDate', formatShortDate);

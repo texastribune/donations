@@ -1,36 +1,39 @@
 <template>
   <ul class="c-ambassador-socials">
-    <li>
+    <li class="has-s-btm-marg">
       <a
         ga-on="click"
         href="#"
+        class="c-button c-button--s has-text-white has-bg-twitter l-width-full l-display-block"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.twitter"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
       >
-        Twitter
+        Tweet #ISupportTexasTribune
       </a>
     </li>
-    <li>
+    <li class="has-s-btm-marg">
       <a
         ga-on="click"
         href="#"
+        class="c-button c-button--s has-text-white has-bg-facebook l-width-full l-display-block"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.facebook"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
       >
-        Facebook
+        Share on Facebook
       </a>
     </li>
     <li>
       <a
         ga-on="click"
         href="#"
+        class="c-button c-button--s has-text-black-off has-bg-gray-light l-width-full l-display-block"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.email"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
       >
-        Email
+        Email friends and family
       </a>
     </li>
   </ul>
