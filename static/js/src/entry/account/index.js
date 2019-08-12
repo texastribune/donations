@@ -1,5 +1,3 @@
-/* eslint-disable import/first */
-
 import Vue from 'vue';
 import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
@@ -7,6 +5,22 @@ import VueRouter from 'vue-router';
 import VeeValidate, { Validator } from 'vee-validate';
 import VModal from 'vue-js-modal';
 import VueClipboard from 'vue-clipboard2';
+
+import routes from './routes'; // eslint-disable-line
+import store from './store';
+import App from './App.vue';
+import RoutesSiteFooter from './nav/components/RoutesSiteFooter.vue';
+import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
+import RoutesNavBar from './nav/components/RoutesNavBar.vue';
+import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
+import Icon from './components/Icon.vue';
+import BaseButton from './components/BaseButton.vue';
+import formatCurrency from './utils/format-currency';
+import formatLongDate from './utils/format-long-date';
+import formatShortDate from './utils/format-short-date';
+import { logIn } from './utils/auth-actions';
+import logError from './utils/log-error';
+import { UnverifiedError } from './errors';
 
 import {
   SENTRY_DSN,
@@ -31,25 +45,13 @@ if (ENABLE_SENTRY) {
   });
 }
 
-// eslint-disable-next-line
-import routes from './routes';
-import store from './store';
-import App from './App.vue';
-import RoutesSiteFooter from './nav/components/RoutesSiteFooter.vue';
-import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
-import RoutesNavBar from './nav/components/RoutesNavBar.vue';
-import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
-import Icon from './components/Icon.vue';
-import BaseButton from './components/BaseButton.vue';
-import formatCurrency from './utils/format-currency';
-import formatLongDate from './utils/format-long-date';
-import formatShortDate from './utils/format-short-date';
-import { logIn } from './utils/auth-actions';
-import logError from './utils/log-error';
-import { UnverifiedError } from './errors';
-
 Validator.localize('en', {
   custom: {
+    linkEmail: {
+      required: 'This field must contain a valid email address',
+      email: 'This field must contain a valid email address',
+    },
+
     email: {
       required:
         "This email field cannot be empty because it's your login for texastribune.org. Changing this email will change your login, but not your email newsletters.",
