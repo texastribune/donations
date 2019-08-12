@@ -44,13 +44,9 @@ const actions = {
     const { accessToken } = rootState.tokenUser;
     const { id: personId } = state.details;
 
-    await axios.patch(
-      `${PORTAL_API_URL}persons/${personId}`,
-      { ...updates },
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
+    await axios.patch(`${PORTAL_API_URL}persons/${personId}`, updates, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
   },
 
   updateIdentity: async ({ state, rootState }, updates) => {
@@ -63,7 +59,7 @@ const actions = {
 
     await axios.patch(
       `${PORTAL_API_URL}persons/${personId}/identities/${identityId}`,
-      { ...updates },
+      updates,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
