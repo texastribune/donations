@@ -4,7 +4,7 @@
       <a
         ga-on="click"
         href="#"
-        class="c-button c-button--s has-text-white has-bg-twitter l-width-full l-display-block"
+        class="c-button c-button--s has-text-white has-bg-twitter has-padding l-width-full l-display-block"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.twitter"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
@@ -16,7 +16,7 @@
       <a
         ga-on="click"
         href="#"
-        class="c-button c-button--s has-text-white has-bg-facebook l-width-full l-display-block"
+        class="c-button c-button--s has-text-white has-bg-facebook has-padding l-width-full l-display-block"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.facebook"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
@@ -28,7 +28,7 @@
       <a
         ga-on="click"
         href="#"
-        class="c-button c-button--s has-text-black-off has-bg-gray-light l-width-full l-display-block"
+        class="c-button c-button--s has-text-black-off has-bg-gray-light has-padding l-width-full l-display-block"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.email"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
