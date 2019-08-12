@@ -1,6 +1,7 @@
 .c-btn-or-btn {
   display: grid;
   gap: $size-xs;
+  grid-gap: $size-xs;
   grid-template-columns: 1fr $size-xxl 1fr;
 
   &__first {
