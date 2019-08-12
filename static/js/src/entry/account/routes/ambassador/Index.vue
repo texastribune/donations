@@ -1,7 +1,7 @@
 <template>
   <route-loader v-if="routeIsFetching">
     <template v-slot:text>
-      Grabbing your ambassador information
+      Grabbing your referral information
     </template>
   </route-loader>
 
@@ -9,7 +9,7 @@
     <h1
       class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
     >
-      Your Referrals
+      Refer a Friend
     </h1>
 
     <div class="has-ump-side-padding has-xxxl-btm-marg">
@@ -48,7 +48,7 @@ export default {
   mixins: [routeMixin],
 
   data() {
-    return { title: 'Tribune Ambassadors' };
+    return { title: 'Refer a Friend' };
   },
 };
 </script>

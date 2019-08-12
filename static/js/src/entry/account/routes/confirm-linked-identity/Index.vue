@@ -14,7 +14,6 @@
           :existing-email="existingEmail"
           :email-to-link="emailToLink"
           :ticket="ticket"
-          @goHome="goHome"
         />
       </div>
     </main>

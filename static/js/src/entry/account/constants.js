@@ -71,9 +71,12 @@ export const GA_USER_PORTAL = {
     payments: 'donation history',
     blast: 'the blast overview',
     ambassador: 'ambassador profile',
+    error: 'error page',
+    unverified: 'unverified page',
     'blast-payments': 'the blast payment history',
     'edit-contact-info': 'profile editor',
     'confirm-linked-identity': 'link email confirmation',
+    'changed-email': 'changed email confirmation',
   },
 };
 export const GA_DONATIONS = {

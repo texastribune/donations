@@ -3,7 +3,7 @@
     <div class="c-modal">
       <div class="c-modal__top l-align-center-children has-padding">
         <h2 class="t-size-b t-align-center t-space-base">
-          Please go back to finish updating your profile
+          You have unsaved changes
         </h2>
       </div>
       <ul class="c-modal__buttons l-width-full">

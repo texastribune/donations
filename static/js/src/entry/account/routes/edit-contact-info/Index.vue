@@ -50,7 +50,7 @@ export default {
 
   data() {
     return {
-      title: 'Edit Contact Info',
+      title: 'Edit Your Profile',
       showModal: false,
       next: null,
     };

@@ -4,7 +4,6 @@
     :existing-email="existingEmail"
     :email-to-link="emailToLink"
     @logIn="logIn"
-    @goHome="goHome"
   />
 </template>
 
@@ -46,10 +45,6 @@ export default {
   methods: {
     logIn() {
       logIn(`/account/confirm-linked-identity?ticket=${this.ticket}`);
-    },
-
-    goHome() {
-      this.$emit('goHome');
     },
   },
 };

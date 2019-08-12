@@ -13,6 +13,10 @@
           If the issue persists, contact us at
           <a
             href="mailto:community@texastribune.org?subject=account%20technical%20error"
+            ga-on="click"
+            :ga-event-category="ga.userPortal.category"
+            :ga-event-action="ga.userPortal.actions['contact-us']"
+            :ga-event-label="ga.userPortal.labels.error"
             >community@texastribune.org</a
           >.
         </p>

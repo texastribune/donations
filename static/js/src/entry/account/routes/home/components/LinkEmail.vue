@@ -44,7 +44,12 @@
         </div>
         <p class="t-size-xs has-text-gray">
           Having trouble? Contact us at
-          <a href="mailto:membership@texastribune.org"
+          <a
+            href="mailto:membership@texastribune.org"
+            ga-on="click"
+            :ga-event-category="ga.userPortal.category"
+            :ga-event-action="ga.userPortal.actions['contact-us']"
+            :ga-event-label="gaLabel"
             >membership@texastribune.org</a
           >.
         </p>

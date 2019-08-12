@@ -15,7 +15,7 @@
         <base-button
           :display="{ bg: 'gray-light', color: 'black' }"
           text="Log in"
-          @onClick="onLogIn"
+          @onClick="logIn"
         />
       </div>
       <span class="c-btn-or-btn__word t-align-center l-align-center-self"
@@ -25,7 +25,7 @@
         <base-button
           :display="{ bg: 'gray-light', color: 'black' }"
           text="Cancel"
-          @onClick="onCancel"
+          @onClick="goToHomePage"
         />
       </div>
     </div>
@@ -49,11 +49,11 @@ export default {
   },
 
   methods: {
-    onCancel() {
-      this.$emit('goHome');
+    goToHomePage() {
+      window.location.href = 'https://www.texastribune.org';
     },
 
-    onLogIn() {
+    logIn() {
       this.$emit('logIn');
     },
   },

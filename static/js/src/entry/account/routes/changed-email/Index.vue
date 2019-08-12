@@ -19,6 +19,10 @@
           Having trouble? Contact
           <a
             href="mailto:community@texastribune.org?subject=account%20technical%20error"
+            ga-on="click"
+            :ga-event-category="ga.userPortal.category"
+            :ga-event-action="ga.userPortal.actions['contact-us']"
+            :ga-event-label="ga.userPortal.labels['changed-email']"
             >community@texastribune.org</a
           >.
         </p>
