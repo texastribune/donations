@@ -17,8 +17,8 @@ export default {
   computed: {
     initialFields() {
       return {
-        email: {
-          name: 'email',
+        linkEmail: {
+          name: 'linkEmail',
           value: '',
           label: 'email address to link',
           rules: { required: true, email: true },
