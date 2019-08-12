@@ -2,13 +2,13 @@
   <div>
     <h1 class="has-xl-btm-marg">Are you sure?</h1>
     <p class="has-b-btm-marg">
-      You're about to link <strong>{{ emailToLink }}</strong> to your Texas
-      Tribune account with email <strong>{{ existingEmail }}</strong
-      >.
+      You're about to link <strong>{{ emailToLink }}</strong> to the Texas
+      Tribune account associated with <strong>{{ existingEmail }}</strong
+      >. Click below to confirm this update to your account.
     </p>
     <p class="has-xl-btm-marg">
-      If you don't own both of the above email addresses, or you didn't mean to
-      do this, click <strong>CANCEL</strong>.
+      If these email addresses don't belong to you, or you didn't mean to do
+      this, click <strong>CANCEL</strong> or simply ignore this.
     </p>
     <div class="c-btn-or-btn">
       <div class="c-btn-or-btn__first">

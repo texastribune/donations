@@ -60,14 +60,14 @@ export default {
         },
         confirmedEmail: {
           name: 'confirmedEmail',
-          label: 'Type your email again to confirm the change',
+          label: 'Type your email again to confirm this change',
           value: '',
           isVisible: false,
         },
         marketing: {
           name: 'marketing',
           label:
-            'Yes, I would like to receive emails with special promotions, product announcements and membership opportunities.',
+            "Yes, I'd like to be among the first to know about special announcements and membership news from the Tribune. (Important: We will never share your contact info.)",
           value: tribune_offers_consent,
           rules: {},
           isVisible: true,

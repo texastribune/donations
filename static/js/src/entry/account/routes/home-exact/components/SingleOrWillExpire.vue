@@ -81,7 +81,7 @@
               :ga-event-action="ga.userPortalNav.actions.inline"
               :ga-event-label="ga.userPortalNav.labels.ambassador"
             >
-              Become a Tribune ambassador
+              Become a Tribune Ambassador
             </router-link>
           </span>
         </li>

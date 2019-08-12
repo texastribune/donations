@@ -45,7 +45,7 @@
               :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
               :to="{ name: 'edit-contact-info' }"
             >
-              Edit Contact Info
+              Edit Your Profile
             </router-link>
           </li>
           <li v-if="showMembershipLink">

@@ -26,6 +26,7 @@
     <ul
       v-show="showErrors"
       :class="{ 'has-xs-btm-marg': showErrors && !!$slots.extra }"
+      class="t-space-base"
     >
       <li
         v-for="(message, index) in errorMessages"

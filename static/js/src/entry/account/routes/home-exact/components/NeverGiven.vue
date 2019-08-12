@@ -32,12 +32,6 @@
         <template v-slot:heading>
           <h2 class="t-size-s">Already a member?</h2>
         </template>
-        <template v-slot:text>
-          <p class="t-size-xs has-text-gray">
-            You may have donated with a different email address. Enter another
-            email below to link your accounts.
-          </p>
-        </template>
       </link-email>
     </template>
   </summary-box>

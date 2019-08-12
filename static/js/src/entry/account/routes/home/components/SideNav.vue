@@ -78,7 +78,7 @@
             :ga-event-action="ga.userPortalNav.actions.side"
             :ga-event-label="ga.userPortalNav.labels.blast"
           >
-            The Blast Newsletter
+            The Blast
           </router-link>
         </li>
       </ul>

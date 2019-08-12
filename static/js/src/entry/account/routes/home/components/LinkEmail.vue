@@ -5,15 +5,16 @@
   >
     <div class="c-link-email t-linkstyle--underlined">
       <template v-if="submittedEmail">
-        <h2 class="t-size-b has-b-btm-marg">Verify your linked email</h2>
+        <h2 class="t-size-b has-b-btm-marg">Verify your email</h2>
         <p class="t-size-xs has-text-gray has-s-btm-marg">
-          To keep your information safe, we need you to verify your linked
-          email: <strong>{{ submittedEmail }}</strong
+          To keep your information safe, we need you to verify this email before
+          we can update your account: <strong>{{ submittedEmail }}</strong
           >.
         </p>
         <p class="t-size-xs has-text-gray">
-          Check your inbox for an email from The Texas Tribune with subject line
-          "Link your account," then click to verify. Having trouble? Email
+          Check your inbox for an email from The Texas Tribune with the subject
+          line "Please confirm your linked email," then click to verify. Having
+          trouble? Email
           <a href="mailto:community@texastribune.org"
             >community@texastribune.org</a
           >.
@@ -42,7 +43,7 @@
           />
         </div>
         <p class="t-size-xs has-text-gray">
-          Already tried this? Still not seeing your donations? Contact us at
+          Having trouble? Contact us at
           <a href="mailto:membership@texastribune.org"
             >membership@texastribune.org</a
           >.

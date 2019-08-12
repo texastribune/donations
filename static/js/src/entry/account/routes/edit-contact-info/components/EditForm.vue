@@ -54,14 +54,14 @@
         >
           <template v-slot:extra>
             <p v-show="showConfirmedEmail" class="t-size-xs has-text-error">
-              <strong>Are you sure?</strong> Changing this will log you out of
-              your account, and you won't be able to log back in with
+              <strong>Are you sure?</strong> Changing this email will
+              immediately log you out of texastribune.org, and you won't be able
+              to log back in with
               <strong>{{ initialFields.email.value }}</strong
-              >. Changing your account email will not affect your email
-              subscriptions.
+              >.
             </p>
             <p v-show="!showConfirmedEmail" class="t-size-xs has-text-gray">
-              Note: This email is for logging into your account. Changing it
+              Note: This email is for logging into texastribune.org. Changing it
               will not affect your email newsletters.
             </p>
           </template>

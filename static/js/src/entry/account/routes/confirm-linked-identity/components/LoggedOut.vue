@@ -7,8 +7,8 @@
       >, please log into your account.
     </p>
     <p class="has-xl-btm-marg">
-      If you don't own both of the above email addresses, or you didn't mean to
-      do this, click <strong>CANCEL</strong> or simply ignore this.
+      If these email addresses don't belong to you, or you didn't mean to do
+      this, click <strong>CANCEL</strong> or simply ignore this.
     </p>
     <div class="c-btn-or-btn">
       <div class="c-btn-or-btn__first">

@@ -51,7 +51,8 @@ import { UnverifiedError } from './errors';
 Validator.localize('en', {
   custom: {
     email: {
-      required: 'Email address is required',
+      required:
+        "This email field cannot be empty because it's your login for texastribune.org. Changing this email will change your login, but not your email newsletters.",
     },
 
     confirmedEmail: {
@@ -60,15 +61,18 @@ Validator.localize('en', {
     },
 
     firstName: {
-      required: 'First name is required',
+      required:
+        'To save changes to your contact info, please complete the first and last name fields. First and last name appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     lastName: {
-      required: 'Last name is required',
+      required:
+        'To save changes to your contact info, please complete the first and last name fields. First and last name appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     zip: {
-      required: 'ZIP code is required',
+      required:
+        "To save changes to your contact info, please complete the ZIP code field. We use ZIP code to understand whether we're meeting our goals of serving all Texans.",
     },
   },
 });

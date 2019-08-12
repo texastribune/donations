@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="has-xxxs-btm-marg has-text-gray-dark t-size-s">
-      Or, copy your personal referral link:
+      Or, share your personal referral link:
     </p>
     <text-input-and-submit
       :initial-fields="initialFields"

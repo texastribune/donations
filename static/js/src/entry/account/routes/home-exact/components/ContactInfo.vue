@@ -27,7 +27,7 @@
               :ga-event-action="ga.userPortalNav.actions.inline"
               :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
             >
-              Edit your contact info
+              Edit your profile
             </router-link>
           </span>
         </li>
