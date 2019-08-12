@@ -31,6 +31,11 @@ export default {
       type: String,
       required: true,
     },
+
+    ticket: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
@@ -44,6 +49,7 @@ export default {
       this.setAppIsFetching(true);
 
       await this.confirmLinkedIdentity(this.ticket);
+      // TODO: Call /self/ again
 
       this.setAppIsFetching(false);
       this.goHome();

@@ -95,6 +95,7 @@ const actions = {
 
     await axios.put(
       `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}?ticket=${ticket}`,
+      {},
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }

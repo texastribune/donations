@@ -7,6 +7,7 @@
         <logged-in
           :existing-email="existingEmail"
           :email-to-link="emailToLink"
+          :ticket="ticket"
           @goHome="goHome"
         />
         <logged-out
