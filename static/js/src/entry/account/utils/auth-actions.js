@@ -1,10 +1,8 @@
 import auth from './auth';
 import {
   LOGGED_IN_FLAG_KEY,
-  AUTH_CLIENT_ID,
-  AUTH_LOGOUT_COMPLETE_URL,
-  LOGIN_REDIRECT_KEY,
-  LOGOUT_REDIRECT_KEY,
+  AUTH_PORTAL_CLIENT_ID,
+  AUTH_PORTAL_LOGOUT_COMPLETE_URL,
   NON_STAFF_CONNECTION,
 } from '../constants';
 
@@ -17,15 +15,13 @@ export const setFlag = () => {
 };
 
 export const logIn = () => {
-  localStorage.setItem(LOGIN_REDIRECT_KEY, window.location.href);
   auth.authorize({ initial_screen: 'login' });
 };
 
 export const logOut = () => {
-  localStorage.setItem(LOGOUT_REDIRECT_KEY, window.location.href);
   auth.logout({
-    clientID: AUTH_CLIENT_ID,
-    returnTo: AUTH_LOGOUT_COMPLETE_URL,
+    clientID: AUTH_PORTAL_CLIENT_ID,
+    returnTo: AUTH_PORTAL_LOGOUT_COMPLETE_URL,
   });
 };
 
@@ -33,7 +29,6 @@ export const hasLoggedInFlag = () =>
   localStorage.getItem(LOGGED_IN_FLAG_KEY) === 'true';
 
 export const register = () => {
-  localStorage.setItem(LOGIN_REDIRECT_KEY, window.location.href);
   auth.authorize({ initial_screen: 'signUp' });
 };
 
@@ -42,15 +37,13 @@ export const resetPassword = (email, cb) => {
 };
 
 export const redirectAfterLogIn = () => {
-  const url = localStorage.getItem(LOGIN_REDIRECT_KEY) || '/account';
   setTimeout(() => {
-    window.location.href = url;
+    window.location.href = '/account/';
   }, 1800);
 };
 
 export const redirectAfterLogOut = () => {
-  const url = localStorage.getItem(LOGOUT_REDIRECT_KEY) || '/account';
   setTimeout(() => {
-    window.location.href = url;
+    window.location.href = '/donate';
   }, 1800);
 };

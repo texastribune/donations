@@ -17,14 +17,14 @@
     </div>
 
     <ul class="c-link-list t-linkstyle--underlined">
-      <li v-if="isExpired" class="has-xs-btm-marg">
+      <li class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
         <span class="has-text-gray-dark">
           <a
-            :href="isCircleDonor ? circleUrl : donateUrl"
             ga-on="click"
+            :href="isCircleDonor ? circleUrl : donateUrl"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
             :ga-event-label="ga.donations.labels['renew-membership']"
@@ -33,7 +33,7 @@
           </a>
         </span>
       </li>
-      <li v-else-if="isSingleDonor" class="has-xs-btm-marg">
+      <li v-if="isSingleDonor" class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>
         </span>
@@ -73,18 +73,13 @@
 import InfoList from '../../../components/InfoList.vue';
 
 export default {
-  name: 'MembershipDetail',
+  name: 'MembershipExpired',
 
   components: { InfoList },
 
   props: {
     data: {
       type: Array,
-      required: true,
-    },
-
-    isExpired: {
-      type: Boolean,
       required: true,
     },
 

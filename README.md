@@ -27,9 +27,9 @@ Environment
 -----------
 | Variable                    |                                        Example |
 |-----------------------------|-----------------------------------------------:|
-| `AUTH0_AUDIENCE`            |                                      foobarbaz |
 | `AUTH0_DOMAIN`              |                                     domain.com |
-| `AUTH0_CLIENT_ID`           |                             stringstringstring |
+| `AUTH0_PORTAL_AUDIENCE`     |                                      foobarbaz |
+| `AUTH0_PORTAL_CLIENT_ID`    |                             stringstringstring |
 | `PUBLISHABLE_KEY`           |                                  pk_test_12345 |
 | `SECRET_KEY`                |                                  sk_test_12335 |
 | `SALESFORCE_HOST`           |                            test.salesforce.com |

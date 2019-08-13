@@ -6,7 +6,7 @@
 /* eslint-disable camelcase */
 
 import Appeal from '../components/Appeal.vue';
-import userMixin from '../mixins/user';
+import userMixin from '../../../store/user/mixin';
 
 export default {
   name: 'AppealContainer',

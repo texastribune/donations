@@ -6,9 +6,9 @@
 import { mapActions } from 'vuex';
 
 import ViewAs from '../components/ViewAs.vue';
-import userMixin from '../mixins/user';
-import contextMixin from '../../../mixins/context';
-import tokenUserMixin from '../../../mixins/token-user';
+import userMixin from '../../../store/user/mixin';
+import tokenUserMixin from '../../../store/token-user/mixin';
+import contextMixin from '../../../store/context/mixin';
 
 export default {
   name: 'ViewAsContainer',
@@ -29,14 +29,13 @@ export default {
       this.setAppIsFetching(false);
     },
 
-    async undoViewAs(cb) {
+    async undoViewAs() {
       this.setAppIsFetching(true);
 
       await this.getUser();
 
       this.setIsViewingAs(false);
       this.setAppIsFetching(false);
-      cb();
     },
   },
 };

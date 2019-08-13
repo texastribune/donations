@@ -6,7 +6,7 @@
 /* eslint-disable camelcase */
 
 import CustomAppeal from '../components/CustomAppeal.vue';
-import userMixin from '../mixins/user';
+import userMixin from '../../../store/user/mixin';
 
 export default {
   name: 'CustomAppealContainer',

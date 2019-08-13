@@ -12,10 +12,10 @@
     "AMAZON_SANDBOX": {
       "required": true
     },
-    "AUTH0_AUDIENCE": {
+    "AUTH0_PORTAL_AUDIENCE": {
       "required": true
     },
-    "AUTH0_CLIENT_ID": {
+    "AUTH0_PORTAL_CLIENT_ID": {
       "required": true
     },
     "AUTH0_DOMAIN": {
@@ -47,7 +47,7 @@
     },
     "ENABLE_PORTAL": {
       "required": true
-    },    
+    },
     "ENABLE_SENTRY": {
       "required": true
     },
