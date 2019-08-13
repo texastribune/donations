@@ -20,7 +20,7 @@
 /* eslint-disable camelcase */
 
 import routeMixin from '../../mixins/route';
-import userMixin from '../home/mixins/user';
+import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../../components/Help.vue';
 import BlastDetail from './containers/BlastDetailContainer.vue';
@@ -33,14 +33,8 @@ export default {
 
   mixins: [routeMixin, userMixin],
 
-  computed: {
-    route() {
-      return {
-        isExact: true,
-        isProtected: false,
-        title: 'The Blast',
-      };
-    },
+  data() {
+    return { title: 'The Blast' };
   },
 
   methods: {

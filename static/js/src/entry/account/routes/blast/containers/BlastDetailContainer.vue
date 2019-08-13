@@ -6,7 +6,7 @@
 /* eslint-disable camelcase */
 
 import BlastDetail from '../components/BlastDetail.vue';
-import userMixin from '../../home/mixins/user';
+import userMixin from '../../../store/user/mixin';
 import formatCurrency from '../../../utils/format-currency';
 import formatLongDate from '../../../utils/format-long-date';
 import { CARD_PAYMENT_FLAG } from '../../../constants';

@@ -1,16 +1,18 @@
 /* eslint-disable no-param-reassign */
 
+const MUTATION_TYPES = {
+  setIsViewingAs: 'SET_IS_VIEWING_AS',
+  setAppIsFetching: 'SET_APP_IS_FETCHING',
+  setError: 'SET_ERROR',
+};
+
 function createDefaultState() {
   return {
     isViewingAs: false,
     appIsFetching: false,
+    error: null,
   };
 }
-
-const MUTATION_TYPES = {
-  setIsViewingAs: 'SET_IS_VIEWING_AS',
-  setAppIsFetching: 'SET_APP_IS_FETCHING',
-};
 
 const mutations = {
   [MUTATION_TYPES.setIsViewingAs](state, isViewingAs) {
@@ -19,6 +21,10 @@ const mutations = {
 
   [MUTATION_TYPES.setAppIsFetching](state, appIsFetching) {
     state.appIsFetching = appIsFetching;
+  },
+
+  [MUTATION_TYPES.setError](state, error) {
+    state.error = error;
   },
 };
 
@@ -29,6 +35,10 @@ const actions = {
 
   setAppIsFetching: ({ commit }, appIsFetching) => {
     commit(MUTATION_TYPES.setAppIsFetching, appIsFetching);
+  },
+
+  setError: ({ commit }, error) => {
+    commit(MUTATION_TYPES.setError, error);
   },
 };
 

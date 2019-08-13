@@ -1,6 +1,12 @@
 import * as validators from '../../utils/validators';
 
-// eslint-disable-next-line import/prefer-default-export
+export const AMBASSADOR_CODES = {
+  'ump-1': {
+    installmentPeriod: 'monthly',
+    amount: '15',
+  },
+};
+
 export const BASE_FORM_STATE = {
   stripeEmail: {
     value: '',

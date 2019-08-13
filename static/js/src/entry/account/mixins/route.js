@@ -1,12 +1,11 @@
-/* eslint-disable camelcase */
-
-import { logIn, logOut } from '../utils/auth-actions';
-import tokenUserMixin from './token-user';
+import { logOut } from '../utils/auth-actions';
+import tokenUserMixin from '../store/token-user/mixin';
+import contextMixin from '../store/context/mixin';
+import { InvalidRouteError } from '../errors';
 import { TITLE_SUFFIX } from '../constants';
-import { InvalidRouteError, UnverifiedError } from '../errors';
 
 export default {
-  mixins: [tokenUserMixin],
+  mixins: [tokenUserMixin, contextMixin],
 
   props: {
     parentRouteIsFetching: {
@@ -16,45 +15,20 @@ export default {
   },
 
   data() {
-    return {
-      routeIsFetching: true,
-      shouldLogPV: true,
-    };
+    return { routeIsFetching: true };
   },
 
   async created() {
-    const { isProtected, isExact, title } = this.route;
-    const {
-      accessToken,
-      tokenUserError,
-      isVerified,
-      parentRouteIsFetching,
-    } = this;
-
-    // sometimes title will be null in cases
-    // where it can't be set until a data fetch happens
-    if (isExact && title) this.setTitle();
-
-    if (tokenUserError && isProtected) {
-      // Auth0 error encountered during checkSession call
-      throw tokenUserError;
-    } else if (!accessToken && isProtected) {
-      // login-required route; user not logged in
-      logIn();
-    } else if (!isVerified && isProtected) {
-      // login-required route; user has not verified email
-      throw new UnverifiedError();
-    } else if (!parentRouteIsFetching) {
+    if (!this.parentRouteIsFetching) {
       // top level route; do data fetch immediately
       // because there's no parent fetch to wait on
-      await this.doRouteFetch(this.$route);
+      await this.doRouteFetch();
     }
   },
 
   methods: {
     setTitle() {
-      const { title } = this.route;
-      document.title = `${title} ${TITLE_SUFFIX}`;
+      document.title = `${this.title} ${TITLE_SUFFIX}`;
     },
 
     logPageView() {
@@ -65,51 +39,39 @@ export default {
       });
     },
 
-    setRouteIsFetching(routeIsFetching) {
-      this.routeIsFetching = routeIsFetching;
-    },
-
-    async doRouteFetch(toRoute, next) {
-      const { isExact } = this.route;
-      const { shouldLogPV } = this;
+    async doRouteFetch() {
+      this.routeIsFetching = true;
 
       try {
-        if (next) {
-          // if an active route's params have changed
-          await this.refetchData(toRoute);
-        } else {
-          await this.fetchData(toRoute);
+        await this.fetchData();
+
+        if (this.title) {
+          this.setTitle();
+          this.logPageView();
         }
 
-        if (next) next();
-        if (isExact && shouldLogPV) this.logPageView();
-
-        // we don't want to log a PV again if this
-        // data fetch is repeated (unless route params have changed)
-        this.shouldLogPV = false;
         this.routeIsFetching = false;
       } catch (err) {
-        if (next) next();
-
-        // you're on a route that you're not supposed to be on
-        // like the Blast page if you're not a Blast subscriber
         if (err instanceof InvalidRouteError) {
           this.$router.push({ name: 'home' });
         } else {
-          throw err;
+          // TODO: throw to errorCaptured in <App />
+          this.setError(err);
+          this.logError(err);
         }
       }
     },
+
+    // eslint-disable-next-line no-empty-function
+    async fetchData() {},
   },
 
   watch: {
     // watch the value of accessToken as we refresh
     // it every 15 minutes
     accessToken(newToken, oldToken) {
-      const {
-        route: { isProtected },
-        tokenUserError,
-      } = this;
+      const { tokenUserError } = this;
+      const { isProtected } = this.$route.meta;
 
       if (isProtected && oldToken && !newToken) {
         if (tokenUserError) {
@@ -127,26 +89,13 @@ export default {
       }
     },
 
-    async parentRouteIsFetching(newVal, oldVal) {
+    async parentRouteIsFetching(newParentIsFetching, oldParentIsFetching) {
       // if a child route has a parent that's doing
       // a data fetch, wait for the parent fetch to complete
       // in case the child's fetch depends on data from it
-      if (oldVal && !newVal) {
-        await this.doRouteFetch(this.$route);
+      if (oldParentIsFetching && !newParentIsFetching) {
+        await this.doRouteFetch();
       }
     },
-  },
-
-  async beforeRouteUpdate(to, from, next) {
-    // to refetch when route params have changed
-    // a refetchData method must be defined
-    if (!this.refetchData) {
-      next();
-    } else {
-      this.routeIsFetching = true;
-      this.shouldLogPV = true;
-
-      await this.doRouteFetch(to, next);
-    }
   },
 };

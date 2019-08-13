@@ -9,7 +9,7 @@
 <script>
 /* eslint-disable camelcase */
 
-import userMixin from '../../home/mixins/user';
+import userMixin from '../../../store/user/mixin';
 import MessagesWrapper from '../components/MessagesWrapper.vue';
 
 export default {

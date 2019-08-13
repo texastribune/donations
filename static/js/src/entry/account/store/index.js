@@ -1,9 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-import userModule from './modules/user';
-import tokenUserModule from './modules/token-user';
-import contextModule from './modules/context';
+import userModule from './user';
+import tokenUserModule from './token-user';
+import contextModule from './context';
 
 Vue.use(Vuex);
 

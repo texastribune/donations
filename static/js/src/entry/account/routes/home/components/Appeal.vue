@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import BENEFITS from '../../../benefits';
+import BENEFITS from '../benefits';
 
 export default {
   name: 'Appeal',

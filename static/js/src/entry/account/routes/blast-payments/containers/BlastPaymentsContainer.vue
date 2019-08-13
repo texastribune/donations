@@ -9,7 +9,7 @@ import parse from 'date-fns/parse';
 import isFuture from 'date-fns/is_future';
 
 import BlastPayments from '../components/BlastPayments.vue';
-import userMixin from '../../home/mixins/user';
+import userMixin from '../../../store/user/mixin';
 import { BLAST_PAYMENT_FLAG, CARD_PAYMENT_FLAG } from '../../../constants';
 
 export default {
