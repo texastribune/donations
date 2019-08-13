@@ -10,6 +10,12 @@
   }
 }
 
+.has-white-off-bg-from-bp-l {
+  @include mq($from: bp-l) {
+    background-color: $color-white-off;
+  }
+}
+
 .has-bg-twitter {
   background-color: $color-twitter;
 }

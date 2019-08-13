@@ -1,8 +1,9 @@
 <template>
-  <messages
+  <message
     :is-blast-subscriber="isBlastSubscriber"
     :is-custom-donor="isCustomDonor"
     :is-never-given="isNeverGiven"
+    :ga-close-label="gaCloseLabel"
   />
 </template>
 
@@ -10,14 +11,21 @@
 /* eslint-disable camelcase */
 
 import userMixin from '../../../store/user/mixin';
-import Messages from '../components/Messages.vue';
+import Message from '../components/Message.vue';
 
 export default {
-  name: 'HomeMessagesContainer',
+  name: 'HomeWelcomeMessageContainer',
 
-  components: { Messages },
+  components: { Message },
 
   mixins: [userMixin],
+
+  props: {
+    gaCloseLabel: {
+      type: String,
+      required: true,
+    },
+  },
 
   computed: {
     isNeverGiven() {

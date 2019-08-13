@@ -1,5 +1,5 @@
 <template>
-  <aside v-if="shouldShow" class="c-message has-bg-white-off">
+  <aside v-if="shouldShow" class="c-message has-white-off-bg-from-bp-l">
     <div class="c-message__top has-xxs-btm-marg">
       <slot name="icon"></slot>
       <h2 class="t-size-s">{{ heading }}</h2>

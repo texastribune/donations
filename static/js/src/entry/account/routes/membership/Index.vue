@@ -5,10 +5,10 @@
     </template>
   </route-loader>
 
-  <div v-else>
-    <h1
-      class="has-ump-top-padding has-ump-side-padding has-xl-btm-marg t-size-xl"
-    >
+  <div v-else class="has-ump-top-padding">
+    <message :ga-close-label="ga.userPortal.labels.membership" />
+
+    <h1 class="has-ump-side-padding has-xl-btm-marg t-size-xl">
       Your Membership
     </h1>
 
@@ -39,6 +39,7 @@ import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import LinkEmail from '../home/components/LinkEmail.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
+import Message from '../home/containers/MessageContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import Help from '../home/components/Help.vue';
 import { InvalidRouteError } from '../../errors';
@@ -52,6 +53,7 @@ export default {
     RecurringOrCircle,
     SingleOrWillExpire,
     Appeal,
+    Message,
     CircleAppeal,
     Help,
     LinkEmail,

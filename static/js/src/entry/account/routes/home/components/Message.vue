@@ -4,7 +4,7 @@
       <message
         heading="Welcome"
         :name="messageKey"
-        :ga-close-label="ga.userPortal.labels.home"
+        :ga-close-label="gaCloseLabel"
         @setMessageSeen="slotProps.setMessageSeen"
       >
         <template v-slot:icon>
@@ -72,7 +72,7 @@ import Message from '../../../components/Message.vue';
 import { READ_WRITE_WELCOME_MESSAGE_KEY } from '../../../constants';
 
 export default {
-  name: 'HomeMessages',
+  name: 'HomeWelcomeMessage',
 
   components: { Messages, Message },
 
@@ -89,6 +89,11 @@ export default {
 
     isBlastSubscriber: {
       type: Boolean,
+      required: true,
+    },
+
+    gaCloseLabel: {
+      type: String,
       required: true,
     },
   },

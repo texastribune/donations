@@ -5,10 +5,10 @@
     </template>
   </route-loader>
 
-  <div v-else>
-    <h1
-      class="has-xl-btm-marg has-ump-side-padding has-ump-top-padding t-size-xl"
-    >
+  <div v-else class="has-ump-top-padding">
+    <message :ga-close-label="ga.userPortal.labels.blast" />
+
+    <h1 class="has-xl-btm-marg has-ump-side-padding t-size-xl">
       The Blast Newsletter
     </h1>
 
@@ -25,13 +25,14 @@ import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../home/components/Help.vue';
+import Message from '../home/containers/MessageContainer.vue';
 import Detail from './containers/DetailContainer.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastRoute',
 
-  components: { Help, Detail, RouteLoader },
+  components: { Help, Detail, RouteLoader, Message },
 
   mixins: [routeMixin, userMixin],
 
