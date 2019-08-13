@@ -29,10 +29,10 @@
         <div class="has-b-btm-marg">
           <slot name="text" :linked-emails="linkedEmails | formatLinkedEmails">
             <p class="t-size-xs has-text-gray">
-              You're seeing donations for
-              {{ linkedEmails | formatLinkedEmails }}. You may have donated with
-              a different email address. Enter another email below to link your
-              accounts.
+              You're seeing donations for:
+              <strong>{{ linkedEmails | formatLinkedEmails }}</strong
+              >. You may have donated with a different email address. Enter
+              another email below to link your accounts.
             </p>
           </slot>
         </div>
@@ -69,15 +69,11 @@ export default {
 
   filters: {
     formatLinkedEmails(emails) {
-      if (emails.length === 1) return emails[0];
-
       let formatted = '';
 
       emails.forEach((email, index) => {
         if (index === emails.length - 1) {
-          formatted += ` and ${email}`;
-        } else if (index === emails.length - 2) {
-          formatted += `${email} `;
+          formatted += `${email}`;
         } else {
           formatted += `${email}, `;
         }
