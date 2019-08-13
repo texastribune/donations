@@ -9,7 +9,7 @@
       <ul class="c-modal__buttons l-width-full">
         <li>
           <base-button
-            text="Go back"
+            text="Continue editing"
             :display="{ size: 's' }"
             @onClick="$emit('onReturn')"
           />
