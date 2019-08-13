@@ -69,13 +69,15 @@ export default {
 
   filters: {
     formatLinkedEmails(emails) {
+      if (emails.length === 1) return emails[0];
+
       let formatted = '';
 
       emails.forEach((email, index) => {
-        if (emails.length === 1) {
-          formatted += email;
-        } else if (index === emails.length - 1) {
+        if (index === emails.length - 1) {
           formatted += ` and ${email}`;
+        } else if (index === emails.length - 2) {
+          formatted += `${email} `;
         } else {
           formatted += `${email}, `;
         }
