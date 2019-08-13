@@ -33,7 +33,7 @@ export default {
   },
 
   methods: {
-    async linkEmail({ email: { value } }) {
+    async linkEmail({ linkEmail: { value } }) {
       this.setAppIsFetching(true);
 
       await this.linkIdentity({ email: value });
