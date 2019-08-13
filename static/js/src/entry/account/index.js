@@ -74,7 +74,7 @@ Validator.localize('en', {
 
     zip: {
       required:
-        "To save changes to your contact info, please complete the ZIP code field. We use ZIP code to understand whether we're meeting our goals of serving all Texans.",
+        "To save changes to your contact info, please complete the ZIP code field. We use your ZIP code to better inform you about the issues most relevant to you and to let you know when we're hosting events in your area.",
     },
   },
 });
