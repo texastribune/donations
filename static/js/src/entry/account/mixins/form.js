@@ -18,7 +18,6 @@ export default {
     return {
       currentFields: this.buildCurrentFields(),
       formKey: Date.now().toString(),
-      keysInField: [],
     };
   },
 
@@ -62,19 +61,13 @@ export default {
 
   methods: {
     updateCurrentFields() {
-      Object.keys(this.initialFields).forEach(fieldName => {
-        this.keysInField.forEach(keyInField => {
-          this.currentFields[fieldName][keyInField] = this.initialFields[
-            fieldName
-          ][keyInField];
-        });
-      });
+      this.$set(this, 'currentFields', this.buildCurrentFields());
     },
 
     buildCurrentFields() {
       const final = {};
 
-      Object.keys(this.initialFields).forEach((fieldName, index) => {
+      Object.keys(this.initialFields).forEach(fieldName => {
         const { ...allValues } = this.initialFields[fieldName];
 
         final[fieldName] = {
@@ -83,10 +76,6 @@ export default {
           dirty: null,
           valid: null,
         };
-
-        if (index === 0) {
-          this.keysInField = [...Object.keys(final[fieldName])];
-        }
       });
 
       return final;
