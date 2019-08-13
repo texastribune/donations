@@ -26,9 +26,9 @@ module.exports = {
     }),
     new EnvironmentPlugin([
       'NODE_ENV',
-      'AUTH0_AUDIENCE',
       'AUTH0_DOMAIN',
-      'AUTH0_CLIENT_ID',
+      'AUTH0_PORTAL_AUDIENCE',
+      'AUTH0_PORTAL_CLIENT_ID',
       'PORTAL_API_DOMAIN',
       'PORTAL_CAMPAIGN_ID',
       'ENABLE_SENTRY',

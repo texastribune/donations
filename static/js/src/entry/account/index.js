@@ -26,20 +26,23 @@ if (ENABLE_SENTRY) {
   });
 }
 
-import App from './App.vue';
-import routes from './routes'; // eslint-disable-line
+// eslint-disable-next-line
+import routes from './routes';
 import store from './store';
-import SiteFooter from './containers/SiteFooterContainer.vue';
-import AppLoader from './components/AppLoader.vue';
-import NavBar from './containers/NavBarContainer.vue';
+import App from './App.vue';
+import RoutesSiteFooter from './nav/components/RoutesSiteFooter.vue';
+import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
+import RoutesNavBar from './nav/components/RoutesNavBar.vue';
+import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
 import Icon from './components/Icon.vue';
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
+import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
+import { UnverifiedError } from './errors';
 
 Vue.use(VueRouter);
-
 Vue.mixin({
   data() {
     return {
@@ -58,9 +61,10 @@ Vue.mixin({
   methods: { logError },
 });
 
-Vue.component('SiteFooter', SiteFooter);
-Vue.component('NavBar', NavBar);
-Vue.component('AppLoader', AppLoader);
+Vue.component('RoutesSiteFooter', RoutesSiteFooter);
+Vue.component('NoRoutesSiteFooter', NoRoutesSiteFooter);
+Vue.component('RoutesNavBar', RoutesNavBar);
+Vue.component('NoRoutesNavBar', NoRoutesNavBar);
 Vue.component('Icon', Icon);
 
 Vue.filter('currency', formatCurrency);
@@ -86,9 +90,35 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
 
+  if (store.state.tokenUser.accessToken) refreshToken();
+
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setAppIsFetching', true);
-    next();
+
+    const {
+      accessToken,
+      isVerified,
+      error: tokenUserError,
+    } = store.state.tokenUser;
+
+    if (to.meta.isProtected) {
+      if (tokenUserError) {
+        logError(tokenUserError);
+        store.dispatch('context/setError', tokenUserError);
+        return next();
+      }
+      if (!accessToken) {
+        return logIn();
+      }
+      if (!isVerified) {
+        const err = new UnverifiedError();
+        logError(err);
+        store.dispatch('context/setError', err);
+        return next();
+      }
+    }
+
+    return next();
   });
 
   router.afterEach(() => {
@@ -97,7 +127,4 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
 
   const instance = new Vue({ ...App, router, store });
   instance.$mount('#account-attach');
-
-  const { accessToken } = store.state.tokenUser;
-  if (accessToken) refreshToken();
 });

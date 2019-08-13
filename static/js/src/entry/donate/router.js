@@ -6,7 +6,7 @@ import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
 import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import sanitizeParams from '../../utils/sanitize-params';
-import { BASE_FORM_STATE } from './constants';
+import { BASE_FORM_STATE, AMBASSADOR_CODES } from './constants';
 
 /* import Thermometer from './Thermometer.vue'; */
 
@@ -23,7 +23,6 @@ function createInitialFormState(queryParams) {
   }
 
   const cleanParams = sanitizeParams(queryParams);
-  let { amount, installmentPeriod = 'monthly' } = cleanParams;
   const {
     campaignId = '',
     referralId = '',
@@ -31,22 +30,31 @@ function createInitialFormState(queryParams) {
     lastName = '',
     email = '',
     zipcode = '',
+    code = '',
   } = cleanParams;
+  let amount;
+  let installmentPeriod;
 
-  switch (installmentPeriod.toLowerCase()) {
-    case 'once':
-      installmentPeriod = 'None';
-      amount = amount || '60';
-      break;
-    case 'monthly':
-      amount = amount || '35';
-      break;
-    case 'yearly':
-      amount = amount || '75';
-      break;
-    default:
-      installmentPeriod = 'monthly';
-      amount = amount || '35';
+  if (code && AMBASSADOR_CODES[code]) {
+    ({ amount, installmentPeriod } = AMBASSADOR_CODES[code]);
+  } else {
+    ({ amount, installmentPeriod = 'monthly' } = cleanParams);
+
+    switch (installmentPeriod.toLowerCase()) {
+      case 'once':
+        installmentPeriod = 'None';
+        amount = amount || '60';
+        break;
+      case 'monthly':
+        amount = amount || '35';
+        break;
+      case 'yearly':
+        amount = amount || '75';
+        break;
+      default:
+        installmentPeriod = 'monthly';
+        amount = amount || '35';
+    }
   }
 
   // merge query-parameter values into full state object,

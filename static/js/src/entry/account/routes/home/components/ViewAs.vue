@@ -35,7 +35,6 @@
           padding: 10px;
           background: #dcdcdc;
         "
-        :disabled="!allowSubmit"
         @click="submit"
       >
         View as
@@ -82,27 +81,23 @@ export default {
   name: 'ViewAs',
 
   data() {
-    return { email: '', isVisible: true, allowSubmit: true };
+    return { email: '', isVisible: true };
   },
 
   methods: {
     submit() {
       this.$router.push({ name: 'home' });
-      this.allowSubmit = false;
       this.$emit('doViewAs', this.email);
     },
 
     reset() {
       this.$router.push({ name: 'home' });
       this.email = '';
-      this.$emit('undoViewAs', () => {
-        this.allowSubmit = true;
-      });
+      this.$emit('undoViewAs');
     },
 
     close() {
       this.isVisible = false;
-      this.reset();
     },
   },
 };

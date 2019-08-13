@@ -22,8 +22,11 @@
         >
           Your account
         </h4>
-        <ul class="c-site-footer__links has-text-white">
-          <li v-if="showRouteLinks">
+        <ul
+          v-if="userFetchComplete"
+          class="c-site-footer__links has-text-white"
+        >
+          <li v-if="showHomeLink">
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -139,13 +142,15 @@
 </template>
 
 <script>
+// TODO: Make this more generic w/ slots and move to base components directory
+
 import getYear from 'date-fns/get_year';
 
 export default {
   name: 'SiteFooter',
 
   props: {
-    showRouteLinks: {
+    showHomeLink: {
       type: Boolean,
       required: true,
     },
@@ -161,6 +166,11 @@ export default {
     },
 
     showPaymentsLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    userFetchComplete: {
       type: Boolean,
       required: true,
     },
