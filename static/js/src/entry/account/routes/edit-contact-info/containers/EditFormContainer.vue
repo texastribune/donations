@@ -53,7 +53,7 @@ export default {
         },
         email: {
           name: 'email',
-          label: 'Email',
+          label: 'Login email',
           value: email,
           rules: { required: true, email: true },
           isVisible: true,
@@ -67,7 +67,7 @@ export default {
         marketing: {
           name: 'marketing',
           label:
-            "Yes, I'd like to be among the first to know about special announcements and membership news from the Tribune. (Important: We will never share your contact info.)",
+            "Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune. (Important: We will never share your contact info.)",
           value: tribune_offers_consent,
           rules: {},
           isVisible: true,

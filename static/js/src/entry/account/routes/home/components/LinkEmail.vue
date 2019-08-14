@@ -29,7 +29,7 @@
         <div class="has-b-btm-marg">
           <slot name="text" :linked-emails="linkedEmails | formatLinkedEmails">
             <p class="t-size-xs has-text-gray">
-              You're seeing donations for:
+              You're seeing donations from:
               <strong>{{ linkedEmails | formatLinkedEmails }}</strong
               >. You may have donated with a different email address. Enter
               another email below to link your accounts.

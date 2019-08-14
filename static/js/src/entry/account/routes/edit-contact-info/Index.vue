@@ -9,7 +9,7 @@
     <h1
       class="has-ump-side-padding has-ump-top-padding has-l-btm-marg t-size-xl"
     >
-      Your Profile
+      Your Profile Settings
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
@@ -50,7 +50,7 @@ export default {
 
   data() {
     return {
-      title: 'Edit Your Profile',
+      title: 'Your Profile Settings',
       showModal: false,
       checkModalResolve: () => {},
     };

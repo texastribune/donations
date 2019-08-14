@@ -60,10 +60,6 @@
               <strong>{{ initialFields.email.value }}</strong
               >.
             </p>
-            <p v-show="!showConfirmedEmail" class="t-size-xs has-text-gray">
-              Note: This email is for logging into texastribune.org. Changing it
-              will not affect your email newsletters.
-            </p>
           </template>
         </text-input>
       </div>

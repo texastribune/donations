@@ -23,7 +23,7 @@
         </li>
         <li>
           <base-button
-            text="Abandon changes"
+            text="Don't save"
             :display="{ size: 's' }"
             @onClick="onAbandon"
           />

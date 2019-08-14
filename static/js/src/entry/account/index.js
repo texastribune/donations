@@ -54,7 +54,7 @@ Validator.localize('en', {
 
     email: {
       required:
-        "This email field cannot be empty because it's your login for texastribune.org. Changing this email will change your login, but not your email newsletters.",
+        "This cannot be empty because it's your login for texastribune.org.",
     },
 
     confirmedEmail: {
@@ -64,17 +64,17 @@ Validator.localize('en', {
 
     firstName: {
       required:
-        'To save changes to your contact info, please complete the first and last name fields. First and last name appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
+        'Please complete the first and last name fields. They appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     lastName: {
       required:
-        'To save changes to your contact info, please complete the first and last name fields. First and last name appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
+        'Please complete the first and last name fields. They appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     zip: {
       required:
-        "To save changes to your contact info, please complete the ZIP code field. We use your ZIP code to better inform you about the issues most relevant to you and to let you know when we're hosting events in your area.",
+        "Please enter your ZIP code. We use it to better inform you about news and events we're hosting in your area.",
     },
   },
 });
