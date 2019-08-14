@@ -9,7 +9,7 @@
     <h1
       class="has-ump-side-padding has-ump-top-padding has-l-btm-marg t-size-xl"
     >
-      Your Contact Info
+      Your Profile
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
@@ -23,7 +23,7 @@
 
     <help edit />
 
-    <confirm-modal @onLeave="onLeave" @onReturn="onReturn" />
+    <confirm-modal :resolve="checkModalResolve" />
   </div>
 </template>
 
@@ -52,7 +52,7 @@ export default {
     return {
       title: 'Edit Your Profile',
       showModal: false,
-      next: null,
+      checkModalResolve: () => {},
     };
   },
 
@@ -61,27 +61,26 @@ export default {
       this.showModal = shouldShow;
     },
 
-    onLeave() {
-      this.$modal.hide('modal');
-      this.next();
-      this.clearNext();
-    },
-
-    onReturn() {
-      this.$modal.hide('modal');
-      this.next(false);
-      this.clearNext();
-    },
-
-    clearNext() {
-      this.next = null;
+    checkModalAction() {
+      return new Promise(resolve => {
+        this.checkModalResolve = resolve;
+      });
     },
   },
 
-  beforeRouteLeave(to, from, next) {
+  async beforeRouteLeave(to, from, next) {
     if (this.showModal) {
       this.$modal.show('modal');
-      this.next = next;
+
+      const shouldNav = await this.checkModalAction();
+
+      this.$modal.hide('modal');
+
+      if (shouldNav) {
+        next();
+      } else {
+        next(false);
+      }
     } else {
       next();
     }
