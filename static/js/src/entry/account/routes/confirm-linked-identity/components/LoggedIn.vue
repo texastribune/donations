@@ -49,17 +49,6 @@ export default {
   },
 
   methods: {
-    onCancel() {
-      this.$emit('goHome');
-
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['cancel-linked-email'],
-        gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
-      });
-    },
-
     onConfirm() {
       this.$emit('confirm');
 
@@ -67,6 +56,17 @@ export default {
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
         gaAction: this.ga.userPortal.actions['confirm-linked-email'],
+        gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
+      });
+    },
+
+    onCancel() {
+      this.$emit('goHome');
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['cancel-linked-email'],
         gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
       });
     },

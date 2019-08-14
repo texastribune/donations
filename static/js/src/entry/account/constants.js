@@ -59,6 +59,7 @@ export const GA_USER_PORTAL = {
     'submit-linked-email': 'lookup linked email',
     'confirm-linked-email': 'confirm linked email',
     'cancel-linked-email': 'cancel linked email',
+    'login-linked-email': 'login linked email',
     'edit-name': 'edit name',
     'edit-email': 'edit account email',
     'edit-zip': 'edit zip',
@@ -76,6 +77,7 @@ export const GA_USER_PORTAL = {
     'blast-payments': 'the blast payment history',
     'edit-contact-info': 'profile editor',
     'confirm-linked-identity': 'link email confirmation',
+    'login-linked-identity': 'link email login',
     'changed-email': 'changed email confirmation',
   },
 };

@@ -49,12 +49,26 @@ export default {
   },
 
   methods: {
-    goToHomePage() {
-      window.location.href = 'https://www.texastribune.org';
+    logIn() {
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['login-linked-email'],
+        gaLabel: this.ga.userPortal.labels['login-linked-identity'],
+      });
+
+      this.$emit('logIn');
     },
 
-    logIn() {
-      this.$emit('logIn');
+    goToHomePage() {
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['cancel-linked-email'],
+        gaLabel: this.ga.userPortal.labels['login-linked-identity'],
+      });
+
+      window.location.href = 'https://www.texastribune.org';
     },
   },
 };
