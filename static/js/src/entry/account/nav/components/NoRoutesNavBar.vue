@@ -2,6 +2,8 @@
   <user-nav-container v-slot="slotProps">
     <nav-bar
       user-fetch-complete
+      :show-edit-contact-info-link="false"
+      :show-ambassador-link="false"
       :show-home-link="false"
       :show-blast-link="false"
       :show-membership-link="false"
