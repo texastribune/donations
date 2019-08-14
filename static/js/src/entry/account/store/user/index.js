@@ -44,7 +44,7 @@ const actions = {
     const { accessToken } = rootState.tokenUser;
     const { id: personId } = state.details;
 
-    await axios.patch(`${PORTAL_API_URL}persons/${personId}`, updates, {
+    await axios.patch(`${PORTAL_API_URL}persons/${personId}/`, updates, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
   },
@@ -58,7 +58,7 @@ const actions = {
     const { id: identityId } = getTokenIdentity(identities, tokenEmail);
 
     await axios.patch(
-      `${PORTAL_API_URL}persons/${personId}/identities/${identityId}`,
+      `${PORTAL_API_URL}persons/${personId}/identities/${identityId}/`,
       updates,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -74,7 +74,7 @@ const actions = {
     const { id: personId } = state.details;
 
     await axios.put(
-      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}`,
+      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/`,
       identity,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -90,7 +90,7 @@ const actions = {
     const { id: personId } = state.details;
 
     await axios.put(
-      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}?ticket=${ticket}`,
+      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/?ticket=${ticket}`,
       {},
       {
         headers: { Authorization: `Bearer ${accessToken}` },
