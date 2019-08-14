@@ -72,11 +72,11 @@
   },
   "license": "MIT",
   "browserslist": [
-    "> 0.5%",
+    "> 1%",
     "last 2 versions",
     "Firefox ESR",
     "iOS >= 11",
-    "Safari >= 11",
+    "Safari >= 12",
     "not dead"
   ],
   "eslintConfig": {
