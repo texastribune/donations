@@ -4,6 +4,7 @@
     :is-custom-donor="isCustomDonor"
     :is-never-given="isNeverGiven"
     :ga-close-label="gaCloseLabel"
+    :display="display"
   />
 </template>
 
@@ -24,6 +25,11 @@ export default {
     gaCloseLabel: {
       type: String,
       required: true,
+    },
+
+    display: {
+      type: Object,
+      default: () => ({}),
     },
   },
 

@@ -5,6 +5,7 @@
         heading="Welcome"
         :name="messageKey"
         :ga-close-label="gaCloseLabel"
+        :display="display"
         @setMessageSeen="slotProps.setMessageSeen"
       >
         <template v-slot:icon>
@@ -94,6 +95,11 @@ export default {
 
     gaCloseLabel: {
       type: String,
+      required: true,
+    },
+
+    display: {
+      type: Object,
       required: true,
     },
   },

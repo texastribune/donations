@@ -1,5 +1,11 @@
 <template>
-  <aside v-if="shouldShow" class="c-message has-white-off-bg-from-bp-l">
+  <aside
+    v-if="shouldShow"
+    :class="{
+      'c-message--same-mobile-bg': mergedDisplay.sameMobileBg,
+    }"
+    class="c-message has-bg-white-off"
+  >
     <div class="c-message__top has-xxs-btm-marg">
       <slot name="icon"></slot>
       <h2 class="t-size-s">{{ heading }}</h2>
@@ -36,10 +42,21 @@ export default {
       type: String,
       required: true,
     },
+
+    display: {
+      type: Object,
+      default: () => ({}),
+    },
   },
 
   data() {
     return { shouldShow: false };
+  },
+
+  computed: {
+    mergedDisplay() {
+      return { sameMobileBg: false, ...this.display };
+    },
   },
 
   mounted() {

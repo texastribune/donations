@@ -9,7 +9,10 @@
     v-else
     class="has-ump-top-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
   >
-    <message :ga-close-label="ga.userPortal.labels.home" />
+    <message
+      :ga-close-label="ga.userPortal.labels.home"
+      :display="{ sameMobileBg: true }"
+    />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
