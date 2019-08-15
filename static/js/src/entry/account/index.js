@@ -64,12 +64,12 @@ Validator.localize('en', {
 
     firstName: {
       required:
-        'Please complete the first and last name fields. They appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
+        'Please complete the first and last name fields. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     lastName: {
       required:
-        'Please complete the first and last name fields. They appear in comments on texastribune.org to promote a more transparent and personable atmosphere.',
+        'Please complete the first and last name fields. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     zip: {

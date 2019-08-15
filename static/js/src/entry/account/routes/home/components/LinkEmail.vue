@@ -13,8 +13,7 @@
         </p>
         <p class="t-size-xs has-text-gray">
           Check your inbox for an email from The Texas Tribune with the subject
-          line "Please confirm your linked email," then click to verify. Having
-          trouble? Email
+          line "Was this you?" then click to verify. Having trouble? Email
           <a href="mailto:community@texastribune.org"
             >community@texastribune.org</a
           >.

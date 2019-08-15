@@ -15,8 +15,8 @@
         </p>
         <p>
           Check your inbox for an email from The Texas Tribune with the subject
-          line "Please confirm your account," then click to verify your email.
-          Having trouble? Contact
+          line "Please confirm your login email change," then click to verify
+          your email. Having trouble? Contact
           <a
             href="mailto:community@texastribune.org?subject=account%20technical%20error"
             ga-on="click"
