@@ -45,6 +45,10 @@ export default {
   },
 
   methods: {
+    goHome() {
+      this.$emit('goHome');
+    },
+
     async confirm() {
       this.setAppIsFetching(true);
 
@@ -53,10 +57,6 @@ export default {
 
       this.setAppIsFetching(false);
       this.goHome();
-    },
-
-    goHome() {
-      this.$emit('goHome');
     },
   },
 };
