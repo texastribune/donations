@@ -53,7 +53,6 @@ export default {
       this.setAppIsFetching(true);
 
       await this.confirmLinkedIdentity(this.ticket);
-      // TODO: Call /self/ again
 
       this.setAppIsFetching(false);
       this.goHome();
