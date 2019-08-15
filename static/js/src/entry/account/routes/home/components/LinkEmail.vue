@@ -36,23 +36,10 @@
             </p>
           </slot>
         </div>
-        <div class="has-b-btm-marg">
-          <text-input-and-submit
-            :initial-fields="initialFields"
-            @onSubmit="linkEmail"
-          />
-        </div>
-        <p class="t-size-xs has-text-gray">
-          Having trouble? Contact us at
-          <a
-            href="mailto:membership@texastribune.org"
-            ga-on="click"
-            :ga-event-category="ga.userPortal.category"
-            :ga-event-action="ga.userPortal.actions['contact-us']"
-            :ga-event-label="gaLabel"
-            >membership@texastribune.org</a
-          >.
-        </p>
+        <text-input-and-submit
+          :initial-fields="initialFields"
+          @onSubmit="linkEmail"
+        />
       </template>
     </div>
   </link-email-provider>
