@@ -1,8 +1,11 @@
 <template>
   <edit-form
     :initial-fields="initialFields"
+    :bad-email="badEmail"
+    :show-success="showSuccess"
     @onSubmit="onSubmit"
     @onFormHasChangedToggle="setShowModal"
+    @onFormIsPristineToggle="resetBadEmailAndSuccess"
   />
 </template>
 
@@ -22,6 +25,10 @@ export default {
   components: { EditForm },
 
   mixins: [userMixin, tokenUserMixin, contextMixin],
+
+  data() {
+    return { badEmail: '', showSuccess: false };
+  },
 
   computed: {
     initialFields() {
@@ -81,6 +88,13 @@ export default {
       this.$emit('setShowModal', formHasChanged);
     },
 
+    resetBadEmailAndSuccess(formIsPristine) {
+      if (!formIsPristine) {
+        this.badEmail = '';
+        this.showSuccess = false;
+      }
+    },
+
     async onSubmit(fields) {
       const userPayload = {
         first_name: fields.firstName.value,
@@ -99,19 +113,35 @@ export default {
     },
 
     async updateContactInfo({ userPayload, identityPayload }) {
-      this.setAppIsFetching(true);
+      let badEmailUpdate = false;
 
-      await Promise.all([
-        this.updateUser(userPayload),
-        this.updateIdentity(identityPayload),
-      ]);
+      this.setAppIsFetching(true);
+      this.resetBadEmailAndSuccess();
+
+      try {
+        await Promise.all([
+          this.updateUser(userPayload),
+          this.updateIdentity(identityPayload),
+        ]);
+      } catch (err) {
+        // TODO: Confirm error response
+        if (err.response && err.response.status === 400) {
+          badEmailUpdate = true;
+        } else {
+          throw err;
+        }
+      }
+
+      await this.getUser();
 
       const { email } = identityPayload;
 
-      if (email) {
+      if (badEmailUpdate) {
+        this.badEmail = email;
+      } else if (email) {
         logOut(`/account/changed-email?email=${email}`);
       } else {
-        await this.getUser();
+        this.showSuccess = true;
       }
 
       this.setAppIsFetching(false);

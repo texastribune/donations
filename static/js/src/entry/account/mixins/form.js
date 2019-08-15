@@ -30,16 +30,22 @@ export default {
       return haveChanged.length > 0;
     },
 
-    formIsValid() {
-      const fieldsToValidate = Object.keys(this.currentFields).filter(
-        fieldName => {
-          const { isVisible } = this.currentFields[fieldName];
-          return isVisible;
-        }
+    formIsPristine() {
+      const areNotPristine = Object.keys(this.currentFields).filter(
+        fieldName => !this.currentFields[fieldName].pristine
       );
 
-      const areNotValid = fieldsToValidate.filter(
-        fieldName => !this.currentFields[fieldName].valid
+      return areNotPristine.length === 0;
+    },
+
+    formIsValid() {
+      const visibleFields = Object.keys(this.currentFields).filter(
+        fieldName => this.currentFields[fieldName].isVisible
+      );
+
+      const areNotValid = visibleFields.filter(
+        // explicitly check for false because value can also be null
+        fieldName => this.currentFields[fieldName].valid === false
       );
 
       return areNotValid.length === 0;
@@ -50,6 +56,12 @@ export default {
     formHasChanged(newHasChanged, oldHasChanged) {
       if (newHasChanged !== oldHasChanged) {
         this.$emit('onFormHasChangedToggle', newHasChanged);
+      }
+    },
+
+    formIsPristine(newIsPristine, oldIsPristine) {
+      if (newIsPristine !== oldIsPristine) {
+        this.$emit('onFormIsPristineToggle', newIsPristine);
       }
     },
 
@@ -72,9 +84,9 @@ export default {
 
         final[fieldName] = {
           ...allValues,
-          changed: null,
-          dirty: null,
-          valid: null,
+          pristine: true, // default vee-validate flag value
+          changed: false, // default vee-validate flag value
+          valid: null, // default vee-validate flag value
         };
       });
 

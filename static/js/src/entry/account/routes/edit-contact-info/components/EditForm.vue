@@ -1,5 +1,14 @@
 <template>
   <form :key="formKey" @submit.prevent="onSubmit">
+    <p v-if="badEmail" class="has-b-btm-marg has-text-error">
+      <strong
+        >Error: You can't change your login email to {{ badEmail }} because an
+        account already exists with that email address.</strong
+      >
+    </p>
+    <p v-if="showSuccess" class="has-b-btm-marg has-text-success">
+      <strong>Success! Your profile has been updated.</strong>
+    </p>
     <validation-provider
       v-slot="{ errors, flags }"
       :rules="currentFields.firstName.rules"
@@ -130,6 +139,18 @@ export default {
   name: 'EditContactInfoForm',
 
   mixins: [formMixin],
+
+  props: {
+    badEmail: {
+      type: String,
+      required: true,
+    },
+
+    showSuccess: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   computed: {
     emailHasChangedAndIsValid() {

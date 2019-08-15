@@ -83,10 +83,10 @@ export default {
 
   computed: {
     showErrors() {
-      const { valid, dirty, showErrorImmediately } = this;
+      const { valid, pristine, showErrorImmediately } = this;
 
       return (
-        (!valid && !showErrorImmediately && dirty) ||
+        (!valid && !showErrorImmediately && !pristine) ||
         (!valid && showErrorImmediately)
       );
     },

@@ -25,8 +25,8 @@ export default {
       return this.flags.valid;
     },
 
-    dirty() {
-      return this.flags.dirty;
+    pristine() {
+      return this.flags.pristine;
     },
   },
 
@@ -39,15 +39,15 @@ export default {
       this.updateFlags();
     },
 
-    dirty() {
+    pristine() {
       this.updateFlags();
     },
   },
 
   methods: {
     updateFlags() {
-      const { changed, valid, dirty } = this;
-      this.$emit('updateFlags', this.name, { changed, valid, dirty });
+      const { changed, valid, pristine } = this;
+      this.$emit('updateFlags', this.name, { changed, valid, pristine });
     },
   },
 };
