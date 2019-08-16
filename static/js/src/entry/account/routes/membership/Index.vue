@@ -21,7 +21,9 @@
 
       <div class="has-xxl-btm-marg"><circle-appeal /></div>
 
-      <link-email :ga-label="ga.userPortal.labels.membership" />
+      <div class="c-detail-box c-detail-box--from-l">
+        <link-email :ga-label="ga.userPortal.labels.membership" />
+      </div>
     </div>
 
     <appeal /> <help membership />

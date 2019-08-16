@@ -1,5 +1,6 @@
 <template>
   <aside class="c-detail-box">
+    <h2 class="t-size-b t-uppercase has-xxxs-btm-marg">Thank you!</h2>
     <p class="has-text-gray-dark t-linkstyle--underlined">
       Thank you for your commitment to provide backing for the vital work of our
       journalists. Circle Members believe in supporting our mission as a public

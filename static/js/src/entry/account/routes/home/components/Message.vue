@@ -13,7 +13,7 @@
         </template>
         <template v-slot:content>
           <div class="has-text-gray-dark t-size-s t-linkstyle--underlined">
-            <p class="has-b-btm-marg">
+            <p>
               <template v-if="isCustomDonor">
                 Thanks for creating a Texas Tribune account. You can use this
                 login to edit your contact information, comment on
@@ -45,18 +45,6 @@
               </template>
               Later this year, you’ll also be able to update your credit card
               and newsletter preferences.
-            </p>
-            <p>
-              Having trouble? Email us at
-              <a
-                href="mailto:community@texastribune.org"
-                ga-on="click"
-                :ga-event-category="ga.userPortal.category"
-                :ga-event-action="ga.userPortal.actions['contact-us']"
-                :ga-event-label="ga.userPortal.labels.home"
-              >
-                community@texastribune.org </a
-              >.
             </p>
           </div>
         </template>

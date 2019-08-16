@@ -19,7 +19,9 @@
 
       <div class="has-xxl-btm-marg"><custom-appeal /></div>
 
-      <link-email :ga-label="ga.userPortal.labels.payments" />
+      <div class="c-detail-box c-detail-box--from-l">
+        <link-email :ga-label="ga.userPortal.labels.payments" />
+      </div>
     </div>
 
     <appeal /> <help payments />

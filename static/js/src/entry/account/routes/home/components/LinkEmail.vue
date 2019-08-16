@@ -19,7 +19,7 @@
       <template v-else>
         <div class="has-xxxs-btm-marg">
           <slot name="heading">
-            <h2 class="t-size-b">Not seeing your donations?</h2>
+            <h2 class="t-size-b t-uppercase">Missing donations?</h2>
           </slot>
         </div>
         <div class="has-b-btm-marg">
