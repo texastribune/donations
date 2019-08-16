@@ -4,10 +4,6 @@
   position: relative;
   padding: $size-b;
 
-  @include mq($until: bp-l) {
-    background-color: $color-white-off;
-  }
-
   &--on-gray-mobile-bg {
     @include mq($until: bp-l) {
       background-color: $color-white-off;
