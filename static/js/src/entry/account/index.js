@@ -48,13 +48,13 @@ if (ENABLE_SENTRY) {
 Validator.localize('en', {
   custom: {
     linkEmail: {
-      required: 'This field must contain a valid email address',
-      email: 'This field must contain a valid email address',
+      required: 'This field must contain a valid email address.',
+      email: 'This field must contain a valid email address.',
     },
 
     email: {
       required:
-        "This cannot be empty because it's your login for texastribune.org.",
+        "This email is required because it's your login to texastribune.org.",
     },
 
     confirmedEmail: {
