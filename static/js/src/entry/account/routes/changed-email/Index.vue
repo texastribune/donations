@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 
 export default {
   name: 'ChangedEmailRoute',

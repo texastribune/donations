@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
 import UserNavContainer from '../../nav/containers/UserNavContainer.vue';
 import SideNav from './components/SideNav.vue';

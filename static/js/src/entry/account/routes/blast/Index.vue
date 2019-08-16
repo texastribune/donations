@@ -21,7 +21,7 @@
 <script>
 /* eslint-disable camelcase */
 
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../home/components/Help.vue';

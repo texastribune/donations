@@ -133,7 +133,7 @@
 </template>
 
 <script>
-import formMixin from '../../../mixins/form';
+import formMixin from '../../../form/mixins';
 
 export default {
   name: 'EditContactInfoForm',

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Message from './components/Message.vue';

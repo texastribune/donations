@@ -33,10 +33,10 @@
 <script>
 /* eslint-disable camelcase */
 
+import routeMixin from '../mixin';
 import Expired from './containers/ExpiredContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
-import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import LinkEmail from '../home/components/LinkEmail.vue';

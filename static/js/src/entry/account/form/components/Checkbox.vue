@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import formElementMixin from '../mixins/form-element';
+import formElementMixin from '../mixins/element';
 
 export default {
   name: 'Checkbox',

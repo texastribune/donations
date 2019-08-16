@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../home/components/Help.vue';
 import ReferralLinks from './components/ReferralLinks.vue';

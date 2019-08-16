@@ -26,7 +26,7 @@
 
 import jwt from 'jsonwebtoken';
 
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import tokenUserMixin from '../../store/token-user/mixin';
 import userMixin from '../../store/user/mixin';
 import RouteLoader from './components/RouteLoader.vue';

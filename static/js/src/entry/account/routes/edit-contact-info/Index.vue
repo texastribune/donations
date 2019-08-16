@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Links from './containers/LinksContainer.vue';

@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import TextInputAndSubmit from '../../../components/TextInputAndSubmit.vue';
+import TextInputAndSubmit from '../../../form/components/TextInputAndSubmit.vue';
 
 export default {
   name: 'ReferralForm',

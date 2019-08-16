@@ -43,7 +43,7 @@
 
 <script>
 import LinkEmailProvider from '../providers/LinkEmailProvider.vue';
-import TextInputAndSubmit from '../../../components/TextInputAndSubmit.vue';
+import TextInputAndSubmit from '../../../form/components/TextInputAndSubmit.vue';
 
 export default {
   name: 'LinkEmail',

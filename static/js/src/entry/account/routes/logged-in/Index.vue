@@ -14,7 +14,7 @@
 <script>
 import { setLoggedInFlag } from '../../utils/storage';
 import { redirect } from '../../utils/auth-actions';
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 
 export default {
   name: 'LoggedInRoute',
