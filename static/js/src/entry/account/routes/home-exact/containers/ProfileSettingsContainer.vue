@@ -1,5 +1,5 @@
 <template>
-  <contact-info
+  <profile-settings
     :pw-reset-success="pwResetSuccess"
     :pw-reset-failure="pwResetFailure"
     :contact-info="contactInfo"
@@ -13,15 +13,15 @@
 
 import { mapState } from 'vuex';
 
-import ContactInfo from '../components/ContactInfo.vue';
+import ProfileSettings from '../components/ProfileSettings.vue';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import userMixin from '../../../store/user/mixin';
 import { resetPassword } from '../../../utils/auth-actions';
 
 export default {
-  name: 'SummaryContactInfoContainer',
+  name: 'SummmaryProfileSettingsContainer',
 
-  components: { ContactInfo },
+  components: { ProfileSettings },
 
   mixins: [tokenUserMixin, userMixin],
 
@@ -60,7 +60,7 @@ export default {
         });
       }
 
-      contactInfo.push({ id: 1, heading: 'Email', text: email });
+      contactInfo.push({ id: 1, heading: 'Login email', text: email });
 
       if (postal_code) {
         contactInfo.push({ id: 2, heading: 'ZIP code', text: postal_code });

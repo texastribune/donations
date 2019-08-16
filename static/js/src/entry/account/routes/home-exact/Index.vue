@@ -17,7 +17,7 @@
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
-      <contact-info />
+      <profile-settings />
       <blast />
       <blast-cancelled />
       <recurring-or-circle />
@@ -36,7 +36,7 @@ import routeMixin from '../../mixins/route';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Message from '../home/containers/MessageContainer.vue';
-import ContactInfo from './containers/ContactInfoContainer.vue';
+import ProfileSettings from './containers/ProfileSettingsContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
 import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
@@ -50,7 +50,7 @@ export default {
 
   components: {
     Message,
-    ContactInfo,
+    ProfileSettings,
     RecurringOrCircle,
     Expired,
     SingleOrWillExpire,

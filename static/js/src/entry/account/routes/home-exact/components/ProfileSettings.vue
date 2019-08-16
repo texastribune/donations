@@ -1,5 +1,5 @@
 <template>
-  <summary-box heading="contact info">
+  <summary-box heading="profile settings">
     <template v-slot:content>
       <info-list :items="contactInfo">
         <template v-slot="slotProps">
@@ -68,7 +68,7 @@ import SummaryBox from '../../../components/SummaryBox.vue';
 import InfoList from '../../../components/InfoList.vue';
 
 export default {
-  name: 'SummaryContactInfo',
+  name: 'SummaryProfileSettings',
 
   components: { SummaryBox, InfoList },
 
