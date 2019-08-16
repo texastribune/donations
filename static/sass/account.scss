@@ -7,6 +7,8 @@
 @import '@texastribune/queso-ui/assets/scss/6-components/mini-form/mini-form';
 @import '@texastribune/queso-ui/assets/scss/6-components/text-input/text-input';
 
+@import './ds/4-elements/all';
+
 @import './ds/6-components/appeal';
 @import './ds/6-components/btn-or-btn';
 @import './ds/6-components/detail-box';
@@ -21,6 +23,7 @@
 @import './ds/6-components/site-footer';
 @import './ds/6-components/summary-box';
 @import './ds/6-components/summary-boxes';
+
 @import './ds/7-utilities/bg';
 @import './ds/7-utilities/spacing';
 @import './ds/7-utilities/transitions';
