@@ -1,10 +1,16 @@
 .c-message {
+  background-color: #fef2da;
   border-radius: 3px;
   position: relative;
   padding: $size-b;
 
-  &--same-mobile-bg {
+  @include mq($until: bp-l) {
+    background-color: $color-white-off;
+  }
+
+  &--on-gray-mobile-bg {
     @include mq($until: bp-l) {
+      background-color: $color-white-off;
       border-bottom: 1px solid $color-gray-light;
       padding: $size-b 0;
     }

@@ -1,5 +1,5 @@
 <template>
-  <aside class="c-appeal has-ump-side-padding has-white-off-bg-until-bp-l">
+  <aside class="c-detail-box">
     <p class="has-text-gray-dark t-linkstyle--underlined">
       Thank you for your commitment to provide backing for the vital work of our
       journalists. Circle Members believe in supporting our mission as a public

@@ -1,6 +1,5 @@
 <template>
   <aside
-    :class="hasTopPadding && 'c-help--has-top-padding'"
     class="c-help has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">Contact us</h2>
@@ -87,11 +86,6 @@ export default {
   },
 
   computed: {
-    hasTopPadding() {
-      const { blast, blastPayments, edit, ambassador } = this;
-      return blast || blastPayments || edit || ambassador;
-    },
-
     // eslint-disable-next-line consistent-return, vue/return-in-computed-property
     gaEventLabel() {
       const {

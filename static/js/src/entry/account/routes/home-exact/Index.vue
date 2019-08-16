@@ -7,11 +7,11 @@
 
   <div
     v-else
-    class="has-ump-top-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
+    class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
   >
     <message
       :ga-close-label="ga.userPortal.labels.home"
-      :display="{ sameMobileBg: true }"
+      :display="{ onGrayMobileBg: true }"
     />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
@@ -27,7 +27,7 @@
       <custom />
     </div>
 
-    <help home />
+    <div class="is-hidden-until-bp-l"><help home /></div>
   </div>
 </template>
 

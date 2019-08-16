@@ -14,14 +14,15 @@
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
       <div class="has-xxl-btm-marg"><detail /></div>
+
+      <div class="has-xxl-btm-marg"><circle-appeal /></div>
+
+      <div class="has-xxl-btm-marg"><custom-appeal /></div>
+
       <link-email :ga-label="ga.userPortal.labels.payments" />
     </div>
 
-    <appeal />
-    <circle-appeal />
-    <custom-appeal />
-
-    <help payments />
+    <appeal /> <help payments />
   </div>
 </template>
 

@@ -12,19 +12,19 @@
       Your Membership
     </h1>
 
-    <div class="has-ump-side-padding has-xl-btm-marg">
+    <div class="has-ump-side-padding has-xxl-btm-marg">
       <div class="has-xxl-btm-marg">
         <expired />
         <recurring-or-circle />
         <single-or-will-expire />
       </div>
 
+      <div class="has-xxl-btm-marg"><circle-appeal /></div>
+
       <link-email :ga-label="ga.userPortal.labels.membership" />
     </div>
 
-    <appeal />
-    <circle-appeal />
-    <help membership />
+    <appeal /> <help membership />
   </div>
 </template>
 

@@ -2,9 +2,9 @@
   <aside
     v-if="shouldShow"
     :class="{
-      'c-message--same-mobile-bg': mergedDisplay.sameMobileBg,
+      'c-message--on-gray-mobile-bg': mergedDisplay.onGrayMobileBg,
     }"
-    class="c-message has-bg-white-off"
+    class="c-message"
   >
     <div class="c-message__top has-xxs-btm-marg">
       <slot name="icon"></slot>
@@ -55,7 +55,7 @@ export default {
 
   computed: {
     mergedDisplay() {
-      return { sameMobileBg: false, ...this.display };
+      return { onGrayMobileBg: false, ...this.display };
     },
   },
 
