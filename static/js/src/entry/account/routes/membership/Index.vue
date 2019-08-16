@@ -6,7 +6,7 @@
   </route-loader>
 
   <div v-else class="has-ump-top-padding">
-    <message :ga-close-label="ga.userPortal.labels.membership" />
+    <credit-card-message :ga-close-label="ga.userPortal.labels.membership" />
 
     <h1 class="has-ump-side-padding has-xl-btm-marg t-size-xl">
       Your Membership
@@ -41,7 +41,7 @@ import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import LinkEmail from '../home/components/LinkEmail.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
-import Message from '../home/containers/MessageContainer.vue';
+import CreditCardMessage from '../home/components/CreditCardMessage.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import Help from '../home/components/Help.vue';
 import { InvalidRouteError } from '../../errors';
@@ -55,7 +55,7 @@ export default {
     RecurringOrCircle,
     SingleOrWillExpire,
     Appeal,
-    Message,
+    CreditCardMessage,
     CircleAppeal,
     Help,
     LinkEmail,

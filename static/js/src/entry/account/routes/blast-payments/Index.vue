@@ -6,7 +6,9 @@
   </route-loader>
 
   <div v-else class="has-ump-top-padding">
-    <message :ga-close-label="ga.userPortal.labels['blast-payments']" />
+    <credit-card-message
+      :ga-close-label="ga.userPortal.labels['blast-payments']"
+    />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       The Blast Newsletter: Payment History
@@ -25,14 +27,14 @@ import routeMixin from '../../mixins/route';
 import userMixin from '../../store/user/mixin';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Message from '../home/containers/MessageContainer.vue';
+import CreditCardMessage from '../home/components/CreditCardMessage.vue';
 import Detail from './containers/DetailContainer.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastPaymentsRoute',
 
-  components: { Help, Detail, RouteLoader, Message },
+  components: { Help, Detail, RouteLoader, CreditCardMessage },
 
   mixins: [routeMixin, userMixin],
 

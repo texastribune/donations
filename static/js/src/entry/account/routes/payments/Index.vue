@@ -6,7 +6,7 @@
   </route-loader>
 
   <div v-else class="has-ump-top-padding">
-    <message :ga-close-label="ga.userPortal.labels.payments" />
+    <credit-card-message :ga-close-label="ga.userPortal.labels.payments" />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       Your Donations
@@ -37,7 +37,7 @@ import RouteLoader from '../home/components/RouteLoader.vue';
 import Appeal from '../home/containers/AppealContainer.vue';
 import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
 import CustomAppeal from '../home/containers/CustomAppealContainer.vue';
-import Message from '../home/containers/MessageContainer.vue';
+import CreditCardMessage from '../home/components/CreditCardMessage.vue';
 import LinkEmail from '../home/components/LinkEmail.vue';
 import Help from '../home/components/Help.vue';
 import Detail from './containers/DetailContainer.vue';
@@ -52,7 +52,7 @@ export default {
     CircleAppeal,
     CustomAppeal,
     Detail,
-    Message,
+    CreditCardMessage,
     Help,
     RouteLoader,
   },

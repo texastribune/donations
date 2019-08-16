@@ -9,10 +9,7 @@
     v-else
     class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
   >
-    <message
-      :ga-close-label="ga.userPortal.labels.home"
-      :display="{ onGrayMobileBg: true }"
-    />
+    <message />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
@@ -35,7 +32,7 @@
 import routeMixin from '../../mixins/route';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Message from '../home/containers/MessageContainer.vue';
+import Message from './components/Message.vue';
 import ProfileSettings from './containers/ProfileSettingsContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
