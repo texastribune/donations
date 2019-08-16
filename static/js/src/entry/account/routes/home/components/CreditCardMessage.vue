@@ -24,8 +24,6 @@
 </template>
 
 <script>
-import getYear from 'date-fns/get_year';
-
 import Messages from '../../../components/Messages.vue';
 import Message from '../../../components/Message.vue';
 import { READ_WRITE_CREDIT_CARD_MESSAGE_KEY } from '../../../constants';
@@ -46,12 +44,6 @@ export default {
     return {
       messageKey: READ_WRITE_CREDIT_CARD_MESSAGE_KEY,
     };
-  },
-
-  computed: {
-    lastYear() {
-      return getYear(new Date()) - 1;
-    },
   },
 };
 </script>
