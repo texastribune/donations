@@ -124,8 +124,11 @@ export default {
           this.updateIdentity(identityPayload),
         ]);
       } catch (err) {
-        // TODO: Confirm error response
-        if (err.response && err.response.status === 400) {
+        if (
+          err.response &&
+          err.response.status === 400 &&
+          err.response.data.detail === "can't change email"
+        ) {
           badEmailUpdate = true;
         } else {
           throw err;
