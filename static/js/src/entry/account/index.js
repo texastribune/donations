@@ -53,8 +53,7 @@ Validator.localize('en', {
     },
 
     email: {
-      required:
-        "This email is required because it's your login to texastribune.org.",
+      required: 'You must have an email to log into texastribune.org.',
     },
 
     confirmedEmail: {
@@ -64,17 +63,17 @@ Validator.localize('en', {
 
     firstName: {
       required:
-        'Please complete the first and last name fields. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+        'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     lastName: {
       required:
-        'Please complete the first and last name fields. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+        'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
     },
 
     zip: {
       required:
-        "Please enter your ZIP code. We use it to better inform you about news and events we're hosting in your area.",
+        'Please enter your ZIP code to help us inform you about news and events in your area.',
     },
   },
 });
