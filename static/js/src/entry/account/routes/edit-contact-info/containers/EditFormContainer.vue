@@ -95,34 +95,63 @@ export default {
       }
     },
 
-    async onSubmit(fields) {
-      const userPayload = {
-        first_name: fields.firstName.value,
-        last_name: fields.lastName.value,
-        postal_code: fields.zip.value,
-      };
-      const identityPayload = {
-        tribune_offers_consent: fields.marketing.value,
-      };
+    getUserPayload(fields) {
+      const userPayload = {};
+
+      if (fields.firstName.changed) {
+        userPayload.first_name = fields.firstName.value;
+      }
+
+      if (fields.lastName.changed) {
+        userPayload.last_name = fields.lastName.value;
+      }
+
+      if (fields.zip.changed) {
+        userPayload.postal_code = fields.zip.value;
+      }
+
+      return userPayload;
+    },
+
+    getIdentityPayload(fields) {
+      const identityPayload = {};
 
       if (fields.email.changed) {
         identityPayload.email = fields.email.value;
       }
 
-      await this.updateContactInfo({ userPayload, identityPayload });
+      if (fields.marketing.changed) {
+        identityPayload.tribune_offers_consent = fields.marketing.value;
+      }
+
+      return identityPayload;
     },
 
-    async updateContactInfo({ userPayload, identityPayload }) {
+    async onSubmit(fields) {
+      const dispatches = [];
+      const userPayload = this.getUserPayload(fields);
+      const identityPayload = this.getIdentityPayload(fields);
+      const newEmail = identityPayload.email || null;
+
+      if (Object.keys(userPayload).length > 0) {
+        dispatches.push(this.updateUser(userPayload));
+      }
+
+      if (Object.keys(identityPayload).length > 0) {
+        dispatches.push(this.updateIdentity(identityPayload));
+      }
+
+      await this.updateContactInfo(dispatches, newEmail);
+    },
+
+    async updateContactInfo(dispatches, newEmail) {
       let badEmailUpdate = false;
 
       this.setAppIsFetching(true);
       this.resetBadEmailAndSuccess();
 
       try {
-        await Promise.all([
-          this.updateUser(userPayload),
-          this.updateIdentity(identityPayload),
-        ]);
+        await Promise.all(dispatches);
       } catch (err) {
         if (
           err.response &&
@@ -137,12 +166,10 @@ export default {
 
       await this.getUser();
 
-      const { email } = identityPayload;
-
       if (badEmailUpdate) {
-        this.badEmail = email;
-      } else if (email) {
-        logOut(`/account/changed-email?email=${email}`);
+        this.badEmail = newEmail;
+      } else if (newEmail) {
+        logOut(`/account/changed-email?email=${newEmail}`);
       } else {
         this.showSuccess = true;
       }

@@ -128,7 +128,7 @@
         />
       </div>
     </validation-provider>
-    <submit :disabled="!formIsValid" value="Save" />
+    <submit :disabled="!formIsValid || !formHasChanged" value="Save" />
   </form>
 </template>
 
