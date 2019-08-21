@@ -165,7 +165,7 @@ export default {
       }
 
       if (newEmail && !badEmailUpdate) {
-        logOut(`/account/changed-email?email=${newEmail}`);
+        logOut(`/account/changed-email?email=${encodeURIComponent(newEmail)}`);
       } else {
         await this.getUser();
 
