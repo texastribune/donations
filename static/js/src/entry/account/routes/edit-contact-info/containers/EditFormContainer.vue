@@ -164,17 +164,19 @@ export default {
         }
       }
 
-      await this.getUser();
-
-      if (badEmailUpdate) {
-        this.badEmail = newEmail;
-      } else if (newEmail) {
+      if (newEmail && !badEmailUpdate) {
         logOut(`/account/changed-email?email=${newEmail}`);
       } else {
-        this.showSuccess = true;
-      }
+        await this.getUser();
 
-      this.setAppIsFetching(false);
+        if (badEmailUpdate) {
+          this.badEmail = newEmail;
+        } else {
+          this.showSuccess = true;
+        }
+
+        this.setAppIsFetching(false);
+      }
     },
   },
 };
