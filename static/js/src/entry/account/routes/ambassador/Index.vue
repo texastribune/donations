@@ -14,9 +14,13 @@
 
     <div class="has-ump-side-padding has-xxxl-btm-marg">
       <p class="has-xl-btm-marg has-text-gray-dark t-size-s">
-        Thank you for being a Texas Tribune member! You can help ensure the rest
-        of Texas knows about our mission to inform and engage the public in
-        politics and policy news by sharing your membership story.
+        Thank you for supporting our nonprofit newsroom! Thanks to your support,
+        we're hard at work on our mission of informing and engaging Texans on
+        politics and policy issues of statewide importance. Did you know that
+        recommendations from members like you are our most effective tool for
+        reaching readers who haven't yet heard about our journalism? So, what do
+        you say: Do we have your endorsement? Tell the rest of Texas why our
+        nonpartisan reporting matters to you.
       </p>
       <section class="has-xl-btm-marg">
         <h2 class="has-s-btm-marg t-size-b">
