@@ -10,6 +10,8 @@ env-docker
 /static/build/*.png
 /static/build/*.svg
 /static/build/*.map
+static/js
+static/prod
 node_modules/
 .cache
 .coverage
@@ -21,3 +23,4 @@ yarn-error.log
 # SVG sprite
 /templates/includes/base_icons.html
 **/__pycache__
+.mypy_cache

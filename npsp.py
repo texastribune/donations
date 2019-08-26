@@ -243,6 +243,7 @@ class SalesforceConnection:
             except SalesforceException as e:
                 log.exception(e.response.text)
                 raise
+            sf_object.created = False
             return
 
         log.info(f"{sf_object.api_name} object doesn't exist; creating...")
@@ -402,13 +403,16 @@ class SalesforceObject(object):
     # TODO use composite request to create Contact/Account/Opportunity in one API call?
     # TODO use related API query to get opps for an RDO?
     def serialize(self):
+        """
+        Given an object turn it into a dict/JSON.
+        """
         # don't differentiate patch() vs post() here and let that happen (by removing
         # what's not tainted) in the save() method? Because right now we're testing for
         # "id" in both places and that feels ugly and redundant
         log.debug("called serialize")
         # TODO construct the reverse map here and in deserialize() on demand since here and deserialize() are
         # the only places we use it?
-        log.debug(self.field_to_attr_map)
+        #        log.debug(self.field_to_attr_map)
         if not hasattr(self, "field_to_attr_map"):
             log.debug("calling get_schema()")
             self.get_schema()
@@ -422,7 +426,7 @@ class SalesforceObject(object):
                     log.debug(f"{attribute} not in attr_to_field_map")
                     # we don't want .created and .duplicate_found
                     continue
-                out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
+        #                out[self.attr_to_field_map[attribute]] = getattr(self, attribute)
         else:
             out = {
                 api_name: getattr(self, attribute)

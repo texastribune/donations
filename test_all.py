@@ -1,7 +1,7 @@
 from datetime import datetime
+import logging
 import vcr
 from decimal import Decimal
-import json
 from unittest.mock import patch
 
 from pytz import timezone
@@ -39,6 +39,34 @@ class SalesforceConnectionSubClass(SalesforceConnection):
 sf = SalesforceConnectionSubClass()
 
 from pprint import pprint
+
+vcr_log = logging.getLogger("vcr")
+vcr_log.setLevel(logging.WARNING)
+
+
+# @vcr.use_cassette
+def test_serialize_object_has_id():
+    opp = Opportunity()
+    opp.id = "006S000000DrUps"
+    opp.amount = 5
+    breakpoint()
+    result = opp.serialize()
+    # TODO: result['Amount'] is $213.04 -- the amount that's in the opp in SF; presumably because I hadn't save()d it yet;
+    # what should be the behavior?
+    # TODO should serialize() be _private?
+    # TODO: what to do about RecordType.Name?
+    assert "created" not in result
+    assert "duplicate_found" not in result
+    assert len(result) == 2  # 'Amount' and 'RecordType.Name'
+    assert result["Amount"] == 5
+
+
+@vcr.use_cassette
+def test_serialize():
+    opp = Opportunity()
+    opp.amount = 5
+    result = opp.serialize()
+    assert result["Amount"] == 5
 
 
 def test_setattr():
