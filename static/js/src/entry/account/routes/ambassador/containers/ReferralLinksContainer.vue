@@ -15,11 +15,11 @@ export default {
 
   computed: {
     twitterUrl() {
-      return this.user.twitter;
+      return this.user.twitter_share_url;
     },
 
     facebookUrl() {
-      return this.user.facebook;
+      return this.user.facebook_share_url;
     },
   },
 };
