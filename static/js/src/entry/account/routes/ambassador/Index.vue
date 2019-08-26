@@ -40,7 +40,7 @@
 import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../home/components/Help.vue';
-import ReferralLinks from './components/ReferralLinks.vue';
+import ReferralLinks from './containers/ReferralLinksContainer.vue';
 import ReferralForm from './containers/ReferralFormContainer.vue';
 import Links from './containers/LinksContainer.vue';
 

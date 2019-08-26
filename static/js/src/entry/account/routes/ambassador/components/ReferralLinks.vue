@@ -3,8 +3,8 @@
     <li class="has-s-btm-marg">
       <a
         ga-on="click"
-        href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fsupport.texastribune.org%2Fdonate%3Fcode%3Dump-1%26campaignId%3D7010f0000013I2yAAE%26utm_campaign%3Dtrib-marketing%26utm_content%3Dump-share%26referralId%3D003S000001AoQTVIA3&amp;text=%23ISupportTexasTribune%20because%20"
         class="c-button c-button--s has-text-white has-bg-twitter has-padding l-width-full l-display-block"
+        :href="twitterUrl"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.twitter"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
@@ -15,8 +15,8 @@
     <li class="has-s-btm-marg">
       <a
         ga-on="click"
-        href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fsupport.texastribune.org%2Fdonate%3Fcode%3Dump-1%26campaignId%3D7010f0000013I2yAAE%26utm_campaign%3Dtrib-marketing%26utm_content%3Dump-share%26referralId%3D003S000001AoQTVIA3"
         class="c-button c-button--s has-text-white has-bg-facebook has-padding l-width-full l-display-block"
+        :href="facebookUrl"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.facebook"
         :ga-event-label="ga.tribuneAmbassadors.labels.ambassador"
@@ -42,5 +42,17 @@
 <script>
 export default {
   name: 'ReferralLinks',
+
+  props: {
+    twitterUrl: {
+      type: String,
+      required: true,
+    },
+
+    facebookUrl: {
+      type: String,
+      required: true,
+    },
+  },
 };
 </script>
