@@ -135,7 +135,7 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
   if (store.state.tokenUser.accessToken) refreshToken();
 
   router.beforeEach((to, from, next) => {
-    store.dispatch('context/setAppIsFetching', true);
+    store.dispatch('context/setIsFetching', true);
 
     const {
       accessToken,
@@ -164,7 +164,7 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
   });
 
   router.afterEach(() => {
-    store.dispatch('context/setAppIsFetching', false);
+    store.dispatch('context/setIsFetching', false);
   });
 
   const instance = new Vue({ ...App, router, store });
