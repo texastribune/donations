@@ -1,5 +1,9 @@
 <template>
-  <referral-links :twitter-url="twitterUrl" :facebook-url="facebookUrl" />
+  <referral-links
+    :twitter-url="twitterUrl"
+    :facebook-url="facebookUrl"
+    :email-url="emailUrl"
+  />
 </template>
 
 <script>
@@ -20,6 +24,10 @@ export default {
 
     facebookUrl() {
       return this.user.facebook_share_url;
+    },
+
+    emailUrl() {
+      return this.user.email_share_url;
     },
   },
 };
