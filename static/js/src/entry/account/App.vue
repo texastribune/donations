@@ -27,20 +27,20 @@ export default {
 
   computed: {
     showLoader() {
-      return this.appIsFetching && !this.error;
+      return this.appIsFetching && !this.appError;
     },
 
     showUnverified() {
-      return this.error instanceof UnverifiedError;
+      return this.appError instanceof UnverifiedError;
     },
 
     showError() {
-      return !!this.error;
+      return !!this.appError;
     },
   },
 
   watch: {
-    error(newError) {
+    appError(newError) {
       if (newError) {
         if (newError instanceof UnverifiedError) {
           this.setTitle('Unverified email address');
@@ -58,7 +58,7 @@ export default {
   },
 
   errorCaptured(err) {
-    this.setError(err);
+    this.setAppError(err);
   },
 };
 </script>

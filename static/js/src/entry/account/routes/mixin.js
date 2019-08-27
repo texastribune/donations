@@ -56,7 +56,7 @@ export default {
           this.$router.push({ name: 'home' });
         } else {
           // TODO: throw to errorCaptured in <App />
-          this.setError(err);
+          this.setAppError(err);
           this.logError(err);
         }
       }
