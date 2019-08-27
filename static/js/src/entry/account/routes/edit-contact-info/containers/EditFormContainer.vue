@@ -74,7 +74,7 @@ export default {
         marketing: {
           name: 'marketing',
           label:
-            "Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune.",
+            "Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune. (Remember: Per our privacy policy, we won't share your data without permission.)",
           value: tribune_offers_consent,
           rules: {},
           isVisible: true,

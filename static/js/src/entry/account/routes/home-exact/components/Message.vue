@@ -16,7 +16,7 @@
             <p>
               Thanks for creating your Texas Tribune account! You can use this
               login to edit your contact information, comment on
-              texastribune.org stories and view donation or subscription
+              texastribune.org stories, and view donation or subscription
               history. Soon, you'll also be able to update your newsletter
               preferences and credit card information.
             </p>
