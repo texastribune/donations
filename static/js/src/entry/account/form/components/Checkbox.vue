@@ -1,12 +1,14 @@
 <template>
   <div class="c-checkbox">
-    <div class="c-checkbox__box">
-      <input :id="name" :checked="value" type="checkbox" @change="onChange" />
-    </div>
-    <div class="c-checkbox__label">
-      <label :for="name" class="t-size-s t-space-base has-text-gray-dark">
-        {{ label }}
-      </label>
+    <div class="c-checkbox__inputs">
+      <div class="c-checkbox__box">
+        <input :id="name" :checked="value" type="checkbox" @change="onChange" />
+      </div>
+      <div class="c-checkbox__label">
+        <label :for="name" class="t-size-s t-space-base has-text-gray-dark">
+          {{ label }}
+        </label>
+      </div>
     </div>
   </div>
 </template>

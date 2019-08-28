@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="c-text-input">
     <label
       v-if="showLabel"
       :for="name"
@@ -18,7 +18,7 @@
         'is-invalid': showErrors,
         'has-xxxs-btm-marg': showErrors || (!showErrors && !!$slots.extra),
       }"
-      class="c-text-input l-display-block l-width-full has-text-gray-dark t-space-base"
+      class="c-text-input__input l-display-block l-width-full has-text-gray-dark t-space-base"
       type="text"
       @input="onInput"
       @paste="onPaste"
