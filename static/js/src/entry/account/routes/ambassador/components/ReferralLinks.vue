@@ -4,6 +4,8 @@
       <a
         ga-on="click"
         class="c-button c-button--s has-text-white has-bg-twitter has-padding l-width-full l-display-block"
+        rel="noopener noreferrer"
+        target="_blank"
         :href="twitterUrl"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.twitter"
@@ -16,6 +18,8 @@
       <a
         ga-on="click"
         class="c-button c-button--s has-text-white has-bg-facebook has-padding l-width-full l-display-block"
+        rel="noopener noreferrer"
+        target="_blank"
         :href="facebookUrl"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.facebook"
@@ -28,6 +32,8 @@
       <a
         ga-on="click"
         class="c-button c-button--s has-text-black-off has-bg-gray-light has-padding l-width-full l-display-block"
+        rel="noopener noreferrer"
+        target="_blank"
         :href="emailUrl"
         :ga-event-category="ga.tribuneAmbassadors.category"
         :ga-event-action="ga.tribuneAmbassadors.actions.email"
