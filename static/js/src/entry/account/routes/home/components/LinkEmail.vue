@@ -7,9 +7,9 @@
       <template v-if="submittedEmail">
         <h2 class="t-size-b has-b-btm-marg">Verify your email</h2>
         <p class="t-size-xs has-text-gray has-s-btm-marg">
-          To keep your information safe, we need you to verify this email before
-          we can update your account: <strong>{{ submittedEmail }}</strong
-          >.
+          To keep your information safe, we need you to verify
+          <strong>{{ submittedEmail }}</strong> before we can update your
+          account.
         </p>
         <p class="t-size-xs has-text-gray">
           Check your inbox for an email from The Texas Tribune with the subject
