@@ -1,10 +1,7 @@
 <template>
-  <summary-box heading="membership" :display="{ isExpired: false }">
+  <summary-box heading="membership">
     <template v-slot:content>
-      <p
-        v-if="nextTransaction.last4"
-        class="has-text-gray-dark t-space-heading-m"
-      >
+      <p v-if="nextTransaction.last4" class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your next
         <strong>{{ nextTransaction.period }}</strong> donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
@@ -12,7 +9,7 @@
         >, to your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-space-heading-m">
+      <p v-else class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your next
         {{ nextTransaction.period }} donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> is due on
@@ -38,7 +35,7 @@
             </router-link>
           </span>
         </li>
-        <li>
+        <li class="has-m-btm-marg">
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>
           </span>
@@ -54,10 +51,26 @@
             </router-link>
           </span>
         </li>
+        <li>
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
+          <span class="has-text-gray-dark">
+            <router-link
+              ga-on="click"
+              :to="{ name: 'ambassador' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.inline"
+              :ga-event-label="ga.userPortalNav.labels.ambassador"
+            >
+              Become a Tribune Ambassador
+            </router-link>
+          </span>
+        </li>
       </ul>
     </template>
     <template v-slot:bottom>
-      <p class="has-text-gray-dark t-space-heading-m t-linkstyle--underlined">
+      <p class="has-text-gray-dark t-linkstyle--underlined">
         To update your membership, contact us at
         <a
           href="mailto:membership@texastribune.org"
@@ -77,7 +90,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'RecurringOrCircle',
+  name: 'SummaryRecurringOrCircle',
 
   components: { SummaryBox },
 

@@ -1,7 +1,5 @@
 .c-help {
-  &--has-top-padding {
-    @include mq($until: bp-l) {
-      padding-top: $size-xxl;
-    }
+  @include mq($until: bp-l) {
+    padding-top: $size-xxl;
   }
 }

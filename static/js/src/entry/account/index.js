@@ -1,9 +1,26 @@
-/* eslint-disable import/first */
-
 import Vue from 'vue';
 import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
+import VeeValidate, { Validator } from 'vee-validate';
+import VModal from 'vue-js-modal';
+import VueClipboard from 'vue-clipboard2';
+
+import routes from './routes'; // eslint-disable-line
+import store from './store';
+import App from './App.vue';
+import RoutesSiteFooter from './nav/components/RoutesSiteFooter.vue';
+import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
+import RoutesNavBar from './nav/components/RoutesNavBar.vue';
+import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
+import Icon from './components/Icon.vue';
+import BaseButton from './components/BaseButton.vue';
+import formatCurrency from './utils/format-currency';
+import formatLongDate from './utils/format-long-date';
+import formatShortDate from './utils/format-short-date';
+import { logIn } from './utils/auth-actions';
+import logError from './utils/log-error';
+import { UnverifiedError } from './errors';
 
 import {
   SENTRY_DSN,
@@ -12,8 +29,10 @@ import {
   GA_USER_PORTAL_NAV,
   GA_USER_PORTAL,
   GA_DONATIONS,
-  GA_CUSTOM_EVENT_NAME,
   GA_BLAST_INTENT,
+  GA_TRIBUNE_AMBASSADORS,
+  GA_AMBASSADORS_CUSTOM_EVENT_NAME,
+  GA_CUSTOM_EVENT_NAME,
   DONATE_URL,
   CIRCLE_URL,
 } from './constants';
@@ -26,23 +45,43 @@ if (ENABLE_SENTRY) {
   });
 }
 
-// eslint-disable-next-line
-import routes from './routes';
-import store from './store';
-import App from './App.vue';
-import RoutesSiteFooter from './nav/components/RoutesSiteFooter.vue';
-import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
-import RoutesNavBar from './nav/components/RoutesNavBar.vue';
-import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
-import Icon from './components/Icon.vue';
-import formatCurrency from './utils/format-currency';
-import formatLongDate from './utils/format-long-date';
-import formatShortDate from './utils/format-short-date';
-import { logIn } from './utils/auth-actions';
-import logError from './utils/log-error';
-import { UnverifiedError } from './errors';
+Validator.localize('en', {
+  custom: {
+    linkEmail: {
+      required: 'This field must contain a valid email address.',
+      email: 'This field must contain a valid email address.',
+    },
 
+    email: {
+      required: 'You must have an email to log into texastribune.org.',
+    },
+
+    confirmedEmail: {
+      required: 'Email addresses do not match',
+      is: 'Email addresses do not match',
+    },
+
+    firstName: {
+      required:
+        'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+    },
+
+    lastName: {
+      required:
+        'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+    },
+
+    zip: {
+      required:
+        'Please enter your ZIP code to help us inform you about news and events in your area.',
+    },
+  },
+});
+
+Vue.use(VModal);
 Vue.use(VueRouter);
+Vue.use(VeeValidate);
+Vue.use(VueClipboard);
 Vue.mixin({
   data() {
     return {
@@ -51,7 +90,9 @@ Vue.mixin({
         userPortalNav: GA_USER_PORTAL_NAV,
         donations: GA_DONATIONS,
         blastIntent: GA_BLAST_INTENT,
+        tribuneAmbassadors: GA_TRIBUNE_AMBASSADORS,
         customEventName: GA_CUSTOM_EVENT_NAME,
+        ambassadorsCustomEventName: GA_AMBASSADORS_CUSTOM_EVENT_NAME,
       },
       donateUrl: DONATE_URL,
       circleUrl: CIRCLE_URL,
@@ -66,6 +107,7 @@ Vue.component('NoRoutesSiteFooter', NoRoutesSiteFooter);
 Vue.component('RoutesNavBar', RoutesNavBar);
 Vue.component('NoRoutesNavBar', NoRoutesNavBar);
 Vue.component('Icon', Icon);
+Vue.component('BaseButton', BaseButton);
 
 Vue.filter('currency', formatCurrency);
 Vue.filter('shortDate', formatShortDate);
@@ -93,7 +135,7 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
   if (store.state.tokenUser.accessToken) refreshToken();
 
   router.beforeEach((to, from, next) => {
-    store.dispatch('context/setAppIsFetching', true);
+    store.dispatch('context/setIsFetching', true);
 
     const {
       accessToken,
@@ -122,7 +164,7 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
   });
 
   router.afterEach(() => {
-    store.dispatch('context/setAppIsFetching', false);
+    store.dispatch('context/setIsFetching', false);
   });
 
   const instance = new Vue({ ...App, router, store });

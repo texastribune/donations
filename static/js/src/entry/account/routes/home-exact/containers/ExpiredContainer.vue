@@ -16,10 +16,10 @@ import userMixin from '../../../store/user/mixin';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 const Expired = () =>
-  import(/* webpackChunkName: "expired-summary" */ '../components/Expired.vue');
+  import(/* webpackChunkName: "summary-expired" */ '../components/Expired.vue');
 
 export default {
-  name: 'ExpiredContainer',
+  name: 'SummaryExpiredContainer',
 
   components: { Expired },
 

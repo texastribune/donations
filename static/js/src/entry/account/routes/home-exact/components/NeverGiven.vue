@@ -1,7 +1,7 @@
 <template>
-  <summary-box heading="become a member" :display="{ isExpired: false }">
+  <summary-box heading="become a member" :display="{ hasMobileBottom: false }">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
+      <p class="has-text-gray-dark">
         Our nonprofit newsroom relies on the support of readers like you to keep
         our stories free and accessible for all. Are you ready to join our
         member community?
@@ -27,15 +27,23 @@
         </li>
       </ul>
     </template>
+    <template v-slot:bottom>
+      <link-email :ga-label="ga.userPortal.labels.home">
+        <template v-slot:heading>
+          <h2 class="t-size-s">Already a member?</h2>
+        </template>
+      </link-email>
+    </template>
   </summary-box>
 </template>
 
 <script>
 import SummaryBox from '../../../components/SummaryBox.vue';
+import LinkEmail from '../../home/components/LinkEmail.vue';
 
 export default {
-  name: 'NeverGiven',
+  name: 'SummaryNeverGiven',
 
-  components: { SummaryBox },
+  components: { SummaryBox, LinkEmail },
 };
 </script>

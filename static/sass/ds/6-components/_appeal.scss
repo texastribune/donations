@@ -1,6 +1,9 @@
 .c-appeal {
   list-style: none;
-  padding-bottom: $size-giant;
+
+  @include mq($from: bp-l) {
+    padding-bottom: $size-xxl;
+  }
 
   @include mq($until: bp-l) {
     padding-top: $size-xxl;

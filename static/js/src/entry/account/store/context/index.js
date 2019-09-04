@@ -2,14 +2,14 @@
 
 const MUTATION_TYPES = {
   setIsViewingAs: 'SET_IS_VIEWING_AS',
-  setAppIsFetching: 'SET_APP_IS_FETCHING',
+  setIsFetching: 'SET_IS_FETCHING',
   setError: 'SET_ERROR',
 };
 
 function createDefaultState() {
   return {
     isViewingAs: false,
-    appIsFetching: false,
+    isFetching: false,
     error: null,
   };
 }
@@ -19,8 +19,8 @@ const mutations = {
     state.isViewingAs = isViewingAs;
   },
 
-  [MUTATION_TYPES.setAppIsFetching](state, appIsFetching) {
-    state.appIsFetching = appIsFetching;
+  [MUTATION_TYPES.setIsFetching](state, isFetching) {
+    state.isFetching = isFetching;
   },
 
   [MUTATION_TYPES.setError](state, error) {
@@ -33,8 +33,8 @@ const actions = {
     commit(MUTATION_TYPES.setIsViewingAs, isViewingAs);
   },
 
-  setAppIsFetching: ({ commit }, appIsFetching) => {
-    commit(MUTATION_TYPES.setAppIsFetching, appIsFetching);
+  setIsFetching: ({ commit }, isFetching) => {
+    commit(MUTATION_TYPES.setIsFetching, isFetching);
   },
 
   setError: ({ commit }, error) => {
