@@ -1,9 +1,12 @@
 .l-minimal {
   align-items: center;
   display: flex;
-  height: 70vh;
   justify-content: center;
   min-height: 20rem;
+
+  @include mq($from: bp-l) {
+    height: 70vh;
+  }
 
   &__content {
     flex: 0 1 50rem;

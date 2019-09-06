@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="c-appeal t-space-heading-m has-ump-side-padding has-white-off-bg-until-bp-l"
+    class="c-appeal t-space-base has-ump-side-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">
       <template v-if="isExpired">

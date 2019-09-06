@@ -27,7 +27,7 @@ COPY webpack /app/webpack
 COPY config /app/config
 COPY package.json /app/
 COPY yarn.lock /app/
-COPY .babelrc.js /app/
+COPY babel.config.js /app/
 RUN yarn
 
 RUN pip install --upgrade pip

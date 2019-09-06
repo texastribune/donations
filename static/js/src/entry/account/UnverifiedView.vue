@@ -4,7 +4,7 @@
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-linkstyle--underlined">
         <h1 class="has-xl-btm-marg">Please verify your account</h1>
-        <p class="t-space-heading-m">
+        <p>
           Thanks for creating a Texas Tribune account &mdash; you’re almost
           done! To view your account, we need you to verify your email address:
           <strong>{{ email }}</strong
@@ -13,6 +13,10 @@
           verify your email. Having trouble? Contact
           <a
             href="mailto:community@texastribune.org?subject=account%20technical%20error"
+            ga-on="click"
+            :ga-event-category="ga.userPortal.category"
+            :ga-event-action="ga.userPortal.actions['contact-us']"
+            :ga-event-label="ga.userPortal.labels.unverified"
             >community@texastribune.org</a
           >.
         </p>

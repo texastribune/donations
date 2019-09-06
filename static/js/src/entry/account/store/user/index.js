@@ -2,7 +2,8 @@
 
 import axios from 'axios';
 
-import addFields from './add-fields';
+import addFields from './utils/add-fields';
+import getTokenIdentity from '../../utils/get-token-identity';
 import { PORTAL_API_URL } from '../../constants';
 
 const MUTATION_TYPES = {
@@ -37,6 +38,64 @@ const actions = {
     });
 
     commit(MUTATION_TYPES.setDetails, addFields(data));
+  },
+
+  updateUser: async ({ state, rootState }, updates) => {
+    const { accessToken } = rootState.tokenUser;
+    const { id: personId } = state.details;
+
+    await axios.patch(`${PORTAL_API_URL}persons/${personId}/`, updates, {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
+  },
+
+  updateIdentity: async ({ state, rootState }, updates) => {
+    const {
+      accessToken,
+      details: { email: tokenEmail },
+    } = rootState.tokenUser;
+    const { id: personId, identities } = state.details;
+    const { id: identityId } = getTokenIdentity(identities, tokenEmail);
+
+    await axios.patch(
+      `${PORTAL_API_URL}persons/${personId}/identities/${identityId}/`,
+      updates,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+  },
+
+  linkIdentity: async ({ state, rootState }, identity) => {
+    const {
+      accessToken,
+      details: { email: tokenEmail },
+    } = rootState.tokenUser;
+    const { id: personId } = state.details;
+
+    await axios.put(
+      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/`,
+      identity,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
+  },
+
+  confirmLinkedIdentity: async ({ state, rootState }, ticket) => {
+    const {
+      accessToken,
+      details: { email: tokenEmail },
+    } = rootState.tokenUser;
+    const { id: personId } = state.details;
+
+    await axios.put(
+      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/?ticket=${ticket}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
   },
 };
 

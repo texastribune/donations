@@ -1,17 +1,14 @@
 <template>
-  <summary-box heading="the blast" :display="{ isExpired: false }">
+  <summary-box heading="the blast">
     <template v-slot:content>
-      <p
-        v-if="lastTransaction.last4"
-        class="has-text-gray-dark t-space-heading-m"
-      >
+      <p v-if="lastTransaction.last4" class="has-text-gray-dark">
         Your subscription to The Blast is no longer active. Your last payment of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged to
         your card ending in <strong>{{ lastTransaction.last4 }}</strong> on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-space-heading-m">
+      <p v-else class="has-text-gray-dark">
         Your subscription to The Blast is no longer active. Your last payment of
         <strong>{{ lastTransaction.amount | currency }}</strong> was made on
         <strong>{{ lastTransaction.date | longDate }}</strong
@@ -61,7 +58,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'BlastCancelled',
+  name: 'SummaryBlastCancelled',
 
   components: { SummaryBox },
 

@@ -1,7 +1,7 @@
 <template>
   <summary-box heading="membership" :display="{ isExpired: true }">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
+      <p class="has-text-gray-dark">
         Thanks for your previous support!
         <span class="has-text-error"
           >Your membership expired on
@@ -82,7 +82,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'Expired',
+  name: 'SummaryExpired',
 
   components: { SummaryBox },
 

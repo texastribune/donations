@@ -37,6 +37,17 @@
               Account Overview
             </router-link>
           </li>
+          <li v-if="showEditContactInfoLink">
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
+              :to="{ name: 'edit-contact-info' }"
+            >
+              Edit Your Profile
+            </router-link>
+          </li>
           <li v-if="showMembershipLink">
             <router-link
               ga-on="click"
@@ -57,6 +68,17 @@
               :to="{ name: 'payments' }"
             >
               Donation History
+            </router-link>
+          </li>
+          <li v-if="showAmbassadorLink">
+            <router-link
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.footer"
+              :ga-event-label="ga.userPortalNav.labels.ambassador"
+              :to="{ name: 'ambassador' }"
+            >
+              Tribune Ambassadors
             </router-link>
           </li>
           <li v-if="showBlastLinks">
@@ -151,6 +173,16 @@ export default {
 
   props: {
     showHomeLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showEditContactInfoLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showAmbassadorLink: {
       type: Boolean,
       required: true,
     },

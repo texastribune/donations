@@ -11,6 +11,6 @@
 
 <script>
 export default {
-  name: 'RouteLoader',
+  name: 'HomeRouteLoader',
 };
 </script>

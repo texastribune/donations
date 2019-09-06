@@ -1,35 +1,37 @@
 <template>
   <route-loader v-if="routeIsFetching">
-    <template v-slot:text
-      >Grabbing your Blast payment history</template
-    >
+    <template v-slot:text>
+      Grabbing your Blast payment history
+    </template>
   </route-loader>
 
-  <div v-else class="has-ump-top-padding">
-    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">
+  <div v-else>
+    <h1
+      class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
+    >
       The Blast Newsletter: Payment History
     </h1>
 
-    <div class="has-ump-side-padding has-xxl-btm-marg"><blast-payments /></div>
+    <div class="has-ump-side-padding has-xxl-btm-marg"><detail /></div>
 
-    <help blast-payments :display="{ hasTopPadding: true }" />
+    <help blast-payments />
   </div>
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import routeMixin from '../../mixins/route';
+import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
-import Help from '../../components/Help.vue';
+import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import BlastPayments from './containers/BlastPaymentsContainer.vue';
+import Detail from './containers/DetailContainer.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastPaymentsRoute',
 
-  components: { Help, BlastPayments, RouteLoader },
+  components: { Help, Detail, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 
@@ -39,12 +41,7 @@ export default {
 
   methods: {
     async fetchData() {
-      const {
-        is_former_blast_subscriber,
-        is_current_blast_subscriber,
-      } = this.user;
-      const meetsCriteria =
-        is_former_blast_subscriber || is_current_blast_subscriber;
+      const meetsCriteria = this.user.is_blast_subscriber;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },
