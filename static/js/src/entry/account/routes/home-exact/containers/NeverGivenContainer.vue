@@ -6,10 +6,10 @@
 import userMixin from '../../../store/user/mixin';
 
 const NeverGiven = () =>
-  import(/* webpackChunkName: "never-given-summary" */ '../components/NeverGiven.vue');
+  import(/* webpackChunkName: "summary-never-given" */ '../components/NeverGiven.vue');
 
 export default {
-  name: 'NeverGivenContainer',
+  name: 'SummaryNeverGivenContainer',
 
   components: { NeverGiven },
 

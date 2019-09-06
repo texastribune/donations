@@ -1,10 +1,7 @@
 <template>
-  <summary-box heading="membership" :display="{ isExpired: false }">
+  <summary-box heading="membership">
     <template v-slot:content>
-      <p
-        v-if="lastTransaction.last4"
-        class="has-text-gray-dark t-space-heading-m"
-      >
+      <p v-if="lastTransaction.last4" class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged on
         <strong>{{ lastTransaction.date | longDate }}</strong
@@ -13,7 +10,7 @@
         <strong>{{ membershipExpirationDate | longDate }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-space-heading-m">
+      <p v-else class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was on
         <strong>{{ lastTransaction.date | longDate }}</strong
@@ -56,7 +53,7 @@
             </a>
           </span>
         </li>
-        <li>
+        <li class="has-m-btm-marg">
           <span class="c-link-list__arrow has-text-teal">
             <strong>&rarr;</strong>
           </span>
@@ -72,6 +69,22 @@
             </router-link>
           </span>
         </li>
+        <li>
+          <span class="c-link-list__arrow has-text-teal">
+            <strong>&rarr;</strong>
+          </span>
+          <span class="has-text-gray-dark">
+            <router-link
+              ga-on="click"
+              :to="{ name: 'ambassador' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.inline"
+              :ga-event-label="ga.userPortalNav.labels.ambassador"
+            >
+              Become a Tribune Ambassador
+            </router-link>
+          </span>
+        </li>
       </ul>
     </template>
   </summary-box>
@@ -81,7 +94,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'SingleOrWillExpire',
+  name: 'SummarySingleOrWillExpire',
 
   components: { SummaryBox },
 

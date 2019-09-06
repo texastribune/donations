@@ -2,10 +2,16 @@ import { mapState, mapActions } from 'vuex';
 
 export default {
   computed: {
-    ...mapState('context', ['appIsFetching', 'error']),
+    ...mapState('context', {
+      appIsFetching: 'isFetching',
+      appError: 'error',
+    }),
   },
 
   methods: {
-    ...mapActions('context', ['setAppIsFetching', 'setError']),
+    ...mapActions('context', {
+      setAppIsFetching: 'setIsFetching',
+      setAppError: 'setError',
+    }),
   },
 };

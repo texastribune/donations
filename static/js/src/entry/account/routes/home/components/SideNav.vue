@@ -16,6 +16,19 @@
             Account Overview
           </router-link>
         </li>
+        <li v-if="showEditContactInfoLink" class="has-xxs-btm-marg">
+          <router-link
+            exact
+            class="has-text-black-off has-text-hover-gray"
+            active-class="is-active"
+            :to="{ name: 'edit-contact-info' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.side"
+            :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
+          >
+            Profile Settings
+          </router-link>
+        </li>
         <li v-if="showMembershipLink" class="has-xxs-btm-marg">
           <router-link
             class="has-text-black-off has-text-hover-gray"
@@ -42,7 +55,20 @@
             Donation History
           </router-link>
         </li>
-        <li v-if="showBlastLinks" class="has-xxs-btm-marg">
+        <li v-if="showAmbassadorLink" class="has-xxs-btm-marg">
+          <router-link
+            exact
+            class="has-text-black-off has-text-hover-gray"
+            active-class="is-active"
+            :to="{ name: 'ambassador' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.side"
+            :ga-event-label="ga.userPortalNav.labels.ambassador"
+          >
+            Tribune Ambassadors
+          </router-link>
+        </li>
+        <li v-if="showBlastLink">
           <router-link
             class="has-text-black-off has-text-hover-gray"
             active-class="is-active"
@@ -52,20 +78,7 @@
             :ga-event-action="ga.userPortalNav.actions.side"
             :ga-event-label="ga.userPortalNav.labels.blast"
           >
-            The Blast Newsletter
-          </router-link>
-        </li>
-        <li v-if="showBlastLinks">
-          <router-link
-            class="has-text-black-off has-text-hover-gray"
-            active-class="is-active"
-            ga-on="click"
-            :to="{ name: 'blast-payments' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.side"
-            :ga-event-label="ga.userPortalNav.labels['blast-payments']"
-          >
-            The Blast Payment History
+            The Blast
           </router-link>
         </li>
       </ul>
@@ -83,6 +96,11 @@ export default {
       required: true,
     },
 
+    showEditContactInfoLink: {
+      type: Boolean,
+      required: true,
+    },
+
     showMembershipLink: {
       type: Boolean,
       required: true,
@@ -93,7 +111,12 @@ export default {
       required: true,
     },
 
-    showBlastLinks: {
+    showAmbassadorLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showBlastLink: {
       type: Boolean,
       required: true,
     },

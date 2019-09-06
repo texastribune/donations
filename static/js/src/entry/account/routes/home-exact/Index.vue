@@ -1,20 +1,20 @@
 <template>
   <route-loader v-if="routeIsFetching">
-    <template v-slot:text
-      >Grabbing your account information</template
-    >
+    <template v-slot:text>
+      Grabbing your account information
+    </template>
   </route-loader>
 
   <div
     v-else
-    class="has-white-bg-from-bp-l has-white-off-bg-until-bp-l has-ump-top-padding"
+    class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
   >
-    <messages />
+    <message />
 
-    <h1 class="has-l-btm-marg has-ump-side-padding t-size-xl">Your Account</h1>
+    <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
     <div class="c-summary-boxes has-xl-btm-marg has-ump-side-padding">
-      <contact-info />
+      <profile-settings />
       <blast />
       <blast-cancelled />
       <recurring-or-circle />
@@ -24,15 +24,16 @@
       <custom />
     </div>
 
-    <help home />
+    <div class="is-hidden-until-bp-l"><help home /></div>
   </div>
 </template>
 
 <script>
-import routeMixin from '../../mixins/route';
-import Help from '../../components/Help.vue';
+import routeMixin from '../mixin';
+import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import ContactInfo from './containers/ContactInfoContainer.vue';
+import Message from './components/Message.vue';
+import ProfileSettings from './containers/ProfileSettingsContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
 import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
@@ -40,14 +41,13 @@ import NeverGiven from './containers/NeverGivenContainer.vue';
 import Custom from './containers/CustomContainer.vue';
 import Blast from './containers/BlastContainer.vue';
 import BlastCancelled from './containers/BlastCancelledContainer.vue';
-import Messages from './containers/MessagesContainer.vue';
 
 export default {
   name: 'HomeExactRoute',
 
   components: {
-    Messages,
-    ContactInfo,
+    Message,
+    ProfileSettings,
     RecurringOrCircle,
     Expired,
     SingleOrWillExpire,
