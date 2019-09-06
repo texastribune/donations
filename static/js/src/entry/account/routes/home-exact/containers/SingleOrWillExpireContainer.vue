@@ -16,10 +16,10 @@ import userMixin from '../../../store/user/mixin';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 const SingleOrWillExpire = () =>
-  import(/* webpackChunkName: "single-or-will-expire-summary" */ '../components/SingleOrWillExpire.vue');
+  import(/* webpackChunkName: "summary-single-or-will-expire" */ '../components/SingleOrWillExpire.vue');
 
 export default {
-  name: 'SingleOrWillExpireContainer',
+  name: 'SummarySingleOrWillExpireContainer',
 
   components: { SingleOrWillExpire },
 

@@ -1,7 +1,7 @@
 <template>
-  <summary-box heading="membership" :display="{ isExpired: false }">
+  <summary-box heading="membership">
     <template v-slot:content>
-      <p class="has-text-gray-dark t-space-heading-m">
+      <p class="has-text-gray-dark">
         Thank you for being a Texas Tribune member!
       </p>
     </template>
@@ -32,7 +32,7 @@
 import SummaryBox from '../../../components/SummaryBox.vue';
 
 export default {
-  name: 'Custom',
+  name: 'SummaryCustom',
 
   components: { SummaryBox },
 };

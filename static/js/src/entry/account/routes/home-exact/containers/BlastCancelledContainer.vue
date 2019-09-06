@@ -11,10 +11,10 @@ import userMixin from '../../../store/user/mixin';
 import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 const BlastCancelled = () =>
-  import(/* webpackChunkName: "blast-cancelled-summary" */ '../components/BlastCancelled.vue');
+  import(/* webpackChunkName: "summary-blast-cancelled" */ '../components/BlastCancelled.vue');
 
 export default {
-  name: 'BlastCancelledContainer',
+  name: 'SummaryBlastCancelledContainer',
 
   components: { BlastCancelled },
 

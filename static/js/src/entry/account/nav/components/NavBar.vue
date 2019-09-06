@@ -134,6 +134,32 @@
             <strong>Membership</strong>
           </router-link>
         </li>
+        <li v-if="showEditContactInfoLink" class="c-navbar__dropdown-item">
+          <router-link
+            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            active-class="is-active"
+            ga-on="click"
+            :to="{ name: 'edit-contact-info' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.top"
+            :ga-event-label="ga.userPortalNav.labels['edit-contact-info']"
+          >
+            <strong>Profile Settings</strong>
+          </router-link>
+        </li>
+        <li v-if="showAmbassadorLink" class="c-navbar__dropdown-item">
+          <router-link
+            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            active-class="is-active"
+            ga-on="click"
+            :to="{ name: 'ambassador' }"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.top"
+            :ga-event-label="ga.userPortalNav.labels.ambassador"
+          >
+            <strong>Tribune Ambassadors</strong>
+          </router-link>
+        </li>
         <li v-if="showBlastLink" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
@@ -192,6 +218,16 @@ export default {
       required: true,
     },
 
+    showEditContactInfoLink: {
+      type: Boolean,
+      required: true,
+    },
+
+    showAmbassadorLink: {
+      type: Boolean,
+      required: true,
+    },
+
     userFetchComplete: {
       type: Boolean,
       required: true,
@@ -210,8 +246,14 @@ export default {
   },
 
   methods: {
-    logOut,
-    logIn,
+    logOut() {
+      logOut();
+    },
+
+    logIn() {
+      logIn();
+    },
+
     toggleDropdown() {
       this.showDropdown = !this.showDropdown;
     },
