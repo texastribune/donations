@@ -11,12 +11,9 @@
       <div class="c-navbar__content">
         <ul
           v-if="userFetchComplete"
-          class="c-navbar__items is-hidden-until-bp-l"
+          class="c-navbar__items c-navbar__items--no-space is-hidden-until-bp-l"
         >
-          <li
-            v-if="showHomeLink"
-            class="c-navbar__item c-navbar__item--space-right"
-          >
+          <li v-if="showHomeLink" class="c-navbar__item">
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
@@ -30,10 +27,7 @@
               <strong>Account Overview</strong>
             </router-link>
           </li>
-          <li
-            v-if="showMembershipLink"
-            class="c-navbar__item c-navbar__item--space-right"
-          >
+          <li v-if="showMembershipLink" class="c-navbar__item">
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
@@ -46,10 +40,7 @@
               <strong>Membership</strong>
             </router-link>
           </li>
-          <li
-            v-if="showBlastLink"
-            class="c-navbar__item c-navbar__item--space-right"
-          >
+          <li v-if="showBlastLink" class="c-navbar__item">
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               active-class="is-active"
