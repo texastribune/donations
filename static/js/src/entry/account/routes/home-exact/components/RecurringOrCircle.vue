@@ -70,7 +70,7 @@
       </ul>
     </template>
     <template v-slot:bottom>
-      <p class="has-text-gray-dark t-linkstyle--underlined">
+      <p class="has-text-gray-dark t-links-underlined">
         To update your membership, contact us at
         <a
           href="mailto:membership@texastribune.org"

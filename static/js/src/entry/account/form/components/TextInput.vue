@@ -18,7 +18,7 @@
         'is-invalid': showErrors,
         'has-xxxs-btm-marg': showErrors || (!showErrors && !!$slots.extra),
       }"
-      class="c-text-input__input l-display-block l-width-full has-text-gray-dark t-space-base"
+      class="c-text-input__input l-display-block l-width-full has-text-gray-dark t-lh-b"
       type="text"
       @input="onInput"
       @paste="onPaste"
@@ -26,7 +26,7 @@
     <ul
       v-show="showErrors"
       :class="{ 'has-xs-btm-marg': showErrors && !!$slots.extra }"
-      class="t-space-base"
+      class="t-lh-b"
     >
       <li
         v-for="(message, index) in errorMessages"

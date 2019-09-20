@@ -2,7 +2,7 @@
   <section class="c-detail-box">
     <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
 
-    <ul class="c-link-list t-linkstyle--underlined">
+    <ul class="c-link-list t-links-underlined">
       <li>
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>

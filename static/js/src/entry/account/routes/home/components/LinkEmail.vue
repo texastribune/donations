@@ -3,7 +3,7 @@
     ref="provider"
     v-slot="{ linkedEmails, initialFields, submittedEmail }"
   >
-    <div class="c-link-email t-linkstyle--underlined">
+    <div class="c-link-email t-links-underlined">
       <template v-if="submittedEmail">
         <h2 class="t-size-b has-b-btm-marg">Verify your email</h2>
         <p class="t-size-xs has-text-gray has-s-btm-marg">
