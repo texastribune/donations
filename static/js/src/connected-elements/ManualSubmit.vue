@@ -12,6 +12,13 @@
 import Vue from 'vue';
 import { createToken } from 'vue-stripe-elements-plus';
 
+import getRecaptchaToken from '../utils/get-recaptcha-token';
+import { RecaptchaError, StripeError } from '../errors';
+import { RECAPTCHA_ERROR_MESSAGE } from '../constants';
+
+const CARD_ERROR_MESSAGE =
+  'There was an issue processing your card. Please try a different card and submit the form again. If the issue persists, contact inquiries@texastribune.org.';
+
 export default {
   name: 'ManualSubmit',
 
@@ -32,17 +39,6 @@ export default {
     },
   },
 
-  data() {
-    return {
-      blanketErrorMessage: `
-        There was an issue processing your card.
-        Please try a different card and submit
-        the form again. If the issue persists, contact
-        inquiries@texastribune.org.
-      `,
-    };
-  },
-
   methods: {
     markFetchingToken() {
       this.$emit('setLocalValue', { key: 'isFetchingToken', value: true });
@@ -52,44 +48,61 @@ export default {
       this.$emit('setLocalValue', { key: 'isFetchingToken', value: false });
     },
 
-    onClick() {
-      const updates = [
+    async onClick() {
+      this.$emit('setLocalValue', [
         { key: 'showErrors', value: true },
         { key: 'showCardError', value: true },
         { key: 'serverErrorMessage', value: '' },
-      ];
-
-      this.$emit('setLocalValue', updates);
+        { key: 'genericErrorMessage', value: '' },
+      ]);
 
       if (this.formIsValid) {
         this.markFetchingToken();
 
-        createToken().then(result => {
-          if (!result.error) {
-            const {
-              token: { id },
-            } = result;
+        try {
+          let captchaToken;
 
+          try {
+            captchaToken = await getRecaptchaToken('manualPay');
+          } catch (err) {
+            throw new RecaptchaError();
+          }
+
+          this.$emit('setLocalValue', {
+            key: 'captchaToken',
+            value: captchaToken,
+          });
+
+          const stripeResult = await createToken();
+
+          if (stripeResult.error) {
+            const { message, type } = stripeResult.error;
+            throw new StripeError(message, type);
+          }
+
+          this.$emit('setLocalValue', {
+            key: 'stripeToken',
+            value: stripeResult.token.id,
+          });
+
+          Vue.nextTick(() => {
+            this.$emit('onSubmit');
+          });
+        } catch (error) {
+          this.markNotFetchingToken();
+
+          if (error instanceof RecaptchaError) {
             this.$emit('setLocalValue', {
-              key: 'stripeToken',
-              value: id,
+              key: 'genericErrorMessage',
+              value: RECAPTCHA_ERROR_MESSAGE,
             });
-
-            Vue.nextTick(() => {
-              this.$emit('onSubmit');
-            });
-          } else {
-            const {
-              error: { message, type },
-            } = result;
+          } else if (error instanceof StripeError) {
             let messageToShow;
 
-            this.markNotFetchingToken();
-
-            if (type === 'validation_error') {
-              messageToShow = message;
+            if (error.type === 'validation_error') {
+              messageToShow = error.message;
             } else {
-              messageToShow = this.blanketErrorMessage;
+              messageToShow = CARD_ERROR_MESSAGE;
             }
 
             this.$emit('setCardValue', [
@@ -97,7 +110,7 @@ export default {
               { key: 'message', value: messageToShow },
             ]);
           }
-        });
+        }
       }
     },
   },

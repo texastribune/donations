@@ -435,7 +435,10 @@ def donate_form():
         return validate_form(DonateForm, bundles=bundles, template=template)
 
     return render_template(
-        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )
 
 
@@ -448,7 +451,10 @@ def circle_form():
         return validate_form(CircleForm, bundles=bundles, template=template)
 
     return render_template(
-        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )
 
 
@@ -466,7 +472,10 @@ def business_form():
         )
 
     return render_template(
-        template, bundles=bundles, key=app.config["STRIPE_KEYS"]["publishable_key"]
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )
 
 

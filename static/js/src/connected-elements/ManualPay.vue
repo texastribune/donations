@@ -8,6 +8,8 @@
 <script>
 import { Card } from 'vue-stripe-elements-plus';
 
+import { STRIPE_KEY } from '../constants';
+
 export default {
   name: 'ManualPay',
 
@@ -38,8 +40,7 @@ export default {
 
   computed: {
     stripeKey() {
-      // eslint-disable-next-line no-underscore-dangle
-      return window.__STRIPE_KEY__;
+      return STRIPE_KEY;
     },
 
     isValid() {

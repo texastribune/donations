@@ -6,7 +6,7 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div v-show="showServerErrorMessage" class="grid_row grid_separator">
+    <div v-show="serverErrorMessage" class="grid_row grid_separator">
       <div class="col">
         <p class="form__error form__error--prominent">
           {{ serverErrorMessage }}
@@ -131,7 +131,10 @@
       aria-hidden="true"
     />
 
-    <div :aria-live="nativeIsSupported ? 'polite' : false">
+    <div
+      :aria-live="nativeIsSupported ? 'polite' : false"
+      class="grid_separator"
+    >
       <div v-if="showManualPay">
         <div class="grid_row">
           <div class="col">
@@ -160,17 +163,18 @@
       </div>
     </div>
 
-    <div v-if="showErrorClue" class="grid_separator--l" aria-hidden="true" />
-
-    <div v-if="showErrorClue" class="grid_row" aria-hidden="true">
-      <div class="col">
-        <p class="form__error form__error--normal form__error--centered">
-          Please correct errors above
-        </p>
+    <div v-if="genericErrorMessage">
+      <div class="grid_row">
+        <div class="col">
+          <p class="form__error form__error--normal form__error--centered">
+            {{ genericErrorMessage }}
+          </p>
+        </div>
       </div>
     </div>
 
     <local-hidden :value="stripeToken" name="stripeToken" />
+    <local-hidden :value="captchaToken" name="captchaToken" />
     <hidden name="description" :store-module="storeModule" />
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
