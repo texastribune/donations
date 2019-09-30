@@ -8,7 +8,7 @@ import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state
 import sanitizeParams from '../../utils/sanitize-params';
 import { BASE_FORM_STATE, AMBASSADOR_CODES } from './constants';
 
-import Thermometer from './Thermometer.vue';
+// import Thermometer from './Thermometer.vue';
 
 Vue.use(VueRouter);
 
@@ -82,7 +82,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
-    const thermometer = new Vue({ ...Thermometer });
+    // const thermometer = new Vue({ ...Thermometer });
     const {
       currentRoute: { query },
     } = router;
@@ -94,7 +94,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     routeHandler.$mount('#app');
     topForm.$mount('#top-form');
-    thermometer.$mount('#thermometer');
+    // thermometer.$mount('#thermometer');
   });
 }
 
