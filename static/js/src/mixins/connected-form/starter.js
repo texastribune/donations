@@ -5,11 +5,13 @@ export default {
       // at the Vuex level
       card: {
         isValid: false,
-        message: 'Your card number is incomplete',
+        errorMessage: 'Your card number is incomplete',
+        showError: false,
       },
       stripeToken: '',
+      recaptchaToken: '',
+      genericErrorMessage: '',
       showErrors: false,
-      showCardError: false,
       showManualPay: false,
       nativeIsSupported: false,
       isFetchingToken: false,
@@ -24,19 +26,6 @@ export default {
       const invalids = Object.keys(fields).filter(key => !fields[key].isValid);
 
       return invalids.length === 0;
-    },
-
-    // whether to show "please correct errors above" below form
-    showErrorClue() {
-      if (this.showCardError && !this.card.isValid) return true;
-      if (this.showErrors && !this.isValid) return true;
-
-      return false;
-    },
-
-    // whether to show card-failure message produced on the server
-    showServerErrorMessage() {
-      return !this.showErrorClue && this.serverErrorMessage;
     },
   },
 
