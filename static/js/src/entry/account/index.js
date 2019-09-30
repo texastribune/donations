@@ -132,7 +132,9 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
 
-  if (store.state.tokenUser.accessToken) refreshToken();
+  if (store.state.tokenUser.accessToken) {
+    refreshToken();
+  }
 
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setIsFetching', true);
@@ -149,13 +151,13 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
         store.dispatch('context/setError', tokenUserError);
         return next();
       }
+
       if (!accessToken) {
         return logIn();
       }
+
       if (!isVerified) {
-        const err = new UnverifiedError();
-        logError(err);
-        store.dispatch('context/setError', err);
+        store.dispatch('context/setError', new UnverifiedError());
         return next();
       }
     }
