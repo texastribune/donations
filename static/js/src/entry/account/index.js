@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 import VeeValidate, { Validator } from 'vee-validate';
 import VModal from 'vue-js-modal';
 import VueClipboard from 'vue-clipboard2';
+import axios from 'axios';
 
 import routes from './routes'; // eslint-disable-line
 import store from './store';
@@ -20,8 +21,7 @@ import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
 import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
-import { UnverifiedError } from './errors';
-
+import { UnverifiedError, AxiosNetworkError } from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -112,6 +112,15 @@ Vue.component('BaseButton', BaseButton);
 Vue.filter('currency', formatCurrency);
 Vue.filter('shortDate', formatShortDate);
 Vue.filter('longDate', formatLongDate);
+
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.request && !error.response) {
+      logError(new AxiosNetworkError(error.request));
+    }
+  }
+);
 
 // we refresh at a 15-minute interval instead of when
 // the access token expires because we want to regularly

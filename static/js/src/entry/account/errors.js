@@ -15,3 +15,10 @@ export class InvalidRouteError extends Error {
     super('Invalid route');
   }
 }
+
+export class AxiosNetworkError extends Error {
+  constructor(request) {
+    super('Axios network error');
+    this.request = request;
+  }
+}
