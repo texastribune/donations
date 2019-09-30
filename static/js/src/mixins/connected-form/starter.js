@@ -5,13 +5,13 @@ export default {
       // at the Vuex level
       card: {
         isValid: false,
-        message: 'Your card number is incomplete',
+        errorMessage: 'Your card number is incomplete',
+        showError: false,
       },
       stripeToken: '',
-      captchaToken: '',
+      recaptchaToken: '',
       genericErrorMessage: '',
       showErrors: false,
-      showCardError: false,
       showManualPay: false,
       nativeIsSupported: false,
       isFetchingToken: false,
