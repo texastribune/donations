@@ -51,26 +51,27 @@ export default {
     async onClick() {
       this.$emit('setLocalValue', [
         { key: 'showErrors', value: true },
-        { key: 'showCardError', value: true },
         { key: 'serverErrorMessage', value: '' },
         { key: 'genericErrorMessage', value: '' },
       ]);
+
+      this.$emit('setCardValue', { key: 'showError', value: true });
 
       if (this.formIsValid) {
         this.markFetchingToken();
 
         try {
-          let captchaToken;
+          let recaptchaToken;
 
           try {
-            captchaToken = await getRecaptchaToken('manualPay');
+            recaptchaToken = await getRecaptchaToken('manualPay');
           } catch (err) {
             throw new RecaptchaError();
           }
 
           this.$emit('setLocalValue', {
-            key: 'captchaToken',
-            value: captchaToken,
+            key: 'recaptchaToken',
+            value: recaptchaToken,
           });
 
           const stripeResult = await createToken();
@@ -107,7 +108,7 @@ export default {
 
             this.$emit('setCardValue', [
               { key: 'isValid', value: false },
-              { key: 'message', value: messageToShow },
+              { key: 'errorMessage', value: messageToShow },
             ]);
           }
         }

@@ -18,11 +18,6 @@ export default {
   },
 
   props: {
-    showError: {
-      type: Boolean,
-      default: false,
-    },
-
     card: {
       type: Object,
       required: true,
@@ -47,8 +42,12 @@ export default {
       return this.card.isValid;
     },
 
+    showError() {
+      return this.card.showError;
+    },
+
     message() {
-      return this.card.message;
+      return this.card.errorMessage;
     },
 
     classesWithValidation() {
@@ -76,7 +75,7 @@ export default {
 
       this.$emit('setCardValue', [
         { key: 'isValid', value: validValue },
-        { key: 'message', value: messageValue },
+        { key: 'errorMessage', value: messageValue },
       ]);
     },
   },

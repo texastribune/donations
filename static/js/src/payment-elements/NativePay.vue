@@ -113,14 +113,13 @@ export default {
         });
 
       button.on('click', event => {
-        const updates = [
+        this.$emit('setLocalValue', [
           { key: 'showErrors', value: true },
-          { key: 'showCardError', value: false },
           { key: 'serverErrorMessage', value: '' },
           { key: 'genericErrorMessage', value: '' },
-        ];
+        ]);
 
-        this.$emit('setLocalValue', updates);
+        this.$emit('setCardValue', { key: 'showError', value: false });
 
         if (!this.formIsValid) event.preventDefault();
       });
@@ -131,11 +130,11 @@ export default {
         } = event;
 
         try {
-          const captchaToken = await getRecaptchaToken('manualPay');
+          const recaptchaToken = await getRecaptchaToken('nativePay');
 
-          this.$emit('setLocalValues', [
+          this.$emit('setLocalValue', [
             { key: 'stripeToken', value: id },
-            { key: 'captchaToken', value: captchaToken },
+            { key: 'recaptchaToken', value: recaptchaToken },
           ]);
 
           event.complete('success');
