@@ -144,7 +144,10 @@
       <div v-if="genericErrorMessage" class="grid_separator">
         <div class="grid_row">
           <div class="col">
-            <p class="form__error form__error--normal form__error--centered">
+            <p
+              role="alert"
+              class="form__error form__error--normal form__error--centered"
+            >
               {{ genericErrorMessage }}
             </p>
           </div>
