@@ -362,7 +362,8 @@ def do_charge_or_show_errors(template, bundles, function, donation_type):
         return render_template(
             template,
             bundles=bundles,
-            key=app.config["STRIPE_KEYS"]["publishable_key"],
+            stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+            recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
             message=message,
             form_data=form_data,
         )
