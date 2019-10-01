@@ -19,6 +19,9 @@
 
 import Vue from 'vue';
 
+import getRecaptchaToken from '../utils/get-recaptcha-token';
+import { RECAPTCHA_ERROR_MESSAGE, STRIPE_KEY } from '../constants';
+
 export default {
   name: 'NativePay',
 
@@ -71,7 +74,7 @@ export default {
   methods: {
     buildNativePayment() {
       // eslint-disable-next-line no-underscore-dangle
-      const stripe = new Stripe(window.__STRIPE_KEY__);
+      const stripe = new Stripe(STRIPE_KEY);
       const paymentRequest = stripe.paymentRequest({
         country: 'US',
         currency: 'usd',
@@ -99,6 +102,7 @@ export default {
               key: 'nativeIsSupported',
               value: true,
             });
+
             button.mount(this.$refs.native);
           } else {
             throw new Error();
@@ -109,30 +113,43 @@ export default {
         });
 
       button.on('click', event => {
-        const updates = [
+        this.$emit('setLocalValue', [
           { key: 'showErrors', value: true },
-          { key: 'showCardError', value: false },
           { key: 'serverErrorMessage', value: '' },
-        ];
+          { key: 'genericErrorMessage', value: '' },
+        ]);
 
-        this.$emit('setLocalValue', updates);
+        this.$emit('setCardValue', { key: 'showError', value: false });
+
         if (!this.formIsValid) event.preventDefault();
       });
 
-      paymentRequest.on('token', event => {
+      paymentRequest.on('token', async event => {
         const {
           token: { id },
         } = event;
 
-        this.$emit('setLocalValue', {
-          key: 'stripeToken',
-          value: id,
-        });
+        try {
+          const recaptchaToken = await getRecaptchaToken('nativePay');
 
-        event.complete('success');
-        Vue.nextTick(() => {
-          this.$emit('onSubmit');
-        });
+          this.$emit('setLocalValue', [
+            { key: 'stripeToken', value: id },
+            { key: 'recaptchaToken', value: recaptchaToken },
+          ]);
+
+          event.complete('success');
+
+          Vue.nextTick(() => {
+            this.$emit('onSubmit');
+          });
+        } catch (err) {
+          this.$emit('setLocalValue', {
+            key: 'genericErrorMessage',
+            value: RECAPTCHA_ERROR_MESSAGE,
+          });
+
+          event.complete('fail');
+        }
       });
     },
 

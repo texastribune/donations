@@ -40,6 +40,7 @@ class BaseForm(FlaskForm):
         "Email address", [validators.DataRequired(), validators.Email()]
     )
     stripeToken = HiddenField(u"Stripe token", [validators.InputRequired()])
+    recaptchaToken = HiddenField(u"Recaptcha token", [validators.InputRequired()])
     description = HiddenField(u"Description", [validators.InputRequired()])
     pay_fees_value = HiddenField(
         u"Pay Fees Value", [validators.AnyOf(["True", "False"])]

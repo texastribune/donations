@@ -1,6 +1,6 @@
 Flask==1.0.2
 gunicorn==19.9.0
-pytz==2019.1
+pytz==2019.2
 Flask-WTF==0.14.2
 WTForms==2.2.1
 stripe==2.17.0
@@ -15,4 +15,4 @@ flask-limiter==1.0.1
 sentry-sdk==0.10.2
 blinker==1.4
 amazon-pay==2.5.2
-nameparser==1.0.2
+nameparser==1.0.4

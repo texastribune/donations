@@ -1,4 +1,5 @@
 import { logOut } from '../utils/auth-actions';
+import logError from '../utils/log-error';
 import tokenUserMixin from '../store/token-user/mixin';
 import contextMixin from '../store/context/mixin';
 import { InvalidRouteError } from '../errors';
@@ -57,7 +58,7 @@ export default {
         } else {
           // TODO: throw to errorCaptured in <App />
           this.setAppError(err);
-          this.logError(err);
+          logError(err);
         }
       }
     },
