@@ -117,8 +117,19 @@ axios.interceptors.response.use(
   response => response,
   error => {
     if (error.request && !error.response) {
-      logError(new AxiosNetworkError(error.request));
+      logError(new AxiosNetworkError(error.request, 'response'));
     }
+
+    return Promise.reject(error);
+  }
+);
+
+axios.interceptors.request.use(
+  config => config,
+  error => {
+    logError(new AxiosNetworkError(error, 'request'));
+
+    return Promise.reject(error);
   }
 );
 
