@@ -78,6 +78,14 @@ SENTRY_DSN = os.getenv("SENTRY_DSN")
 SENTRY_ENVIRONMENT = os.getenv("SENTRY_ENVIRONMENT", "unknown")
 REPORT_URI = os.getenv("REPORT_URI")
 
+########
+# Recaptcha
+#
+RECAPTCHA_KEYS = {
+    "secret_key": os.getenv("RECAPTCHA_SECRET_KEY"),
+    "site_key": os.getenv("RECAPTCHA_SITE_KEY"),
+}
+
 #######
 # Portal
 #

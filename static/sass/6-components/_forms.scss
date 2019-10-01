@@ -190,3 +190,8 @@
     }
   }
 }
+
+// hide reCAPTCHA badge
+.grecaptcha-badge {
+  visibility: hidden;
+}

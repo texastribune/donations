@@ -6,7 +6,7 @@
     class="form"
     @submit="$event.preventDefault()"
   >
-    <div v-show="showServerErrorMessage" class="grid_row grid_separator">
+    <div v-if="serverErrorMessage" class="grid_row grid_separator">
       <div class="col">
         <p class="form__error form__error--prominent">
           {{ serverErrorMessage }}
@@ -120,6 +120,7 @@
           :supported="nativeIsSupported"
           base-classes="form__native"
           @setLocalValue="setLocalValue"
+          @setCardValue="setCardValue"
           @onSubmit="onSubmit"
         />
       </div>
@@ -131,12 +132,14 @@
       aria-hidden="true"
     />
 
-    <div :aria-live="nativeIsSupported ? 'polite' : false">
+    <div
+      :aria-live="nativeIsSupported ? 'polite' : false"
+      class="grid_separator"
+    >
       <div v-if="showManualPay">
         <div class="grid_row">
           <div class="col">
             <manual-pay
-              :show-error="showErrors && showCardError"
               :card="card"
               base-classes="form__manual"
               @setCardValue="setCardValue"
@@ -160,17 +163,27 @@
       </div>
     </div>
 
-    <div v-if="showErrorClue" class="grid_separator--l" aria-hidden="true" />
-
-    <div v-if="showErrorClue" class="grid_row" aria-hidden="true">
-      <div class="col">
-        <p class="form__error form__error--normal form__error--centered">
-          Please correct errors above
-        </p>
+    <div v-if="genericErrorMessage" class="grid_separator">
+      <div class="grid_row">
+        <div class="col">
+          <p
+            role="alert"
+            class="form__error form__error--normal form__error--centered"
+          >
+            {{ genericErrorMessage }}
+          </p>
+        </div>
       </div>
     </div>
 
+    <p class="subtext">
+      This site is protected by reCAPTCHA and the Google
+      <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+      <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+    </p>
+
     <local-hidden :value="stripeToken" name="stripeToken" />
+    <local-hidden :value="recaptchaToken" name="recaptchaToken" />
     <hidden name="description" :store-module="storeModule" />
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
@@ -184,10 +197,10 @@ import LocalHidden from '../../local-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
 import PayFees from '../../connected-elements/PayFees.vue';
 import TextInput from '../../connected-elements/TextInput.vue';
-import ManualPay from '../../connected-elements/ManualPay.vue';
-import ManualSubmit from '../../connected-elements/ManualSubmit.vue';
-import NativePay from '../../connected-elements/NativePay.vue';
 import updateValue from '../../connected-elements/mixins/update-value';
+import ManualPay from '../../payment-elements/ManualPay.vue';
+import ManualSubmit from '../../payment-elements/ManualSubmit.vue';
+import NativePay from '../../payment-elements/NativePay.vue';
 import formStarter from '../../mixins/connected-form/starter';
 
 export default {

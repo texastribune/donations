@@ -8,6 +8,8 @@
 <script>
 import { Card } from 'vue-stripe-elements-plus';
 
+import { STRIPE_KEY } from '../constants';
+
 export default {
   name: 'ManualPay',
 
@@ -16,11 +18,6 @@ export default {
   },
 
   props: {
-    showError: {
-      type: Boolean,
-      default: false,
-    },
-
     card: {
       type: Object,
       required: true,
@@ -38,16 +35,19 @@ export default {
 
   computed: {
     stripeKey() {
-      // eslint-disable-next-line no-underscore-dangle
-      return window.__STRIPE_KEY__;
+      return STRIPE_KEY;
     },
 
     isValid() {
       return this.card.isValid;
     },
 
+    showError() {
+      return this.card.showError;
+    },
+
     message() {
-      return this.card.message;
+      return this.card.errorMessage;
     },
 
     classesWithValidation() {
@@ -75,7 +75,7 @@ export default {
 
       this.$emit('setCardValue', [
         { key: 'isValid', value: validValue },
-        { key: 'message', value: messageValue },
+        { key: 'errorMessage', value: messageValue },
       ]);
     },
   },
