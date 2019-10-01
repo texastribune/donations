@@ -98,8 +98,6 @@ Vue.mixin({
       circleUrl: CIRCLE_URL,
     };
   },
-
-  methods: { logError },
 });
 
 Vue.component('RoutesSiteFooter', RoutesSiteFooter);
