@@ -65,6 +65,8 @@ Environment
 | `ENABLE_PORTAL`             |                                           True |
 | `PORTAL_API_DOMAIN`         |                            https://foo.bar/api |
 | `PORTAL_CAMPAIGN_ID`        |                             stringstringstring |
+| `RECAPTCHA_SECRET_KEY`      |                             stringstringstring |
+| `RECAPTCHA_SITE_KEY`        |                             stringstringstring |
 
 Running the Project
 -------------------

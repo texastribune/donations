@@ -52,16 +52,22 @@
 {% endblock %}
 
 {% block bottom_script %}
-<script src="https://js.stripe.com/v3/"></script>
+  <script>
+    window.__STRIPE_KEY__ = '{{ stripe }}';
+    window.__RECAPTCHA_KEY__ = '{{ recaptcha }}';
+  </script>
 
-{% if form_data and message %}
-<script>
-  window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message|tojson }};
-  window.__BUSINESS_FORM_REHYDRATION__ = {{ form_data|tojson }};
-</script>
-{% endif %}
+  {% if form_data and message %}
+  <script>
+    window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message | tojson }};
+    window.__BUSINESS_FORM_REHYDRATION__ = {{ form_data | tojson }};
+  </script>
+  {% endif %}
 
-{% for script in bundles['js'] %}
-  <script src="{{ script }}"></script>
-{% endfor %}
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha }}"></script>
+
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
+  {% endfor %}
 {% endblock %}
