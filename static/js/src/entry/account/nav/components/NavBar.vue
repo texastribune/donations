@@ -53,6 +53,18 @@
               <strong>The Blast</strong>
             </router-link>
           </li>
+          <li class="c-navbar__item">
+            <a
+              href="/donate"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              ga-on="click"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.top"
+              :ga-event-label="ga.userPortalNav.labels.donate"
+            >
+              <strong>Donate</strong>
+            </a>
+          </li>
           <li v-if="isLoggedIn" class="c-navbar__item">
             <button
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
@@ -163,6 +175,18 @@
           >
             <strong>The Blast</strong>
           </router-link>
+        </li>
+        <li class="c-navbar__dropdown-item">
+          <a
+            href="/donate"
+            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            ga-on="click"
+            :ga-event-category="ga.userPortalNav.category"
+            :ga-event-action="ga.userPortalNav.actions.top"
+            :ga-event-label="ga.userPortalNav.labels.donate"
+          >
+            <strong>Donate</strong>
+          </a>
         </li>
         <li v-if="isLoggedIn" class="c-navbar__dropdown-item">
           <button
