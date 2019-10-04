@@ -41,6 +41,7 @@ export const GA_USER_PORTAL_NAV = {
     'edit-contact-info': 'profile editor',
     'confirm-linked-identity': 'link email confirmation',
     // external starting here
+    donate: 'donate',
     'community-guidelines': 'community guidelines',
     'support-landing': 'support landing',
     'privacy-policy': 'privacy policy',
