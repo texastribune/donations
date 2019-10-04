@@ -93,6 +93,8 @@ export const GA_DONATIONS = {
     'renew-membership': 'user portal - renew',
     'upgrade-contact': 'user portal - contact to upgrade',
     'never-given': 'user portal - never given',
+    top: 'user portal - top nav click',
+    footer: 'user portal - footer link click',
   },
 };
 export const GA_BLAST_INTENT = {

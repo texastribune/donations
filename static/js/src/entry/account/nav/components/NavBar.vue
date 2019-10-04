@@ -58,9 +58,9 @@
               href="/donate"
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
               ga-on="click"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.top"
-              :ga-event-label="ga.userPortalNav.labels.donate"
+              :ga-event-category="ga.donations.category"
+              :ga-event-action="ga.donations.actions['membership-intent']"
+              :ga-event-label="ga.donations.labels.top"
             >
               <strong>Donate</strong>
             </a>
@@ -181,9 +181,9 @@
             href="/donate"
             class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
             ga-on="click"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.top"
-            :ga-event-label="ga.userPortalNav.labels.donate"
+            :ga-event-category="ga.donations.category"
+            :ga-event-action="ga.donations.actions['membership-intent']"
+            :ga-event-label="ga.donations.labels.top"
           >
             <strong>Donate</strong>
           </a>
