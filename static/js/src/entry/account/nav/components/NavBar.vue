@@ -8,14 +8,14 @@
         <img alt="The Texas Tribune" src="../../svg/tt.svg" />
       </a>
 
-      <div class="c-navbar__content">
+      <div class="c-navbar__content t-size-xxs t-uppercase t-lsp-m">
         <ul
           v-if="userFetchComplete"
           class="c-navbar__items c-navbar__items--no-space is-hidden-until-bp-l"
         >
           <li v-if="showHomeLink" class="c-navbar__item">
             <router-link
-              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               active-class="is-active"
               exact
               ga-on="click"
@@ -29,7 +29,7 @@
           </li>
           <li v-if="showMembershipLink" class="c-navbar__item">
             <router-link
-              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               active-class="is-active"
               ga-on="click"
               :to="{ name: 'membership' }"
@@ -42,7 +42,7 @@
           </li>
           <li v-if="showBlastLink" class="c-navbar__item">
             <router-link
-              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               active-class="is-active"
               ga-on="click"
               :to="{ name: 'blast' }"
@@ -56,7 +56,7 @@
           <li class="c-navbar__item">
             <a
               href="/donate"
-              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               ga-on="click"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
@@ -67,7 +67,7 @@
           </li>
           <li v-if="isLoggedIn" class="c-navbar__item">
             <button
-              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-uppercase t-lsp-m"
               @click="logOut"
             >
               <strong>Log Out</strong>
@@ -75,7 +75,7 @@
           </li>
           <li v-if="!isLoggedIn" class="c-navbar__item">
             <button
-              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated t-uppercase t-lsp-m"
               @click="logIn"
             >
               <strong>Log In</strong>
@@ -86,7 +86,7 @@
         <ul class="c-navbar__items is-hidden-from-bp-l">
           <li v-if="!showDropdown" class="c-navbar__item">
             <button
-              class="c-navbar__item-content c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable t-uppercase t-lsp-m"
               aria-label="Show menu"
               @click="toggleDropdown"
             >
@@ -96,7 +96,7 @@
           </li>
           <li v-else class="c-navbar__item">
             <button
-              class="c-navbar__item-content c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+              class="c-navbar__item-content c-navbar__clickable t-uppercase t-lsp-m"
               aria-label="Hide menu"
               @click="toggleDropdown"
             >
@@ -108,11 +108,14 @@
       </div>
     </div>
 
-    <div v-if="showDropdown" class="c-navbar__dropdown is-hidden-from-bp-l">
+    <div
+      v-if="showDropdown"
+      class="c-navbar__dropdown is-hidden-from-bp-l t-size-xxs t-uppercase t-lsp-m"
+    >
       <ul v-if="userFetchComplete" class="c-navbar__dropdown-items">
         <li v-if="showHomeLink" class="c-navbar__dropdown-item">
           <router-link
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable"
             active-class="is-active"
             exact
             ga-on="click"
@@ -126,7 +129,7 @@
         </li>
         <li v-if="showMembershipLink" class="c-navbar__dropdown-item">
           <router-link
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable"
             active-class="is-active"
             ga-on="click"
             :to="{ name: 'membership' }"
@@ -139,7 +142,7 @@
         </li>
         <li v-if="showEditContactInfoLink" class="c-navbar__dropdown-item">
           <router-link
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable"
             active-class="is-active"
             ga-on="click"
             :to="{ name: 'edit-contact-info' }"
@@ -152,7 +155,7 @@
         </li>
         <li v-if="showAmbassadorLink" class="c-navbar__dropdown-item">
           <router-link
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable"
             active-class="is-active"
             ga-on="click"
             :to="{ name: 'ambassador' }"
@@ -165,7 +168,7 @@
         </li>
         <li v-if="showBlastLink" class="c-navbar__dropdown-item">
           <router-link
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable"
             active-class="is-active"
             ga-on="click"
             :to="{ name: 'blast' }"
@@ -179,7 +182,7 @@
         <li class="c-navbar__dropdown-item">
           <a
             href="/donate"
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable"
             ga-on="click"
             :ga-event-category="ga.donations.category"
             :ga-event-action="ga.donations.actions['membership-intent']"
@@ -190,7 +193,7 @@
         </li>
         <li v-if="isLoggedIn" class="c-navbar__dropdown-item">
           <button
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable t-uppercase t-lsp-m"
             @click="logOut"
           >
             <strong>Log Out</strong>
@@ -198,7 +201,7 @@
         </li>
         <li v-if="!isLoggedIn" class="c-navbar__dropdown-item">
           <button
-            class="c-navbar__clickable t-size-xxs t-uppercase t-uppercase--extra-wide"
+            class="c-navbar__clickable t-uppercase t-lsp-m"
             @click="logIn"
           >
             <strong>Log In</strong>

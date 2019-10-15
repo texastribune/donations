@@ -1,6 +1,4 @@
 .c-appeal {
-  list-style: none;
-
   @include mq($from: bp-l) {
     padding-bottom: $size-xxl;
   }

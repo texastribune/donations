@@ -778,10 +778,10 @@
   resolved "https://registry.yarnpkg.com/@texastribune/postcss-amp/-/postcss-amp-1.4.0.tgz#fb96d58eb5707cadf2ae9d10db697752697cae41"
   integrity sha512-YqYumCnu/8L6awDD5GtSgAv3N8Wsgj7yU4Ipwhqdld4Sw8b2yvoIXMupR4nre2A61JQAOMs+Li7ECkNH2iz40w==
 
-"@texastribune/queso-tools@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@texastribune/queso-tools/-/queso-tools-1.2.1.tgz#2221b0f8f60caaea7bfbd7c0cd5adceb80e89fed"
-  integrity sha512-sityWELWBllSPyKlMVQ11lkZMKL4uzMDudBi1RXWNzLMhNDx+32Z5njOCEHRq1BdFH5pxciKFe15b8y4fl3KaQ==
+"@texastribune/queso-tools@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/@texastribune/queso-tools/-/queso-tools-1.3.0.tgz#9e31c05f69538c4337d7d93097ac917ca47961a2"
+  integrity sha512-GQZ+SHuwSE7VbwYLQ4x4+vqaypmWUVZmaF7GvOqrVqAgws+J3GPSeci67abynAyw8G01jpQdg7bKsKRAFVDLug==
   dependencies:
     "@texastribune/postcss-amp" "^1.4.0"
     amphtml-validator "^1.0.23"
@@ -795,10 +795,10 @@
     svgo "^1.2.2"
     svgstore "^3.0.0-2"
 
-"@texastribune/queso-ui@^4.0.0":
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/@texastribune/queso-ui/-/queso-ui-4.0.0.tgz#fe38c5e88c449e2f412d1b9034655051dfaeafb4"
-  integrity sha512-jyNQf2Z+uVgOk7DGGTmsDJ5mGK06K4EJUbfih9L1rH8ZIDmY6BCHAdaKGULUBWm4q9ATDNZUKPLtsLHJf92e/A==
+"@texastribune/queso-ui@^5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@texastribune/queso-ui/-/queso-ui-5.1.0.tgz#e28f8c212f881b66b824d967660419a638ea7374"
+  integrity sha512-/s3BC4YgBirOeEsShBC6HrFXJh3v1vfvKneFrWcR7TDvGfARpuSenAYOIOqDnnF2MN4tsD7zaXBo0+JfR6o5Ng==
   dependencies:
     normalize.css "^8.0.1"
     sass-mq "^5.0.0"
