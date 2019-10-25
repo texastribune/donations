@@ -21,7 +21,7 @@ import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
 import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
-import { UnverifiedError, AxiosNetworkError } from './errors';
+import { UnverifiedError, AxiosError } from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -113,22 +113,12 @@ Vue.filter('longDate', formatLongDate);
 
 axios.interceptors.response.use(
   response => response,
-  error => {
-    if (error.request && !error.response) {
-      logError(new AxiosNetworkError(error.request));
-    }
-
-    return Promise.reject(error);
-  }
+  error => Promise.reject(new AxiosError(error))
 );
 
 axios.interceptors.request.use(
   config => config,
-  error => {
-    logError(new Error('Axios request error'));
-
-    return Promise.reject(error);
-  }
+  error => Promise.reject(new AxiosError(error))
 );
 
 // we refresh at a 15-minute interval instead of when
