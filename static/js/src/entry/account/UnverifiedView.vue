@@ -28,6 +28,7 @@
 
 <script>
 import tokenUser from './store/token-user/mixin';
+import setTitle from './utils/set-title';
 
 export default {
   name: 'UnverifiedView',
@@ -44,6 +45,8 @@ export default {
     window.onpopstate = () => {
       window.location.reload();
     };
+
+    setTitle('Unverified email address');
   },
 };
 </script>

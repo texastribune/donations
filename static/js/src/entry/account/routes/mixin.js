@@ -1,9 +1,10 @@
 import { logOut } from '../utils/auth-actions';
 import logError from '../utils/log-error';
+import setTitle from '../utils/set-title';
+import logPageView from '../utils/log-page-view';
 import tokenUserMixin from '../store/token-user/mixin';
 import contextMixin from '../store/context/mixin';
 import { InvalidRouteError } from '../errors';
-import { TITLE_SUFFIX } from '../constants';
 
 export default {
   mixins: [tokenUserMixin, contextMixin],
@@ -28,18 +29,6 @@ export default {
   },
 
   methods: {
-    setTitle() {
-      document.title = `${this.title} ${TITLE_SUFFIX}`;
-    },
-
-    logPageView() {
-      window.dataLayer.push({
-        event: 'userPortalPageview',
-        pagePath: window.location.pathname,
-        pageTitle: document.title,
-      });
-    },
-
     async doRouteFetch() {
       this.routeIsFetching = true;
 
@@ -47,8 +36,8 @@ export default {
         await this.fetchData();
 
         if (this.title) {
-          this.setTitle();
-          this.logPageView();
+          setTitle(this.title);
+          logPageView();
         }
 
         this.routeIsFetching = false;

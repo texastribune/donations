@@ -16,7 +16,6 @@ import UnverifiedView from './UnverifiedView.vue';
 import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
 import { UnverifiedError } from './errors';
-import { TITLE_SUFFIX } from './constants';
 
 export default {
   name: 'App',
@@ -36,24 +35,6 @@ export default {
 
     showError() {
       return !!this.appError;
-    },
-  },
-
-  watch: {
-    appError(newError) {
-      if (newError) {
-        if (newError instanceof UnverifiedError) {
-          this.setTitle('Unverified email address');
-        } else {
-          this.setTitle('Error');
-        }
-      }
-    },
-  },
-
-  methods: {
-    setTitle(title) {
-      document.title = `${title} ${TITLE_SUFFIX}`;
     },
   },
 
