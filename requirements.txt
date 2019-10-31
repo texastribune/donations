@@ -1,6 +1,6 @@
 Flask==1.0.2
 gunicorn==19.9.0
-pytz==2019.2
+pytz==2019.3
 Flask-WTF==0.14.2
 WTForms==2.2.1
 stripe==2.38.0
