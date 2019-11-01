@@ -3,7 +3,7 @@ FROM python:3.6
 # This Dockerfile is intended for development. See Dockerfile.sample for something more
 # suitable for production.
 
-ENV NODE_VERSION=node_8.x
+ENV NODE_VERSION=node_12.x
 ENV FLASK_DEBUG 1
 ENV NPM_CONFIG_LOGLEVEL warn
 
