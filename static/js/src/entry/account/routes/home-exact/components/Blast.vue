@@ -9,7 +9,7 @@
         >, to your card ending in <strong>{{ nextTransaction.last4 }}</strong
         >.
       </p>
-      <p v-else class="has-text-gray-dark t-linkstyle--underlined">
+      <p v-else class="has-text-gray-dark t-links-underlined">
         Thanks for subscribing to The Blast! Your subscription is paid through
         <strong>{{ nextTransaction.date | longDate }}</strong
         >. To update or extend your subscription, contact us at
@@ -45,7 +45,7 @@
       </ul>
     </template>
     <template v-if="nextTransaction.last4" v-slot:bottom>
-      <p class="has-text-gray-dark t-linkstyle--underlined">
+      <p class="has-text-gray-dark t-links-underlined">
         Need to make a change? Contact us at
         <a
           href="mailto:blast@texastribune.org"

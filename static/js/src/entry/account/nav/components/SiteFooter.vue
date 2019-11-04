@@ -116,6 +116,17 @@
           <li>
             <a
               ga-on="click"
+              href="/donate"
+              :ga-event-category="ga.donations.category"
+              :ga-event-action="ga.donations.actions['membership-intent']"
+              :ga-event-label="ga.donations.labels.footer"
+            >
+              Donate
+            </a>
+          </li>
+          <li>
+            <a
+              ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.footer"
               :ga-event-label="ga.userPortalNav.labels['community-guidelines']"

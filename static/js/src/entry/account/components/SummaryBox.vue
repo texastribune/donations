@@ -10,7 +10,7 @@
     <div class="c-summary-box__top">
       <h2 class="t-uppercase t-size-b has-s-btm-marg">{{ heading }}</h2>
       <div class="has-xxl-btm-marg"><slot name="content"></slot></div>
-      <div class="t-linkstyle--underlined"><slot name="links"></slot></div>
+      <div class="t-links-underlined"><slot name="links"></slot></div>
     </div>
     <div
       v-if="!!$slots.bottom"

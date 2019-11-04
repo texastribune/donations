@@ -5,7 +5,7 @@
         <input :id="name" :checked="value" type="checkbox" @change="onChange" />
       </div>
       <div class="c-checkbox__label">
-        <label :for="name" class="t-size-s t-space-base has-text-gray-dark">
+        <label :for="name" class="t-size-s t-lh-b has-text-gray-dark">
           {{ label }}
         </label>
       </div>
