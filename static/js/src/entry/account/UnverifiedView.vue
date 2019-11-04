@@ -2,7 +2,7 @@
   <div>
     <no-routes-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
-      <div class="l-minimal__content t-linkstyle--underlined">
+      <div class="l-minimal__content t-links-underlined">
         <h1 class="has-xl-btm-marg">Please verify your account</h1>
         <p>
           Thanks for creating a Texas Tribune account &mdash; you’re almost

@@ -115,7 +115,7 @@ axios.interceptors.response.use(
   response => response,
   error => {
     if (error.request && !error.response) {
-      logError(new AxiosNetworkError(error.request, 'response'));
+      logError(new AxiosNetworkError(error.request));
     }
 
     return Promise.reject(error);
@@ -125,7 +125,7 @@ axios.interceptors.response.use(
 axios.interceptors.request.use(
   config => config,
   error => {
-    logError(new AxiosNetworkError(error, 'request'));
+    logError(new Error('Axios request error'));
 
     return Promise.reject(error);
   }
