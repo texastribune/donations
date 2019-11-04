@@ -5,7 +5,7 @@
       v-if="!routeIsFetching"
       class="l-minimal has-bg-white-off has-xl-padding"
     >
-      <div class="l-minimal__content t-linkstyle--underlined">
+      <div class="l-minimal__content t-links-underlined">
         <h1 class="has-xl-btm-marg">Please verify your email address change</h1>
         <p class="has-b-btm-marg">
           Thanks for updating your email address! To log back into your account,

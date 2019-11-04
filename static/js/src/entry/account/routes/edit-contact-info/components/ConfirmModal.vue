@@ -9,9 +9,7 @@
   >
     <div class="c-modal">
       <div class="c-modal__top l-align-center-children has-padding">
-        <h2 class="t-size-b t-align-center t-space-base">
-          You have unsaved changes
-        </h2>
+        <h2 class="t-size-b t-align-center t-lh-b">You have unsaved changes</h2>
       </div>
       <ul class="c-modal__buttons l-width-full">
         <li>

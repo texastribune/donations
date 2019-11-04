@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ul class="c-link-list t-linkstyle--underlined">
+    <ul class="c-link-list t-links-underlined">
       <li
         v-if="isRecurringDonor || isSingleDonor || isCircleDonor"
         class="has-m-btm-marg"

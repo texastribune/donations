@@ -1,7 +1,7 @@
 <template>
   <aside class="c-detail-box">
     <h2 class="t-size-b t-uppercase has-xxxs-btm-marg">Thank you!</h2>
-    <p class="has-text-gray-dark t-linkstyle--underlined">
+    <p class="has-text-gray-dark t-links-underlined">
       Thank you for your commitment to provide backing for the vital work of our
       journalists. Your support provides a public service to all Texans &mdash;
       through our free website, syndication and informative public events

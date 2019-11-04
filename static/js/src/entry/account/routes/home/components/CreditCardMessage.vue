@@ -11,7 +11,7 @@
           <icon name="bell" :display="{ size: 's' }" />
         </template>
         <template v-slot:content>
-          <div class="has-text-gray-dark t-size-s t-linkstyle--underlined">
+          <div class="has-text-gray-dark t-size-s t-links-underlined">
             <p>
               Soon, you'll be able to update your credit card, change your
               donation details and cancel your membership.

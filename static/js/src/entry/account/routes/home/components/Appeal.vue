@@ -1,6 +1,6 @@
 <template>
   <aside
-    class="c-appeal t-space-base has-ump-side-padding has-white-off-bg-until-bp-l"
+    class="c-appeal t-lh-b has-ump-side-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">
       <template v-if="isExpired">
@@ -23,7 +23,7 @@
       </template>
     </p>
 
-    <ul class="t-linkstyle--underlined has-xl-btm-marg">
+    <ul class="t-links-underlined has-xl-btm-marg">
       <li
         v-for="(benefit, index) in benefits"
         :key="benefit.id"

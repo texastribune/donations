@@ -3,7 +3,7 @@
     class="c-help has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">Contact us</h2>
-    <p class="t-linkstyle--underlined has-text-gray-dark">
+    <p class="t-links-underlined has-text-gray-dark">
       <template v-if="home || edit || ambassador">
         Have questions about your account? Or feedback about this website? Email
         <a

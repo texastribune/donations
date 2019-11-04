@@ -16,7 +16,7 @@
       </info-list>
     </div>
 
-    <ul class="c-link-list t-linkstyle--underlined">
+    <ul class="c-link-list t-links-underlined">
       <li class="has-xs-btm-marg">
         <span class="c-link-list__arrow has-text-teal">
           <strong>&rarr;</strong>

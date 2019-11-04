@@ -1,5 +1,5 @@
 <template>
-  <ul class="c-link-list t-linkstyle--underlined">
+  <ul class="c-link-list t-links-underlined">
     <li v-if="!isNeverGiven" class="has-m-btm-marg">
       <span class="c-link-list__arrow has-text-teal">
         <strong>&rarr;</strong>

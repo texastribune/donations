@@ -2,7 +2,7 @@
   <div>
     <no-routes-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
-      <div class="l-minimal__content t-linkstyle--underlined">
+      <div class="l-minimal__content t-links-underlined">
         <h1 class="has-xl-btm-marg">Sorry about that.</h1>
         <p class="has-s-btm-marg">
           We’re having trouble loading your account information, and we're

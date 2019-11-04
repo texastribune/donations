@@ -15,22 +15,23 @@
       <div class="grid_row grid_wrap--l">	
         <div class="col_12">	
           <h1 class="splash__headline">	
-            Texas Tribune members	
-            <br />	
-            support our&nbsp;	
+            Texas Tribune members	have supported
+            <br /> 
+            10 years of&nbsp;	
             <span class="rotate-words">	
-              <span>journalism.</span>	
-              <span>events.</span>	
-              <span>community.</span>	
-              <span>mission.</span>	
+              <span>nonpartisan news.</span>	
+              <span>watchdog reporting.</span>	
+              <span>community events.</span>	
+              <span>civic engagement.</span>	
+              <span>civil discourse.</span>
             </span>	
           </h1>	
         </div>	
       </div>
       <div class="splash__actions grid_row grid_wrap--l">
         <div class="col_8">
-            <p class="splash__description grid_separator">Do you value credible, nonpartisan, public-interest journalism?</p>	          
-            <a class="button button--yellow grid_separator" href="#join-today" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="support landing">Show Your Support</a>
+            <p class="splash__description grid_separator">Will you support our second decade of exceptional journalism for an exceptional state?</p>	          
+            <a class="button button--yellow grid_separator" href="#join-today" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="support landing">Join Us</a>
         </div>
       </div>
     </div>
@@ -40,16 +41,21 @@
     <section class="grid_container grid_padded--xl grid_separator--xl">
       <div class="grid_row grid_wrap--l">
         <div class="col_8">
-          <div class="member_benefits section-padding">
-            {% include 'includes/benefits.html' %}
+          <div class="section-padding">
+            <div class="prose">
+              <p>Our members are part of a growing community of civically engaged Texans who care about the future of our state. As a <a href="https://www.texastribune.org/about">nonprofit newsroom</a>, we rely on members to help keep our stories free and our events open to the public. Join <a href="https://www.texastribune.org/support-us/donors-and-members/">thousands</a> who already support The Texas Tribune with <nobr>their donations.</nobr></p>
+            </div>
           </div>
-          <div id="join-today" class="donation_form section-padding">
+          <div id="join-today" class="donation_form grid_separator--l">
             <!-- where the router component attaches -->
             <div id="app" style="display:none;"></div>
             <div class="border--yellow_notch"></div>
             <h2 class="grid_separator link--teal">Become a Texas Tribune Member today</h2>
             <!-- where the form attaches -->
             <div id="top-form"></div>
+          </div>
+          <div class="member_benefits section-padding">
+            {% include 'includes/benefits.html' %}
           </div>
         </div>
         <div class="col_1"></div>
