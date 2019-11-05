@@ -27,7 +27,7 @@ COPY yarn.lock /app/
 COPY babel.config.js /app/
 RUN yarn
 
-FROM python:3.6
+FROM python:3.8.0
 
 WORKDIR /app
 
