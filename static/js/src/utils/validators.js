@@ -23,8 +23,16 @@ export const isEmptyOrZip = value => {
 };
 
 export const isValidDonationAmount = value => {
+  let valueToCheck;
+
+  if (value.charAt(0) === '$') {
+    valueToCheck = value.substring(1);
+  } else {
+    valueToCheck = value;
+  }
+
   const isValid = validate(
-    { value: value.trim() },
+    { value: valueToCheck.trim() },
     { value: { numericality: { greaterThanOrEqualTo: 1 } } }
   );
   return typeof isValid === 'undefined';
