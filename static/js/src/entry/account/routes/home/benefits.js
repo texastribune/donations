@@ -37,32 +37,13 @@ const BENEFITS = [
             },
             'members-only newsletter'
           ),
+          ' and quarterly stakeholder reports',
         ]);
       },
     },
   },
   {
     id: 2,
-    component: {
-      name: 'Festival',
-      render(h) {
-        return h('span', [
-          'Discounted passes to our annual ',
-          h(
-            'a',
-            {
-              attrs: {
-                href: 'https://festival.texastribune.org',
-              },
-            },
-            'Texas Tribune Festival'
-          ),
-        ]);
-      },
-    },
-  },
-  {
-    id: 3,
     component: {
       name: 'Wall',
       render(h) {
@@ -83,19 +64,28 @@ const BENEFITS = [
     },
   },
   {
-    id: 4,
+    id: 3,
     component: {
-      name: 'Informed',
+      name: 'Festival',
       render(h) {
-        return h(
-          'span',
-          'Informed Members also receive: Quarterly stakeholder reports'
-        );
+        return h('span', [
+          'Informed Members also receive: Special perks at ',
+          h(
+            'a',
+            {
+              attrs: {
+                href: 'https://festival.texastribune.org',
+              },
+            },
+            'Texas Tribune Festival'
+          ),
+          ' our annual, three-day meeting of the brightest minds in politics and policy',
+        ]);
       },
     },
   },
   {
-    id: 5,
+    id: 4,
     component: {
       name: 'Engaged',
       render(h) {
@@ -107,7 +97,7 @@ const BENEFITS = [
     },
   },
   {
-    id: 6,
+    id: 5,
     component: {
       name: 'Involved',
       render(h) {
