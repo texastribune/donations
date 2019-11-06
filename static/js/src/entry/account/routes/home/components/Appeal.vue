@@ -91,10 +91,10 @@ export default {
   computed: {
     ceiling() {
       const mapping = {
-        member: 3,
-        'informed member': 4,
-        'engaged member': 5,
-        'involved member': 6,
+        member: 2,
+        'informed member': 3,
+        'engaged member': 4,
+        'involved member': 5,
       };
 
       if (this.isExpired) return -1;
