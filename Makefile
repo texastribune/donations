@@ -18,6 +18,9 @@ interactive: build backing
 		--link=redis:redis \
 		--name=${APP} ${NS}/${APP}:dev bash
 
+down:
+	docker rm -f ${APP} rabbitmq redis
+
 build:
 	docker build -f Dockerfile --tag=${NS}/${APP}:dev .
 
