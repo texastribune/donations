@@ -10,6 +10,7 @@ from wtforms.fields import (
 from wtforms.fields.html5 import EmailField
 
 
+# amount must be $1 or higher
 def validate_amount(form, field):
     value = field.data
     if value is None:
@@ -18,6 +19,8 @@ def validate_amount(form, field):
         raise validators.ValidationError("Amount is less than 1")
 
 
+# if value starts with a dollar sign, remove it
+# then convert to a float
 def format_amount(value):
     if value.startswith("$"):
         value_to_convert = value[1:]
