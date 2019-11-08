@@ -343,7 +343,7 @@ def add_donation(form=None, customer=None, donation_type=None):
     return True
 
 
-def do_charge_or_show_errors(template, bundles, function, donation_type):
+def do_charge_or_show_errors(form, template, bundles, function, donation_type):
     app.logger.debug("----Creating Stripe customer...")
 
     email = request.form["stripeEmail"]
@@ -368,7 +368,7 @@ def do_charge_or_show_errors(template, bundles, function, donation_type):
             form_data=form_data,
         )
     app.logger.info(f"Customer id: {customer.id}")
-    function(customer=customer, form=clean(request.form), donation_type=donation_type)
+    function(customer=customer, form=clean(form.data), donation_type=donation_type)
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -406,6 +406,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         )
 
     return do_charge_or_show_errors(
+        form=form,
         bundles=bundles,
         template=template,
         function=function,
