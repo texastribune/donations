@@ -23,12 +23,9 @@ def validate_amount(form, field):
 # then convert to a float
 def format_amount(value):
     if value.startswith("$"):
-        value_to_convert = value[1:]
-    else:
-        value_to_convert = value
+        value = value[1:]
     try:
-        float(value_to_convert)
-        return float(value_to_convert)
+        return float(value)
     except ValueError:
         return None
 
