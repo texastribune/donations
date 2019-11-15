@@ -14,7 +14,7 @@ from wtforms.fields.html5 import EmailField
 def validate_amount(form, field):
     value = field.data
     if value is None:
-        raise validators.ValidationError("Invalid amount")
+        raise validators.ValidationError("Non-numeric amount provided")
     if value < 1:
         raise validators.ValidationError("Amount is less than 1")
 
