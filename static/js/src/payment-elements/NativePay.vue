@@ -45,7 +45,13 @@ export default {
   computed: {
     amount() {
       const getter = this.$store.getters[`${this.storeModule}/valueByKey`];
-      const amountInDollars = parseFloat(getter('amount'));
+      let amount = getter('amount');
+
+      if (amount.charAt(0) === '$') {
+        amount = amount.substring(1);
+      }
+
+      const amountInDollars = parseFloat(amount.trim());
       const roundedAmountInCents = (amountInDollars * 100).toFixed();
 
       return Number(roundedAmountInCents);
@@ -62,6 +68,7 @@ export default {
           label: 'Texas Tribune Donation',
           amount: newAmount,
         };
+
         this.paymentRequest.update({ total });
       }
     },
