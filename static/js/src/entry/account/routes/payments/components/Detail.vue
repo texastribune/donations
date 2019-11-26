@@ -2,7 +2,9 @@
   <section class="c-detail-box">
     <div class="has-xxl-btm-marg"><payment-list :payments="data" /></div>
 
-    <p class="t-size-xs t-links-underlined has-text-gray has-xxxl-btm-marg">
+    <p
+      class="t-size-xs t-links-underlined has-text-gray-dark has-xxxl-btm-marg"
+    >
       Note: Donation history does not include event sponsorships or ticket
       purchases. To receive a {{ lastYear }} tax receipt with this information,
       please contact
