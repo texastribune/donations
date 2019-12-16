@@ -15,7 +15,9 @@
 
 * [ ] Added automated tests? *( )*
 * [ ] Tested manually on mobile? *( )*
+* [ ] Checked BrowserStack? *( )*
 * [ ] Checked for performance implications? *( )*
+* [ ] Checked accessibility? *( )*
 * [ ] Checked for security implications? *( )*
 * [ ] Updated the documentation/wiki? *( )*
 

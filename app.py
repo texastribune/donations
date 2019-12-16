@@ -343,20 +343,23 @@ def add_donation(form=None, customer=None, donation_type=None):
     return True
 
 
-def do_charge_or_show_errors(template, bundles, function, donation_type):
+def do_charge_or_show_errors(form_data, template, bundles, function, donation_type):
     app.logger.debug("----Creating Stripe customer...")
 
-    email = request.form["stripeEmail"]
-    installment_period = request.form["installment_period"]
-    amount = request.form["amount"]
+    email = form_data["stripeEmail"]
+    installment_period = form_data["installment_period"]
+    amount = form_data["amount"]
+    stripe_token = form_data["stripeToken"]
 
     try:
-        customer = stripe.Customer.create(email=email, card=request.form["stripeToken"])
+        customer = stripe.Customer.create(email=email, card=stripe_token)
     except stripe.error.CardError as e:
         body = e.json_body
         err = body.get("error", {})
         message = err.get("message", "")
-        form_data = request.form.to_dict()
+        # at this point, amount has been converted to a float
+        # bring it back to a string for the rehydration of the form
+        form_data["amount"] = str(form_data["amount"])
         del form_data["stripeToken"]
 
         return render_template(
@@ -368,7 +371,7 @@ def do_charge_or_show_errors(template, bundles, function, donation_type):
             form_data=form_data,
         )
     app.logger.info(f"Customer id: {customer.id}")
-    function(customer=customer, form=clean(request.form), donation_type=donation_type)
+    function(customer=customer, form=clean(form_data), donation_type=donation_type)
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -380,6 +383,12 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     app.logger.info(pformat(request.form))
 
     form = FormType(request.form)
+    # use form.data instead of request.form from here on out
+    # because it includes all filters applied by WTF Forms
+    form_data = form.data
+    form_errors = form.errors
+    email = form_data["stripeEmail"]
+
     if FormType is DonateForm:
         donation_type = "membership"
     elif FormType is CircleForm:
@@ -391,21 +400,20 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     else:
         raise Exception("Unrecognized form type")
 
-    email = request.form["stripeEmail"]
-
     if not validate_email(email):
         message = "There was an issue saving your email address."
         return render_template(
             "error.html", message=message, bundles=get_bundles("old")
         )
     if not form.validate():
-        app.logger.error(f"Form validation errors: {form.errors}")
+        app.logger.error(f"Form validation errors: {form_errors}")
         message = "There was an issue saving your donation information."
         return render_template(
             "error.html", message=message, bundles=get_bundles("old")
         )
 
     return do_charge_or_show_errors(
+        form_data=form_data,
         bundles=bundles,
         template=template,
         function=function,

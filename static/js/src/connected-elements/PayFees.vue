@@ -40,7 +40,13 @@ export default {
         key: 'amount',
       });
 
-      if (!isValidDonationAmount(amount)) return false;
+      if (!isValidDonationAmount(amount)) {
+        return false;
+      }
+
+      if (amount.charAt(0) === '$') {
+        amount = amount.substring(1);
+      }
 
       amount = parseFloat(amount.trim());
 

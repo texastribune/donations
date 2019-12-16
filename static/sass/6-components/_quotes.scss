@@ -3,10 +3,10 @@
 
   &__quote {
     @include font-setting('secondary');
-    color: $color-gray-medium;
+    color: $color-gray-dark;
     font-size: $size-b;
   }
-  
+
   &__attribution {
     color: $color-teal-gray;
     font-size: $size-xs;

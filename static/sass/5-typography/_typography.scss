@@ -23,7 +23,7 @@
 
   // Byline
   &--light {
-    color: $color-gray-medium;
+    color: $color-gray-dark;
     font-size: $size-xs;
     font-weight: 400;
     letter-spacing: .05em;
@@ -75,7 +75,7 @@
 // Examples: Grayed text below smallcaps, comment policy
 .subtext {
   @extend %link--blue;
-  color: $color-gray-medium;
+  color: $color-gray-dark;
   font-size: $size-xs;
   font-weight: 400;
   padding: 0;
