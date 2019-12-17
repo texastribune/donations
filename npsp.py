@@ -7,9 +7,10 @@ from decimal import Decimal
 from io import StringIO
 
 import requests
-from pytz import timezone
-
 from fuzzywuzzy import process
+from pytz import timezone
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
 
 ZONE = timezone(os.environ.get("TIMEZONE", "US/Central"))
 
@@ -30,6 +31,26 @@ DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 
 class SalesforceException(Exception):
     pass
+
+
+def requests_retry_session(
+    retries=3,
+    backoff_factor=1,
+    status_forcelist=(400, 500, 502, 503, 504),
+    session=None,
+):
+    session = session or requests.Session()
+    retry = Retry(
+        total=retries,
+        read=retries,
+        connect=retries,
+        backoff_factor=backoff_factor,
+        status_forcelist=status_forcelist,
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount("http://", adapter)
+    session.mount("https://", adapter)
+    return session
 
 
 class SalesforceConnection(object):
@@ -56,7 +77,7 @@ class SalesforceConnection(object):
 
     def _get_token(self):
 
-        r = requests.post(self.url, data=self.payload)
+        r = requests_retry_session().post(self.url, data=self.payload)
         self.check_response(r)
         response = json.loads(r.text)
 
