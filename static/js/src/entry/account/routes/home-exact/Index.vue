@@ -7,7 +7,7 @@
 
   <div
     v-else
-    class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l "
+    class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l"
   >
     <message />
 

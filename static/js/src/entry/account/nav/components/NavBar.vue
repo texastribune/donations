@@ -10,7 +10,6 @@
 
       <div class="c-navbar__content t-size-xxs t-uppercase t-lsp-m">
         <ul
-          v-if="userFetchComplete"
           class="c-navbar__items c-navbar__items--no-space is-hidden-until-bp-l"
         >
           <li v-if="showHomeLink" class="c-navbar__item">
@@ -112,7 +111,7 @@
       v-if="showDropdown"
       class="c-navbar__dropdown is-hidden-from-bp-l t-size-xxs t-uppercase t-lsp-m"
     >
-      <ul v-if="userFetchComplete" class="c-navbar__dropdown-items">
+      <ul class="c-navbar__dropdown-items">
         <li v-if="showHomeLink" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable"
@@ -242,11 +241,6 @@ export default {
     },
 
     showAmbassadorLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    userFetchComplete: {
       type: Boolean,
       required: true,
     },

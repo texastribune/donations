@@ -1,6 +1,6 @@
 <template>
   <div>
-    <no-routes-nav-bar />
+    <basic-nav-bar />
     <main
       v-if="!routeIsFetching"
       class="l-minimal has-bg-white-off has-xl-padding"
@@ -28,7 +28,7 @@
         </p>
       </div>
     </main>
-    <no-routes-site-footer />
+    <basic-site-footer />
   </div>
 </template>
 

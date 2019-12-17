@@ -22,10 +22,7 @@
         >
           Your account
         </h4>
-        <ul
-          v-if="userFetchComplete"
-          class="c-site-footer__links has-text-white"
-        >
+        <ul class="c-site-footer__links has-text-white">
           <li v-if="showHomeLink">
             <router-link
               ga-on="click"
@@ -209,11 +206,6 @@ export default {
     },
 
     showPaymentsLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    userFetchComplete: {
       type: Boolean,
       required: true,
     },

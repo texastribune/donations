@@ -1,7 +1,6 @@
 <template>
-  <user-nav-container v-slot="slotProps">
+  <token-user-nav-provider v-slot="slotProps">
     <site-footer
-      user-fetch-complete
       :show-home-link="false"
       :show-edit-contact-info-link="false"
       :show-ambassador-link="false"
@@ -9,16 +8,16 @@
       :show-membership-link="false"
       :show-payments-link="false"
     />
-  </user-nav-container>
+  </token-user-nav-provider>
 </template>
 
 <script>
-import UserNavContainer from '../containers/UserNavContainer.vue';
+import TokenUserNavProvider from '../providers/TokenUserNavProvider.vue';
 import SiteFooter from './SiteFooter.vue';
 
 export default {
-  name: 'NoRoutesSiteFooter',
+  name: 'BasicSiteFooter',
 
-  components: { UserNavContainer, SiteFooter },
+  components: { TokenUserNavProvider, SiteFooter },
 };
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <no-routes-nav-bar />
+    <basic-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <div class="l-minimal__content t-links-underlined">
         <h1 class="has-xl-btm-marg">Sorry about that.</h1>
@@ -22,7 +22,7 @@
         </p>
       </div>
     </main>
-    <no-routes-site-footer />
+    <basic-site-footer />
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
   <nav class="c-side-nav">
     <transition name="has-fade">
-      <ul v-if="userFetchComplete" class="c-side-nav__outer t-size-s">
+      <ul class="c-side-nav__outer t-size-s">
         <li v-if="showHomeLink" class="has-xxs-btm-marg">
           <router-link
             exact
@@ -117,11 +117,6 @@ export default {
     },
 
     showBlastLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    userFetchComplete: {
       type: Boolean,
       required: true,
     },
