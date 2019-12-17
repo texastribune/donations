@@ -21,3 +21,6 @@ yarn-error.log
 # SVG sprite
 /templates/includes/base_icons.html
 **/__pycache__
+.mypy_cache/
+.vscode/
+cov.html
