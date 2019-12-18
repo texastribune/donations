@@ -1,9 +1,7 @@
 <template>
   <user-nav-provider v-slot="slotProps">
     <nav-bar
-      show-home-link
-      show-edit-contact-info-link
-      show-ambassador-link
+      show-user-links
       :show-blast-link="!routeIsFetching && slotProps.showBlastLinks"
       :show-membership-link="!routeIsFetching && slotProps.showMembershipLink"
       :is-logged-in="slotProps.isLoggedIn"

@@ -16,14 +16,14 @@
         </p>
       </div>
 
-      <div class="c-site-footer__col t-size-s">
+      <div v-if="showUserLinks" class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
           Your account
         </h4>
         <ul class="c-site-footer__links has-text-white">
-          <li v-if="showHomeLink">
+          <li>
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -34,7 +34,7 @@
               Account Overview
             </router-link>
           </li>
-          <li v-if="showEditContactInfoLink">
+          <li>
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -67,7 +67,7 @@
               Donation History
             </router-link>
           </li>
-          <li v-if="showAmbassadorLink">
+          <li>
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -180,34 +180,24 @@ export default {
   name: 'SiteFooter',
 
   props: {
-    showHomeLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showEditContactInfoLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showAmbassadorLink: {
+    showUserLinks: {
       type: Boolean,
       required: true,
     },
 
     showBlastLinks: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
     showMembershipLink: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
     showPaymentsLink: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
 

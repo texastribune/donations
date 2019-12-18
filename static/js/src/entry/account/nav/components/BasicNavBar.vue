@@ -1,13 +1,6 @@
 <template>
   <token-user-nav-provider v-slot="slotProps">
-    <nav-bar
-      :show-edit-contact-info-link="false"
-      :show-ambassador-link="false"
-      :show-home-link="false"
-      :show-blast-link="false"
-      :show-membership-link="false"
-      :is-logged-in="slotProps.isLoggedIn"
-    />
+    <nav-bar :show-user-links="false" :is-logged-in="slotProps.isLoggedIn" />
   </token-user-nav-provider>
 </template>
 

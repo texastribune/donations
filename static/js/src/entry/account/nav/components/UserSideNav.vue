@@ -1,9 +1,6 @@
 <template>
   <user-nav-provider v-slot="slotProps">
     <side-nav
-      show-home-link
-      show-edit-contact-info-link
-      show-ambassador-link
       :show-blast-link="!routeIsFetching && slotProps.showBlastLinks"
       :show-membership-link="!routeIsFetching && slotProps.showMembershipLink"
       :show-payments-link="!routeIsFetching && slotProps.showPaymentsLink"

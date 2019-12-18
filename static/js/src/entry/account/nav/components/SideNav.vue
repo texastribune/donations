@@ -2,7 +2,7 @@
   <nav class="c-side-nav">
     <transition name="has-fade">
       <ul class="c-side-nav__outer t-size-s">
-        <li v-if="showHomeLink" class="has-xxs-btm-marg">
+        <li class="has-xxs-btm-marg">
           <router-link
             exact
             class="has-text-black-off has-text-hover-gray"
@@ -16,7 +16,7 @@
             Account Overview
           </router-link>
         </li>
-        <li v-if="showEditContactInfoLink" class="has-xxs-btm-marg">
+        <li class="has-xxs-btm-marg">
           <router-link
             exact
             class="has-text-black-off has-text-hover-gray"
@@ -55,7 +55,7 @@
             Donation History
           </router-link>
         </li>
-        <li v-if="showAmbassadorLink" class="has-xxs-btm-marg">
+        <li class="has-xxs-btm-marg">
           <router-link
             exact
             class="has-text-black-off has-text-hover-gray"
@@ -91,27 +91,12 @@ export default {
   name: 'SideNav',
 
   props: {
-    showHomeLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showEditContactInfoLink: {
-      type: Boolean,
-      required: true,
-    },
-
     showMembershipLink: {
       type: Boolean,
       required: true,
     },
 
     showPaymentsLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showAmbassadorLink: {
       type: Boolean,
       required: true,
     },
