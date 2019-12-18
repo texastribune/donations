@@ -28,6 +28,8 @@ TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
 # configured to use for opportunities on an RDO
 DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 
+logging.getLogger("urllib3").setLevel(logging.DEBUG)
+
 
 class SalesforceException(Exception):
     pass
