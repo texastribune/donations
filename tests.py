@@ -181,6 +181,7 @@ def test__format_opportunity():
     opportunity = Opportunity(sf_connection=sf)
     opportunity.account_id = "0011700000BpR8PAAV"
     opportunity.amount = 9
+    opportunity.net_amount = 8
     opportunity.encouraged_by = "Because I love the Trib!"
     opportunity.name = "D C (dcraigmile+test6@texastribune.org)"
     opportunity.stripe_id = "cus_78MqJSBejMN9gn"
@@ -213,6 +214,7 @@ def test__format_opportunity():
         "Stripe_Card_Expiration__c": None,
         "Stripe_Card_Last_4__c": None,
         "Amazon_Order_Id__c": None,
+        "Net_Amount__c": "8.00",
     }
     assert response == expected
 
