@@ -1,28 +1,19 @@
-<template>
-  <token-user-nav-provider v-slot="slotProps">
-    <slot
-      :show-blast-links="showBlastLinks"
-      :show-membership-link="showMembershipLink"
-      :show-payments-link="showPaymentsLink"
-      :is-logged-in="slotProps.isLoggedIn"
-    ></slot>
-  </token-user-nav-provider>
-</template>
-
 <script>
 /* eslint-disable camelcase */
 
 import userMixin from '../../store/user/mixin';
-import TokenUserNavProvider from './TokenUserNavProvider.vue';
+import tokenUserMixin from '../../store/token-user/mixin';
 
 export default {
   name: 'UserNavProvider',
 
-  components: { TokenUserNavProvider },
-
-  mixins: [userMixin],
+  mixins: [userMixin, tokenUserMixin],
 
   computed: {
+    isLoggedIn() {
+      return !!this.accessToken;
+    },
+
     showBlastLinks() {
       return !!this.user.is_blast_subscriber;
     },
@@ -42,6 +33,22 @@ export default {
 
       return !never_given;
     },
+  },
+
+  render() {
+    const {
+      isLoggedIn,
+      showBlastLinks,
+      showMembershipLink,
+      showPaymentsLink,
+    } = this;
+
+    return this.$scopedSlots.default({
+      isLoggedIn,
+      showBlastLinks,
+      showMembershipLink,
+      showPaymentsLink,
+    });
   },
 };
 </script>

@@ -1,16 +1,13 @@
 <template>
-  <token-user-nav-provider v-slot="slotProps">
-    <site-footer :show-user-links="false" />
-  </token-user-nav-provider>
+  <site-footer :show-user-links="false" />
 </template>
 
 <script>
-import TokenUserNavProvider from '../providers/TokenUserNavProvider.vue';
 import SiteFooter from './SiteFooter.vue';
 
 export default {
   name: 'BasicSiteFooter',
 
-  components: { TokenUserNavProvider, SiteFooter },
+  components: { SiteFooter },
 };
 </script>
