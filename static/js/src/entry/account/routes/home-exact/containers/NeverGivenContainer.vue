@@ -17,7 +17,7 @@ export default {
 
   computed: {
     shouldShow() {
-      return this.user.never_given;
+      return this.user.is_never_given;
     },
   },
 };

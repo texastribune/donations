@@ -1,21 +1,23 @@
 <template>
-  <user-nav-provider v-slot="slotProps">
+  <user-provider
+    v-slot="{ isBlastSubscriber, hasGivenNotCustom, isNeverGiven }"
+  >
     <side-nav
-      :show-blast-link="!routeIsFetching && slotProps.showBlastLinks"
-      :show-membership-link="!routeIsFetching && slotProps.showMembershipLink"
-      :show-payments-link="!routeIsFetching && slotProps.showPaymentsLink"
+      :show-blast-link="!routeIsFetching && isBlastSubscriber"
+      :show-membership-link="!routeIsFetching && hasGivenNotCustom"
+      :show-payments-link="!routeIsFetching && !isNeverGiven"
     />
-  </user-nav-provider>
+  </user-provider>
 </template>
 
 <script>
-import UserNavProvider from '../providers/UserNavProvider.vue';
+import UserProvider from '../../store/user/Provider.vue';
 import SideNav from './SideNav.vue';
 
 export default {
   name: 'UserSideNav',
 
-  components: { UserNavProvider, SideNav },
+  components: { UserProvider, SideNav },
 
   props: {
     routeIsFetching: {

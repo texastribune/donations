@@ -1,22 +1,24 @@
 <template>
-  <user-nav-provider v-slot="slotProps">
+  <user-provider
+    v-slot="{ isBlastSubscriber, hasGivenNotCustom, isNeverGiven }"
+  >
     <site-footer
       show-user-links
-      :show-blast-links="!routeIsFetching && slotProps.showBlastLinks"
-      :show-membership-link="!routeIsFetching && slotProps.showMembershipLink"
-      :show-payments-link="!routeIsFetching && slotProps.showPaymentsLink"
+      :show-blast-links="!routeIsFetching && isBlastSubscriber"
+      :show-membership-link="!routeIsFetching && hasGivenNotCustom"
+      :show-payments-link="!routeIsFetching && !isNeverGiven"
     />
-  </user-nav-provider>
+  </user-provider>
 </template>
 
 <script>
-import UserNavProvider from '../providers/UserNavProvider.vue';
+import UserProvider from '../../store/user/Provider.vue';
 import SiteFooter from './SiteFooter.vue';
 
 export default {
   name: 'UserSiteFooter',
 
-  components: { UserNavProvider, SiteFooter },
+  components: { UserProvider, SiteFooter },
 
   props: {
     routeIsFetching: {
