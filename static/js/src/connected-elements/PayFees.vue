@@ -51,9 +51,19 @@ export default {
       amount = parseFloat(amount.trim());
 
       const total = (amount + 0.3) / (1 - 0.022);
-      const fee = Math.floor((total - amount) * 100) / 100;
+      const amexTotal = amount / (1 - 0.035);
 
-      return `$${fee.toFixed(2)}`;
+      const fee = Math.floor((total - amount) * 100) / 100;
+      const amexFee = Math.floor((amexTotal - amount) * 100) / 100;
+
+      const lowerFee = Math.min(fee, amexFee);
+      const higherFee = Math.max(fee, amexFee);
+
+      if (lowerFee === higherFee) {
+        return `$${lowerFee.toFixed(2)}`;
+      }
+
+      return `between $${lowerFee.toFixed(2)} and $${higherFee.toFixed(2)}`;
     },
 
     installmentPeriod() {
