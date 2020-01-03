@@ -14,6 +14,7 @@ import UserSiteFooter from './nav/components/UserSiteFooter.vue';
 import BasicSiteFooter from './nav/components/BasicSiteFooter.vue';
 import UserNavBar from './nav/components/UserNavBar.vue';
 import BasicNavBar from './nav/components/BasicNavBar.vue';
+import UserInternalNav from './nav/components/UserInternalNav.vue';
 import Icon from './components/Icon.vue';
 import BaseButton from './components/BaseButton.vue';
 import formatCurrency from './utils/format-currency';
@@ -104,6 +105,7 @@ Vue.component('UserSiteFooter', UserSiteFooter);
 Vue.component('BasicSiteFooter', BasicSiteFooter);
 Vue.component('UserNavBar', UserNavBar);
 Vue.component('BasicNavBar', BasicNavBar);
+Vue.component('UserInternalNav', UserInternalNav);
 Vue.component('Icon', Icon);
 Vue.component('BaseButton', BaseButton);
 

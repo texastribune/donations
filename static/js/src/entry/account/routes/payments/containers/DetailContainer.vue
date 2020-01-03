@@ -1,14 +1,5 @@
 <template>
-  <detail
-    :data="data"
-    :is-single-donor="isSingleDonor"
-    :is-recurring-donor="isRecurringDonor"
-    :is-circle-donor="isCircleDonor"
-    :is-custom-donor="isCustomDonor"
-    :is-expired="isExpired"
-    :total-gifts-last-year="totalGiftsLastYear"
-    :greeting="greeting"
-  />
+  <detail :data="data" />
 </template>
 
 <script>
@@ -29,34 +20,6 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isSingleDonor() {
-      return this.user.is_single_donor;
-    },
-
-    isRecurringDonor() {
-      return this.user.is_recurring_donor;
-    },
-
-    isCircleDonor() {
-      return this.user.is_circle_donor;
-    },
-
-    isCustomDonor() {
-      return this.user.is_custom_donor;
-    },
-
-    isExpired() {
-      return this.user.is_expired;
-    },
-
-    totalGiftsLastYear() {
-      return this.user.total_gifts_last_year;
-    },
-
-    greeting() {
-      return this.user.greeting;
-    },
-
     data() {
       const { transactions } = this.user;
       const relevantTransactions = transactions.filter(

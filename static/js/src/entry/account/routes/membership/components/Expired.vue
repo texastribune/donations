@@ -16,56 +16,11 @@
       </info-list>
     </div>
 
-    <ul class="c-link-list t-links-underlined">
-      <li class="has-xs-btm-marg">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <a
-            ga-on="click"
-            :href="isCircleDonor ? circleUrl : donateUrl"
-            :ga-event-category="ga.donations.category"
-            :ga-event-action="ga.donations.actions['membership-intent']"
-            :ga-event-label="ga.donations.labels['renew-membership']"
-          >
-            Renew your membership
-          </a>
-        </span>
-      </li>
-      <li v-if="isSingleDonor" class="has-xs-btm-marg">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <a
-            ga-on="click"
-            :href="donateUrl"
-            :ga-event-category="ga.donations.category"
-            :ga-event-action="ga.donations.actions['membership-intent']"
-            :ga-event-label="ga.donations.labels['upgrade-membership']"
-          >
-            Become a sustaining member
-          </a>
-        </span>
-      </li>
-      <li>
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <router-link
-            ga-on="click"
-            :to="{ name: 'payments' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.inline"
-            :ga-event-label="ga.userPortalNav.labels.payments"
-          >
-            See your donation history
-          </router-link>
-        </span>
-      </li>
-    </ul>
+    <user-internal-nav
+      show-renew-membership
+      show-become-sustaining
+      show-donation-history
+    />
   </section>
 </template>
 

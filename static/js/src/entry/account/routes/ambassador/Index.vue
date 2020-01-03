@@ -22,6 +22,7 @@
         you say: Do we have your endorsement? Tell the rest of Texas why our
         nonpartisan reporting matters to you.
       </p>
+
       <section class="has-xl-btm-marg">
         <h2 class="has-s-btm-marg t-size-b">
           Why do you support The Texas Tribune?
@@ -29,7 +30,8 @@
         <div class="has-xl-btm-marg"><referral-links /></div>
         <referral-form />
       </section>
-      <links />
+
+      <internal-nav />
     </div>
 
     <help ambassador />
@@ -42,12 +44,12 @@ import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../home/components/Help.vue';
 import ReferralLinks from './containers/ReferralLinksContainer.vue';
 import ReferralForm from './containers/ReferralFormContainer.vue';
-import Links from './containers/LinksContainer.vue';
+import InternalNav from './components/InternalNav.vue';
 
 export default {
   name: 'AmbassadorRoute',
 
-  components: { Help, RouteLoader, ReferralLinks, ReferralForm, Links },
+  components: { Help, RouteLoader, ReferralLinks, ReferralForm, InternalNav },
 
   mixins: [routeMixin],
 

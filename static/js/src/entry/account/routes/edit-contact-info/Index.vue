@@ -17,7 +17,8 @@
         <div class="has-xxl-btm-marg">
           <edit-form @setShowModal="setShowModal" />
         </div>
-        <links />
+
+        <internal-nav />
       </div>
     </div>
 
@@ -31,16 +32,16 @@
 import routeMixin from '../mixin';
 import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Links from './containers/LinksContainer.vue';
 import EditForm from './containers/EditFormContainer.vue';
 import ConfirmModal from './components/ConfirmModal.vue';
+import InternalNav from './components/InternalNav.vue';
 
 export default {
   name: 'EditContactInfoRoute',
 
   components: {
     RouteLoader,
-    Links,
+    InternalNav,
     EditForm,
     ConfirmModal,
     Help,

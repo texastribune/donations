@@ -1,48 +1,5 @@
 <template>
-  <section class="c-detail-box c-detail-box--from-l">
-    <div class="has-xxxl-btm-marg">
-      <payment-list
-        :payments="data"
-        show-receipts
-        @buildReceipt="buildReceipt"
-      />
-    </div>
-
-    <ul class="c-link-list t-links-underlined">
-      <li v-if="isCancelled" class="has-xs-btm-marg">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <a
-            href="/blastform"
-            ga-on="click"
-            :ga-event-category="ga.blastIntent.category"
-            :ga-event-action="ga.blastIntent.actions['renew-blast']"
-            :ga-event-label="ga.blastIntent.labels['user-portal']"
-          >
-            Renew your subscription to The Blast
-          </a>
-        </span>
-      </li>
-      <li>
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <router-link
-            ga-on="click"
-            :to="{ name: 'blast' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.inline"
-            :ga-event-label="ga.userPortalNav.labels.blast"
-          >
-            More about your subscription
-          </router-link>
-        </span>
-      </li>
-    </ul>
-  </section>
+  <payment-list :payments="data" show-receipts @buildReceipt="buildReceipt" />
 </template>
 
 <script>

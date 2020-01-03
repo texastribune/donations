@@ -21,7 +21,12 @@ export default {
   },
 
   render() {
-    return this.$scopedSlots.default(this.camelCasedTokenUser);
+    const { camelCasedTokenUser, accessToken } = this;
+
+    return this.$scopedSlots.default({
+      ...camelCasedTokenUser,
+      accessToken,
+    });
   },
 };
 </script>

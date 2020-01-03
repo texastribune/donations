@@ -12,7 +12,13 @@
       The Blast Newsletter
     </h1>
 
-    <div class="has-ump-side-padding has-xl-btm-marg"><detail /></div>
+    <div class="has-ump-side-padding has-xl-btm-marg">
+      <section class="c-detail-box c-detail-box--from-l">
+        <div class="has-xxxl-btm-marg"><detail /></div>
+
+        <internal-nav />
+      </section>
+    </div>
 
     <help blast />
   </div>
@@ -26,12 +32,13 @@ import userMixin from '../../store/user/mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Help from '../home/components/Help.vue';
 import Detail from './containers/DetailContainer.vue';
+import InternalNav from './components/InternalNav.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastRoute',
 
-  components: { Help, Detail, RouteLoader },
+  components: { Help, Detail, RouteLoader, InternalNav },
 
   mixins: [routeMixin, userMixin],
 
