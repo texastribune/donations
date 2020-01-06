@@ -40,7 +40,7 @@ export default {
 
   computed: {
     shouldShow() {
-      return !!this.accessToken;
+      return this.isLoggedIn;
     },
   },
 

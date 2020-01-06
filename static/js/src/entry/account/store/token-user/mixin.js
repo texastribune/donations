@@ -1,13 +1,14 @@
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   computed: {
     ...mapState('tokenUser', {
       tokenUser: 'details',
-      accessToken: 'accessToken',
       canViewAs: 'canViewAs',
       isVerified: 'isVerified',
       tokenUserError: 'error',
     }),
+
+    ...mapGetters('tokenUser', ['isLoggedIn']),
   },
 };

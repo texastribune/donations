@@ -18,6 +18,52 @@
         >
           <slot name="items"></slot>
 
+          <internal-nav-item v-if="isNeverGiven && showJoinNow">
+            <a
+              ga-on="click"
+              :href="donateUrl"
+              :ga-event-category="ga.donations.category"
+              :ga-event-action="ga.donations.actions['membership-intent']"
+              :ga-event-label="ga.donations.labels['never-given']"
+            >
+              Learn more and join now
+            </a>
+          </internal-nav-item>
+          <internal-nav-item
+            v-if="hasGivenNotCustom && isExpired && showRenewMembership"
+          >
+            <a
+              ga-on="click"
+              :href="isCircleDonor ? circleUrl : donateUrl"
+              :ga-event-category="ga.donations.category"
+              :ga-event-action="ga.donations.actions['membership-intent']"
+              :ga-event-label="ga.donations.labels['renew-membership']"
+            >
+              Renew your membership
+            </a>
+          </internal-nav-item>
+          <internal-nav-item v-if="isFormerBlastSubscriber && showRenewBlast">
+            <a
+              ga-on="click"
+              href="/blastform"
+              :ga-event-category="ga.blastIntent.category"
+              :ga-event-action="ga.blastIntent.actions['renew-blast']"
+              :ga-event-label="ga.blastIntent.labels['user-portal']"
+            >
+              Renew your subscription to The Blast
+            </a>
+          </internal-nav-item>
+          <internal-nav-item v-if="isSingleDonor && showBecomeSustaining">
+            <a
+              ga-on="click"
+              :href="donateUrl"
+              :ga-event-category="ga.donations.category"
+              :ga-event-action="ga.donations.actions['membership-intent']"
+              :ga-event-label="ga.donations.labels['upgrade-membership']"
+            >
+              Become a sustaining member
+            </a>
+          </internal-nav-item>
           <internal-nav-item
             v-if="showResetPw && !pwResetSuccess && !pwResetFailure"
           >
@@ -68,52 +114,6 @@
             >
               See your payment history
             </router-link>
-          </internal-nav-item>
-          <internal-nav-item v-if="isSingleDonor && showBecomeSustaining">
-            <a
-              ga-on="click"
-              :href="donateUrl"
-              :ga-event-category="ga.donations.category"
-              :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['upgrade-membership']"
-            >
-              Become a sustaining member
-            </a>
-          </internal-nav-item>
-          <internal-nav-item v-if="isNeverGiven && showJoinNow">
-            <a
-              ga-on="click"
-              :href="donateUrl"
-              :ga-event-category="ga.donations.category"
-              :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['never-given']"
-            >
-              Learn more and join now
-            </a>
-          </internal-nav-item>
-          <internal-nav-item
-            v-if="hasGivenNotCustom && isExpired && showRenewMembership"
-          >
-            <a
-              ga-on="click"
-              :href="isCircleDonor ? circleUrl : donateUrl"
-              :ga-event-category="ga.donations.category"
-              :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['renew-membership']"
-            >
-              Renew your membership
-            </a>
-          </internal-nav-item>
-          <internal-nav-item v-if="isFormerBlastSubscriber && showRenewBlast">
-            <a
-              ga-on="click"
-              href="/blastform"
-              :ga-event-category="ga.blastIntent.category"
-              :ga-event-action="ga.blastIntent.actions['renew-blast']"
-              :ga-event-label="ga.blastIntent.labels['user-portal']"
-            >
-              Renew your subscription to The Blast
-            </a>
           </internal-nav-item>
           <internal-nav-item v-if="showEditProfile">
             <router-link

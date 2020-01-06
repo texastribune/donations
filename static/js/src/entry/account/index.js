@@ -129,8 +129,8 @@ axios.interceptors.request.use(
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch('tokenUser/getTokenUser');
-    const { accessToken } = store.state.tokenUser;
-    if (accessToken) refreshToken();
+    const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
+    if (isLoggedIn) refreshToken();
   }, 15 * 60 * 1000); // 15 minutes
 }
 
@@ -141,19 +141,18 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     routes,
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
+  const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
 
-  if (store.state.tokenUser.accessToken) {
+  if (isLoggedIn) {
     refreshToken();
   }
 
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setIsFetching', true);
 
-    const {
-      accessToken,
-      isVerified,
-      error: tokenUserError,
-    } = store.state.tokenUser;
+    const { isVerified, error: tokenUserError } = store.state.tokenUser;
+    // eslint-disable-next-line no-shadow
+    const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
 
     if (to.meta.isProtected) {
       if (tokenUserError) {
@@ -162,7 +161,7 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
         return next();
       }
 
-      if (!accessToken) {
+      if (!isLoggedIn) {
         return logIn();
       }
 

@@ -1,6 +1,6 @@
 <template>
-  <token-user-provider v-slot="{ accessToken }">
-    <nav-bar :show-user-links="false" :is-logged-in="!!accessToken" />
+  <token-user-provider v-slot="{ isLoggedIn }">
+    <nav-bar :show-user-links="false" :is-logged-in="isLoggedIn" />
   </token-user-provider>
 </template>
 
@@ -11,7 +11,7 @@ import NavBar from './NavBar.vue';
 export default {
   name: 'BasicNavBar',
 
-  components: { NavBar },
+  components: { NavBar, TokenUserProvider },
 
   mixins: [TokenUserProvider],
 };

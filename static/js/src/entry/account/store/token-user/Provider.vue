@@ -21,11 +21,11 @@ export default {
   },
 
   render() {
-    const { camelCasedTokenUser, accessToken } = this;
+    const { camelCasedTokenUser, isLoggedIn } = this;
 
     return this.$scopedSlots.default({
       ...camelCasedTokenUser,
-      accessToken,
+      isLoggedIn,
     });
   },
 };

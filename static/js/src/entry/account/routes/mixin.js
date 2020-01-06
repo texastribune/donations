@@ -57,13 +57,13 @@ export default {
   },
 
   watch: {
-    // watch the value of accessToken as we refresh
+    // watch the value of isLoggedIn as we refresh
     // it every 15 minutes
-    accessToken(newToken, oldToken) {
+    isLoggedIn(newIsLoggedIn, oldIsLoggedIn) {
       const { tokenUserError } = this;
       const { isProtected } = this.$route.meta;
 
-      if (isProtected && oldToken && !newToken) {
+      if (isProtected && oldIsLoggedIn && !newIsLoggedIn) {
         if (tokenUserError) {
           // Auth0 error encountered and user is on a
           // log-in-required route; show error page

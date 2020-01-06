@@ -1,11 +1,11 @@
 <template>
-  <token-user-provider v-slot="{ accessToken }">
+  <token-user-provider v-slot="{ isLoggedIn }">
     <user-provider v-slot="{ isBlastSubscriber, hasGivenNotCustom }">
       <nav-bar
         show-user-links
         :show-blast-link="!routeIsFetching && isBlastSubscriber"
         :show-membership-link="!routeIsFetching && hasGivenNotCustom"
-        :is-logged-in="!!accessToken"
+        :is-logged-in="isLoggedIn"
       />
     </user-provider>
   </token-user-provider>

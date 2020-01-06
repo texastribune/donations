@@ -8,11 +8,8 @@
 </template>
 
 <script>
-// ordering
 // differing text
-// !!accessToken
 // component names
-// maybe: internal --> inline
 // check summary-box--from-l
 // removal of props
 

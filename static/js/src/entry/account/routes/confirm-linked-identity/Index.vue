@@ -67,7 +67,7 @@ export default {
 
     // eslint-disable-next-line consistent-return
     fetchData() {
-      if (this.accessToken) return this.getUser();
+      if (this.isLoggedIn) return this.getUser();
     },
   },
 };
