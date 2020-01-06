@@ -1,5 +1,5 @@
 <template>
-  <li class="has-m-btm-marg">
+  <li class="c-link-list__item">
     <span class="c-link-list__arrow has-text-teal">
       <strong>&rarr;</strong>
     </span>
@@ -8,7 +8,6 @@
 </template>
 
 <script>
-// bottom margin
 // ordering
 // differing text
 // !!accessToken
