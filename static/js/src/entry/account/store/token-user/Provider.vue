@@ -1,6 +1,4 @@
 <script>
-import camelCase from 'camelcase';
-
 import tokenUserMixin from './mixin';
 
 export default {
@@ -8,25 +6,10 @@ export default {
 
   mixins: [tokenUserMixin],
 
-  computed: {
-    camelCasedTokenUser() {
-      const formatted = {};
-
-      Object.keys(this.tokenUser).forEach(key => {
-        formatted[camelCase(key)] = this.tokenUser[key];
-      });
-
-      return formatted;
-    },
-  },
-
   render() {
-    const { camelCasedTokenUser, isLoggedIn } = this;
+    const { isLoggedIn } = this;
 
-    return this.$scopedSlots.default({
-      ...camelCasedTokenUser,
-      isLoggedIn,
-    });
+    return this.$scopedSlots.default({ isLoggedIn });
   },
 };
 </script>
