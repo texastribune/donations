@@ -109,7 +109,7 @@
     "static/js/src/entry/account/routes/home-exact/containers",
     "static/js/src/entry/account/routes/membership/containers",
     "static/js/src/entry/account/routes/home/Index.vue",
-    "static/js/src/entry/account/routes/payments/components/Detail.vue",
+    "static/js/src/entry/account/routes/payments/components/TaxReceipt.vue",
     "static/js/src/entry/account/routes/blast-payments/components/Detail.vue",
     "static/js/src/entry/account/routes/index.js"
   ],

@@ -10,12 +10,12 @@
 <script>
 // bottom margin
 // ordering
+// differing text
 // !!accessToken
 // component names
 // maybe: internal --> inline
 // check summary-box--from-l
 // removal of props
-// tax receipt
 
 export default {
   name: 'InternalNavItem',
