@@ -24,26 +24,11 @@
         >.
       </p>
     </template>
+
     <template v-slot:links>
-      <ul class="c-link-list">
-        <li>
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'blast-payments' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels['blast-payments']"
-            >
-              See your payment history
-            </router-link>
-          </span>
-        </li>
-      </ul>
+      <user-internal-nav show-blast-payments />
     </template>
+
     <template v-if="nextTransaction.last4" v-slot:bottom>
       <p class="has-text-gray-dark t-links-underlined">
         Need to make a change? Contact us at

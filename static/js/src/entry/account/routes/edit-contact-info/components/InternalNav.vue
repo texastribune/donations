@@ -1,9 +1,9 @@
 <template>
   <user-internal-nav
-    show-reset-password
+    show-reset-pw
     show-membership-status
     show-blast-subscription
-    :password-reset-ga-label="ga.userPortal.labels['edit-contact-info']"
+    :pw-reset-ga-label="ga.userPortal.labels['edit-contact-info']"
   />
 </template>
 

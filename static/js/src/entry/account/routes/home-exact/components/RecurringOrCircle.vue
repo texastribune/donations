@@ -17,58 +17,15 @@
         >.
       </p>
     </template>
+
     <template v-slot:links>
-      <ul class="c-link-list">
-        <li class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'payments' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.payments"
-            >
-              See your donation history
-            </router-link>
-          </span>
-        </li>
-        <li class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'membership' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.membership"
-            >
-              More about your membership
-            </router-link>
-          </span>
-        </li>
-        <li>
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'ambassador' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.ambassador"
-            >
-              Become a Tribune Ambassador
-            </router-link>
-          </span>
-        </li>
-      </ul>
+      <user-internal-nav
+        show-donation-history
+        show-membership-status
+        show-ambassador
+      />
     </template>
+
     <template v-slot:bottom>
       <p class="has-text-gray-dark t-links-underlined">
         To update your membership, contact us at

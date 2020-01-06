@@ -1,11 +1,5 @@
 <template>
-  <profile-settings
-    :pw-reset-success="pwResetSuccess"
-    :pw-reset-failure="pwResetFailure"
-    :contact-info="contactInfo"
-    :is-staff="isStaff"
-    @resetPassword="resetPassword"
-  />
+  <profile-settings :contact-info="contactInfo" />
 </template>
 
 <script>
@@ -16,7 +10,6 @@ import { mapState } from 'vuex';
 import ProfileSettings from '../components/ProfileSettings.vue';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import userMixin from '../../../store/user/mixin';
-import { resetPassword } from '../../../utils/auth-actions';
 
 export default {
   name: 'SummmaryProfileSettingsContainer',
@@ -25,19 +18,8 @@ export default {
 
   mixins: [tokenUserMixin, userMixin],
 
-  data() {
-    return {
-      pwResetSuccess: false,
-      pwResetFailure: false,
-    };
-  },
-
   computed: {
     ...mapState('context', ['isViewingAs']),
-
-    isStaff() {
-      return this.tokenUser['https://texastribune.org/is_staff'];
-    },
 
     contactInfo() {
       let email;
@@ -67,20 +49,6 @@ export default {
       }
 
       return contactInfo;
-    },
-  },
-
-  methods: {
-    resetPassword() {
-      const { email } = this.tokenUser;
-
-      resetPassword(email, err => {
-        if (err) {
-          this.pwResetFailure = true;
-        } else {
-          this.pwResetSuccess = true;
-        }
-      });
     },
   },
 };

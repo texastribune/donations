@@ -1,8 +1,5 @@
 <template>
-  <reset-password-provider
-    ref="resetPasswordProvider"
-    v-slot="{ pwResetSuccess, pwResetFailure }"
-  >
+  <reset-password-provider v-slot="{ pwResetSuccess, pwResetFailure, pwReset }">
     <user-provider
       v-slot="{
         isNeverGiven,
@@ -15,13 +12,16 @@
       }"
     >
       <div>
-        <internal-nav>
+        <ul
+          :class="(pwResetSuccess || pwResetFailure) && 'has-m-btm-marg'"
+          class="c-link-list t-links-underlined"
+        >
           <slot name="items"></slot>
 
           <internal-nav-item
-            v-if="showResetPassword && !pwResetSuccess && !pwResetFailure"
+            v-if="showResetPw && !pwResetSuccess && !pwResetFailure"
           >
-            <button class="c-link-button" @click="resetPassword">
+            <button class="c-link-button" @click="pwReset(pwResetGaLabel)">
               Reset your password
             </button>
           </internal-nav-item>
@@ -137,7 +137,7 @@
               Become a Tribune Ambassador
             </router-link>
           </internal-nav-item>
-        </internal-nav>
+        </ul>
 
         <p v-if="pwResetSuccess" class="t-size-xs has-text-gray">
           Check your inbox for an email from The Texas Tribune with the subject
@@ -158,7 +158,6 @@
 <script>
 import UserProvider from '../../store/user/Provider.vue';
 import ResetPasswordProvider from '../../providers/ResetPasswordProvider.vue';
-import InternalNav from './InternalNav.vue';
 import InternalNavItem from './InternalNavItem.vue';
 
 export default {
@@ -167,7 +166,6 @@ export default {
   components: {
     UserProvider,
     ResetPasswordProvider,
-    InternalNav,
     InternalNavItem,
   },
 
@@ -222,27 +220,14 @@ export default {
       default: false,
     },
 
-    showResetPassword: {
+    showResetPw: {
       type: Boolean,
       default: false,
     },
 
-    passwordResetGaLabel: {
+    pwResetGaLabel: {
       type: String,
       default: '',
-    },
-  },
-
-  methods: {
-    resetPassword() {
-      this.$refs.resetPasswordProvider.resetPassword();
-
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['reset-password'],
-        gaLabel: this.passwordResetGaLabel,
-      });
     },
   },
 };

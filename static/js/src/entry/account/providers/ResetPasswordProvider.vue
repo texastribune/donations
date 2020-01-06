@@ -15,7 +15,7 @@ export default {
   },
 
   methods: {
-    resetPassword() {
+    pwReset(gaLabel) {
       const { email } = this.tokenUser;
 
       resetPassword(email, err => {
@@ -23,15 +23,26 @@ export default {
           this.pwResetFailure = true;
         } else {
           this.pwResetSuccess = true;
+
+          window.dataLayer.push({
+            event: this.ga.customEventName,
+            gaCategory: this.ga.userPortal.category,
+            gaAction: this.ga.userPortal.actions['reset-password'],
+            gaLabel,
+          });
         }
       });
     },
   },
 
   render() {
-    const { pwResetSuccess, pwResetFailure } = this;
+    const { pwResetSuccess, pwResetFailure, pwReset } = this;
 
-    return this.$scopedSlots.default({ pwResetSuccess, pwResetFailure });
+    return this.$scopedSlots.default({
+      pwResetSuccess,
+      pwResetFailure,
+      pwReset,
+    });
   },
 };
 </script>
