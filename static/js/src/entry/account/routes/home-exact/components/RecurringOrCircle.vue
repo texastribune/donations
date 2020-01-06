@@ -23,7 +23,11 @@
         show-donation-history
         show-membership-status
         show-ambassador
-      />
+      >
+        <template v-slot:membership-text>
+          More about your membership
+        </template>
+      </user-internal-nav>
     </template>
 
     <template v-slot:bottom>

@@ -26,7 +26,11 @@
         show-membership-status
         show-become-sustaining
         show-ambassador
-      />
+      >
+        <template v-slot:membership-text>
+          More about your membership
+        </template>
+      </user-internal-nav>
     </template>
   </summary-box>
 </template>

@@ -29,7 +29,11 @@
         show-donation-history
         show-membership-status
         show-renew-membership
-      />
+      >
+        <template v-slot:membership-text>
+          More about your membership
+        </template>
+      </user-internal-nav>
     </template>
   </summary-box>
 </template>

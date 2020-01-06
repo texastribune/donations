@@ -8,11 +8,6 @@
 </template>
 
 <script>
-// differing text
-// component names
-// check summary-box--from-l
-// removal of props
-
 export default {
   name: 'InternalNavItem',
 };

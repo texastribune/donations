@@ -15,11 +15,6 @@ export default {
       type: Array,
       required: true,
     },
-
-    isCancelled: {
-      type: Boolean,
-      required: true,
-    },
   },
 };
 </script>

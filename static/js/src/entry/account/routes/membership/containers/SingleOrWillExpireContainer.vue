@@ -1,10 +1,6 @@
 <template>
   <transition name="has-fade">
-    <single-or-will-expire
-      v-if="shouldShow"
-      :data="data"
-      :is-single-donor="isSingleDonor"
-    />
+    <single-or-will-expire v-if="shouldShow" :data="data" />
   </transition>
 </template>
 
@@ -40,10 +36,6 @@ export default {
         (is_single_donor && !is_expired) ||
         ((is_recurring_donor || is_circle_donor) && will_expire)
       );
-    },
-
-    isSingleDonor() {
-      return this.user.is_single_donor;
     },
 
     data() {

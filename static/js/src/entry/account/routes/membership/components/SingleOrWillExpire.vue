@@ -19,11 +19,6 @@ export default {
       type: Array,
       required: true,
     },
-
-    isSingleDonor: {
-      type: Boolean,
-      required: true,
-    },
   },
 };
 </script>
