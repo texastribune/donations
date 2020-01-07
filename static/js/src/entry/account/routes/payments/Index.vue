@@ -13,7 +13,7 @@
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
-      <section class="c-detail-box">
+      <section class="c-detail-box has-xxl-btm-marg">
         <div class="has-xxxl-btm-marg"><detail /></div>
 
         <internal-nav />
