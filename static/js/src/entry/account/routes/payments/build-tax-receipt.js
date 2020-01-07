@@ -37,8 +37,7 @@ export default async function buildTaxReceipt({
     [
       '919 Congress Avenue, Sixth Floor',
       'Austin, TX 78701',
-      'P: 512-716-8600',
-      'F: 512-716-8601',
+      'P: 512-716-8695',
       'www.texastribune.org',
     ],
     425,
