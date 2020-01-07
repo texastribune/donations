@@ -6,7 +6,7 @@ import formatCurrency from '../../utils/format-currency';
 
 export default async function buildTaxReceipt({
   lastYear,
-  totalGiftsLastYear,
+  receiptAmount,
   greeting,
 }) {
   // eslint-disable-next-line new-cap
@@ -37,8 +37,7 @@ export default async function buildTaxReceipt({
     [
       '919 Congress Avenue, Sixth Floor',
       'Austin, TX 78701',
-      'P: 512-716-8600',
-      'F: 512-716-8601',
+      'P: 512-716-8695',
       'www.texastribune.org',
     ],
     425,
@@ -67,7 +66,7 @@ export default async function buildTaxReceipt({
     doc.setFontStyle('bold');
     doc.text('Total donation amount', leftEdge, 327);
     doc.setFontStyle('normal');
-    doc.text(formatCurrency(totalGiftsLastYear), leftEdge, 340);
+    doc.text(formatCurrency(receiptAmount), leftEdge, 340);
 
     doc.text(
       "Thanks so much. We couldn't do this work without you!",
@@ -95,7 +94,7 @@ export default async function buildTaxReceipt({
     doc.setFontStyle('bold');
     doc.text('Total donation amount', leftEdge, 290);
     doc.setFontStyle('normal');
-    doc.text(formatCurrency(totalGiftsLastYear), leftEdge, 302);
+    doc.text(formatCurrency(receiptAmount), leftEdge, 302);
 
     doc.text(
       "Thanks so much. We couldn't do this work without you!",

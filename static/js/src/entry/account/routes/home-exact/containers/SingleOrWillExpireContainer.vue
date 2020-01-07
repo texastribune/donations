@@ -3,7 +3,6 @@
     <single-or-will-expire
       v-if="shouldShow"
       :last-transaction="lastTransaction"
-      :is-single-donor="isSingleDonor"
       :membership-expiration-date="membershipExpirationDate"
     />
   </transition>
@@ -39,10 +38,6 @@ export default {
         (is_single_donor && !is_expired) ||
         ((is_recurring_donor || is_circle_donor) && will_expire)
       );
-    },
-
-    isSingleDonor() {
-      return this.user.is_single_donor;
     },
 
     membershipExpirationDate() {

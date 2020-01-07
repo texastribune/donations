@@ -1,22 +1,12 @@
 <template>
   <div>
-    <routes-nav-bar />
+    <user-nav-bar :route-is-fetching="routeIsFetching" />
 
     <main class="has-bg-white-off">
       <div class="l-ump-container l-align-center-x">
         <div class="l-ump-grid">
           <div class="l-ump-grid__side is-hidden-until-bp-l">
-            <user-nav-container v-slot="slotProps">
-              <side-nav
-                show-home-link
-                show-edit-contact-info-link
-                show-ambassador-link
-                :user-fetch-complete="slotProps.userFetchComplete"
-                :show-blast-link="slotProps.showBlastLinks"
-                :show-membership-link="slotProps.showMembershipLink"
-                :show-payments-link="slotProps.showPaymentsLink"
-              />
-            </user-nav-container>
+            <user-side-nav :route-is-fetching="routeIsFetching" />
           </div>
           <div class="l-ump-grid__content has-bg-white">
             <router-view :parent-route-is-fetching="routeIsFetching" />
@@ -25,7 +15,7 @@
       </div>
     </main>
 
-    <routes-site-footer />
+    <user-site-footer :route-is-fetching="routeIsFetching" />
 
     <view-as />
   </div>
@@ -34,8 +24,7 @@
 <script>
 import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
-import UserNavContainer from '../../nav/containers/UserNavContainer.vue';
-import SideNav from './components/SideNav.vue';
+import UserSideNav from '../../nav/components/UserSideNav.vue';
 
 const ViewAs = () =>
   import(/* webpackChunkName: "view-as" */ './containers/ViewAsContainer.vue');
@@ -43,7 +32,7 @@ const ViewAs = () =>
 export default {
   name: 'HomeRoute',
 
-  components: { UserNavContainer, SideNav, ViewAs },
+  components: { UserSideNav, ViewAs },
 
   mixins: [routeMixin, userMixin],
 

@@ -10,10 +10,11 @@ import axios from 'axios';
 import routes from './routes'; // eslint-disable-line
 import store from './store';
 import App from './App.vue';
-import RoutesSiteFooter from './nav/components/RoutesSiteFooter.vue';
-import NoRoutesSiteFooter from './nav/components/NoRoutesSiteFooter.vue';
-import RoutesNavBar from './nav/components/RoutesNavBar.vue';
-import NoRoutesNavBar from './nav/components/NoRoutesNavBar.vue';
+import UserSiteFooter from './nav/components/UserSiteFooter.vue';
+import BasicSiteFooter from './nav/components/BasicSiteFooter.vue';
+import UserNavBar from './nav/components/UserNavBar.vue';
+import BasicNavBar from './nav/components/BasicNavBar.vue';
+import UserInternalNav from './nav/components/UserInternalNav.vue';
 import Icon from './components/Icon.vue';
 import BaseButton from './components/BaseButton.vue';
 import formatCurrency from './utils/format-currency';
@@ -21,7 +22,7 @@ import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
 import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
-import { UnverifiedError, AxiosNetworkError } from './errors';
+import { UnverifiedError, AxiosError } from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -100,10 +101,11 @@ Vue.mixin({
   },
 });
 
-Vue.component('RoutesSiteFooter', RoutesSiteFooter);
-Vue.component('NoRoutesSiteFooter', NoRoutesSiteFooter);
-Vue.component('RoutesNavBar', RoutesNavBar);
-Vue.component('NoRoutesNavBar', NoRoutesNavBar);
+Vue.component('UserSiteFooter', UserSiteFooter);
+Vue.component('BasicSiteFooter', BasicSiteFooter);
+Vue.component('UserNavBar', UserNavBar);
+Vue.component('BasicNavBar', BasicNavBar);
+Vue.component('UserInternalNav', UserInternalNav);
 Vue.component('Icon', Icon);
 Vue.component('BaseButton', BaseButton);
 
@@ -113,22 +115,12 @@ Vue.filter('longDate', formatLongDate);
 
 axios.interceptors.response.use(
   response => response,
-  error => {
-    if (error.request && !error.response) {
-      logError(new AxiosNetworkError(error.request));
-    }
-
-    return Promise.reject(error);
-  }
+  error => Promise.reject(new AxiosError(error))
 );
 
 axios.interceptors.request.use(
   config => config,
-  error => {
-    logError(new Error('Axios request error'));
-
-    return Promise.reject(error);
-  }
+  error => Promise.reject(new AxiosError(error))
 );
 
 // we refresh at a 15-minute interval instead of when
@@ -137,8 +129,8 @@ axios.interceptors.request.use(
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch('tokenUser/getTokenUser');
-    const { accessToken } = store.state.tokenUser;
-    if (accessToken) refreshToken();
+    const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
+    if (isLoggedIn) refreshToken();
   }, 15 * 60 * 1000); // 15 minutes
 }
 
@@ -149,19 +141,18 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     routes,
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
+  const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
 
-  if (store.state.tokenUser.accessToken) {
+  if (isLoggedIn) {
     refreshToken();
   }
 
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setIsFetching', true);
 
-    const {
-      accessToken,
-      isVerified,
-      error: tokenUserError,
-    } = store.state.tokenUser;
+    const { isVerified, error: tokenUserError } = store.state.tokenUser;
+    // eslint-disable-next-line no-shadow
+    const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
 
     if (to.meta.isProtected) {
       if (tokenUserError) {
@@ -170,7 +161,7 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
         return next();
       }
 
-      if (!accessToken) {
+      if (!isLoggedIn) {
         return logIn();
       }
 

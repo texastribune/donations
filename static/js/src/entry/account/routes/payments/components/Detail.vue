@@ -1,10 +1,8 @@
 <template>
-  <section class="c-detail-box">
+  <div>
     <div class="has-xxl-btm-marg"><payment-list :payments="data" /></div>
 
-    <p
-      class="t-size-xs t-links-underlined has-text-gray-dark has-xxxl-btm-marg"
-    >
+    <p class="t-size-xs t-links-underlined has-text-gray-dark">
       Note: Donation history does not include event sponsorships or ticket
       purchases. To receive a {{ lastYear }} tax receipt with this information,
       please contact
@@ -17,71 +15,7 @@
         >community@texastribune.org</a
       >.
     </p>
-
-    <ul class="c-link-list t-links-underlined">
-      <li v-if="totalGiftsLastYear > 0" class="has-m-btm-marg">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <button class="c-link-button" @click="buildReceipt">
-            Download your {{ lastYear }} tax receipt
-          </button>
-        </span>
-      </li>
-      <li
-        v-if="(isRecurringDonor || isSingleDonor || isCircleDonor) && isExpired"
-        class="has-m-btm-marg"
-      >
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <a
-            :href="isCircleDonor ? circleUrl : donateUrl"
-            ga-on="click"
-            :ga-event-category="ga.donations.category"
-            :ga-event-action="ga.donations.actions['membership-intent']"
-            :ga-event-label="ga.donations.labels['renew-membership']"
-          >
-            Renew your membership
-          </a>
-        </span>
-      </li>
-      <li v-else-if="isSingleDonor" class="has-m-btm-marg">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <a
-            ga-on="click"
-            :href="donateUrl"
-            :ga-event-category="ga.donations.category"
-            :ga-event-action="ga.donations.actions['membership-intent']"
-            :ga-event-label="ga.donations.labels['upgrade-membership']"
-          >
-            Become a sustaining member
-          </a>
-        </span>
-      </li>
-      <li v-if="isRecurringDonor || isSingleDonor || isCircleDonor">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <router-link
-            ga-on="click"
-            :to="{ name: 'membership' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.inline"
-            :ga-event-label="ga.userPortalNav.labels.membership"
-          >
-            See your membership status
-          </router-link>
-        </span>
-      </li>
-    </ul>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -99,68 +33,11 @@ export default {
       type: Array,
       required: true,
     },
-
-    isSingleDonor: {
-      type: Boolean,
-      required: true,
-    },
-
-    isRecurringDonor: {
-      type: Boolean,
-      required: true,
-    },
-
-    isCircleDonor: {
-      type: Boolean,
-      required: true,
-    },
-
-    isCustomDonor: {
-      type: Boolean,
-      required: true,
-    },
-
-    isExpired: {
-      validator: value => typeof value === 'boolean' || value === null,
-      required: true,
-    },
-
-    totalGiftsLastYear: {
-      type: Number,
-      required: true,
-    },
-
-    greeting: {
-      type: String,
-      required: true,
-    },
   },
 
   computed: {
     lastYear() {
       return getYear(new Date()) - 1;
-    },
-  },
-
-  methods: {
-    async buildReceipt() {
-      try {
-        const buildTaxReceipt = await import(/* webpackChunkName: 'build-tax-receipt' */ '../build-tax-receipt');
-        const { lastYear, totalGiftsLastYear, greeting } = this;
-
-        await buildTaxReceipt.default({
-          lastYear,
-          totalGiftsLastYear,
-          greeting,
-        });
-      } finally {
-        window.dataLayer.push({
-          event: this.ga.customEventName,
-          gaCategory: this.ga.userPortal.category,
-          gaAction: this.ga.userPortal.actions['tax-receipt'],
-          gaLabel: this.ga.userPortal.labels.payments,
-        });
-      }
     },
   },
 };

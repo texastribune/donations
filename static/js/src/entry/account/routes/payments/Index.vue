@@ -13,7 +13,11 @@
     </h1>
 
     <div class="has-ump-side-padding has-xxl-btm-marg">
-      <div class="has-xxl-btm-marg"><detail /></div>
+      <section class="c-detail-box">
+        <div class="has-xxxl-btm-marg"><detail /></div>
+
+        <internal-nav />
+      </section>
 
       <div class="has-xxl-btm-marg"><circle-appeal /></div>
 
@@ -24,7 +28,9 @@
       </div>
     </div>
 
-    <appeal /> <help payments />
+    <appeal />
+
+    <help payments />
   </div>
 </template>
 
@@ -41,6 +47,7 @@ import CreditCardMessage from '../home/components/CreditCardMessage.vue';
 import LinkEmail from '../home/components/LinkEmail.vue';
 import Help from '../home/components/Help.vue';
 import Detail from './containers/DetailContainer.vue';
+import InternalNav from './components/InternalNav.vue';
 import { InvalidRouteError } from '../../errors';
 
 export default {
@@ -52,6 +59,7 @@ export default {
     CircleAppeal,
     CustomAppeal,
     Detail,
+    InternalNav,
     CreditCardMessage,
     Help,
     RouteLoader,
@@ -65,8 +73,8 @@ export default {
 
   methods: {
     async fetchData() {
-      const { never_given } = this.user;
-      const meetsCriteria = !never_given;
+      const { is_never_given } = this.user;
+      const meetsCriteria = !is_never_given;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

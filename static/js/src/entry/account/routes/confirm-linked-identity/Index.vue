@@ -1,6 +1,6 @@
 <template>
   <div>
-    <no-routes-nav-bar />
+    <basic-nav-bar />
     <main class="l-minimal has-bg-white-off has-xl-padding">
       <route-loader v-if="routeIsFetching" />
       <div v-else class="l-minimal__content">
@@ -17,7 +17,7 @@
         />
       </div>
     </main>
-    <no-routes-site-footer />
+    <basic-site-footer />
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
 
     // eslint-disable-next-line consistent-return
     fetchData() {
-      if (this.accessToken) return this.getUser();
+      if (this.isLoggedIn) return this.getUser();
     },
   },
 };

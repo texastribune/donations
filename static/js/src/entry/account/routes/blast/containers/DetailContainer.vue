@@ -1,5 +1,5 @@
 <template>
-  <detail :data="data" :is-cancelled="isCancelled" />
+  <detail :data="data" />
 </template>
 
 <script>
@@ -19,10 +19,6 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    isCancelled() {
-      return this.user.is_former_blast_subscriber;
-    },
-
     data() {
       const data = [{ id: 0 }, { id: 1 }];
       const {

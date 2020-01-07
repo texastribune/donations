@@ -16,32 +16,9 @@ export class InvalidRouteError extends Error {
   }
 }
 
-export class AxiosNetworkError extends Error {
-  constructor(xhr) {
-    super('Axios network error');
-
-    const {
-      status,
-      statusText,
-      timeout,
-      readyState,
-      response,
-      responseText,
-      responseType,
-      responseURL,
-    } = xhr;
-
-    const metadata = {
-      status,
-      statusText,
-      timeout,
-      readyState,
-      response,
-      responseText,
-      responseType,
-      responseURL,
-    };
-
-    this.metadata = JSON.stringify(metadata);
+export class AxiosError extends Error {
+  constructor(error) {
+    super('Axios error');
+    this.metadata = JSON.stringify(error);
   }
 }

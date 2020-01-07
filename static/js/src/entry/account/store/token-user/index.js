@@ -93,10 +93,14 @@ const actions = {
     }),
 };
 
+const getters = {
+  isLoggedIn: ({ accessToken }) => !!accessToken,
+};
+
 export default {
   namespaced: true,
   state: createDefaultState(),
   mutations,
   actions,
-  getters: {},
+  getters,
 };

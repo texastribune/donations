@@ -7,26 +7,11 @@
         member community?
       </p>
     </template>
+
     <template v-slot:links>
-      <ul class="c-link-list">
-        <li>
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <a
-              ga-on="click"
-              :href="donateUrl"
-              :ga-event-category="ga.donations.category"
-              :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['never-given']"
-            >
-              Learn more and join now
-            </a>
-          </span>
-        </li>
-      </ul>
+      <user-internal-nav show-join-now />
     </template>
+
     <template v-slot:bottom>
       <link-email :ga-label="ga.userPortal.labels.home">
         <template v-slot:heading>

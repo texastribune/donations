@@ -1,11 +1,6 @@
 <template>
   <transition name="has-fade">
-    <expired
-      v-if="shouldShow"
-      :data="data"
-      :is-single-donor="isSingleDonor"
-      :is-circle-donor="isCircleDonor"
-    />
+    <expired v-if="shouldShow" :data="data" />
   </transition>
 </template>
 
@@ -30,14 +25,6 @@ export default {
   computed: {
     shouldShow() {
       return this.user.is_expired;
-    },
-
-    isSingleDonor() {
-      return this.user.is_single_donor;
-    },
-
-    isCircleDonor() {
-      return this.user.is_circle_donor;
     },
 
     data() {

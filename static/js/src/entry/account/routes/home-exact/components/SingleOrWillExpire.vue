@@ -19,73 +19,18 @@
         >.
       </p>
     </template>
+
     <template v-slot:links>
-      <ul class="c-link-list">
-        <li class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'payments' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.payments"
-            >
-              See your donation history
-            </router-link>
-          </span>
-        </li>
-        <li v-if="isSingleDonor" class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <a
-              ga-on="click"
-              :href="donateUrl"
-              :ga-event-category="ga.donations.category"
-              :ga-event-action="ga.donations.actions['membership-intent']"
-              :ga-event-label="ga.donations.labels['upgrade-membership']"
-            >
-              Become a sustaining member
-            </a>
-          </span>
-        </li>
-        <li class="has-m-btm-marg">
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'membership' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.membership"
-            >
-              More about your membership
-            </router-link>
-          </span>
-        </li>
-        <li>
-          <span class="c-link-list__arrow has-text-teal">
-            <strong>&rarr;</strong>
-          </span>
-          <span class="has-text-gray-dark">
-            <router-link
-              ga-on="click"
-              :to="{ name: 'ambassador' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.ambassador"
-            >
-              Become a Tribune Ambassador
-            </router-link>
-          </span>
-        </li>
-      </ul>
+      <user-internal-nav
+        show-donation-history
+        show-membership-status
+        show-become-sustaining
+        show-ambassador
+      >
+        <template v-slot:membership-text>
+          More about your membership
+        </template>
+      </user-internal-nav>
     </template>
   </summary-box>
 </template>
@@ -101,11 +46,6 @@ export default {
   props: {
     lastTransaction: {
       type: Object,
-      required: true,
-    },
-
-    isSingleDonor: {
-      type: Boolean,
       required: true,
     },
 

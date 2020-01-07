@@ -2,7 +2,6 @@
   <transition name="has-fade">
     <expired
       v-if="shouldShow"
-      :is-circle-donor="isCircleDonor"
       :last-transaction="lastTransaction"
       :membership-expiration-date="membershipExpirationDate"
     />
@@ -41,10 +40,6 @@ export default {
 
     membershipExpirationDate() {
       return this.user.membership_expiration_date;
-    },
-
-    isCircleDonor() {
-      return this.user.is_circle_donor;
     },
 
     lastTransaction() {
