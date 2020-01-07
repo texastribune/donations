@@ -16,11 +16,7 @@
       </info-list>
     </div>
 
-    <user-internal-nav
-      show-renew-membership
-      show-become-sustaining
-      show-donation-history
-    />
+    <user-internal-nav show-renew-membership show-donation-history />
   </section>
 </template>
 

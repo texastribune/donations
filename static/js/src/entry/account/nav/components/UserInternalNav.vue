@@ -53,7 +53,9 @@
               Renew your subscription to The Blast
             </a>
           </internal-nav-item>
-          <internal-nav-item v-if="isSingleDonor && showBecomeSustaining">
+          <internal-nav-item
+            v-if="isSingleDonor && !isExpired && showBecomeSustaining"
+          >
             <a
               ga-on="click"
               :href="donateUrl"
