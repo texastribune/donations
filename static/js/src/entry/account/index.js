@@ -1,11 +1,11 @@
 import Vue from 'vue';
-import { init as initSentry } from '@sentry/browser';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
 import VeeValidate, { Validator } from 'vee-validate';
 import VModal from 'vue-js-modal';
 import VueClipboard from 'vue-clipboard2';
 import axios from 'axios';
+import { init as initSentry, configureScope } from '@sentry/browser';
 
 import routes from './routes'; // eslint-disable-line
 import store from './store';
@@ -115,12 +115,30 @@ Vue.filter('longDate', formatLongDate);
 
 axios.interceptors.response.use(
   response => response,
-  error => Promise.reject(new AxiosError(error))
+  error => {
+    // eslint-disable-next-line func-names, prefer-arrow-callback
+    configureScope(function(scope) {
+      if (error.metadata) {
+        scope.setExtra('lastAxiosResponse', error.metadata);
+      }
+    });
+
+    return Promise.reject(new AxiosError());
+  }
 );
 
 axios.interceptors.request.use(
   config => config,
-  error => Promise.reject(new AxiosError(error))
+  error => {
+    // eslint-disable-next-line func-names, prefer-arrow-callback
+    configureScope(function(scope) {
+      if (error.metadata) {
+        scope.setExtra('lastAxiosRequest', error.metadata);
+      }
+    });
+
+    return Promise.reject(new AxiosError());
+  }
 );
 
 // we refresh at a 15-minute interval instead of when

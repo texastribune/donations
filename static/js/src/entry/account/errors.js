@@ -17,8 +17,7 @@ export class InvalidRouteError extends Error {
 }
 
 export class AxiosError extends Error {
-  constructor(error) {
+  constructor() {
     super('Axios error');
-    this.metadata = JSON.stringify(error);
   }
 }
