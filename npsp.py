@@ -39,14 +39,17 @@ def requests_retry_session(
     retries=3,
     backoff_factor=1,
     status_forcelist=(400, 500, 502, 503, 504),
+    method_whitelist=False,
     session=None,
 ):
     session = session or requests.Session()
     retry = Retry(
         total=retries,
+        status=retries,
         read=retries,
         connect=retries,
         backoff_factor=backoff_factor,
+        method_whitelist=method_whitelist,
         status_forcelist=status_forcelist,
     )
     adapter = HTTPAdapter(max_retries=retry)
