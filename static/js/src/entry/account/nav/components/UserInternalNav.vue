@@ -1,24 +1,21 @@
 <template>
-  <reset-password-provider v-slot="{ pwResetSuccess, pwResetFailure, pwReset }">
-    <user-provider
-      v-slot="{
-        isNeverGiven,
-        isSingleDonor,
-        isCircleDonor,
-        hasGivenNotCustom,
-        isExpired,
-        isFormerBlastSubscriber,
-        isBlastSubscriber,
-      }"
-    >
-      <div>
-        <ul
-          :class="(pwResetSuccess || pwResetFailure) && 'has-m-btm-marg'"
-          class="c-link-list t-links-underlined"
-        >
-          <slot name="items"></slot>
+  <user-provider
+    v-slot="{
+      isNeverGiven,
+      isSingleDonor,
+      isCircleDonor,
+      hasGivenNotCustom,
+      isExpired,
+      isFormerBlastSubscriber,
+      isBlastSubscriber,
+    }"
+  >
+    <div>
+      <link-list>
+        <slot name="items"></slot>
 
-          <internal-nav-item v-if="isNeverGiven && showJoinNow">
+        <link-list-item v-if="isNeverGiven && showJoinNow">
+          <template v-slot:main>
             <a
               ga-on="click"
               :href="donateUrl"
@@ -28,10 +25,12 @@
             >
               Learn more and join now
             </a>
-          </internal-nav-item>
-          <internal-nav-item
-            v-if="hasGivenNotCustom && isExpired && showRenewMembership"
-          >
+          </template>
+        </link-list-item>
+        <link-list-item
+          v-if="hasGivenNotCustom && isExpired && showRenewMembership"
+        >
+          <template v-slot:main>
             <a
               ga-on="click"
               :href="isCircleDonor ? circleUrl : donateUrl"
@@ -41,8 +40,10 @@
             >
               Renew your membership
             </a>
-          </internal-nav-item>
-          <internal-nav-item v-if="isFormerBlastSubscriber && showRenewBlast">
+          </template>
+        </link-list-item>
+        <link-list-item v-if="isFormerBlastSubscriber && showRenewBlast">
+          <template v-slot:main>
             <a
               ga-on="click"
               href="/blastform"
@@ -52,10 +53,12 @@
             >
               Renew your subscription to The Blast
             </a>
-          </internal-nav-item>
-          <internal-nav-item
-            v-if="isSingleDonor && !isExpired && showBecomeSustaining"
-          >
+          </template>
+        </link-list-item>
+        <link-list-item
+          v-if="isSingleDonor && !isExpired && showBecomeSustaining"
+        >
+          <template v-slot:main>
             <a
               ga-on="click"
               :href="donateUrl"
@@ -65,15 +68,16 @@
             >
               Become a sustaining member
             </a>
-          </internal-nav-item>
-          <internal-nav-item
-            v-if="showResetPw && !pwResetSuccess && !pwResetFailure"
-          >
-            <button class="c-link-button" @click="pwReset(pwResetGaLabel)">
-              Reset your password
-            </button>
-          </internal-nav-item>
-          <internal-nav-item v-if="!isNeverGiven && showDonationHistory">
+          </template>
+        </link-list-item>
+
+        <reset-password
+          v-if="showResetPw"
+          :pw-reset-ga-label="pwResetGaLabel"
+        />
+
+        <link-list-item v-if="!isNeverGiven && showDonationHistory">
+          <template v-slot:main>
             <router-link
               ga-on="click"
               :to="{ name: 'payments' }"
@@ -83,8 +87,10 @@
             >
               See your donation history
             </router-link>
-          </internal-nav-item>
-          <internal-nav-item v-if="hasGivenNotCustom && showMembershipStatus">
+          </template>
+        </link-list-item>
+        <link-list-item v-if="hasGivenNotCustom && showMembershipStatus">
+          <template v-slot:main>
             <router-link
               ga-on="click"
               :to="{ name: 'membership' }"
@@ -94,8 +100,10 @@
             >
               <slot name="membership-text">See your membership status</slot>
             </router-link>
-          </internal-nav-item>
-          <internal-nav-item v-if="isBlastSubscriber && showBlastSubscription">
+          </template>
+        </link-list-item>
+        <link-list-item v-if="isBlastSubscriber && showBlastSubscription">
+          <template v-slot:main>
             <router-link
               ga-on="click"
               :to="{ name: 'blast' }"
@@ -105,8 +113,10 @@
             >
               <slot name="blast-text">See your subscription to The Blast</slot>
             </router-link>
-          </internal-nav-item>
-          <internal-nav-item v-if="isBlastSubscriber && showBlastPayments">
+          </template>
+        </link-list-item>
+        <link-list-item v-if="isBlastSubscriber && showBlastPayments">
+          <template v-slot:main>
             <router-link
               ga-on="click"
               :to="{ name: 'blast-payments' }"
@@ -116,8 +126,10 @@
             >
               See your payment history
             </router-link>
-          </internal-nav-item>
-          <internal-nav-item v-if="showEditProfile">
+          </template>
+        </link-list-item>
+        <link-list-item v-if="showEditProfile">
+          <template v-slot:main>
             <router-link
               ga-on="click"
               :to="{ name: 'edit-contact-info' }"
@@ -127,8 +139,10 @@
             >
               Edit your profile
             </router-link>
-          </internal-nav-item>
-          <internal-nav-item v-if="showAmbassador">
+          </template>
+        </link-list-item>
+        <link-list-item v-if="showAmbassador">
+          <template v-slot:main>
             <router-link
               ga-on="click"
               :to="{ name: 'ambassador' }"
@@ -138,37 +152,27 @@
             >
               Become a Tribune Ambassador
             </router-link>
-          </internal-nav-item>
-        </ul>
-
-        <p v-if="pwResetSuccess" class="t-size-xs has-text-gray">
-          Check your inbox for an email from The Texas Tribune with the subject
-          line &quot;Reset your password.&quot;
-        </p>
-        <p v-if="pwResetFailure" class="t-size-xs has-text-gray">
-          There was an issue resetting your password. If you continue having
-          trouble, email
-          <a href="mailto:community@texastribune.org"
-            >community@texastribune.org </a
-          >.
-        </p>
-      </div>
-    </user-provider>
-  </reset-password-provider>
+          </template>
+        </link-list-item>
+      </link-list>
+    </div>
+  </user-provider>
 </template>
 
 <script>
 import UserProvider from '../../store/user/Provider.vue';
-import ResetPasswordProvider from '../../providers/ResetPasswordProvider.vue';
-import InternalNavItem from './InternalNavItem.vue';
+import LinkList from '../../components/LinkList.vue';
+import LinkListItem from '../../components/LinkListItem.vue';
+import ResetPassword from '../../reset-password/components/LinkListItem.vue';
 
 export default {
   name: 'UserInternalNav',
 
   components: {
     UserProvider,
-    ResetPasswordProvider,
-    InternalNavItem,
+    LinkList,
+    LinkListItem,
+    ResetPassword,
   },
 
   props: {

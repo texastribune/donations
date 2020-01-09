@@ -2,7 +2,7 @@ import format from 'date-fns/format';
 import jsPDF from 'jspdf';
 import axios from 'axios';
 
-import formatCurrency from '../../utils/format-currency';
+import formatCurrency from '../utils/format-currency';
 
 export default async function buildTaxReceipt({
   lastYear,

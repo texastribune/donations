@@ -1,44 +1,33 @@
-<template>
-  <internal-nav-item>
-    <button class="c-link-button" @click="buildReceipt">
-      Download your {{ lastYear }} tax receipt
-    </button>
-  </internal-nav-item>
-</template>
-
 <script>
 import getYear from 'date-fns/get_year';
 
-import InternalNavItem from '../../../nav/components/InternalNavItem.vue';
+import userMixin from '../../store/user/mixin';
 
 export default {
-  name: 'TaxReceipt',
+  name: 'TaxReceiptProvider',
 
-  components: { InternalNavItem },
-
-  props: {
-    receiptAmount: {
-      type: Number,
-      required: true,
-    },
-
-    greeting: {
-      type: String,
-      required: true,
-    },
-  },
+  mixins: [userMixin],
 
   computed: {
+    receiptAmount() {
+      return this.user.total_gifts_last_year;
+    },
+
+    greeting() {
+      return this.user.greeting;
+    },
+
     lastYear() {
       return getYear(new Date()) - 1;
     },
   },
 
   methods: {
-    async buildReceipt() {
+    async buildReceipt(gaLabel) {
       try {
         const buildTaxReceipt = await import(/* webpackChunkName: 'build-tax-receipt' */ '../build-tax-receipt');
         const { lastYear, receiptAmount, greeting } = this;
+
         await buildTaxReceipt.default({
           lastYear,
           receiptAmount,
@@ -49,10 +38,16 @@ export default {
           event: this.ga.customEventName,
           gaCategory: this.ga.userPortal.category,
           gaAction: this.ga.userPortal.actions['tax-receipt'],
-          gaLabel: this.ga.userPortal.labels.payments,
+          gaLabel,
         });
       }
     },
+  },
+
+  render() {
+    const { buildReceipt, lastYear } = this;
+
+    return this.$scopedSlots.default({ buildReceipt, lastYear });
   },
 };
 </script>
