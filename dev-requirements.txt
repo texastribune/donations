@@ -1,6 +1,6 @@
 pytest==3.8.1
 pytest-cov==2.8.1
-ipdb==0.12.2
+ipdb==0.12.3
 black
 mypy
 flake8
