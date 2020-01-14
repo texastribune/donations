@@ -11,7 +11,7 @@ docopt==0.6.2
 fuzzywuzzy==0.17.0
 python-Levenshtein==0.12.0
 flask-talisman==0.5.1
-flask-limiter==1.0.1
+flask-limiter==1.1.0
 sentry-sdk==0.14.0
 blinker==1.4
 amazon-pay==2.6.0
