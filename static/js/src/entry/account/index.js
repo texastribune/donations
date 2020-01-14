@@ -1,11 +1,16 @@
 import Vue from 'vue';
-import { Vue as VueIntegration } from '@sentry/integrations';
 import VueRouter from 'vue-router';
-import VeeValidate, { Validator } from 'vee-validate';
 import VModal from 'vue-js-modal';
+import { extend as extendValidationRule } from 'vee-validate';
+import {
+  required as requiredRule,
+  email as emailRule,
+  numeric as numericRule,
+} from 'vee-validate/dist/rules';
 import VueClipboard from 'vue-clipboard2';
 import axios from 'axios';
-import { init as initSentry, configureScope } from '@sentry/browser';
+import { Vue as VueIntegration } from '@sentry/integrations';
+import { init as initSentry, setExtra } from '@sentry/browser';
 
 import routes from './routes'; // eslint-disable-line
 import store from './store';
@@ -46,42 +51,8 @@ if (ENABLE_SENTRY) {
   });
 }
 
-Validator.localize('en', {
-  custom: {
-    linkEmail: {
-      required: 'This field must contain a valid email address.',
-      email: 'This field must contain a valid email address.',
-    },
-
-    email: {
-      required: 'You must have an email to log into texastribune.org.',
-    },
-
-    confirmedEmail: {
-      required: 'Email addresses do not match',
-      is: 'Email addresses do not match',
-    },
-
-    firstName: {
-      required:
-        'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
-    },
-
-    lastName: {
-      required:
-        'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
-    },
-
-    zip: {
-      required:
-        'Please enter your ZIP code to help us inform you about news and events in your area.',
-    },
-  },
-});
-
 Vue.use(VModal);
 Vue.use(VueRouter);
-Vue.use(VeeValidate);
 Vue.use(VueClipboard);
 Vue.mixin({
   data() {
@@ -113,16 +84,21 @@ Vue.filter('currency', formatCurrency);
 Vue.filter('shortDate', formatShortDate);
 Vue.filter('longDate', formatLongDate);
 
+extendValidationRule('email', emailRule);
+extendValidationRule('required', requiredRule);
+extendValidationRule('numeric', numericRule);
+extendValidationRule('confirm', {
+  params: ['target'],
+
+  validate(value, { target }) {
+    return value === target;
+  },
+});
+
 axios.interceptors.response.use(
   response => response,
   error => {
-    // eslint-disable-next-line func-names, prefer-arrow-callback
-    configureScope(function(scope) {
-      if (error.metadata) {
-        scope.setExtra('lastAxiosResponse', error.metadata);
-      }
-    });
-
+    setExtra('lastAxiosResponse', error.toJSON());
     return Promise.reject(new AxiosError());
   }
 );
@@ -130,13 +106,7 @@ axios.interceptors.response.use(
 axios.interceptors.request.use(
   config => config,
   error => {
-    // eslint-disable-next-line func-names, prefer-arrow-callback
-    configureScope(function(scope) {
-      if (error.metadata) {
-        scope.setExtra('lastAxiosRequest', error.metadata);
-      }
-    });
-
+    setExtra('lastAxiosRequest', error.toJSON());
     return Promise.reject(new AxiosError());
   }
 );

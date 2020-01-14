@@ -1,11 +1,17 @@
-import { ValidationProvider } from 'vee-validate';
+import { ValidationProvider, ValidationObserver } from 'vee-validate';
 
 import TextInput from '../components/TextInput.vue';
 import Checkbox from '../components/Checkbox.vue';
 import Submit from '../components/Submit.vue';
 
 export default {
-  components: { TextInput, Checkbox, Submit, ValidationProvider },
+  components: {
+    TextInput,
+    Checkbox,
+    Submit,
+    ValidationProvider,
+    ValidationObserver,
+  },
 
   props: {
     initialFields: {
@@ -37,19 +43,6 @@ export default {
 
       return areNotPristine.length === 0;
     },
-
-    formIsValid() {
-      const visibleFields = Object.keys(this.currentFields).filter(
-        fieldName => this.currentFields[fieldName].isVisible
-      );
-
-      const areNotValid = visibleFields.filter(
-        // explicitly check for false because value can also be null
-        fieldName => this.currentFields[fieldName].valid === false
-      );
-
-      return areNotValid.length === 0;
-    },
   },
 
   watch: {
@@ -72,6 +65,10 @@ export default {
   },
 
   methods: {
+    onSubmit() {
+      this.$emit('onSubmit', this.currentFields);
+    },
+
     updateCurrentFields() {
       this.$set(this, 'currentFields', this.buildCurrentFields());
     },
@@ -80,13 +77,13 @@ export default {
       const final = {};
 
       Object.keys(this.initialFields).forEach(fieldName => {
-        const { ...allValues } = this.initialFields[fieldName];
+        const value = this.initialFields[fieldName];
 
         final[fieldName] = {
-          ...allValues,
-          pristine: true, // default vee-validate flag value
-          changed: false, // default vee-validate flag value
-          valid: null, // default vee-validate flag value
+          value,
+          pristine: true,
+          changed: false,
+          valid: null,
         };
       });
 
@@ -100,7 +97,7 @@ export default {
       };
     },
 
-    resetValue(fieldName) {
+    emptyOutField(fieldName) {
       this.currentFields[fieldName].value = '';
     },
   },

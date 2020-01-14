@@ -10,23 +10,19 @@ export default {
       required: true,
     },
 
-    flags: {
-      type: Object,
+    pristine: {
+      type: Boolean,
       required: true,
     },
-  },
 
-  computed: {
-    changed() {
-      return this.flags.changed;
+    changed: {
+      type: Boolean,
+      required: true,
     },
 
-    valid() {
-      return this.flags.valid;
-    },
-
-    pristine() {
-      return this.flags.pristine;
+    valid: {
+      type: Boolean,
+      required: true,
     },
   },
 
@@ -35,19 +31,20 @@ export default {
       this.updateFlags();
     },
 
-    valid() {
+    pristine() {
       this.updateFlags();
     },
 
-    pristine() {
+    valid() {
       this.updateFlags();
     },
   },
 
   methods: {
     updateFlags() {
-      const { changed, valid, pristine } = this;
-      this.$emit('updateFlags', this.name, { changed, valid, pristine });
+      const { changed, pristine, valid } = this;
+
+      this.$emit('updateFlags', this.name, { changed, pristine, valid });
     },
   },
 };

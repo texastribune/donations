@@ -11,12 +11,12 @@
       :id="name"
       :name="name"
       :value="value"
-      :aria-label="showLabel ? false : label"
-      :aria-invalid="showErrors"
+      :aria-label="ariaLabel"
+      :aria-invalid="hasErrors"
       :readonly="readOnly"
       :class="{
-        'is-invalid': showErrors,
-        'has-xxxs-btm-marg': showErrors || (!showErrors && !!$slots.extra),
+        'is-invalid': hasErrors,
+        'has-xxxs-btm-marg': hasErrors || (!hasErrors && hasExtraSlot),
       }"
       class="c-text-input__input l-display-block l-width-full has-text-gray-dark t-lh-b"
       type="text"
@@ -24,8 +24,8 @@
       @paste="onPaste"
     />
     <ul
-      v-show="showErrors"
-      :class="{ 'has-xs-btm-marg': showErrors && !!$slots.extra }"
+      v-show="hasErrors"
+      :class="{ 'has-xs-btm-marg': hasErrors && hasExtraSlot }"
       class="t-lh-b"
     >
       <li
@@ -74,31 +74,31 @@ export default {
       type: Boolean,
       default: true,
     },
-
-    showErrorImmediately: {
-      type: Boolean,
-      default: true,
-    },
   },
 
   computed: {
-    showErrors() {
-      const { valid, pristine, showErrorImmediately } = this;
+    hasErrors() {
+      return this.errorMessages.length > 0;
+    },
 
-      return (
-        (!valid && !showErrorImmediately && !pristine) ||
-        (!valid && showErrorImmediately)
-      );
+    hasExtraSlot() {
+      return !!this.$slots.extra;
+    },
+
+    ariaLabel() {
+      if (this.showLabel) return null;
+
+      return this.label;
     },
   },
 
   methods: {
-    onInput(e) {
-      this.$emit('input', e.target.value);
+    onInput(event) {
+      this.$emit('input', event.target.value);
     },
 
-    onPaste(e) {
-      if (this.preventPaste) e.preventDefault();
+    onPaste(event) {
+      if (this.preventPaste) event.preventDefault();
     },
   },
 };

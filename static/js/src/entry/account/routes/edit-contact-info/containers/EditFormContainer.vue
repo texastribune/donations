@@ -37,48 +37,12 @@ export default {
       const { tribune_offers_consent } = getTokenIdentity(identities, email);
 
       return {
-        firstName: {
-          name: 'firstName',
-          label: 'First name',
-          value: first_name || '',
-          rules: { required: true },
-          isVisible: true,
-        },
-        lastName: {
-          name: 'lastName',
-          label: 'Last name',
-          value: last_name || '',
-          rules: { required: true },
-          isVisible: true,
-        },
-        zip: {
-          name: 'zip',
-          label: 'ZIP code',
-          value: postal_code || '',
-          rules: { required: true, numeric: true },
-          isVisible: true,
-        },
-        email: {
-          name: 'email',
-          label: 'Login email',
-          value: email,
-          rules: { required: true, email: true },
-          isVisible: true,
-        },
-        confirmedEmail: {
-          name: 'confirmedEmail',
-          label: 'Type your email again to confirm this change',
-          value: '',
-          isVisible: false,
-        },
-        marketing: {
-          name: 'marketing',
-          label:
-            "Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune. (Remember: Per our privacy policy, we won't share your data without permission.)",
-          value: tribune_offers_consent,
-          rules: {},
-          isVisible: true,
-        },
+        firstName: first_name || '',
+        lastName: last_name || '',
+        email,
+        confirmedEmail: '',
+        zip: postal_code || '',
+        marketing: tribune_offers_consent,
       };
     },
   },
@@ -131,7 +95,7 @@ export default {
       const dispatches = [];
       const userPayload = this.getUserPayload(fields);
       const identityPayload = this.getIdentityPayload(fields);
-      const newEmail = identityPayload.email || null;
+      const newEmail = identityPayload.email;
 
       if (Object.keys(userPayload).length > 0) {
         dispatches.push(this.updateUser(userPayload));
@@ -141,14 +105,16 @@ export default {
         dispatches.push(this.updateIdentity(identityPayload));
       }
 
-      await this.updateContactInfo(dispatches, newEmail);
+      if (dispatches.length) {
+        await this.updateContactInfo(dispatches, newEmail);
+        this.logToGtm(fields);
+      }
     },
 
     async updateContactInfo(dispatches, newEmail) {
       let badEmailUpdate = false;
 
       this.setAppIsFetching(true);
-      this.resetBadEmailAndSuccess();
 
       try {
         await Promise.all(dispatches);
@@ -166,17 +132,60 @@ export default {
 
       if (newEmail && !badEmailUpdate) {
         logOut(`/account/changed-email?email=${encodeURIComponent(newEmail)}`);
-      } else {
-        await this.getUser();
-
-        if (badEmailUpdate) {
-          this.badEmail = newEmail;
-        } else {
-          this.showSuccess = true;
-        }
-
-        this.setAppIsFetching(false);
+      } else if (newEmail && badEmailUpdate) {
+        this.badEmail = newEmail;
+      } else if (!newEmail) {
+        this.showSuccess = true;
       }
+
+      await this.getUser();
+
+      this.setAppIsFetching(false);
+    },
+
+    logToGtm(fields) {
+      const allEvents = [];
+      const baseEvent = {
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaLabel: this.ga.userPortal.labels['edit-contact-info'],
+      };
+
+      if (fields.email.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-email'],
+        });
+      }
+      if (fields.firstName.changed || fields.lastName.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-name'],
+        });
+      }
+      if (fields.zip.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-zip'],
+        });
+      }
+
+      if (fields.marketing.changed && fields.marketing.value) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['marketing-opt-in'],
+        });
+      }
+      if (fields.marketing.changed && !fields.marketing.value) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['marketing-opt-out'],
+        });
+      }
+
+      allEvents.forEach(event => {
+        window.dataLayer.push(event);
+      });
     },
   },
 };
