@@ -42,7 +42,7 @@
         <div class="has-b-btm-marg">
           <text-input
             v-model="currentFields.lastName.value"
-            label="Last Name"
+            label="Last name"
             name="lastName"
             :error-messages="errors"
             :pristine="pristine"

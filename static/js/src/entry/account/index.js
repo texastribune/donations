@@ -12,7 +12,8 @@ import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry, setExtra } from '@sentry/browser';
 
-import routes from './routes'; // eslint-disable-line
+// eslint-disable-next-line
+import routes from './routes';
 import store from './store';
 import App from './App.vue';
 import UserSiteFooter from './nav/components/UserSiteFooter.vue';
@@ -27,7 +28,11 @@ import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
 import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
-import { UnverifiedError, AxiosError } from './errors';
+import {
+  UnverifiedError,
+  AxiosResponseError,
+  AxiosRequestError,
+} from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -54,6 +59,7 @@ if (ENABLE_SENTRY) {
 Vue.use(VModal);
 Vue.use(VueRouter);
 Vue.use(VueClipboard);
+
 Vue.mixin({
   data() {
     return {
@@ -89,7 +95,6 @@ extendValidationRule('required', requiredRule);
 extendValidationRule('numeric', numericRule);
 extendValidationRule('confirm', {
   params: ['target'],
-
   validate(value, { target }) {
     return value === target;
   },
@@ -98,16 +103,28 @@ extendValidationRule('confirm', {
 axios.interceptors.response.use(
   response => response,
   error => {
-    setExtra('lastAxiosResponse', error.toJSON());
-    return Promise.reject(new AxiosError());
+    const { status, data, headers } = error.response;
+    const meta = {
+      status,
+      data,
+      headers,
+      extra: error.toJSON(),
+    };
+
+    setExtra('lastAxiosResponse', meta);
+
+    return Promise.reject(new AxiosResponseError(meta));
   }
 );
 
 axios.interceptors.request.use(
   config => config,
   error => {
-    setExtra('lastAxiosRequest', error.toJSON());
-    return Promise.reject(new AxiosError());
+    const meta = { extra: error.toJSON() };
+
+    setExtra('lastAxiosRequest', meta);
+
+    return Promise.reject(new AxiosRequestError(meta));
   }
 );
 
@@ -117,7 +134,9 @@ axios.interceptors.request.use(
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch('tokenUser/getTokenUser');
+
     const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
+
     if (isLoggedIn) refreshToken();
   }, 15 * 60 * 1000); // 15 minutes
 }

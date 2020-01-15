@@ -16,6 +16,7 @@ import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
 import getTokenIdentity from '../../../utils/get-token-identity';
+import { AxiosResponseError } from '../../../errors';
 import { logOut } from '../../../utils/auth-actions';
 import EditForm from '../components/EditForm.vue';
 
@@ -120,9 +121,9 @@ export default {
         await Promise.all(dispatches);
       } catch (err) {
         if (
-          err.response &&
-          err.response.status === 400 &&
-          err.response.data.detail === "can't change email"
+          err instanceof AxiosResponseError &&
+          err.status === 400 &&
+          err.data.detail === "can't change email"
         ) {
           badEmailUpdate = true;
         } else {
