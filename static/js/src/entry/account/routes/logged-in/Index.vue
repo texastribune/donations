@@ -27,7 +27,7 @@ export default {
 
   mounted() {
     setLoggedInFlag();
-    redirect(this.$route.query.next);
+    redirect(this.$route.query);
   },
 };
 </script>

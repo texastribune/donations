@@ -16,6 +16,7 @@ import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
 import getTokenIdentity from '../../../utils/get-token-identity';
+import { CHANGED_EMAIL_REDIRECT } from '../../../constants';
 import { AxiosResponseError } from '../../../errors';
 import { logOut } from '../../../utils/auth-actions';
 import EditForm from '../components/EditForm.vue';
@@ -132,7 +133,10 @@ export default {
       }
 
       if (newEmail && !badEmailUpdate) {
-        logOut(`/account/changed-email?email=${encodeURIComponent(newEmail)}`);
+        logOut({
+          next: CHANGED_EMAIL_REDIRECT,
+          data: { email: newEmail },
+        });
       } else if (newEmail && badEmailUpdate) {
         this.badEmail = newEmail;
       } else if (!newEmail) {
