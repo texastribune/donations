@@ -103,13 +103,12 @@ extendValidationRule('confirm', {
 axios.interceptors.response.use(
   response => response,
   error => {
-    const { status, data, headers } = error.response;
-    const meta = {
-      status,
-      data,
-      headers,
-      extra: error.toJSON(),
-    };
+    let meta = { extra: error.toJSON() };
+
+    if (error.response) {
+      const { status, data, headers } = error.response;
+      meta = { ...meta, status, data, headers };
+    }
 
     setExtra('lastAxiosResponse', meta);
 

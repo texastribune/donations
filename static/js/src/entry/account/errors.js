@@ -17,13 +17,14 @@ export class InvalidRouteError extends Error {
 }
 
 export class AxiosResponseError extends Error {
-  constructor({ status, headers, data, extra }) {
+  constructor({ extra, status, headers, data }) {
     super('Axios response error');
 
-    this.status = status;
-    this.headers = headers;
-    this.data = data;
     this.extra = extra;
+
+    if (status) this.status = status;
+    if (headers) this.headers = headers;
+    if (data) this.data = data;
   }
 }
 
