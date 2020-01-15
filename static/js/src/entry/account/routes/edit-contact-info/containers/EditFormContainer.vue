@@ -3,7 +3,7 @@
     :initial-fields="initialFields"
     :bad-email="badEmail"
     :show-success="showSuccess"
-    @onSubmit="onSubmit"
+    @onSubmit="buildDispatches"
     @onFormHasChangedToggle="setShowModal"
     @onFormIsPristineToggle="resetBadEmailAndSuccess"
   />
@@ -93,7 +93,7 @@ export default {
       return identityPayload;
     },
 
-    async onSubmit(fields) {
+    async buildDispatches(fields) {
       const dispatches = [];
       const userPayload = this.getUserPayload(fields);
       const identityPayload = this.getIdentityPayload(fields);
