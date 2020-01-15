@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import formMixin from '../mixins';
+import formMixin from '../mixins/form';
 
 export default {
   name: 'TextInputAndSubmit',

@@ -147,7 +147,7 @@
 <script>
 import { localize } from 'vee-validate';
 
-import formMixin from '../../../form/mixins';
+import formMixin from '../../../form/mixins/form';
 
 localize({
   en: {
