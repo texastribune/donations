@@ -43,10 +43,6 @@ export const logOut = (info = {}) => {
   });
 };
 
-export const resetPassword = (email, cb) => {
-  auth.changePassword({ email, connection: NON_STAFF_CONNECTION }, cb);
-};
-
 export const redirect = routeQueryParams => {
   const { next, data } = routeQueryParams;
   let url = REDIRECTS[next];
@@ -66,4 +62,8 @@ export const redirect = routeQueryParams => {
       window.location.href = url;
     }, 1800);
   }
+};
+
+export const resetPassword = (email, cb) => {
+  auth.changePassword({ email, connection: NON_STAFF_CONNECTION }, cb);
 };
