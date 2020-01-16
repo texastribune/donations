@@ -1,5 +1,5 @@
 <template>
-  <ul class="t-lh-b">
+  <ul>
     <li
       v-for="(message, index) in errorMessages"
       :key="message"
