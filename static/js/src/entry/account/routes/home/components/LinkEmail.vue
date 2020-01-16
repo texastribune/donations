@@ -1,7 +1,7 @@
 <template>
   <link-email-provider
-    ref="provider"
-    v-slot="{ linkedEmails, initialFields, submittedEmail }"
+    v-slot="{ linkEmail, linkedEmails, initialFields, submittedEmail }"
+    :ga-label="gaLabel"
   >
     <div class="c-link-email t-links-underlined">
       <template v-if="submittedEmail">
@@ -33,6 +33,9 @@
           </slot>
         </div>
         <text-input-and-submit
+          name="linkEmail"
+          label="Email address to link"
+          rules="required|email"
           :initial-fields="initialFields"
           @onSubmit="linkEmail"
         />
@@ -42,8 +45,21 @@
 </template>
 
 <script>
+import { localize } from 'vee-validate';
+
 import LinkEmailProvider from '../providers/LinkEmailProvider.vue';
 import TextInputAndSubmit from '../../../form/components/TextInputAndSubmit.vue';
+
+localize({
+  en: {
+    fields: {
+      linkEmail: {
+        required: 'This field must contain a valid email address.',
+        email: 'This field must contain a valid email address.',
+      },
+    },
+  },
+});
 
 export default {
   name: 'LinkEmail',
@@ -70,19 +86,6 @@ export default {
     gaLabel: {
       type: String,
       required: true,
-    },
-  },
-
-  methods: {
-    async linkEmail(fields) {
-      await this.$refs.provider.linkEmail(fields);
-
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['submit-linked-email'],
-        gaLabel: this.gaLabel,
-      });
     },
   },
 };

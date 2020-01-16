@@ -10,6 +10,7 @@
 <script>
 import tokenUserMixin from '../../../store/token-user/mixin';
 import { logIn } from '../../../utils/auth-actions';
+import { CONFIRM_LINKED_IDENTITY_REDIRECT } from '../../../constants';
 import LoggedOut from '../components/LoggedOut.vue';
 
 export default {
@@ -44,7 +45,10 @@ export default {
 
   methods: {
     logIn() {
-      logIn(`/account/confirm-linked-identity?ticket=${this.ticket}`);
+      logIn({
+        next: CONFIRM_LINKED_IDENTITY_REDIRECT,
+        data: { ticket: this.ticket },
+      });
     },
   },
 };

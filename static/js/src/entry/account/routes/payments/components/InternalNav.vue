@@ -5,13 +5,13 @@
     show-renew-membership
   >
     <template v-slot:items>
-      <tax-receipt />
+      <tax-receipt :tax-receipt-ga-label="ga.userPortal.labels.payments" />
     </template>
   </user-internal-nav>
 </template>
 
 <script>
-import TaxReceipt from '../containers/TaxReceiptContainer.vue';
+import TaxReceipt from '../../../tax-receipt/components/LinkListItem.vue';
 
 export default {
   name: 'PaymentsInternalNav',

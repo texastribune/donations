@@ -1,6 +1,6 @@
 <script>
-import tokenUserMixin from '../store/token-user/mixin';
-import { resetPassword } from '../utils/auth-actions';
+import tokenUserMixin from '../../store/token-user/mixin';
+import { resetPassword } from '../../utils/auth-actions';
 
 export default {
   name: 'ResetPasswordProvider',

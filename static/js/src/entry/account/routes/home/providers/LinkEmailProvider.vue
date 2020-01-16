@@ -10,21 +10,20 @@ export default {
 
   mixins: [userMixin, contextMixin],
 
+  props: {
+    gaLabel: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
     return { submittedEmail: '' };
   },
 
   computed: {
     initialFields() {
-      return {
-        linkEmail: {
-          name: 'linkEmail',
-          value: '',
-          label: 'email address to link',
-          rules: { required: true, email: true },
-          isVisible: true,
-        },
-      };
+      return { linkEmail: '' };
     },
 
     linkedEmails() {
@@ -33,14 +32,24 @@ export default {
   },
 
   methods: {
-    async linkEmail({ linkEmail: { value } }) {
+    async linkEmail(fields) {
+      const emailToLink = fields.linkEmail.value;
+
       this.setAppIsFetching(true);
 
-      await this.linkIdentity({ email: value });
+      await this.linkIdentity({ email: emailToLink });
       await this.getUser();
 
-      this.submittedEmail = value;
+      this.submittedEmail = emailToLink;
+
       this.setAppIsFetching(false);
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['submit-linked-email'],
+        gaLabel: this.gaLabel,
+      });
     },
   },
 

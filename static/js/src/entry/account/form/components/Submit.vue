@@ -3,7 +3,6 @@
     type="submit"
     class="c-button c-button--s has-text-white has-bg-teal l-width-full l-display-block"
     :value="value"
-    :disabled="disabled"
   />
 </template>
 
@@ -15,11 +14,6 @@ export default {
     value: {
       type: String,
       default: 'Submit',
-    },
-
-    disabled: {
-      type: Boolean,
-      required: true,
     },
   },
 };

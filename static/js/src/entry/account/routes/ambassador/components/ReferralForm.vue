@@ -4,9 +4,12 @@
       Or, share your personal referral link:
     </p>
     <text-input-and-submit
-      :initial-fields="initialFields"
-      :submit-text="submitText"
+      name="url"
+      label="Personal referral link"
+      rules="required"
       read-only
+      :submit-text="submitText"
+      :initial-fields="initialFields"
       @onSubmit="copyUrl"
     />
   </div>
@@ -39,15 +42,10 @@ export default {
   },
 
   methods: {
-    copyUrl({ url: { value } }) {
-      this.$emit('copyUrl', value);
+    copyUrl(fields) {
+      const url = fields.url.value;
 
-      window.dataLayer.push({
-        event: this.ga.ambassadorsCustomEventName,
-        gaCategory: this.ga.tribuneAmbassadors.category,
-        gaAction: this.ga.tribuneAmbassadors.actions.link,
-        gaLabel: this.ga.tribuneAmbassadors.labels.ambassador,
-      });
+      this.$emit('copyUrl', url);
     },
   },
 };

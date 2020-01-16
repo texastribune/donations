@@ -16,8 +16,22 @@ export class InvalidRouteError extends Error {
   }
 }
 
-export class AxiosError extends Error {
-  constructor() {
-    super('Axios error');
+export class AxiosResponseError extends Error {
+  constructor({ extra, status, headers, data }) {
+    super('Axios response error');
+
+    this.extra = extra;
+
+    if (status) this.status = status;
+    if (headers) this.headers = headers;
+    if (data) this.data = data;
+  }
+}
+
+export class AxiosRequestError extends Error {
+  constructor({ extra }) {
+    super('Axios request error');
+
+    this.extra = extra;
   }
 }
