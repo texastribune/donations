@@ -122,7 +122,7 @@
         </div>
       </validation-provider>
       <validation-provider
-        v-slot="{ pristine, changed, valid }"
+        v-slot="{ errors, pristine, changed, valid }"
         name="marketing"
         slim
       >
@@ -131,6 +131,7 @@
             v-model="currentFields.marketing.value"
             label="Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune. (Remember: Per our privacy policy, we won't share your data without permission.)"
             name="marketing"
+            :error-messages="errors"
             :pristine="pristine"
             :changed="changed"
             :valid="valid"

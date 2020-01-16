@@ -23,40 +23,29 @@
       @input="onInput"
       @paste="onPaste"
     />
-    <ul
-      v-show="hasErrors"
-      :class="{ 'has-xs-btm-marg': hasErrors && hasExtraSlot }"
-      class="t-lh-b"
-    >
-      <li
-        v-for="(message, index) in errorMessages"
-        :key="message"
-        :class="{ 'has-xs-btm-marg': index !== errorMessages.length - 1 }"
-        class="has-text-error t-size-xs"
-      >
-        {{ message }}
-      </li>
-    </ul>
+
+    <div v-show="hasErrors" :class="{ 'has-xs-btm-marg': hasExtraSlot }">
+      <errors :error-messages="errorMessages" />
+    </div>
+
     <slot name="extra"></slot>
   </div>
 </template>
 
 <script>
 import formElementMixin from '../mixins/element';
+import Errors from './Errors.vue';
 
 export default {
   name: 'TextInput',
+
+  components: { Errors },
 
   mixins: [formElementMixin],
 
   props: {
     value: {
       type: String,
-      required: true,
-    },
-
-    errorMessages: {
-      type: Array,
       required: true,
     },
 
@@ -77,10 +66,6 @@ export default {
   },
 
   computed: {
-    hasErrors() {
-      return this.errorMessages.length > 0;
-    },
-
     hasExtraSlot() {
       return !!this.$slots.extra;
     },

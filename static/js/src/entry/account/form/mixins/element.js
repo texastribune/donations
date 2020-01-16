@@ -1,5 +1,10 @@
 export default {
   props: {
+    errorMessages: {
+      type: Array,
+      required: true,
+    },
+
     name: {
       type: String,
       required: true,
@@ -23,6 +28,12 @@ export default {
     valid: {
       type: Boolean,
       required: true,
+    },
+  },
+
+  computed: {
+    hasErrors() {
+      return this.errorMessages.length > 0;
     },
   },
 
