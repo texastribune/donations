@@ -17,8 +17,6 @@ export const AUTH_PORTAL_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-in/`;
 export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
-export const CARD_PAYMENT_FLAG = 'credit card';
-export const BLAST_PAYMENT_FLAG = 'the blast';
 export const { SENTRY_DSN } = process.env;
 export const { SENTRY_ENVIRONMENT } = process.env;
 export const ENABLE_SENTRY = process.env.ENABLE_SENTRY.toLowerCase() === 'true';
