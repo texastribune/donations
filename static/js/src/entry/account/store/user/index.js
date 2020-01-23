@@ -1,60 +1,63 @@
 /* eslint-disable no-param-reassign */
 
 import axios from 'axios';
+// import camelCase from 'camelcase';
 
-import addFields from './utils/add-fields';
+import { USER_TYPES } from '../types';
 import getTokenIdentity from '../../utils/get-token-identity';
 import { PORTAL_API_URL } from '../../constants';
 
-const MUTATION_TYPES = {
-  setDetails: 'SET_DETAILS',
-};
+const SET_RAW_DATA = 'SET_RAW_DATA';
+
+const state = { data: {} };
 
 const mutations = {
-  [MUTATION_TYPES.setDetails](state, details) {
-    state.details = details;
+  [SET_RAW_DATA](currentState, data) {
+    currentState.data = data;
   },
 };
 
-function createDefaultState() {
-  return { details: {} };
-}
-
 const actions = {
-  getOtherUser: async ({ commit, rootState }, email) => {
+  [USER_TYPES.getOtherUser]: async ({ commit, rootState }, email) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
       params: { email },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    commit(MUTATION_TYPES.setDetails, addFields(data[0]));
+    commit(SET_RAW_DATA, data[0]);
   },
 
-  getUser: async ({ commit, rootState }) => {
+  [USER_TYPES.getUser]: async ({ commit, rootState }) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    commit(MUTATION_TYPES.setDetails, addFields(data));
+    commit(SET_RAW_DATA, data);
   },
 
-  updateUser: async ({ state, rootState }, updates) => {
+  [USER_TYPES.updateUser]: async (
+    { state: moduleState, rootState },
+    updates
+  ) => {
     const { accessToken } = rootState.tokenUser;
-    const { id: personId } = state.details;
+    const { id: personId } = moduleState.data;
 
     await axios.patch(`${PORTAL_API_URL}persons/${personId}/`, updates, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
   },
 
-  updateIdentity: async ({ state, rootState }, updates) => {
+  [USER_TYPES.updateIdentity]: async (
+    { state: moduleState, rootState },
+    updates
+  ) => {
     const {
       accessToken,
       details: { email: tokenEmail },
     } = rootState.tokenUser;
-    const { id: personId, identities } = state.details;
+    const { id: personId, identities } = moduleState.data;
     const { id: identityId } = getTokenIdentity(identities, tokenEmail);
 
     await axios.patch(
@@ -66,12 +69,15 @@ const actions = {
     );
   },
 
-  linkIdentity: async ({ state, rootState }, identity) => {
+  [USER_TYPES.linkIdentity]: async (
+    { state: moduleState, rootState },
+    identity
+  ) => {
     const {
       accessToken,
       details: { email: tokenEmail },
     } = rootState.tokenUser;
-    const { id: personId } = state.details;
+    const { id: personId } = moduleState.data;
 
     await axios.put(
       `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/`,
@@ -82,12 +88,15 @@ const actions = {
     );
   },
 
-  confirmLinkedIdentity: async ({ state, rootState }, ticket) => {
+  [USER_TYPES.confirmLinkedIdentity]: async (
+    { state: moduleState, rootState },
+    ticket
+  ) => {
     const {
       accessToken,
       details: { email: tokenEmail },
     } = rootState.tokenUser;
-    const { id: personId } = state.details;
+    const { id: personId } = moduleState.data;
 
     await axios.put(
       `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/?ticket=${ticket}`,
@@ -99,10 +108,25 @@ const actions = {
   },
 };
 
+const getters = {
+  userId: () => {},
+  tokenIdentity: () => {},
+  isNeverGiven: () => {},
+  isSingleDonor: () => {},
+  isRecurringDonor: () => {},
+  isCircleDonor: () => {},
+  isCustomDonor: () => {},
+  isExpired: () => {},
+  isBlastSubscriber: () => {},
+  hasGivenNotCustom: () => {},
+  willExpire: () => {},
+  membershipLevel: () => {},
+};
+
 export default {
   namespaced: true,
-  state: createDefaultState(),
+  state,
   mutations,
   actions,
-  getters: {},
+  getters,
 };
