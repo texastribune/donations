@@ -5,7 +5,6 @@ import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
 import formatTransaction from './utils/format-transaction';
-import { USER_TYPES } from '../types';
 import getTokenIdentity from '../../utils/get-token-identity';
 import { PORTAL_API_URL } from '../../constants';
 
@@ -20,7 +19,7 @@ const mutations = {
 };
 
 const actions = {
-  [USER_TYPES.getOtherUser]: async ({ commit, rootState }, email) => {
+  getOtherUser: async ({ commit, rootState }, email) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
       params: { email },
@@ -30,7 +29,7 @@ const actions = {
     commit(SET_RAW_DATA, data[0]);
   },
 
-  [USER_TYPES.getUser]: async ({ commit, rootState }) => {
+  getUser: async ({ commit, rootState }) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -39,10 +38,7 @@ const actions = {
     commit(SET_RAW_DATA, data);
   },
 
-  [USER_TYPES.updateUser]: async (
-    { state: moduleState, rootState },
-    updates
-  ) => {
+  updateUser: async ({ state: moduleState, rootState }, updates) => {
     const { accessToken } = rootState.tokenUser;
     const { id: personId } = moduleState.data;
 
@@ -51,10 +47,7 @@ const actions = {
     });
   },
 
-  [USER_TYPES.updateIdentity]: async (
-    { state: moduleState, rootState },
-    updates
-  ) => {
+  updateIdentity: async ({ state: moduleState, rootState }, updates) => {
     const {
       accessToken,
       details: { email: tokenEmail },
@@ -71,10 +64,7 @@ const actions = {
     );
   },
 
-  [USER_TYPES.linkIdentity]: async (
-    { state: moduleState, rootState },
-    identity
-  ) => {
+  linkIdentity: async ({ state: moduleState, rootState }, identity) => {
     const {
       accessToken,
       details: { email: tokenEmail },
@@ -90,10 +80,7 @@ const actions = {
     );
   },
 
-  [USER_TYPES.confirmLinkedIdentity]: async (
-    { state: moduleState, rootState },
-    ticket
-  ) => {
+  confirmLinkedIdentity: async ({ state: moduleState, rootState }, ticket) => {
     const {
       accessToken,
       details: { email: tokenEmail },
@@ -111,7 +98,28 @@ const actions = {
 };
 
 const getters = {
+  email: (
+    _,
+    __,
+    ___,
+    {
+      tokenUser: {
+        idTokenPayload: { email },
+      },
+    }
+  ) => email,
+
+  idendity: ({ data: { identities } }, { email }) => {
+    const [goodIdentity] = identities.filter(
+      ({ email: identityEmail }) => identityEmail === email
+    );
+
+    return goodIdentity;
+  },
+
   userId: ({ data: { id } }) => id,
+
+  identityId: (_, { identity: { id } }) => id,
 
   firstName: ({ data: { first_name: firstName } }) => firstName,
 
@@ -119,7 +127,8 @@ const getters = {
 
   zip: ({ data: { postal_code: zip } }) => zip,
 
-  didOfferConsent: () => {},
+  didConsent: (_, { identity: { tribune_offers_consent: didConsent } }) =>
+    didConsent,
 
   linkedEmails: ({ data: { identities } }) =>
     identities.map(({ email }) => email),
