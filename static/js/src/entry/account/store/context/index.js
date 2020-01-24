@@ -1,50 +1,46 @@
 /* eslint-disable no-param-reassign */
 
-const MUTATION_TYPES = {
-  setIsViewingAs: 'SET_IS_VIEWING_AS',
-  setIsFetching: 'SET_IS_FETCHING',
-  setError: 'SET_ERROR',
+const SET_IS_VIEWING_AS = 'SET_IS_VIEWING_AS';
+const SET_IS_FETCHING = 'SET_IS_FETCHING';
+const SET_ERROR = 'SET_ERROR';
+
+const initialState = {
+  isViewingAs: false,
+  isFetching: false,
+  error: null,
 };
 
-function createDefaultState() {
-  return {
-    isViewingAs: false,
-    isFetching: false,
-    error: null,
-  };
-}
-
 const mutations = {
-  [MUTATION_TYPES.setIsViewingAs](state, isViewingAs) {
+  [SET_IS_VIEWING_AS](state, isViewingAs) {
     state.isViewingAs = isViewingAs;
   },
 
-  [MUTATION_TYPES.setIsFetching](state, isFetching) {
+  [SET_IS_FETCHING](state, isFetching) {
     state.isFetching = isFetching;
   },
 
-  [MUTATION_TYPES.setError](state, error) {
+  [SET_ERROR](state, error) {
     state.error = error;
   },
 };
 
 const actions = {
   setIsViewingAs: ({ commit }, isViewingAs) => {
-    commit(MUTATION_TYPES.setIsViewingAs, isViewingAs);
+    commit(SET_IS_VIEWING_AS, isViewingAs);
   },
 
   setIsFetching: ({ commit }, isFetching) => {
-    commit(MUTATION_TYPES.setIsFetching, isFetching);
+    commit(SET_IS_FETCHING, isFetching);
   },
 
   setError: ({ commit }, error) => {
-    commit(MUTATION_TYPES.setError, error);
+    commit(SET_ERROR, error);
   },
 };
 
 export default {
   namespaced: true,
-  state: createDefaultState(),
+  state: initialState,
   mutations,
   actions,
   getters: {},

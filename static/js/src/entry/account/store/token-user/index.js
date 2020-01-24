@@ -12,7 +12,7 @@ const SET_ID_TOKEN = 'SET_ID_TOKEN';
 const SET_ID_TOKEN_PAYLOAD = 'SET_ID_TOKEN_PAYLOAD';
 const SET_ERROR = 'SET_ERROR';
 
-const state = {
+const initialState = {
   accessToken: '',
   idToken: '',
   idTokenPayload: {},
@@ -93,7 +93,7 @@ const getters = {
 
 export default {
   namespaced: true,
-  state,
+  state: initialState,
   mutations,
   actions,
   getters,

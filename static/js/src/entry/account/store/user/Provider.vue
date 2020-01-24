@@ -7,7 +7,9 @@ export default {
   mixins: [userMixin],
 
   render() {
-    return this.$scopedSlots.default(this.userGetters);
+    const { userGetters } = this;
+
+    return this.$scopedSlots.default({ user: { ...userGetters } });
   },
 };
 </script>

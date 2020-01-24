@@ -1,14 +1,29 @@
-import { mapState, mapGetters } from 'vuex';
+const MODULE = 'tokenUser';
 
 export default {
   computed: {
-    ...mapState('tokenUser', {
-      tokenUser: 'details',
-      canViewAs: 'canViewAs',
-      isVerified: 'isVerified',
-      tokenUserError: 'error',
-    }),
+    tokenUserGetters() {
+      const tokenUserGetters = {};
+      const allGetters = this.$store.getters;
 
-    ...mapGetters('tokenUser', ['isLoggedIn']),
+      Object.keys(allGetters).forEach(getterName => {
+        if (getterName.indexOf(`${MODULE}/`) !== -1) {
+          tokenUserGetters[getterName.replace(`${MODULE}/`, '')] =
+            allGetters[getterName];
+        }
+      });
+
+      return tokenUserGetters;
+    },
+
+    tokenUserState() {
+      const { error } = this.$store.state[MODULE];
+
+      return { error };
+    },
+
+    tokenUser() {
+      return { ...this.tokenUserGetters, ...this.tokenUserState };
+    },
   },
 };

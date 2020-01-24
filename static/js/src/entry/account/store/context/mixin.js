@@ -1,17 +1,29 @@
-import { mapState, mapActions } from 'vuex';
+const MODULE = 'context';
 
 export default {
   computed: {
-    ...mapState('context', {
-      appIsFetching: 'isFetching',
-      appError: 'error',
-    }),
-  },
+    contextState() {
+      return this.$store.state[MODULE];
+    },
 
-  methods: {
-    ...mapActions('context', {
-      setAppIsFetching: 'setIsFetching',
-      setAppError: 'setError',
-    }),
+    contextActions() {
+      const userActions = {
+        setIsViewingAs: () => {
+          this.$store.dispatch(`${MODULE}/setIsViewingAs`);
+        },
+        setIsFetching: () => {
+          this.$store.dispatch(`${MODULE}/setIsFetching`);
+        },
+        setError: () => {
+          this.$store.dispatch(`${MODULE}/setError`);
+        },
+      };
+
+      return userActions;
+    },
+
+    context() {
+      return { ...this.contextActions, ...this.contextState };
+    },
   },
 };

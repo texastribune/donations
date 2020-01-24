@@ -5,12 +5,11 @@ import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
 import formatTransaction from './utils/format-transaction';
-import getTokenIdentity from '../../utils/get-token-identity';
 import { PORTAL_API_URL } from '../../constants';
 
 const SET_RAW_DATA = 'SET_RAW_DATA';
 
-const state = { data: {} };
+const initialState = { data: {} };
 
 const mutations = {
   [SET_RAW_DATA](currentState, data) {
@@ -38,25 +37,21 @@ const actions = {
     commit(SET_RAW_DATA, data);
   },
 
-  updateUser: async ({ state: moduleState, rootState }, updates) => {
+  updateUser: async ({ getters, rootState }, updates) => {
     const { accessToken } = rootState.tokenUser;
-    const { id: personId } = moduleState.data;
+    const { userId } = getters;
 
-    await axios.patch(`${PORTAL_API_URL}persons/${personId}/`, updates, {
+    await axios.patch(`${PORTAL_API_URL}persons/${userId}/`, updates, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
   },
 
-  updateIdentity: async ({ state: moduleState, rootState }, updates) => {
-    const {
-      accessToken,
-      details: { email: tokenEmail },
-    } = rootState.tokenUser;
-    const { id: personId, identities } = moduleState.data;
-    const { id: identityId } = getTokenIdentity(identities, tokenEmail);
+  updateIdentity: async ({ getters, rootState }, updates) => {
+    const { accessToken } = rootState.tokenUser;
+    const { userId, identityId } = getters;
 
     await axios.patch(
-      `${PORTAL_API_URL}persons/${personId}/identities/${identityId}/`,
+      `${PORTAL_API_URL}persons/${userId}/identities/${identityId}/`,
       updates,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -64,15 +59,12 @@ const actions = {
     );
   },
 
-  linkIdentity: async ({ state: moduleState, rootState }, identity) => {
-    const {
-      accessToken,
-      details: { email: tokenEmail },
-    } = rootState.tokenUser;
-    const { id: personId } = moduleState.data;
+  linkIdentity: async ({ getters, rootState }, identity) => {
+    const { accessToken } = rootState.tokenUser;
+    const { userId, email } = getters;
 
     await axios.put(
-      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/`,
+      `${PORTAL_API_URL}persons/${userId}/identities/${email}/`,
       identity,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -80,15 +72,12 @@ const actions = {
     );
   },
 
-  confirmLinkedIdentity: async ({ state: moduleState, rootState }, ticket) => {
-    const {
-      accessToken,
-      details: { email: tokenEmail },
-    } = rootState.tokenUser;
-    const { id: personId } = moduleState.data;
+  confirmLinkedIdentity: async ({ getters, rootState }, ticket) => {
+    const { accessToken } = rootState.tokenUser;
+    const { userId, email } = getters;
 
     await axios.put(
-      `${PORTAL_API_URL}persons/${personId}/identities/${tokenEmail}/?ticket=${ticket}`,
+      `${PORTAL_API_URL}persons/${userId}/identities/${email}/?ticket=${ticket}`,
       {},
       {
         headers: { Authorization: `Bearer ${accessToken}` },
@@ -101,7 +90,6 @@ const getters = {
   email: (
     _,
     __,
-    ___,
     {
       tokenUser: {
         idTokenPayload: { email },
@@ -109,7 +97,9 @@ const getters = {
     }
   ) => email,
 
-  idendity: ({ data: { identities } }, { email }) => {
+  identity: ({ data: { identities = [] } }, { email }) => {
+    if (!identities.length) return {};
+
     const [goodIdentity] = identities.filter(
       ({ email: identityEmail }) => identityEmail === email
     );
@@ -130,7 +120,7 @@ const getters = {
   didConsent: (_, { identity: { tribune_offers_consent: didConsent } }) =>
     didConsent,
 
-  linkedEmails: ({ data: { identities } }) =>
+  linkedEmails: ({ data: { identities = [] } }) =>
     identities.map(({ email }) => email),
 
   twitterUrl: ({ data: { twitter_share_url: twitterUrl } }) => twitterUrl,
@@ -208,8 +198,8 @@ const getters = {
     return null;
   },
 
-  allTransactions: ({ data }) => {
-    const nonBlastTransactions = data.transactions.filter(
+  allTransactions: ({ data: { transactions = [] } }) => {
+    const nonBlastTransactions = transactions.filter(
       ({ type }) => type.toLowerCase() !== 'the blast'
     );
 
@@ -218,18 +208,14 @@ const getters = {
     );
   },
 
-  nextTransaction: ({ data }) => {
-    const { next_transaction: nextTransaction } = data;
-
+  nextTransaction: ({ data: { next_transaction: nextTransaction } }) => {
     if (nextTransaction) {
       return formatTransaction(nextTransaction);
     }
     return null;
   },
 
-  lastTransaction: ({ data }) => {
-    const { last_transaction: lastTransaction } = data;
-
+  lastTransaction: ({ data: { last_transaction: lastTransaction } }) => {
     if (lastTransaction) {
       return formatTransaction(lastTransaction);
     }
@@ -248,26 +234,26 @@ const getters = {
     );
   },
 
-  allBlastTransactions: ({ data }) => {
-    const blastTransactions = data.transactions.filter(
+  allBlastTransactions: ({ data: { transactions = [] } }) => {
+    const blastTransactions = transactions.filter(
       ({ type }) => type.toLowerCase() === 'the blast'
     );
 
     return blastTransactions.map(transaction => formatTransaction(transaction));
   },
 
-  nextBlastTransaction: ({ data }) => {
-    const { next_blast_transaction: nextBlastTransaction } = data;
-
+  nextBlastTransaction: ({
+    data: { next_blast_transaction: nextBlastTransaction },
+  }) => {
     if (nextBlastTransaction) {
       return formatTransaction(nextBlastTransaction);
     }
     return null;
   },
 
-  lastBlastTransaction: ({ data }) => {
-    const { last_blast_transaction: lastBlastTransaction } = data;
-
+  lastBlastTransaction: ({
+    data: { last_blast_transaction: lastBlastTransaction },
+  }) => {
     if (lastBlastTransaction) {
       return formatTransaction(lastBlastTransaction);
     }
@@ -291,7 +277,7 @@ const getters = {
 
 export default {
   namespaced: true,
-  state,
+  state: initialState,
   mutations,
   actions,
   getters,
