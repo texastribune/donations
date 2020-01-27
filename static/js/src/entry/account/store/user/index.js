@@ -115,7 +115,12 @@ const getters = {
 
   lastName: ({ data: { last_name: lastName } }) => lastName,
 
+  greeting: ({ data: { greeting } }) => greeting,
+
   zip: ({ data: { postal_code: zip } }) => zip,
+
+  lastYearAmount: ({ data: { total_gifts_last_year: lastYearAmount } }) =>
+    lastYearAmount,
 
   didConsent: (_, { identity: { tribune_offers_consent: didConsent } }) =>
     didConsent,

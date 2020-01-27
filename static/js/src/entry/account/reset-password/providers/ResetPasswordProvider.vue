@@ -1,11 +1,11 @@
 <script>
-import tokenUserMixin from '../../store/token-user/mixin';
+import userMixin from '../../store/user/mixin';
 import { resetPassword } from '../../utils/auth-actions';
 
 export default {
   name: 'ResetPasswordProvider',
 
-  mixins: [tokenUserMixin],
+  mixins: [userMixin],
 
   data() {
     return {
@@ -16,7 +16,7 @@ export default {
 
   methods: {
     pwReset(gaLabel) {
-      const { email } = this.tokenUser;
+      const { email } = this.user;
 
       resetPassword(email, err => {
         if (err) {
@@ -39,9 +39,11 @@ export default {
     const { pwResetSuccess, pwResetFailure, pwReset } = this;
 
     return this.$scopedSlots.default({
-      pwResetSuccess,
-      pwResetFailure,
-      pwReset,
+      pwReset: {
+        pwResetSuccess,
+        pwResetFailure,
+        pwReset,
+      },
     });
   },
 };

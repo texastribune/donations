@@ -9,14 +9,6 @@ export default {
   mixins: [userMixin],
 
   computed: {
-    receiptAmount() {
-      return this.user.total_gifts_last_year;
-    },
-
-    greeting() {
-      return this.user.greeting;
-    },
-
     lastYear() {
       return getYear(new Date()) - 1;
     },
@@ -26,11 +18,12 @@ export default {
     async buildReceipt(gaLabel) {
       try {
         const buildTaxReceipt = await import(/* webpackChunkName: 'build-tax-receipt' */ '../build-tax-receipt');
-        const { lastYear, receiptAmount, greeting } = this;
+        const { lastYear, user } = this;
+        const { lastYearAmount, greeting } = user;
 
         await buildTaxReceipt.default({
           lastYear,
-          receiptAmount,
+          lastYearAmount,
           greeting,
         });
       } finally {
@@ -47,7 +40,9 @@ export default {
   render() {
     const { buildReceipt, lastYear } = this;
 
-    return this.$scopedSlots.default({ buildReceipt, lastYear });
+    return this.$scopedSlots.default({
+      taxReceipt: { buildReceipt, lastYear },
+    });
   },
 };
 </script>

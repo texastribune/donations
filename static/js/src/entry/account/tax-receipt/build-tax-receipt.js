@@ -6,7 +6,7 @@ import formatCurrency from '../utils/format-currency';
 
 export default async function buildTaxReceipt({
   lastYear,
-  receiptAmount,
+  lastYearAmount,
   greeting,
 }) {
   // eslint-disable-next-line new-cap
@@ -66,7 +66,7 @@ export default async function buildTaxReceipt({
     doc.setFontStyle('bold');
     doc.text('Total donation amount', leftEdge, 327);
     doc.setFontStyle('normal');
-    doc.text(formatCurrency(receiptAmount), leftEdge, 340);
+    doc.text(formatCurrency(lastYearAmount), leftEdge, 340);
 
     doc.text(
       "Thanks so much. We couldn't do this work without you!",
@@ -94,7 +94,7 @@ export default async function buildTaxReceipt({
     doc.setFontStyle('bold');
     doc.text('Total donation amount', leftEdge, 290);
     doc.setFontStyle('normal');
-    doc.text(formatCurrency(receiptAmount), leftEdge, 302);
+    doc.text(formatCurrency(lastYearAmount), leftEdge, 302);
 
     doc.text(
       "Thanks so much. We couldn't do this work without you!",

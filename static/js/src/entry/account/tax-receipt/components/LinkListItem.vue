@@ -1,5 +1,5 @@
 <template>
-  <tax-receipt-provider v-slot="{ buildReceipt, lastYear }">
+  <tax-receipt-provider v-slot="{ taxReceipt: { buildReceipt, lastYear } }">
     <link-list-item>
       <template v-slot:main>
         <button class="c-link-button" @click="buildReceipt(taxReceiptGaLabel)">
