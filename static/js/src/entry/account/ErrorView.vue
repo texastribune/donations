@@ -9,7 +9,7 @@
           working hard to fix it.
         </p>
         <p>
-          Click here to return to your <a href="/account">account overview</a>.
+          Click here to return to your <a href="/account/">account overview</a>.
           If the issue persists, contact us at
           <a
             href="mailto:community@texastribune.org?subject=account%20technical%20error"

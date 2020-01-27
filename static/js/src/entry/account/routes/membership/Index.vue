@@ -31,8 +31,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import routeMixin from '../mixin';
 import Expired from './containers/ExpiredContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
@@ -69,14 +67,8 @@ export default {
 
   methods: {
     async fetchData() {
-      const {
-        is_recurring_donor,
-        is_single_donor,
-        is_circle_donor,
-      } = this.user;
-
-      const meetsCriteria =
-        is_recurring_donor || is_single_donor || is_circle_donor;
+      const { hasGivenNotCustom } = this.user;
+      const meetsCriteria = hasGivenNotCustom;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

@@ -1,13 +1,13 @@
 <template>
   <ul class="c-info-list">
-    <li v-for="item in items" :key="item.id" class="c-info-list__item">
+    <li v-for="item in items" :key="item.key" class="c-info-list__item">
       <h3 class="t-size-s has-xxxs-btm-marg">
         <strong>{{ item.heading }}</strong>
       </h3>
       <p>
-        <slot :item="item">
-          <span class="has-text-gray-dark">{{ item.text }}</span>
-        </slot>
+        <span class="has-text-gray-dark">
+          <slot name="text" :item="item"> {{ item.text }} </slot>
+        </span>
       </p>
     </li>
   </ul>

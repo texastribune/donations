@@ -7,7 +7,7 @@
         <p>
           Thanks for creating a Texas Tribune account &mdash; you’re almost
           done! To view your account, we need you to verify your email address:
-          <strong>{{ email }}</strong
+          <strong>{{ user.email }}</strong
           >. Check your inbox for an email from The Texas Tribune with the
           subject line &quot;Please confirm your account,&quot; then click to
           verify your email. Having trouble? Contact
@@ -27,19 +27,13 @@
 </template>
 
 <script>
-import tokenUser from './store/token-user/mixin';
+import userMixin from './store/user/mixin';
 import setTitle from './utils/set-title';
 
 export default {
   name: 'UnverifiedView',
 
-  mixins: [tokenUser],
-
-  computed: {
-    email() {
-      return this.tokenUser.email;
-    },
-  },
+  mixins: [userMixin],
 
   mounted() {
     window.onpopstate = () => {
