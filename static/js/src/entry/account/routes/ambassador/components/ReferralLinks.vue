@@ -1,5 +1,5 @@
 <template>
-  <user-provider v-slot="{ twitterUrl, facebookUrl, emailUrl }">
+  <user-provider v-slot="{ user: { twitterUrl, facebookUrl, emailUrl } }">
     <ul class="c-ambassador-socials">
       <li class="has-s-btm-marg">
         <a
