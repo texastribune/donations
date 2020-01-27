@@ -11,7 +11,7 @@ export default function formatTransaction({
     period,
   };
 
-  if (paymentType.toLowerCase() === 'credit card') {
+  if (paymentType && paymentType.toLowerCase() === 'credit card') {
     transaction.card = { brand: card.brand, last4: card.last4 };
   }
 
