@@ -56,10 +56,6 @@ if (ENABLE_SENTRY) {
   });
 }
 
-Vue.use(VModal);
-Vue.use(VueRouter);
-Vue.use(VueClipboard);
-
 Vue.mixin({
   data() {
     return {
@@ -78,6 +74,10 @@ Vue.mixin({
   },
 });
 
+Vue.use(VModal);
+Vue.use(VueRouter);
+Vue.use(VueClipboard);
+
 Vue.component('UserSiteFooter', UserSiteFooter);
 Vue.component('BasicSiteFooter', BasicSiteFooter);
 Vue.component('UserNavBar', UserNavBar);
@@ -95,6 +95,7 @@ extendValidationRule('required', requiredRule);
 extendValidationRule('numeric', numericRule);
 extendValidationRule('confirm', {
   params: ['target'],
+
   validate(value, { target }) {
     return value === target;
   },
@@ -137,21 +138,19 @@ function refreshToken() {
     const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
 
     if (isLoggedIn) refreshToken();
-  }, 15 * 60 * 1000); // 15 minutes
+  }, 15 * 60 * 1000);
 }
 
 store.dispatch('tokenUser/getTokenUser').then(() => {
+  const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
   const router = new VueRouter({
     base: '/account',
     mode: 'history',
     routes,
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
-  const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
 
-  if (isLoggedIn) {
-    refreshToken();
-  }
+  if (isLoggedIn) refreshToken();
 
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setIsFetching', true);
@@ -185,5 +184,6 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
   });
 
   const instance = new Vue({ ...App, router, store });
+
   instance.$mount('#account-attach');
 });
