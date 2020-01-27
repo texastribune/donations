@@ -4,7 +4,7 @@
       <message
         heading="Coming soon"
         :name="messageKey"
-        :ga-close-label="gaCloseLabel"
+        :ga-label="gaLabel"
         @setMessageSeen="slotProps.setMessageSeen"
       >
         <template v-slot:icon>
@@ -34,7 +34,7 @@ export default {
   components: { Messages, Message },
 
   props: {
-    gaCloseLabel: {
+    gaLabel: {
       type: String,
       required: true,
     },

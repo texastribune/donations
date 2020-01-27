@@ -6,7 +6,7 @@
   </route-loader>
 
   <div v-else class="has-ump-top-padding">
-    <credit-card-message :ga-close-label="ga.userPortal.labels.membership" />
+    <credit-card-message :ga-label="ga.userPortal.labels.membership" />
 
     <h1 class="has-ump-side-padding has-xl-btm-marg t-size-xl">
       Your Membership
@@ -26,7 +26,9 @@
       </div>
     </div>
 
-    <appeal /> <help membership />
+    <appeal />
+
+    <help membership />
   </div>
 </template>
 

@@ -4,7 +4,7 @@
       <message
         heading="Welcome"
         :name="messageKey"
-        :ga-close-label="ga.userPortal.labels.home"
+        :ga-label="ga.userPortal.labels.home"
         :display="{ onGrayMobileBg: true }"
         @setMessageSeen="slotProps.setMessageSeen"
       >

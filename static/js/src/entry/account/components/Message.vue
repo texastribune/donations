@@ -38,7 +38,7 @@ export default {
       required: true,
     },
 
-    gaCloseLabel: {
+    gaLabel: {
       type: String,
       required: true,
     },
@@ -77,7 +77,7 @@ export default {
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
         gaAction: this.ga.userPortal.actions['clear-notification'],
-        gaLabel: this.gaCloseLabel,
+        gaLabel: this.gaLabel,
       });
     },
 

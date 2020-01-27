@@ -6,7 +6,7 @@
   </route-loader>
 
   <div v-else class="has-ump-top-padding">
-    <credit-card-message :ga-close-label="ga.userPortal.labels.payments" />
+    <credit-card-message :ga-label="ga.userPortal.labels.payments" />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       Your Donations
