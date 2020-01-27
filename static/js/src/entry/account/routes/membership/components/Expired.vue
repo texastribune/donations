@@ -63,7 +63,6 @@ export default {
         data.push({
           key: 'payment',
           heading: 'Payment method',
-          text: '',
           extra: { brand, last4 },
         });
       }
@@ -71,7 +70,6 @@ export default {
       data.push({
         key: 'status',
         heading: 'Status',
-        text: '',
         extra: { membershipExpirationDate },
       });
 

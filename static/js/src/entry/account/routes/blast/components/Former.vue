@@ -1,22 +1,22 @@
 <template>
-  <section class="c-detail-box">
-    <div class="has-xxl-btm-marg">
+  <section class="c-detail-box c-detail-box--from-l">
+    <div class="has-xxxl-btm-marg">
       <info-list :items="data">
-        <template v-slot:text="{ item: { extra, key } }">
-          <template v-if="key === 'donation'">
+        <template v-slot:text="{ item: { key, extra, text } }">
+          <template v-if="key === 'subscription'">
             {{ extra.amount | currency }}, {{ extra.period }}
           </template>
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
           </template>
-          <template v-if="key === 'next'">
-            {{ extra.nextTransactionDate | longDate }}
+          <template v-if="key === 'status'">
+            {{ text }}
           </template>
         </template>
       </info-list>
     </div>
 
-    <user-internal-nav show-donation-history />
+    <user-internal-nav show-blast-payments show-renew-blast />
   </section>
 </template>
 
@@ -24,12 +24,12 @@
 import InfoList from '../../../components/InfoList.vue';
 
 export default {
-  name: 'MembershipRecurringOrCircle',
+  name: 'BlastFormer',
 
   components: { InfoList },
 
   props: {
-    nextTransaction: {
+    lastTransaction: {
       type: Object,
       required: true,
     },
@@ -38,16 +38,11 @@ export default {
   computed: {
     data() {
       const data = [];
-      const {
-        amount,
-        period,
-        card,
-        date: nextTransactionDate,
-      } = this.nextTransaction;
+      const { amount, period, card } = this.lastTransaction;
 
       data.push({
-        key: 'donation',
-        heading: 'Donation',
+        key: 'subscription',
+        heading: 'Subscription',
         extra: { amount, period },
       });
 
@@ -62,9 +57,9 @@ export default {
       }
 
       data.push({
-        key: 'next',
-        heading: 'Next payment',
-        extra: { nextTransactionDate },
+        key: 'status',
+        heading: 'Status',
+        text: 'Your subscription is no longer active.',
       });
 
       return data;

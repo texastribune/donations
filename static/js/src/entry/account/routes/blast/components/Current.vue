@@ -1,9 +1,9 @@
 <template>
-  <section class="c-detail-box">
-    <div class="has-xxl-btm-marg">
+  <section class="c-detail-box c-detail-box--from-l">
+    <div class="has-xxxl-btm-marg">
       <info-list :items="data">
-        <template v-slot:text="{ item: { extra, key } }">
-          <template v-if="key === 'donation'">
+        <template v-slot:text="{ item: { key, extra } }">
+          <template v-if="key === 'subscription'">
             {{ extra.amount | currency }}, {{ extra.period }}
           </template>
           <template v-if="key === 'payment'">
@@ -16,7 +16,7 @@
       </info-list>
     </div>
 
-    <user-internal-nav show-donation-history />
+    <user-internal-nav show-blast-payments />
   </section>
 </template>
 
@@ -24,7 +24,7 @@
 import InfoList from '../../../components/InfoList.vue';
 
 export default {
-  name: 'MembershipRecurringOrCircle',
+  name: 'BlastCurrent',
 
   components: { InfoList },
 
@@ -46,8 +46,8 @@ export default {
       } = this.nextTransaction;
 
       data.push({
-        key: 'donation',
-        heading: 'Donation',
+        key: 'subscription',
+        heading: 'Subscription',
         extra: { amount, period },
       });
 

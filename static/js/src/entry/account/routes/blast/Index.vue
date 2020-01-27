@@ -13,11 +13,7 @@
     </h1>
 
     <div class="has-ump-side-padding has-xl-btm-marg">
-      <section class="c-detail-box c-detail-box--from-l">
-        <div class="has-xxxl-btm-marg"><detail /></div>
-
-        <internal-nav />
-      </section>
+      <current /> <former />
     </div>
 
     <help blast />
@@ -25,20 +21,18 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
-import Help from '../home/components/Help.vue';
-import Detail from './containers/DetailContainer.vue';
-import InternalNav from './components/InternalNav.vue';
 import { InvalidRouteError } from '../../errors';
+import RouteLoader from '../home/components/RouteLoader.vue';
+import Current from './containers/CurrentContainer.vue';
+import Former from './containers/FormerContainer.vue';
+import Help from '../home/components/Help.vue';
 
 export default {
   name: 'BlastRoute',
 
-  components: { Help, Detail, RouteLoader, InternalNav },
+  components: { Help, Current, Former, RouteLoader },
 
   mixins: [routeMixin, userMixin],
 
@@ -48,7 +42,7 @@ export default {
 
   methods: {
     async fetchData() {
-      const meetsCriteria = this.user.is_blast_subscriber;
+      const meetsCriteria = this.user.isBlastSubscriber;
       if (!meetsCriteria) throw new InvalidRouteError();
     },
   },
