@@ -26,20 +26,20 @@ export default {
 
   computed: {
     showLoader() {
-      return this.appIsFetching && !this.appError;
+      return this.context.isFetching && !this.context.error;
     },
 
     showUnverified() {
-      return this.appError instanceof UnverifiedError;
+      return this.context.error instanceof UnverifiedError;
     },
 
     showError() {
-      return !!this.appError;
+      return !!this.context.error;
     },
   },
 
   errorCaptured(err) {
-    this.setAppError(err);
+    this.context.setError(err);
   },
 };
 </script>

@@ -40,13 +40,13 @@ export default {
 
   computed: {
     shouldShow() {
-      return this.isLoggedIn;
+      return this.tokenUser.isLoggedIn;
     },
   },
 
   methods: {
     goHome() {
-      this.$emit('goHome');
+      this.$router.push({ name: 'home' });
     },
 
     async confirm() {

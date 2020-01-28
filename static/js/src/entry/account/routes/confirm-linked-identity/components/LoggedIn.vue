@@ -50,25 +50,25 @@ export default {
 
   methods: {
     onConfirm() {
-      this.$emit('confirm');
-
       window.dataLayer.push({
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
         gaAction: this.ga.userPortal.actions['confirm-linked-email'],
         gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
       });
+
+      this.$emit('confirm');
     },
 
     onCancel() {
-      this.$emit('goHome');
-
       window.dataLayer.push({
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
         gaAction: this.ga.userPortal.actions['cancel-linked-email'],
         gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
       });
+
+      this.$emit('goHome');
     },
   },
 };

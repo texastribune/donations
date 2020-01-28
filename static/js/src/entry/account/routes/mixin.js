@@ -28,6 +28,12 @@ export default {
     }
   },
 
+  computed: {
+    isLoggedIn() {
+      return this.tokenUser.isLoggedIn;
+    },
+  },
+
   methods: {
     async doRouteFetch() {
       this.routeIsFetching = true;
@@ -46,7 +52,7 @@ export default {
           this.$router.push({ name: 'home' });
         } else {
           // TODO: throw to errorCaptured in <App />
-          this.setAppError(err);
+          this.context.setError(err);
           logError(err);
         }
       }
@@ -60,15 +66,15 @@ export default {
     // watch the value of isLoggedIn as we refresh
     // it every 15 minutes
     isLoggedIn(newIsLoggedIn, oldIsLoggedIn) {
-      const { tokenUserError } = this;
+      const { error } = this.tokenUser;
       const { isProtected } = this.$route.meta;
 
       if (isProtected && oldIsLoggedIn && !newIsLoggedIn) {
-        if (tokenUserError) {
+        if (error) {
           // Auth0 error encountered and user is on a
           // log-in-required route; show error page
           // TODO: show modal
-          throw tokenUserError;
+          throw error;
         } else {
           // user is on a login-required route and
           // either their session has expired or they
