@@ -64,11 +64,8 @@ export default {
     getUserPayload(fields) {
       const userPayload = {};
 
-      if (fields.firstName.changed) {
+      if (fields.firstName.changed || fields.lastName.changed) {
         userPayload.first_name = fields.firstName.value;
-      }
-
-      if (fields.lastName.changed) {
         userPayload.last_name = fields.lastName.value;
       }
 
