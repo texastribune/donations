@@ -39,9 +39,9 @@
 </template>
 
 <script>
+import Help from '../../components/Help.vue';
 import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Help from '../home/components/Help.vue';
 import ReferralForm from './containers/ReferralFormContainer.vue';
 import ReferralLinks from './components/ReferralLinks.vue';
 import InternalNav from './components/InternalNav.vue';

@@ -47,8 +47,8 @@
 <script>
 import { localize } from 'vee-validate';
 
-import LinkEmailProvider from '../providers/LinkEmailProvider.vue';
-import TextInputAndSubmit from '../../../form/components/TextInputAndSubmit.vue';
+import LinkEmailProvider from '../providers/Provider.vue';
+import TextInputAndSubmit from '../../form/components/TextInputAndSubmit.vue';
 
 localize({
   en: {

@@ -65,20 +65,8 @@
 </template>
 
 <script>
-/*
- We disable the submit button after it's clicked
- (and re-enable it after someone resets) so the store
- value of context.isViewingAs toggles from false to true
- every time an email address is entered.
-
- This is so the watcher in ContactInfoContainer knows to
- re-format the data. We have to mangle it differently
- depending whether you're "viewing as," so we have to be
- very explicit about when to update it.
-*/
-
 export default {
-  name: 'ViewAs',
+  name: 'ViewAsForm',
 
   data() {
     return { email: '', isVisible: true };

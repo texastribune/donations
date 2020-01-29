@@ -2,8 +2,6 @@ export const CONTEXT_MODULE = 'context';
 export const USER_MODULE = 'user';
 export const TOKEN_USER_MODULE = 'tokenUser';
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
-export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
-export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
 export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${

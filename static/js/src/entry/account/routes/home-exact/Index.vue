@@ -9,7 +9,7 @@
     v-else
     class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l"
   >
-    <message />
+    <welcome-message :ga-label="ga.userPortal.labels.home" />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
@@ -29,10 +29,10 @@
 </template>
 
 <script>
+import Help from '../../components/Help.vue';
+import WelcomeMessage from '../../messages/components/WelcomeMessage.vue';
 import routeMixin from '../mixin';
-import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Message from './components/Message.vue';
 import ProfileSettings from './containers/ProfileSettingsContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
@@ -46,7 +46,7 @@ export default {
   name: 'HomeExactRoute',
 
   components: {
-    Message,
+    WelcomeMessage,
     ProfileSettings,
     RecurringOrCircle,
     Expired,

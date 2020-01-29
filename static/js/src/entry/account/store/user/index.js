@@ -166,8 +166,12 @@ const getters = {
     data: { membership_expiration_date: membershipExpirationDate },
   }) => membershipExpirationDate,
 
-  membershipLevel: ({ data: { membership_level: membershipLevel } }) =>
-    membershipLevel,
+  membershipLevel: ({ data: { membership_level: membershipLevel } }) => {
+    if (membershipLevel) {
+      return membershipLevel.toLowerCase();
+    }
+    return null;
+  },
 
   isNeverGiven: ({ data: { never_given: isNeverGiven } }) => isNeverGiven,
 

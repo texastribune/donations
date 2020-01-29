@@ -1,12 +1,9 @@
 <script>
-import userMixin from '../../../store/user/mixin';
-import contextMixin from '../../../store/context/mixin';
-import LinkEmail from '../components/LinkEmail.vue';
+import userMixin from '../../store/user/mixin';
+import contextMixin from '../../store/context/mixin';
 
 export default {
   name: 'LinkEmailProvider',
-
-  components: { LinkEmail },
 
   mixins: [userMixin, contextMixin],
 
@@ -27,7 +24,7 @@ export default {
     },
 
     linkedEmails() {
-      return this.user.identities.map(({ email }) => email);
+      return this.user.linkedEmails;
     },
   },
 
@@ -35,14 +32,13 @@ export default {
     async linkEmail(fields) {
       const emailToLink = fields.linkEmail.value;
 
-      this.setAppIsFetching(true);
+      this.context.setAppIsFetching(true);
 
-      await this.linkIdentity({ email: emailToLink });
-      await this.getUser();
+      await this.user.linkIdentity({ email: emailToLink });
+      await this.user.getUser();
 
       this.submittedEmail = emailToLink;
-
-      this.setAppIsFetching(false);
+      this.context.setAppIsFetching(false);
 
       window.dataLayer.push({
         event: this.ga.customEventName,

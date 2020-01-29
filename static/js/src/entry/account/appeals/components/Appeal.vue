@@ -7,7 +7,7 @@
         Member benefits
       </template>
       <template v-else>
-        {{ level }} benefits
+        {{ membershipLevel }} benefits
       </template>
     </h2>
 
@@ -65,13 +65,13 @@
 </template>
 
 <script>
-import BENEFITS from '../benefits';
+import BENEFITS from './benefits';
 
 export default {
   name: 'Appeal',
 
   props: {
-    level: {
+    membershipLevel: {
       validator: value => typeof value === 'string' || value === null,
       required: true,
     },
@@ -97,12 +97,14 @@ export default {
         'involved member': 5,
       };
 
-      if (this.isExpired) return -1;
-      return mapping[this.level];
+      if (this.isExpired) {
+        return -1;
+      }
+      return mapping[this.membershipLevel];
     },
 
     isHighest() {
-      return this.level === 'involved member';
+      return this.membershipLevel === 'involved member';
     },
 
     upgradeHref() {

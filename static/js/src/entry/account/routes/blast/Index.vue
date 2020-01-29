@@ -21,13 +21,13 @@
 </template>
 
 <script>
-import routeMixin from '../mixin';
+import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
 import { InvalidRouteError } from '../../errors';
+import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Current from './containers/CurrentContainer.vue';
 import Former from './containers/FormerContainer.vue';
-import Help from '../home/components/Help.vue';
 
 export default {
   name: 'BlastRoute',
