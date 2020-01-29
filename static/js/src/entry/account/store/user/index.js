@@ -8,23 +8,32 @@ import formatTransaction from './utils/format-transaction';
 import { PORTAL_API_URL } from '../../constants';
 
 const SET_RAW_DATA = 'SET_RAW_DATA';
+const SET_VIEW_AS_EMAIL = 'SET_VIEW_AS_EMAIL';
 
-const initialState = { data: {} };
+const initialState = {
+  data: {},
+  viewAsEmail: '',
+};
 
 const mutations = {
-  [SET_RAW_DATA](currentState, data) {
-    currentState.data = data;
+  [SET_RAW_DATA](state, data) {
+    state.data = data;
+  },
+
+  [SET_VIEW_AS_EMAIL](state, viewAsEmail) {
+    state.viewAsEmail = viewAsEmail;
   },
 };
 
 const actions = {
-  getOtherUser: async ({ commit, rootState }, email) => {
+  getViewAsUser: async ({ commit, rootState }, email) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
       params: { email },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
+    commit(SET_VIEW_AS_EMAIL, email);
     commit(SET_RAW_DATA, data[0]);
   },
 
@@ -88,23 +97,29 @@ const actions = {
 
 const getters = {
   email: (
+    { data: { viewAsEmail } },
     _,
-    __,
     {
       tokenUser: {
         idTokenPayload: { email },
       },
+      context: { isViewingAs },
     }
-  ) => email,
+  ) => {
+    if (isViewingAs) {
+      return viewAsEmail;
+    }
+    return email;
+  },
 
   identity: ({ data: { identities = [] } }, { email }) => {
     if (!identities.length) return {};
 
-    const [goodIdentity] = identities.filter(
+    const [identity] = identities.filter(
       ({ email: identityEmail }) => identityEmail === email
     );
 
-    return goodIdentity;
+    return identity;
   },
 
   userId: ({ data: { id } }) => id,

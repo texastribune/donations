@@ -18,8 +18,8 @@ export default {
 
     userActions() {
       const userActions = {
-        getOtherUser: () => {
-          this.$store.dispatch(`${MODULE}/getOtherUser`);
+        getViewAsUser: () => {
+          this.$store.dispatch(`${MODULE}/getViewAsUser`);
         },
         getUser: () => {
           this.$store.dispatch(`${MODULE}/getUser`);
