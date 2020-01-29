@@ -1,15 +1,15 @@
 <script>
-import userMixin from './mixin';
+import mixin, { MODULE } from './mixin';
 
 export default {
-  name: 'UserProvider',
+  name: `${MODULE}Provider`,
 
-  mixins: [userMixin],
+  mixins: [mixin],
 
   render() {
-    const { userGetters } = this;
+    const { [`${MODULE}Getters`]: getters } = this;
 
-    return this.$scopedSlots.default({ user: { ...userGetters } });
+    return this.$scopedSlots.default({ [MODULE]: { ...getters } });
   },
 };
 </script>

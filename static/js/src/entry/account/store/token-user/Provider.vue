@@ -1,14 +1,16 @@
 <script>
-import tokenUser from './mixin';
+import mixin, { MODULE } from './mixin';
 
 export default {
-  name: 'TokenUserProvider',
+  name: `${MODULE}Provider`,
 
-  mixins: [tokenUser],
+  mixins: [mixin],
 
   render() {
+    const { [`${MODULE}Getters`]: getters, [`${MODULE}State`]: state } = this;
+
     return this.$scopedSlots.default({
-      tokenUser: { ...this.tokenUserGetters, ...this.tokenUserState },
+      [MODULE]: { ...getters, ...state },
     });
   },
 };

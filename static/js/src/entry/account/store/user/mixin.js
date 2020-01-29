@@ -1,23 +1,25 @@
-const MODULE = 'user';
+import { USER_MODULE } from '../../constants';
+
+export const MODULE = USER_MODULE;
 
 export default {
   computed: {
-    userGetters() {
-      const userGetters = {};
+    [`${MODULE}Getters`]() {
+      const relevantGetters = {};
       const allGetters = this.$store.getters;
 
       Object.keys(allGetters).forEach(getterName => {
         if (getterName.indexOf(`${MODULE}/`) !== -1) {
-          userGetters[getterName.replace(`${MODULE}/`, '')] =
+          relevantGetters[getterName.replace(`${MODULE}/`, '')] =
             allGetters[getterName];
         }
       });
 
-      return userGetters;
+      return relevantGetters;
     },
 
-    userActions() {
-      const userActions = {
+    [`${MODULE}Actions`]() {
+      const relevantActions = {
         getViewAsUser: () => {
           this.$store.dispatch(`${MODULE}/getViewAsUser`);
         },
@@ -38,11 +40,16 @@ export default {
         },
       };
 
-      return userActions;
+      return relevantActions;
     },
 
-    user() {
-      return { ...this.userGetters, ...this.userActions };
+    [MODULE]() {
+      const {
+        [`${MODULE}Getters`]: getters,
+        [`${MODULE}Actions`]: actions,
+      } = this;
+
+      return { ...getters, ...actions };
     },
   },
 };

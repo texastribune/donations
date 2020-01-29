@@ -1,3 +1,6 @@
+export const CONTEXT_MODULE = 'context';
+export const USER_MODULE = 'user';
+export const TOKEN_USER_MODULE = 'tokenUser';
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
 export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';

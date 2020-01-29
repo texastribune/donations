@@ -1,16 +1,16 @@
 <script>
-import contextMixin from './mixin';
+import mixin, { MODULE } from './mixin';
 
 export default {
-  name: 'ContextProvider',
+  name: `${MODULE}Provider`,
 
-  mixins: [contextMixin],
+  mixins: [mixin],
 
   render() {
-    const { contextState } = this;
+    const { [`${MODULE}State`]: state } = this;
 
     return this.$scopedSlots.default({
-      context: { ...contextState },
+      [MODULE]: { ...state },
     });
   },
 };

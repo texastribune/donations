@@ -1,12 +1,14 @@
-const MODULE = 'context';
+import { CONTEXT_MODULE } from '../../constants';
+
+export const MODULE = CONTEXT_MODULE;
 
 export default {
   computed: {
-    contextState() {
+    [`${MODULE}State`]() {
       return this.$store.state[MODULE];
     },
 
-    contextActions() {
+    [`${MODULE}Actions`]() {
       const userActions = {
         setIsViewingAs: () => {
           this.$store.dispatch(`${MODULE}/setIsViewingAs`);
@@ -22,8 +24,10 @@ export default {
       return userActions;
     },
 
-    context() {
-      return { ...this.contextActions, ...this.contextState };
+    [MODULE]() {
+      const { [`${MODULE}Actions`]: actions, [`${MODULE}State`]: state } = this;
+
+      return { ...actions, ...state };
     },
   },
 };

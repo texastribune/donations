@@ -1,8 +1,10 @@
-const MODULE = 'tokenUser';
+import { TOKEN_USER_MODULE } from '../../constants';
+
+export const MODULE = TOKEN_USER_MODULE;
 
 export default {
   computed: {
-    tokenUserGetters() {
+    [`${MODULE}Getters`]() {
       const tokenUserGetters = {};
       const allGetters = this.$store.getters;
 
@@ -16,14 +18,15 @@ export default {
       return tokenUserGetters;
     },
 
-    tokenUserState() {
+    [`${MODULE}State`]() {
       const { error } = this.$store.state[MODULE];
-
       return { error };
     },
 
-    tokenUser() {
-      return { ...this.tokenUserGetters, ...this.tokenUserState };
+    [MODULE]() {
+      const { [`${MODULE}Getters`]: getters, [`${MODULE}State`]: state } = this;
+
+      return { ...getters, ...state };
     },
   },
 };
