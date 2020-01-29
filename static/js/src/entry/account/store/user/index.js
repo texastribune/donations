@@ -112,7 +112,18 @@ const getters = {
     return email;
   },
 
-  identity: ({ data: { identities = [] } }, { email }) => {
+  identity: (
+    { data: { identities = [] } },
+    { email },
+    { context: { isViewingAs } }
+  ) => {
+    // viewing as someone who has never visited portal
+    if (isViewingAs && !identities.length) {
+      return {
+        tribune_offers_consent: false,
+      };
+    }
+    // data fetch still in progress
     if (!identities.length) return {};
 
     const [identity] = identities.filter(

@@ -150,14 +150,17 @@ store.dispatch('tokenUser/getTokenUser').then(() => {
     scrollBehavior: () => ({ x: 0, y: 0 }),
   });
 
-  if (isLoggedIn) refreshToken();
+  if (isLoggedIn) {
+    refreshToken();
+  }
 
   router.beforeEach((to, from, next) => {
     store.dispatch('context/setIsFetching', true);
 
-    const { isVerified, error: tokenUserError } = store.state.tokenUser;
     // eslint-disable-next-line no-shadow
     const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
+    const isVerified = store.getters['tokenUser/isVerified'];
+    const { error: tokenUserError } = store.state.tokenUser;
 
     if (to.meta.isProtected) {
       if (tokenUserError) {

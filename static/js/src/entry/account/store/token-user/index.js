@@ -14,26 +14,28 @@ const SET_ERROR = 'SET_ERROR';
 
 const initialState = {
   accessToken: '',
+  accessTokenPayload: {},
   idToken: '',
   idTokenPayload: {},
   error: null,
 };
 
 const mutations = {
-  [SET_ACCESS_TOKEN](currentState, accessToken) {
-    currentState.accessToken = accessToken;
+  [SET_ACCESS_TOKEN](state, accessToken) {
+    state.accessToken = accessToken;
+    state.accessTokenPayload = jwt.decode(accessToken);
   },
 
-  [SET_ID_TOKEN](currentState, idToken) {
-    currentState.idToken = idToken;
+  [SET_ID_TOKEN](state, idToken) {
+    state.idToken = idToken;
   },
 
-  [SET_ID_TOKEN_PAYLOAD](currentState, payload) {
-    currentState.idTokenPayload = payload;
+  [SET_ID_TOKEN_PAYLOAD](state, payload) {
+    state.idTokenPayload = payload;
   },
 
-  [SET_ERROR](currentState, error) {
-    currentState.error = new Auth0Error(error);
+  [SET_ERROR](state, error) {
+    state.error = new Auth0Error(error);
   },
 };
 
@@ -78,9 +80,7 @@ const actions = {
 const getters = {
   isLoggedIn: ({ accessToken }) => !!accessToken,
 
-  accessTokenPayload: ({ accessToken }) => jwt.decode(accessToken),
-
-  canViewAs: (_, { accessTokenPayload }) => {
+  canViewAs: ({ accessTokenPayload }) => {
     const { permissions } = accessTokenPayload;
     const filteredPerms = permissions.filter(perm => perm === 'portal:view_as');
 
