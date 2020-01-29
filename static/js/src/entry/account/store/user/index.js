@@ -111,13 +111,13 @@ const getters = {
 
   identityId: (_, { identity: { id } }) => id,
 
-  firstName: ({ data: { first_name: firstName } }) => firstName,
+  firstName: ({ data: { first_name: firstName } }) => firstName || '',
 
-  lastName: ({ data: { last_name: lastName } }) => lastName,
+  lastName: ({ data: { last_name: lastName } }) => lastName || '',
 
-  greeting: ({ data: { greeting } }) => greeting,
+  greeting: ({ data: { greeting } }) => greeting || '',
 
-  zip: ({ data: { postal_code: zip } }) => zip,
+  zip: ({ data: { postal_code: zip } }) => zip || '',
 
   lastYearAmount: ({ data: { total_gifts_last_year: lastYearAmount } }) =>
     lastYearAmount,
