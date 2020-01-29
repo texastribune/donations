@@ -2,17 +2,14 @@
   <transition name="has-fade">
     <expired
       v-if="shouldShow"
-      :last-transaction="lastTransaction"
-      :membership-expiration-date="membershipExpirationDate"
+      :last-transaction="user.lastTransaction"
+      :membership-expiration-date="user.membershipExpirationDate"
     />
   </transition>
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import userMixin from '../../../store/user/mixin';
-import { CARD_PAYMENT_FLAG } from '../../../constants';
 
 const Expired = () =>
   import(/* webpackChunkName: "summary-expired" */ '../components/Expired.vue');
@@ -26,37 +23,9 @@ export default {
 
   computed: {
     shouldShow() {
-      const {
-        is_recurring_donor,
-        is_single_donor,
-        is_circle_donor,
-        is_expired,
-      } = this.user;
+      const { hasGivenNotCustom, isExpired } = this.user;
 
-      return (
-        (is_recurring_donor || is_single_donor || is_circle_donor) && is_expired
-      );
-    },
-
-    membershipExpirationDate() {
-      return this.user.membership_expiration_date;
-    },
-
-    lastTransaction() {
-      const {
-        last_transaction: { amount, date, payment_type, credit_card },
-      } = this.user;
-
-      const data = {
-        amount,
-        date,
-      };
-
-      if (payment_type && payment_type.toLowerCase() === CARD_PAYMENT_FLAG) {
-        data.last4 = credit_card.last4;
-      }
-
-      return data;
+      return hasGivenNotCustom && is_expired;
     },
   },
 };

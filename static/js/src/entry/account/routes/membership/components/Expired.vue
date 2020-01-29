@@ -53,7 +53,6 @@ export default {
       data.push({
         key: 'donation',
         heading: 'Last donation',
-        text: '',
         extra: { amount, lastTransactionDate },
       });
 

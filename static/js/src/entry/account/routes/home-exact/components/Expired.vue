@@ -8,11 +8,12 @@
           <strong>{{ membershipExpirationDate | longDate }}</strong
           >.</span
         >
-        <template v-if="lastTransaction.last4">
+        <template v-if="lastTransaction.card">
           Your last donation of
           <strong>{{ lastTransaction.amount | currency }}</strong> was charged
           on <strong>{{ lastTransaction.date | longDate }}</strong
-          >, to your card ending in <strong>{{ lastTransaction.last4 }}</strong
+          >, to your card ending in
+          <strong>{{ lastTransaction.card.last4 }}</strong
           >.
         </template>
         <template v-else>
