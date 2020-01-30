@@ -42,7 +42,7 @@ export default {
 
   methods: {
     fetchData() {
-      return this.getUser();
+      return this.user.getUser();
     },
   },
 };

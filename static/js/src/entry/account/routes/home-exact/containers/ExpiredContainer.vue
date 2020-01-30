@@ -25,7 +25,7 @@ export default {
     shouldShow() {
       const { hasGivenNotCustom, isExpired } = this.user;
 
-      return hasGivenNotCustom && is_expired;
+      return hasGivenNotCustom && isExpired;
     },
   },
 };

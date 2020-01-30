@@ -1,6 +1,6 @@
 <template>
   <view-as-form
-    v-if="canViewAs"
+    v-if="context.canViewAs"
     @doViewAs="doViewAs"
     @undoViewAs="undoViewAs"
   />

@@ -57,7 +57,7 @@ export default {
   computed: {
     data() {
       const data = [];
-      const { firstName, lastName, email, zip } = this.user;
+      const { firstName, lastName, email, zip } = this;
 
       if (firstName && lastName) {
         data.push({
