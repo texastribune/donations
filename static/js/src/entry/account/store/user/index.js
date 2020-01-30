@@ -5,6 +5,7 @@ import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
 import formatTransaction from './utils/format-transaction';
+import { USER_TYPES } from '../types';
 import { PORTAL_API_URL } from '../../constants';
 
 const SET_RAW_DATA = 'SET_RAW_DATA';
@@ -26,7 +27,7 @@ const mutations = {
 };
 
 const actions = {
-  getViewAsUser: async ({ commit, rootState }, email) => {
+  [USER_TYPES.getViewAsUser]: async ({ commit, rootState }, email) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
       params: { email },
@@ -37,7 +38,7 @@ const actions = {
     commit(SET_RAW_DATA, data[0]);
   },
 
-  getUser: async ({ commit, rootState }) => {
+  [USER_TYPES.getUser]: async ({ commit, rootState }) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
       headers: { Authorization: `Bearer ${accessToken}` },
@@ -46,7 +47,7 @@ const actions = {
     commit(SET_RAW_DATA, data);
   },
 
-  updateUser: async ({ getters, rootState }, updates) => {
+  [USER_TYPES.updateUser]: async ({ getters, rootState }, updates) => {
     const { accessToken } = rootState.tokenUser;
     const { userId } = getters;
 
@@ -55,7 +56,7 @@ const actions = {
     });
   },
 
-  updateIdentity: async ({ getters, rootState }, updates) => {
+  [USER_TYPES.updateIdentity]: async ({ getters, rootState }, updates) => {
     const { accessToken } = rootState.tokenUser;
     const { userId, identityId } = getters;
 
@@ -68,7 +69,7 @@ const actions = {
     );
   },
 
-  linkIdentity: async ({ getters, rootState }, identity) => {
+  [USER_TYPES.linkIdentity]: async ({ getters, rootState }, identity) => {
     const { accessToken } = rootState.tokenUser;
     const { userId, email } = getters;
 
@@ -81,7 +82,10 @@ const actions = {
     );
   },
 
-  confirmLinkedIdentity: async ({ getters, rootState }, ticket) => {
+  [USER_TYPES.confirmLinkedIdentity]: async (
+    { getters, rootState },
+    ticket
+  ) => {
     const { accessToken } = rootState.tokenUser;
     const { userId, email } = getters;
 

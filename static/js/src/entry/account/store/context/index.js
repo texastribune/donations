@@ -1,5 +1,7 @@
 /* eslint-disable no-param-reassign */
 
+import { CONTEXT_TYPES } from '../types';
+
 const SET_IS_VIEWING_AS = 'SET_IS_VIEWING_AS';
 const SET_IS_FETCHING = 'SET_IS_FETCHING';
 const SET_ERROR = 'SET_ERROR';
@@ -25,15 +27,15 @@ const mutations = {
 };
 
 const actions = {
-  setIsViewingAs: ({ commit }, isViewingAs) => {
+  [CONTEXT_TYPES.setIsViewingAs]: ({ commit }, isViewingAs) => {
     commit(SET_IS_VIEWING_AS, isViewingAs);
   },
 
-  setIsFetching: ({ commit }, isFetching) => {
+  [CONTEXT_TYPES.setIsFetching]: ({ commit }, isFetching) => {
     commit(SET_IS_FETCHING, isFetching);
   },
 
-  setError: ({ commit }, error) => {
+  [CONTEXT_TYPES.setError]: ({ commit }, error) => {
     commit(SET_ERROR, error);
   },
 };

@@ -1,6 +1,10 @@
-import { USER_MODULE } from '../../constants';
+import { mapActions } from 'vuex';
+
+import { USER_TYPES, USER_MODULE } from '../types';
 
 export const MODULE = USER_MODULE;
+
+const TYPES = USER_TYPES;
 
 export default {
   computed: {
@@ -18,38 +22,14 @@ export default {
       return relevantGetters;
     },
 
-    [`${MODULE}Actions`]() {
-      const relevantActions = {
-        getViewAsUser: () => {
-          this.$store.dispatch(`${MODULE}/getViewAsUser`);
-        },
-        getUser: () => {
-          this.$store.dispatch(`${MODULE}/getUser`);
-        },
-        updateUser: () => {
-          this.$store.dispatch(`${MODULE}/updateUser`);
-        },
-        updateIdentity: () => {
-          this.$store.dispatch(`${MODULE}/updateIdentity`);
-        },
-        linkIdentity: () => {
-          this.$store.dispatch(`${MODULE}/linkIdentity`);
-        },
-        confirmLinkedIdentity: () => {
-          this.$store.dispatch(`${MODULE}/confirmLinkedIdentity`);
-        },
-      };
-
-      return relevantActions;
-    },
-
     [MODULE]() {
-      const {
-        [`${MODULE}Getters`]: getters,
-        [`${MODULE}Actions`]: actions,
-      } = this;
+      const { [`${MODULE}Getters`]: getters } = this;
 
-      return { ...getters, ...actions };
+      return { ...getters };
     },
+  },
+
+  methods: {
+    ...mapActions(MODULE, Object.keys(TYPES).map(type => TYPES[type])),
   },
 };

@@ -15,6 +15,7 @@ import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
 import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
+import { CONTEXT_TYPES } from './store/types';
 import { UnverifiedError } from './errors';
 
 export default {
@@ -39,7 +40,7 @@ export default {
   },
 
   errorCaptured(err) {
-    this.context.setError(err);
+    this[CONTEXT_TYPES.setError](err);
   },
 };
 </script>

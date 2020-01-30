@@ -4,6 +4,7 @@ import setTitle from '../utils/set-title';
 import logPageView from '../utils/log-page-view';
 import tokenUserMixin from '../store/token-user/mixin';
 import contextMixin from '../store/context/mixin';
+import { CONTEXT_TYPES } from '../store/types';
 import { InvalidRouteError } from '../errors';
 
 export default {
@@ -52,7 +53,7 @@ export default {
           this.$router.push({ name: 'home' });
         } else {
           // TODO: throw to errorCaptured in <App />
-          this.context.setError(err);
+          this[CONTEXT_TYPES.setError](err);
           logError(err);
         }
       }

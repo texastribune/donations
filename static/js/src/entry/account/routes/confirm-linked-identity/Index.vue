@@ -29,6 +29,7 @@ import jwt from 'jsonwebtoken';
 import routeMixin from '../mixin';
 import tokenUserMixin from '../../store/token-user/mixin';
 import userMixin from '../../store/user/mixin';
+import { USER_TYPES } from '../../store/types';
 import RouteLoader from './components/RouteLoader.vue';
 import LoggedOut from './components/LoggedOut.vue';
 import LoggedIn from './containers/LoggedInContainer.vue';
@@ -64,7 +65,7 @@ export default {
     // eslint-disable-next-line consistent-return
     fetchData() {
       if (this.tokenUser.isLoggedIn) {
-        return this.user.getUser();
+        return this[USER_TYPES.getUser]();
       }
     },
   },

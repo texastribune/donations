@@ -15,6 +15,7 @@
 import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
+import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 import getTokenIdentity from '../../../utils/get-token-identity';
 import { CHANGED_EMAIL_REDIRECT } from '../../../constants';
 import { AxiosResponseError } from '../../../errors';
@@ -100,11 +101,11 @@ export default {
       const newEmail = identityPayload.email;
 
       if (Object.keys(userPayload).length > 0) {
-        dispatches.push(this.updateUser(userPayload));
+        dispatches.push(this[USER_TYPES.updateUser](userPayload));
       }
 
       if (Object.keys(identityPayload).length > 0) {
-        dispatches.push(this.updateIdentity(identityPayload));
+        dispatches.push(this[USER_TYPES.updateIdentity](identityPayload));
       }
 
       if (dispatches.length) {
@@ -116,7 +117,7 @@ export default {
     async updateContactInfo(dispatches, newEmail) {
       let badEmailUpdate = false;
 
-      this.setAppIsFetching(true);
+      this[CONTEXT_TYPES.setIsFetching](true);
 
       try {
         await Promise.all(dispatches);
@@ -143,9 +144,9 @@ export default {
         this.showSuccess = true;
       }
 
-      await this.getUser();
+      await this[USER_TYPES.getUser]();
 
-      this.setAppIsFetching(false);
+      this[CONTEXT_TYPES.setIsFetching](false);
     },
 
     logToGtm(fields) {

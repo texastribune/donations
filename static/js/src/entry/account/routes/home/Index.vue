@@ -24,6 +24,7 @@
 <script>
 import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
+import { USER_TYPES } from '../../store/types';
 import UserSideNav from '../../nav/components/UserSideNav.vue';
 
 const ViewAsForm = () =>
@@ -42,7 +43,7 @@ export default {
 
   methods: {
     fetchData() {
-      return this.user.getUser();
+      return this[USER_TYPES.getUser]();
     },
   },
 };

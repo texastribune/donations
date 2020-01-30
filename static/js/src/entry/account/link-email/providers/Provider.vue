@@ -1,6 +1,7 @@
 <script>
 import userMixin from '../../store/user/mixin';
 import contextMixin from '../../store/context/mixin';
+import { CONTEXT_TYPES, USER_TYPES } from '../../store/types';
 
 export default {
   name: 'LinkEmailProvider',
@@ -32,13 +33,13 @@ export default {
     async linkEmail(fields) {
       const emailToLink = fields.linkEmail.value;
 
-      this.context.setAppIsFetching(true);
+      this[CONTEXT_TYPES.setIsFetching](true);
 
-      await this.user.linkIdentity({ email: emailToLink });
-      await this.user.getUser();
+      await this[USER_TYPES.linkIdentity]({ email: emailToLink });
+      await this[USER_TYPES.getUser]();
 
       this.submittedEmail = emailToLink;
-      this.context.setAppIsFetching(false);
+      this[CONTEXT_TYPES.setIsFetching](false);
 
       window.dataLayer.push({
         event: this.ga.customEventName,

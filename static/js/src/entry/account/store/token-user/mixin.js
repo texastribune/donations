@@ -1,4 +1,4 @@
-import { TOKEN_USER_MODULE } from '../../constants';
+import { TOKEN_USER_MODULE } from '../types';
 
 export const MODULE = TOKEN_USER_MODULE;
 

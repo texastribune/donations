@@ -11,6 +11,7 @@ import ViewAsForm from '../components/ViewAsForm.vue';
 import userMixin from '../../store/user/mixin';
 import tokenUserMixin from '../../store/token-user/mixin';
 import contextMixin from '../../store/context/mixin';
+import { CONTEXT_TYPES, USER_TYPES } from '../../store/types';
 
 export default {
   name: 'ViewAsFormContainer',
@@ -21,21 +22,21 @@ export default {
 
   methods: {
     async doViewAs(email) {
-      this.context.setAppIsFetching(true);
+      this[CONTEXT_TYPES.setIsFetching](true);
 
-      await this.getOtherUser(email);
+      await this[USER_TYPES.getViewAsUser](email);
 
-      this.context.setIsViewingAs(true);
-      this.context.setAppIsFetching(false);
+      this[CONTEXT_TYPES.setIsViewingAs](true);
+      this[CONTEXT_TYPES.setIsFetching](false);
     },
 
     async undoViewAs() {
-      this.context.setAppIsFetching(true);
+      this[CONTEXT_TYPES.setIsFetching](true);
 
-      await this.getUser();
+      await this[USER_TYPES.getUser]();
 
-      this.context.setIsViewingAs(false);
-      this.context.setAppIsFetching(false);
+      this[CONTEXT_TYPES.setIsViewingAs](false);
+      this[CONTEXT_TYPES.setIsFetching](false);
     },
   },
 };

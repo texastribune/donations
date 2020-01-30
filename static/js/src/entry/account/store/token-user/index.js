@@ -3,6 +3,7 @@
 import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
+import { TOKEN_USER_TYPES } from '../types';
 import auth from '../../utils/auth';
 import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/storage';
 import { Auth0Error } from '../../errors';
@@ -40,7 +41,7 @@ const mutations = {
 };
 
 const actions = {
-  getTokenUser: ({ commit }) =>
+  [TOKEN_USER_TYPES.getTokenUser]: ({ commit }) =>
     new Promise(resolve => {
       if (getLoggedInFlag() === 'true') {
         auth.checkSession(

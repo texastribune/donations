@@ -1,6 +1,10 @@
-import { CONTEXT_MODULE } from '../../constants';
+import { mapActions } from 'vuex';
+
+import { CONTEXT_TYPES, CONTEXT_MODULE } from '../types';
 
 export const MODULE = CONTEXT_MODULE;
+
+const TYPES = CONTEXT_TYPES;
 
 export default {
   computed: {
@@ -8,26 +12,14 @@ export default {
       return this.$store.state[MODULE];
     },
 
-    [`${MODULE}Actions`]() {
-      const userActions = {
-        setIsViewingAs: () => {
-          this.$store.dispatch(`${MODULE}/setIsViewingAs`);
-        },
-        setIsFetching: () => {
-          this.$store.dispatch(`${MODULE}/setIsFetching`);
-        },
-        setError: () => {
-          this.$store.dispatch(`${MODULE}/setError`);
-        },
-      };
-
-      return userActions;
-    },
-
     [MODULE]() {
-      const { [`${MODULE}Actions`]: actions, [`${MODULE}State`]: state } = this;
+      const { [`${MODULE}State`]: state } = this;
 
-      return { ...actions, ...state };
+      return { ...state };
     },
+  },
+
+  methods: {
+    ...mapActions(MODULE, Object.keys(TYPES).map(type => TYPES[type])),
   },
 };
