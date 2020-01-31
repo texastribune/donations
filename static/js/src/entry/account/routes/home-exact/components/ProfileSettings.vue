@@ -63,7 +63,7 @@ export default {
         data.push({
           key: 'name',
           heading: 'Name',
-          text: `${firstName}, ${lastName}`,
+          text: `${firstName} ${lastName}`,
         });
       }
 
