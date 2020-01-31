@@ -176,7 +176,8 @@ const getters = {
 
   emailUrl: ({ data: { email_share_url: emailUrl } }) => emailUrl,
 
-  ambassadorUrl: ({ data: { ambassador_url: ambassadorUrl } }) => ambassadorUrl,
+  ambassadorUrl: ({ data: { ambassador_url: ambassadorUrl } }) =>
+    ambassadorUrl || '',
 
   membershipExpirationDate: ({
     data: { membership_expiration_date: membershipExpirationDate },
