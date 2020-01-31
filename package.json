@@ -64,6 +64,7 @@
     "webpack-sources": "^1.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.3",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
@@ -85,6 +86,9 @@
       "browser": true
     },
     "parser": "vue-eslint-parser",
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
     "extends": [
       "plugin:vue/recommended",
       "airbnb-base",
@@ -105,14 +109,6 @@
       ]
     }
   },
-  "eslintIgnore": [
-    "static/js/src/entry/account/routes/home-exact/containers",
-    "static/js/src/entry/account/routes/membership/containers",
-    "static/js/src/entry/account/routes/home/Index.vue",
-    "static/js/src/entry/account/tax-receipt/providers/TaxReceiptProvider.vue",
-    "static/js/src/entry/account/routes/blast-payments/components/Detail.vue",
-    "static/js/src/entry/account/routes/index.js"
-  ],
   "prettier": {
     "bracketSpacing": true,
     "printWidth": 80,

@@ -12,7 +12,6 @@ import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry, setExtra } from '@sentry/browser';
 
-// eslint-disable-next-line
 import routes from './routes';
 import store from './store';
 import App from './App.vue';
@@ -61,8 +60,6 @@ if (ENABLE_SENTRY) {
     integrations: [new VueIntegration({ Vue })],
   });
 }
-
-Vue.config.devtools = true;
 
 Vue.mixin({
   data() {
