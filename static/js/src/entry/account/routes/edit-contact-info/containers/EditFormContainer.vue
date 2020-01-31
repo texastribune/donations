@@ -10,13 +10,10 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
 import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
-import getTokenIdentity from '../../../utils/get-token-identity';
 import { CHANGED_EMAIL_REDIRECT } from '../../../constants';
 import { AxiosResponseError } from '../../../errors';
 import { logOut } from '../../../utils/auth-actions';
@@ -35,17 +32,15 @@ export default {
 
   computed: {
     initialFields() {
-      const { first_name, last_name, postal_code, identities } = this.user;
-      const { email } = this.tokenUser;
-      const { tribune_offers_consent } = getTokenIdentity(identities, email);
+      const { firstName, lastName, zip, email, wantsMarketing } = this.user;
 
       return {
-        firstName: first_name || '',
-        lastName: last_name || '',
+        firstName: firstName || '',
+        lastName: lastName || '',
         email,
         confirmedEmail: '',
-        zip: postal_code || '',
-        marketing: tribune_offers_consent,
+        zip: zip || '',
+        marketing: wantsMarketing,
       };
     },
   },

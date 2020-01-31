@@ -152,8 +152,10 @@ const getters = {
   lastYearAmount: ({ data: { total_gifts_last_year: lastYearAmount } }) =>
     lastYearAmount,
 
-  didConsent: (_, { identity: { tribune_offers_consent: didConsent } }) =>
-    didConsent,
+  wantsMarketing: (
+    _,
+    { identity: { tribune_offers_consent: wantsMarketing } }
+  ) => wantsMarketing,
 
   linkedEmails: ({ data: { identities = [] } }) =>
     identities.map(({ email }) => email),
