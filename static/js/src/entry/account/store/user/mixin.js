@@ -3,7 +3,6 @@ import { mapActions } from 'vuex';
 import { USER_TYPES, USER_MODULE } from '../types';
 
 export const MODULE = USER_MODULE;
-
 const TYPES = USER_TYPES;
 
 export default {

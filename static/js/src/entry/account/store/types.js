@@ -16,7 +16,6 @@ export const TOKEN_USER_TYPES = {
 };
 
 export const CONTEXT_TYPES = {
-  setIsViewingAs: `${CONTEXT_MODULE}__setIsViewingAs`,
   setIsFetching: `${CONTEXT_MODULE}__setIsFetching`,
   setError: `${CONTEXT_MODULE}__setError`,
 };

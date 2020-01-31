@@ -7,10 +7,10 @@ export default {
   mixins: [mixin],
 
   render() {
-    const { [`${MODULE}State`]: state } = this;
+    const { [`${MODULE}State`]: state, [`${MODULE}Getters`]: getters } = this;
 
     return this.$scopedSlots.default({
-      [MODULE]: { ...state },
+      [MODULE]: { ...state, ...getters },
     });
   },
 };

@@ -8,8 +8,8 @@ import formatTransaction from './utils/format-transaction';
 import { USER_TYPES } from '../types';
 import { PORTAL_API_URL } from '../../constants';
 
-const SET_RAW_DATA = 'SET_RAW_DATA';
-const SET_VIEW_AS_EMAIL = 'SET_VIEW_AS_EMAIL';
+const SET_ME = 'SET_ME';
+const SET_VIEW_AS = 'SET_VIEW_AS';
 
 const initialState = {
   data: {},
@@ -17,25 +17,26 @@ const initialState = {
 };
 
 const mutations = {
-  [SET_RAW_DATA](state, data) {
+  [SET_ME](state, data) {
     state.data = data;
+    state.viewAsEmail = '';
   },
 
-  [SET_VIEW_AS_EMAIL](state, viewAsEmail) {
+  [SET_VIEW_AS](state, { data, viewAsEmail }) {
+    state.data = data;
     state.viewAsEmail = viewAsEmail;
   },
 };
 
 const actions = {
-  [USER_TYPES.getViewAsUser]: async ({ commit, rootState }, email) => {
+  [USER_TYPES.getViewAsUser]: async ({ commit, rootState }, viewAsEmail) => {
     const { accessToken } = rootState.tokenUser;
     const { data } = await axios.get(`${PORTAL_API_URL}persons/`, {
-      params: { email },
+      params: { email: viewAsEmail },
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    commit(SET_VIEW_AS_EMAIL, email);
-    commit(SET_RAW_DATA, data[0]);
+    commit(SET_VIEW_AS, { data: data[0], viewAsEmail });
   },
 
   [USER_TYPES.getUser]: async ({ commit, rootState }) => {
@@ -44,90 +45,99 @@ const actions = {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
 
-    commit(SET_RAW_DATA, data);
+    commit(SET_ME, data);
   },
 
-  [USER_TYPES.updateUser]: async ({ getters, rootState }, updates) => {
-    const { accessToken } = rootState.tokenUser;
-    const { userId } = getters;
+  [USER_TYPES.updateUser]: async ({ state, getters, rootState }, updates) => {
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
 
-    await axios.patch(`${PORTAL_API_URL}persons/${userId}/`, updates, {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-  },
-
-  [USER_TYPES.updateIdentity]: async ({ getters, rootState }, updates) => {
-    const { accessToken } = rootState.tokenUser;
-    const { userId, identityId } = getters;
-
-    await axios.patch(
-      `${PORTAL_API_URL}persons/${userId}/identities/${identityId}/`,
-      updates,
-      {
+      await axios.patch(`${PORTAL_API_URL}persons/${userId}/`, updates, {
         headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
+      });
+    }
   },
 
-  [USER_TYPES.linkIdentity]: async ({ getters, rootState }, identity) => {
-    const { accessToken } = rootState.tokenUser;
-    const { userId, email } = getters;
+  [USER_TYPES.updateIdentity]: async (
+    { state, getters, rootState },
+    updates
+  ) => {
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId, identityId } = getters;
 
-    await axios.put(
-      `${PORTAL_API_URL}persons/${userId}/identities/${email}/`,
-      identity,
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/identities/${identityId}/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    }
+  },
+
+  [USER_TYPES.linkIdentity]: async (
+    { state, getters, rootState },
+    identity
+  ) => {
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId, email } = getters;
+
+      await axios.put(
+        `${PORTAL_API_URL}persons/${userId}/identities/${email}/`,
+        identity,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    }
   },
 
   [USER_TYPES.confirmLinkedIdentity]: async (
-    { getters, rootState },
+    { state, getters, rootState },
     ticket
   ) => {
-    const { accessToken } = rootState.tokenUser;
-    const { userId, email } = getters;
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId, email } = getters;
 
-    await axios.put(
-      `${PORTAL_API_URL}persons/${userId}/identities/${email}/?ticket=${ticket}`,
-      {},
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      }
-    );
+      await axios.put(
+        `${PORTAL_API_URL}persons/${userId}/identities/${email}/?ticket=${ticket}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    }
   },
 };
 
 const getters = {
   email: (
-    { data: { viewAsEmail } },
+    { viewAsEmail },
     _,
     {
       tokenUser: {
         idTokenPayload: { email },
       },
-      context: { isViewingAs },
     }
   ) => {
-    if (isViewingAs) {
+    if (viewAsEmail) {
       return viewAsEmail;
     }
     return email;
   },
 
-  identity: (
-    { data: { identities = [] } },
-    { email },
-    { context: { isViewingAs } }
-  ) => {
-    // viewing as someone who has never visited portal
-    if (isViewingAs && !identities.length) {
+  identity: ({ viewAsEmail, data: { identities = [] } }, { email }) => {
+    // viewing as someone who does not have an Auth0 account
+    if (viewAsEmail && !identities.length) {
       return {
         tribune_offers_consent: false,
       };
     }
-    // data fetch still in progress
+    // data fetch in progress
     if (!identities.length) return {};
 
     const [identity] = identities.filter(

@@ -2,21 +2,15 @@
 
 import { CONTEXT_TYPES } from '../types';
 
-const SET_IS_VIEWING_AS = 'SET_IS_VIEWING_AS';
 const SET_IS_FETCHING = 'SET_IS_FETCHING';
 const SET_ERROR = 'SET_ERROR';
 
 const initialState = {
-  isViewingAs: false,
   isFetching: false,
   error: null,
 };
 
 const mutations = {
-  [SET_IS_VIEWING_AS](state, isViewingAs) {
-    state.isViewingAs = isViewingAs;
-  },
-
   [SET_IS_FETCHING](state, isFetching) {
     state.isFetching = isFetching;
   },
@@ -27,10 +21,6 @@ const mutations = {
 };
 
 const actions = {
-  [CONTEXT_TYPES.setIsViewingAs]: ({ commit }, isViewingAs) => {
-    commit(SET_IS_VIEWING_AS, isViewingAs);
-  },
-
   [CONTEXT_TYPES.setIsFetching]: ({ commit }, isFetching) => {
     commit(SET_IS_FETCHING, isFetching);
   },
@@ -40,10 +30,14 @@ const actions = {
   },
 };
 
+const getters = {
+  isViewingAs: (_, __, { user: { viewAsEmail } }) => !!viewAsEmail,
+};
+
 export default {
   namespaced: true,
   state: initialState,
   mutations,
   actions,
-  getters: {},
+  getters,
 };

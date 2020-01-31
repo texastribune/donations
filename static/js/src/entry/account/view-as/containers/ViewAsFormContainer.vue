@@ -1,6 +1,6 @@
 <template>
   <view-as-form
-    v-if="context.canViewAs"
+    v-if="tokenUser.canViewAs"
     @doViewAs="doViewAs"
     @undoViewAs="undoViewAs"
   />
@@ -23,19 +23,13 @@ export default {
   methods: {
     async doViewAs(email) {
       this[CONTEXT_TYPES.setIsFetching](true);
-
       await this[USER_TYPES.getViewAsUser](email);
-
-      this[CONTEXT_TYPES.setIsViewingAs](true);
       this[CONTEXT_TYPES.setIsFetching](false);
     },
 
     async undoViewAs() {
       this[CONTEXT_TYPES.setIsFetching](true);
-
       await this[USER_TYPES.getUser]();
-
-      this[CONTEXT_TYPES.setIsViewingAs](false);
       this[CONTEXT_TYPES.setIsFetching](false);
     },
   },

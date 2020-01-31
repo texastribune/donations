@@ -10,7 +10,6 @@ import { Auth0Error } from '../../errors';
 
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
 const SET_ID_TOKEN = 'SET_ID_TOKEN';
-const SET_ID_TOKEN_PAYLOAD = 'SET_ID_TOKEN_PAYLOAD';
 const SET_ERROR = 'SET_ERROR';
 
 const initialState = {
@@ -24,15 +23,24 @@ const initialState = {
 const mutations = {
   [SET_ACCESS_TOKEN](state, accessToken) {
     state.accessToken = accessToken;
-    state.accessTokenPayload = jwt.decode(accessToken);
+
+    if (accessToken) {
+      state.accessTokenPayload = jwt.decode(accessToken);
+    } else {
+      state.accessTokenPayload = {};
+    }
   },
 
   [SET_ID_TOKEN](state, idToken) {
     state.idToken = idToken;
-  },
 
-  [SET_ID_TOKEN_PAYLOAD](state, payload) {
-    state.idTokenPayload = payload;
+    if (idToken) {
+      const payload = jwt.decode(idToken);
+      state.idTokenPayload = payload;
+      setExtra('auth', payload);
+    } else {
+      state.idTokenPayload = {};
+    }
   },
 
   [SET_ERROR](state, error) {
@@ -66,8 +74,7 @@ const actions = {
               resolve();
             } else {
               commit(SET_ACCESS_TOKEN, authResult.accessToken);
-              commit(SET_ID_TOKEN_PAYLOAD, authResult.idTokenPayload);
-              setExtra('auth', authResult.idTokenPayload);
+              commit(SET_ID_TOKEN, authResult.idToken);
               resolve();
             }
           }
@@ -82,7 +89,7 @@ const getters = {
   isLoggedIn: ({ accessToken }) => !!accessToken,
 
   canViewAs: ({ accessTokenPayload }) => {
-    const { permissions } = accessTokenPayload;
+    const { permissions = [] } = accessTokenPayload;
     const filteredPerms = permissions.filter(perm => perm === 'portal:view_as');
 
     return filteredPerms.length === 1;
