@@ -1,11 +1,12 @@
 <script>
 import userMixin from '../../store/user/mixin';
+import contextMixin from '../../store/context/mixin';
 import { resetPassword } from '../../utils/auth-actions';
 
 export default {
   name: 'ResetPasswordProvider',
 
-  mixins: [userMixin],
+  mixins: [userMixin, contextMixin],
 
   data() {
     return {
@@ -16,22 +17,26 @@ export default {
 
   methods: {
     pwReset(gaLabel) {
-      const { email } = this.user;
+      const { isViewingAs } = this.context;
 
-      resetPassword(email, err => {
-        if (err) {
-          this.pwResetFailure = true;
-        } else {
-          this.pwResetSuccess = true;
+      if (!isViewingAs) {
+        const { email } = this.user;
 
-          window.dataLayer.push({
-            event: this.ga.customEventName,
-            gaCategory: this.ga.userPortal.category,
-            gaAction: this.ga.userPortal.actions['reset-password'],
-            gaLabel,
-          });
-        }
-      });
+        resetPassword(email, err => {
+          if (err) {
+            this.pwResetFailure = true;
+          } else {
+            this.pwResetSuccess = true;
+
+            window.dataLayer.push({
+              event: this.ga.customEventName,
+              gaCategory: this.ga.userPortal.category,
+              gaAction: this.ga.userPortal.actions['reset-password'],
+              gaLabel,
+            });
+          }
+        });
+      }
     },
   },
 

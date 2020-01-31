@@ -26,9 +26,9 @@ export default {
     },
 
     [MODULE]() {
-      const { [`${MODULE}State`]: state } = this;
+      const { [`${MODULE}State`]: state, [`${MODULE}Getters`]: getters } = this;
 
-      return { ...state };
+      return { ...state, ...getters };
     },
   },
 
