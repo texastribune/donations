@@ -1,6 +1,6 @@
 <template>
-  <user-provider v-if="isCircleDonor" v-slot="{ user: { isCircleDonor } }">
-    <aside class="c-detail-box">
+  <user-provider v-slot="{ user: { isCircleDonor } }">
+    <aside v-if="isCircleDonor" class="c-detail-box">
       <h2 class="t-size-b t-uppercase has-xxxs-btm-marg">Thank you!</h2>
       <p class="has-text-gray-dark t-links-underlined">
         Thank you for your commitment to provide backing for the vital work of
