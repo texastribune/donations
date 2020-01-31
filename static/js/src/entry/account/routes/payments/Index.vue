@@ -35,8 +35,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
 import LinkEmail from '../../link-email/components/LinkEmail.vue';
@@ -46,7 +44,7 @@ import Appeal from '../../appeals/containers/AppealContainer.vue';
 import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Detail from './containers/DetailContainer.vue';
+import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
 import { InvalidRouteError } from '../../errors';
 
@@ -73,8 +71,8 @@ export default {
 
   methods: {
     async fetchData() {
-      const { is_never_given } = this.user;
-      const meetsCriteria = !is_never_given;
+      const { isNeverGiven } = this.user;
+      const meetsCriteria = !isNeverGiven;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },
