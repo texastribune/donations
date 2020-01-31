@@ -1,7 +1,7 @@
 <template>
   <profile-settings
-    :firstName="user.firstName"
-    :lastName="user.lastName"
+    :first-name="user.firstName"
+    :last-name="user.lastName"
     :email="user.email"
     :zip="user.zip"
   />
