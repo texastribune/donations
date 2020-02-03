@@ -4,10 +4,8 @@
       <h3 class="t-size-s has-xxxs-btm-marg">
         <strong>{{ item.heading }}</strong>
       </h3>
-      <p>
-        <span class="has-text-gray-dark">
-          <slot name="text" :item="item"> {{ item.text }} </slot>
-        </span>
+      <p class="has-text-gray-dark">
+        <slot name="text" :item="item"> {{ item.text }} </slot>
       </p>
     </li>
   </ul>
