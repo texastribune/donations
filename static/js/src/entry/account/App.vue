@@ -15,6 +15,7 @@ import ErrorView from './ErrorView.vue';
 import UnverifiedView from './UnverifiedView.vue';
 import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
+import { CONTEXT_TYPES } from './store/types';
 import { UnverifiedError } from './errors';
 
 export default {
@@ -26,20 +27,20 @@ export default {
 
   computed: {
     showLoader() {
-      return this.appIsFetching && !this.appError;
+      return this.context.isFetching && !this.context.error;
     },
 
     showUnverified() {
-      return this.appError instanceof UnverifiedError;
+      return this.context.error instanceof UnverifiedError;
     },
 
     showError() {
-      return !!this.appError;
+      return !!this.context.error;
     },
   },
 
   errorCaptured(err) {
-    this.setAppError(err);
+    this[CONTEXT_TYPES.setError](err);
   },
 };
 </script>

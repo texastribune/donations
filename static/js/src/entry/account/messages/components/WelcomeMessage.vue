@@ -4,7 +4,7 @@
       <message
         heading="Welcome"
         :name="messageKey"
-        :ga-close-label="ga.userPortal.labels.home"
+        :ga-label="gaLabel"
         :display="{ onGrayMobileBg: true }"
         @setMessageSeen="slotProps.setMessageSeen"
       >
@@ -28,14 +28,22 @@
 </template>
 
 <script>
-import Messages from '../../../components/Messages.vue';
-import Message from '../../../components/Message.vue';
-import { READ_WRITE_WELCOME_MESSAGE_KEY } from '../../../constants';
+import Messages from './Messages.vue';
+import Message from './Message.vue';
+
+const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 
 export default {
-  name: 'HomeWelcomeMessage',
+  name: 'WelcomeMessage',
 
   components: { Messages, Message },
+
+  props: {
+    gaLabel: {
+      type: String,
+      required: true,
+    },
+  },
 
   data() {
     return {

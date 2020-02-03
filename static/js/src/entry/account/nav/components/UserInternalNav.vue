@@ -1,13 +1,15 @@
 <template>
   <user-provider
     v-slot="{
-      isNeverGiven,
-      isSingleDonor,
-      isCircleDonor,
-      hasGivenNotCustom,
-      isExpired,
-      isFormerBlastSubscriber,
-      isBlastSubscriber,
+      user: {
+        isNeverGiven,
+        isSingleDonor,
+        isCircleDonor,
+        hasGivenNotCustom,
+        isExpired,
+        isFormerBlastSubscriber,
+        isBlastSubscriber,
+      },
     }"
   >
     <div>

@@ -1,12 +1,13 @@
 <template>
   <summary-box heading="the blast">
     <template v-slot:content>
-      <p v-if="nextTransaction.last4" class="has-text-gray-dark">
+      <p v-if="nextTransaction.card" class="has-text-gray-dark">
         Thanks for subscribing to The Blast! Your next
         <strong>{{ nextTransaction.period }}</strong> payment of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
         on <strong>{{ nextTransaction.date | longDate }}</strong
-        >, to your card ending in <strong>{{ nextTransaction.last4 }}</strong
+        >, to your card ending in
+        <strong>{{ nextTransaction.card.last4 }}</strong
         >.
       </p>
       <p v-else class="has-text-gray-dark t-links-underlined">
@@ -29,7 +30,7 @@
       <user-internal-nav show-blast-payments />
     </template>
 
-    <template v-if="nextTransaction.last4" v-slot:bottom>
+    <template v-if="nextTransaction.card" v-slot:bottom>
       <p class="has-text-gray-dark t-links-underlined">
         Need to make a change? Contact us at
         <a

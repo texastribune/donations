@@ -172,8 +172,6 @@
 </template>
 
 <script>
-// TODO: Make this more generic w/ slots and move to base components directory
-
 import getYear from 'date-fns/get_year';
 
 export default {

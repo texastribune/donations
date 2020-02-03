@@ -1,27 +1,15 @@
 <script>
-import camelCase from 'camelcase';
-
-import userMixin from './mixin';
+import mixin, { MODULE } from './mixin';
 
 export default {
-  name: 'UserProvider',
+  name: `${MODULE}Provider`,
 
-  mixins: [userMixin],
-
-  computed: {
-    camelCasedUser() {
-      const formatted = {};
-
-      Object.keys(this.user).forEach(key => {
-        formatted[camelCase(key)] = this.user[key];
-      });
-
-      return formatted;
-    },
-  },
+  mixins: [mixin],
 
   render() {
-    return this.$scopedSlots.default(this.camelCasedUser);
+    const { [`${MODULE}Getters`]: getters } = this;
+
+    return this.$scopedSlots.default({ [MODULE]: { ...getters } });
   },
 };
 </script>

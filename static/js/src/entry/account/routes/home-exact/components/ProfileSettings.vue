@@ -1,14 +1,14 @@
 <template>
   <summary-box heading="profile settings">
     <template v-slot:content>
-      <info-list :items="contactInfo">
-        <template v-slot="slotProps">
-          <span
-            class="has-text-gray-dark"
-            :class="{ 't-wrap-break': slotProps.item.heading === 'Email' }"
-          >
-            {{ slotProps.item.text }}
-          </span>
+      <info-list :items="data">
+        <template v-slot:text="{ item: { key, text } }">
+          <template v-if="key === 'email'">
+            <span class="t-wrap-break">{{ text }}</span>
+          </template>
+          <template v-else>
+            {{ text }}
+          </template>
         </template>
       </info-list>
     </template>
@@ -33,9 +33,55 @@ export default {
   components: { SummaryBox, InfoList },
 
   props: {
-    contactInfo: {
-      type: Array,
+    email: {
+      type: String,
       required: true,
+    },
+
+    firstName: {
+      type: String,
+      required: true,
+    },
+
+    lastName: {
+      type: String,
+      required: true,
+    },
+
+    zip: {
+      type: String,
+      required: true,
+    },
+  },
+
+  computed: {
+    data() {
+      const data = [];
+      const { firstName, lastName, email, zip } = this;
+
+      if (firstName && lastName) {
+        data.push({
+          key: 'name',
+          heading: 'Name',
+          text: `${firstName} ${lastName}`,
+        });
+      }
+
+      data.push({
+        key: 'email',
+        heading: 'Login email',
+        text: email,
+      });
+
+      if (zip) {
+        data.push({
+          key: 'zip',
+          heading: 'ZIP code',
+          text: zip,
+        });
+      }
+
+      return data;
     },
   },
 };

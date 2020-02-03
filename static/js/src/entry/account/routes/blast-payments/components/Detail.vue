@@ -1,30 +1,30 @@
 <template>
-  <payment-list :payments="data" show-receipts @buildReceipt="buildReceipt" />
+  <user-provider v-slot="{ user: { pastBlastTransactions } }">
+    <payment-list
+      :payments="pastBlastTransactions"
+      show-receipts
+      @buildReceipt="buildReceipt"
+    />
+  </user-provider>
 </template>
 
 <script>
+import UserProvider from '../../../store/user/Provider.vue';
 import PaymentList from '../../../components/PaymentList.vue';
 
 export default {
   name: 'BlastPaymentsDetail',
 
-  components: { PaymentList },
-
-  props: {
-    data: {
-      type: Array,
-      required: true,
-    },
-  },
+  components: { PaymentList, UserProvider },
 
   methods: {
-    async buildReceipt({ date, amount, method }) {
+    async buildReceipt({ date, amount, card }) {
       try {
         const buildBlastReceipt = await import(/* webpackChunkName: 'build-blast-receipt' */ '../build-blast-receipt');
         await buildBlastReceipt.default({
           date,
           amount,
-          method,
+          card,
         });
       } finally {
         window.dataLayer.push({

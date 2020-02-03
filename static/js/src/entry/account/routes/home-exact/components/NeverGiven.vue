@@ -24,7 +24,7 @@
 
 <script>
 import SummaryBox from '../../../components/SummaryBox.vue';
-import LinkEmail from '../../home/components/LinkEmail.vue';
+import LinkEmail from '../../../link-email/components/LinkEmail.vue';
 
 export default {
   name: 'SummaryNeverGiven',

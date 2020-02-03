@@ -1,15 +1,17 @@
 <script>
-import tokenUserMixin from './mixin';
+import mixin, { MODULE } from './mixin';
 
 export default {
-  name: 'TokenUserProvider',
+  name: `${MODULE}Provider`,
 
-  mixins: [tokenUserMixin],
+  mixins: [mixin],
 
   render() {
-    const { isLoggedIn } = this;
+    const { [`${MODULE}Getters`]: getters, [`${MODULE}State`]: state } = this;
 
-    return this.$scopedSlots.default({ isLoggedIn });
+    return this.$scopedSlots.default({
+      [MODULE]: { ...getters, ...state },
+    });
   },
 };
 </script>

@@ -29,8 +29,8 @@
 </template>
 
 <script>
+import Help from '../../components/Help.vue';
 import routeMixin from '../mixin';
-import Help from '../home/components/Help.vue';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import EditForm from './containers/EditFormContainer.vue';
 import ConfirmModal from './components/ConfirmModal.vue';

@@ -6,7 +6,7 @@
   </route-loader>
 
   <div v-else class="has-ump-top-padding">
-    <credit-card-message :ga-close-label="ga.userPortal.labels.payments" />
+    <credit-card-message :ga-label="ga.userPortal.labels.payments" />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       Your Donations
@@ -35,18 +35,16 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
-import routeMixin from '../mixin';
+import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
+import LinkEmail from '../../link-email/components/LinkEmail.vue';
+import CustomAppeal from '../../appeals/components/CustomAppeal.vue';
+import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
+import Appeal from '../../appeals/containers/AppealContainer.vue';
+import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
+import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Appeal from '../home/containers/AppealContainer.vue';
-import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
-import CustomAppeal from '../home/containers/CustomAppealContainer.vue';
-import CreditCardMessage from '../home/components/CreditCardMessage.vue';
-import LinkEmail from '../home/components/LinkEmail.vue';
-import Help from '../home/components/Help.vue';
-import Detail from './containers/DetailContainer.vue';
+import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
 import { InvalidRouteError } from '../../errors';
 
@@ -73,8 +71,8 @@ export default {
 
   methods: {
     async fetchData() {
-      const { is_never_given } = this.user;
-      const meetsCriteria = !is_never_given;
+      const { isNeverGiven } = this.user;
+      const meetsCriteria = !isNeverGiven;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

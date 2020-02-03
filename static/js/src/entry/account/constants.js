@@ -1,6 +1,4 @@
 export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
-export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
-export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
 export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${
@@ -17,8 +15,6 @@ export const AUTH_PORTAL_LOGIN_COMPLETE_URL = `${
   window.location.origin
 }/account/logged-in/`;
 export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
-export const CARD_PAYMENT_FLAG = 'credit card';
-export const BLAST_PAYMENT_FLAG = 'the blast';
 export const { SENTRY_DSN } = process.env;
 export const { SENTRY_ENVIRONMENT } = process.env;
 export const ENABLE_SENTRY = process.env.ENABLE_SENTRY.toLowerCase() === 'true';

@@ -17,22 +17,23 @@
 
     <user-site-footer :route-is-fetching="routeIsFetching" />
 
-    <view-as />
+    <view-as-form />
   </div>
 </template>
 
 <script>
 import routeMixin from '../mixin';
 import userMixin from '../../store/user/mixin';
+import { USER_TYPES } from '../../store/types';
 import UserSideNav from '../../nav/components/UserSideNav.vue';
 
-const ViewAs = () =>
-  import(/* webpackChunkName: "view-as" */ './containers/ViewAsContainer.vue');
+const ViewAsForm = () =>
+  import(/* webpackChunkName: "view-as-form" */ '../../view-as/containers/ViewAsFormContainer.vue');
 
 export default {
   name: 'HomeRoute',
 
-  components: { UserSideNav, ViewAs },
+  components: { UserSideNav, ViewAsForm },
 
   mixins: [routeMixin, userMixin],
 
@@ -42,7 +43,7 @@ export default {
 
   methods: {
     fetchData() {
-      return this.getUser();
+      return this[USER_TYPES.getUser]();
     },
   },
 };

@@ -1,10 +1,10 @@
 <template>
   <summary-box heading="the blast">
     <template v-slot:content>
-      <p v-if="lastTransaction.last4" class="has-text-gray-dark">
+      <p v-if="lastTransaction.card" class="has-text-gray-dark">
         Your subscription to The Blast is no longer active. Your last payment of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged to
-        your card ending in <strong>{{ lastTransaction.last4 }}</strong> on
+        your card ending in <strong>{{ lastTransaction.card.last4 }}</strong> on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >.
       </p>

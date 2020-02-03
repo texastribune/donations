@@ -1,6 +1,6 @@
 <template>
-  <token-user-provider v-slot="{ isLoggedIn }">
-    <user-provider v-slot="{ isBlastSubscriber, hasGivenNotCustom }">
+  <token-user-provider v-slot="{ tokenUser: { isLoggedIn } }">
+    <user-provider v-slot="{ user: { isBlastSubscriber, hasGivenNotCustom } }">
       <nav-bar
         show-user-links
         :show-blast-link="!routeIsFetching && isBlastSubscriber"

@@ -1,5 +1,7 @@
 <template>
-  <reset-password-provider v-slot="{ pwResetSuccess, pwResetFailure, pwReset }">
+  <reset-password-provider
+    v-slot="{ pwReset: { pwResetSuccess, pwResetFailure, pwReset } }"
+  >
     <link-list-item>
       <template v-slot:main>
         <button class="c-link-button" @click="pwReset(pwResetGaLabel)">

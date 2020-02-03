@@ -4,7 +4,7 @@
       <message
         heading="Coming soon"
         :name="messageKey"
-        :ga-close-label="gaCloseLabel"
+        :ga-label="gaLabel"
         @setMessageSeen="slotProps.setMessageSeen"
       >
         <template v-slot:icon>
@@ -24,9 +24,10 @@
 </template>
 
 <script>
-import Messages from '../../../components/Messages.vue';
-import Message from '../../../components/Message.vue';
-import { READ_WRITE_CREDIT_CARD_MESSAGE_KEY } from '../../../constants';
+import Messages from './Messages.vue';
+import Message from './Message.vue';
+
+const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 
 export default {
   name: 'CreditCardMessage',
@@ -34,7 +35,7 @@ export default {
   components: { Messages, Message },
 
   props: {
-    gaCloseLabel: {
+    gaLabel: {
       type: String,
       required: true,
     },

@@ -30,8 +30,10 @@
             </slot>
           </td>
           <td>
-            <slot name="method" :method="payment.method">
-              {{ payment.method }}
+            <slot name="method" :payment="payment">
+              <template v-if="payment.card">
+                {{ payment.card.brand }} {{ payment.card.last4 }}
+              </template>
             </slot>
           </td>
           <td v-if="showReceipts">
@@ -47,6 +49,7 @@
         </tr>
       </tbody>
     </table>
+
     <base-button
       v-if="offset < payments.length"
       :display="{ size: 's', bg: 'white', color: 'black', isFullWidth: false }"

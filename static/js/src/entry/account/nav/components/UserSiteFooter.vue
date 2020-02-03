@@ -1,6 +1,6 @@
 <template>
   <user-provider
-    v-slot="{ isBlastSubscriber, hasGivenNotCustom, isNeverGiven }"
+    v-slot="{ user: { isBlastSubscriber, hasGivenNotCustom, isNeverGiven } }"
   >
     <site-footer
       show-user-links

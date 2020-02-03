@@ -12,7 +12,6 @@ import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry, setExtra } from '@sentry/browser';
 
-// eslint-disable-next-line
 import routes from './routes';
 import store from './store';
 import App from './App.vue';
@@ -47,6 +46,12 @@ import {
   DONATE_URL,
   CIRCLE_URL,
 } from './constants';
+import {
+  CONTEXT_TYPES,
+  CONTEXT_MODULE,
+  TOKEN_USER_TYPES,
+  TOKEN_USER_MODULE,
+} from './store/types';
 
 if (ENABLE_SENTRY) {
   initSentry({
@@ -55,10 +60,6 @@ if (ENABLE_SENTRY) {
     integrations: [new VueIntegration({ Vue })],
   });
 }
-
-Vue.use(VModal);
-Vue.use(VueRouter);
-Vue.use(VueClipboard);
 
 Vue.mixin({
   data() {
@@ -78,6 +79,10 @@ Vue.mixin({
   },
 });
 
+Vue.use(VModal);
+Vue.use(VueRouter);
+Vue.use(VueClipboard);
+
 Vue.component('UserSiteFooter', UserSiteFooter);
 Vue.component('BasicSiteFooter', BasicSiteFooter);
 Vue.component('UserNavBar', UserNavBar);
@@ -95,6 +100,7 @@ extendValidationRule('required', requiredRule);
 extendValidationRule('numeric', numericRule);
 extendValidationRule('confirm', {
   params: ['target'],
+
   validate(value, { target }) {
     return value === target;
   },
@@ -132,58 +138,73 @@ axios.interceptors.request.use(
 // check whether a user has logged out of Auth0 in another app
 function refreshToken() {
   setTimeout(async () => {
-    await store.dispatch('tokenUser/getTokenUser');
+    await store.dispatch(
+      `${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`
+    );
 
-    const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
+    const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
 
     if (isLoggedIn) refreshToken();
-  }, 15 * 60 * 1000); // 15 minutes
+  }, 15 * 60 * 1000);
 }
 
-store.dispatch('tokenUser/getTokenUser').then(() => {
-  const router = new VueRouter({
-    base: '/account',
-    mode: 'history',
-    routes,
-    scrollBehavior: () => ({ x: 0, y: 0 }),
-  });
-  const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
+store
+  .dispatch(`${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`)
+  .then(() => {
+    const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
+    const router = new VueRouter({
+      base: '/account',
+      mode: 'history',
+      routes,
+      scrollBehavior: () => ({ x: 0, y: 0 }),
+    });
 
-  if (isLoggedIn) {
-    refreshToken();
-  }
-
-  router.beforeEach((to, from, next) => {
-    store.dispatch('context/setIsFetching', true);
-
-    const { isVerified, error: tokenUserError } = store.state.tokenUser;
-    // eslint-disable-next-line no-shadow
-    const isLoggedIn = store.getters['tokenUser/isLoggedIn'];
-
-    if (to.meta.isProtected) {
-      if (tokenUserError) {
-        logError(tokenUserError);
-        store.dispatch('context/setError', tokenUserError);
-        return next();
-      }
-
-      if (!isLoggedIn) {
-        return logIn();
-      }
-
-      if (!isVerified) {
-        store.dispatch('context/setError', new UnverifiedError());
-        return next();
-      }
+    if (isLoggedIn) {
+      refreshToken();
     }
 
-    return next();
-  });
+    router.beforeEach((to, from, next) => {
+      store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
-  router.afterEach(() => {
-    store.dispatch('context/setIsFetching', false);
-  });
+      // eslint-disable-next-line no-shadow
+      const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
+      const isVerified = store.getters[`${TOKEN_USER_MODULE}/isVerified`];
+      const { error: tokenUserError } = store.state[TOKEN_USER_MODULE];
 
-  const instance = new Vue({ ...App, router, store });
-  instance.$mount('#account-attach');
-});
+      if (to.meta.isProtected) {
+        if (tokenUserError) {
+          logError(tokenUserError);
+
+          store.dispatch(
+            `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
+            tokenUserError
+          );
+
+          return next();
+        }
+
+        if (!isLoggedIn) {
+          return logIn();
+        }
+
+        if (!isVerified) {
+          store.dispatch(
+            `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
+            new UnverifiedError()
+          );
+
+          return next();
+        }
+      }
+
+      return next();
+    });
+
+    router.afterEach(() => {
+      store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
+    });
+
+    const instance = new Vue({ ...App, router, store });
+
+    instance.$mount('#account-attach');
+  });

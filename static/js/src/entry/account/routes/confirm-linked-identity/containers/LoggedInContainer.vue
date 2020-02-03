@@ -12,6 +12,7 @@
 import tokenUserMixin from '../../../store/token-user/mixin';
 import userMixin from '../../../store/user/mixin';
 import contextMixin from '../../../store/context/mixin';
+import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 import LoggedIn from '../components/LoggedIn.vue';
 
 export default {
@@ -40,21 +41,22 @@ export default {
 
   computed: {
     shouldShow() {
-      return this.isLoggedIn;
+      return this.tokenUser.isLoggedIn;
     },
   },
 
   methods: {
     goHome() {
-      this.$emit('goHome');
+      this.$router.push({ name: 'home' });
     },
 
     async confirm() {
-      this.setAppIsFetching(true);
+      this[CONTEXT_TYPES.setIsFetching](true);
 
-      await this.confirmLinkedIdentity(this.ticket);
+      await this[USER_TYPES.confirmLinkedIdentity](this.ticket);
 
-      this.setAppIsFetching(false);
+      this[CONTEXT_TYPES.setIsFetching](false);
+
       this.goHome();
     },
   },

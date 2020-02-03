@@ -3,8 +3,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import userMixin from '../../../store/user/mixin';
 
 const Custom = () =>
@@ -19,7 +17,7 @@ export default {
 
   computed: {
     shouldShow() {
-      return this.user.is_custom_donor;
+      return this.user.isCustomDonor;
     },
   },
 };

@@ -218,8 +218,6 @@
 </template>
 
 <script>
-// TODO: Make this more generic w/ slots and move to base components directory
-
 import { logOut, logIn } from '../../utils/auth-actions';
 
 export default {

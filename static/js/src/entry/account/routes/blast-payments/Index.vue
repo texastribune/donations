@@ -25,13 +25,11 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
-import routeMixin from '../mixin';
+import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
-import Help from '../home/components/Help.vue';
+import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
-import Detail from './containers/DetailContainer.vue';
+import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
 import { InvalidRouteError } from '../../errors';
 
@@ -48,7 +46,7 @@ export default {
 
   methods: {
     async fetchData() {
-      const meetsCriteria = this.user.is_blast_subscriber;
+      const meetsCriteria = this.user.isBlastSubscriber;
 
       if (!meetsCriteria) throw new InvalidRouteError();
     },

@@ -23,7 +23,7 @@ export default {
 
   computed: {
     initialFields() {
-      return { url: this.user.ambassador_url };
+      return { url: this.user.ambassadorUrl };
     },
   },
 

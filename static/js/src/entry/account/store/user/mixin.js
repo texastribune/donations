@@ -1,18 +1,34 @@
-import { mapState, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
+
+import { USER_TYPES, USER_MODULE } from '../types';
+
+export const MODULE = USER_MODULE;
+const TYPES = USER_TYPES;
 
 export default {
   computed: {
-    ...mapState('user', { user: 'details' }),
+    [`${MODULE}Getters`]() {
+      const relevantGetters = {};
+      const allGetters = this.$store.getters;
+
+      Object.keys(allGetters).forEach(getterName => {
+        if (getterName.indexOf(`${MODULE}/`) !== -1) {
+          relevantGetters[getterName.replace(`${MODULE}/`, '')] =
+            allGetters[getterName];
+        }
+      });
+
+      return relevantGetters;
+    },
+
+    [MODULE]() {
+      const { [`${MODULE}Getters`]: getters } = this;
+
+      return { ...getters };
+    },
   },
 
   methods: {
-    ...mapActions('user', [
-      'getUser',
-      'getOtherUser',
-      'updateUser',
-      'updateIdentity',
-      'linkIdentity',
-      'confirmLinkedIdentity',
-    ]),
+    ...mapActions(MODULE, Object.keys(TYPES).map(type => TYPES[type])),
   },
 };

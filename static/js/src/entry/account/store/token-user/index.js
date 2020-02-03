@@ -1,88 +1,80 @@
-/* eslint-disable no-param-reassign, camelcase */
+/* eslint-disable no-param-reassign */
 
 import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
+import { TOKEN_USER_TYPES } from '../types';
 import auth from '../../utils/auth';
 import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/storage';
 import { Auth0Error } from '../../errors';
 
-const MUTATION_TYPES = {
-  setAccessToken: 'SET_ACCESS_TOKEN',
-  setIsVerified: 'SET_IS_VERIFIED',
-  setCanViewAs: 'SET_CAN_VIEW_AS',
-  setDetails: 'SET_DETAILS',
-  setError: 'SET_ERROR',
+const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
+const SET_ID_TOKEN = 'SET_ID_TOKEN';
+const SET_ERROR = 'SET_ERROR';
+
+const initialState = {
+  accessToken: '',
+  accessTokenPayload: {},
+  idToken: '',
+  idTokenPayload: {},
+  error: null,
 };
 
-function createDefaultState() {
-  return {
-    accessToken: '',
-    canViewAs: false,
-    isVerified: false,
-    error: null,
-    details: {},
-  };
-}
-
 const mutations = {
-  [MUTATION_TYPES.setAccessToken](state, accessToken) {
+  [SET_ACCESS_TOKEN](state, accessToken) {
     state.accessToken = accessToken;
+
+    if (accessToken) {
+      state.accessTokenPayload = jwt.decode(accessToken);
+    } else {
+      state.accessTokenPayload = {};
+    }
   },
 
-  [MUTATION_TYPES.setIsVerified](state, isVerified) {
-    state.isVerified = isVerified;
+  [SET_ID_TOKEN](state, idToken) {
+    state.idToken = idToken;
+
+    if (idToken) {
+      const payload = jwt.decode(idToken);
+      state.idTokenPayload = payload;
+      setExtra('auth', payload);
+    } else {
+      state.idTokenPayload = {};
+    }
   },
 
-  [MUTATION_TYPES.setCanViewAs](state, canViewAs) {
-    state.canViewAs = canViewAs;
-  },
-
-  [MUTATION_TYPES.setDetails](state, details) {
-    state.details = details;
-  },
-
-  [MUTATION_TYPES.setError](state, err) {
-    state.error = new Auth0Error(err);
+  [SET_ERROR](state, error) {
+    state.error = new Auth0Error(error);
   },
 };
 
 const actions = {
-  getTokenUser: ({ commit }) =>
+  [TOKEN_USER_TYPES.getTokenUser]: ({ commit }) =>
     new Promise(resolve => {
       if (getLoggedInFlag() === 'true') {
         auth.checkSession(
           { responseType: 'token id_token' },
           (err, authResult) => {
             if (err) {
-              const { error, error_description } = err;
+              const { error, error_description: description } = err;
               // TODO: show fly-in
               if (error && error !== 'login_required') {
                 // instead of throwing this up now so user gets
                 // the error page, store it and only throw it when
                 // user enters a login-required route; that logic is
                 // handled in our route mixin
-                commit(MUTATION_TYPES.setError, error_description);
+                commit(SET_ERROR, description);
               } else if (!error) {
                 // from Auth0 docs: you can also get a generic 403 error
                 // without an error or error_description property.
-                commit(MUTATION_TYPES.setError, 'Auth0 unknown 403 error');
+                commit(SET_ERROR, 'Auth0 unknown 403 error');
               }
-              commit(MUTATION_TYPES.setAccessToken, '');
+              commit(SET_ACCESS_TOKEN, '');
               clearLoggedInFlag();
               resolve();
             } else {
-              const { email_verified } = authResult.idTokenPayload;
-              const { permissions } = jwt.decode(authResult.accessToken);
-              const filteredPerms = permissions.filter(
-                perm => perm === 'portal:view_as'
-              );
-
-              commit(MUTATION_TYPES.setIsVerified, email_verified);
-              commit(MUTATION_TYPES.setCanViewAs, filteredPerms.length === 1);
-              commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
-              commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
-              setExtra('auth', authResult.idTokenPayload);
+              commit(SET_ACCESS_TOKEN, authResult.accessToken);
+              commit(SET_ID_TOKEN, authResult.idToken);
               resolve();
             }
           }
@@ -95,11 +87,21 @@ const actions = {
 
 const getters = {
   isLoggedIn: ({ accessToken }) => !!accessToken,
+
+  canViewAs: ({ accessTokenPayload }) => {
+    const { permissions = [] } = accessTokenPayload;
+    const filteredPerms = permissions.filter(perm => perm === 'portal:view_as');
+
+    return filteredPerms.length === 1;
+  },
+
+  isVerified: ({ idTokenPayload: { email_verified: isVerified } }) =>
+    isVerified,
 };
 
 export default {
   namespaced: true,
-  state: createDefaultState(),
+  state: initialState,
   mutations,
   actions,
   getters,

@@ -1,5 +1,5 @@
 <template>
-  <token-user-provider v-slot="{ isLoggedIn }">
+  <token-user-provider v-slot="{ tokenUser: { isLoggedIn } }">
     <nav-bar :show-user-links="false" :is-logged-in="isLoggedIn" />
   </token-user-provider>
 </template>
