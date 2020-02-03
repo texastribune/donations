@@ -35,11 +35,11 @@ export default {
       const { firstName, lastName, zip, email, wantsMarketing } = this.user;
 
       return {
-        firstName: firstName || '',
-        lastName: lastName || '',
+        firstName,
+        lastName,
         email,
+        zip,
         confirmedEmail: '',
-        zip: zip || '',
         marketing: wantsMarketing,
       };
     },
