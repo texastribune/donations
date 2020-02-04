@@ -156,7 +156,12 @@ store
       base: '/account',
       mode: 'history',
       routes,
-      scrollBehavior: () => ({ x: 0, y: 0 }),
+      scrollBehavior(to, from, savedPosition) {
+        if (savedPosition) {
+          return savedPosition;
+        }
+        return { x: 0, y: 0 };
+      },
     });
 
     if (isLoggedIn) {
