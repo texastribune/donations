@@ -1,9 +1,6 @@
 <template>
-  <token-user-provider
-    v-if="!isLoggedIn"
-    v-slot="{ tokenUser: { isLoggedIn } }"
-  >
-    <div>
+  <token-user-provider v-slot="{ tokenUser: { isLoggedIn } }">
+    <div v-if="!isLoggedIn">
       <h1 class="has-xl-btm-marg">To verify, please log in</h1>
       <p class="has-b-btm-marg">
         To link <strong>{{ emailToLink }}</strong> to the Texas Tribune account
