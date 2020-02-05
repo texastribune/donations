@@ -31,7 +31,6 @@ import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
-import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastPaymentsRoute',
@@ -42,14 +41,6 @@ export default {
 
   data() {
     return { title: 'The Blast Payment History' };
-  },
-
-  methods: {
-    async fetchData() {
-      const meetsCriteria = this.user.isBlastSubscriber;
-
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
   },
 };
 </script>

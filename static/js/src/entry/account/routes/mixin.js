@@ -5,7 +5,6 @@ import logPageView from '../utils/log-page-view';
 import tokenUserMixin from '../store/token-user/mixin';
 import contextMixin from '../store/context/mixin';
 import { CONTEXT_TYPES } from '../store/types';
-import { InvalidRouteError } from '../errors';
 
 export default {
   mixins: [tokenUserMixin, contextMixin],
@@ -49,13 +48,9 @@ export default {
 
         this.routeIsFetching = false;
       } catch (err) {
-        if (err instanceof InvalidRouteError) {
-          this.$router.push({ name: 'home' });
-        } else {
-          // TODO: throw to errorCaptured in <App />
-          this[CONTEXT_TYPES.setError](err);
-          logError(err);
-        }
+        // TODO: throw to errorCaptured in <App />
+        this[CONTEXT_TYPES.setError](err);
+        logError(err);
       }
     },
 

@@ -23,7 +23,6 @@
 <script>
 import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
-import { InvalidRouteError } from '../../errors';
 import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Current from './containers/CurrentContainer.vue';
@@ -38,13 +37,6 @@ export default {
 
   data() {
     return { title: 'The Blast' };
-  },
-
-  methods: {
-    async fetchData() {
-      const meetsCriteria = this.user.isBlastSubscriber;
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
   },
 };
 </script>

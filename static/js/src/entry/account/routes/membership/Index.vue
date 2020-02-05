@@ -34,7 +34,6 @@
 
 <script>
 import Help from '../../components/Help.vue';
-import { InvalidRouteError } from '../../errors';
 import userMixin from '../../store/user/mixin';
 import LinkEmail from '../../link-email/components/LinkEmail.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
@@ -65,15 +64,6 @@ export default {
 
   data() {
     return { title: 'Membership' };
-  },
-
-  methods: {
-    async fetchData() {
-      const { hasGivenNotCustom } = this.user;
-      const meetsCriteria = hasGivenNotCustom;
-
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
   },
 };
 </script>

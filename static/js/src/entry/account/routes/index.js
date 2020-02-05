@@ -1,3 +1,5 @@
+import store from '../store';
+import { USER_MODULE } from '../store/types';
 import Home from './home/Index.vue';
 
 const HomeExact = () =>
@@ -63,49 +65,105 @@ const routes = [
         name: 'home',
         component: HomeExact,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
       },
       {
         path: 'edit-contact-info/',
         name: 'edit-contact-info',
         component: EditContactInfo,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
       },
       {
         path: 'ambassador/',
         name: 'ambassador',
         component: Ambassador,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
       },
       {
         path: 'membership/',
         name: 'membership',
         component: Membership,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const hasGivenNotCustom =
+            store.getters[`${USER_MODULE}/hasGivenNotCustom`];
+
+          if (hasGivenNotCustom) {
+            return next();
+          }
+          return next({ name: 'home' });
+        },
       },
       {
         path: 'payments/',
         name: 'payments',
         component: Payments,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const isNeverGiven = store.getters[`${USER_MODULE}/isNeverGiven`];
+
+          if (!isNeverGiven) {
+            return next();
+          }
+          return next({ name: 'home' });
+        },
       },
       {
         path: 'blast/',
         name: 'blast',
         component: Blast,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const isBlastSubscriber =
+            store.getters[`${USER_MODULE}/isBlastSubscriber`];
+
+          if (isBlastSubscriber) {
+            return next();
+          }
+          return next({ name: 'home' });
+        },
       },
       {
         path: 'blast-payments/',
         name: 'blast-payments',
         component: BlastPayments,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const isBlastSubscriber =
+            store.getters[`${USER_MODULE}/isBlastSubscriber`];
+
+          if (isBlastSubscriber) {
+            return next();
+          }
+          return next({ name: 'home' });
+        },
       },
       { path: '*', name: 'not-found', redirect: { name: 'home' } },
     ],

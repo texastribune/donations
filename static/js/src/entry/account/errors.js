@@ -10,12 +10,6 @@ export class UnverifiedError extends Error {
   }
 }
 
-export class InvalidRouteError extends Error {
-  constructor() {
-    super('Invalid route');
-  }
-}
-
 export class AxiosResponseError extends Error {
   constructor({ extra, status, headers, data }) {
     super('Axios response error');

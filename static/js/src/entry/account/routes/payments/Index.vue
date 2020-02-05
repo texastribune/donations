@@ -46,7 +46,6 @@ import routeMixin from '../mixin';
 import RouteLoader from '../home/components/RouteLoader.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
-import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'PaymentsRoute',
@@ -67,15 +66,6 @@ export default {
 
   data() {
     return { title: 'Donation History' };
-  },
-
-  methods: {
-    async fetchData() {
-      const { isNeverGiven } = this.user;
-      const meetsCriteria = !isNeverGiven;
-
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
   },
 };
 </script>
