@@ -16,7 +16,7 @@ node_modules/
 htmlcov
 celerybeat-schedule.db
 celerybeat.pid
-yarn-error.log
+npm-debug.log
 .pytest_cache
 # SVG sprite
 /templates/includes/base_icons.html
