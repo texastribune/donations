@@ -23,9 +23,9 @@ COPY static /app/static
 COPY webpack /app/webpack
 COPY config /app/config
 COPY package.json /app/
-COPY yarn.lock /app/
+COPY package-lock.json /app/
 COPY babel.config.js /app/
-RUN yarn
+RUN npm install
 
 FROM python:3.6
 
