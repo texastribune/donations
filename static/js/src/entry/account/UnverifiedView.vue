@@ -28,7 +28,6 @@
 
 <script>
 import userMixin from './store/user/mixin';
-import setTitle from './utils/set-title';
 
 export default {
   name: 'UnverifiedView',
@@ -39,8 +38,6 @@ export default {
     window.onpopstate = () => {
       window.location.reload();
     };
-
-    setTitle('Unverified email address');
   },
 };
 </script>

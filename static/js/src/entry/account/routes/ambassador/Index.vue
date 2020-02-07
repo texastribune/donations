@@ -1,11 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your referral information
-    </template>
-  </route-loader>
-
-  <div v-else>
+  <div>
     <h1
       class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
     >
@@ -41,7 +35,6 @@
 <script>
 import Help from '../../components/Help.vue';
 import routeMixin from '../mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
 import ReferralForm from './containers/ReferralFormContainer.vue';
 import ReferralLinks from './components/ReferralLinks.vue';
 import InternalNav from './components/InternalNav.vue';
@@ -49,12 +42,8 @@ import InternalNav from './components/InternalNav.vue';
 export default {
   name: 'AmbassadorRoute',
 
-  components: { Help, RouteLoader, ReferralLinks, ReferralForm, InternalNav },
+  components: { Help, ReferralLinks, ReferralForm, InternalNav },
 
   mixins: [routeMixin],
-
-  data() {
-    return { title: 'Refer a Friend' };
-  },
 };
 </script>

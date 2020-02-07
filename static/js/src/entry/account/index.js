@@ -27,6 +27,8 @@ import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
 import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
+import setTitle from './utils/set-title';
+import logPageView from './utils/log-page-view';
 import {
   UnverifiedError,
   AxiosResponseError,
@@ -133,9 +135,6 @@ axios.interceptors.request.use(
   }
 );
 
-// we refresh at a 15-minute interval instead of when
-// the access token expires because we want to regularly
-// check whether a user has logged out of Auth0 in another app
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch(
@@ -151,9 +150,10 @@ function refreshToken() {
 store
   .dispatch(`${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`)
   .then(() => {
+    const appBase = '/account';
     const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
     const router = new VueRouter({
-      base: '/account',
+      base: appBase,
       mode: 'history',
       routes,
       scrollBehavior(to, from, savedPosition) {
@@ -168,7 +168,7 @@ store
       refreshToken();
     }
 
-    router.beforeEach((to, from, next) => {
+    router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
       // eslint-disable-next-line no-shadow
@@ -178,13 +178,11 @@ store
 
       if (to.meta.isProtected) {
         if (tokenUserError) {
-          logError(tokenUserError);
-
           store.dispatch(
             `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
             tokenUserError
           );
-
+          logError(tokenUserError);
           return next();
         }
 
@@ -197,19 +195,44 @@ store
             `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
             new UnverifiedError()
           );
-
           return next();
+        }
+      }
+
+      let diffed = false;
+      const activated = to.matched.filter(
+        // eslint-disable-next-line no-return-assign
+        (route, i) => diffed || (diffed = from.matched[i] !== route)
+      );
+      const fetchers = activated
+        .map(route => route.meta.fetchData)
+        .filter(fetcher => !!fetcher);
+
+      if (fetchers.length) {
+        if (fetchers.length > 1 && to.meta.requiresParentFetch) {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const fetcher of fetchers) {
+            // eslint-disable-next-line no-await-in-loop
+            await fetcher(to, from);
+          }
+        } else {
+          await Promise.all(fetchers.map(fetcher => fetcher(to, from)));
         }
       }
 
       return next();
     });
 
-    router.afterEach(() => {
+    router.afterEach(to => {
+      const { error: appError } = store.state[CONTEXT_MODULE];
+      const pageTitle = appError ? 'Error' : to.meta.title;
+      const pagePath = `${appBase}${to.fullPath}`;
+
+      setTitle(pageTitle);
+      logPageView({ pageTitle, pagePath });
+
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
     });
 
-    const instance = new Vue({ ...App, router, store });
-
-    instance.$mount('#account-attach');
+    new Vue({ ...App, router, store }).$mount('#account-attach');
   });

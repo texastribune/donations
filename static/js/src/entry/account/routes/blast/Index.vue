@@ -1,11 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your Blast information
-    </template>
-  </route-loader>
-
-  <div v-else>
+  <div>
     <h1
       class="has-ump-top-padding has-xl-btm-marg has-ump-side-padding t-size-xl"
     >
@@ -24,19 +18,14 @@
 import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
 import routeMixin from '../mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
 import Current from './containers/CurrentContainer.vue';
 import Former from './containers/FormerContainer.vue';
 
 export default {
   name: 'BlastRoute',
 
-  components: { Help, Current, Former, RouteLoader },
+  components: { Help, Current, Former },
 
   mixins: [routeMixin, userMixin],
-
-  data() {
-    return { title: 'The Blast' };
-  },
 };
 </script>

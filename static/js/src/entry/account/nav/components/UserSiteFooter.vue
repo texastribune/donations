@@ -4,9 +4,9 @@
   >
     <site-footer
       show-user-links
-      :show-blast-links="!routeIsFetching && isBlastSubscriber"
-      :show-membership-link="!routeIsFetching && hasGivenNotCustom"
-      :show-payments-link="!routeIsFetching && !isNeverGiven"
+      :show-blast-links="isBlastSubscriber"
+      :show-membership-link="hasGivenNotCustom"
+      :show-payments-link="!isNeverGiven"
     />
   </user-provider>
 </template>
@@ -19,12 +19,5 @@ export default {
   name: 'UserSiteFooter',
 
   components: { UserProvider, SiteFooter },
-
-  props: {
-    routeIsFetching: {
-      type: Boolean,
-      required: true,
-    },
-  },
 };
 </script>

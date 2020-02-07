@@ -3,8 +3,8 @@
     <user-provider v-slot="{ user: { isBlastSubscriber, hasGivenNotCustom } }">
       <nav-bar
         show-user-links
-        :show-blast-link="!routeIsFetching && isBlastSubscriber"
-        :show-membership-link="!routeIsFetching && hasGivenNotCustom"
+        :show-blast-link="isBlastSubscriber"
+        :show-membership-link="hasGivenNotCustom"
         :is-logged-in="isLoggedIn"
       />
     </user-provider>
@@ -20,12 +20,5 @@ export default {
   name: 'UserNavBar',
 
   components: { TokenUserProvider, UserProvider, NavBar },
-
-  props: {
-    routeIsFetching: {
-      type: Boolean,
-      required: true,
-    },
-  },
 };
 </script>

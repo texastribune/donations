@@ -1,5 +1,5 @@
 import store from '../store';
-import { USER_MODULE } from '../store/types';
+import { USER_MODULE, USER_TYPES } from '../store/types';
 import Home from './home/Index.vue';
 
 const HomeExact = () =>
@@ -31,34 +31,52 @@ const routes = [
     name: 'logged-in',
     component: LoggedIn,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Logged In',
+    },
   },
   {
     path: '/logged-out/',
     name: 'logged-out',
     component: LoggedOut,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Logged Out',
+    },
   },
   {
     path: '/changed-email/',
     name: 'changed-email',
     component: ChangedEmail,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Verify your changed email',
+    },
   },
   {
     path: '/confirm-linked-identity/',
     name: 'confirm-linked-identity',
     component: ConfirmLinkedIdentity,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Confirm linked email address',
+    },
   },
   {
     path: '/',
     component: Home,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: true },
+    meta: {
+      isProtected: true,
+      title: null,
+      async fetchData() {
+        await store.dispatch(`${USER_MODULE}/${USER_TYPES.getUser}`);
+      },
+    },
     children: [
       {
         path: '',
@@ -67,6 +85,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'Home',
           requiresParentFetch: false,
         },
       },
@@ -77,6 +96,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'Your Profile Settings',
           requiresParentFetch: false,
         },
       },
@@ -87,6 +107,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'Refer a Friend',
           requiresParentFetch: false,
         },
       },
@@ -97,6 +118,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'Membership',
           requiresParentFetch: false,
         },
         beforeEnter: (to, from, next) => {
@@ -116,6 +138,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'Donation History',
           requiresParentFetch: false,
         },
         beforeEnter: (to, from, next) => {
@@ -134,6 +157,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'The Blast',
           requiresParentFetch: false,
         },
         beforeEnter: (to, from, next) => {
@@ -153,6 +177,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
+          title: 'The Blast Payment History',
           requiresParentFetch: false,
         },
         beforeEnter: (to, from, next) => {

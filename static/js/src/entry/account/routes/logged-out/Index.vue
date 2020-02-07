@@ -21,10 +21,6 @@ export default {
 
   mixins: [routeMixin],
 
-  data() {
-    return { title: 'Logged Out' };
-  },
-
   mounted() {
     clearLoggedInFlag();
     redirect(this.$route.query);

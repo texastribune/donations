@@ -6,7 +6,7 @@
 
     <unverified-view v-if="showUnverified" />
     <error-view v-else-if="showError" />
-    <router-view v-else :parent-route-is-fetching="false" />
+    <router-view v-else />
   </div>
 </template>
 

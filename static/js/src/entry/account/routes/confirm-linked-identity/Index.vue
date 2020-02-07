@@ -41,10 +41,6 @@ export default {
 
   mixins: [routeMixin, userMixin, tokenUserMixin],
 
-  data() {
-    return { title: 'Confirm linked email address' };
-  },
-
   computed: {
     ticket() {
       return this.$route.query.ticket;
@@ -61,11 +57,14 @@ export default {
     },
   },
 
+  async mounted() {
+    await this.fetchData();
+  },
+
   methods: {
-    // eslint-disable-next-line consistent-return
-    fetchData() {
+    async fetchData() {
       if (this.tokenUser.isLoggedIn) {
-        return this[USER_TYPES.getUser]();
+        await this[USER_TYPES.getUser]();
       }
     },
   },

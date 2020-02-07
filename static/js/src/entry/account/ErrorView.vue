@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import setTitle from './utils/set-title';
-
 export default {
   name: 'ErrorView',
 
@@ -36,8 +34,6 @@ export default {
     window.onpopstate = () => {
       window.location.reload();
     };
-
-    setTitle('Error');
   },
 };
 </script>
