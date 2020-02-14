@@ -15,8 +15,9 @@ import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
 import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 import { CHANGED_EMAIL_REDIRECT } from '../../../constants';
-import { AxiosResponseError } from '../../../errors';
+import { NetworkError } from '../../../errors';
 import { logOut } from '../../../utils/auth-actions';
+import logError from '../../../utils/log-error';
 import EditForm from '../components/EditForm.vue';
 
 export default {
@@ -115,11 +116,13 @@ export default {
         await Promise.all(dispatches);
       } catch (err) {
         if (
-          err instanceof AxiosResponseError &&
+          err instanceof NetworkError &&
           err.status === 400 &&
-          err.data.detail === "can't change email"
+          err.meta.data.detail === "can't change email"
         ) {
           badEmailUpdate = true;
+          err.meta.newEmail = newEmail;
+          logError({ err, level: 'warning' });
         } else {
           throw err;
         }

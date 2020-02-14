@@ -10,7 +10,7 @@ import {
 import VueClipboard from 'vue-clipboard2';
 import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
-import { init as initSentry, setExtra } from '@sentry/browser';
+import { init as initSentry } from '@sentry/browser';
 
 import routes from './routes';
 import store from './store';
@@ -29,11 +29,7 @@ import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
 import setTitle from './utils/set-title';
 import logPageView from './utils/log-page-view';
-import {
-  UnverifiedError,
-  AxiosResponseError,
-  AxiosRequestError,
-} from './errors';
+import { UnverifiedError, NetworkError } from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -102,7 +98,6 @@ extendValidationRule('required', requiredRule);
 extendValidationRule('numeric', numericRule);
 extendValidationRule('confirm', {
   params: ['target'],
-
   validate(value, { target }) {
     return value === target;
   },
@@ -111,27 +106,34 @@ extendValidationRule('confirm', {
 axios.interceptors.response.use(
   response => response,
   error => {
-    let meta = { extra: error.toJSON() };
+    const axiosDetail = error.toJSON();
+    const errorDetail = {
+      message: axiosDetail.message,
+      meta: { ...axiosDetail },
+    };
 
     if (error.response) {
-      const { status, data, headers } = error.response;
-      meta = { ...meta, status, data, headers };
+      const { status, headers, data } = error.response;
+
+      errorDetail.status = status;
+      errorDetail.meta.headers = headers;
+      errorDetail.meta.data = data;
     }
 
-    setExtra('lastAxiosResponse', meta);
-
-    return Promise.reject(new AxiosResponseError(meta));
+    return Promise.reject(new NetworkError(errorDetail));
   }
 );
 
 axios.interceptors.request.use(
   config => config,
   error => {
-    const meta = { extra: error.toJSON() };
+    const axiosDetail = error.toJSON();
+    const errorDetail = {
+      message: `Request Error: ${axiosDetail.message}`,
+      meta: { ...axiosDetail },
+    };
 
-    setExtra('lastAxiosRequest', meta);
-
-    return Promise.reject(new AxiosRequestError(meta));
+    return Promise.reject(new NetworkError(errorDetail));
   }
 );
 
@@ -143,17 +145,18 @@ function refreshToken() {
 
     const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
 
-    if (isLoggedIn) refreshToken();
+    if (isLoggedIn) {
+      refreshToken();
+    }
   }, 15 * 60 * 1000);
 }
 
 store
   .dispatch(`${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`)
   .then(() => {
-    const appBase = '/account';
     const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
     const router = new VueRouter({
-      base: appBase,
+      base: '/account',
       mode: 'history',
       routes,
       scrollBehavior(to, from, savedPosition) {
@@ -168,6 +171,11 @@ store
       refreshToken();
     }
 
+    router.onError(err => {
+      store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
+      logError({ err });
+    });
+
     router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
@@ -178,12 +186,8 @@ store
 
       if (to.meta.isProtected) {
         if (tokenUserError) {
-          store.dispatch(
-            `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
-            tokenUserError
-          );
-          logError(tokenUserError);
-          return next();
+          // will eventually be a 401 status
+          next(tokenUserError);
         }
 
         if (!isLoggedIn) {
@@ -191,11 +195,7 @@ store
         }
 
         if (!isVerified) {
-          store.dispatch(
-            `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
-            new UnverifiedError()
-          );
-          return next();
+          next(new UnverifiedError());
         }
       }
 
@@ -208,28 +208,37 @@ store
         .map(route => route.meta.fetchData)
         .filter(fetcher => !!fetcher);
 
-      if (fetchers.length) {
-        if (fetchers.length > 1 && to.meta.requiresParentFetch) {
-          // eslint-disable-next-line no-restricted-syntax
-          for (const fetcher of fetchers) {
+      if (to.meta.requiresParentFetch) {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const fetcher of fetchers) {
+          try {
             // eslint-disable-next-line no-await-in-loop
             await fetcher(to, from);
+          } catch (err) {
+            next(err);
           }
-        } else {
+        }
+      } else {
+        try {
           await Promise.all(fetchers.map(fetcher => fetcher(to, from)));
+        } catch (err) {
+          next(err);
         }
       }
 
-      return next();
+      next();
     });
 
     router.afterEach(to => {
       const { error: appError } = store.state[CONTEXT_MODULE];
-      const pageTitle = appError ? 'Error' : to.meta.title;
-      const pagePath = `${appBase}${to.fullPath}`;
 
-      setTitle(pageTitle);
-      logPageView({ pageTitle, pagePath });
+      if (!appError) {
+        setTitle(to.meta.title);
+
+        Vue.nextTick(() => {
+          logPageView();
+        });
+      }
 
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
     });

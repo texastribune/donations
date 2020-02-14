@@ -14,15 +14,15 @@ export default {
     // watch the value of isLoggedIn as we refresh
     // it every 15 minutes
     isLoggedIn(newIsLoggedIn, oldIsLoggedIn) {
-      const { error } = this.tokenUser;
+      const { error: tokenUserError } = this.tokenUser;
       const { isProtected } = this.$route.meta;
 
       if (isProtected && oldIsLoggedIn && !newIsLoggedIn) {
-        if (error) {
+        if (tokenUserError) {
           // Auth0 error encountered and user is on a
           // log-in-required route; show error page
           // TODO: show modal
-          throw error;
+          throw tokenUserError;
         } else {
           // user is on a login-required route and
           // either their session has expired or they

@@ -1,31 +1,31 @@
+export class AppError extends Error {
+  constructor({ name, message, status = 500, meta = {} }) {
+    super(message);
+
+    this.name = name;
+    this.status = status;
+    this.meta = meta;
+  }
+}
+
+export class NetworkError extends AppError {
+  constructor({ message, status = 500, meta = {} }) {
+    super({ name: 'NetworkError', message, status, meta });
+  }
+}
+
+export class UnverifiedError extends AppError {
+  constructor() {
+    super({
+      name: 'UnverifiedError',
+      message: 'Unverified email address accessing protected route',
+      status: 403,
+    });
+  }
+}
+
 export class Auth0Error extends Error {
   constructor(message) {
     super(`Auth0 error: ${message}`);
-  }
-}
-
-export class UnverifiedError extends Error {
-  constructor() {
-    super('Unverified email address');
-  }
-}
-
-export class AxiosResponseError extends Error {
-  constructor({ extra, status, headers, data }) {
-    super('Axios response error');
-
-    this.extra = extra;
-
-    if (status) this.status = status;
-    if (headers) this.headers = headers;
-    if (data) this.data = data;
-  }
-}
-
-export class AxiosRequestError extends Error {
-  constructor({ extra }) {
-    super('Axios request error');
-
-    this.extra = extra;
   }
 }

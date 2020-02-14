@@ -1,7 +1,7 @@
-export default function logPageView({ pagePath, pageTitle }) {
+export default function logPageView() {
   window.dataLayer.push({
     event: 'userPortalPageview',
-    pageTitle,
-    pagePath,
+    pageTitle: document.title,
+    pagePath: window.location.pathname,
   });
 }
