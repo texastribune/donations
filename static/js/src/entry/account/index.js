@@ -176,6 +176,7 @@ store
       logError({ err });
     });
 
+    // eslint-disable-next-line consistent-return
     router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
