@@ -21,10 +21,6 @@ export default {
 
   mixins: [routeMixin],
 
-  data() {
-    return { title: 'Logged In' };
-  },
-
   mounted() {
     setLoggedInFlag();
     redirect(this.$route.query);

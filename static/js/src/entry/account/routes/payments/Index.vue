@@ -1,11 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your donation history
-    </template>
-  </route-loader>
-
-  <div v-else class="has-ump-top-padding">
+  <div class="has-ump-top-padding">
     <credit-card-message :ga-label="ga.userPortal.labels.payments" />
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
@@ -43,10 +37,8 @@ import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
 import Appeal from '../../appeals/containers/AppealContainer.vue';
 import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import routeMixin from '../mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
-import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'PaymentsRoute',
@@ -60,22 +52,8 @@ export default {
     InternalNav,
     CreditCardMessage,
     Help,
-    RouteLoader,
   },
 
   mixins: [routeMixin, userMixin],
-
-  data() {
-    return { title: 'Donation History' };
-  },
-
-  methods: {
-    async fetchData() {
-      const { isNeverGiven } = this.user;
-      const meetsCriteria = !isNeverGiven;
-
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
-  },
 };
 </script>

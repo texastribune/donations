@@ -1,11 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your Blast payment history
-    </template>
-  </route-loader>
-
-  <div v-else>
+  <div>
     <h1
       class="has-ump-top-padding has-ump-side-padding has-l-btm-marg t-size-xl"
     >
@@ -28,28 +22,14 @@
 import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
 import routeMixin from '../mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
-import { InvalidRouteError } from '../../errors';
 
 export default {
   name: 'BlastPaymentsRoute',
 
-  components: { Help, Detail, RouteLoader, InternalNav },
+  components: { Help, Detail, InternalNav },
 
   mixins: [routeMixin, userMixin],
-
-  data() {
-    return { title: 'The Blast Payment History' };
-  },
-
-  methods: {
-    async fetchData() {
-      const meetsCriteria = this.user.isBlastSubscriber;
-
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
-  },
 };
 </script>

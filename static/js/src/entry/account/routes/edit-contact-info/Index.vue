@@ -1,11 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your contact information
-    </template>
-  </route-loader>
-
-  <div v-else>
+  <div>
     <h1
       class="has-ump-side-padding has-ump-top-padding has-l-btm-marg t-size-xl"
     >
@@ -31,7 +25,6 @@
 <script>
 import Help from '../../components/Help.vue';
 import routeMixin from '../mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
 import EditForm from './containers/EditFormContainer.vue';
 import ConfirmModal from './components/ConfirmModal.vue';
 import InternalNav from './components/InternalNav.vue';
@@ -40,7 +33,6 @@ export default {
   name: 'EditContactInfoRoute',
 
   components: {
-    RouteLoader,
     InternalNav,
     EditForm,
     ConfirmModal,
@@ -51,7 +43,6 @@ export default {
 
   data() {
     return {
-      title: 'Your Profile Settings',
       showModal: false,
       checkModalResolve: () => {},
     };

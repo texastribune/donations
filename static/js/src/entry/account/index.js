@@ -10,7 +10,7 @@ import {
 import VueClipboard from 'vue-clipboard2';
 import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
-import { init as initSentry, setExtra } from '@sentry/browser';
+import { init as initSentry } from '@sentry/browser';
 
 import routes from './routes';
 import store from './store';
@@ -27,11 +27,9 @@ import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
 import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
-import {
-  UnverifiedError,
-  AxiosResponseError,
-  AxiosRequestError,
-} from './errors';
+import setTitle from './utils/set-title';
+import logPageView from './utils/log-page-view';
+import { UnverifiedError, NetworkError } from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -100,7 +98,6 @@ extendValidationRule('required', requiredRule);
 extendValidationRule('numeric', numericRule);
 extendValidationRule('confirm', {
   params: ['target'],
-
   validate(value, { target }) {
     return value === target;
   },
@@ -109,33 +106,37 @@ extendValidationRule('confirm', {
 axios.interceptors.response.use(
   response => response,
   error => {
-    let meta = { extra: error.toJSON() };
+    const axiosDetail = error.toJSON();
+    const errorDetail = {
+      message: axiosDetail.message,
+      meta: { ...axiosDetail },
+    };
 
     if (error.response) {
-      const { status, data, headers } = error.response;
-      meta = { ...meta, status, data, headers };
+      const { status, headers, data } = error.response;
+
+      errorDetail.status = status;
+      errorDetail.meta.headers = headers;
+      errorDetail.meta.data = data;
     }
 
-    setExtra('lastAxiosResponse', meta);
-
-    return Promise.reject(new AxiosResponseError(meta));
+    return Promise.reject(new NetworkError(errorDetail));
   }
 );
 
 axios.interceptors.request.use(
   config => config,
   error => {
-    const meta = { extra: error.toJSON() };
+    const axiosDetail = error.toJSON();
+    const errorDetail = {
+      message: `Request Error: ${axiosDetail.message}`,
+      meta: { ...axiosDetail },
+    };
 
-    setExtra('lastAxiosRequest', meta);
-
-    return Promise.reject(new AxiosRequestError(meta));
+    return Promise.reject(new NetworkError(errorDetail));
   }
 );
 
-// we refresh at a 15-minute interval instead of when
-// the access token expires because we want to regularly
-// check whether a user has logged out of Auth0 in another app
 function refreshToken() {
   setTimeout(async () => {
     await store.dispatch(
@@ -144,7 +145,9 @@ function refreshToken() {
 
     const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
 
-    if (isLoggedIn) refreshToken();
+    if (isLoggedIn) {
+      refreshToken();
+    }
   }, 15 * 60 * 1000);
 }
 
@@ -168,7 +171,13 @@ store
       refreshToken();
     }
 
-    router.beforeEach((to, from, next) => {
+    router.onError(err => {
+      store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
+      logError({ err });
+    });
+
+    // eslint-disable-next-line consistent-return
+    router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
       // eslint-disable-next-line no-shadow
@@ -178,14 +187,8 @@ store
 
       if (to.meta.isProtected) {
         if (tokenUserError) {
-          logError(tokenUserError);
-
-          store.dispatch(
-            `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
-            tokenUserError
-          );
-
-          return next();
+          // will eventually be a 401 status
+          next(tokenUserError);
         }
 
         if (!isLoggedIn) {
@@ -193,23 +196,53 @@ store
         }
 
         if (!isVerified) {
-          store.dispatch(
-            `${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`,
-            new UnverifiedError()
-          );
-
-          return next();
+          next(new UnverifiedError());
         }
       }
 
-      return next();
+      let diffed = false;
+      const activated = to.matched.filter(
+        // eslint-disable-next-line no-return-assign
+        (route, i) => diffed || (diffed = from.matched[i] !== route)
+      );
+      const fetchers = activated
+        .map(route => route.meta.fetchData)
+        .filter(fetcher => !!fetcher);
+
+      if (to.meta.requiresParentFetch) {
+        // eslint-disable-next-line no-restricted-syntax
+        for (const fetcher of fetchers) {
+          try {
+            // eslint-disable-next-line no-await-in-loop
+            await fetcher(to, from);
+          } catch (err) {
+            next(err);
+          }
+        }
+      } else {
+        try {
+          await Promise.all(fetchers.map(fetcher => fetcher(to, from)));
+        } catch (err) {
+          next(err);
+        }
+      }
+
+      next();
     });
 
-    router.afterEach(() => {
+    router.afterEach(to => {
+      const { error: appError } = store.state[CONTEXT_MODULE];
+
+      if (!appError) {
+        setTitle(to.meta.title);
+
+        Vue.nextTick(() => {
+          logPageView();
+        });
+      }
+
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
     });
 
-    const instance = new Vue({ ...App, router, store });
-
-    instance.$mount('#account-attach');
+    new Vue({ ...App, router, store }).$mount('#account-attach');
   });

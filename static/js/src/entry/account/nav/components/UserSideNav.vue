@@ -3,9 +3,9 @@
     v-slot="{ user: { isBlastSubscriber, hasGivenNotCustom, isNeverGiven } }"
   >
     <side-nav
-      :show-blast-link="!routeIsFetching && isBlastSubscriber"
-      :show-membership-link="!routeIsFetching && hasGivenNotCustom"
-      :show-payments-link="!routeIsFetching && !isNeverGiven"
+      :show-blast-link="isBlastSubscriber"
+      :show-membership-link="hasGivenNotCustom"
+      :show-payments-link="!isNeverGiven"
     />
   </user-provider>
 </template>
@@ -18,12 +18,5 @@ export default {
   name: 'UserSideNav',
 
   components: { UserProvider, SideNav },
-
-  props: {
-    routeIsFetching: {
-      type: Boolean,
-      required: true,
-    },
-  },
 };
 </script>

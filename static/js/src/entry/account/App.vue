@@ -4,34 +4,28 @@
       <app-loader v-show="showLoader" />
     </transition>
 
-    <unverified-view v-if="showUnverified" />
-    <error-view v-else-if="showError" />
-    <router-view v-else :parent-route-is-fetching="false" />
+    <error-view v-if="showError" />
+    <router-view v-else />
   </div>
 </template>
 
 <script>
 import ErrorView from './ErrorView.vue';
-import UnverifiedView from './UnverifiedView.vue';
 import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
 import { CONTEXT_TYPES } from './store/types';
-import { UnverifiedError } from './errors';
+import logError from './utils/log-error';
 
 export default {
   name: 'App',
 
-  components: { ErrorView, UnverifiedView, AppLoader },
+  components: { ErrorView, AppLoader },
 
   mixins: [contextMixin],
 
   computed: {
     showLoader() {
       return this.context.isFetching && !this.context.error;
-    },
-
-    showUnverified() {
-      return this.context.error instanceof UnverifiedError;
     },
 
     showError() {
@@ -41,6 +35,10 @@ export default {
 
   errorCaptured(err) {
     this[CONTEXT_TYPES.setError](err);
+
+    logError({ err });
+
+    return false;
   },
 };
 </script>

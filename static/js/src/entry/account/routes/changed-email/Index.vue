@@ -39,10 +39,6 @@ export default {
 
   mixins: [routeMixin],
 
-  data() {
-    return { title: 'Verify your changed email' };
-  },
-
   computed: {
     newEmail() {
       return this.$route.query.email;

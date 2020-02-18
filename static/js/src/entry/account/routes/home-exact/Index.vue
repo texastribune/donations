@@ -1,12 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your account information
-    </template>
-  </route-loader>
-
   <div
-    v-else
     class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l"
   >
     <welcome-message :ga-label="ga.userPortal.labels.home" />
@@ -32,7 +25,6 @@
 import Help from '../../components/Help.vue';
 import WelcomeMessage from '../../messages/components/WelcomeMessage.vue';
 import routeMixin from '../mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
 import ProfileSettings from './containers/ProfileSettingsContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
@@ -56,13 +48,8 @@ export default {
     Blast,
     BlastCancelled,
     Help,
-    RouteLoader,
   },
 
   mixins: [routeMixin],
-
-  data() {
-    return { title: 'Home' };
-  },
 };
 </script>
