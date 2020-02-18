@@ -217,9 +217,13 @@ const getters = {
 
   isSingleDonor: (
     { data: { is_recurring_donor: isRecurringDonor, is_mdev: isMDev } },
-    { isNeverGiven, membershipExpirationDate }
+    { isNeverGiven, isCircleDonor, membershipExpirationDate }
   ) =>
-    !isNeverGiven && !isRecurringDonor && !!membershipExpirationDate && !isMDev,
+    !isNeverGiven &&
+    !isRecurringDonor &&
+    !!membershipExpirationDate &&
+    !isMDev &&
+    !isCircleDonor,
 
   isRecurringDonor: (
     { data: { is_recurring_donor: isRecurringDonor, is_mdev: isMDev } },
