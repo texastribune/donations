@@ -176,7 +176,6 @@ store
       logError({ err });
     });
 
-    // eslint-disable-next-line consistent-return
     router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
@@ -188,7 +187,7 @@ store
       if (to.meta.isProtected) {
         if (tokenUserError) {
           // will eventually be a 401 status
-          next(tokenUserError);
+          return next(tokenUserError);
         }
 
         if (!isLoggedIn) {
@@ -196,7 +195,7 @@ store
         }
 
         if (!isVerified) {
-          next(new UnverifiedError());
+          return next(new UnverifiedError());
         }
       }
 
@@ -209,25 +208,21 @@ store
         .map(route => route.meta.fetchData)
         .filter(fetcher => !!fetcher);
 
-      if (to.meta.requiresParentFetch) {
-        // eslint-disable-next-line no-restricted-syntax
-        for (const fetcher of fetchers) {
-          try {
+      try {
+        if (to.meta.requiresParentFetch) {
+          // eslint-disable-next-line no-restricted-syntax
+          for (const fetcher of fetchers) {
             // eslint-disable-next-line no-await-in-loop
             await fetcher(to, from);
-          } catch (err) {
-            next(err);
           }
-        }
-      } else {
-        try {
+        } else {
           await Promise.all(fetchers.map(fetcher => fetcher(to, from)));
-        } catch (err) {
-          next(err);
         }
+      } catch (err) {
+        return next(err);
       }
 
-      next();
+      return next();
     });
 
     router.afterEach(to => {
