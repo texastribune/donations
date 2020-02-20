@@ -36,7 +36,6 @@
 
 <script>
 import { logIn } from '../../../utils/auth-actions';
-import { CONFIRM_LINKED_IDENTITY_REDIRECT } from '../../../constants';
 import TokenUserProvider from '../../../store/token-user/Provider.vue';
 
 export default {
@@ -71,8 +70,8 @@ export default {
       });
 
       logIn({
-        next: CONFIRM_LINKED_IDENTITY_REDIRECT,
-        data: { ticket: this.ticket },
+        redirectName: 'confirmLinkedIdentity',
+        redirectQueryParams: { ticket: this.ticket },
       });
     },
 

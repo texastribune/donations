@@ -1,4 +1,5 @@
 import { logOut } from '../utils/auth-actions';
+import { REDIRECTS_META } from '../constants';
 import tokenUserMixin from '../store/token-user/mixin';
 
 export default {
@@ -40,6 +41,30 @@ export default {
 
       if (isProtected && newTokenUserError && !oldTokenUserError) {
         throw this.tokenUserError;
+      }
+    },
+  },
+
+  methods: {
+    redirectFromQueryParams() {
+      const { redirectName, redirectQueryParams } = this.$route.query;
+      const redirectMeta = REDIRECTS_META[redirectName];
+
+      if (redirectMeta) {
+        const { external, url, routeName } = redirectMeta;
+
+        setTimeout(() => {
+          if (external) {
+            window.location.href = url;
+          } else {
+            this.$router.push({
+              name: routeName,
+              query: redirectQueryParams
+                ? JSON.parse(decodeURIComponent(redirectQueryParams))
+                : {},
+            });
+          }
+        }, 1800);
       }
     },
   },

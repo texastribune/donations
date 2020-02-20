@@ -32,7 +32,7 @@ const routes = [
     component: LoggedIn,
     pathToRegexpOptions: { strict: true },
     meta: {
-      isProtected: false,
+      isProtected: true,
       title: 'Logged In',
     },
   },
