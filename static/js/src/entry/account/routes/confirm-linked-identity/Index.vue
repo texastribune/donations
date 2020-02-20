@@ -41,6 +41,10 @@ export default {
 
   mixins: [routeMixin, userMixin, tokenUserMixin],
 
+  data() {
+    return { hasRouteFetch: true };
+  },
+
   computed: {
     ticket() {
       return this.$route.query.ticket;
@@ -57,14 +61,14 @@ export default {
     },
   },
 
-  async mounted() {
-    await this.fetchData();
-  },
-
   methods: {
     async fetchData() {
-      if (this.tokenUser.isLoggedIn) {
+      const { isReady, error } = this.tokenUser;
+
+      if (isReady) {
         await this[USER_TYPES.getUser]();
+      } else if (error) {
+        throw error;
       }
     },
   },

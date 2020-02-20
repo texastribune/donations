@@ -137,16 +137,16 @@ axios.interceptors.request.use(
   }
 );
 
-function refreshToken() {
+function refreshTokens() {
   setTimeout(async () => {
     await store.dispatch(
       `${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`
     );
 
-    const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
+    const isReady = store.getters[`${TOKEN_USER_MODULE}/isReady`];
 
-    if (isLoggedIn) {
-      refreshToken();
+    if (isReady) {
+      refreshTokens();
     }
   }, 15 * 60 * 1000);
 }
@@ -154,7 +154,7 @@ function refreshToken() {
 store
   .dispatch(`${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`)
   .then(() => {
-    const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
+    const isReady = store.getters[`${TOKEN_USER_MODULE}/isReady`];
     const router = new VueRouter({
       base: '/account',
       mode: 'history',
@@ -167,8 +167,8 @@ store
       },
     });
 
-    if (isLoggedIn) {
-      refreshToken();
+    if (isReady) {
+      refreshTokens();
     }
 
     router.onError(err => {
@@ -179,18 +179,18 @@ store
     router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
-      // eslint-disable-next-line no-shadow
-      const isLoggedIn = store.getters[`${TOKEN_USER_MODULE}/isLoggedIn`];
       const isVerified = store.getters[`${TOKEN_USER_MODULE}/isVerified`];
-      const { error: tokenUserError } = store.state[TOKEN_USER_MODULE];
+      const { isLoggedIn, error: tokenUserError } = store.state[
+        TOKEN_USER_MODULE
+      ];
 
       if (to.meta.isProtected) {
-        if (tokenUserError) {
-          return next(tokenUserError);
-        }
-
         if (!isLoggedIn) {
           return logIn();
+        }
+
+        if (tokenUserError) {
+          return next(tokenUserError);
         }
 
         if (!isVerified) {

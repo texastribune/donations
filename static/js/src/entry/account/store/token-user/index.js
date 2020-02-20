@@ -5,15 +5,14 @@ import { setExtra } from '@sentry/browser';
 
 import { TOKEN_USER_TYPES } from '../types';
 import auth from '../../utils/auth';
-import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/auth-actions';
 import { Auth0Error } from '../../errors';
 
-const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
-const SET_ID_TOKEN = 'SET_ID_TOKEN';
+const SET_READY = 'SET_READY';
+const SET_LOGGED_OUT = 'SET_LOGGED_OUT';
 const SET_ERROR = 'SET_ERROR';
-const CLEAR_TOKENS = 'CLEAR_TOKENS';
 
 const initialState = {
+  isLoggedIn: false,
   accessToken: '',
   accessTokenPayload: {},
   idToken: '',
@@ -22,31 +21,40 @@ const initialState = {
 };
 
 const mutations = {
-  [SET_ACCESS_TOKEN](state, accessToken) {
+  [SET_READY](state, { accessToken, idToken }) {
+    const accessTokenPayload = jwt.decode(accessToken);
+    const idTokenPayload = jwt.decode(idToken);
+
+    state.isLoggedIn = true;
     state.accessToken = accessToken;
-    state.accessTokenPayload = jwt.decode(accessToken);
-  },
-
-  [SET_ID_TOKEN](state, idToken) {
-    const payload = jwt.decode(idToken);
-
+    state.accessTokenPayload = accessTokenPayload;
     state.idToken = idToken;
-    state.idTokenPayload = payload;
+    state.idTokenPayload = idTokenPayload;
+    state.error = null;
 
-    setExtra('auth', payload);
+    setExtra('auth', idTokenPayload);
   },
 
-  [CLEAR_TOKENS](state) {
-    state.idToken = '';
-    state.idTokenPayload = {};
+  [SET_LOGGED_OUT](state) {
+    state.isLoggedIn = false;
     state.accessToken = '';
     state.accessTokenPayload = {};
+    state.idToken = '';
+    state.idTokenPayload = {};
+    state.error = null;
 
     setExtra('auth', {});
   },
 
-  [SET_ERROR](state, { description, code }) {
-    state.error = new Auth0Error({ message: description, code });
+  [SET_ERROR](state, error) {
+    state.isLoggedIn = true;
+    state.accessToken = '';
+    state.accessTokenPayload = {};
+    state.idToken = '';
+    state.idTokenPayload = {};
+    state.error = error;
+
+    setExtra('auth', {});
   },
 };
 
@@ -54,41 +62,40 @@ const actions = {
   [TOKEN_USER_TYPES.getTokenUser]: async ({ commit }) => {
     try {
       await new Promise((resolve, reject) => {
-        if (getLoggedInFlag()) {
-          auth.checkSession(
-            { responseType: 'token id_token' },
-            (err, authResult) => {
-              if (err) {
-                reject(err);
-              } else {
-                commit(SET_ACCESS_TOKEN, authResult.accessToken);
-                commit(SET_ID_TOKEN, authResult.idToken);
-                resolve();
-              }
+        auth.checkSession(
+          { responseType: 'token id_token' },
+          (err, authResult) => {
+            if (err) {
+              reject(err);
+            } else {
+              commit(SET_READY, {
+                accessToken: authResult.accessToken,
+                idToken: authResult.idToken,
+              });
+              resolve();
             }
-          );
-        } else {
-          resolve();
-        }
+          }
+        );
       });
     } catch (err) {
       const { code, description } = err;
 
       if (code === 'login_required') {
-        clearLoggedInFlag();
+        commit(SET_LOGGED_OUT);
       } else if (!code || !description) {
-        commit(SET_ERROR, { code: 403, description: 'Unknown error' });
+        commit(
+          SET_ERROR,
+          new Auth0Error({ message: 'Unknown error', code: 403 })
+        );
       } else {
-        commit(SET_ERROR, { code, description });
+        commit(SET_ERROR, new Auth0Error({ message: description, code }));
       }
-
-      commit(CLEAR_TOKENS);
     }
   },
 };
 
 const getters = {
-  isLoggedIn: ({ accessToken }) => !!accessToken,
+  isReady: ({ isLoggedIn, error }) => isLoggedIn && !error,
 
   canViewAs: ({ accessTokenPayload }) => {
     const { permissions = [] } = accessTokenPayload;

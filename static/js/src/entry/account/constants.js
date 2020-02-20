@@ -1,4 +1,3 @@
-export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
 export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';

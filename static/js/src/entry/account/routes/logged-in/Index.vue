@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { setLoggedInFlag, redirect } from '../../utils/auth-actions';
+import { redirect } from '../../utils/auth-actions';
 import routeMixin from '../mixin';
 
 export default {
@@ -21,7 +21,6 @@ export default {
   mixins: [routeMixin],
 
   mounted() {
-    setLoggedInFlag();
     redirect(this.$route.query);
   },
 };

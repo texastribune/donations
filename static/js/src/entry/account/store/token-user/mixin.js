@@ -19,8 +19,8 @@ export default {
     },
 
     [`${MODULE}State`]() {
-      const { error } = this.$store.state[MODULE];
-      return { error };
+      const { error, isLoggedIn } = this.$store.state[MODULE];
+      return { error, isLoggedIn };
     },
 
     [MODULE]() {

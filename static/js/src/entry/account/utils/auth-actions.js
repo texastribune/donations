@@ -7,7 +7,6 @@ import {
   DONATE_REDIRECT,
   ACCOUNT_HOME_REDIRECT,
   REDIRECTS,
-  LOGGED_IN_FLAG_KEY,
 } from '../constants';
 
 const createRedirectQueryParams = ({ next, data }) => {
@@ -67,14 +66,4 @@ export const redirect = routeQueryParams => {
 
 export const resetPassword = (email, cb) => {
   auth.changePassword({ email, connection: NON_STAFF_CONNECTION }, cb);
-};
-
-export const setLoggedInFlag = () => {
-  localStorage.setItem(LOGGED_IN_FLAG_KEY, true);
-};
-
-export const getLoggedInFlag = () => !!localStorage.getItem(LOGGED_IN_FLAG_KEY);
-
-export const clearLoggedInFlag = () => {
-  localStorage.removeItem(LOGGED_IN_FLAG_KEY);
 };

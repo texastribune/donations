@@ -4,32 +4,42 @@ import tokenUserMixin from '../store/token-user/mixin';
 export default {
   mixins: [tokenUserMixin],
 
+  data() {
+    return { routeIsFetching: true };
+  },
+
   computed: {
     isLoggedIn() {
       return this.tokenUser.isLoggedIn;
     },
+
+    tokenUserError() {
+      return this.tokenUser.error;
+    },
+  },
+
+  async mounted() {
+    if (this.hasRouteFetch) {
+      await this.fetchData();
+    }
+
+    this.routeIsFetching = false;
   },
 
   watch: {
-    // watch the value of isLoggedIn as we refresh
-    // it every 15 minutes
     isLoggedIn(newIsLoggedIn, oldIsLoggedIn) {
-      const { error: tokenUserError } = this.tokenUser;
       const { isProtected } = this.$route.meta;
 
       if (isProtected && oldIsLoggedIn && !newIsLoggedIn) {
-        if (tokenUserError) {
-          // Auth0 error encountered and user is on a
-          // log-in-required route; show error page
-          // TODO: show modal
-          throw tokenUserError;
-        } else {
-          // user is on a login-required route and
-          // either their session has expired or they
-          // have logged out elsewhere; log them out here too
-          // TODO: show modal
-          logOut();
-        }
+        logOut();
+      }
+    },
+
+    tokenUserError(newTokenUserError, oldTokenUserError) {
+      const { isProtected } = this.$route.meta;
+
+      if (isProtected && newTokenUserError && !oldTokenUserError) {
+        throw this.tokenUserError;
       }
     },
   },

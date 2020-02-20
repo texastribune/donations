@@ -41,7 +41,7 @@ export default {
 
   computed: {
     shouldShow() {
-      return this.tokenUser.isLoggedIn;
+      return this.tokenUser.isReady;
     },
   },
 
