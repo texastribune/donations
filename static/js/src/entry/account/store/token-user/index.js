@@ -5,12 +5,13 @@ import { setExtra } from '@sentry/browser';
 
 import { TOKEN_USER_TYPES } from '../types';
 import auth from '../../utils/auth';
-import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/storage';
+import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/auth-actions';
 import { Auth0Error } from '../../errors';
 
 const SET_ACCESS_TOKEN = 'SET_ACCESS_TOKEN';
 const SET_ID_TOKEN = 'SET_ID_TOKEN';
 const SET_ERROR = 'SET_ERROR';
+const CLEAR_TOKENS = 'CLEAR_TOKENS';
 
 const initialState = {
   accessToken: '',
@@ -23,66 +24,67 @@ const initialState = {
 const mutations = {
   [SET_ACCESS_TOKEN](state, accessToken) {
     state.accessToken = accessToken;
-
-    if (accessToken) {
-      state.accessTokenPayload = jwt.decode(accessToken);
-    } else {
-      state.accessTokenPayload = {};
-    }
+    state.accessTokenPayload = jwt.decode(accessToken);
   },
 
   [SET_ID_TOKEN](state, idToken) {
-    state.idToken = idToken;
+    const payload = jwt.decode(idToken);
 
-    if (idToken) {
-      const payload = jwt.decode(idToken);
-      state.idTokenPayload = payload;
-      setExtra('auth', payload);
-    } else {
-      state.idTokenPayload = {};
-    }
+    state.idToken = idToken;
+    state.idTokenPayload = payload;
+
+    setExtra('auth', payload);
   },
 
-  [SET_ERROR](state, error) {
-    state.error = new Auth0Error(error);
+  [CLEAR_TOKENS](state) {
+    state.idToken = '';
+    state.idTokenPayload = {};
+    state.accessToken = '';
+    state.accessTokenPayload = {};
+
+    setExtra('auth', {});
+  },
+
+  [SET_ERROR](state, { description, code }) {
+    state.error = new Auth0Error({ message: description, code });
   },
 };
 
 const actions = {
-  [TOKEN_USER_TYPES.getTokenUser]: ({ commit }) =>
-    new Promise(resolve => {
-      if (getLoggedInFlag() === 'true') {
-        auth.checkSession(
-          { responseType: 'token id_token' },
-          (err, authResult) => {
-            if (err) {
-              const { error, error_description: description } = err;
-              // TODO: show fly-in
-              if (error && error !== 'login_required') {
-                // instead of throwing this up now so user gets
-                // the error page, store it and only throw it when
-                // user enters a login-required route; that logic is
-                // handled in our route mixin
-                commit(SET_ERROR, description);
-              } else if (!error) {
-                // from Auth0 docs: you can also get a generic 403 error
-                // without an error or error_description property.
-                commit(SET_ERROR, 'Auth0 unknown 403 error');
+  [TOKEN_USER_TYPES.getTokenUser]: async ({ commit }) => {
+    try {
+      await new Promise((resolve, reject) => {
+        if (getLoggedInFlag()) {
+          auth.checkSession(
+            { responseType: 'token id_token' },
+            (err, authResult) => {
+              if (err) {
+                reject(err);
+              } else {
+                commit(SET_ACCESS_TOKEN, authResult.accessToken);
+                commit(SET_ID_TOKEN, authResult.idToken);
+                resolve();
               }
-              commit(SET_ACCESS_TOKEN, '');
-              clearLoggedInFlag();
-              resolve();
-            } else {
-              commit(SET_ACCESS_TOKEN, authResult.accessToken);
-              commit(SET_ID_TOKEN, authResult.idToken);
-              resolve();
             }
-          }
-        );
+          );
+        } else {
+          resolve();
+        }
+      });
+    } catch (err) {
+      const { code, description } = err;
+
+      if (code === 'login_required') {
+        clearLoggedInFlag();
+      } else if (!code || !description) {
+        commit(SET_ERROR, { code: 403, description: 'Unknown error' });
       } else {
-        resolve();
+        commit(SET_ERROR, { code, description });
       }
-    }),
+
+      commit(CLEAR_TOKENS);
+    }
+  },
 };
 
 const getters = {

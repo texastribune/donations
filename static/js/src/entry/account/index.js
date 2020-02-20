@@ -186,7 +186,6 @@ store
 
       if (to.meta.isProtected) {
         if (tokenUserError) {
-          // will eventually be a 401 status
           return next(tokenUserError);
         }
 

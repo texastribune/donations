@@ -12,8 +12,7 @@
 </template>
 
 <script>
-import { clearLoggedInFlag } from '../../utils/storage';
-import { redirect } from '../../utils/auth-actions';
+import { redirect, clearLoggedInFlag } from '../../utils/auth-actions';
 import routeMixin from '../mixin';
 
 export default {
