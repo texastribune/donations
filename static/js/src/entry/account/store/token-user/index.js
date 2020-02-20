@@ -95,6 +95,8 @@ const actions = {
 };
 
 const getters = {
+  tokenExpiryInMs: ({ accessTokenPayload: { exp } }) => exp * 1000,
+
   isReady: ({ isLoggedIn, error }) => isLoggedIn && !error,
 
   canViewAs: ({ accessTokenPayload }) => {

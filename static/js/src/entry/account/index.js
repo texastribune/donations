@@ -137,6 +137,14 @@ axios.interceptors.request.use(
   }
 );
 
+function getInterval() {
+  const tokenExpiryInMs = store.getters[`${TOKEN_USER_MODULE}/tokenExpiryInMs`];
+  const nowInMs = Date.now();
+  const fiveMinutesInMs = 5 * 60 * 1000;
+
+  return tokenExpiryInMs - nowInMs - fiveMinutesInMs;
+}
+
 function refreshTokens() {
   setTimeout(async () => {
     await store.dispatch(
@@ -148,7 +156,7 @@ function refreshTokens() {
     if (isReady) {
       refreshTokens();
     }
-  }, 15 * 60 * 1000);
+  }, getInterval());
 }
 
 store
