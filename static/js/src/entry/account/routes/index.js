@@ -85,7 +85,7 @@ const routes = [
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
-          title: 'Account Overview',
+          title: 'Home',
           requiresParentFetch: false,
         },
       },
