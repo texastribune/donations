@@ -3,15 +3,21 @@
     <basic-nav-bar />
 
     <main class="l-minimal has-bg-white-off has-xl-padding">
-      <route-loader v-if="routeIsFetching" />
-
-      <div v-else class="l-minimal__content">
-        <logged-in
+      <div class="l-minimal__content">
+        <ready
+          v-if="showReady"
           :existing-email="existingEmail"
           :email-to-link="emailToLink"
           :ticket="ticket"
         />
         <logged-out
+          v-if="showLoggedOut"
+          :existing-email="existingEmail"
+          :email-to-link="emailToLink"
+          :ticket="ticket"
+        />
+        <wrong-account
+          v-if="showWrongAccount"
           :existing-email="existingEmail"
           :email-to-link="emailToLink"
           :ticket="ticket"
@@ -26,24 +32,20 @@
 <script>
 import jwt from 'jsonwebtoken';
 
-import routeMixin from '../mixin';
 import tokenUserMixin from '../../store/token-user/mixin';
 import userMixin from '../../store/user/mixin';
-import { USER_TYPES } from '../../store/types';
-import RouteLoader from './components/RouteLoader.vue';
+import routeMixin from '../mixin';
+
+import Ready from './components/Ready.vue';
 import LoggedOut from './components/LoggedOut.vue';
-import LoggedIn from './containers/LoggedInContainer.vue';
+import WrongAccount from './components/WrongAccount.vue';
 
 export default {
   name: 'ConfirmLinkedIdentityRoute',
 
-  components: { LoggedIn, LoggedOut, RouteLoader },
+  components: { Ready, LoggedOut, WrongAccount },
 
   mixins: [routeMixin, userMixin, tokenUserMixin],
-
-  data() {
-    return { hasRouteFetch: true };
-  },
 
   computed: {
     ticket() {
@@ -59,18 +61,28 @@ export default {
       const { email_to_link: emailToLink } = jwt.decode(this.ticket);
       return emailToLink;
     },
+
+    isRightAccount() {
+      return this.existingEmail === this.user.email;
+    },
+
+    showReady() {
+      return this.tokenUser.isReady && this.isRightAccount;
+    },
+
+    showLoggedOut() {
+      return !this.tokenUser.isLoggedIn;
+    },
+
+    showWrongAccount() {
+      return this.tokenUser.isReady && !this.isRightAccount;
+    },
   },
 
-  methods: {
-    async fetchData() {
-      const { isReady, error } = this.tokenUser;
-
-      if (isReady) {
-        await this[USER_TYPES.getUser]();
-      } else if (error) {
-        throw error;
-      }
-    },
+  mounted() {
+    if (this.tokenUser.error) {
+      throw this.tokenUser.error;
+    }
   },
 };
 </script>
