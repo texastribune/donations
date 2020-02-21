@@ -20,7 +20,7 @@ const createRedirectQueryParams = ({ redirectName, redirectQueryParams }) => {
 
 export const logIn = (info = {}) => {
   const queryParams = createRedirectQueryParams({
-    redirectName: 'accountHome',
+    redirectName: 'accountOverview',
     ...info,
   });
 

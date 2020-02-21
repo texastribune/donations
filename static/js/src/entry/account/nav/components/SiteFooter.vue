@@ -29,7 +29,7 @@
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.footer"
               :ga-event-label="ga.userPortalNav.labels.home"
-              :to="{ name: 'home' }"
+              :to="{ name: 'accountOverview' }"
             >
               Account Overview
             </router-link>

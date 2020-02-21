@@ -18,7 +18,7 @@
               active-class="is-active"
               exact
               ga-on="click"
-              :to="{ name: 'home' }"
+              :to="{ name: 'accountOverview' }"
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.top"
               :ga-event-label="ga.userPortalNav.labels.home"
@@ -118,7 +118,7 @@
             active-class="is-active"
             exact
             ga-on="click"
-            :to="{ name: 'home' }"
+            :to="{ name: 'accountOverview' }"
             :ga-event-category="ga.userPortalNav.category"
             :ga-event-action="ga.userPortalNav.actions.top"
             :ga-event-label="ga.userPortalNav.labels.home"

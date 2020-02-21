@@ -120,9 +120,9 @@ export const REDIRECTS_META = {
     external: true,
     url: '/donate',
   },
-  accountHome: {
+  accountOverview: {
     external: false,
-    routeName: 'home',
+    routeName: 'accountOverview',
   },
   confirmLinkedIdentity: {
     external: false,
