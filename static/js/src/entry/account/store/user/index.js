@@ -254,15 +254,8 @@ const getters = {
     return null;
   },
 
-  allTransactions: ({ data: { transactions = [] } }) => {
-    const nonBlastTransactions = transactions.filter(
-      ({ type }) => type.toLowerCase() !== 'the blast'
-    );
-
-    return nonBlastTransactions.map(transaction =>
-      formatTransaction(transaction)
-    );
-  },
+  transactions: ({ data: { transactions = [] } }) =>
+    transactions.map(transaction => formatTransaction(transaction)),
 
   nextTransaction: ({ data: { next_transaction: nextTransaction } }) => {
     if (nextTransaction) {
@@ -278,8 +271,8 @@ const getters = {
     return null;
   },
 
-  pastTransactions: (_, { allTransactions }) => {
-    const pastTransactions = allTransactions.filter(({ date }) => isPast(date));
+  pastTransactions: (_, { transactions }) => {
+    const pastTransactions = transactions.filter(({ date }) => isPast(date));
 
     return pastTransactions.sort(
       ({ date: firstDate }, { date: secondDate }) => {
@@ -290,13 +283,9 @@ const getters = {
     );
   },
 
-  allBlastTransactions: ({ data: { transactions = [] } }) => {
-    const blastTransactions = transactions.filter(
-      ({ type }) => type.toLowerCase() === 'the blast'
-    );
-
-    return blastTransactions.map(transaction => formatTransaction(transaction));
-  },
+  blastTransactions: ({
+    data: { blast_transactions: blastTransactions = [] },
+  }) => blastTransactions.map(transaction => formatTransaction(transaction)),
 
   nextBlastTransaction: ({
     data: { next_blast_transaction: nextBlastTransaction },
@@ -316,8 +305,8 @@ const getters = {
     return null;
   },
 
-  pastBlastTransactions: (_, { allBlastTransactions }) => {
-    const pastBlastTransactions = allBlastTransactions.filter(({ date }) =>
+  pastBlastTransactions: (_, { blastTransactions }) => {
+    const pastBlastTransactions = blastTransactions.filter(({ date }) =>
       isPast(date)
     );
 
