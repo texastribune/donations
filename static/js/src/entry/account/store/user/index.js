@@ -120,7 +120,7 @@ const getters = {
     _,
     {
       tokenUser: {
-        idTokenPayload: { email },
+        idTokenPayload: { email = '' },
       },
     }
   ) => {
@@ -130,16 +130,30 @@ const getters = {
     return email;
   },
 
-  identity: ({ viewAsEmail, data: { identities = [] } }, { email }) => {
+  identity: (
+    { viewAsEmail, data: { identities = [] } },
+    { email },
+    _,
+    { 'tokenUser/isReady': isReady }
+  ) => {
+    // an Auth0 error occurred, or user is not logged in
+    if (!isReady) {
+      return {};
+    }
+
     // viewing as someone who does not have an Auth0 account
     if (viewAsEmail && !identities.length) {
       return {
         tribune_offers_consent: false,
       };
     }
-    // data fetch in progress
-    if (!identities.length) return {};
 
+    // data fetch in progress
+    if (!identities.length) {
+      return {};
+    }
+
+    // what we want: grab the identity associated with a user's Auth0 email address
     const [identity] = identities.filter(
       ({ email: identityEmail }) => identityEmail === email
     );
@@ -151,13 +165,13 @@ const getters = {
 
   identityId: (_, { identity: { id } }) => id,
 
-  firstName: ({ data: { first_name: firstName } }) => firstName || '',
+  firstName: ({ data: { first_name: firstName = '' } }) => firstName,
 
-  lastName: ({ data: { last_name: lastName } }) => lastName || '',
+  lastName: ({ data: { last_name: lastName = '' } }) => lastName,
 
-  greeting: ({ data: { greeting } }) => greeting || '',
+  zip: ({ data: { postal_code: zip = '' } }) => zip,
 
-  zip: ({ data: { postal_code: zip } }) => zip || '',
+  greeting: ({ data: { greeting } }) => greeting,
 
   lastYearAmount: ({ data: { total_gifts_last_year: lastYearAmount } }) =>
     lastYearAmount,
@@ -176,8 +190,7 @@ const getters = {
 
   emailUrl: ({ data: { email_share_url: emailUrl } }) => emailUrl,
 
-  ambassadorUrl: ({ data: { ambassador_url: ambassadorUrl } }) =>
-    ambassadorUrl || '',
+  ambassadorUrl: ({ data: { ambassador_url: ambassadorUrl } }) => ambassadorUrl,
 
   membershipExpirationDate: ({
     data: { membership_expiration_date: membershipExpirationDate },
