@@ -95,7 +95,7 @@ const actions = {
 };
 
 const getters = {
-  tokenExpiryInMs: ({ accessTokenPayload: { exp } }) => exp * 1000,
+  tokenExpiryInMs: ({ accessTokenPayload: { exp = 0 } }) => exp * 1000,
 
   isReady: ({ isLoggedIn, error }) => isLoggedIn && !error,
 
@@ -106,7 +106,7 @@ const getters = {
     return filteredPerms.length === 1;
   },
 
-  isVerified: ({ idTokenPayload: { email_verified: isVerified } }) =>
+  isVerified: ({ idTokenPayload: { email_verified: isVerified = false } }) =>
     isVerified,
 };
 
