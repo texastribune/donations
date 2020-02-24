@@ -181,6 +181,7 @@ store
 
     router.onError(err => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
+      store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
       logError({ err });
     });
 
