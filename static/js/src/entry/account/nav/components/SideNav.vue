@@ -8,7 +8,7 @@
             class="has-text-black-off has-text-hover-gray"
             active-class="is-active"
             ga-on="click"
-            :to="{ name: 'home' }"
+            :to="{ name: 'accountOverview' }"
             :ga-event-category="ga.userPortalNav.category"
             :ga-event-action="ga.userPortalNav.actions.side"
             :ga-event-label="ga.userPortalNav.labels.home"

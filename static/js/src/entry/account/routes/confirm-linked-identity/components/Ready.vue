@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <loader v-if="isFetching" />
+
+  <div v-else>
     <h1 class="has-xl-btm-marg">Are you sure?</h1>
     <p class="has-b-btm-marg">
       You're about to link <strong>{{ emailToLink }}</strong> to Texas Tribune
@@ -15,7 +17,7 @@
         <base-button
           :display="{ bg: 'gray-light', color: 'black' }"
           text="Confirm email link"
-          @onClick="onConfirm"
+          @onClick="confirm"
         />
       </div>
       <span class="c-btn-or-btn__word t-align-center l-align-center-self"
@@ -25,7 +27,7 @@
         <base-button
           :display="{ bg: 'gray-light', color: 'black' }"
           text="Cancel"
-          @onClick="onCancel"
+          @onClick="cancel"
         />
       </div>
     </div>
@@ -33,8 +35,19 @@
 </template>
 
 <script>
+import userMixin from '../../../store/user/mixin';
+import contextMixin from '../../../store/context/mixin';
+
+import Loader from './Loader.vue';
+
+import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
+
 export default {
-  name: 'ConfirmLinkedIdentityLoggedIn',
+  name: 'ConfirmLinkedIdentityReady',
+
+  components: { Loader },
+
+  mixins: [userMixin, contextMixin],
 
   props: {
     existingEmail: {
@@ -46,10 +59,24 @@ export default {
       type: String,
       required: true,
     },
+
+    ticket: {
+      type: String,
+      required: true,
+    },
+  },
+
+  data() {
+    return { isFetching: true };
+  },
+
+  async mounted() {
+    await this[USER_TYPES.getUser]();
+    this.isFetching = false;
   },
 
   methods: {
-    onConfirm() {
+    async confirm() {
       window.dataLayer.push({
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
@@ -57,10 +84,16 @@ export default {
         gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
       });
 
-      this.$emit('confirm');
+      this[CONTEXT_TYPES.setIsFetching](true);
+
+      await this[USER_TYPES.confirmLinkedIdentity](this.ticket);
+
+      this[CONTEXT_TYPES.setIsFetching](false);
+
+      this.$router.push({ name: 'accountOverview' });
     },
 
-    onCancel() {
+    cancel() {
       window.dataLayer.push({
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
@@ -68,7 +101,7 @@ export default {
         gaLabel: this.ga.userPortal.labels['confirm-linked-identity'],
       });
 
-      this.$emit('goHome');
+      this.$router.push({ name: 'accountOverview' });
     },
   },
 };

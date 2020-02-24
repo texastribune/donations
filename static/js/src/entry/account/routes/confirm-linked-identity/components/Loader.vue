@@ -9,6 +9,6 @@
 
 <script>
 export default {
-  name: 'ConfirmLinkedIdentityRouteLoader',
+  name: 'ConfirmLinkedIdentityReadyLoader',
 };
 </script>

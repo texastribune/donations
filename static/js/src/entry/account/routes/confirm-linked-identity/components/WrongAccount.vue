@@ -1,10 +1,19 @@
 <template>
   <div>
-    <h1 class="has-xl-btm-marg">To verify, please log in</h1>
+    <h1 class="has-xl-btm-marg">You're logged into the wrong account</h1>
     <p class="has-b-btm-marg">
       To link <strong>{{ emailToLink }}</strong> to the Texas Tribune account
       created with <strong>{{ existingEmail }}</strong
-      >, please log into your account.
+      >, you need to log into Texas Tribune account:
+      <strong>{{ existingEmail }}</strong
+      >. Right now, you're logged into Texas Tribune account:
+      <strong>{{ user.email }}</strong
+      >.
+    </p>
+    <p class="has-b-btm-marg">
+      Click <strong>LOG OUT</strong> below. You'll be sent to a page where you
+      can log in with <strong>{{ existingEmail }}</strong
+      >, then complete the account link.
     </p>
     <p class="has-xl-btm-marg">
       If these email addresses don't belong to you, or you didn't mean to do
@@ -14,8 +23,8 @@
       <div class="c-btn-or-btn__first">
         <base-button
           :display="{ bg: 'gray-light', color: 'black' }"
-          text="Log in"
-          @onClick="logIn"
+          text="Log out"
+          @onClick="logOut"
         />
       </div>
       <span class="c-btn-or-btn__word t-align-center l-align-center-self"
@@ -33,10 +42,14 @@
 </template>
 
 <script>
-import { logIn } from '../../../utils/auth-actions';
+import userMixin from '../../../store/user/mixin';
+
+import { logOut } from '../../../utils/auth-actions';
 
 export default {
-  name: 'ConfirmLinkedIdentityLoggedOut',
+  name: 'ConfirmLinkedIdentityWrongAccount',
+
+  mixins: [userMixin],
 
   props: {
     existingEmail: {
@@ -56,28 +69,14 @@ export default {
   },
 
   methods: {
-    logIn() {
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['login-linked-email'],
-        gaLabel: this.ga.userPortal.labels['login-linked-identity'],
-      });
-
-      logIn({
+    logOut() {
+      logOut({
         redirectName: 'confirmLinkedIdentity',
         redirectQueryParams: { ticket: this.ticket },
       });
     },
 
     goToHomePage() {
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['cancel-linked-email'],
-        gaLabel: this.ga.userPortal.labels['login-linked-identity'],
-      });
-
       window.location.href = 'https://www.texastribune.org/';
     },
   },

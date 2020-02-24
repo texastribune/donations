@@ -35,7 +35,7 @@ import Blast from './containers/BlastContainer.vue';
 import BlastCancelled from './containers/BlastCancelledContainer.vue';
 
 export default {
-  name: 'HomeExactRoute',
+  name: 'AccountOverviewRoute',
 
   components: {
     WelcomeMessage,

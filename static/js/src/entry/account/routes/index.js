@@ -1,9 +1,9 @@
 import store from '../store';
 import { USER_MODULE, USER_TYPES } from '../store/types';
-import Home from './home/Index.vue';
+import Account from './account/Index.vue';
 
-const HomeExact = () =>
-  import(/* webpackChunkName: "home-exact-route" */ './home-exact/Index.vue');
+const AccountOverview = () =>
+  import(/* webpackChunkName: "account-overview-route" */ './account-overview/Index.vue');
 const EditContactInfo = () =>
   import(/* webpackChunkName: "edit-contact-info-route" */ './edit-contact-info/Index.vue');
 const Ambassador = () =>
@@ -32,7 +32,7 @@ const routes = [
     component: LoggedIn,
     pathToRegexpOptions: { strict: true },
     meta: {
-      isProtected: false,
+      isProtected: true,
       title: 'Logged In',
     },
   },
@@ -68,7 +68,7 @@ const routes = [
   },
   {
     path: '/',
-    component: Home,
+    component: Account,
     pathToRegexpOptions: { strict: true },
     meta: {
       isProtected: true,
@@ -80,8 +80,8 @@ const routes = [
     children: [
       {
         path: '',
-        name: 'home',
-        component: HomeExact,
+        name: 'accountOverview',
+        component: AccountOverview,
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
@@ -128,7 +128,7 @@ const routes = [
           if (hasGivenNotCustom) {
             return next();
           }
-          return next({ name: 'home' });
+          return next({ name: 'accountOverview' });
         },
       },
       {
@@ -147,7 +147,7 @@ const routes = [
           if (!isNeverGiven) {
             return next();
           }
-          return next({ name: 'home' });
+          return next({ name: 'accountOverview' });
         },
       },
       {
@@ -167,7 +167,7 @@ const routes = [
           if (isBlastSubscriber) {
             return next();
           }
-          return next({ name: 'home' });
+          return next({ name: 'accountOverview' });
         },
       },
       {
@@ -187,10 +187,10 @@ const routes = [
           if (isBlastSubscriber) {
             return next();
           }
-          return next({ name: 'home' });
+          return next({ name: 'accountOverview' });
         },
       },
-      { path: '*', name: 'not-found', redirect: { name: 'home' } },
+      { path: '*', name: 'not-found', redirect: { name: 'accountOverview' } },
     ],
   },
 ];

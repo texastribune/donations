@@ -1,4 +1,5 @@
-export const LOGGED_IN_FLAG_KEY = 'isLoggedIn';
+export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
+export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
 export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${
@@ -114,13 +115,21 @@ export const GA_TRIBUNE_AMBASSADORS = {
 };
 export const GA_CUSTOM_EVENT_NAME = 'customUserPortal';
 export const GA_AMBASSADORS_CUSTOM_EVENT_NAME = 'customTribuneAmbassadors';
-export const DONATE_REDIRECT = 'donate';
-export const ACCOUNT_HOME_REDIRECT = 'accountHome';
-export const CONFIRM_LINKED_IDENTITY_REDIRECT = 'confirmLinkedIdentity';
-export const CHANGED_EMAIL_REDIRECT = 'changedEmail';
-export const REDIRECTS = {
-  [DONATE_REDIRECT]: '/donate',
-  [ACCOUNT_HOME_REDIRECT]: '/account/',
-  [CONFIRM_LINKED_IDENTITY_REDIRECT]: '/account/confirm-linked-identity/',
-  [CHANGED_EMAIL_REDIRECT]: '/account/changed-email/',
+export const REDIRECTS_META = {
+  donate: {
+    external: true,
+    url: '/donate',
+  },
+  accountOverview: {
+    external: false,
+    routeName: 'accountOverview',
+  },
+  confirmLinkedIdentity: {
+    external: false,
+    routeName: 'confirm-linked-identity',
+  },
+  changedEmail: {
+    external: false,
+    routeName: 'changed-email',
+  },
 };

@@ -74,12 +74,12 @@ export default {
 
   methods: {
     submit() {
-      this.$router.push({ name: 'home' });
+      this.$router.push({ name: 'accountOverview' });
       this.$emit('doViewAs', this.email);
     },
 
     reset() {
-      this.$router.push({ name: 'home' });
+      this.$router.push({ name: 'accountOverview' });
       this.email = '';
       this.$emit('undoViewAs');
     },

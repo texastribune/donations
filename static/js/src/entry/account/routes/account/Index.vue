@@ -28,7 +28,7 @@ const ViewAsForm = () =>
   import(/* webpackChunkName: "view-as-form" */ '../../view-as/containers/ViewAsFormContainer.vue');
 
 export default {
-  name: 'HomeRoute',
+  name: 'Account',
 
   components: { UserSideNav, ViewAsForm },
 
