@@ -13,7 +13,7 @@
         </p>
         <p class="t-size-xs has-text-gray">
           Check your inbox for an email from The Texas Tribune with the subject
-          line "Was this you?" and click to verify.
+          line "Link your account" and click to verify.
         </p>
       </template>
       <template v-else>
