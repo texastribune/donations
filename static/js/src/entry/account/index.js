@@ -11,6 +11,7 @@ import VueClipboard from 'vue-clipboard2';
 import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry } from '@sentry/browser';
+import getYear from 'date-fns/get_year';
 
 import routes from './routes';
 import store from './store';
@@ -71,8 +72,14 @@ Vue.mixin({
         customEventName: GA_CUSTOM_EVENT_NAME,
         ambassadorsCustomEventName: GA_AMBASSADORS_CUSTOM_EVENT_NAME,
       },
-      donateUrl: DONATE_URL,
-      circleUrl: CIRCLE_URL,
+      urls: {
+        donate: DONATE_URL,
+        circle: CIRCLE_URL,
+      },
+      dates: {
+        lastYear: getYear(new Date()) - 1,
+        thisYear: getYear(new Date()),
+      },
     };
   },
 });

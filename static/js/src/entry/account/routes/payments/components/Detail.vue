@@ -12,7 +12,7 @@
       >
         <template v-slot:text>
           Note: Donation history does not include event sponsorships or ticket
-          purchases. To receive a {{ lastYear }} tax receipt with this
+          purchases. To receive a {{ dates.lastYear }} tax receipt with this
           information, please contact
         </template>
       </contact-us>
@@ -21,8 +21,6 @@
 </template>
 
 <script>
-import getYear from 'date-fns/get_year';
-
 import UserProvider from '../../../store/user/Provider.vue';
 import PaymentList from '../../../components/PaymentList.vue';
 import ContactUs from '../../../components/ContactUsSmall.vue';
@@ -31,11 +29,5 @@ export default {
   name: 'PaymentsDetail',
 
   components: { ContactUs, PaymentList, UserProvider },
-
-  computed: {
-    lastYear() {
-      return getYear(new Date()) - 1;
-    },
-  },
 };
 </script>

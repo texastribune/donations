@@ -12,7 +12,7 @@
         />
 
         <p class="t-size-s has-text-white">
-          &copy; {{ thisYear }} The Texas Tribune
+          &copy; {{ dates.thisYear }} The Texas Tribune
         </p>
       </div>
 
@@ -172,8 +172,6 @@
 </template>
 
 <script>
-import getYear from 'date-fns/get_year';
-
 export default {
   name: 'SiteFooter',
 
@@ -196,12 +194,6 @@ export default {
     showPaymentsLink: {
       type: Boolean,
       default: false,
-    },
-  },
-
-  computed: {
-    thisYear() {
-      return getYear(new Date());
     },
   },
 };
