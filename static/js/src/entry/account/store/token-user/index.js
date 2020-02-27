@@ -53,8 +53,6 @@ const mutations = {
     state.idToken = '';
     state.idTokenPayload = {};
     state.error = error;
-
-    setExtra('auth', {});
   },
 };
 
