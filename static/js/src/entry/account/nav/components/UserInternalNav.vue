@@ -20,7 +20,7 @@
           <template v-slot:main>
             <a
               ga-on="click"
-              :href="donateUrl"
+              :href="urls.donate"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['never-given']"
@@ -35,7 +35,7 @@
           <template v-slot:main>
             <a
               ga-on="click"
-              :href="isCircleDonor ? circleUrl : donateUrl"
+              :href="isCircleDonor ? urls.circle : urls.donate"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['renew-membership']"
@@ -63,7 +63,7 @@
           <template v-slot:main>
             <a
               ga-on="click"
-              :href="donateUrl"
+              :href="urls.donate"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['upgrade-membership']"

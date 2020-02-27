@@ -108,8 +108,12 @@ export default {
     },
 
     upgradeHref() {
-      if (this.isExpired) return this.donateUrl;
-      if (this.isHighest) return this.circleUrl;
+      if (this.isExpired) {
+        return this.urls.donate;
+      }
+      if (this.isHighest) {
+        return this.urls.circle;
+      }
 
       return 'mailto:membership@texastribune.org?subject=Upgrade%20my%20Tribune%20membership&body=Hi!%20I%20would%20like%20to%20increase%20my%20support%20for%20The%20Texas%20Tribune.';
     },

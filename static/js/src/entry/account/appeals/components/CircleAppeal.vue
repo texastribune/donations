@@ -10,7 +10,7 @@
         nonpartisan news and information.
         <a
           ga-on="click"
-          :href="circleUrl"
+          :href="urls.circle"
           :ga-event-category="ga.userPortalNav.category"
           :ga-event-action="ga.userPortalNav.actions.inline"
           :ga-event-label="ga.userPortalNav.labels['circle-landing']"
