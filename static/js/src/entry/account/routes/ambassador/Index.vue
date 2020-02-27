@@ -28,12 +28,16 @@
       <internal-nav />
     </div>
 
-    <help ambassador />
+    <contact-us :ga-label="ga.userPortal.labels.ambassador">
+      <template v-slot:text>
+        Have questions about your account? Or feedback about this website? Email
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
+import ContactUs from '../../components/ContactUs.vue';
 import routeMixin from '../mixin';
 import ReferralForm from './containers/ReferralFormContainer.vue';
 import ReferralLinks from './components/ReferralLinks.vue';
@@ -42,7 +46,7 @@ import InternalNav from './components/InternalNav.vue';
 export default {
   name: 'AmbassadorRoute',
 
-  components: { Help, ReferralLinks, ReferralForm, InternalNav },
+  components: { ContactUs, ReferralLinks, ReferralForm, InternalNav },
 
   mixins: [routeMixin],
 };

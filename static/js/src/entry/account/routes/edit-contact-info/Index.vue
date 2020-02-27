@@ -16,14 +16,18 @@
       </div>
     </div>
 
-    <help edit />
+    <contact-us :ga-label="ga.userPortal.labels['edit-contact-info']">
+      <template v-slot:text>
+        Have questions about your account? Or feedback about this website? Email
+      </template>
+    </contact-us>
 
     <confirm-modal :resolve="checkModalResolve" />
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
+import ContactUs from '../../components/ContactUs.vue';
 import routeMixin from '../mixin';
 import EditForm from './containers/EditFormContainer.vue';
 import ConfirmModal from './components/ConfirmModal.vue';
@@ -36,7 +40,7 @@ export default {
     InternalNav,
     EditForm,
     ConfirmModal,
-    Help,
+    ContactUs,
   },
 
   mixins: [routeMixin],

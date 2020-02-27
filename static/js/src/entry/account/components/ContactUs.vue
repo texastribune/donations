@@ -1,31 +1,28 @@
 <template>
-  <p
-    class="t-links-underlined has-text-gray-dark"
-    :class="`t-size-${mergedDisplay.size} has-text-${mergedDisplay.color}`"
+  <aside
+    class="c-help has-ump-side-padding has-ump-btm-padding has-white-off-bg-until-bp-l"
   >
-    <slot name="text"></slot>
-    <a
-      :href="`mailto:${computedEmail}?subject=${computedSubject}`"
-      ga-on="click"
-      :ga-event-category="gaCategory"
-      :ga-event-action="gaAction"
-      :ga-event-label="computedGaLabel"
-    >
-      {{ computedEmail }} </a
-    >.
-  </p>
+    <h2 class="t-uppercase t-size-b has-s-btm-marg">Contact us</h2>
+    <p class="t-links-underlined has-text-gray-dark">
+      <slot name="text"></slot>
+      <a
+        :href="`mailto:${computedEmail}?subject=${subject}`"
+        ga-on="click"
+        :ga-event-category="gaCategory"
+        :ga-event-action="gaAction"
+        :ga-event-label="computedGaLabel"
+      >
+        {{ computedEmail }} </a
+      >.
+    </p>
+  </aside>
 </template>
 
 <script>
 export default {
-  name: 'ContactUsSmall',
+  name: 'ContactUs',
 
   props: {
-    gaLabel: {
-      type: String,
-      default: '',
-    },
-
     email: {
       type: String,
       default: '',
@@ -36,9 +33,9 @@ export default {
       default: '',
     },
 
-    display: {
-      type: Object,
-      default: () => ({}),
+    gaLabel: {
+      type: String,
+      default: '',
     },
 
     isMembership: {
@@ -53,14 +50,6 @@ export default {
   },
 
   computed: {
-    mergedDisplay() {
-      return {
-        size: 'b',
-        color: 'gray-dark',
-        ...this.display,
-      };
-    },
-
     gaCategory() {
       if (this.isMembership) {
         return this.ga.donations.category;
@@ -96,18 +85,6 @@ export default {
       }
 
       return 'community@texastribune.org';
-    },
-
-    computedSubject() {
-      const { subject, isBlast, isMembership } = this;
-
-      if (subject) {
-        return subject;
-      }
-      if (!isBlast && !isMembership) {
-        return 'account%20technical%20error';
-      }
-      return '';
     },
   },
 };

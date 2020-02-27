@@ -22,12 +22,16 @@
 
     <appeal />
 
-    <help membership />
+    <contact-us :ga-label="ga.userPortal.labels.membership" is-membership>
+      <template v-slot:text>
+        To update your membership status, contact us at
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
+import ContactUs from '../../components/ContactUs.vue';
 import userMixin from '../../store/user/mixin';
 import LinkEmail from '../../link-email/components/LinkEmail.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
@@ -48,7 +52,7 @@ export default {
     Appeal,
     CreditCardMessage,
     CircleAppeal,
-    Help,
+    ContactUs,
     LinkEmail,
   },
 

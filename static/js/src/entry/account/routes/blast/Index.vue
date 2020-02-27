@@ -10,12 +10,16 @@
       <current /> <former />
     </div>
 
-    <help blast />
+    <contact-us :ga-label="ga.userPortal.labels.blast" is-blast>
+      <template v-slot:text>
+        To update your subscription to The Blast, contact us at
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
+import ContactUs from '../../components/ContactUs.vue';
 import userMixin from '../../store/user/mixin';
 import routeMixin from '../mixin';
 import Current from './containers/CurrentContainer.vue';
@@ -24,7 +28,7 @@ import Former from './containers/FormerContainer.vue';
 export default {
   name: 'BlastRoute',
 
-  components: { Help, Current, Former },
+  components: { ContactUs, Current, Former },
 
   mixins: [routeMixin, userMixin],
 };

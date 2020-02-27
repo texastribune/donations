@@ -24,12 +24,16 @@
 
     <appeal />
 
-    <help payments />
+    <contact-us :ga-label="ga.userPortal.labels.membership" is-membership>
+      <template v-slot:text>
+        To update your membership status, contact us at
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
+import ContactUs from '../../components/ContactUs.vue';
 import userMixin from '../../store/user/mixin';
 import LinkEmail from '../../link-email/components/LinkEmail.vue';
 import CustomAppeal from '../../appeals/components/CustomAppeal.vue';
@@ -51,7 +55,7 @@ export default {
     Detail,
     InternalNav,
     CreditCardMessage,
-    Help,
+    ContactUs,
   },
 
   mixins: [routeMixin, userMixin],

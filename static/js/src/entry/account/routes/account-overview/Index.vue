@@ -17,12 +17,19 @@
       <custom />
     </div>
 
-    <div class="is-hidden-until-bp-l"><help home /></div>
+    <div class="is-hidden-until-bp-l">
+      <contact-us :ga-label="ga.userPortal.labels.home">
+        <template v-slot:text>
+          Have questions about your account? Or feedback about this website?
+          Email
+        </template>
+      </contact-us>
+    </div>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
+import ContactUs from '../../components/ContactUs.vue';
 import WelcomeMessage from '../../messages/components/WelcomeMessage.vue';
 import routeMixin from '../mixin';
 import ProfileSettings from './containers/ProfileSettingsContainer.vue';
@@ -47,7 +54,7 @@ export default {
     Custom,
     Blast,
     BlastCancelled,
-    Help,
+    ContactUs,
   },
 
   mixins: [routeMixin],
