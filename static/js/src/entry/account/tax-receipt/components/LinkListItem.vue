@@ -2,7 +2,7 @@
   <tax-receipt-provider v-slot="{ taxReceipt: { buildReceipt } }">
     <link-list-item>
       <template v-slot:main>
-        <button class="c-link-button" @click="buildReceipt(taxReceiptGaLabel)">
+        <button class="c-link-button" @click="buildReceipt(gaLabel)">
           Download your {{ dates.lastYear }} tax receipt
         </button>
       </template>
@@ -20,7 +20,7 @@ export default {
   components: { LinkListItem, TaxReceiptProvider },
 
   props: {
-    taxReceiptGaLabel: {
+    gaLabel: {
       type: String,
       required: true,
     },

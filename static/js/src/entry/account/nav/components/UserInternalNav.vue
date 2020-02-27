@@ -73,10 +73,7 @@
           </template>
         </link-list-item>
 
-        <reset-password
-          v-if="showResetPw"
-          :pw-reset-ga-label="pwResetGaLabel"
-        />
+        <reset-password v-if="showResetPw" :ga-label="pwResetGaLabel" />
 
         <link-list-item v-if="!isNeverGiven && showDonationHistory">
           <template v-slot:main>

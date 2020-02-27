@@ -4,7 +4,7 @@
   >
     <link-list-item>
       <template v-slot:main>
-        <button class="c-link-button" @click="pwReset(pwResetGaLabel)">
+        <button class="c-link-button" @click="pwReset(gaLabel)">
           Reset your password
         </button>
       </template>
@@ -35,7 +35,7 @@ export default {
   components: { ResetPasswordProvider, LinkListItem },
 
   props: {
-    pwResetGaLabel: {
+    gaLabel: {
       type: String,
       required: true,
     },
