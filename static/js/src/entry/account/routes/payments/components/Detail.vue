@@ -5,19 +5,17 @@
         <payment-list :payments="pastTransactions" />
       </div>
 
-      <p class="t-size-xs t-links-underlined has-text-gray-dark">
-        Note: Donation history does not include event sponsorships or ticket
-        purchases. To receive a {{ lastYear }} tax receipt with this
-        information, please contact
-        <a
-          href="mailto:community@texastribune.org"
-          ga-on="click"
-          :ga-event-category="ga.userPortal.category"
-          :ga-event-action="ga.userPortal.actions['contact-us']"
-          :ga-event-label="ga.userPortal.labels.payments"
-          >community@texastribune.org</a
-        >.
-      </p>
+      <contact-us
+        :ga-label="ga.userPortal.labels.payments"
+        :display="{ size: 'xs' }"
+        subject="custom%20tax%20receipt"
+      >
+        <template v-slot:text>
+          Note: Donation history does not include event sponsorships or ticket
+          purchases. To receive a {{ lastYear }} tax receipt with this
+          information, please contact
+        </template>
+      </contact-us>
     </div>
   </user-provider>
 </template>
@@ -27,11 +25,12 @@ import getYear from 'date-fns/get_year';
 
 import UserProvider from '../../../store/user/Provider.vue';
 import PaymentList from '../../../components/PaymentList.vue';
+import ContactUs from '../../../components/ContactUsSmall.vue';
 
 export default {
   name: 'PaymentsDetail',
 
-  components: { PaymentList, UserProvider },
+  components: { ContactUs, PaymentList, UserProvider },
 
   computed: {
     lastYear() {

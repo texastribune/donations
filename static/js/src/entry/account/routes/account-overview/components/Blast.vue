@@ -31,29 +31,27 @@
     </template>
 
     <template v-if="nextTransaction.card" v-slot:bottom>
-      <p class="has-text-gray-dark t-links-underlined">
-        Need to make a change? Contact us at
-        <a
-          href="mailto:blast@texastribune.org"
-          ga-on="click"
-          :ga-event-category="ga.userPortal.category"
-          :ga-event-action="ga.userPortal.actions['contact-us']"
-          :ga-event-label="ga.userPortal.labels.home"
-        >
-          blast@texastribune.org </a
-        >.
-      </p>
+      <contact-us
+        :ga-label="ga.userPortal.labels.home"
+        :display="{ size: 's' }"
+        is-blast
+      >
+        <template v-slot:text>
+          Need to make a change? Contact us at
+        </template>
+      </contact-us>
     </template>
   </summary-box>
 </template>
 
 <script>
 import SummaryBox from '../../../components/SummaryBox.vue';
+import ContactUs from '../../../components/ContactUsSmall.vue';
 
 export default {
   name: 'SummaryBlast',
 
-  components: { SummaryBox },
+  components: { SummaryBox, ContactUs },
 
   props: {
     nextTransaction: {

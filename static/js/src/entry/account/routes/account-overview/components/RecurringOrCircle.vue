@@ -32,29 +32,23 @@
     </template>
 
     <template v-slot:bottom>
-      <p class="has-text-gray-dark t-links-underlined">
-        To update your membership, contact us at
-        <a
-          href="mailto:membership@texastribune.org"
-          ga-on="click"
-          :ga-event-category="ga.donations.category"
-          :ga-event-action="ga.donations.actions['membership-intent']"
-          :ga-event-label="ga.donations.labels['upgrade-contact']"
-        >
-          membership@texastribune.org</a
-        >.
-      </p>
+      <contact-us is-membership :display="{ size: 's' }">
+        <template v-slot:text>
+          To update your membership, contact us at
+        </template>
+      </contact-us>
     </template>
   </summary-box>
 </template>
 
 <script>
 import SummaryBox from '../../../components/SummaryBox.vue';
+import ContactUs from '../../../components/ContactUsSmall.vue';
 
 export default {
   name: 'SummaryRecurringOrCircle',
 
-  components: { SummaryBox },
+  components: { SummaryBox, ContactUs },
 
   props: {
     nextTransaction: {
