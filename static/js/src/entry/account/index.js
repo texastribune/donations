@@ -189,7 +189,10 @@ store
     router.onError(err => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
-      logError({ err });
+
+      if (!(err instanceof UnverifiedError)) {
+        logError({ err });
+      }
     });
 
     router.beforeEach(async (to, from, next) => {
