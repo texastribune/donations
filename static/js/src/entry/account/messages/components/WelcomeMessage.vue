@@ -1,12 +1,12 @@
 <template>
   <messages :num-messages="1">
-    <template v-slot="slotProps">
+    <template v-slot:messages="{ setMessageSeen }">
       <message
         heading="Welcome"
         :name="messageKey"
         :ga-label="gaLabel"
         :display="{ onGrayMobileBg: true }"
-        @setMessageSeen="slotProps.setMessageSeen"
+        @setMessageSeen="setMessageSeen"
       >
         <template v-slot:icon>
           <icon name="bell" :display="{ size: 's' }" />
