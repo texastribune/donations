@@ -1,6 +1,13 @@
 <template>
   <div class="has-ump-top-padding">
-    <credit-card-message :ga-label="ga.userPortal.labels.membership" />
+    <messages :num-messages="1">
+      <template v-slot:messages="{ setMessageSeen }">
+        <credit-card-message
+          :ga-label="ga.userPortal.labels.membership"
+          @setMessageSeen="setMessageSeen"
+        />
+      </template>
+    </messages>
 
     <h1 class="has-ump-side-padding has-xl-btm-marg t-size-xl">
       Your Membership
@@ -41,6 +48,7 @@ import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
 
 import LinkEmail from '../../link-email/components/MiniForm.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
+import Messages from '../../messages/components/Messages.vue';
 import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import ContactUs from '../../components/ContactUs.vue';
 
@@ -52,6 +60,7 @@ export default {
     RecurringOrCircle,
     SingleOrWillExpire,
     Appeal,
+    Messages,
     CreditCardMessage,
     CircleAppeal,
     ContactUs,

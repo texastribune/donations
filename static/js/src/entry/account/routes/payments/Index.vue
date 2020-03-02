@@ -1,6 +1,13 @@
 <template>
   <div class="has-ump-top-padding">
-    <credit-card-message :ga-label="ga.userPortal.labels.payments" />
+    <messages :num-messages="1">
+      <template v-slot:messages="{ setMessageSeen }">
+        <credit-card-message
+          :ga-label="ga.userPortal.labels.payments"
+          @setMessageSeen="setMessageSeen"
+        />
+      </template>
+    </messages>
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       Your Donations
@@ -41,6 +48,7 @@ import Appeal from '../../appeals/containers/AppealContainer.vue';
 import LinkEmail from '../../link-email/components/MiniForm.vue';
 import CustomAppeal from '../../appeals/components/CustomAppeal.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
+import Messages from '../../messages/components/Messages.vue';
 import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import ContactUs from '../../components/ContactUs.vue';
 import Detail from './components/Detail.vue';
@@ -56,6 +64,7 @@ export default {
     CustomAppeal,
     Detail,
     InternalNav,
+    Messages,
     CreditCardMessage,
     ContactUs,
   },

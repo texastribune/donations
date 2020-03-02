@@ -2,7 +2,14 @@
   <div
     class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l"
   >
-    <welcome-message :ga-label="ga.userPortal.labels.home" />
+    <messages :num-messages="1">
+      <template v-slot:messages="{ setMessageSeen }">
+        <welcome-message
+          :ga-label="ga.userPortal.labels.home"
+          @setMessageSeen="setMessageSeen"
+        />
+      </template>
+    </messages>
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">Your Account</h1>
 
@@ -40,6 +47,7 @@ import Custom from './containers/CustomContainer.vue';
 import Blast from './containers/BlastContainer.vue';
 import BlastCancelled from './containers/BlastCancelledContainer.vue';
 
+import Messages from '../../messages/components/Messages.vue';
 import WelcomeMessage from '../../messages/components/WelcomeMessage.vue';
 import ContactUs from '../../components/ContactUs.vue';
 
@@ -47,6 +55,7 @@ export default {
   name: 'AccountOverviewRoute',
 
   components: {
+    Messages,
     WelcomeMessage,
     ProfileSettings,
     RecurringOrCircle,
