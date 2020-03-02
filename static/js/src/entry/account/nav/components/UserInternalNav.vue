@@ -160,9 +160,10 @@
 
 <script>
 import UserProvider from '../../store/user/Provider.vue';
+
+import ResetPassword from '../../reset-password/components/LinkListItem.vue';
 import LinkList from '../../components/LinkList.vue';
 import LinkListItem from '../../components/LinkListItem.vue';
-import ResetPassword from '../../reset-password/components/LinkListItem.vue';
 
 export default {
   name: 'UserInternalNav',

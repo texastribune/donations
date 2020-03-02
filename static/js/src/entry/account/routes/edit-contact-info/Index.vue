@@ -27,9 +27,11 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
 import routeMixin from '../mixin';
+
 import EditForm from './containers/EditFormContainer.vue';
+
+import ContactUs from '../../components/ContactUs.vue';
 import ConfirmModal from './components/ConfirmModal.vue';
 import InternalNav from './components/InternalNav.vue';
 

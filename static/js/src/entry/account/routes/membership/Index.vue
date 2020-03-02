@@ -31,16 +31,18 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
 import userMixin from '../../store/user/mixin';
-import LinkEmail from '../../link-email/components/LinkEmail.vue';
-import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
-import Appeal from '../../appeals/containers/AppealContainer.vue';
-import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import routeMixin from '../mixin';
+
+import Appeal from '../../appeals/containers/AppealContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
+
+import LinkEmail from '../../link-email/components/MiniForm.vue';
+import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
+import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
+import ContactUs from '../../components/ContactUs.vue';
 
 export default {
   name: 'MembershipRoute',

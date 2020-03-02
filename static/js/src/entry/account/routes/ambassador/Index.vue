@@ -37,9 +37,11 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
 import routeMixin from '../mixin';
+
 import ReferralForm from './containers/ReferralFormContainer.vue';
+
+import ContactUs from '../../components/ContactUs.vue';
 import ReferralLinks from './components/ReferralLinks.vue';
 import InternalNav from './components/InternalNav.vue';
 

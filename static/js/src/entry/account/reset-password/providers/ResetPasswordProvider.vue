@@ -1,6 +1,7 @@
 <script>
 import userMixin from '../../store/user/mixin';
 import contextMixin from '../../store/context/mixin';
+
 import { resetPassword } from '../../utils/auth-actions';
 
 export default {

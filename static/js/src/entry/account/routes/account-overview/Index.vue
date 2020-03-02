@@ -29,9 +29,8 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
-import WelcomeMessage from '../../messages/components/WelcomeMessage.vue';
 import routeMixin from '../mixin';
+
 import ProfileSettings from './containers/ProfileSettingsContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
@@ -40,6 +39,9 @@ import NeverGiven from './containers/NeverGivenContainer.vue';
 import Custom from './containers/CustomContainer.vue';
 import Blast from './containers/BlastContainer.vue';
 import BlastCancelled from './containers/BlastCancelledContainer.vue';
+
+import WelcomeMessage from '../../messages/components/WelcomeMessage.vue';
+import ContactUs from '../../components/ContactUs.vue';
 
 export default {
   name: 'AccountOverviewRoute',

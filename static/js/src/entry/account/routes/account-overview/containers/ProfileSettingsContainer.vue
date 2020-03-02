@@ -8,8 +8,9 @@
 </template>
 
 <script>
-import ProfileSettings from '../components/ProfileSettings.vue';
 import userMixin from '../../../store/user/mixin';
+
+import ProfileSettings from '../components/ProfileSettings.vue';
 
 export default {
   name: 'SummmaryProfileSettingsContainer',

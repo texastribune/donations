@@ -1,6 +1,7 @@
 <script>
 import userMixin from '../../store/user/mixin';
 import contextMixin from '../../store/context/mixin';
+
 import { CONTEXT_TYPES, USER_TYPES } from '../../store/types';
 
 export default {

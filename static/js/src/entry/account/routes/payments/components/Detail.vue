@@ -22,6 +22,7 @@
 
 <script>
 import UserProvider from '../../../store/user/Provider.vue';
+
 import PaymentList from '../../../components/PaymentList.vue';
 import ContactUs from '../../../components/ContactUsSmall.vue';
 

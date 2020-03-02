@@ -28,9 +28,10 @@
 </template>
 
 <script>
-import { READ_WRITE_WELCOME_MESSAGE_KEY } from '../../constants';
 import Messages from './Messages.vue';
 import Message from './Message.vue';
+
+import { READ_WRITE_WELCOME_MESSAGE_KEY } from '../../constants';
 
 export default {
   name: 'WelcomeMessage',

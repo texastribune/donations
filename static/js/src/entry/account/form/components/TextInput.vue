@@ -34,6 +34,7 @@
 
 <script>
 import formElementMixin from '../mixins/element';
+
 import Errors from './Errors.vue';
 
 export default {

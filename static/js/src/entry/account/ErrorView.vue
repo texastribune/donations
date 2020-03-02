@@ -42,11 +42,14 @@
 </template>
 
 <script>
-import ContactUs from './components/ContactUsSmall.vue';
 import contextMixin from './store/context/mixin';
 import userMixin from './store/user/mixin';
-import { UnverifiedError } from './errors';
+
+import ContactUs from './components/ContactUsSmall.vue';
+
 import setTitle from './utils/set-title';
+
+import { UnverifiedError } from './errors';
 
 export default {
   name: 'ErrorView',

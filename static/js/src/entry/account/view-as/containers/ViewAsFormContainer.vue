@@ -7,10 +7,12 @@
 </template>
 
 <script>
-import ViewAsForm from '../components/ViewAsForm.vue';
 import userMixin from '../../store/user/mixin';
 import tokenUserMixin from '../../store/token-user/mixin';
 import contextMixin from '../../store/context/mixin';
+
+import ViewAsForm from '../components/ViewAsForm.vue';
+
 import { CONTEXT_TYPES, USER_TYPES } from '../../store/types';
 
 export default {

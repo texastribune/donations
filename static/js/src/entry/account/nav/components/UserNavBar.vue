@@ -14,6 +14,7 @@
 <script>
 import TokenUserProvider from '../../store/token-user/Provider.vue';
 import UserProvider from '../../store/user/Provider.vue';
+
 import NavBar from './NavBar.vue';
 
 export default {

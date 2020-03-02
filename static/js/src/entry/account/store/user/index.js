@@ -5,6 +5,7 @@ import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
 import formatTransaction from './utils/format-transaction';
+
 import { USER_TYPES } from '../types';
 import { PORTAL_API_URL } from '../../constants';
 

@@ -24,9 +24,10 @@
 </template>
 
 <script>
-import { READ_WRITE_CREDIT_CARD_MESSAGE_KEY } from '../../constants';
 import Messages from './Messages.vue';
 import Message from './Message.vue';
+
+import { READ_WRITE_CREDIT_CARD_MESSAGE_KEY } from '../../constants';
 
 export default {
   name: 'CreditCardMessage',

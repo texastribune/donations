@@ -3,9 +3,10 @@
 import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
-import { TOKEN_USER_TYPES } from '../types';
 import auth from '../../utils/auth';
+
 import { Auth0Error } from '../../errors';
+import { TOKEN_USER_TYPES } from '../types';
 
 const SET_READY = 'SET_READY';
 const SET_LOGGED_OUT = 'SET_LOGGED_OUT';

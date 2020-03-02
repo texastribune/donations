@@ -11,8 +11,9 @@
 </template>
 
 <script>
-import LinkListItem from '../../components/LinkListItem.vue';
 import TaxReceiptProvider from '../providers/TaxReceiptProvider.vue';
+
+import LinkListItem from '../../components/LinkListItem.vue';
 
 export default {
   name: 'LinkListItemTaxReceipt',

@@ -26,8 +26,9 @@
 </template>
 
 <script>
-import LinkListItem from '../../components/LinkListItem.vue';
 import ResetPasswordProvider from '../providers/ResetPasswordProvider.vue';
+
+import LinkListItem from '../../components/LinkListItem.vue';
 
 export default {
   name: 'LinkListItemResetPassword',

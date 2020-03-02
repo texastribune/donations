@@ -22,9 +22,11 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
-import userMixin from '../../store/user/mixin';
 import routeMixin from '../mixin';
+
+import userMixin from '../../store/user/mixin';
+
+import ContactUs from '../../components/ContactUs.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
 

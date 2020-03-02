@@ -33,14 +33,16 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
 import userMixin from '../../store/user/mixin';
-import LinkEmail from '../../link-email/components/LinkEmail.vue';
+import routeMixin from '../mixin';
+
+import Appeal from '../../appeals/containers/AppealContainer.vue';
+
+import LinkEmail from '../../link-email/components/MiniForm.vue';
 import CustomAppeal from '../../appeals/components/CustomAppeal.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
-import Appeal from '../../appeals/containers/AppealContainer.vue';
 import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
-import routeMixin from '../mixin';
+import ContactUs from '../../components/ContactUs.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
 

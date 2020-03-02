@@ -30,6 +30,7 @@
 
 <script>
 import routeMixin from '../mixin';
+
 import ContactUs from '../../components/ContactUsSmall.vue';
 
 export default {

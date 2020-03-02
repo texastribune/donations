@@ -13,11 +13,14 @@
 import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
-import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
-import { NetworkError } from '../../../errors';
+
+import EditForm from '../components/EditForm.vue';
+
 import { logOut } from '../../../utils/auth-actions';
 import logError from '../../../utils/log-error';
-import EditForm from '../components/EditForm.vue';
+
+import { NetworkError } from '../../../errors';
+import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 
 export default {
   name: 'EditContactInfoFormContainer',

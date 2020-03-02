@@ -19,11 +19,13 @@
 </template>
 
 <script>
-import ContactUs from '../../components/ContactUs.vue';
 import userMixin from '../../store/user/mixin';
 import routeMixin from '../mixin';
+
 import Current from './containers/CurrentContainer.vue';
 import Former from './containers/FormerContainer.vue';
+
+import ContactUs from '../../components/ContactUs.vue';
 
 export default {
   name: 'BlastRoute',

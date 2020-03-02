@@ -1,6 +1,8 @@
-import { logOut } from '../utils/auth-actions';
-import { REDIRECTS_META } from '../constants';
 import tokenUserMixin from '../store/token-user/mixin';
+
+import { logOut } from '../utils/auth-actions';
+
+import { REDIRECTS_META } from '../constants';
 
 export default {
   mixins: [tokenUserMixin],
