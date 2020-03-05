@@ -1,6 +1,13 @@
 <template>
   <div class="has-ump-top-padding">
-    <credit-card-message :ga-label="ga.userPortal.labels.payments" />
+    <messages :num-messages="1">
+      <template v-slot:messages="{ setMessageSeen }">
+        <credit-card-message
+          :ga-label="ga.userPortal.labels.payments"
+          @setMessageSeen="setMessageSeen"
+        />
+      </template>
+    </messages>
 
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       Your Donations
@@ -24,19 +31,26 @@
 
     <appeal />
 
-    <help payments />
+    <contact-us :ga-label="ga.userPortal.labels.membership" is-membership>
+      <template v-slot:text>
+        To update your membership status, contact us at
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
-import LinkEmail from '../../link-email/components/LinkEmail.vue';
+import routeMixin from '../mixin';
+
+import Appeal from '../../appeals/containers/AppealContainer.vue';
+
+import LinkEmail from '../../link-email/components/MiniForm.vue';
 import CustomAppeal from '../../appeals/components/CustomAppeal.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
-import Appeal from '../../appeals/containers/AppealContainer.vue';
+import Messages from '../../messages/components/Messages.vue';
 import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
-import routeMixin from '../mixin';
+import ContactUs from '../../components/ContactUs.vue';
 import Detail from './components/Detail.vue';
 import InternalNav from './components/InternalNav.vue';
 
@@ -50,8 +64,9 @@ export default {
     CustomAppeal,
     Detail,
     InternalNav,
+    Messages,
     CreditCardMessage,
-    Help,
+    ContactUs,
   },
 
   mixins: [routeMixin, userMixin],

@@ -23,8 +23,8 @@
 </template>
 
 <script>
+import LinkEmail from '../../../link-email/components/MiniForm.vue';
 import SummaryBox from '../../../components/SummaryBox.vue';
-import LinkEmail from '../../../link-email/components/LinkEmail.vue';
 
 export default {
   name: 'SummaryNeverGiven',

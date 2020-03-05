@@ -12,6 +12,7 @@
 
 <script>
 import UserProvider from '../../store/user/Provider.vue';
+
 import SideNav from './SideNav.vue';
 
 export default {

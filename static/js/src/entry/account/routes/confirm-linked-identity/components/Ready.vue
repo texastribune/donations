@@ -85,9 +85,7 @@ export default {
       });
 
       this[CONTEXT_TYPES.setIsFetching](true);
-
       await this[USER_TYPES.confirmLinkedIdentity](this.ticket);
-
       this[CONTEXT_TYPES.setIsFetching](false);
 
       this.$router.push({ name: 'accountOverview' });

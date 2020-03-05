@@ -5,6 +5,7 @@ import parse from 'date-fns/parse';
 import isPast from 'date-fns/is_past';
 
 import formatTransaction from './utils/format-transaction';
+
 import { USER_TYPES } from '../types';
 import { PORTAL_API_URL } from '../../constants';
 
@@ -130,35 +131,20 @@ const getters = {
     return email;
   },
 
-  identity: (
-    { viewAsEmail, data: { identities = [] } },
-    { email },
-    _,
-    { 'tokenUser/isReady': isReady }
-  ) => {
-    // an Auth0 error occurred, or user is not logged in
-    if (!isReady) {
-      return {};
-    }
-
-    // viewing as someone who does not have an Auth0 account
+  identity: ({ viewAsEmail, data: { identities = [] } }, { email }) => {
+    // we're viewing as someone who does not have an Auth0 account
     if (viewAsEmail && !identities.length) {
       return {
         tribune_offers_consent: false,
       };
     }
 
-    // data fetch in progress
-    if (!identities.length) {
-      return {};
-    }
-
-    // what we want: grab the identity associated with a user's Auth0 email address
-    const [identity] = identities.filter(
+    // grab the identity associated with a user's Auth0 email address
+    const matchingIdentities = identities.filter(
       ({ email: identityEmail }) => identityEmail === email
     );
 
-    return identity;
+    return matchingIdentities[0] || {};
   },
 
   userId: ({ data: { id } }) => id,

@@ -21,7 +21,9 @@
 
 <script>
 import routeMixin from '../mixin';
+
 import userMixin from '../../store/user/mixin';
+
 import UserSideNav from '../../nav/components/UserSideNav.vue';
 
 const ViewAsForm = () =>

@@ -20,7 +20,7 @@
           <template v-slot:main>
             <a
               ga-on="click"
-              :href="donateUrl"
+              :href="urls.donate"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['never-given']"
@@ -35,7 +35,7 @@
           <template v-slot:main>
             <a
               ga-on="click"
-              :href="isCircleDonor ? circleUrl : donateUrl"
+              :href="isCircleDonor ? urls.circle : urls.donate"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['renew-membership']"
@@ -63,7 +63,7 @@
           <template v-slot:main>
             <a
               ga-on="click"
-              :href="donateUrl"
+              :href="urls.donate"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels['upgrade-membership']"
@@ -73,10 +73,7 @@
           </template>
         </link-list-item>
 
-        <reset-password
-          v-if="showResetPw"
-          :pw-reset-ga-label="pwResetGaLabel"
-        />
+        <reset-password v-if="showResetPw" :ga-label="pwResetGaLabel" />
 
         <link-list-item v-if="!isNeverGiven && showDonationHistory">
           <template v-slot:main>
@@ -163,9 +160,10 @@
 
 <script>
 import UserProvider from '../../store/user/Provider.vue';
+
+import ResetPassword from '../../reset-password/components/LinkListItem.vue';
 import LinkList from '../../components/LinkList.vue';
 import LinkListItem from '../../components/LinkListItem.vue';
-import ResetPassword from '../../reset-password/components/LinkListItem.vue';
 
 export default {
   name: 'UserInternalNav',

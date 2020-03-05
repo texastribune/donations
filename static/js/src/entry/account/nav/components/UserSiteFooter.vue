@@ -13,6 +13,7 @@
 
 <script>
 import UserProvider from '../../store/user/Provider.vue';
+
 import SiteFooter from './SiteFooter.vue';
 
 export default {

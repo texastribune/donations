@@ -8,6 +8,7 @@
 
 <script>
 import userMixin from '../../../store/user/mixin';
+
 import ReferralForm from '../components/ReferralForm.vue';
 
 export default {

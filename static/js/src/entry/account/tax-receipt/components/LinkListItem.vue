@@ -1,9 +1,9 @@
 <template>
-  <tax-receipt-provider v-slot="{ taxReceipt: { buildReceipt, lastYear } }">
+  <tax-receipt-provider v-slot="{ taxReceipt: { buildReceipt } }">
     <link-list-item>
       <template v-slot:main>
-        <button class="c-link-button" @click="buildReceipt(taxReceiptGaLabel)">
-          Download your {{ lastYear }} tax receipt
+        <button class="c-link-button" @click="buildReceipt(gaLabel)">
+          Download your {{ dates.lastYear }} tax receipt
         </button>
       </template>
     </link-list-item>
@@ -11,8 +11,9 @@
 </template>
 
 <script>
-import LinkListItem from '../../components/LinkListItem.vue';
 import TaxReceiptProvider from '../providers/TaxReceiptProvider.vue';
+
+import LinkListItem from '../../components/LinkListItem.vue';
 
 export default {
   name: 'LinkListItemTaxReceipt',
@@ -20,7 +21,7 @@ export default {
   components: { LinkListItem, TaxReceiptProvider },
 
   props: {
-    taxReceiptGaLabel: {
+    gaLabel: {
       type: String,
       required: true,
     },

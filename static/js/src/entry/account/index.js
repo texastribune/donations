@@ -1,3 +1,4 @@
+// third party
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VModal from 'vue-js-modal';
@@ -11,9 +12,13 @@ import VueClipboard from 'vue-clipboard2';
 import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry } from '@sentry/browser';
+import getYear from 'date-fns/get_year';
 
+// route and store
 import routes from './routes';
 import store from './store';
+
+// components
 import App from './App.vue';
 import UserSiteFooter from './nav/components/UserSiteFooter.vue';
 import BasicSiteFooter from './nav/components/BasicSiteFooter.vue';
@@ -22,6 +27,8 @@ import BasicNavBar from './nav/components/BasicNavBar.vue';
 import UserInternalNav from './nav/components/UserInternalNav.vue';
 import Icon from './components/Icon.vue';
 import BaseButton from './components/BaseButton.vue';
+
+// utils
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
@@ -29,6 +36,8 @@ import { logIn } from './utils/auth-actions';
 import logError from './utils/log-error';
 import setTitle from './utils/set-title';
 import logPageView from './utils/log-page-view';
+
+// constants
 import { UnverifiedError, NetworkError } from './errors';
 import {
   SENTRY_DSN,
@@ -71,8 +80,14 @@ Vue.mixin({
         customEventName: GA_CUSTOM_EVENT_NAME,
         ambassadorsCustomEventName: GA_AMBASSADORS_CUSTOM_EVENT_NAME,
       },
-      donateUrl: DONATE_URL,
-      circleUrl: CIRCLE_URL,
+      urls: {
+        donate: DONATE_URL,
+        circle: CIRCLE_URL,
+      },
+      dates: {
+        lastYear: getYear(new Date()) - 1,
+        thisYear: getYear(new Date()),
+      },
     };
   },
 });
@@ -182,7 +197,10 @@ store
     router.onError(err => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
-      logError({ err });
+
+      if (!(err instanceof UnverifiedError)) {
+        logError({ err });
+      }
     });
 
     router.beforeEach(async (to, from, next) => {

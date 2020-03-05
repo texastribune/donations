@@ -1,6 +1,13 @@
 <template>
   <div class="has-ump-top-padding">
-    <credit-card-message :ga-label="ga.userPortal.labels.membership" />
+    <messages :num-messages="1">
+      <template v-slot:messages="{ setMessageSeen }">
+        <credit-card-message
+          :ga-label="ga.userPortal.labels.membership"
+          @setMessageSeen="setMessageSeen"
+        />
+      </template>
+    </messages>
 
     <h1 class="has-ump-side-padding has-xl-btm-marg t-size-xl">
       Your Membership
@@ -22,21 +29,28 @@
 
     <appeal />
 
-    <help membership />
+    <contact-us :ga-label="ga.userPortal.labels.membership" is-membership>
+      <template v-slot:text>
+        To update your membership status, contact us at
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-import Help from '../../components/Help.vue';
 import userMixin from '../../store/user/mixin';
-import LinkEmail from '../../link-email/components/LinkEmail.vue';
-import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
-import Appeal from '../../appeals/containers/AppealContainer.vue';
-import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import routeMixin from '../mixin';
+
+import Appeal from '../../appeals/containers/AppealContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
+
+import LinkEmail from '../../link-email/components/MiniForm.vue';
+import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
+import Messages from '../../messages/components/Messages.vue';
+import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
+import ContactUs from '../../components/ContactUs.vue';
 
 export default {
   name: 'MembershipRoute',
@@ -46,9 +60,10 @@ export default {
     RecurringOrCircle,
     SingleOrWillExpire,
     Appeal,
+    Messages,
     CreditCardMessage,
     CircleAppeal,
-    Help,
+    ContactUs,
     LinkEmail,
   },
 

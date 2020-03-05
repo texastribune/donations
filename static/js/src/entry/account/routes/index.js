@@ -1,6 +1,8 @@
 import store from '../store';
-import { USER_MODULE, USER_TYPES } from '../store/types';
+
 import Account from './account/Index.vue';
+
+import { USER_MODULE, USER_TYPES } from '../store/types';
 
 const AccountOverview = () =>
   import(/* webpackChunkName: "account-overview-route" */ './account-overview/Index.vue');

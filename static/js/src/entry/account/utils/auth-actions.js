@@ -1,4 +1,5 @@
 import auth from './auth';
+
 import {
   AUTH_PORTAL_CLIENT_ID,
   AUTH_PORTAL_LOGOUT_COMPLETE_URL,

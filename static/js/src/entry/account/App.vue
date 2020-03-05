@@ -10,11 +10,14 @@
 </template>
 
 <script>
+import contextMixin from './store/context/mixin';
+
 import ErrorView from './ErrorView.vue';
 import AppLoader from './components/AppLoader.vue';
-import contextMixin from './store/context/mixin';
-import { CONTEXT_TYPES } from './store/types';
+
 import logError from './utils/log-error';
+
+import { CONTEXT_TYPES } from './store/types';
 
 export default {
   name: 'App',

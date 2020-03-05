@@ -1,6 +1,4 @@
 <script>
-import getYear from 'date-fns/get_year';
-
 import userMixin from '../../store/user/mixin';
 
 export default {
@@ -8,18 +6,12 @@ export default {
 
   mixins: [userMixin],
 
-  computed: {
-    lastYear() {
-      return getYear(new Date()) - 1;
-    },
-  },
-
   methods: {
     async buildReceipt(gaLabel) {
       try {
         const buildTaxReceipt = await import(/* webpackChunkName: 'build-tax-receipt' */ '../build-tax-receipt');
-        const { lastYear, user } = this;
-        const { lastYearAmount, greeting } = user;
+        const { lastYearAmount, greeting } = this.user;
+        const { lastYear } = this.dates;
 
         await buildTaxReceipt.default({
           lastYear,
@@ -38,10 +30,10 @@ export default {
   },
 
   render() {
-    const { buildReceipt, lastYear } = this;
+    const { buildReceipt } = this;
 
     return this.$scopedSlots.default({
-      taxReceipt: { buildReceipt, lastYear },
+      taxReceipt: { buildReceipt },
     });
   },
 };

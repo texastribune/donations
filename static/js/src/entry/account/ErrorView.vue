@@ -3,7 +3,7 @@
     <basic-nav-bar />
 
     <main class="l-minimal has-bg-white-off has-xl-padding">
-      <div class="l-minimal__content t-links-underlined">
+      <div class="l-minimal__content">
         <h1 class="has-xl-btm-marg">
           <template v-if="isUnverifiedError">
             Please verify your account.
@@ -13,7 +13,7 @@
           </template>
         </h1>
 
-        <p class="has-s-btm-marg">
+        <p class="has-s-btm-marg t-links-underlined t-size-b">
           <template v-if="isUnverifiedError">
             Thanks for creating a Texas Tribune account &mdash; you’re almost
             done! To view your account, we need you to verify your email
@@ -29,17 +29,11 @@
           </template>
         </p>
 
-        <p>
-          Having trouble? Contact
-          <a
-            href="mailto:community@texastribune.org?subject=account%20technical%20error"
-            ga-on="click"
-            :ga-event-category="ga.userPortal.category"
-            :ga-event-action="ga.userPortal.actions['contact-us']"
-            :ga-event-label="gaLabel"
-            >community@texastribune.org</a
-          >.
-        </p>
+        <contact-us :ga-label="gaLabel" :display="{ color: 'black' }">
+          <template v-slot:text>
+            Having trouble? Contact
+          </template>
+        </contact-us>
       </div>
     </main>
 
@@ -50,11 +44,17 @@
 <script>
 import contextMixin from './store/context/mixin';
 import userMixin from './store/user/mixin';
-import { UnverifiedError } from './errors';
+
+import ContactUs from './components/ContactUsSmall.vue';
+
 import setTitle from './utils/set-title';
+
+import { UnverifiedError } from './errors';
 
 export default {
   name: 'ErrorView',
+
+  components: { ContactUs },
 
   mixins: [contextMixin, userMixin],
 

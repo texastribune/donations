@@ -4,6 +4,7 @@ import Vuex from 'vuex';
 import userModule from './user';
 import tokenUserModule from './token-user';
 import contextModule from './context';
+
 import { CONTEXT_MODULE, TOKEN_USER_MODULE, USER_MODULE } from './types';
 
 Vue.use(Vuex);
