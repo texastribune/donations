@@ -7,6 +7,9 @@
 // mixins and functions (no actual CSS output)
 @import "@texastribune/queso-ui/assets/scss/2-tools/all";
 
+// fonts
+@import "@texastribune/queso-ui/assets/scss/4-elements/font-families";
+
 // t-size helper for sizing fonts
 @import "@texastribune/queso-ui/assets/scss/5-typography/t-helpers";
 @import "@texastribune/queso-ui/assets/scss/5-typography/t-size";
