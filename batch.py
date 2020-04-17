@@ -6,7 +6,7 @@ from pytz import timezone
 
 import celery
 import redis
-from charges import amount_to_charge, charge
+from charges import amount_to_charge, charge, ChargeException
 from npsp import Opportunity
 from util import send_email
 
@@ -100,7 +100,11 @@ def charge_cards():
         log.it(
             f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
         )
-        charge(opportunity)
+        try:
+            charge(opportunity)
+        except ChargeException:
+            # TODO should we alert slack? Did not because we had no notifications here before
+            pass
 
     log.send()
 
