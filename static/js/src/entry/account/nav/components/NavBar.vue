@@ -54,7 +54,7 @@
           </li>
           <li class="c-navbar__item">
             <a
-              href="/donate"
+              href="/donate?installmentPeriod=yearly&amount=150&campaignId=7016f0000013La7AAE"
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               ga-on="click"
               :ga-event-category="ga.donations.category"
@@ -186,7 +186,7 @@
         </li>
         <li class="c-navbar__dropdown-item">
           <a
-            href="/donate"
+            href="/donate?installmentPeriod=yearly&amount=150&campaignId=7016f0000013La7AAE"
             class="c-navbar__clickable"
             ga-on="click"
             :ga-event-category="ga.donations.category"

@@ -113,7 +113,7 @@
           <li>
             <a
               ga-on="click"
-              href="/donate"
+              href="/donate?installmentPeriod=yearly&amount=150&campaignId=7016f0000013La7AAE"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels.footer"
