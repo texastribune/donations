@@ -52,10 +52,10 @@ from util import (
     clean,
     notify_slack,
     send_email_new_business_membership,
-    send_multiple_account_warning,
+    send_multiple_account_warning, send_slack_message,
 )
 from validate_email import validate_email
-from charges import charge
+from charges import charge, ChargeException
 
 ZONE = timezone(TIMEZONE)
 
@@ -317,9 +317,12 @@ def add_donation(form=None, customer=None, donation_type=None):
     if period is None:
         logging.info("----Creating one time payment...")
         opportunity = add_opportunity(contact=contact, form=form, customer=customer)
-        charge(opportunity)
-        logging.info(opportunity)
-        notify_slack(contact=contact, opportunity=opportunity)
+        try:
+            charge(opportunity)
+            logging.info(opportunity)
+            notify_slack(contact=contact, opportunity=opportunity)
+        except ChargeException as e:
+            e.send_slack_notification()
         return True
 
     elif donation_type == "circle":
@@ -337,9 +340,12 @@ def add_donation(form=None, customer=None, donation_type=None):
         for opportunity in opportunities
         if opportunity.expected_giving_date == today
     ][0]
-    charge(opp)
-    logging.info(rdo)
-    notify_slack(contact=contact, rdo=rdo)
+    try:
+        charge(opp)
+        logging.info(rdo)
+        notify_slack(contact=contact, rdo=rdo)
+    except ChargeException as e:
+        e.send_slack_notification()
     return True
 
 
@@ -1005,8 +1011,11 @@ def add_business_membership(
         for opportunity in opportunities
         if opportunity.expected_giving_date == today
     ][0]
-    charge(opp)
-    notify_slack(account=account, contact=contact, rdo=rdo)
+    try:
+        charge(opp)
+        notify_slack(account=account, contact=contact, rdo=rdo)
+    except ChargeException as e:
+        e.send_slack_notification()
 
     logging.info("----Getting affiliation...")
 
@@ -1078,7 +1087,11 @@ def add_blast_subscription(form=None, customer=None):
         for opportunity in opportunities
         if opportunity.expected_giving_date == today
     ][0]
-    charge(opp)
+    try:
+        charge(opp)
+    except ChargeException:
+        # TODO should we alert slack? Did not because we had no notifications here before.
+        pass
 
     return True
 
