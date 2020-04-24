@@ -40,6 +40,12 @@
 
   &__description {
     font-size: $size-b;
+    line-height: 1.4;
+
+    a {
+      color: $color-white-pure;
+      text-decoration: underline;
+    }
   }
 
   &__logo {
