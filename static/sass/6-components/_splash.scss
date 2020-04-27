@@ -1,16 +1,9 @@
 .splash {
-  background-color: $color-sand;
+  background-color: $color-fmd-blue-dark;
   background-position-x: 50%;
-  background-image: url('../img/TT-SMD18-BG_pattern-tile-trim.png');
   background-repeat: repeat;
   padding: 0 $size-b;
   color: $color-white-pure;
-
-  //FMD variation
-  // background-image: url('../img/TT-FMD18-BG_pattern-tile-grey.png');
-  // padding-bottom: $size-giant*2;
-  // padding-top: $size-giant*2;
-  //end FMD variation
 
   &--blast {
     background: $color-black-pure;
@@ -23,20 +16,12 @@
     @include mq($until: bp-l) {
       padding-bottom: $size-b;
       padding-top: $size-b;
-
-      //FMD variation
-      // padding-bottom: $size-l;
-      // padding-top: $size-l;
-      //end FMD variation
     }
   }
 
   &__headline {
+    font-size: $size-xl;
     padding-bottom: $size-l;
-
-    //FMD variation
-    //color: $color-fmd-blue-dark;
-    //end FMD variation
 
     @include mq($from: bp-m) {
       font-size: $size-xl;
@@ -51,21 +36,16 @@
     @include mq($from: bp-xl) {
       font-size: 2.75rem;
     }
-
-    //FMD variation
-    // @include mq($until: $animation-single-line-bp) {
-    //   padding-bottom: 3.5rem;
-    // }
-    //end FMD variation
   }
 
   &__description {
     font-size: $size-b;
+    line-height: 1.5;
 
-    //FMD variation
-    // @extend %link--blue;
-    // color: $color-fmd-blue-dark;
-    //end FMD variation
+    a {
+      color: $color-white-pure;
+      text-decoration: underline;
+    }
   }
 
   &__logo {
@@ -75,7 +55,7 @@
       max-width: 100%;
     }
   }
-  
+
   &__bug {
     img {
       max-width: 250px;
@@ -84,32 +64,4 @@
       text-align: right;
     }
   }
-  
-  &__actions {
-    @include mq($until: bp-m) {
-      margin-top: 2rem;
-    }
-  }
-
-  //FMD variation
-  // &_actions {
-  //   align-items: center;
-  // }
-  // &--buttons {
-  //   .button {
-  //     width: 45%;
-  //   }
-  //   .button--yellow {
-  //     background-color: $color-fmd-blue-light;
-  //     border: 2px solid $color-fmd-blue-light;
-  //     color: $color-white-pure;
-  //   }
-  //   .text {
-  //     color: $color-fmd-blue-dark;
-  //     font-size: $size-xs;
-  //     padding-left: $size-xxs/2;
-  //     padding-right: $size-xxs/2;
-  //   }
-  // }
-  //end FMD variation
 }
