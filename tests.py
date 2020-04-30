@@ -215,6 +215,7 @@ def test__format_opportunity():
         "Stripe_Card_Last_4__c": None,
         "Amazon_Order_Id__c": None,
         "Net_Amount__c": "8.00",
+        "Donor_Selected_Amount__c": 0,
     }
     assert response == expected
 
