@@ -1,4 +1,5 @@
 import auth from './auth';
+
 import {
   AUTH_PORTAL_CLIENT_ID,
   AUTH_PORTAL_LOGOUT_COMPLETE_URL,
@@ -6,26 +7,42 @@ import {
   NON_STAFF_CONNECTION,
 } from '../constants';
 
-export const logIn = (next = '/account/') => {
+const createRedirectQueryParams = ({ redirectName, redirectQueryParams }) => {
+  let queryParams = `redirectName=${redirectName}`;
+
+  if (redirectQueryParams) {
+    queryParams += `&redirectQueryParams=${encodeURIComponent(
+      JSON.stringify(redirectQueryParams)
+    )}`;
+  }
+
+  return queryParams;
+};
+
+export const logIn = (info = {}) => {
+  const queryParams = createRedirectQueryParams({
+    redirectName: 'accountOverview',
+    ...info,
+  });
+
   auth.authorize({
     initial_screen: 'login',
-    redirectUri: `${AUTH_PORTAL_LOGIN_COMPLETE_URL}?next=${next}`,
+    redirectUri: `${AUTH_PORTAL_LOGIN_COMPLETE_URL}?${queryParams}`,
   });
 };
 
-export const logOut = (next = '/donate') => {
+export const logOut = (info = {}) => {
+  const queryParams = createRedirectQueryParams({
+    redirectName: 'donate',
+    ...info,
+  });
+
   auth.logout({
     clientID: AUTH_PORTAL_CLIENT_ID,
-    returnTo: `${AUTH_PORTAL_LOGOUT_COMPLETE_URL}?next=${next}`,
+    returnTo: `${AUTH_PORTAL_LOGOUT_COMPLETE_URL}?${queryParams}`,
   });
 };
 
 export const resetPassword = (email, cb) => {
   auth.changePassword({ email, connection: NON_STAFF_CONNECTION }, cb);
-};
-
-export const redirect = next => {
-  setTimeout(() => {
-    window.location.href = next;
-  }, 1800);
 };

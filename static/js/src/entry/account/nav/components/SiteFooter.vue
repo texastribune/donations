@@ -12,32 +12,29 @@
         />
 
         <p class="t-size-s has-text-white">
-          &copy; {{ thisYear }} The Texas Tribune
+          &copy; {{ dates.thisYear }} The Texas Tribune
         </p>
       </div>
 
-      <div class="c-site-footer__col t-size-s">
+      <div v-if="showUserLinks" class="c-site-footer__col t-size-s">
         <h4
           class="c-site-footer__header has-text-yellow t-uppercase has-xs-btm-marg"
         >
           Your account
         </h4>
-        <ul
-          v-if="userFetchComplete"
-          class="c-site-footer__links has-text-white"
-        >
-          <li v-if="showHomeLink">
+        <ul class="c-site-footer__links has-text-white">
+          <li>
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.footer"
               :ga-event-label="ga.userPortalNav.labels.home"
-              :to="{ name: 'home' }"
+              :to="{ name: 'accountOverview' }"
             >
               Account Overview
             </router-link>
           </li>
-          <li v-if="showEditContactInfoLink">
+          <li>
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -70,7 +67,7 @@
               Donation History
             </router-link>
           </li>
-          <li v-if="showAmbassadorLink">
+          <li>
             <router-link
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -116,7 +113,7 @@
           <li>
             <a
               ga-on="click"
-              href="/donate"
+              href="/donate?installmentPeriod=yearly&amount=150&campaignId=7016f0000013La7AAE"
               :ga-event-category="ga.donations.category"
               :ga-event-action="ga.donations.actions['membership-intent']"
               :ga-event-label="ga.donations.labels.footer"
@@ -175,53 +172,28 @@
 </template>
 
 <script>
-// TODO: Make this more generic w/ slots and move to base components directory
-
-import getYear from 'date-fns/get_year';
-
 export default {
   name: 'SiteFooter',
 
   props: {
-    showHomeLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showEditContactInfoLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showAmbassadorLink: {
+    showUserLinks: {
       type: Boolean,
       required: true,
     },
 
     showBlastLinks: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
     showMembershipLink: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
     showPaymentsLink: {
       type: Boolean,
-      required: true,
-    },
-
-    userFetchComplete: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
-  computed: {
-    thisYear() {
-      return getYear(new Date());
+      default: false,
     },
   },
 };

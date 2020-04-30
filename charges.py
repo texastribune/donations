@@ -12,6 +12,22 @@ stripe.api_key = STRIPE_KEYS["secret_key"]
 TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
 
 
+class ChargeException(Exception):
+    def __init__(self, opportunity, message):
+        super().__init__(message)
+        self.opportunity = opportunity
+        self.message = message
+
+    def send_slack_notification(self):
+        send_slack_message(
+            {
+                "channel": "#stripe",
+                "text": f"Charge failed for {self.opportunity.name} [{self.message}]",
+                "icon_emoji": ":x:",
+            }
+        )
+
+
 def amount_to_charge(opportunity):
     """
     Determine the amount to charge. This depends on whether the payer agreed
@@ -79,21 +95,19 @@ def charge(opportunity):
                     "icon_emoji": ":x:",
                 }
             )
-        return
+
+        raise ChargeException(opportunity, "card error")
 
     except stripe.error.InvalidRequestError as e:
         logging.error(f"Problem: {e}")
-        # TODO should we raise this?
-        return
+        raise ChargeException(opportunity, "invalid request")
     except Exception as e:
         logging.error(f"Problem: {e}")
-        # TODO should we raise this?
-        return
+        raise ChargeException(opportunity, "unknown error")
 
     if card_charge.status != "succeeded":
         logging.error("Charge failed. Check Stripe logs.")
-        # TODO should we raise this?
-        return
+        raise ChargeException(opportunity, "charge failed")
 
     # There's a lot going on here. Up to this point the donor selected an
     # amount (say $100) and decided if they wanted to pay our processing

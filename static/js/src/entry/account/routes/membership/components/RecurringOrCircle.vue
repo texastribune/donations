@@ -1,25 +1,22 @@
 <template>
   <section class="c-detail-box">
-    <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
+    <div class="has-xxl-btm-marg">
+      <info-list :items="data">
+        <template v-slot:text="{ item: { extra, key } }">
+          <template v-if="key === 'donation'">
+            {{ extra.amount | currency }}, {{ extra.period }}
+          </template>
+          <template v-if="key === 'payment'">
+            {{ extra.brand }} ending in {{ extra.last4 }}
+          </template>
+          <template v-if="key === 'next'">
+            {{ extra.nextTransactionDate | longDate }}
+          </template>
+        </template>
+      </info-list>
+    </div>
 
-    <ul class="c-link-list t-links-underlined">
-      <li>
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <router-link
-            ga-on="click"
-            :to="{ name: 'payments' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.inline"
-            :ga-event-label="ga.userPortalNav.labels.payments"
-          >
-            See your donation history
-          </router-link>
-        </span>
-      </li>
-    </ul>
+    <user-internal-nav show-donation-history />
   </section>
 </template>
 
@@ -32,9 +29,45 @@ export default {
   components: { InfoList },
 
   props: {
-    data: {
-      type: Array,
+    nextTransaction: {
+      type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    data() {
+      const data = [];
+      const {
+        amount,
+        period,
+        card,
+        date: nextTransactionDate,
+      } = this.nextTransaction;
+
+      data.push({
+        key: 'donation',
+        heading: 'Donation',
+        extra: { amount, period },
+      });
+
+      if (card) {
+        const { brand, last4 } = card;
+
+        data.push({
+          key: 'payment',
+          heading: 'Payment method',
+          extra: { brand, last4 },
+        });
+      }
+
+      data.push({
+        key: 'next',
+        heading: 'Next payment',
+        extra: { nextTransactionDate },
+      });
+
+      return data;
     },
   },
 };

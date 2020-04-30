@@ -4,7 +4,7 @@ import axios from 'axios';
 import formatCurrency from '../../utils/format-currency';
 import formatShortDate from '../../utils/format-short-date';
 
-export default async function buildBlastReceipt({ date, amount, method }) {
+export default async function buildBlastReceipt({ date, amount, card }) {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF({
     unit: 'px',
@@ -56,11 +56,11 @@ export default async function buildBlastReceipt({ date, amount, method }) {
   doc.setFontStyle('normal');
   doc.text(formatCurrency(amount), leftEdge, 214);
 
-  if (method) {
+  if (card) {
     doc.setFontStyle('bold');
     doc.text('Payment method', leftEdge, 244);
     doc.setFontStyle('normal');
-    doc.text(method, leftEdge, 256);
+    doc.text(`${card.brand} ${card.last4}`, leftEdge, 256);
     doc.text(
       'If you have any questions, email us at blast@texastribune.org or call 512-716-8695.',
       leftEdge,

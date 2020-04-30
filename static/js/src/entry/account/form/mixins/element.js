@@ -1,5 +1,10 @@
 export default {
   props: {
+    errorMessages: {
+      type: Array,
+      required: true,
+    },
+
     name: {
       type: String,
       required: true,
@@ -10,23 +15,25 @@ export default {
       required: true,
     },
 
-    flags: {
-      type: Object,
+    pristine: {
+      type: Boolean,
+      required: true,
+    },
+
+    changed: {
+      type: Boolean,
+      required: true,
+    },
+
+    valid: {
+      type: Boolean,
       required: true,
     },
   },
 
   computed: {
-    changed() {
-      return this.flags.changed;
-    },
-
-    valid() {
-      return this.flags.valid;
-    },
-
-    pristine() {
-      return this.flags.pristine;
+    hasErrors() {
+      return this.errorMessages.length > 0;
     },
   },
 
@@ -35,19 +42,20 @@ export default {
       this.updateFlags();
     },
 
-    valid() {
+    pristine() {
       this.updateFlags();
     },
 
-    pristine() {
+    valid() {
       this.updateFlags();
     },
   },
 
   methods: {
     updateFlags() {
-      const { changed, valid, pristine } = this;
-      this.$emit('updateFlags', this.name, { changed, valid, pristine });
+      const { changed, pristine, valid } = this;
+
+      this.$emit('updateFlags', this.name, { changed, pristine, valid });
     },
   },
 };

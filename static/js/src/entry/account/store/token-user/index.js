@@ -1,102 +1,118 @@
-/* eslint-disable no-param-reassign, camelcase */
+/* eslint-disable no-param-reassign */
 
 import jwt from 'jsonwebtoken';
 import { setExtra } from '@sentry/browser';
 
 import auth from '../../utils/auth';
-import { clearLoggedInFlag, getLoggedInFlag } from '../../utils/storage';
-import { Auth0Error } from '../../errors';
 
-const MUTATION_TYPES = {
-  setAccessToken: 'SET_ACCESS_TOKEN',
-  setIsVerified: 'SET_IS_VERIFIED',
-  setCanViewAs: 'SET_CAN_VIEW_AS',
-  setDetails: 'SET_DETAILS',
-  setError: 'SET_ERROR',
+import { Auth0Error } from '../../errors';
+import { TOKEN_USER_TYPES } from '../types';
+
+const SET_READY = 'SET_READY';
+const SET_LOGGED_OUT = 'SET_LOGGED_OUT';
+const SET_ERROR = 'SET_ERROR';
+
+const initialState = {
+  isLoggedIn: false,
+  accessToken: '',
+  accessTokenPayload: {},
+  idToken: '',
+  idTokenPayload: {},
+  error: null,
 };
 
-function createDefaultState() {
-  return {
-    accessToken: '',
-    canViewAs: false,
-    isVerified: false,
-    error: null,
-    details: {},
-  };
-}
-
 const mutations = {
-  [MUTATION_TYPES.setAccessToken](state, accessToken) {
+  [SET_READY](state, { accessToken, idToken }) {
+    const accessTokenPayload = jwt.decode(accessToken);
+    const idTokenPayload = jwt.decode(idToken);
+
+    state.isLoggedIn = true;
     state.accessToken = accessToken;
+    state.accessTokenPayload = accessTokenPayload;
+    state.idToken = idToken;
+    state.idTokenPayload = idTokenPayload;
+    state.error = null;
+
+    setExtra('auth', idTokenPayload);
   },
 
-  [MUTATION_TYPES.setIsVerified](state, isVerified) {
-    state.isVerified = isVerified;
+  [SET_LOGGED_OUT](state) {
+    state.isLoggedIn = false;
+    state.accessToken = '';
+    state.accessTokenPayload = {};
+    state.idToken = '';
+    state.idTokenPayload = {};
+    state.error = null;
+
+    setExtra('auth', {});
   },
 
-  [MUTATION_TYPES.setCanViewAs](state, canViewAs) {
-    state.canViewAs = canViewAs;
-  },
-
-  [MUTATION_TYPES.setDetails](state, details) {
-    state.details = details;
-  },
-
-  [MUTATION_TYPES.setError](state, err) {
-    state.error = new Auth0Error(err);
+  [SET_ERROR](state, error) {
+    state.isLoggedIn = true;
+    state.accessToken = '';
+    state.accessTokenPayload = {};
+    state.idToken = '';
+    state.idTokenPayload = {};
+    state.error = error;
   },
 };
 
 const actions = {
-  getTokenUser: ({ commit }) =>
-    new Promise(resolve => {
-      if (getLoggedInFlag() === 'true') {
+  [TOKEN_USER_TYPES.getTokenUser]: async ({ commit }) => {
+    try {
+      await new Promise((resolve, reject) => {
         auth.checkSession(
           { responseType: 'token id_token' },
           (err, authResult) => {
             if (err) {
-              const { error, error_description } = err;
-              // TODO: show fly-in
-              if (error && error !== 'login_required') {
-                // instead of throwing this up now so user gets
-                // the error page, store it and only throw it when
-                // user enters a login-required route; that logic is
-                // handled in our route mixin
-                commit(MUTATION_TYPES.setError, error_description);
-              } else if (!error) {
-                // from Auth0 docs: you can also get a generic 403 error
-                // without an error or error_description property.
-                commit(MUTATION_TYPES.setError, 'Auth0 unknown 403 error');
-              }
-              commit(MUTATION_TYPES.setAccessToken, '');
-              clearLoggedInFlag();
-              resolve();
+              reject(err);
             } else {
-              const { email_verified } = authResult.idTokenPayload;
-              const { permissions } = jwt.decode(authResult.accessToken);
-              const filteredPerms = permissions.filter(
-                perm => perm === 'portal:view_as'
-              );
-
-              commit(MUTATION_TYPES.setIsVerified, email_verified);
-              commit(MUTATION_TYPES.setCanViewAs, filteredPerms.length === 1);
-              commit(MUTATION_TYPES.setAccessToken, authResult.accessToken);
-              commit(MUTATION_TYPES.setDetails, authResult.idTokenPayload);
-              setExtra('auth', authResult.idTokenPayload);
+              commit(SET_READY, {
+                accessToken: authResult.accessToken,
+                idToken: authResult.idToken,
+              });
               resolve();
             }
           }
         );
+      });
+    } catch (err) {
+      const { code, description } = err;
+
+      if (code === 'login_required') {
+        commit(SET_LOGGED_OUT);
+      } else if (!code || !description) {
+        commit(
+          SET_ERROR,
+          new Auth0Error({ message: 'Unknown error', code: 403 })
+        );
       } else {
-        resolve();
+        commit(SET_ERROR, new Auth0Error({ message: description, code }));
       }
-    }),
+    }
+  },
+};
+
+const getters = {
+  tokenExpiryInMs: ({ accessTokenPayload: { exp = 0 } }) => exp * 1000,
+
+  isReady: ({ isLoggedIn, error }) => isLoggedIn && !error,
+
+  canViewAs: ({ accessTokenPayload }) => {
+    const { permissions = [] } = accessTokenPayload;
+    const filteredPerms = permissions.filter(perm => perm === 'portal:view_as');
+
+    return filteredPerms.length === 1;
+  },
+
+  isVerified: ({ idTokenPayload: { email_verified: isVerified = false } }) =>
+    isVerified,
 };
 
 export default {
   namespaced: true,
-  state: createDefaultState(),
+  state: initialState,
   mutations,
   actions,
-  getters: {},
+  getters,
 };

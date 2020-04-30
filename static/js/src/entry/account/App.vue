@@ -4,61 +4,44 @@
       <app-loader v-show="showLoader" />
     </transition>
 
-    <unverified-view v-if="showUnverified" />
-    <error-view v-else-if="showError" />
-    <router-view v-else :parent-route-is-fetching="false" />
+    <error-view v-if="showError" />
+    <router-view v-else />
   </div>
 </template>
 
 <script>
-import ErrorView from './ErrorView.vue';
-import UnverifiedView from './UnverifiedView.vue';
-import AppLoader from './components/AppLoader.vue';
 import contextMixin from './store/context/mixin';
-import { UnverifiedError } from './errors';
-import { TITLE_SUFFIX } from './constants';
+
+import ErrorView from './ErrorView.vue';
+import AppLoader from './components/AppLoader.vue';
+
+import logError from './utils/log-error';
+
+import { CONTEXT_TYPES } from './store/types';
 
 export default {
   name: 'App',
 
-  components: { ErrorView, UnverifiedView, AppLoader },
+  components: { ErrorView, AppLoader },
 
   mixins: [contextMixin],
 
   computed: {
     showLoader() {
-      return this.appIsFetching && !this.appError;
-    },
-
-    showUnverified() {
-      return this.appError instanceof UnverifiedError;
+      return this.context.isFetching && !this.context.error;
     },
 
     showError() {
-      return !!this.appError;
-    },
-  },
-
-  watch: {
-    appError(newError) {
-      if (newError) {
-        if (newError instanceof UnverifiedError) {
-          this.setTitle('Unverified email address');
-        } else {
-          this.setTitle('Error');
-        }
-      }
-    },
-  },
-
-  methods: {
-    setTitle(title) {
-      document.title = `${title} ${TITLE_SUFFIX}`;
+      return !!this.context.error;
     },
   },
 
   errorCaptured(err) {
-    this.setAppError(err);
+    this[CONTEXT_TYPES.setError](err);
+
+    logError({ err });
+
+    return false;
   },
 };
 </script>

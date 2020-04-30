@@ -1,34 +1,40 @@
 <template>
-  <form class="c-mini-form" @submit.prevent="$emit('onSubmit', currentFields)">
-    <validation-provider
-      v-slot="{ errors, flags }"
-      :name="name"
-      :rules="currentFields[name].rules"
-      immediate
-      slim
+  <validation-observer v-slot="{ handleSubmit }">
+    <form
+      :key="formKey"
+      class="c-mini-form"
+      @submit.prevent="handleSubmit(onSubmit)"
     >
-      <div class="c-mini-form__input">
-        <text-input
-          v-model="currentFields[name].value"
-          :name="currentFields[name].name"
-          :label="currentFields[name].label"
-          :read-only="currentFields[name].readOnly"
-          :error-messages="errors"
-          :flags="flags"
-          :show-label="false"
-          :show-error-immediately="false"
-          @updateFlags="updateFlags"
-        />
-      </div>
-    </validation-provider>
-    <div class="c-mini-form__submit">
-      <submit :disabled="!formIsValid" :value="submitText" />
-    </div>
-  </form>
+      <validation-provider
+        v-slot="{ errors, pristine, changed, valid }"
+        :rules="rules"
+        :name="name"
+        slim
+      >
+        <div class="c-mini-form__input">
+          <text-input
+            v-model="inputModel"
+            :label="label"
+            :name="name"
+            :prevent-paste="preventPaste"
+            :read-only="readOnly"
+            :show-label="false"
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          />
+        </div>
+      </validation-provider>
+
+      <div class="c-mini-form__submit"><submit :value="submitText" /></div>
+    </form>
+  </validation-observer>
 </template>
 
 <script>
-import formMixin from '../mixins';
+import formMixin from '../mixins/form';
 
 export default {
   name: 'TextInputAndSubmit',
@@ -36,21 +42,50 @@ export default {
   mixins: [formMixin],
 
   props: {
-    submitText: {
+    name: {
       type: String,
-      default: 'Submit',
+      required: true,
+    },
+
+    label: {
+      type: String,
+      required: true,
+    },
+
+    rules: {
+      type: String,
+      required: true,
+    },
+
+    preventPaste: {
+      type: Boolean,
+      default: false,
     },
 
     readOnly: {
       type: Boolean,
       default: false,
     },
+
+    submitText: {
+      type: String,
+      default: 'Submit',
+    },
   },
 
   computed: {
-    name() {
-      const [onlyFieldKey] = Object.keys(this.initialFields);
-      return this.initialFields[onlyFieldKey].name;
+    inputModel: {
+      get() {
+        const [firstKey] = Object.keys(this.currentFields);
+
+        return this.currentFields[firstKey].value;
+      },
+
+      set(value) {
+        const [firstKey] = Object.keys(this.currentFields);
+
+        this.currentFields[firstKey].value = value;
+      },
     },
   },
 };

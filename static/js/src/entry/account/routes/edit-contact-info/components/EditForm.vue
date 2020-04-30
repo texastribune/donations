@@ -1,139 +1,187 @@
 <template>
-  <form :key="formKey" @submit.prevent="onSubmit">
-    <p v-if="badEmail" role="alert" class="has-b-btm-marg has-text-error">
-      <strong
-        >Error: You can't change your login email to {{ badEmail }} because an
-        account already exists with that email address.</strong
-      >
-    </p>
-    <p v-if="showSuccess" role="alert" class="has-b-btm-marg has-text-success">
-      <strong>Success! Your profile has been updated.</strong>
-    </p>
-    <validation-provider
-      v-slot="{ errors, flags }"
-      :rules="currentFields.firstName.rules"
-      :name="currentFields.firstName.name"
-      immediate
-      slim
-    >
-      <div class="has-b-btm-marg">
-        <text-input
-          v-model="currentFields.firstName.value"
-          :error-messages="errors"
-          :flags="flags"
-          :name="currentFields.firstName.name"
-          :label="currentFields.firstName.label"
-          @updateFlags="updateFlags"
-        />
-      </div>
-    </validation-provider>
-    <validation-provider
-      v-slot="{ errors, flags }"
-      :rules="currentFields.lastName.rules"
-      :name="currentFields.lastName.name"
-      immediate
-      slim
-    >
-      <div class="has-b-btm-marg">
-        <text-input
-          v-model="currentFields.lastName.value"
-          :error-messages="errors"
-          :flags="flags"
-          :name="currentFields.lastName.name"
-          :label="currentFields.lastName.label"
-          @updateFlags="updateFlags"
-        />
-      </div>
-    </validation-provider>
-    <validation-provider
-      v-slot="{ errors, flags }"
-      :rules="currentFields.email.rules"
-      :name="currentFields.email.name"
-      immediate
-      slim
-    >
-      <div class="has-b-btm-marg">
-        <text-input
-          v-model="currentFields.email.value"
-          :error-messages="errors"
-          :flags="flags"
-          :name="currentFields.email.name"
-          :label="currentFields.email.label"
-          @updateFlags="updateFlags"
+  <validation-observer v-slot="{ handleSubmit }">
+    <form :key="formKey" @submit.prevent="handleSubmit(onSubmit)">
+      <p v-if="badEmail" role="alert" class="has-b-btm-marg has-text-error">
+        <strong
+          >Error: You can't change your login email to {{ badEmail }} because an
+          account already exists with that email address.</strong
         >
-          <template v-slot:extra>
-            <p v-show="showConfirmedEmail" class="t-size-xs has-text-error">
-              <strong>Are you sure?</strong> Changing this email will
-              immediately log you out of texastribune.org, and you won't be able
-              to log back in with
-              <strong>{{ initialFields.email.value }}</strong
-              >.
-            </p>
-          </template>
-        </text-input>
-      </div>
-    </validation-provider>
-    <validation-provider
-      v-show="showConfirmedEmail"
-      v-slot="{ errors, flags }"
-      :rules="confirmedEmailRules"
-      :name="currentFields.confirmedEmail.name"
-      immediate
-      slim
-    >
-      <div class="has-b-btm-marg">
-        <text-input
-          v-model="currentFields.confirmedEmail.value"
-          :error-messages="errors"
-          :flags="flags"
-          :name="currentFields.confirmedEmail.name"
-          :label="currentFields.confirmedEmail.label"
-          prevent-paste
-          @updateFlags="updateFlags"
-        />
-      </div>
-    </validation-provider>
-    <validation-provider
-      v-slot="{ errors, flags }"
-      :rules="currentFields.zip.rules"
-      :name="currentFields.zip.name"
-      immediate
-      slim
-    >
-      <div class="has-b-btm-marg">
-        <text-input
-          v-model="currentFields.zip.value"
-          :error-messages="errors"
-          :flags="flags"
-          :name="currentFields.zip.name"
-          :label="currentFields.zip.label"
-          @updateFlags="updateFlags"
-        />
-      </div>
-    </validation-provider>
-    <validation-provider
-      v-slot="{ flags }"
-      :rules="currentFields.marketing.rules"
-      :name="currentFields.marketing.name"
-      immediate
-      slim
-    >
-      <div class="has-b-btm-marg">
-        <checkbox
-          v-model="currentFields.marketing.value"
-          :flags="flags"
-          :name="currentFields.marketing.name"
-          :label="currentFields.marketing.label"
-          @updateFlags="updateFlags"
-        />
-      </div>
-    </validation-provider>
-    <submit :disabled="!formIsValid || !formHasChanged" value="Save" />
-  </form>
+      </p>
+      <p
+        v-if="showSuccess"
+        role="alert"
+        class="has-b-btm-marg has-text-success"
+      >
+        <strong>Success! Your profile has been updated.</strong>
+      </p>
+      <validation-provider
+        v-slot="{ errors, pristine, changed, valid }"
+        rules="required"
+        name="firstName"
+        slim
+      >
+        <div class="has-b-btm-marg">
+          <text-input
+            v-model="currentFields.firstName.value"
+            label="First name"
+            name="firstName"
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          />
+        </div>
+      </validation-provider>
+      <validation-provider
+        v-slot="{ errors, pristine, changed, valid }"
+        rules="required"
+        name="lastName"
+        slim
+      >
+        <div class="has-b-btm-marg">
+          <text-input
+            v-model="currentFields.lastName.value"
+            label="Last name"
+            name="lastName"
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          />
+        </div>
+      </validation-provider>
+      <validation-provider
+        v-slot="{ errors, pristine, changed, valid }"
+        rules="required|email"
+        name="email"
+        slim
+      >
+        <div class="has-b-btm-marg">
+          <text-input
+            v-model="currentFields.email.value"
+            label="Login email"
+            name="email"
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          >
+            <template v-slot:extra>
+              <p v-show="showConfirmedEmail" class="t-size-xs has-text-error">
+                <strong>Are you sure?</strong> Changing this email will
+                immediately log you out of texastribune.org, and you won't be
+                able to log back in with
+                <strong>{{ initialFields.email }}</strong
+                >.
+              </p>
+            </template>
+          </text-input>
+        </div>
+      </validation-provider>
+      <validation-provider
+        v-show="showConfirmedEmail"
+        v-slot="{ errors, pristine, changed, valid }"
+        :rules="confirmedEmailRules"
+        name="confirmedEmail"
+        slim
+      >
+        <div class="has-b-btm-marg">
+          <text-input
+            v-model="currentFields.confirmedEmail.value"
+            label="Type your email again to confirm this change"
+            name="confirmedEmail"
+            prevent-paste
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          />
+        </div>
+      </validation-provider>
+      <validation-provider
+        v-slot="{ errors, pristine, changed, valid }"
+        rules="required|numeric"
+        name="zip"
+        slim
+      >
+        <div class="has-b-btm-marg">
+          <text-input
+            v-model="currentFields.zip.value"
+            label="ZIP code"
+            name="zip"
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          />
+        </div>
+      </validation-provider>
+      <validation-provider
+        v-slot="{ errors, pristine, changed, valid }"
+        name="marketing"
+        slim
+      >
+        <div class="has-b-btm-marg">
+          <checkbox
+            v-model="currentFields.marketing.value"
+            label="Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune. (Remember: Per our privacy policy, we won't share your data without permission.)"
+            name="marketing"
+            :error-messages="errors"
+            :pristine="pristine"
+            :changed="changed"
+            :valid="valid"
+            @updateFlags="updateFlags"
+          />
+        </div>
+      </validation-provider>
+
+      <submit value="Save" />
+    </form>
+  </validation-observer>
 </template>
 
 <script>
-import formMixin from '../../../form/mixins';
+import { localize } from 'vee-validate';
+
+import formMixin from '../../../form/mixins/form';
+
+localize({
+  en: {
+    fields: {
+      email: {
+        required: 'You must have an email to log into texastribune.org.',
+        email: 'Please enter a valid email address.',
+      },
+
+      confirmedEmail: {
+        required: 'Email addresses do not match.',
+        email: 'Email addresses do not match.',
+        confirm: 'Email addresses do not match.',
+      },
+
+      firstName: {
+        required:
+          'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+      },
+
+      lastName: {
+        required:
+          'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+      },
+
+      zip: {
+        required:
+          'Please enter your ZIP code to help us inform you about news and events in your area.',
+        numeric: 'Your ZIP code must contain only numbers.',
+      },
+    },
+  },
+});
 
 export default {
   name: 'EditContactInfoForm',
@@ -153,92 +201,26 @@ export default {
   },
 
   computed: {
-    emailHasChangedAndIsValid() {
+    showConfirmedEmail() {
       const { changed, valid } = this.currentFields.email;
+
       return changed && valid;
     },
 
-    showConfirmedEmail: {
-      get() {
-        const { isVisible } = this.currentFields.confirmedEmail;
-        return isVisible;
-      },
-
-      set(isVisible) {
-        this.currentFields.confirmedEmail.isVisible = isVisible;
-      },
-    },
-
     confirmedEmailRules() {
-      return { required: true, is: this.currentFields.email.value };
+      if (this.showConfirmedEmail) {
+        return 'required|email|confirm:@email';
+      }
+
+      return '';
     },
   },
 
   watch: {
-    emailHasChangedAndIsValid(newHasChangedAndIsValid) {
-      if (newHasChangedAndIsValid) {
-        this.showConfirmedEmail = true;
-      } else {
-        this.showConfirmedEmail = false;
-        this.resetValue('confirmedEmail');
+    showConfirmedEmail(newShowConfirmed, oldShowConfirmed) {
+      if (!newShowConfirmed && oldShowConfirmed) {
+        this.emptyOutField('confirmedEmail');
       }
-    },
-  },
-
-  methods: {
-    onSubmit() {
-      this.$emit('onSubmit', this.currentFields);
-      this.logToGtm();
-    },
-
-    logToGtm() {
-      const allEvents = [];
-      const baseEvent = {
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaLabel: this.ga.userPortal.labels['edit-contact-info'],
-      };
-
-      if (this.currentFields.email.changed) {
-        allEvents.push({
-          ...baseEvent,
-          gaAction: this.ga.userPortal.actions['edit-email'],
-        });
-      }
-      if (
-        this.currentFields.firstName.changed ||
-        this.currentFields.lastName.changed
-      ) {
-        allEvents.push({
-          ...baseEvent,
-          gaAction: this.ga.userPortal.actions['edit-name'],
-        });
-      }
-      if (this.currentFields.zip.changed) {
-        allEvents.push({
-          ...baseEvent,
-          gaAction: this.ga.userPortal.actions['edit-zip'],
-        });
-      }
-
-      const { changed, value } = this.currentFields.marketing;
-
-      if (changed && value) {
-        allEvents.push({
-          ...baseEvent,
-          gaAction: this.ga.userPortal.actions['marketing-opt-in'],
-        });
-      }
-      if (changed && !value) {
-        allEvents.push({
-          ...baseEvent,
-          gaAction: this.ga.userPortal.actions['marketing-opt-out'],
-        });
-      }
-
-      allEvents.forEach(event => {
-        window.dataLayer.push(event);
-      });
     },
   },
 };

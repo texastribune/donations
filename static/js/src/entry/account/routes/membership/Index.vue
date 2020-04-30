@@ -1,12 +1,13 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your membership information
-    </template>
-  </route-loader>
-
-  <div v-else class="has-ump-top-padding">
-    <credit-card-message :ga-close-label="ga.userPortal.labels.membership" />
+  <div class="has-ump-top-padding">
+    <messages :num-messages="1">
+      <template v-slot:messages="{ setMessageSeen }">
+        <credit-card-message
+          :ga-label="ga.userPortal.labels.membership"
+          @setMessageSeen="setMessageSeen"
+        />
+      </template>
+    </messages>
 
     <h1 class="has-ump-side-padding has-xl-btm-marg t-size-xl">
       Your Membership
@@ -26,60 +27,46 @@
       </div>
     </div>
 
-    <appeal /> <help membership />
+    <appeal />
+
+    <contact-us :ga-label="ga.userPortal.labels.membership" is-membership>
+      <template v-slot:text>
+        To update your membership status, contact us at
+      </template>
+    </contact-us>
   </div>
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
+import userMixin from '../../store/user/mixin';
 import routeMixin from '../mixin';
+
+import Appeal from '../../appeals/containers/AppealContainer.vue';
 import Expired from './containers/ExpiredContainer.vue';
 import RecurringOrCircle from './containers/RecurringOrCircleContainer.vue';
 import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
-import userMixin from '../../store/user/mixin';
-import RouteLoader from '../home/components/RouteLoader.vue';
-import LinkEmail from '../home/components/LinkEmail.vue';
-import Appeal from '../home/containers/AppealContainer.vue';
-import CreditCardMessage from '../home/components/CreditCardMessage.vue';
-import CircleAppeal from '../home/containers/CircleAppealContainer.vue';
-import Help from '../home/components/Help.vue';
-import { InvalidRouteError } from '../../errors';
+
+import LinkEmail from '../../link-email/components/MiniForm.vue';
+import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
+import Messages from '../../messages/components/Messages.vue';
+import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
+import ContactUs from '../../components/ContactUs.vue';
 
 export default {
   name: 'MembershipRoute',
 
   components: {
-    RouteLoader,
     Expired,
     RecurringOrCircle,
     SingleOrWillExpire,
     Appeal,
+    Messages,
     CreditCardMessage,
     CircleAppeal,
-    Help,
+    ContactUs,
     LinkEmail,
   },
 
   mixins: [routeMixin, userMixin],
-
-  data() {
-    return { title: 'Membership' };
-  },
-
-  methods: {
-    async fetchData() {
-      const {
-        is_recurring_donor,
-        is_single_donor,
-        is_circle_donor,
-      } = this.user;
-
-      const meetsCriteria =
-        is_recurring_donor || is_single_donor || is_circle_donor;
-
-      if (!meetsCriteria) throw new InvalidRouteError();
-    },
-  },
 };
 </script>

@@ -3,21 +3,24 @@
     :initial-fields="initialFields"
     :bad-email="badEmail"
     :show-success="showSuccess"
-    @onSubmit="onSubmit"
+    @onSubmit="buildDispatches"
     @onFormHasChangedToggle="setShowModal"
     @onFormIsPristineToggle="resetBadEmailAndSuccess"
   />
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import userMixin from '../../../store/user/mixin';
 import tokenUserMixin from '../../../store/token-user/mixin';
 import contextMixin from '../../../store/context/mixin';
-import getTokenIdentity from '../../../utils/get-token-identity';
-import { logOut } from '../../../utils/auth-actions';
+
 import EditForm from '../components/EditForm.vue';
+
+import { logOut } from '../../../utils/auth-actions';
+import logError from '../../../utils/log-error';
+
+import { NetworkError } from '../../../errors';
+import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 
 export default {
   name: 'EditContactInfoFormContainer',
@@ -32,53 +35,15 @@ export default {
 
   computed: {
     initialFields() {
-      const { first_name, last_name, postal_code, identities } = this.user;
-      const { email } = this.tokenUser;
-      const { tribune_offers_consent } = getTokenIdentity(identities, email);
+      const { firstName, lastName, zip, email, wantsMarketing } = this.user;
 
       return {
-        firstName: {
-          name: 'firstName',
-          label: 'First name',
-          value: first_name || '',
-          rules: { required: true },
-          isVisible: true,
-        },
-        lastName: {
-          name: 'lastName',
-          label: 'Last name',
-          value: last_name || '',
-          rules: { required: true },
-          isVisible: true,
-        },
-        zip: {
-          name: 'zip',
-          label: 'ZIP code',
-          value: postal_code || '',
-          rules: { required: true, numeric: true },
-          isVisible: true,
-        },
-        email: {
-          name: 'email',
-          label: 'Login email',
-          value: email,
-          rules: { required: true, email: true },
-          isVisible: true,
-        },
-        confirmedEmail: {
-          name: 'confirmedEmail',
-          label: 'Type your email again to confirm this change',
-          value: '',
-          isVisible: false,
-        },
-        marketing: {
-          name: 'marketing',
-          label:
-            "Yes, I'd like to be among the first to know about special announcements, events and membership news from the Tribune. (Remember: Per our privacy policy, we won't share your data without permission.)",
-          value: tribune_offers_consent,
-          rules: {},
-          isVisible: true,
-        },
+        firstName,
+        lastName,
+        email,
+        zip,
+        confirmedEmail: '',
+        marketing: wantsMarketing,
       };
     },
   },
@@ -98,11 +63,8 @@ export default {
     getUserPayload(fields) {
       const userPayload = {};
 
-      if (fields.firstName.changed) {
+      if (fields.firstName.changed || fields.lastName.changed) {
         userPayload.first_name = fields.firstName.value;
-      }
-
-      if (fields.lastName.changed) {
         userPayload.last_name = fields.lastName.value;
       }
 
@@ -127,56 +89,106 @@ export default {
       return identityPayload;
     },
 
-    async onSubmit(fields) {
+    async buildDispatches(fields) {
       const dispatches = [];
       const userPayload = this.getUserPayload(fields);
       const identityPayload = this.getIdentityPayload(fields);
-      const newEmail = identityPayload.email || null;
+      const newEmail = identityPayload.email;
 
       if (Object.keys(userPayload).length > 0) {
-        dispatches.push(this.updateUser(userPayload));
+        dispatches.push(this[USER_TYPES.updateUser](userPayload));
       }
 
       if (Object.keys(identityPayload).length > 0) {
-        dispatches.push(this.updateIdentity(identityPayload));
+        dispatches.push(this[USER_TYPES.updateIdentity](identityPayload));
       }
 
-      await this.updateContactInfo(dispatches, newEmail);
+      if (dispatches.length) {
+        await this.updateContactInfo(dispatches, newEmail);
+        this.logToGtm(fields);
+      }
     },
 
     async updateContactInfo(dispatches, newEmail) {
       let badEmailUpdate = false;
 
-      this.setAppIsFetching(true);
-      this.resetBadEmailAndSuccess();
+      this[CONTEXT_TYPES.setIsFetching](true);
 
       try {
         await Promise.all(dispatches);
       } catch (err) {
         if (
-          err.response &&
-          err.response.status === 400 &&
-          err.response.data.detail === "can't change email"
+          err instanceof NetworkError &&
+          err.status === 400 &&
+          err.meta.data.detail === "can't change email"
         ) {
           badEmailUpdate = true;
+          err.meta.newEmail = newEmail;
+          logError({ err, level: 'warning' });
         } else {
           throw err;
         }
       }
 
       if (newEmail && !badEmailUpdate) {
-        logOut(`/account/changed-email?email=${encodeURIComponent(newEmail)}`);
-      } else {
-        await this.getUser();
-
-        if (badEmailUpdate) {
-          this.badEmail = newEmail;
-        } else {
-          this.showSuccess = true;
-        }
-
-        this.setAppIsFetching(false);
+        logOut({
+          redirectName: 'changedEmail',
+          redirectQueryParams: { email: newEmail },
+        });
+      } else if (newEmail && badEmailUpdate) {
+        this.badEmail = newEmail;
+      } else if (!newEmail) {
+        this.showSuccess = true;
       }
+
+      await this[USER_TYPES.getUser]();
+
+      this[CONTEXT_TYPES.setIsFetching](false);
+    },
+
+    logToGtm(fields) {
+      const allEvents = [];
+      const baseEvent = {
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaLabel: this.ga.userPortal.labels['edit-contact-info'],
+      };
+
+      if (fields.email.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-email'],
+        });
+      }
+      if (fields.firstName.changed || fields.lastName.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-name'],
+        });
+      }
+      if (fields.zip.changed) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['edit-zip'],
+        });
+      }
+
+      if (fields.marketing.changed && fields.marketing.value) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['marketing-opt-in'],
+        });
+      }
+      if (fields.marketing.changed && !fields.marketing.value) {
+        allEvents.push({
+          ...baseEvent,
+          gaAction: this.ga.userPortal.actions['marketing-opt-out'],
+        });
+      }
+
+      allEvents.forEach(event => {
+        window.dataLayer.push(event);
+      });
     },
   },
 };

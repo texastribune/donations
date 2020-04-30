@@ -1,7 +1,11 @@
-import Home from './home/Index.vue';
+import store from '../store';
 
-const HomeExact = () =>
-  import(/* webpackChunkName: "home-exact-route" */ './home-exact/Index.vue');
+import Account from './account/Index.vue';
+
+import { USER_MODULE, USER_TYPES } from '../store/types';
+
+const AccountOverview = () =>
+  import(/* webpackChunkName: "account-overview-route" */ './account-overview/Index.vue');
 const EditContactInfo = () =>
   import(/* webpackChunkName: "edit-contact-info-route" */ './edit-contact-info/Index.vue');
 const Ambassador = () =>
@@ -29,85 +33,166 @@ const routes = [
     name: 'logged-in',
     component: LoggedIn,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: true,
+      title: 'Logged In',
+    },
   },
   {
     path: '/logged-out/',
     name: 'logged-out',
     component: LoggedOut,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Logged Out',
+    },
   },
   {
     path: '/changed-email/',
     name: 'changed-email',
     component: ChangedEmail,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Verify your changed email',
+    },
   },
   {
     path: '/confirm-linked-identity/',
     name: 'confirm-linked-identity',
     component: ConfirmLinkedIdentity,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: false },
+    meta: {
+      isProtected: false,
+      title: 'Confirm linked email address',
+    },
   },
   {
     path: '/',
-    component: Home,
+    component: Account,
     pathToRegexpOptions: { strict: true },
-    meta: { isProtected: true },
+    meta: {
+      isProtected: true,
+      title: null,
+      async fetchData() {
+        await store.dispatch(`${USER_MODULE}/${USER_TYPES.getUser}`);
+      },
+    },
     children: [
       {
         path: '',
-        name: 'home',
-        component: HomeExact,
+        name: 'accountOverview',
+        component: AccountOverview,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'Home',
+          requiresParentFetch: false,
+        },
       },
       {
         path: 'edit-contact-info/',
         name: 'edit-contact-info',
         component: EditContactInfo,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'Your Profile Settings',
+          requiresParentFetch: false,
+        },
       },
       {
         path: 'ambassador/',
         name: 'ambassador',
         component: Ambassador,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'Refer a Friend',
+          requiresParentFetch: false,
+        },
       },
       {
         path: 'membership/',
         name: 'membership',
         component: Membership,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'Membership',
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const hasGivenNotCustom =
+            store.getters[`${USER_MODULE}/hasGivenNotCustom`];
+
+          if (hasGivenNotCustom) {
+            return next();
+          }
+          return next({ name: 'accountOverview' });
+        },
       },
       {
         path: 'payments/',
         name: 'payments',
         component: Payments,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'Donation History',
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const isNeverGiven = store.getters[`${USER_MODULE}/isNeverGiven`];
+
+          if (!isNeverGiven) {
+            return next();
+          }
+          return next({ name: 'accountOverview' });
+        },
       },
       {
         path: 'blast/',
         name: 'blast',
         component: Blast,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'The Blast',
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const isBlastSubscriber =
+            store.getters[`${USER_MODULE}/isBlastSubscriber`];
+
+          if (isBlastSubscriber) {
+            return next();
+          }
+          return next({ name: 'accountOverview' });
+        },
       },
       {
         path: 'blast-payments/',
         name: 'blast-payments',
         component: BlastPayments,
         pathToRegexpOptions: { strict: true },
-        meta: { isProtected: true },
+        meta: {
+          isProtected: true,
+          title: 'The Blast Payment History',
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const isBlastSubscriber =
+            store.getters[`${USER_MODULE}/isBlastSubscriber`];
+
+          if (isBlastSubscriber) {
+            return next();
+          }
+          return next({ name: 'accountOverview' });
+        },
       },
-      { path: '*', name: 'not-found', redirect: { name: 'home' } },
+      { path: '*', name: 'not-found', redirect: { name: 'accountOverview' } },
     ],
   },
 ];

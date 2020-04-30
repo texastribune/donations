@@ -8,6 +8,7 @@
 
 <script>
 import userMixin from '../../../store/user/mixin';
+
 import ReferralForm from '../components/ReferralForm.vue';
 
 export default {
@@ -23,16 +24,7 @@ export default {
 
   computed: {
     initialFields() {
-      return {
-        url: {
-          value: this.user.ambassador_url,
-          name: 'url',
-          label: 'personal referral link',
-          rules: { url: true, required: true },
-          isVisible: true,
-          readOnly: true,
-        },
-      };
+      return { url: this.user.ambassadorUrl };
     },
   },
 
@@ -46,6 +38,13 @@ export default {
         setTimeout(() => {
           this.didCopy = false;
         }, 1000);
+
+        window.dataLayer.push({
+          event: this.ga.ambassadorsCustomEventName,
+          gaCategory: this.ga.tribuneAmbassadors.category,
+          gaAction: this.ga.tribuneAmbassadors.actions.link,
+          gaLabel: this.ga.tribuneAmbassadors.labels.ambassador,
+        });
       } catch (err) {
         // do nothing; just prevent
         // error page from appearing

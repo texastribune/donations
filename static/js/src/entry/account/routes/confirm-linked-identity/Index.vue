@@ -1,48 +1,51 @@
 <template>
   <div>
-    <no-routes-nav-bar />
+    <basic-nav-bar />
+
     <main class="l-minimal has-bg-white-off has-xl-padding">
-      <route-loader v-if="routeIsFetching" />
-      <div v-else class="l-minimal__content">
-        <logged-in
+      <div class="l-minimal__content">
+        <ready
+          v-if="showReady"
           :existing-email="existingEmail"
           :email-to-link="emailToLink"
           :ticket="ticket"
-          @goHome="goHome"
         />
         <logged-out
+          v-if="showLoggedOut"
+          :existing-email="existingEmail"
+          :email-to-link="emailToLink"
+          :ticket="ticket"
+        />
+        <wrong-account
+          v-if="showWrongAccount"
           :existing-email="existingEmail"
           :email-to-link="emailToLink"
           :ticket="ticket"
         />
       </div>
     </main>
-    <no-routes-site-footer />
+
+    <basic-site-footer />
   </div>
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import jwt from 'jsonwebtoken';
 
-import routeMixin from '../mixin';
 import tokenUserMixin from '../../store/token-user/mixin';
 import userMixin from '../../store/user/mixin';
-import RouteLoader from './components/RouteLoader.vue';
-import LoggedIn from './containers/LoggedInContainer.vue';
-import LoggedOut from './containers/LoggedOutContainer.vue';
+import routeMixin from '../mixin';
+
+import Ready from './components/Ready.vue';
+import LoggedOut from './components/LoggedOut.vue';
+import WrongAccount from './components/WrongAccount.vue';
 
 export default {
   name: 'ConfirmLinkedIdentityRoute',
 
-  components: { LoggedIn, LoggedOut, RouteLoader },
+  components: { Ready, LoggedOut, WrongAccount },
 
   mixins: [routeMixin, userMixin, tokenUserMixin],
-
-  data() {
-    return { title: 'Confirm linked email address' };
-  },
 
   computed: {
     ticket() {
@@ -50,25 +53,36 @@ export default {
     },
 
     existingEmail() {
-      const { existing_email } = jwt.decode(this.ticket);
-      return existing_email;
+      const { existing_email: existingEmail } = jwt.decode(this.ticket);
+      return existingEmail;
     },
 
     emailToLink() {
-      const { email_to_link } = jwt.decode(this.ticket);
-      return email_to_link;
+      const { email_to_link: emailToLink } = jwt.decode(this.ticket);
+      return emailToLink;
+    },
+
+    isRightAccount() {
+      return this.existingEmail === this.user.email;
+    },
+
+    showReady() {
+      return this.tokenUser.isReady && this.isRightAccount;
+    },
+
+    showLoggedOut() {
+      return !this.tokenUser.isLoggedIn;
+    },
+
+    showWrongAccount() {
+      return this.tokenUser.isReady && !this.isRightAccount;
     },
   },
 
-  methods: {
-    goHome() {
-      this.$router.push({ name: 'home' });
-    },
-
-    // eslint-disable-next-line consistent-return
-    fetchData() {
-      if (this.accessToken) return this.getUser();
-    },
+  mounted() {
+    if (this.tokenUser.error) {
+      throw this.tokenUser.error;
+    }
   },
 };
 </script>

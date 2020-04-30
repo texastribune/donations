@@ -1,11 +1,5 @@
 <template>
-  <route-loader v-if="routeIsFetching">
-    <template v-slot:text>
-      Grabbing your contact information
-    </template>
-  </route-loader>
-
-  <div v-else>
+  <div>
     <h1
       class="has-ump-side-padding has-ump-top-padding has-l-btm-marg t-size-xl"
     >
@@ -17,11 +11,16 @@
         <div class="has-xxl-btm-marg">
           <edit-form @setShowModal="setShowModal" />
         </div>
-        <links />
+
+        <internal-nav />
       </div>
     </div>
 
-    <help edit />
+    <contact-us :ga-label="ga.userPortal.labels['edit-contact-info']">
+      <template v-slot:text>
+        Have questions about your account? Or feedback about this website? Email
+      </template>
+    </contact-us>
 
     <confirm-modal :resolve="checkModalResolve" />
   </div>
@@ -29,28 +28,27 @@
 
 <script>
 import routeMixin from '../mixin';
-import Help from '../home/components/Help.vue';
-import RouteLoader from '../home/components/RouteLoader.vue';
-import Links from './containers/LinksContainer.vue';
+
 import EditForm from './containers/EditFormContainer.vue';
+
+import ContactUs from '../../components/ContactUs.vue';
 import ConfirmModal from './components/ConfirmModal.vue';
+import InternalNav from './components/InternalNav.vue';
 
 export default {
   name: 'EditContactInfoRoute',
 
   components: {
-    RouteLoader,
-    Links,
+    InternalNav,
     EditForm,
     ConfirmModal,
-    Help,
+    ContactUs,
   },
 
   mixins: [routeMixin],
 
   data() {
     return {
-      title: 'Your Profile Settings',
       showModal: false,
       checkModalResolve: () => {},
     };

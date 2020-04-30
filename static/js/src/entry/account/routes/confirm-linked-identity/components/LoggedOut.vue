@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { logIn } from '../../../utils/auth-actions';
+
 export default {
   name: 'ConfirmLinkedIdentityLoggedOut',
 
@@ -43,6 +45,11 @@ export default {
     },
 
     emailToLink: {
+      type: String,
+      required: true,
+    },
+
+    ticket: {
       type: String,
       required: true,
     },
@@ -57,7 +64,10 @@ export default {
         gaLabel: this.ga.userPortal.labels['login-linked-identity'],
       });
 
-      this.$emit('logIn');
+      logIn({
+        redirectName: 'confirmLinkedIdentity',
+        redirectQueryParams: { ticket: this.ticket },
+      });
     },
 
     goToHomePage() {
@@ -68,7 +78,7 @@ export default {
         gaLabel: this.ga.userPortal.labels['login-linked-identity'],
       });
 
-      window.location.href = 'https://www.texastribune.org';
+      window.location.href = 'https://www.texastribune.org/';
     },
   },
 };

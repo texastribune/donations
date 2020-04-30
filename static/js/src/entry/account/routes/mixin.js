@@ -1,101 +1,72 @@
-import { logOut } from '../utils/auth-actions';
-import logError from '../utils/log-error';
 import tokenUserMixin from '../store/token-user/mixin';
-import contextMixin from '../store/context/mixin';
-import { InvalidRouteError } from '../errors';
-import { TITLE_SUFFIX } from '../constants';
+
+import { logOut } from '../utils/auth-actions';
+
+import { REDIRECTS_META } from '../constants';
 
 export default {
-  mixins: [tokenUserMixin, contextMixin],
-
-  props: {
-    parentRouteIsFetching: {
-      type: Boolean,
-      required: true,
-    },
-  },
+  mixins: [tokenUserMixin],
 
   data() {
     return { routeIsFetching: true };
   },
 
-  async created() {
-    if (!this.parentRouteIsFetching) {
-      // top level route; do data fetch immediately
-      // because there's no parent fetch to wait on
-      await this.doRouteFetch();
-    }
+  computed: {
+    isLoggedIn() {
+      return this.tokenUser.isLoggedIn;
+    },
+
+    tokenUserError() {
+      return this.tokenUser.error;
+    },
   },
 
-  methods: {
-    setTitle() {
-      document.title = `${this.title} ${TITLE_SUFFIX}`;
-    },
+  async mounted() {
+    if (this.hasRouteFetch) {
+      await this.fetchData();
+    }
 
-    logPageView() {
-      window.dataLayer.push({
-        event: 'userPortalPageview',
-        pagePath: window.location.pathname,
-        pageTitle: document.title,
-      });
-    },
-
-    async doRouteFetch() {
-      this.routeIsFetching = true;
-
-      try {
-        await this.fetchData();
-
-        if (this.title) {
-          this.setTitle();
-          this.logPageView();
-        }
-
-        this.routeIsFetching = false;
-      } catch (err) {
-        if (err instanceof InvalidRouteError) {
-          this.$router.push({ name: 'home' });
-        } else {
-          // TODO: throw to errorCaptured in <App />
-          this.setAppError(err);
-          logError(err);
-        }
-      }
-    },
-
-    // eslint-disable-next-line no-empty-function
-    async fetchData() {},
+    this.routeIsFetching = false;
   },
 
   watch: {
-    // watch the value of accessToken as we refresh
-    // it every 15 minutes
-    accessToken(newToken, oldToken) {
-      const { tokenUserError } = this;
+    isLoggedIn(newIsLoggedIn, oldIsLoggedIn) {
       const { isProtected } = this.$route.meta;
 
-      if (isProtected && oldToken && !newToken) {
-        if (tokenUserError) {
-          // Auth0 error encountered and user is on a
-          // log-in-required route; show error page
-          // TODO: show modal
-          throw tokenUserError;
-        } else {
-          // user is on a login-required route and
-          // either their session has expired or they
-          // have logged out elsewhere; log them out here too
-          // TODO: show modal
-          logOut();
-        }
+      if (isProtected && oldIsLoggedIn && !newIsLoggedIn) {
+        logOut();
       }
     },
 
-    async parentRouteIsFetching(newParentIsFetching, oldParentIsFetching) {
-      // if a child route has a parent that's doing
-      // a data fetch, wait for the parent fetch to complete
-      // in case the child's fetch depends on data from it
-      if (oldParentIsFetching && !newParentIsFetching) {
-        await this.doRouteFetch();
+    tokenUserError(newTokenUserError, oldTokenUserError) {
+      const { isProtected } = this.$route.meta;
+
+      if (isProtected && newTokenUserError && !oldTokenUserError) {
+        throw this.tokenUserError;
+      }
+    },
+  },
+
+  methods: {
+    redirectFromQueryParams() {
+      const { redirectName, redirectQueryParams } = this.$route.query;
+      const redirectMeta = REDIRECTS_META[redirectName];
+
+      if (redirectMeta) {
+        const { external, url, routeName } = redirectMeta;
+
+        setTimeout(() => {
+          if (external) {
+            window.location.href = url;
+          } else {
+            this.$router.push({
+              name: routeName,
+              query: redirectQueryParams
+                ? JSON.parse(decodeURIComponent(redirectQueryParams))
+                : {},
+            });
+          }
+        }, 1800);
       }
     },
   },

@@ -7,15 +7,13 @@ ENV NODE_VERSION=node_12.x
 ENV FLASK_DEBUG 1
 ENV NPM_CONFIG_LOGLEVEL warn
 
-# install Node and Yarn
+# install Node and NPM
 RUN apt-get -yq update && \
     apt-get -yq install apt-transport-https && \
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list && \
     curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
     echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" > /etc/apt/sources.list.d/nodesource.list && \
     apt-get -yq update && \
-    apt-get -y install nodejs yarn && \
+    apt-get -y install nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -26,9 +24,9 @@ COPY static /app/static
 COPY webpack /app/webpack
 COPY config /app/config
 COPY package.json /app/
-COPY yarn.lock /app/
+COPY package-lock.json /app/
 COPY babel.config.js /app/
-RUN yarn
+RUN npm install
 
 RUN pip install --upgrade pip
 COPY requirements.txt /app/

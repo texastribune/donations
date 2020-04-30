@@ -1,41 +1,24 @@
 <template>
   <section class="c-detail-box">
-    <div class="has-xxl-btm-marg"><info-list :items="data" /></div>
+    <div class="has-xxl-btm-marg">
+      <info-list :items="data">
+        <template v-slot:text="{ item: { extra, key } }">
+          <template v-if="key === 'donation'">
+            {{ extra.amount | currency }},
+            {{ extra.lastTransactionDate | longDate }}
+          </template>
+          <template v-if="key === 'payment'">
+            {{ extra.brand }} ending in {{ extra.last4 }}
+          </template>
+          <template v-if="key === 'status'">
+            Your membership is good through
+            {{ extra.membershipExpirationDate | longDate }}.
+          </template>
+        </template>
+      </info-list>
+    </div>
 
-    <ul class="c-link-list t-links-underlined">
-      <li class="has-xs-btm-marg">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <router-link
-            ga-on="click"
-            :to="{ name: 'payments' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.inline"
-            :ga-event-label="ga.userPortalNav.labels.payments"
-          >
-            See your donation history
-          </router-link>
-        </span>
-      </li>
-      <li v-if="isSingleDonor">
-        <span class="c-link-list__arrow has-text-teal">
-          <strong>&rarr;</strong>
-        </span>
-        <span class="has-text-gray-dark">
-          <a
-            ga-on="click"
-            :href="donateUrl"
-            :ga-event-category="ga.donations.category"
-            :ga-event-action="ga.donations.actions['membership-intent']"
-            :ga-event-label="ga.donations.labels['upgrade-membership']"
-          >
-            Become a sustaining member
-          </a>
-        </span>
-      </li>
-    </ul>
+    <user-internal-nav show-become-sustaining show-donation-history />
   </section>
 </template>
 
@@ -48,14 +31,46 @@ export default {
   components: { InfoList },
 
   props: {
-    data: {
-      type: Array,
+    lastTransaction: {
+      type: Object,
       required: true,
     },
 
-    isSingleDonor: {
-      type: Boolean,
+    membershipExpirationDate: {
+      type: String,
       required: true,
+    },
+  },
+
+  computed: {
+    data() {
+      const data = [];
+      const { membershipExpirationDate } = this;
+      const { amount, card, date: lastTransactionDate } = this.lastTransaction;
+
+      data.push({
+        key: 'donation',
+        heading: 'Donation',
+        extra: { amount, lastTransactionDate },
+      });
+
+      if (card) {
+        const { brand, last4 } = card;
+
+        data.push({
+          key: 'payment',
+          heading: 'Payment method',
+          extra: { brand, last4 },
+        });
+      }
+
+      data.push({
+        key: 'status',
+        heading: 'Status',
+        extra: { membershipExpirationDate },
+      });
+
+      return data;
     },
   },
 };

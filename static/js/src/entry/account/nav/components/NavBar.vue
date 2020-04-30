@@ -10,16 +10,15 @@
 
       <div class="c-navbar__content t-size-xxs t-uppercase t-lsp-m">
         <ul
-          v-if="userFetchComplete"
           class="c-navbar__items c-navbar__items--no-space is-hidden-until-bp-l"
         >
-          <li v-if="showHomeLink" class="c-navbar__item">
+          <li v-if="showUserLinks" class="c-navbar__item">
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               active-class="is-active"
               exact
               ga-on="click"
-              :to="{ name: 'home' }"
+              :to="{ name: 'accountOverview' }"
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.top"
               :ga-event-label="ga.userPortalNav.labels.home"
@@ -27,7 +26,7 @@
               <strong>Account Overview</strong>
             </router-link>
           </li>
-          <li v-if="showMembershipLink" class="c-navbar__item">
+          <li v-if="showUserLinks && showMembershipLink" class="c-navbar__item">
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               active-class="is-active"
@@ -40,7 +39,7 @@
               <strong>Membership</strong>
             </router-link>
           </li>
-          <li v-if="showBlastLink" class="c-navbar__item">
+          <li v-if="showUserLinks && showBlastLink" class="c-navbar__item">
             <router-link
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               active-class="is-active"
@@ -55,7 +54,7 @@
           </li>
           <li class="c-navbar__item">
             <a
-              href="/donate"
+              href="/donate?installmentPeriod=yearly&amount=150&campaignId=7016f0000013La7AAE"
               class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"
               ga-on="click"
               :ga-event-category="ga.donations.category"
@@ -112,14 +111,14 @@
       v-if="showDropdown"
       class="c-navbar__dropdown is-hidden-from-bp-l t-size-xxs t-uppercase t-lsp-m"
     >
-      <ul v-if="userFetchComplete" class="c-navbar__dropdown-items">
-        <li v-if="showHomeLink" class="c-navbar__dropdown-item">
+      <ul class="c-navbar__dropdown-items">
+        <li v-if="showUserLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable"
             active-class="is-active"
             exact
             ga-on="click"
-            :to="{ name: 'home' }"
+            :to="{ name: 'accountOverview' }"
             :ga-event-category="ga.userPortalNav.category"
             :ga-event-action="ga.userPortalNav.actions.top"
             :ga-event-label="ga.userPortalNav.labels.home"
@@ -127,7 +126,10 @@
             <strong>Account Overview</strong>
           </router-link>
         </li>
-        <li v-if="showMembershipLink" class="c-navbar__dropdown-item">
+        <li
+          v-if="showUserLinks && showMembershipLink"
+          class="c-navbar__dropdown-item"
+        >
           <router-link
             class="c-navbar__clickable"
             active-class="is-active"
@@ -140,7 +142,7 @@
             <strong>Membership</strong>
           </router-link>
         </li>
-        <li v-if="showEditContactInfoLink" class="c-navbar__dropdown-item">
+        <li v-if="showUserLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable"
             active-class="is-active"
@@ -153,7 +155,7 @@
             <strong>Profile Settings</strong>
           </router-link>
         </li>
-        <li v-if="showAmbassadorLink" class="c-navbar__dropdown-item">
+        <li v-if="showUserLinks" class="c-navbar__dropdown-item">
           <router-link
             class="c-navbar__clickable"
             active-class="is-active"
@@ -166,7 +168,10 @@
             <strong>Tribune Ambassadors</strong>
           </router-link>
         </li>
-        <li v-if="showBlastLink" class="c-navbar__dropdown-item">
+        <li
+          v-if="showUserLinks && showBlastLink"
+          class="c-navbar__dropdown-item"
+        >
           <router-link
             class="c-navbar__clickable"
             active-class="is-active"
@@ -181,7 +186,7 @@
         </li>
         <li class="c-navbar__dropdown-item">
           <a
-            href="/donate"
+            href="/donate?installmentPeriod=yearly&amount=150&campaignId=7016f0000013La7AAE"
             class="c-navbar__clickable"
             ga-on="click"
             :ga-event-category="ga.donations.category"
@@ -213,42 +218,25 @@
 </template>
 
 <script>
-// TODO: Make this more generic w/ slots and move to base components directory
-
 import { logOut, logIn } from '../../utils/auth-actions';
 
 export default {
   name: 'NavBar',
 
   props: {
-    showHomeLink: {
+    showUserLinks: {
       type: Boolean,
       required: true,
     },
 
     showBlastLink: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
     showMembershipLink: {
       type: Boolean,
-      required: true,
-    },
-
-    showEditContactInfoLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    showAmbassadorLink: {
-      type: Boolean,
-      required: true,
-    },
-
-    userFetchComplete: {
-      type: Boolean,
-      required: true,
+      default: false,
     },
 
     isLoggedIn: {
