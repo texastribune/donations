@@ -3,7 +3,7 @@ gunicorn==19.9.0
 pytz==2019.3
 Flask-WTF==0.14.3
 WTForms==2.2.1
-stripe==2.41.1
+stripe==2.47.0
 celery==4.2.1
 redis==2.10.6
 validate_email==1.3
