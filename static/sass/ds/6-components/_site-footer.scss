@@ -1,8 +1,5 @@
 .c-site-footer {
   &__inner {
-    display: grid;
-    gap: $size-b;
-    grid-gap: $size-b;
     grid-template-columns: repeat(3, 1fr);
 
     @include mq($until: bp-s) {
