@@ -52,7 +52,8 @@ from util import (
     clean,
     notify_slack,
     send_email_new_business_membership,
-    send_multiple_account_warning, send_slack_message,
+    send_multiple_account_warning,
+    send_slack_message,
 )
 from validate_email import validate_email
 from charges import charge, ChargeException
@@ -363,6 +364,8 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         body = e.json_body
         err = body.get("error", {})
         message = err.get("message", "")
+        if message:
+            message = f"{message} Having issues making a donation? You can also <a href='https://www.paypal.me/texastribune'>give via PayPal here</a>."
         # at this point, amount has been converted to a float
         # bring it back to a string for the rehydration of the form
         form_data["amount"] = str(form_data["amount"])
