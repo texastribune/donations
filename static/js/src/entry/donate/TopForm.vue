@@ -194,7 +194,6 @@
 </template>
 
 <script>
-// eslint-disable-no-v-html
 import Hidden from '../../connected-elements/Hidden.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
