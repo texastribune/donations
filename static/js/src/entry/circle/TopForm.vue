@@ -9,9 +9,11 @@
     <div v-show="serverErrorMessage" class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
-          <p class="form__error form__error--prominent">
-            {{ serverErrorMessage }}
-          </p>
+          <!-- eslint-disable-next-line vue/no-v-html -->
+          <p
+            class="form__error form__error--prominent"
+            v-html="serverErrorMessage"
+          ></p>
         </div>
       </div>
     </div>

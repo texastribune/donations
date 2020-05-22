@@ -8,9 +8,11 @@
   >
     <div v-if="serverErrorMessage" class="grid_row grid_separator">
       <div class="col">
-        <p class="form__error form__error--prominent">
-          {{ serverErrorMessage }}
-        </p>
+        <!-- eslint-disable-next-line vue/no-v-html -->
+        <p
+          class="form__error form__error--prominent"
+          v-html="serverErrorMessage"
+        ></p>
       </div>
     </div>
 
@@ -192,6 +194,7 @@
 </template>
 
 <script>
+// eslint-disable-no-v-html
 import Hidden from '../../connected-elements/Hidden.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
