@@ -364,8 +364,8 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         body = e.json_body
         err = body.get("error", {})
         message = err.get("message", "")
-        if message:
-            message = f"{message} Our apologies, we’re having some trouble processing your donation. You can <a href='https://www.paypal.me/texastribune'>give via PayPal here</a>."
+        # delete this once we hear back from stripe
+        message = f"{message} Having issues making a donation? You can also <a href='https://www.paypal.me/texastribune'>give via PayPal here</a>."
         # at this point, amount has been converted to a float
         # bring it back to a string for the rehydration of the form
         form_data["amount"] = str(form_data["amount"])
