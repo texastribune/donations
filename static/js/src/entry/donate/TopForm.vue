@@ -8,11 +8,12 @@
   >
     <div v-if="serverErrorMessage" class="grid_row grid_separator">
       <div class="col">
-        <!-- eslint-disable-next-line vue/no-v-html -->
+        <!-- eslint-disable -->
         <p
           class="form__error form__error--prominent"
           v-html="serverErrorMessage"
         ></p>
+        <!-- eslint-enable -->
       </div>
     </div>
 
