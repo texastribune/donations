@@ -130,10 +130,7 @@ export default {
       }
 
       if (newEmail && !badEmailUpdate) {
-        logOut({
-          redirectName: 'changedEmail',
-          redirectQueryParams: { email: newEmail },
-        });
+        logOut({ redirectName: 'changedEmail' });
       } else if (newEmail && badEmailUpdate) {
         this.badEmail = newEmail;
       } else if (!newEmail) {
