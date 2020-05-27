@@ -6,6 +6,8 @@ const CommonConfig = require('./config.common.js');
 module.exports = Merge(CommonConfig, {
   mode: 'development',
 
+  devtool: 'eval-source-map',
+
   watch: true,
 
   cache: false,
