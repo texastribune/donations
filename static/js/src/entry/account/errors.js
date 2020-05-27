@@ -24,9 +24,6 @@ export class UnverifiedError extends AppError {
 
 export class Auth0Error extends AppError {
   constructor({ message }) {
-    super({
-      name: 'Auth0Error',
-      message,
-    });
+    super({ name: 'Auth0Error', message });
   }
 }
