@@ -117,12 +117,19 @@ axios.interceptors.response.use(
   response => response,
   error => {
     const { code, response, message } = error;
-    const errorDetail = { message };
+    const errorDetail = { message, extra: {} };
 
     if (response) {
       const { data, status } = response;
       errorDetail.status = status;
-      errorDetail.extra = { code, data };
+      errorDetail.extra.data = data;
+      errorDetail.extra.gotResponse = true;
+    } else {
+      errorDetail.extra.gotResponse = false;
+    }
+
+    if (code) {
+      errorDetail.extra.code = code;
     }
 
     return Promise.reject(new AxiosError(errorDetail));
