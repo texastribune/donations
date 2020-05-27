@@ -1,4 +1,3 @@
-// third party
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VModal from 'vue-js-modal';
@@ -14,11 +13,9 @@ import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry } from '@sentry/browser';
 import getYear from 'date-fns/get_year';
 
-// route and store
 import routes from './routes';
 import store from './store';
 
-// components
 import App from './App.vue';
 import UserSiteFooter from './nav/components/UserSiteFooter.vue';
 import BasicSiteFooter from './nav/components/BasicSiteFooter.vue';
@@ -28,7 +25,6 @@ import UserInternalNav from './nav/components/UserInternalNav.vue';
 import Icon from './components/Icon.vue';
 import BaseButton from './components/BaseButton.vue';
 
-// utils
 import formatCurrency from './utils/format-currency';
 import formatLongDate from './utils/format-long-date';
 import formatShortDate from './utils/format-short-date';
@@ -37,8 +33,7 @@ import logError from './utils/log-error';
 import setTitle from './utils/set-title';
 import logPageView from './utils/log-page-view';
 
-// constants
-import { UnverifiedError, NetworkError } from './errors';
+import { UnverifiedError, AxiosError } from './errors';
 import {
   SENTRY_DSN,
   SENTRY_ENVIRONMENT,
@@ -121,35 +116,22 @@ extendValidationRule('confirm', {
 axios.interceptors.response.use(
   response => response,
   error => {
-    const axiosDetail = error.toJSON();
-    const errorDetail = {
-      message: axiosDetail.message,
-      meta: { ...axiosDetail },
-    };
+    const { code, response, message } = error;
+    const errorDetail = { message };
 
-    if (error.response) {
-      const { status, headers, data } = error.response;
-
+    if (response) {
+      const { data, status } = response;
       errorDetail.status = status;
-      errorDetail.meta.headers = headers;
-      errorDetail.meta.data = data;
+      errorDetail.extra = { code, data };
     }
 
-    return Promise.reject(new NetworkError(errorDetail));
+    return Promise.reject(new AxiosError(errorDetail));
   }
 );
 
 axios.interceptors.request.use(
   config => config,
-  error => {
-    const axiosDetail = error.toJSON();
-    const errorDetail = {
-      message: `Request Error: ${axiosDetail.message}`,
-      meta: { ...axiosDetail },
-    };
-
-    return Promise.reject(new NetworkError(errorDetail));
-  }
+  error => Promise.reject(new AxiosError({ message: error.message }))
 );
 
 function getInterval() {

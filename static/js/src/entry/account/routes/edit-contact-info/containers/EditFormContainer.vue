@@ -19,7 +19,7 @@ import EditForm from '../components/EditForm.vue';
 import { logOut } from '../../../utils/auth-actions';
 import logError from '../../../utils/log-error';
 
-import { NetworkError } from '../../../errors';
+import { AxiosError } from '../../../errors';
 import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 
 export default {
@@ -118,12 +118,11 @@ export default {
         await Promise.all(dispatches);
       } catch (err) {
         if (
-          err instanceof NetworkError &&
+          err instanceof AxiosError &&
           err.status === 400 &&
-          err.meta.data.detail === "can't change email"
+          err.extra.data.detail === "can't change email"
         ) {
           badEmailUpdate = true;
-          err.meta.newEmail = newEmail;
           logError({ err, level: 'warning' });
         } else {
           throw err;

@@ -82,12 +82,9 @@ const actions = {
       if (code === 'login_required') {
         commit(SET_LOGGED_OUT);
       } else if (!code || !description) {
-        commit(
-          SET_ERROR,
-          new Auth0Error({ message: 'Unknown error', code: 403 })
-        );
+        commit(SET_ERROR, new Auth0Error({ message: 'Unknown error' }));
       } else {
-        commit(SET_ERROR, new Auth0Error({ message: description, code }));
+        commit(SET_ERROR, new Auth0Error({ message: description }));
       }
     }
   },
