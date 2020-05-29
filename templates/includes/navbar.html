@@ -1,0 +1,41 @@
+<nav class="c-navbar c-navbar--dark">
+  <div class="c-navbar__top l-align-center-x">
+    <a href="https://www.texastribune.org" class="c-navbar__logo l-align-center-self">
+      <span class="is-sr-only">The Texas Tribune</span>
+      {% include "includes/logo.html" %}
+    </a>
+    <div class="c-navbar__content">
+      <ul class="c-navbar__items c-navbar__items--no-space t-size-xxs t-uppercase t-lsp-m">
+        <li class="c-navbar__item is-hidden-until-bp-l">
+          <a href="/donate" class="{% if request.path == '/donate' %}is-active{% endif %} c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated" ga-on="click" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="c-navbar">
+            <strong>Donate</strong>
+          </a>
+        </li>
+        <li class="c-navbar__item is-hidden-until-bp-l">
+          <a href="https://www.texastribune.org/about/subscribe/" class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated"  ga-on="click" ga-event-category="subscribe intent" ga-event-action="top nav click" ga-event-label="not frontpage">
+            <strong>Newsletters</strong>
+          </a>
+        </li>
+        <li class="c-navbar__item is-hidden-until-bp-l">
+          <a href="https://www.texastribune.org/events/" class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated" ga-on="click" ga-event-category="navigation" ga-event-action="top nav click" ga-event-label="events">
+            <strong>Events</strong>
+          </a>
+        </li>
+        <li class="c-navbar__item is-hidden-until-bp-l">
+          <a href="https://www.texastribune.org/audio/" class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated" ga-on="click" ga-event-category="navigation" ga-event-action="top nav click" ga-event-label="audio">
+            <strong>Audio</strong>
+          </a>
+        </li>
+        <li class="c-navbar__item is-hidden-until-bp-l">
+          <a href="https://www.texastribune.org/data/" class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated" ga-on="click" ga-event-category="navigation" ga-event-action="top nav click" ga-event-label="data">
+            <strong>Data</strong>
+          </a>
+        </li>
+        <li class="c-navbar__item">
+          <a href="/account" class="c-navbar__item-content c-navbar__clickable c-navbar__clickable--animated">
+            <strong>Account</strong>
+          </a>
+        </li>
+      </ul>
+  </div>
+</nav>
