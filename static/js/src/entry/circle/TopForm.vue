@@ -9,12 +9,9 @@
     <div v-show="serverErrorMessage" class="grid_container--l grid_separator">
       <div class="grid_row">
         <div class="col">
-          <!-- eslint-disable -->
-          <p
-            class="form__error form__error--prominent"
-            v-html="serverErrorMessage"
-          ></p>
-          <!-- eslint-enable -->
+          <p class="form__error form__error--prominent">
+            {{ serverErrorMessage }}
+          </p>
         </div>
       </div>
     </div>
