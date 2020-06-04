@@ -281,6 +281,8 @@ class Opportunity(SalesforceObject):
 
         self.id = None
         self._amount = 0
+        self._net_amount = 0
+        self.donor_selected_amount = 0
         self.close_date = today
         self.campaign_id = None
         self.record_type_name = record_type_name
@@ -333,6 +335,8 @@ class Opportunity(SalesforceObject):
             SELECT
                 Id,
                 Amount,
+                Net_Amount__c,
+                Donor_Selected_Amount__c,
                 Name,
                 Stripe_Customer_ID__c,
                 Description,
@@ -366,6 +370,8 @@ class Opportunity(SalesforceObject):
             y.id = item["Id"]
             y.name = item["Name"]
             y.amount = item["Amount"]
+            y.net_amount = item["Net_Amount__c"]
+            y.donor_selected_amount = item["Donor_Selected_Amount__c"]
             y.stripe_customer = item["Stripe_Customer_ID__c"]
             y.description = item["Description"]
             y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
@@ -399,10 +405,20 @@ class Opportunity(SalesforceObject):
     def amount(self, amount):
         self._amount = amount
 
+    @property
+    def net_amount(self):
+        return str(Decimal(self._net_amount).quantize(TWOPLACES))
+
+    @net_amount.setter
+    def net_amount(self, net_amount):
+        self._net_amount = net_amount
+
     def _format(self):
         return {
             "AccountId": self.account_id,
             "Amount": self.amount,
+            "Net_Amount__c": self.net_amount,
+            "Donor_Selected_Amount__c": self.donor_selected_amount,
             "CloseDate": self.close_date,
             "CampaignId": self.campaign_id,
             "RecordType": {"Name": self.record_type_name},
