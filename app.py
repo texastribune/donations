@@ -52,7 +52,8 @@ from util import (
     clean,
     notify_slack,
     send_email_new_business_membership,
-    send_multiple_account_warning, send_slack_message,
+    send_multiple_account_warning,
+    send_slack_message,
 )
 from validate_email import validate_email
 from charges import charge, ChargeException
