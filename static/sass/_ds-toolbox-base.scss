@@ -18,9 +18,16 @@
 @import "@texastribune/queso-ui/assets/scss/6-components/icon/icon";
 
 // c-site-footer
+@import "@texastribune/queso-ui/assets/scss/6-components/navbar/navbar";
 @import "@texastribune/queso-ui/assets/scss/6-components/site-footer/site-footer";
 
-// color-helpers
+// layout
+@import "@texastribune/queso-ui/assets/scss/7-layout/align";
+@import "@texastribune/queso-ui/assets/scss/7-layout/display";
+
+// utilities
 @import "@texastribune/queso-ui/assets/scss/utilities/color-helpers";
+@import "@texastribune/queso-ui/assets/scss/utilities/hidden";
 @import "@texastribune/queso-ui/assets/scss/utilities/notch";
 @import "@texastribune/queso-ui/assets/scss/utilities/spacing";
+@import "@texastribune/queso-ui/assets/scss/utilities/sr-only";
