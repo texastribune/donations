@@ -17,7 +17,7 @@ export class AxiosError extends AppError {
 
 // client only
 export class UnverifiedError extends AppError {
-  constructor({ extra }) {
+  constructor({ extra } = {}) {
     super({
       name: 'UnverifiedError',
       message: 'Unverified email address accessing protected route',
