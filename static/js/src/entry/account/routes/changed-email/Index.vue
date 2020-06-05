@@ -6,10 +6,8 @@
       <div class="l-minimal__content">
         <h1 class="has-xl-btm-marg">Please verify your email address change</h1>
         <p class="has-b-btm-marg t-size-b">
-          Thanks for updating your email address! To log back into your account,
-          we need you to verify your new email address:
-          <strong>{{ newEmail }}</strong
-          >.
+          Thanks for updating your account information! To log back into your
+          account, we need you to verify your new email address.
         </p>
         <contact-us
           :ga-label="ga.userPortal.labels['changed-email']"
@@ -39,11 +37,5 @@ export default {
   components: { ContactUs },
 
   mixins: [routeMixin],
-
-  computed: {
-    newEmail() {
-      return this.$route.query.email;
-    },
-  },
 };
 </script>

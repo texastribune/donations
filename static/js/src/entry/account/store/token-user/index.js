@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 
 import jwt from 'jsonwebtoken';
-import { setExtra } from '@sentry/browser';
+import { setUser } from '@sentry/browser';
 
 import auth from '../../utils/auth';
 
@@ -33,7 +33,7 @@ const mutations = {
     state.idTokenPayload = idTokenPayload;
     state.error = null;
 
-    setExtra('auth', idTokenPayload);
+    setUser({ id: idTokenPayload.sub });
   },
 
   [SET_LOGGED_OUT](state) {
@@ -44,7 +44,7 @@ const mutations = {
     state.idTokenPayload = {};
     state.error = null;
 
-    setExtra('auth', {});
+    setUser(null);
   },
 
   [SET_ERROR](state, error) {
@@ -82,12 +82,9 @@ const actions = {
       if (code === 'login_required') {
         commit(SET_LOGGED_OUT);
       } else if (!code || !description) {
-        commit(
-          SET_ERROR,
-          new Auth0Error({ message: 'Unknown error', code: 403 })
-        );
+        commit(SET_ERROR, new Auth0Error({ message: 'Unknown error' }));
       } else {
-        commit(SET_ERROR, new Auth0Error({ message: description, code }));
+        commit(SET_ERROR, new Auth0Error({ message: description }));
       }
     }
   },
