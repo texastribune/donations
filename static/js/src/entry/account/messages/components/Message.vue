@@ -82,7 +82,11 @@ export default {
     },
 
     getFromStorage() {
-      return localStorage.getItem(`${this.name}Seen`);
+      try {
+        return localStorage.getItem(`${this.name}Seen`);
+      } catch (err) {
+        return 'true';
+      }
     },
 
     setInStorage() {
