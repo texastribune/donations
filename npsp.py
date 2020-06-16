@@ -407,7 +407,10 @@ class Opportunity(SalesforceObject):
 
     @property
     def net_amount(self):
-        return str(Decimal(self._net_amount).quantize(TWOPLACES))
+        net_amount = self._net_amount
+        if not self._net_amount:
+            net_amount = 0.0
+        return str(Decimal(net_amount).quantize(TWOPLACES))
 
     @net_amount.setter
     def net_amount(self, net_amount):
