@@ -84,7 +84,7 @@ def charge_cards():
 
     log.it("---Starting batch job...")
 
-    three_days_ago = (datetime.now(tz=zone) - timedelta(days=3)).strftime("%Y-%m-%d")
+    three_days_ago = (datetime.now(tz=zone) - timedelta(days=14)).strftime("%Y-%m-%d")
     today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
     opportunities = Opportunity.list(begin=three_days_ago, end=today)
