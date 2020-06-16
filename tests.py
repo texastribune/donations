@@ -19,6 +19,12 @@ class SalesforceConnectionSubClass(SalesforceConnection):
 sf = SalesforceConnectionSubClass()
 
 
+def test_net_amount_none():
+    opp = Opportunity(sf_connection=sf)
+    opp.net_amount = None
+    assert opp.net_amount == "0.00"
+
+
 def test__clean():
     form = {
         "a": "None",
