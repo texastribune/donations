@@ -52,13 +52,7 @@
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
   {% block content %}
-  <section class="masthead">
-    <div class="grid_container--xl grid_row">
-      <a href="https://www.texastribune.org/" class="unlink">
-        <img src="{{ url_for('static', filename='img/logo.png') }}">
-      </a>
-    </div>
-  </section>
+  {% include 'includes/navbar.html' %}
 
   {% endblock %}
   <footer class="footer grid_padding grid_row grid_wrap--l">
