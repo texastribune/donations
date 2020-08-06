@@ -48,6 +48,35 @@ def quantize(amount):
     return Decimal(amount).quantize(TWOPLACES)
 
 
+def generate_stripe_description(opportunity) -> str:
+    """
+    Our current code populates the Description field of recurring donations 
+    and opportunities when those are created. Those descriptions get passed 
+    on to Stripe when the card is charged. But we have at least two cases 
+    where the Description field could be blank: when someone manually enters 
+    a donation or when it's a donation that's been migrated from our legacy 
+    (Tinypass) system. But in those cases we know the opportunity type and 
+    it's a direct relationship to the description so we can populate it anyway.
+    """
+    # remove leading "The " from descriptions for better Stripe
+    if opportunity.description:
+        if opportunity.description.startswith("The "):
+            return opportunity.description[4:]
+        else:
+            return opportunity.description
+
+    description_map = {
+        "The Blast": "Blast Subscription",
+        "Recurring Donation": "Texas Tribune Sustaining Membership",
+        "Single": "Texas Tribune Membership",
+        "Giving Circle": "Texas Tribune Circle Membership",
+    }
+    if opportunity.type in description_map.keys():
+        return description_map[opportunity.type]
+    else:
+        return "Texas Tribune"
+
+
 def charge(opportunity):
 
     amount = amount_to_charge(opportunity)
@@ -65,7 +94,7 @@ def charge(opportunity):
             customer=opportunity.stripe_customer,
             amount=int(amount * 100),
             currency="usd",
-            description=opportunity.description,
+            description=generate_stripe_description(opportunity),
             metadata={
                 "opportunity_id": opportunity.id,
                 "account_id": opportunity.account_id,
