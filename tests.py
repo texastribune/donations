@@ -9,6 +9,7 @@ from batch import amount_to_charge
 from npsp import RDO, Contact, Opportunity, SalesforceConnection, Account
 from util import clean, construct_slack_message
 from forms import format_amount, validate_amount
+from charges import generate_stripe_description
 
 
 class SalesforceConnectionSubClass(SalesforceConnection):
@@ -17,6 +18,35 @@ class SalesforceConnectionSubClass(SalesforceConnection):
 
 
 sf = SalesforceConnectionSubClass()
+
+
+def test_generate_stripe_description():
+    # if description is blank use type
+    opp = Opportunity(sf_connection=sf)
+    opp.type = "Recurring Donation"
+    opp.description = ""
+    actual = generate_stripe_description(opp)
+    assert actual == "Texas Tribune Sustaining Membership"
+
+    # strip leading "The "
+    opp = Opportunity(sf_connection=sf)
+    opp.description = "The Cuddly Kitty"
+    actual = generate_stripe_description(opp)
+    assert actual == "Cuddly Kitty"
+
+    # description overrides type
+    opp = Opportunity(sf_connection=sf)
+    opp.type = "Recurring Donation"
+    opp.description = "Cats in Hats Are Cute!"
+    actual = generate_stripe_description(opp)
+    assert actual == "Cats in Hats Are Cute!"
+
+    # if we can't find anything else at least they'll know it's from us
+    opp = Opportunity(sf_connection=sf)
+    opp.type = "Something Bogus"
+    opp.description = ""
+    actual = generate_stripe_description(opp)
+    assert actual == "Texas Tribune"
 
 
 def test_net_amount_none():
