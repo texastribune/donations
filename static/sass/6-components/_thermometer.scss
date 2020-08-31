@@ -14,7 +14,7 @@
     position: relative;
 
     &_inner {
-      background-color: $color-fmd-blue-dark;
+      background-color: $color-yellow-tribune;
       border-radius: 30px;
       display: inline-block;
       height: 100%;
@@ -28,7 +28,7 @@
         width: 0; // width set inline by Vue.js
       }
       &--goal {
-        opacity: 0.1;
+        opacity: 0.2;
         width: 100%;
       }
     }
