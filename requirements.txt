@@ -15,4 +15,4 @@ flask-limiter==1.0.1
 sentry-sdk==0.17.4
 blinker==1.4
 amazon-pay==2.6.0
-nameparser==1.0.4
+nameparser==1.0.6
