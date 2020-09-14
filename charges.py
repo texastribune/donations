@@ -50,12 +50,12 @@ def quantize(amount):
 
 def generate_stripe_description(opportunity) -> str:
     """
-    Our current code populates the Description field of recurring donations 
-    and opportunities when those are created. Those descriptions get passed 
-    on to Stripe when the card is charged. But we have at least two cases 
-    where the Description field could be blank: when someone manually enters 
-    a donation or when it's a donation that's been migrated from our legacy 
-    (Tinypass) system. But in those cases we know the opportunity type and 
+    Our current code populates the Description field of recurring donations
+    and opportunities when those are created. Those descriptions get passed
+    on to Stripe when the card is charged. But we have at least two cases
+    where the Description field could be blank: when someone manually enters
+    a donation or when it's a donation that's been migrated from our legacy
+    (Tinypass) system. But in those cases we know the opportunity type and
     it's a direct relationship to the description so we can populate it anyway.
     """
     # remove leading "The " from descriptions for better Stripe
@@ -100,13 +100,27 @@ def charge(opportunity):
                 "account_id": opportunity.account_id,
             },
         )
-    except stripe.error.CardError as e:
-        # look for decline code:
-        error = e.json_body["error"]
-        logging.info(f"The card has been declined:")
-        logging.info(f"Message: {error.get('message', '')}")
-        logging.info(f"Decline code: {error.get('decline_code', '')}")
-        opportunity.closed_lost_reason = error.get("message", "unknown failure")
+    except Exception as e:
+        logging.info(f"Error charging card: {type(e)}")
+        if isinstance(e, stripe.error.StripeError):
+            message = e.user_message or ''
+            logging.info(f"Message: {message}")
+
+            reason = e.user_message
+
+            if isinstance(e, stripe.error.CardError):
+                logging.info(f"The card has been declined")
+                logging.info(f"Decline code: {e.json_body.get('decline_code', '')}")
+
+                if reason is None:
+                    reason = "card declined for unknown reason"
+
+            if reason is None:
+                    reason = "unknown failure"
+        else:
+            reason = "unknown failure"
+
+        opportunity.closed_lost_reason = reason
         opportunity.stage_name = "Closed Lost"
         opportunity.save()
         logging.debug(
@@ -125,14 +139,8 @@ def charge(opportunity):
                 }
             )
 
-        raise ChargeException(opportunity, "card error")
+        raise ChargeException(opportunity, reason)
 
-    except stripe.error.InvalidRequestError as e:
-        logging.error(f"Problem: {e}")
-        raise ChargeException(opportunity, "invalid request")
-    except Exception as e:
-        logging.error(f"Problem: {e}")
-        raise ChargeException(opportunity, "unknown error")
 
     if card_charge.status != "succeeded":
         logging.error("Charge failed. Check Stripe logs.")
