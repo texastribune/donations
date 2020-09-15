@@ -100,13 +100,27 @@ def charge(opportunity):
                 "account_id": opportunity.account_id,
             },
         )
-    except stripe.error.CardError as e:
-        # look for decline code:
-        error = e.json_body["error"]
-        logging.info(f"The card has been declined:")
-        logging.info(f"Message: {error.get('message', '')}")
-        logging.info(f"Decline code: {error.get('decline_code', '')}")
-        opportunity.closed_lost_reason = error.get("message", "unknown failure")
+    except Exception as e:
+        logging.info(f"Error charging card: {type(e)}")
+        if isinstance(e, stripe.error.StripeError):
+            message = e.user_message or ''
+            logging.info(f"Message: {message}")
+
+            reason = e.user_message
+
+            if isinstance(e, stripe.error.CardError):
+                logging.info(f"The card has been declined")
+                logging.info(f"Decline code: {e.json_body.get('decline_code', '')}")
+
+                if reason is None:
+                    reason = "card declined for unknown reason"
+
+            if reason is None:
+                    reason = "unknown failure"
+        else:
+            reason = "unknown failure"
+
+        opportunity.closed_lost_reason = reason
         opportunity.stage_name = "Closed Lost"
         opportunity.save()
         logging.debug(
@@ -125,14 +139,8 @@ def charge(opportunity):
                 }
             )
 
-        raise ChargeException(opportunity, "card error")
+        raise ChargeException(opportunity, reason)
 
-    except stripe.error.InvalidRequestError as e:
-        logging.error(f"Problem: {e}")
-        raise ChargeException(opportunity, "invalid request")
-    except Exception as e:
-        logging.error(f"Problem: {e}")
-        raise ChargeException(opportunity, "unknown error")
 
     if card_charge.status != "succeeded":
         logging.error("Charge failed. Check Stripe logs.")
