@@ -1,5 +1,5 @@
 pytest==3.8.1
-pytest-cov==2.8.1
+pytest-cov==2.10.1
 ipdb==0.13.3
 black
 mypy
