@@ -4,6 +4,9 @@ jobs:
     working_directory: /app
     docker:
       - image: docker
+        auth:
+          username: ttcircleci
+          password: $DOCKERHUB_TTCIRCLECI_PASSWORD
     steps:
       - checkout
       - setup_remote_docker
