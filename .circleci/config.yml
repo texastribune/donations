@@ -9,7 +9,7 @@ jobs:
           password: $DOCKERHUB_TTCIRCLECI_PASSWORD
     steps:
       - checkout
-      - setup_remote_docker
+      - setup_remote_docker:
             version: 19.03.13
       - run: |
           docker info
