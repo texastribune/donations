@@ -5,10 +5,8 @@
   &__links {
     list-style: none;
   }
-
-  // remove after 10yr treatment
   &__logo {
-    // hack: nudge 10yr bug left for alignment of square
-    margin-left: -$size-xxs;
+    // hack: nudge bug left for alignment of square
+    margin-left: -$size-tiny;
   }
 }
