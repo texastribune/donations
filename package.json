@@ -11,11 +11,12 @@
     "url": "https://github.com/texastribune/donations/issues"
   },
   "browserslist": [
-    "> 1%",
     "last 2 versions",
-    "Firefox ESR",
-    "iOS >= 11",
-    "Safari >= 12",
+    "firefox ESR",
+    "iOS >= 12",
+    "safari >= 12",
+    "samsung >= 12",
+    "not ie 11",
     "not dead"
   ],
   "engines": {
