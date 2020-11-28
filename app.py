@@ -25,12 +25,7 @@ from pytz import timezone
 from validate_email import validate_email
 
 from app_celery import make_celery
-from bad_actor import (
-    BadActorJudgmentType,
-    BadActorResponse,
-    call_bad_actor_api,
-    create_bad_actor_request,
-)
+from bad_actor import BadActor
 from charges import ChargeException, QuarantinedException, charge
 from config import (
     AMAZON_CAMPAIGN_ID,
@@ -281,12 +276,14 @@ def apply_card_details(rdo=None, customer=None):
 
 
 @celery.task(name="app.add_donation")
-def add_donation(form=None, customer=None, donation_type=None):
+def add_donation(form=None, customer=None, donation_type=None, bad_actor_request=None):
     """
     Add a contact and their donation into SF. This is done in the background
     because there are a lot of API calls and there's no point in making the
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
+    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
+    quarantine = bad_actor_response.quarantine
 
     form = clean(form)
     first_name = form["first_name"]
@@ -322,21 +319,31 @@ def add_donation(form=None, customer=None, donation_type=None):
 
     if period is None:
         logging.info("----Creating one time payment...")
-        opportunity = add_opportunity(contact=contact, form=form, customer=customer)
+        opportunity = add_opportunity(
+            contact=contact, form=form, customer=customer, quarantine=quarantine
+        )
         try:
             charge(opportunity)
             logging.info(opportunity)
             notify_slack(contact=contact, opportunity=opportunity)
         except ChargeException as e:
             e.send_slack_notification()
+        except QuarantinedException:
+            bad_actor_response.notify_bad_actor(
+                transaction_type="Opportunity", transaction=opportunity
+            )
         return True
 
     elif donation_type == "circle":
         logging.info("----Creating circle payment...")
-        rdo = add_circle_membership(contact=contact, form=form, customer=customer)
+        rdo = add_circle_membership(
+            contact=contact, form=form, customer=customer, quarantine=quarantine
+        )
     else:
         logging.info("----Creating recurring payment...")
-        rdo = add_recurring_donation(contact=contact, form=form, customer=customer)
+        rdo = add_recurring_donation(
+            contact=contact, form=form, customer=customer, quarantine=quarantine
+        )
 
     # get opportunities
     opportunities = rdo.opportunities()
@@ -352,6 +359,8 @@ def add_donation(form=None, customer=None, donation_type=None):
         notify_slack(contact=contact, rdo=rdo)
     except ChargeException as e:
         e.send_slack_notification()
+    except QuarantinedException:
+        bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
     return True
 
 
@@ -383,7 +392,29 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
             form_data=form_data,
         )
     app.logger.info(f"Customer id: {customer.id}")
-    function(customer=customer, form=clean(form_data), donation_type=donation_type)
+    bad_actor_request = None
+    try:
+        bad_actor_request = BadActor.create_bad_actor_request(
+            headers=request.headers,
+            captcha_token=form_data["recaptchaToken"],
+            email=email,
+            amount=amount,
+            zipcode=form_data["zipcode"],
+            first_name=form_data["first_name"],
+            last_name=form_data["last_name"],
+            remote_addr=request.remote_addr,
+            reason=form_data["reason"],
+        )
+        app.logger.info(bad_actor_request)
+    except Exception as error:
+        app.logger.warning("Unable to check for bad actor: %s", error)
+
+    function(
+        customer=customer,
+        form=clean(form_data),
+        donation_type=donation_type,
+        bad_actor_request=bad_actor_request,
+    )
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -816,7 +847,7 @@ def stripehook():
     return "", 200
 
 
-def add_opportunity(contact=None, form=None, customer=None):
+def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
     """
     This will add a single donation to Salesforce.
     """
@@ -832,6 +863,7 @@ def add_opportunity(contact=None, form=None, customer=None):
     opportunity.agreed_to_pay_fees = form["pay_fees_value"]
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
+    opportunity.quarantined = quarantine
 
     customer = stripe.Customer.retrieve(customer["id"])
     card = customer.sources.retrieve(customer.sources.data[0].id)
@@ -847,7 +879,7 @@ def add_opportunity(contact=None, form=None, customer=None):
     return opportunity
 
 
-def add_circle_membership(contact=None, form=None, customer=None):
+def add_circle_membership(contact=None, form=None, customer=None, quarantine=False):
 
     """
     This will add Circle membership to Salesforce.
@@ -875,6 +907,7 @@ def add_circle_membership(contact=None, form=None, customer=None):
 
     rdo.installment_period = installment_period
     rdo.open_ended_status = "None"
+    rdo.quarantined = quarantine
 
     apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
@@ -882,7 +915,7 @@ def add_circle_membership(contact=None, form=None, customer=None):
     return rdo
 
 
-def add_recurring_donation(contact=None, form=None, customer=None):
+def add_recurring_donation(contact=None, form=None, customer=None, quarantine=False):
     """
     This will add a recurring donation to Salesforce.
     """
@@ -903,6 +936,7 @@ def add_recurring_donation(contact=None, form=None, customer=None):
     rdo.installments = None
     rdo.installment_period = form["installment_period"]
     rdo.open_ended_status = "Open"
+    rdo.quarantined = quarantine
 
     apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
@@ -910,7 +944,7 @@ def add_recurring_donation(contact=None, form=None, customer=None):
     return rdo
 
 
-def add_business_rdo(account=None, form=None, customer=None):
+def add_business_rdo(account=None, form=None, customer=None, quarantine=False):
     """
     Adds a recurring business membership to Salesforce.
     """
@@ -935,6 +969,7 @@ def add_business_rdo(account=None, form=None, customer=None):
     rdo.installments = None
     rdo.open_ended_status = "Open"
     rdo.installment_period = form["installment_period"]
+    rdo.quarantined = quarantine
 
     apply_card_details(rdo=rdo, customer=customer)
     rdo.save()
@@ -944,7 +979,10 @@ def add_business_rdo(account=None, form=None, customer=None):
 
 @celery.task(name="app.add_business_membership")
 def add_business_membership(
-    form=None, customer=None, donation_type="business_membership"
+    form=None,
+    customer=None,
+    donation_type="business_membership",
+    bad_actor_request=None,
 ):
     """
     Adds a business membership. Both single and recurring.
@@ -956,6 +994,8 @@ def add_business_membership(
     notification about the new membership.
 
     """
+    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
+    quarantine = bad_actor_response.quarantine
 
     form = clean(form)
 
@@ -1007,8 +1047,20 @@ def add_business_membership(
         raise Exception("Business membership must be either yearly or monthly")
 
     logging.info("----Creating recurring business membership...")
-    rdo = add_business_rdo(account=account, form=form, customer=customer)
+    rdo = add_business_rdo(
+        account=account, form=form, customer=customer, quarantine=quarantine
+    )
     logging.info(rdo)
+
+    logging.info("----Getting affiliation...")
+
+    affiliation = Affiliation.get_or_create(
+        account=account, contact=contact, role="Business Member Donor"
+    )
+    logging.info(affiliation)
+
+    send_email_new_business_membership(account=account, contact=contact)
+
     # get opportunities
     opportunities = rdo.opportunities()
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
@@ -1022,15 +1074,8 @@ def add_business_membership(
         notify_slack(account=account, contact=contact, rdo=rdo)
     except ChargeException as e:
         e.send_slack_notification()
-
-    logging.info("----Getting affiliation...")
-
-    affiliation = Affiliation.get_or_create(
-        account=account, contact=contact, role="Business Member Donor"
-    )
-    logging.info(affiliation)
-
-    send_email_new_business_membership(account=account, contact=contact)
+    except QuarantinedException:
+        bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
 
     if contact.duplicate_found:
         send_multiple_account_warning(contact)

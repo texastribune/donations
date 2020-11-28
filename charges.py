@@ -28,6 +28,10 @@ class ChargeException(Exception):
         )
 
 
+class QuarantinedException(Exception):
+    pass
+
+
 def amount_to_charge(opportunity):
     """
     Determine the amount to charge. This depends on whether the payer agreed
@@ -85,6 +89,9 @@ def charge(opportunity):
     )
     if opportunity.stage_name != "Pledged":
         raise Exception(f"Opportunity {opportunity.id} is not Pledged")
+    if opportunity.quarantined:
+        logging.info("---- Skipping because it's quarantined")
+        raise QuarantinedException(f"Opportunity {opportunity.id} is quarantined")
 
     opportunity.stage_name = "In Process"
     opportunity.save()
