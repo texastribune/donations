@@ -69,7 +69,6 @@ Environment
 | `RECAPTCHA_SITE_KEY`        |                             stringstringstring |
 | `BAD_ACTOR_API_URL`         |                            https://foo.bar.api |
 | `BAD_ACTOR_NOTIFICATION_URL`|                            https://foo.bar.api |
-| `AUTH0_AUDIENCE`            |                            https://foo.bar.api |
 | `AUTH0_PORTAL_M2M_CLIENT_ID`|                                         string |
 | `AUTH0_PORTAL_M2M_CLIENT_SECRET`|                                     string |
 
