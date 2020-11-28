@@ -1,5 +1,4 @@
 from enum import Enum
-from celery.contrib import rdb
 
 from typing import List, Union
 
@@ -82,8 +81,6 @@ class BadActor:
         return fields
 
     def _slackify_all(self) -> list:
-
-        rdb.set_trace()
 
         # add another item for the Salesforce link
         txn_url = f"{self.transaction.sf.instance_url}/{self.transaction.id}"
