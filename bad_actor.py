@@ -1,5 +1,5 @@
 from enum import Enum
-
+import logging
 from typing import List, Union
 
 import requests
@@ -14,7 +14,6 @@ from config import (
     BAD_ACTOR_API_URL,
     BAD_ACTOR_NOTIFICATION_URL,
 )
-from logs import logger
 
 
 class BadActorJudgmentType(int, Enum):
@@ -58,7 +57,7 @@ class BadActor:
         try:
             self.bad_actor_api_response = self._call_bad_actor_api(bad_actor_request)
         except Exception as error:
-            logger.warning("Unable to call bad actor API: %s", error)
+            logging.warning("Unable to call bad actor API: %s", error)
             self.bad_actor_api_response = None
 
     @property
@@ -144,17 +143,17 @@ class BadActor:
 
         webhook = WebhookClient(BAD_ACTOR_NOTIFICATION_URL)
         response = webhook.send(blocks=blocks)
-        logger.info(response)
+        logging.info(response)
 
     def notify_bad_actor(self, transaction_type, transaction):
         self.transaction_type = transaction_type
         self.transaction = transaction
 
         if self.bad_actor_api_response.overall_judgment < BadActorJudgmentType.suspect:
-            logger.info("not a bad actor; returning")
+            logging.info("not a bad actor; returning")
             return
 
-        logger.debug(self)
+        logging.debug(self)
         self._send_to_slack()
 
         return
@@ -225,9 +224,9 @@ class BadActor:
         headers = {
             "Authorization": f"Bearer {access_token}",
         }
-        logger.info(request)
+        logging.info(request)
         response = requests.post(url=BAD_ACTOR_API_URL, headers=headers, json=request)
         response = response.json()
-        logger.info(response)
+        logging.info(response)
 
         return BadActorResponse.parse_obj(response)
