@@ -180,9 +180,6 @@
     "STRIPE_WEBHOOK_SECRET": {
       "required": true
     },
-    "AUTH0_DOMAIN": {
-      "required": true
-    },
     "AUTH0_PORTAL_M2M_CLIENT_ID": {
       "required": true
     },
