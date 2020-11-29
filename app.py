@@ -994,8 +994,6 @@ def add_business_membership(
     notification about the new membership.
 
     """
-    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
-    quarantine = bad_actor_response.quarantine
 
     form = clean(form)
 
@@ -1009,6 +1007,11 @@ def add_business_membership(
     shipping_street = form["shipping_street"]
     shipping_state = form["shipping_state"]
     shipping_postalcode = form["shipping_postalcode"]
+
+    bad_actor_request["zipcode"] = shipping_postalcode
+
+    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
+    quarantine = bad_actor_response.quarantine
 
     logging.info("----Getting contact....")
     contact = Contact.get_or_create(
