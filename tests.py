@@ -88,7 +88,7 @@ def test_slackify_all():
         items=[bad_actor_item1, bad_actor_item2],
     )
     opportunity = Opportunity(sf_connection=sf)
-    opportunity.id_ = "baz"
+    opportunity.id = "baz"
     bad_actor = BadActor(bad_actor_request=None)
     bad_actor.bad_actor_api_response = bad_actor_response
     bad_actor.transaction = opportunity
