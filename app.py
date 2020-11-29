@@ -394,12 +394,16 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     app.logger.info(f"Customer id: {customer.id}")
     bad_actor_request = None
     try:
+        if "zipcode" in form_data:
+            zipcode = form_data["zipcode"]
+        else:
+            zipcode = form_data["shipping_postalcode"]
         bad_actor_request = BadActor.create_bad_actor_request(
             headers=request.headers,
             captcha_token=form_data["recaptchaToken"],
             email=email,
             amount=amount,
-            zipcode=form_data["zipcode"],
+            zipcode=zipcode,
             first_name=form_data["first_name"],
             last_name=form_data["last_name"],
             remote_addr=request.remote_addr,
