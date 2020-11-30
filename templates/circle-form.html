@@ -134,6 +134,15 @@
 
   <script src="https://js.stripe.com/v3/"></script>
   <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha }}"></script>
+  <script>
+    !function () {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://risk.clearbit.com/v1/risk.js';
+      var parent = document.getElementsByTagName('script')[0];
+      parent.parentNode.insertBefore(script, parent);
+    }();
+  </script>
 
   {% for script in bundles['js'] %}
     <script src="{{ script }}"></script>
