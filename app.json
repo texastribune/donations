@@ -1,5 +1,6 @@
 {
   "name": "donations",
+  "stack": "heroku-20",
   "scripts": {
   },
   "env": {
