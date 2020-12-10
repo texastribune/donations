@@ -1,3 +1,4 @@
+from config import BAD_ACTOR_NOTIFICATION_URL
 from datetime import datetime
 from decimal import Decimal
 
@@ -10,14 +11,124 @@ from npsp import RDO, Contact, Opportunity, SalesforceConnection, Account
 from util import clean, construct_slack_message
 from forms import format_amount, validate_amount
 from charges import generate_stripe_description
+from bad_actor import (
+    BadActor,
+    BadActorJudgmentType,
+    BadActorResponse,
+    BadActorResponseItem,
+)
 
 
 class SalesforceConnectionSubClass(SalesforceConnection):
     def __init__(self):
         pass
 
+    @property
+    def instance_url(self):
+        return "quux"
+
 
 sf = SalesforceConnectionSubClass()
+
+
+bad_actor_request = {
+    "email": "foo@bar.org",
+    "ip": "127.0.0.1",
+    "country_code": "US",
+    "zipcode": "78701",
+    "given_name": "nick",
+    "family_name": "cage",
+    "referer": "https://foo.com/foobar?foobar=baz",
+    "captcha_token": "captcha_token",
+    "reason": "because I care",
+    "amount": 1.34,
+}
+
+
+def test_bad_actor_init():
+    bad_actor_response_suspect = BadActorResponse(
+        overall_judgment=BadActorJudgmentType.suspect, items=[]
+    )
+    bad_actor_response_good = BadActorResponse(
+        overall_judgment=BadActorJudgmentType.good, items=[]
+    )
+    bad_actor = BadActor(bad_actor_request=bad_actor_request)
+
+    assert bad_actor.quarantine is False
+    bad_actor.bad_actor_api_response = bad_actor_response_suspect
+    assert bad_actor.quarantine is True
+    bad_actor.bad_actor_api_response = bad_actor_response_good
+    assert bad_actor.quarantine is False
+
+
+def test_bad_actor_slackify_items():
+    bad_actor_item1 = BadActorResponseItem(
+        label="foo", value="bar", judgment=BadActorJudgmentType.suspect
+    )
+    bad_actor_item2 = BadActorResponseItem(
+        label="foo", value="bar", judgment=BadActorJudgmentType.good
+    )
+    actual = BadActor._slackify_items([bad_actor_item1, bad_actor_item2])
+    expected = [
+        {"type": "mrkdwn", "text": ":eyes: *foo*: bar"},
+        {"type": "mrkdwn", "text": ":white_check_mark: *foo*: bar"},
+    ]
+    assert actual == expected
+
+
+def test_slackify_all():
+    bad_actor_item1 = BadActorResponseItem(
+        label="foo", value="bar", judgment=BadActorJudgmentType.suspect
+    )
+    bad_actor_item2 = BadActorResponseItem(
+        label="foo", value="bar", judgment=BadActorJudgmentType.good
+    )
+    bad_actor_response = BadActorResponse(
+        overall_judgment=BadActorJudgmentType.suspect,
+        items=[bad_actor_item1, bad_actor_item2],
+    )
+    opportunity = Opportunity(sf_connection=sf)
+    opportunity.id = "baz"
+    bad_actor = BadActor(bad_actor_request=None)
+    bad_actor.bad_actor_api_response = bad_actor_response
+    bad_actor.transaction = opportunity
+    bad_actor.transaction_type = "Opportunity"
+    expected = [
+        {
+            "fields": [{"text": "<quux/baz|Salesforce>", "type": "mrkdwn"}],
+            "type": "section",
+        },
+        {
+            "fields": [
+                {"text": ":eyes: *foo*: bar", "type": "mrkdwn"},
+                {"text": ":white_check_mark: *foo*: bar", "type": "mrkdwn"},
+            ],
+            "type": "section",
+        },
+        {
+            "block_id": "choices",
+            "elements": [
+                {
+                    "action_id": "approve",
+                    "style": "primary",
+                    "text": {"emoji": True, "text": "Approve", "type": "plain_text"},
+                    "type": "button",
+                    "value": "Opportunity:baz",
+                },
+                {
+                    "action_id": "reject",
+                    "style": "danger",
+                    "text": {"emoji": True, "text": "Reject", "type": "plain_text"},
+                    "type": "button",
+                    "value": "Opportunity:baz",
+                },
+            ],
+            "type": "actions",
+        },
+    ]
+
+    actual = bad_actor._slackify_all()
+    assert actual == expected
 
 
 def test_generate_stripe_description():
@@ -252,6 +363,7 @@ def test__format_opportunity():
         "Amazon_Order_Id__c": None,
         "Net_Amount__c": "8.00",
         "Donor_Selected_Amount__c": 0,
+        "Quarantined__c": False,
     }
     assert response == expected
 
@@ -272,6 +384,7 @@ def test__format_circle_donation():
     rdo.description = "Texas Tribune Circle Membership"
     rdo.agreed_to_pay_fees = True
     rdo.type = "Giving Circle"
+    rdo.quarantined = True
 
     response = rdo._format()
     expected_response = {
@@ -296,6 +409,7 @@ def test__format_circle_donation():
         "Stripe_Card_Brand__c": None,
         "Stripe_Card_Expiration__c": None,
         "Stripe_Card_Last_4__c": None,
+        "Quarantined__c": True,
     }
     assert response == expected_response
 
@@ -340,6 +454,7 @@ def test__format_cent_circle_donation():
         "Stripe_Card_Brand__c": None,
         "Stripe_Card_Expiration__c": None,
         "Stripe_Card_Last_4__c": None,
+        "Quarantined__c": False,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -385,6 +500,7 @@ def test__format_recurring_donation():
         "Stripe_Card_Brand__c": None,
         "Stripe_Card_Expiration__c": None,
         "Stripe_Card_Last_4__c": None,
+        "Quarantined__c": False,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -405,6 +521,7 @@ def test__format_recurring_donation_decimal():
     rdo.open_ended_status = None
     rdo.description = "Texas Tribune Membership"
     rdo.agreed_to_pay_fees = True
+    rdo.quarantined = True
 
     response = rdo._format()
 
@@ -430,6 +547,7 @@ def test__format_recurring_donation_decimal():
         "Stripe_Card_Brand__c": None,
         "Stripe_Card_Expiration__c": None,
         "Stripe_Card_Last_4__c": None,
+        "Quarantined__c": True,
     }
     response["Name"] = "foo"
     assert response == expected_response
@@ -452,6 +570,7 @@ def test__format_blast_rdo():
     rdo.type = "The Blast"
     rdo.billing_email = "dcraigmile+test6@texastribune.org"
     rdo.blast_subscription_email = "subscriber@foo.bar"
+    rdo.quarantined = True
 
     response = rdo._format()
 
@@ -477,6 +596,7 @@ def test__format_blast_rdo():
         "Stripe_Card_Brand__c": None,
         "Stripe_Card_Last_4__c": None,
         "Stripe_Card_Expiration__c": None,
+        "Quarantined__c": True,
     }
 
     response["Name"] = "foo"

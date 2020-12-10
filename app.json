@@ -180,6 +180,21 @@
     "STRIPE_WEBHOOK_SECRET": {
       "required": true
     },
+    "AUTH0_PORTAL_M2M_CLIENT_ID": {
+      "required": true
+    },
+    "AUTH0_PORTAL_M2M_CLIENT_SECRET": {
+      "required": true
+    },
+    "AUTH0_PORTAL_AUDIENCE": {
+      "required": true
+    },
+    "BAD_ACTOR_API_URL": {
+      "required": true
+    },
+    "BAD_ACTOR_NOTIFICATION_URL": {
+      "required": true
+    },
     "TZ": {
       "required": true
     }

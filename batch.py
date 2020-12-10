@@ -1,12 +1,12 @@
 import logging
-from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from datetime import datetime, timedelta
-
-from pytz import timezone
 
 import celery
 import redis
-from charges import amount_to_charge, charge, ChargeException
+from pytz import timezone
+
+from charges import ChargeException, QuarantinedException, amount_to_charge, charge
+from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from npsp import Opportunity
 from util import send_email
 
@@ -105,6 +105,10 @@ def charge_cards():
         except ChargeException as e:
             logging.info("Batch charge error")
             e.send_slack_notification()
+        except QuarantinedException:
+            logging.info(
+                "Failed to charge because Opportunity %s is quarantined", opportunity
+            )
 
     log.send()
 

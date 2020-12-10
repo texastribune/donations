@@ -303,6 +303,7 @@ class Opportunity(SalesforceObject):
         self.closed_lost_reason = None
         self.amazon_order_id = None
         self.created = False
+        self.quarantined = False
 
     @classmethod
     def list(
@@ -357,6 +358,7 @@ class Opportunity(SalesforceObject):
                 Stripe_Card_Expiration__c,
                 Stripe_Card_Last_4__c,
                 Amazon_Order_Id__c
+                Quarantined__c,
             FROM Opportunity
             {where}
         """
@@ -392,6 +394,7 @@ class Opportunity(SalesforceObject):
             y.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
             y.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
             y.amazon_order_id = item["Amazon_Order_Id__c"]
+            y.quarantined = item["Quarantined__c"]
             y.created = False
             results.append(y)
 
@@ -441,6 +444,7 @@ class Opportunity(SalesforceObject):
             "Stripe_Card_Expiration__c": self.stripe_card_expiration,
             "Stripe_Card_Last_4__c": self.stripe_card_last_4,
             "Amazon_Order_Id__c": self.amazon_order_id,
+            "Quarantined__c": self.quarantined,
         }
 
     @classmethod
@@ -533,6 +537,8 @@ class RDO(SalesforceObject):
         self.stripe_card_expiration = None
         self.stripe_card_last_4 = None
 
+        self.quarantined = False
+
         self.created = False
 
     def _format(self):
@@ -566,6 +572,7 @@ class RDO(SalesforceObject):
             "Stripe_Card_Brand__c": self.stripe_card_brand,
             "Stripe_Card_Expiration__c": self.stripe_card_expiration,
             "Stripe_Card_Last_4__c": self.stripe_card_last_4,
+            "Quarantined__c": self.quarantined,
         }
         return recurring_donation
 
@@ -584,7 +591,7 @@ class RDO(SalesforceObject):
             Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
             Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
             Expected_Giving_Date__c, Stripe_Card_Brand__c,
-            Stripe_Card_Expiration__c, Stripe_Card_Last_4__c
+            Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
             FROM Opportunity
             WHERE npe03__Recurring_Donation__c = '{self.id}'
         """
@@ -615,6 +622,7 @@ class RDO(SalesforceObject):
             y.stripe_card = item["Stripe_Card__c"]
             y.account_id = item["AccountId"]
             y.closed_lost_reason = item["npsp__Closed_Lost_Reason__c"]
+            y.quarantined = item["Quarantined__c"]
             y.created = False
             results.append(y)
         return results

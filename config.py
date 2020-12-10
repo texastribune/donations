@@ -107,3 +107,18 @@ CIRCLE_FAILURE_RECIPIENT = os.getenv("CIRCLE_FAILURE_RECIPIENT")
 
 CELERYD_LOG_FORMAT = "%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s"
 CELERYD_TASK_LOG_FORMAT = "%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s"
+
+########
+# Auth0
+#
+AUTH0_DOMAIN = os.getenv("AUTH0_DOMAIN", "auth.texastribune.org")
+AUTH0_PORTAL_M2M_CLIENT_ID = os.getenv("AUTH0_PORTAL_M2M_CLIENT_ID", None)
+AUTH0_PORTAL_M2M_CLIENT_SECRET = os.getenv("AUTH0_PORTAL_M2M_CLIENT_SECRET", None)
+AUTH0_PORTAL_AUDIENCE = os.getenv(
+    "AUTH0_PORTAL_AUDIENCE", "https://texastribune.org/portal"
+)
+########
+# Bad Actor
+#
+BAD_ACTOR_API_URL = os.getenv("BAD_ACTOR_API_URL", None)
+BAD_ACTOR_NOTIFICATION_URL = os.getenv("BAD_ACTOR_NOTIFICATION_URL", None)

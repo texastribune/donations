@@ -1,11 +1,11 @@
-import calendar
 import logging
 from decimal import Decimal
-from config import STRIPE_KEYS, CIRCLE_FAILURE_RECIPIENT
-from npsp import User, Task
-from util import send_slack_message
 
 import stripe
+
+from config import CIRCLE_FAILURE_RECIPIENT, STRIPE_KEYS
+from npsp import Task, User
+from util import send_slack_message
 
 stripe.api_key = STRIPE_KEYS["secret_key"]
 
@@ -26,6 +26,10 @@ class ChargeException(Exception):
                 "icon_emoji": ":x:",
             }
         )
+
+
+class QuarantinedException(Exception):
+    pass
 
 
 def amount_to_charge(opportunity):
@@ -50,12 +54,12 @@ def quantize(amount):
 
 def generate_stripe_description(opportunity) -> str:
     """
-    Our current code populates the Description field of recurring donations 
-    and opportunities when those are created. Those descriptions get passed 
-    on to Stripe when the card is charged. But we have at least two cases 
-    where the Description field could be blank: when someone manually enters 
-    a donation or when it's a donation that's been migrated from our legacy 
-    (Tinypass) system. But in those cases we know the opportunity type and 
+    Our current code populates the Description field of recurring donations
+    and opportunities when those are created. Those descriptions get passed
+    on to Stripe when the card is charged. But we have at least two cases
+    where the Description field could be blank: when someone manually enters
+    a donation or when it's a donation that's been migrated from our legacy
+    (Tinypass) system. But in those cases we know the opportunity type and
     it's a direct relationship to the description so we can populate it anyway.
     """
     # remove leading "The " from descriptions for better Stripe
@@ -85,6 +89,9 @@ def charge(opportunity):
     )
     if opportunity.stage_name != "Pledged":
         raise Exception(f"Opportunity {opportunity.id} is not Pledged")
+    if opportunity.quarantined:
+        logging.info("---- Skipping because it's quarantined")
+        raise QuarantinedException(f"Opportunity {opportunity.id} is quarantined")
 
     opportunity.stage_name = "In Process"
     opportunity.save()
@@ -103,20 +110,20 @@ def charge(opportunity):
     except Exception as e:
         logging.info(f"Error charging card: {type(e)}")
         if isinstance(e, stripe.error.StripeError):
-            message = e.user_message or ''
+            message = e.user_message or ""
             logging.info(f"Message: {message}")
 
             reason = e.user_message
 
             if isinstance(e, stripe.error.CardError):
-                logging.info(f"The card has been declined")
+                logging.info("The card has been declined")
                 logging.info(f"Decline code: {e.json_body.get('decline_code', '')}")
 
                 if reason is None:
                     reason = "card declined for unknown reason"
 
             if reason is None:
-                    reason = "unknown failure"
+                reason = "unknown failure"
         else:
             reason = "unknown failure"
 
@@ -140,7 +147,6 @@ def charge(opportunity):
             )
 
         raise ChargeException(opportunity, reason)
-
 
     if card_charge.status != "succeeded":
         logging.error("Charge failed. Check Stripe logs.")
