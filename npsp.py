@@ -357,8 +357,8 @@ class Opportunity(SalesforceObject):
                 Stripe_Card_Brand__c,
                 Stripe_Card_Expiration__c,
                 Stripe_Card_Last_4__c,
-                Amazon_Order_Id__c
-                Quarantined__c,
+                Amazon_Order_Id__c,
+                Quarantined__c
             FROM Opportunity
             {where}
         """
