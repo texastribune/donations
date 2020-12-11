@@ -337,7 +337,7 @@ def add_donation(form=None, customer=None, donation_type=None, bad_actor_request
     elif donation_type == "circle":
         logging.info("----Creating circle payment...")
         rdo = add_circle_membership(
-            contact=contact, form=form, customer=customer, quarantine=quarantine
+            contact=contact, form=form, customer=customer, quarantine=False
         )
     else:
         logging.info("----Creating recurring payment...")
@@ -1053,7 +1053,7 @@ def add_business_membership(
 
     logging.info("----Creating recurring business membership...")
     rdo = add_business_rdo(
-        account=account, form=form, customer=customer, quarantine=quarantine
+        account=account, form=form, customer=customer, quarantine=False
     )
     logging.info(rdo)
 
