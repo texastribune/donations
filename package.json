@@ -81,7 +81,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.14.0",
-    "eslint-plugin-vue": "^5.0.0",
+    "eslint-plugin-vue": "^6.2.2",
     "vue-eslint-parser": "^4.0.2"
   },
   "eslintConfig": {
