@@ -82,7 +82,7 @@ export default async function buildTaxReceipt({
     );
 
     doc.text(
-      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-452709.',
+      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-4527097.',
       leftEdge,
       427,
       { maxWidth: '385' }
@@ -110,7 +110,7 @@ export default async function buildTaxReceipt({
     );
 
     doc.text(
-      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-452709.',
+      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Texas Tribune is a 501(c)3 nonprofit organization with Federal Tax ID #26-4527097.',
       leftEdge,
       389,
       { maxWidth: '385' }
