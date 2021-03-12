@@ -16,5 +16,5 @@ sentry-sdk==0.20.3
 blinker==1.4
 amazon-pay==2.6.0
 nameparser==1.0.6
-slack-sdk==3.4.1
+slack-sdk==3.4.2
 pydantic==1.8.1
