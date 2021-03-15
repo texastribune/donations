@@ -53,7 +53,7 @@
     "dompurify": "^2.0.17",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
-    "file-loader": "^1.1.11",
+    "file-loader": "^6.2.0",
     "glob-watcher": "^5.0.3",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^2.3.1",
