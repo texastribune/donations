@@ -76,6 +76,7 @@
     "webpack-sources": "^1.0"
   },
   "devDependencies": {
+    "acorn": "^7.4.1",
     "babel-eslint": "^10.0.3",
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
