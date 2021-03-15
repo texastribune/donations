@@ -11,6 +11,8 @@ export default async function buildBlastReceipt({ date, amount, card }) {
     format: 'letter',
     lineHeight: 1.5,
   });
+  doc.setFont('helvetica');
+
   const formattedDate = formatShortDate(date);
   const leftEdge = 40;
   const topEdge = 30;
@@ -46,20 +48,20 @@ export default async function buildBlastReceipt({ date, amount, card }) {
   doc.setFontSize(12);
   doc.text('Thank you for subscribing to The Blast!', leftEdge, 130);
 
-  doc.setFontStyle('bold');
+  doc.setFont('helvetica', 'bold');
   doc.text('Date', leftEdge, 160);
-  doc.setFontStyle('normal');
+  doc.setFont('helvetica', 'normal');
   doc.text(formattedDate, leftEdge, 172);
 
-  doc.setFontStyle('bold');
+  doc.setFont('helvetica', 'bold');
   doc.text('Amount', leftEdge, 202);
-  doc.setFontStyle('normal');
+  doc.setFont('helvetica', 'normal');
   doc.text(formatCurrency(amount), leftEdge, 214);
 
   if (card) {
-    doc.setFontStyle('bold');
+    doc.setFont('helvetica', 'bold');
     doc.text('Payment method', leftEdge, 244);
-    doc.setFontStyle('normal');
+    doc.setFont('helvetica', 'normal');
     doc.text(`${card.brand} ${card.last4}`, leftEdge, 256);
     doc.text(
       'If you have any questions, email us at blast@texastribune.org or call 512-716-8695.',
