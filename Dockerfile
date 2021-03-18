@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM python:3.9
 
 # This Dockerfile is intended for development. See Dockerfile.sample for something more
 # suitable for production.
