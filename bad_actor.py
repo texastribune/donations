@@ -106,8 +106,14 @@ class BadActor:
         judgment_items = self._slackify_items(judgment_items)
 
         return [
-            {"type": "section", "fields": info_items,},
-            {"type": "section", "fields": judgment_items,},
+            {
+                "type": "section",
+                "fields": info_items,
+            },
+            {
+                "type": "section",
+                "fields": judgment_items,
+            },
             {
                 "type": "actions",
                 "block_id": "choices",
