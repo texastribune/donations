@@ -1,4 +1,4 @@
-FROM node:12 as node_base
+FROM node:16 as node_base
 
 # TODO another Dockerfile for Celery (that can be plain python)?
 
