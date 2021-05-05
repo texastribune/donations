@@ -49,7 +49,7 @@
     "camelcase": "^5.3.1",
     "clean-webpack-plugin": "^2.0.2",
     "css-loader": "^1.0.0",
-    "date-fns": "^1.30.1",
+    "date-fns": "^2.21.2",
     "dompurify": "^2.0.17",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
