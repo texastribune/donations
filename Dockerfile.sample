@@ -27,7 +27,7 @@ COPY package-lock.json /app/
 COPY babel.config.js /app/
 RUN npm install
 
-FROM python:3.6
+FROM python:3.9.5
 
 WORKDIR /app
 
