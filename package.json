@@ -50,7 +50,7 @@
     "clean-webpack-plugin": "^2.0.2",
     "css-loader": "^1.0.0",
     "date-fns": "^1.30.1",
-    "dompurify": "^2.0.17",
+    "dompurify": "^2.2.8",
     "es6-promise": "^4.2.4",
     "fast-async": "7",
     "file-loader": "^1.1.11",
