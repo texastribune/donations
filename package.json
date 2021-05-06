@@ -73,7 +73,7 @@
     "webpack-assets-manifest": "^3.0.1",
     "webpack-cli": "^3.3.4",
     "webpack-merge": "^4.1.2",
-    "webpack-sources": "^1.0"
+    "webpack-sources": "^2.2"
   },
   "devDependencies": {
     "acorn": "^7.4.1",
