@@ -43,7 +43,7 @@
     "@sentry/webpack-plugin": "^1.6.2",
     "@texastribune/queso-tools": "^2.1.0",
     "@texastribune/queso-ui": "^9.4.2",
-    "auth0-js": "^9.13.2",
+    "auth0-js": "^9.16.0",
     "axios": "^0.21.1",
     "babel-loader": "^8.0.0",
     "camelcase": "^5.3.1",
