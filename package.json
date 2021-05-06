@@ -54,7 +54,7 @@
     "es6-promise": "^4.2.4",
     "fast-async": "7",
     "file-loader": "^1.1.11",
-    "glob-watcher": "^5.0.3",
+    "glob-watcher": "^5.0.5",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^2.3.1",
     "nodent-runtime": "^3.2.1",
