@@ -17,4 +17,4 @@ blinker==1.4
 amazon-pay==2.7.1
 nameparser==1.0.6
 slack-sdk==3.5.1
-pydantic==1.8.1
+pydantic==1.8.2
