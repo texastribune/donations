@@ -64,5 +64,10 @@
     @media print {
       font-size: 0.6rem;
     }
+
+    a {
+      color: $color-black-pure;
+      text-decoration: underline;
+    }
   }
 }
