@@ -2,16 +2,16 @@
   <section class="grid_container--m business-benefits grid_separator--l">
     <header>
       <div class="border--yellow_notch"></div>
-      <h4 class="link--blue grid_separator">Business member benefits</h4>
+      <h2 class="link--blue grid_separator">Business member benefits</h2>
     </header>
-    <h4 class="smallcaps--light"><strong>Exclusive Content</strong></h4>
+    <h3 class="smallcaps--light"><strong>Exclusive Content</strong></h3>
     <div class="prose grid_separator--xl">
       <p>Special notifications and updates from Evan Smith, CEO</p>
     </div>
 
-    <h4 class="smallcaps--light">
+    <h3 class="smallcaps--light">
       <strong>Included with every business membership</strong>
-    </h4>
+    </h3>
     <ul class="list--bulleted grid_separator--l">
       <li>
         Organization name featured on texastribune.org support page, Business
@@ -32,7 +32,7 @@
       </li>
     </ul>
 
-    <h4 class="smallcaps--light"><strong>At higher levels</strong></h4>
+    <h3 class="smallcaps--light"><strong>At higher levels</strong></h3>
     <div class="prose grid_separator--xl">
       <p>
         Annual subscription to The Blast, the best daily premium political

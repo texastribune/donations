@@ -2,13 +2,13 @@
   <section class="wall">
     <div v-if="!loading && !error">
       <slot name="heading"></slot>
-      <div
+      <section
         v-for="(group, groupIndex) in memberGroups"
         :key="group.name"
         :class="{ 'grid_separator--l': groupIndex !== memberGroups.length - 1 }"
         class="wall__group"
       >
-        <h2 class="wall__heading grid_separator--s">{{ group.name }}</h2>
+        <h3 class="wall__heading grid_separator--s">{{ group.name }}</h3>
         <ul class="wall__list">
           <li
             v-for="(member, memberIndex) in group.members"
@@ -21,7 +21,7 @@
             <slot name="member" :member="member"></slot>
           </li>
         </ul>
-      </div>
+      </section>
     </div>
   </section>
 </template>
