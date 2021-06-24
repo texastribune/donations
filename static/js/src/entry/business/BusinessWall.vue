@@ -3,6 +3,10 @@
     json-file="business-member-roster"
     :ordered-group-names="orderedGroupNames"
   >
+    <template v-slot:heading>
+      <div class="border--yellow_notch"></div>
+      <h2 class="grid_separator">Our Business Members</h2>
+    </template>
     <template v-slot:member="{ member }">
       <span class="wall__name"
         ><a :href="member.url">{{ member.business_name }}</a></span

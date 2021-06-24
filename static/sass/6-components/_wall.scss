@@ -14,9 +14,7 @@
   }
 
   &__heading {
-    @include mq($from: bp-s) {
-      text-align: center;
-    }
+    @include font-setting('secondary');
 
     @media print {
       font-size: $size-b;
@@ -27,10 +25,6 @@
     display: flex;
     flex-wrap: wrap;
     list-style: none;
-
-    @include mq($from: bp-s) {
-      justify-content: center;
-    }
 
     @media print {
       justify-content: center;
