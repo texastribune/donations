@@ -1,50 +1,127 @@
 <template>
   <section class="grid_container--m business-benefits grid_separator--l">
-    <header>
-      <div class="border--yellow_notch"></div>
-      <h4 class="link--blue grid_separator">Business member benefits</h4>
-    </header>
-    <h4 class="smallcaps--light"><strong>Exclusive Content</strong></h4>
-    <div class="prose grid_separator--xl">
-      <p>Special notifications and updates from Evan Smith, CEO</p>
+    <div class="grid_separator--xl">
+      <header class="grid_separator">
+        <div class="border--yellow_notch"></div>
+        <h4 class="link--blue">Business Member benefits</h4>
+      </header>
+      <h4 class="smallcaps--light grid_separator">
+        <strong>Included with every Business Membership</strong>
+      </h4>
+      <ul class="list--bulleted">
+        <li>
+          Organization name featured on the
+          <a href="https://www.texastribune.org/support-us/corporate-sponsors/"
+            >corporate-sponsors page</a
+          >
+          on texastribune.org with a link to the business member's site
+        </li>
+        <li>
+          Organization name and site link in the "thank you" segment/sponsor
+          message box in
+          <a href="https://www.texastribune.org/newsletters/the-brief/"
+            >The Brief e-newsletter</a
+          >
+          — once annually
+        </li>
+        <li>
+          Opportunity to include the business member's site link and
+          approximately 20 words of copy in the sponsor message box of
+          <a href="https://www.texastribune.org/newsletters/the-brief/"
+            >The Brief e-newsletter</a
+          >
+          — once annual (value of $250)
+        </li>
+        <li>Invitation to Texas Tribune #MembersOnly events and podcasts</li>
+        <li>
+          Inclusion in the distribution list for #MembersOnly, a monthly Texas
+          Tribune exclusive communication
+        </li>
+        <li>
+          First opportunity to RSVP for select, limited-capacity
+          <a href="https://www.texastribune.org/events/"
+            >Texas Tribune events</a
+          >
+        </li>
+        <li>
+          Opportunity to reserve
+          <a
+            href="https://www.texastribune.org/studio-919/downtown-austin-event-space-congress/"
+            >Studio 919</a
+          >, the Tribune's event studio, at 25% off standard rental pricing
+        </li>
+        <li>
+          Special
+          <a href="https://festival.texastribune.org/"
+            >Texas Tribune Festival</a
+          >
+          pass with a 34% discount off the ticketed price
+        </li>
+        <li>
+          A Texas Tribune Business Membership 4-by-6-inch printed card for
+          display, logo badge to place on the business member's site, and social
+          media graphic/copy to share with the member’s communities
+        </li>
+        <li>
+          Opportunity to gift a Texas Tribune
+          <a href="/donate">Informed Membership</a> (value of $99/year).
+          Benefits include:
+          <ul>
+            <li>Official Texas Tribune member decal</li>
+            <li>
+              Inclusion in the distribution list for #MembersOnly, a monthly
+              Texas Tribune exclusive communication
+            </li>
+            <li>
+              Special perks at
+              <a href="https://festival.texastribune.org/"
+                >The Texas Tribune Festival</a
+              >
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
 
-    <h4 class="smallcaps--light">
-      <strong>Included with every business membership</strong>
-    </h4>
-    <ul class="list--bulleted grid_separator--l">
-      <li>
-        Organization name featured on texastribune.org support page, Business
-        Membership tab, with link to business site
-      </li>
-      <li>
-        Organization name featured in a thank you segment of The Brief once
-        annually
-      </li>
-      <li>
-        Included in distribution list for TribMonth, an exclusive communication
-      </li>
-      <li>First opportunity to RSVP for select Texas Tribune events</li>
-      <li>Special fee to reserve Studio 919, the Tribune's event studio</li>
-      <li>Discounted Texas Tribune Festival pass</li>
-      <li>
-        Texas Tribune Business Membership window decal or 4x6 printed card
-      </li>
-    </ul>
-
-    <h4 class="smallcaps--light"><strong>At higher levels</strong></h4>
-    <div class="prose grid_separator--xl">
-      <p>
-        Annual subscription to The Blast, the best daily premium political
-        newsletter in Texas, for insiders who want the behind-the-scenes scoop
-      </p>
-      <p>
-        If you are interested in a custom marketing / messaging program, learn
-        more from
-        <a href="https://mediakit.texastribune.org/index.html">our media kit</a>
-        or contact April Hinkle directly at
-        <a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a>
-      </p>
+    <div class="grid_separator--xl">
+      <h4 class="smallcaps--light grid_separator">
+        <strong>Included at Lone Star and Big Tex levels</strong>
+      </h4>
+      <ul class="list--bulleted">
+        <li>
+          Annual subscription to
+          <a href="https://www.texastribune.org/theblast/">The Blast</a>, the
+          best premium political newsletter in Texas for insiders who want the
+          behind-the-scenes scoop (value of $480 for annual subscription)
+        </li>
+        <li>
+          Business text link and approximately 20 words of copy in the sponsor
+          message box of
+          <a href="https://www.texastribune.org/newsletters/the-brief/"
+            >The Brief e-newsletter</a
+          >
+          <ul>
+            <li>
+              Lone Star receives a total of three annually (value of $750)
+            </li>
+            <li>Big Tex receives a total of four annually (value of $1,000)</li>
+          </ul>
+        </li>
+        <li>
+          Opportunity to gift a Texas Tribune
+          <a href="/donate">Informed Membership</a>
+          <ul>
+            <li>
+              Lone Star can gift a total of three Informed Memberships (value of
+              $297/year)
+            </li>
+            <li>
+              Big Tex can gift a total of five Informed Memberships (value of
+              $495/year)
+            </li>
+          </ul>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
