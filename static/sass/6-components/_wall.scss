@@ -4,7 +4,7 @@
     text-align: center;
 
     img {
-      max-width: 450px;
+      max-width: 300px;
       width: 100%;
 
       @media print {
@@ -47,7 +47,7 @@
 
   &__star {
     color: $color-yellow-tribune;
-    font-size: $size-xs;
+    font-size: $size-xxs;
   }
 
   &__name {
