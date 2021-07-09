@@ -52,23 +52,26 @@
         </div>
       </section>
 
-      <section class="grid_container--m section-padding grid_padded print__hide">
+      <section class="grid_container--m grid_separator--xl section-padding grid_padded print__hide">
         <header>
           <div class="border--yellow_notch"></div>
-          <h4 class="link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</h4>
+          <h2 class="link--blue grid_separator">Circle members receive <a href="/donate">all membership benefits</a>, plus:</h2>
         </header>
-        <h4 class="smallcaps--light"><strong>Exclusive Content</strong></h4>
-        <div class="prose grid_separator--xl"><p>Special notifications and updates from Evan Smith, CEO</p></div>
 
-        <h4 class="smallcaps--light"><strong>Access Benefits</strong></h4>
-        <ul class="list--bulleted grid_separator--l">
+        <h3 class="smallcaps--light grid_separator"><strong>Exclusive Content</strong></h3>
+        <div class="prose grid_separator--xl">
+          <p>Special notifications and updates from Evan Smith, CEO</p>
+        </div>
+
+        <h3 class="smallcaps--light grid_separator"><strong>Access Benefits</strong></h3>
+        <ul class="list--bulleted grid_separator--xl">
           <li>Early registration to select Tribune events and VIP receptions</li>
           <li>Invitations to exclusive events as part of The Texas Tribune Festival</li>
           <li>Year-round reserved seating at Tribune statewide events</li>
         </ul>
 
-        <h4 class="smallcaps--light"><strong>Special Recognition</strong></h4>
-        <div class="prose grid_separator--xl">
+        <h3 class="smallcaps--light grid_separator"><strong>Special Recognition</strong></h3>
+        <div class="prose">
           <p>Exclusive recognition as a Texas Tribune Circle Member on our site</p>
         </div>
       </section>
@@ -76,7 +79,7 @@
       <section class="grid_container--m section-padding grid_padded print__hide">
         <header>
           <div class="border--yellow_notch"></div>
-          <h4 class="grid_separator circle-benefits__header">Questions?</h4>
+          <h2 class="grid_separator circle-benefits__header">Questions?</h2>
         </header>
         <div class="contact grid_row grid_wrap--l grid_separator">
           <div class="col">
@@ -95,23 +98,24 @@
         </div>
         <div class="contact grid_row grid_wrap--l grid_separator--l">
           <div class="col">
-            <p class="grid_separator--s">For other membership questions, contact:</p>
-            <p>512-716-8695</p>
-            <p class="grid_separator"><a href="mailto:membership@texastribune.org">membership@texastribune.org</a></p>
-          </div>
-          <div class="col">
             <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
             <p><strong>April Hinkle</strong></p>
             <p>Chief Revenue Officer</p>
             <p>512-716-8634</p>
             <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
           </div>
+          <div class="col">
+            <p class="grid_separator--s">For other membership questions, contact:</p>
+            <p>512-716-8695</p>
+            <p class="grid_separator"><a href="mailto:membership@texastribune.org">membership@texastribune.org</a></p>
+          </div>
         </div>
       </section>
 
-      <!-- where the wall component attaches -->
-      <div id="circle-wall"></div>
-
+      <div class="grid_container--l grid_separator--xl">
+        <!-- where the wall component attaches -->
+        <div id="circle-wall"></div>
+      </div>
     </div>
   </main>
 {% endblock %}

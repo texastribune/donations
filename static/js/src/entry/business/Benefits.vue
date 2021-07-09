@@ -3,11 +3,11 @@
     <div class="grid_separator--xl">
       <header class="grid_separator">
         <div class="border--yellow_notch"></div>
-        <h4 class="link--blue">Business Member benefits</h4>
+        <h2 class="link--blue">Business Member benefits</h2>
       </header>
-      <h4 class="smallcaps--light grid_separator">
+      <h3 class="smallcaps--light grid_separator">
         <strong>Included with every Business Membership</strong>
-      </h4>
+      </h3>
       <ul class="list--bulleted">
         <li>
           Organization name featured on the
@@ -84,9 +84,9 @@
     </div>
 
     <div class="grid_separator--xl">
-      <h4 class="smallcaps--light grid_separator">
+      <h3 class="smallcaps--light grid_separator">
         <strong>Included at Lone Star and Big Tex levels</strong>
-      </h4>
+      </h3>
       <ul class="list--bulleted">
         <li>
           Annual subscription to

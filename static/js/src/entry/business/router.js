@@ -5,6 +5,7 @@ import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
 import TopForm from './TopForm.vue';
+import BusinessWall from './BusinessWall.vue';
 import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import sanitizeParams from '../../utils/sanitize-params';
 import {
@@ -60,7 +61,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
-
+    const wall = new Vue({ ...BusinessWall });
     const {
       currentRoute: { query },
     } = router;
@@ -72,6 +73,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     routeHandler.$mount('#app');
     topForm.$mount('#business-form');
+    wall.$mount('#business-wall');
   });
 }
 

@@ -4,7 +4,7 @@
     text-align: center;
 
     img {
-      max-width: 450px;
+      max-width: 300px;
       width: 100%;
 
       @media print {
@@ -14,9 +14,7 @@
   }
 
   &__heading {
-    @include mq($from: bp-s) {
-      text-align: center;
-    }
+    @include font-setting('secondary');
 
     @media print {
       font-size: $size-b;
@@ -27,10 +25,6 @@
     display: flex;
     flex-wrap: wrap;
     list-style: none;
-
-    @include mq($from: bp-s) {
-      justify-content: center;
-    }
 
     @media print {
       justify-content: center;
@@ -53,7 +47,7 @@
 
   &__star {
     color: $color-yellow-tribune;
-    font-size: $size-xs;
+    font-size: $size-xxs;
   }
 
   &__name {
@@ -63,6 +57,11 @@
 
     @media print {
       font-size: 0.6rem;
+    }
+
+    a {
+      color: $color-black-pure;
+      text-decoration: underline;
     }
   }
 }
