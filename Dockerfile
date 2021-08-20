@@ -4,7 +4,7 @@ FROM nikolaik/python-nodejs:python3.9-nodejs12
 # suitable for production.
 
 ENV FLASK_DEBUG 1
-ENV NPM_CONFIG_LOGLEVEL warn   # is this used?
+ENV NPM_CONFIG_LOGLEVEL warn
 
 WORKDIR /app
 
