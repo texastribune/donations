@@ -1,21 +1,10 @@
-#FROM python:3.9
 FROM nikolaik/python-nodejs:python3.9-nodejs12
 
 # This Dockerfile is intended for development. See Dockerfile.sample for something more
 # suitable for production.
 
-#ENV NODE_VERSION=node_12.x
 ENV FLASK_DEBUG 1
-ENV NPM_CONFIG_LOGLEVEL warn
-
-## install Node and NPM
-#RUN apt-get -yq update && \
-#    apt-get -yq install apt-transport-https && \
-#    curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | apt-key add - && \
-#    echo "deb https://deb.nodesource.com/$NODE_VERSION stretch main" > /etc/apt/sources.list.d/nodesource.list && \
-#    apt-get -yq update && \
-#    apt-get -y install nodejs && \
-#    rm -rf /var/lib/apt/lists/*
+ENV NPM_CONFIG_LOGLEVEL warn   # is this used?
 
 WORKDIR /app
 
