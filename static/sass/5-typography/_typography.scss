@@ -85,13 +85,17 @@
   @include font-setting('secondary');
 
   li {
-    font-size: $size-b;
-    margin: 0 0 $size-b $size-m;
     @extend %link--blue;
+    font-size: $size-b;
+    margin: $size-b 0 0 $size-m;
 
-    &:last-child {
-      margin-bottom: 0;
+    &:first-child {
+      margin-top: 0;
     }
+  }
+
+  ul li:first-child {
+    margin-top: $size-b;
   }
 }
 
