@@ -3,12 +3,8 @@
     class="c-appeal t-lh-b has-ump-side-padding has-white-off-bg-until-bp-l"
   >
     <h2 class="t-uppercase t-size-b has-s-btm-marg">
-      <template v-if="isExpired">
-        Member benefits
-      </template>
-      <template v-else>
-        {{ membershipLevel }} benefits
-      </template>
+      <template v-if="isExpired"> Member benefits </template>
+      <template v-else> {{ membershipLevel }} benefits </template>
     </h2>
 
     <p class="has-b-btm-marg">
@@ -35,7 +31,7 @@
         class="c-appeal__item"
       >
         <icon :name="index > ceiling ? 'close' : 'check'" />
-        <component :is="benefit.component" />
+        <component v-bind:is="benefit.component" />
       </li>
     </ul>
 
@@ -44,22 +40,20 @@
     </p>
 
     <a
-      class="c-button c-button--s has-text-white has-bg-teal l-width-full l-display-block"
+      class="
+        c-button c-button--s
+        has-text-white has-bg-teal
+        l-width-full l-display-block
+      "
       ga-on="click"
       :href="upgradeHref"
       :ga-event-category="ga.donations.category"
       :ga-event-action="ga.donations.actions['membership-intent']"
       :ga-event-label="ga.donations.labels['upgrade-contact']"
     >
-      <template v-if="isExpired">
-        Renew your support
-      </template>
-      <template v-else-if="isHighest">
-        Join our giving Circles
-      </template>
-      <template v-else>
-        Contact us to upgrade your membership
-      </template>
+      <template v-if="isExpired"> Renew your support </template>
+      <template v-else-if="isHighest"> Join our giving Circles </template>
+      <template v-else> Contact us to upgrade your membership </template>
     </a>
   </aside>
 </template>
@@ -72,7 +66,7 @@ export default {
 
   props: {
     membershipLevel: {
-      validator: value => typeof value === 'string' || value === null,
+      validator: (value) => typeof value === 'string' || value === null,
       required: true,
     },
 
