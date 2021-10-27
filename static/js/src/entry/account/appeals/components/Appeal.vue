@@ -31,7 +31,7 @@
         class="c-appeal__item"
       >
         <icon :name="index > ceiling ? 'close' : 'check'" />
-        <component v-bind:is="benefit.component" />
+        <component :is="benefit.component" />
       </li>
     </ul>
 
