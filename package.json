@@ -42,7 +42,7 @@
     "@sentry/integrations": "^5.6.0",
     "@sentry/webpack-plugin": "^1.6.2",
     "@texastribune/queso-tools": "^2.2.5",
-    "@texastribune/queso-ui": "^9.4.2",
+    "@texastribune/queso-ui": "^10.3.0",
     "auth0-js": "^9.17.0",
     "axios": "^0.21.4",
     "babel-loader": "^8.0.0",
