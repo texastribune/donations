@@ -12,7 +12,6 @@ import re
 from datetime import datetime
 from pprint import pformat
 
-import celery
 import stripe
 from amazon_pay.client import AmazonPayClient
 from amazon_pay.ipn_handler import IpnHandler
@@ -191,7 +190,7 @@ app.config.update(
 )
 stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
-make_celery(app)
+celery = make_celery(app)
 
 
 """
