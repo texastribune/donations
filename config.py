@@ -26,18 +26,20 @@ LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 # default is 4am and 4pm:
 BATCH_HOURS = os.getenv("BATCH_HOURS", "4, 16")
-CELERY_TIMEZONE = TIMEZONE
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
-CELERY_ALWAYS_EAGER = bool_env("CELERY_ALWAYS_EAGER")
+REDIS_URL = os.getenv("REDIS_URL")
+
+timezone = TIMEZONE
+result_backend = os.getenv("CELERY_RESULT_BACKEND")
+task_always_eager = bool_env("CELERY_ALWAYS_EAGER")
+redis_backend_health_check_interval = 25
 # deprecated:
-CELERYBEAT_SCHEDULE = {
+beat_schedule = {
     "every-day": {
         "task": "batch.charge_cards",
         "schedule": crontab(minute="0", hour=BATCH_HOURS),
     }
 }
-REDIS_URL = os.getenv("REDIS_URL")
 
 ######
 # SMTP
@@ -105,8 +107,8 @@ AMAZON_CAMPAIGN_ID = os.getenv("AMAZON_CAMPAIGN_ID", "")
 # this is User.username
 CIRCLE_FAILURE_RECIPIENT = os.getenv("CIRCLE_FAILURE_RECIPIENT")
 
-CELERYD_LOG_FORMAT = "%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s"
-CELERYD_TASK_LOG_FORMAT = "%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s"
+worker_log_format = "%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s"
+worker_task_log_format = "%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s"
 
 ########
 # Auth0

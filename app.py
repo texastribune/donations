@@ -185,9 +185,9 @@ app.secret_key = FLASK_SECRET_KEY
 
 app.config.from_pyfile("config.py")
 app.config.update(
-    CELERY_ACCEPT_CONTENT=["pickle", "json"],
-    CELERY_ALWAYS_EAGER=False,
-    CELERY_IMPORTS=("app", "npsp", "batch"),
+    accept_content=["pickle", "json"],
+    task_always_eager=False,
+    imports=("app", "npsp", "batch"),
 )
 stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
