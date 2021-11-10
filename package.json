@@ -40,7 +40,7 @@
     "@babel/runtime": "^7.15.4",
     "@sentry/browser": "^5.6.0",
     "@sentry/integrations": "^5.6.0",
-    "@sentry/webpack-plugin": "^1.6.2",
+    "@sentry/webpack-plugin": "^1.18.3",
     "@texastribune/queso-tools": "^2.2.5",
     "@texastribune/queso-ui": "^10.3.0",
     "auth0-js": "^9.17.0",
@@ -81,7 +81,7 @@
     "eslint": "^5.3.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.3.0",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-vue": "^6.2.2",
     "vue-eslint-parser": "^7.11.0"
   },
