@@ -173,7 +173,7 @@ Talisman(
 )
 
 limiter = Limiter(
-    app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
+    app, key_func=get_remote_address, default_limits=["4000 per day", "50 per hour"]
 )
 
 log_level = logging.getLevelName(LOG_LEVEL)
