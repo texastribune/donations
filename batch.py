@@ -8,7 +8,7 @@ from pytz import timezone
 from charges import ChargeException, QuarantinedException, amount_to_charge, charge
 from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from npsp import Opportunity
-from util import send_email
+from util import send_email, notify_slack
 
 zone = timezone(TIMEZONE)
 
@@ -91,7 +91,9 @@ def charge_cards():
 
     log.it("---Processing charges...")
 
-    log.it(f"Found {len(opportunities)} opportunities available to process.")
+    opportunities_cnt = len(opportunities)
+    log.it(f"Found {opportunities_cnt} opportunities available to process.")
+    notify_slack(text=f"Processing {opportunities_cnt} reoccuring donations")
 
     for opportunity in opportunities:
         if not opportunity.stripe_customer:

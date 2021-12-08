@@ -44,18 +44,24 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
     return message
 
 
-def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
+def notify_slack(contact=None, opportunity=None, rdo=None, account=None, text=None):
     """
     Send a notification about a donation to Slack.
     """
 
-    text = construct_slack_message(
-        contact=contact, opportunity=opportunity, rdo=rdo, account=account
-    )
-    username = rdo.lead_source if rdo else opportunity.lead_source
+    # if needing to send a simpler slack message (i.e. job start/stop, processing count, etc.) pass in as text var
+    if not text:
+        text = construct_slack_message(
+            contact=contact, opportunity=opportunity, rdo=rdo, account=account
+        )
     message = {"text": text, "channel": SLACK_CHANNEL, "icon_emoji": ":moneybag:"}
 
-    send_slack_message(message, username=username)
+    if rdo or opportunity:
+        send_slack_message(
+            message, username=rdo.lead_source if rdo else opportunity.lead_source
+        )
+    else:
+        send_slack_message(message)
 
 
 def send_slack_message(message=None, username="moneybot"):
