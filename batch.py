@@ -91,9 +91,9 @@ def charge_cards():
 
     log.it("---Processing charges...")
 
-    opportunities_cnt = len(opportunities)
-    log.it(f"Found {opportunities_cnt} opportunities available to process.")
-    notify_slack(text=f"Processing {opportunities_cnt} reoccuring donations")
+    processing_msg = f"Found {len(opportunities)} opportunities available to process."
+    log.it(processing_msg)
+    notify_slack(text=processing_msg)
 
     for opportunity in opportunities:
         if not opportunity.stripe_customer:
