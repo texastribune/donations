@@ -39,7 +39,7 @@ class Log(object):
         """
         Send the assembled log out as an email.
         """
-        body = "\n".join(self.log)
+        body = "\n".join(self.log).encode("utf-8")
         recipient = ACCOUNTING_MAIL_RECIPIENT
         subject = "Batch run"
         send_email(body=body, recipient=recipient, subject=subject)
