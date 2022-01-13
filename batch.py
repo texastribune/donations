@@ -123,7 +123,7 @@ def charge_cards():
             encoded_name = entry_name.encode("utf-8")
             logging.info(f"--- Test log: {encoded_name}")
         except:
-            logging.warn(f"Could not encode this name")
+            logging.warn("Could not encode this name")
 
     log.send()
 
