@@ -39,7 +39,7 @@ class Log(object):
         """
         Send the assembled log out as an email.
         """
-        body = "\n".join(self.log.encode("utf-8"))
+        body = "\n".join(self.log)
         recipient = ACCOUNTING_MAIL_RECIPIENT
         subject = "Batch run"
         send_email(body=body, recipient=recipient, subject=subject)
@@ -117,6 +117,13 @@ def charge_cards():
             logging.info(
                 "Failed to charge because Opportunity %s is quarantined", opportunity
             )
+        # todo: remove this after checking encoded output in papertrail
+        try:
+            entry_name = opportunity.name
+            encoded_name = entry_name.encode("utf-8")
+            logging.info(f"--- Test log: {encoded_name}")
+        except:
+            logging.warn("Could not encode this name")
 
     log.send()
 
