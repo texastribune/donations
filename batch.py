@@ -105,9 +105,19 @@ def charge_cards():
         if not opportunity.stripe_customer:
             continue
         amount = amount_to_charge(opportunity)
-        log.it(
-            f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
-        )
+        try:
+            entry_name = opportunity.name
+            # replaces non-ascii characters with "?" - See PR #851
+            encoded_name = entry_name.encode("ascii", "replace")
+            decoded_name = encoded_name.decode("ascii")
+            log.it(
+                f"---- Charging ${amount} to {opportunity.stripe_customer} ({decoded_name})"
+            )
+        except:
+            log.it(
+                f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
+            )
+            logging.warn(f"Could not encode {opportunity.name}")
         try:
             charge(opportunity)
         except ChargeException as e:
@@ -117,13 +127,6 @@ def charge_cards():
             logging.info(
                 "Failed to charge because Opportunity %s is quarantined", opportunity
             )
-        # todo: remove this after checking encoded output in papertrail
-        try:
-            entry_name = opportunity.name
-            encoded_name = entry_name.encode("utf-8")
-            logging.info(f"--- Test log: {encoded_name}")
-        except:
-            logging.warn("Could not encode this name")
 
     log.send()
 
