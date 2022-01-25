@@ -89,6 +89,8 @@ celery beat --app app.celery &
 # gunicorn app:app --log-file=- --bind=0.0.0.0:5000 --access-logfile=-
 ```
 
+NOTE: If you are a Tribune engineer, you may need to use `local.texastribune.org/donate` in order to sign in to your account or otherwise interact with the account page.
+
 Running tests
 -------------
 
