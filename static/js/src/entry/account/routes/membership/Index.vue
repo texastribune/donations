@@ -39,8 +39,6 @@ import SingleOrWillExpire from './containers/SingleOrWillExpireContainer.vue';
 
 import LinkEmail from '../../link-email/components/MiniForm.vue';
 import CircleAppeal from '../../appeals/components/CircleAppeal.vue';
-import Messages from '../../messages/components/Messages.vue';
-import CreditCardMessage from '../../messages/components/CreditCardMessage.vue';
 import ContactUs from '../../components/ContactUs.vue';
 
 export default {
@@ -51,8 +49,6 @@ export default {
     RecurringOrCircle,
     SingleOrWillExpire,
     Appeal,
-    Messages,
-    CreditCardMessage,
     CircleAppeal,
     ContactUs,
     LinkEmail,
