@@ -1,14 +1,5 @@
 <template>
   <div class="has-ump-top-padding">
-    <messages :num-messages="1">
-      <template v-slot:messages="{ setMessageSeen }">
-        <credit-card-message
-          :ga-label="ga.userPortal.labels.payments"
-          @setMessageSeen="setMessageSeen"
-        />
-      </template>
-    </messages>
-
     <h1 class="has-ump-side-padding has-l-btm-marg t-size-xl">
       Your Donations
     </h1>
