@@ -13,8 +13,8 @@
       <div class="has-text-gray-dark t-size-s t-links-underlined">
         <p>
           Thanks for creating your Texas Tribune account! You can use this login
-          to edit your contact information, comment on texastribune.org stories,
-          and view donation or subscription history.
+          to edit your contact information and view your donation history and
+          yearly tax receipt.
         </p>
       </div>
     </template>
