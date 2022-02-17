@@ -877,7 +877,7 @@ def stripehook():
 
     if event.type == "customer.source.updated":
         customer_source_updated.delay(event)
-    if event.type == "payout.padi":
+    if event.type == "payout.paid":
         payout_paid.delay(event)
 
     # TODO change this to debug later
