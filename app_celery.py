@@ -8,7 +8,7 @@ def make_celery(app):
         broker_pool_limit=1,
         broker_heartbeat=None,
         broker=app.config["CELERY_BROKER_URL"],
-        broker_connection_timeout=30,
+        broker_connection_timeout=60,
         result_backend=None,
         event_queue_expires=60,
         worker_prefetch_multiplier=1,
