@@ -111,6 +111,15 @@
     "MWS_SECRET_KEY": {
       "required": true
     },
+    "NEW_RELIC_APP_NAME": {
+      "required": false
+    },
+    "NEW_RELIC_LICENSE_KEY": {
+      "required": false
+    },
+    "NEW_RELIC_LOG": {
+      "required": false
+    },
     "PAPERTRAIL_API_TOKEN": {
       "required": true
     },
