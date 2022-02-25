@@ -1,8 +1,8 @@
 import logging
 from datetime import datetime, timedelta
 
-import celery
 import redis
+from celery import shared_task
 from pytz import timezone
 
 from charges import ChargeException, QuarantinedException, amount_to_charge, charge
@@ -74,7 +74,7 @@ class Lock(object):
 # TODO stop sending this email and just rely on Sentry and logs?
 
 
-@celery.task()
+@shared_task()
 def charge_cards():
 
     lock = Lock(key="charge-cards-lock")
