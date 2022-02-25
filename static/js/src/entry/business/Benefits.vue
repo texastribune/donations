@@ -62,24 +62,6 @@
           display, logo badge to place on the business member's site, and social
           media graphic/copy to share with the member’s communities
         </li>
-        <li>
-          Opportunity to gift a Texas Tribune
-          <a href="/donate">Informed Membership</a> (value of $99/year).
-          Benefits include:
-          <ul>
-            <li>Official Texas Tribune member decal</li>
-            <li>
-              Inclusion in the distribution list for #MembersOnly, a monthly
-              Texas Tribune exclusive communication
-            </li>
-            <li>
-              Special perks at
-              <a href="https://festival.texastribune.org/"
-                >The Texas Tribune Festival</a
-              >
-            </li>
-          </ul>
-        </li>
       </ul>
     </div>
 
@@ -105,20 +87,6 @@
               Lone Star receives a total of three annually (value of $750)
             </li>
             <li>Big Tex receives a total of four annually (value of $1,000)</li>
-          </ul>
-        </li>
-        <li>
-          Opportunity to gift a Texas Tribune
-          <a href="/donate">Informed Membership</a>
-          <ul>
-            <li>
-              Lone Star can gift a total of three Informed Memberships (value of
-              $297/year)
-            </li>
-            <li>
-              Big Tex can gift a total of five Informed Memberships (value of
-              $495/year)
-            </li>
           </ul>
         </li>
       </ul>

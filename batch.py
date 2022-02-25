@@ -8,7 +8,7 @@ from pytz import timezone
 from charges import ChargeException, QuarantinedException, amount_to_charge, charge
 from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
 from npsp import Opportunity
-from util import send_email
+from util import send_email, send_slack_message
 
 zone = timezone(TIMEZONE)
 
@@ -91,15 +91,33 @@ def charge_cards():
 
     log.it("---Processing charges...")
 
-    log.it(f"Found {len(opportunities)} opportunities available to process.")
+    processing_msg = f"Found {len(opportunities)} opportunities available to process."
+    log.it(processing_msg)
+    send_slack_message(
+        {
+            "channel": "#stripe",
+            "text": processing_msg,
+            "icon_emoji": ":moneybag:",
+        }
+    )
 
     for opportunity in opportunities:
         if not opportunity.stripe_customer:
             continue
         amount = amount_to_charge(opportunity)
-        log.it(
-            f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
-        )
+        try:
+            entry_name = opportunity.name
+            # replaces non-ascii characters with "?" - See PR #851
+            encoded_name = entry_name.encode("ascii", "replace")
+            decoded_name = encoded_name.decode("ascii")
+            log.it(
+                f"---- Charging ${amount} to {opportunity.stripe_customer} ({decoded_name})"
+            )
+        except:
+            log.it(
+                f"---- Charging ${amount} to {opportunity.stripe_customer} ({opportunity.name})"
+            )
+            logging.warn(f"Could not encode {opportunity.name}")
         try:
             charge(opportunity)
         except ChargeException as e:

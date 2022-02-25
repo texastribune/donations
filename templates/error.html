@@ -1,22 +1,30 @@
-{% extends "layout.html" %}
-{% block title %}
-  {{ super() }}
-{% endblock %}
-{% block extra_script %}
-  {{ super() }}
-{% endblock %}
-
-{% block content %}
-{{ super() }}
+{% extends "layout.html" %} {% block title %} {{ super() }} {% endblock %} {%
+block extra_script %} {{ super() }} {% endblock %} {% block content %} {{
+super() }}
 <div class="main grid_container--m prose grid_padded--xl">
   <div class="grid_row">
     <figure class="image_default">
-      <img src="https://static.texastribune.org/media/marketing/tt-404_sorry.png" />
+      <img
+        src="https://static.texastribune.org/media/marketing/tt-404_sorry.png"
+      />
     </figure>
   </div>
   <h2>{{ message }}</h2>
-  <p>If you're trying to become a member or make a donation, you can go to <a href="/donate">our membership and donation page</a> for more info on how to support us or contact us at <a href="mailto:membership@texastribune.org">membership@texastribune.org</a>.</p>
-  <p>If you're having trouble signing up for The Blast, please email <a href="mailto:blast@texastribune.org">blast@texastribune.org</a>.</p>
-  <p>Visit <a href="https://www.texastribune.org/">The Texas Tribune homepage</a> to read and explore our content.</p>
+  <p>
+    If you're trying to become a member or make a donation, you can go to
+    <a href="/donate">our membership and donation page</a> for more info on how
+    to support us or contact us at
+    <a href="mailto:membership@texastribune.org">membership@texastribune.org</a
+    >.
+  </p>
+  <p>
+    If you're having trouble signing up for The Blast, please email
+    <a href="mailto:blast@texastribune.org">blast@texastribune.org</a>.
+  </p>
+  <p>
+    Visit
+    <a href="https://www.texastribune.org/">The Texas Tribune homepage</a> to
+    read and explore our content.
+  </p>
 </div>
 {% endblock %}

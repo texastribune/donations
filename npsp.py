@@ -205,6 +205,47 @@ class SalesforceConnection(object):
 
         return response
 
+    @staticmethod
+    def chunks(lst, n):
+        """Yield successive n-sized chunks from lst."""
+        for i in range(0, len(lst), n):
+            yield lst[i : i + n]
+
+    """
+    Update the given opportunities with the payout date.
+    Do this with the composite API so it's many fewer API calls.
+    """
+
+    def update_payout_dates(self, opportunity_ids: list, payout_date: str):
+
+        responses = []
+
+        # the max number of records that can be updated in one composite API call is 200
+        for chunk in self.chunks(opportunity_ids, 200):
+            # contruct record entries
+            records = []
+            for id_ in chunk:
+                record = {
+                    "attributes": {"type": "Opportunity"},
+                    "id": id_,
+                    "Cash_Receipt_Date__c": payout_date,
+                }
+                records.append(record)
+
+            data = {"allOrNone": False, "records": records}
+            path = f"/services/data/{SALESFORCE_API_VERSION}/composite/sobjects/"
+            response = self.patch(path, data, expected_response=200)
+            response = json.loads(response.text)
+            error = False
+            for item in response:
+                if item["success"] is not True:
+                    error = item["errors"]
+            if error:
+                raise SalesforceException(f"Failure on update: {error}")
+            responses.append(response)
+
+        return responses
+
     def save(self, sf_object):
 
         if sf_object.id:
@@ -312,6 +353,7 @@ class Opportunity(SalesforceObject):
         end=None,
         stage_name="Pledged",
         stripe_customer_id=None,
+        stripe_transaction_id=None,
         sf_connection=None,
     ):
 

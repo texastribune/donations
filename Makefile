@@ -10,7 +10,7 @@ interactive: build backing
 	-docker volume create --name ${APP}_node_modules-vol
 	docker run \
 		--volume=${APP}_node_modules-vol:/app/node_modules \
-		--volume=$$(pwd):/app \
+		--volume="$$(pwd):/app" \
 		--rm --interactive --tty \
 		--env-file=${DOCKER_ENV_FILE} \
 		--publish=80:5000 \
