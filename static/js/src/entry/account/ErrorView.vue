@@ -8,9 +8,7 @@
           <template v-if="isUnverifiedError">
             Please verify your account.
           </template>
-          <template v-else>
-            Sorry about that.
-          </template>
+          <template v-else> Sorry about that. </template>
         </h1>
 
         <p class="has-s-btm-marg t-links-underlined t-size-b">
@@ -30,9 +28,7 @@
         </p>
 
         <contact-us :ga-label="gaLabel" :display="{ color: 'black' }">
-          <template v-slot:text>
-            Having trouble? Contact
-          </template>
+          <template v-slot:text> Having trouble? Contact </template>
         </contact-us>
       </div>
     </main>
@@ -60,6 +56,8 @@ export default {
 
   computed: {
     isUnverifiedError() {
+      // eslint-disable-next-line no-console
+      console.log(this.context.error);
       return this.context.error instanceof UnverifiedError;
     },
 
