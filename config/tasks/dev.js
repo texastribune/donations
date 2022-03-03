@@ -1,6 +1,6 @@
 const watch = require('glob-watcher');
 const { styles, icons, utils } = require('@texastribune/queso-tools');
-const { css, svg, manifest } = require('../paths.js');
+const { css, svg, manifest } = require('../paths');
 
 async function dev() {
   const compileStyles = async showMsg => {

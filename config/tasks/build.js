@@ -1,5 +1,5 @@
 const { styles, icons } = require('@texastribune/queso-tools');
-const { css, svg, manifest } = require('../paths.js');
+const { css, svg, manifest } = require('../paths');
 
 async function build() {
   await styles(css, manifest);
