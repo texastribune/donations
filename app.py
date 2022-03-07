@@ -244,7 +244,7 @@ def get_bundles(entry):
     with open(manifest_path) as manifest:
         assets = json.load(manifest)
     entrypoint = assets["entrypoints"][entry]
-    for bundle in entrypoint["js"]:
+    for bundle in entrypoint["assets"]["js"]:
         bundles["js"].append(asset_path + bundle)
     with open(css_manifest_path) as manifest:
         css_assets = json.load(manifest)
