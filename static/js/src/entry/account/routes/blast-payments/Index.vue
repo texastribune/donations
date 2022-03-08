@@ -14,7 +14,7 @@
     </div>
 
     <contact-us :ga-label="ga.userPortal.labels['blast-payments']" is-blast>
-      <template v-slot:text>
+      <template #text>
         To update your subscription to The Blast, contact us at
       </template>
     </contact-us>

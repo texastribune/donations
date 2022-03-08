@@ -2,7 +2,7 @@
   <section class="c-detail-box c-detail-box--from-l">
     <div class="has-xxxl-btm-marg">
       <info-list :items="data">
-        <template v-slot:text="{ item: { key, extra } }">
+        <template #text="{ item: { key, extra } }">
           <template v-if="key === 'subscription'">
             {{ extra.amount | currency }}, {{ extra.period }}
           </template>

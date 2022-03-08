@@ -13,7 +13,7 @@
           :ga-label="ga.userPortal.labels['changed-email']"
           :display="{ color: 'black' }"
         >
-          <template v-slot:text>
+          <template #text>
             Check your inbox for an email from The Texas Tribune with the
             subject line "Please confirm your login email change," then click to
             verify your email. Having trouble? Contact

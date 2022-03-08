@@ -1,9 +1,14 @@
 <template>
   <div
-    class="has-ump-top-padding has-ump-btm-padding has-white-bg-from-bp-l has-white-off-bg-until-bp-l"
+    class="
+      has-ump-top-padding
+      has-ump-btm-padding
+      has-white-bg-from-bp-l
+      has-white-off-bg-until-bp-l
+    "
   >
     <messages :num-messages="1">
-      <template v-slot:messages="{ setMessageSeen }">
+      <template #messages="{ setMessageSeen }">
         <welcome-message
           :ga-label="ga.userPortal.labels.home"
           @setMessageSeen="setMessageSeen"
@@ -26,7 +31,7 @@
 
     <div class="is-hidden-until-bp-l">
       <contact-us :ga-label="ga.userPortal.labels.home">
-        <template v-slot:text>
+        <template #text>
           Have questions about your account? Or feedback about this website?
           Email
         </template>
