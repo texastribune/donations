@@ -1,6 +1,6 @@
 <template>
   <summary-box heading="the blast">
-    <template v-slot:content>
+    <template #content>
       <p v-if="lastTransaction.card" class="has-text-gray-dark">
         Your subscription to The Blast is no longer active. Your last payment of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged to
@@ -16,7 +16,7 @@
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav show-renew-blast show-blast-payments />
     </template>
   </summary-box>

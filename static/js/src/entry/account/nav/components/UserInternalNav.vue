@@ -17,7 +17,7 @@
         <slot name="items"></slot>
 
         <link-list-item v-if="isNeverGiven && showJoinNow">
-          <template v-slot:main>
+          <template #main>
             <a
               ga-on="click"
               :href="urls.donate"
@@ -32,7 +32,7 @@
         <link-list-item
           v-if="hasGivenNotCustom && isExpired && showRenewMembership"
         >
-          <template v-slot:main>
+          <template #main>
             <a
               ga-on="click"
               :href="isCircleDonor ? urls.circle : urls.donate"
@@ -45,7 +45,7 @@
           </template>
         </link-list-item>
         <link-list-item v-if="isFormerBlastSubscriber && showRenewBlast">
-          <template v-slot:main>
+          <template #main>
             <a
               ga-on="click"
               href="/blastform"
@@ -60,7 +60,7 @@
         <link-list-item
           v-if="isSingleDonor && !isExpired && showBecomeSustaining"
         >
-          <template v-slot:main>
+          <template #main>
             <a
               ga-on="click"
               :href="urls.donate"
@@ -76,7 +76,7 @@
         <reset-password v-if="showResetPw" :ga-label="pwResetGaLabel" />
 
         <link-list-item v-if="!isNeverGiven && showDonationHistory">
-          <template v-slot:main>
+          <template #main>
             <router-link
               ga-on="click"
               :to="{ name: 'payments' }"
@@ -89,7 +89,7 @@
           </template>
         </link-list-item>
         <link-list-item v-if="hasGivenNotCustom && showMembershipStatus">
-          <template v-slot:main>
+          <template #main>
             <router-link
               ga-on="click"
               :to="{ name: 'membership' }"
@@ -102,7 +102,7 @@
           </template>
         </link-list-item>
         <link-list-item v-if="isBlastSubscriber && showBlastSubscription">
-          <template v-slot:main>
+          <template #main>
             <router-link
               ga-on="click"
               :to="{ name: 'blast' }"
@@ -115,7 +115,7 @@
           </template>
         </link-list-item>
         <link-list-item v-if="isBlastSubscriber && showBlastPayments">
-          <template v-slot:main>
+          <template #main>
             <router-link
               ga-on="click"
               :to="{ name: 'blast-payments' }"
@@ -128,7 +128,7 @@
           </template>
         </link-list-item>
         <link-list-item v-if="showEditProfile">
-          <template v-slot:main>
+          <template #main>
             <router-link
               ga-on="click"
               :to="{ name: 'edit-contact-info' }"
@@ -141,7 +141,7 @@
           </template>
         </link-list-item>
         <link-list-item v-if="showAmbassador">
-          <template v-slot:main>
+          <template #main>
             <router-link
               ga-on="click"
               :to="{ name: 'ambassador' }"

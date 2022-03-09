@@ -6,10 +6,10 @@
     :display="{ onGrayMobileBg: true }"
     @setMessageSeen="$emit('setMessageSeen')"
   >
-    <template v-slot:icon>
+    <template #icon>
       <icon name="bell" :display="{ size: 's' }" />
     </template>
-    <template v-slot:content>
+    <template #content>
       <div class="has-text-gray-dark t-size-s t-links-underlined">
         <p>
           Thanks for creating your Texas Tribune account! You can use this login

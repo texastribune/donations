@@ -1,6 +1,6 @@
 <template>
   <summary-box heading="become a member" :display="{ hasMobileBottom: false }">
-    <template v-slot:content>
+    <template #content>
       <p class="has-text-gray-dark">
         Our nonprofit newsroom relies on the support of readers like you to keep
         our stories free and accessible for all. Are you ready to join our
@@ -8,13 +8,13 @@
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav show-join-now />
     </template>
 
-    <template v-slot:bottom>
+    <template #bottom>
       <link-email :ga-label="ga.userPortal.labels.home">
-        <template v-slot:heading>
+        <template #heading>
           <h2 class="t-size-s">Already a member?</h2>
         </template>
       </link-email>

@@ -29,7 +29,7 @@
     </div>
 
     <contact-us :ga-label="ga.userPortal.labels.ambassador">
-      <template v-slot:text>
+      <template #text>
         Have questions about your account? Or feedback about this website? Email
       </template>
     </contact-us>

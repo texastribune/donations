@@ -1,6 +1,6 @@
 <template>
   <summary-box heading="the blast">
-    <template v-slot:content>
+    <template #content>
       <p v-if="nextTransaction.card" class="has-text-gray-dark">
         Thanks for subscribing to The Blast! Your next
         <strong>{{ nextTransaction.period }}</strong> payment of
@@ -26,19 +26,17 @@
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav show-blast-payments />
     </template>
 
-    <template v-if="nextTransaction.card" v-slot:bottom>
+    <template v-if="nextTransaction.card" #bottom>
       <contact-us
         :ga-label="ga.userPortal.labels.home"
         :display="{ size: 's' }"
         is-blast
       >
-        <template v-slot:text>
-          Need to make a change? Contact us at
-        </template>
+        <template #text> Need to make a change? Contact us at </template>
       </contact-us>
     </template>
   </summary-box>

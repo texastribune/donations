@@ -4,7 +4,7 @@
     show-become-sustaining
     show-renew-membership
   >
-    <template v-slot:items>
+    <template #items>
       <tax-receipt :ga-label="ga.userPortal.labels.payments" />
     </template>
   </user-internal-nav>
