@@ -45,7 +45,7 @@
     "@texastribune/queso-ui": "^10.3.0",
     "auth0-js": "^9.17.0",
     "axios": "^0.21.4",
-    "babel-loader": "^8.0.0",
+    "babel-loader": "^8.2.3",
     "camelcase": "^5.3.1",
     "clean-webpack-plugin": "^2.0.2",
     "css-loader": "^5.2.7",
@@ -82,7 +82,7 @@
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-config-prettier": "^3.3.0",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-vue": "^7.2.0",
+    "eslint-plugin-vue": "^8.5.0",
     "vue-eslint-parser": "^7.11.0"
   },
   "eslintConfig": {
