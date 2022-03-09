@@ -10,7 +10,7 @@
         :display="{ size: 'xs' }"
         subject="custom%20tax%20receipt"
       >
-        <template v-slot:text>
+        <template #text>
           Note: Donation history does not include event sponsorships or ticket
           purchases. To receive a {{ dates.lastYear }} tax receipt with this
           information, please contact

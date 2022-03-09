@@ -21,7 +21,7 @@
     <appeal />
 
     <contact-us :ga-label="ga.userPortal.labels.membership" is-membership>
-      <template v-slot:text>
+      <template #text>
         To update your membership status, contact us at
       </template>
     </contact-us>

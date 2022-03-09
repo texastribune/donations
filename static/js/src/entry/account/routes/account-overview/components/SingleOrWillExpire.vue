@@ -1,6 +1,6 @@
 <template>
   <summary-box heading="membership">
-    <template v-slot:content>
+    <template #content>
       <p v-if="lastTransaction.card" class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged on
@@ -21,16 +21,14 @@
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav
         show-donation-history
         show-membership-status
         show-become-sustaining
         show-ambassador
       >
-        <template v-slot:membership-text>
-          More about your membership
-        </template>
+        <template #membership-text> More about your membership </template>
       </user-internal-nav>
     </template>
   </summary-box>

@@ -3,12 +3,12 @@
     v-slot="{ pwReset: { pwResetSuccess, pwResetFailure, pwReset } }"
   >
     <link-list-item>
-      <template v-slot:main>
+      <template #main>
         <button class="c-link-button" @click="pwReset(gaLabel)">
           Reset your password
         </button>
       </template>
-      <template v-slot:extra>
+      <template #extra>
         <p v-if="pwResetSuccess" class="t-size-xs has-text-gray-dark">
           Check your inbox for an email from The Texas Tribune with the subject
           line &quot;Reset your password.&quot;

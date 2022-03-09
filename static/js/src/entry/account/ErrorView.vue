@@ -28,7 +28,7 @@
         </p>
 
         <contact-us :ga-label="gaLabel" :display="{ color: 'black' }">
-          <template v-slot:text> Having trouble? Contact </template>
+          <template #text> Having trouble? Contact </template>
         </contact-us>
       </div>
     </main>

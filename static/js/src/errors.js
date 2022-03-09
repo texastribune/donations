@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 // from: https://github.com/coralproject/talk/blob/v4.10.3/errors.js
 class ExtendableError {
   constructor(message = null) {

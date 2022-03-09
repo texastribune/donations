@@ -1,7 +1,7 @@
 <template>
   <tax-receipt-provider v-slot="{ taxReceipt: { buildReceipt } }">
     <link-list-item>
-      <template v-slot:main>
+      <template #main>
         <button class="c-link-button" @click="buildReceipt(gaLabel)">
           Download your {{ dates.lastYear }} tax receipt
         </button>

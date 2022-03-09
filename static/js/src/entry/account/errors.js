@@ -1,3 +1,5 @@
+/* eslint-disable max-classes-per-file */
+
 // think of as an abstract class
 export class AppError extends Error {
   constructor({ name, message, extra }) {

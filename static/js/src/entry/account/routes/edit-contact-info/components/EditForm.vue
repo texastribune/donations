@@ -69,7 +69,7 @@
             :valid="valid"
             @updateFlags="updateFlags"
           >
-            <template v-slot:extra>
+            <template #extra>
               <p v-show="showConfirmedEmail" class="t-size-xs has-text-error">
                 <strong>Are you sure?</strong> Changing this email will
                 immediately log you out of texastribune.org, and you won't be

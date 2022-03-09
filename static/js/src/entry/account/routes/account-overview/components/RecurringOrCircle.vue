@@ -1,6 +1,6 @@
 <template>
   <summary-box heading="membership">
-    <template v-slot:content>
+    <template #content>
       <p v-if="nextTransaction.card" class="has-text-gray-dark">
         Thank you for being a Texas Tribune member! Your next
         <strong>{{ nextTransaction.period }}</strong> donation of
@@ -19,23 +19,19 @@
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav
         show-donation-history
         show-membership-status
         show-ambassador
       >
-        <template v-slot:membership-text>
-          More about your membership
-        </template>
+        <template #membership-text> More about your membership </template>
       </user-internal-nav>
     </template>
 
-    <template v-slot:bottom>
+    <template #bottom>
       <contact-us is-membership :display="{ size: 's' }">
-        <template v-slot:text>
-          To update your membership, contact us at
-        </template>
+        <template #text> To update your membership, contact us at </template>
       </contact-us>
     </template>
   </summary-box>

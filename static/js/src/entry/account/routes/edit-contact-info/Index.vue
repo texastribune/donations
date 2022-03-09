@@ -17,7 +17,7 @@
     </div>
 
     <contact-us :ga-label="ga.userPortal.labels['edit-contact-info']">
-      <template v-slot:text>
+      <template #text>
         Have questions about your account? Or feedback about this website? Email
       </template>
     </contact-us>
@@ -47,25 +47,6 @@ export default {
 
   mixins: [routeMixin],
 
-  data() {
-    return {
-      showModal: false,
-      checkModalResolve: () => {},
-    };
-  },
-
-  methods: {
-    setShowModal(shouldShow) {
-      this.showModal = shouldShow;
-    },
-
-    checkModalAction() {
-      return new Promise(resolve => {
-        this.checkModalResolve = resolve;
-      });
-    },
-  },
-
   async beforeRouteLeave(to, from, next) {
     if (this.showModal) {
       this.$modal.show('modal');
@@ -82,6 +63,25 @@ export default {
     } else {
       next();
     }
+  },
+
+  data() {
+    return {
+      showModal: false,
+      checkModalResolve: () => {},
+    };
+  },
+
+  methods: {
+    setShowModal(shouldShow) {
+      this.showModal = shouldShow;
+    },
+
+    checkModalAction() {
+      return new Promise((resolve) => {
+        this.checkModalResolve = resolve;
+      });
+    },
   },
 };
 </script>

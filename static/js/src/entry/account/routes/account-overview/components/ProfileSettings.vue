@@ -1,8 +1,8 @@
 <template>
   <summary-box heading="profile settings">
-    <template v-slot:content>
+    <template #content>
       <info-list :items="data">
-        <template v-slot:text="{ item: { key, text } }">
+        <template #text="{ item: { key, text } }">
           <template v-if="key === 'email'">
             <span class="t-wrap-break">{{ text }}</span>
           </template>
@@ -13,7 +13,7 @@
       </info-list>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav
         show-edit-profile
         show-reset-pw

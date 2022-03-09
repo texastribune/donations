@@ -1,12 +1,12 @@
 <template>
   <summary-box heading="membership">
-    <template v-slot:content>
+    <template #content>
       <p class="has-text-gray-dark">
         Thank you for being a Texas Tribune member!
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav show-donation-history />
     </template>
   </summary-box>

@@ -1,6 +1,6 @@
 <template>
   <summary-box heading="membership" :display="{ isExpired: true }">
-    <template v-slot:content>
+    <template #content>
       <p class="has-text-gray-dark">
         Thanks for your previous support!
         <span class="has-text-error"
@@ -25,15 +25,13 @@
       </p>
     </template>
 
-    <template v-slot:links>
+    <template #links>
       <user-internal-nav
         show-donation-history
         show-membership-status
         show-renew-membership
       >
-        <template v-slot:membership-text>
-          More about your membership
-        </template>
+        <template #membership-text> More about your membership </template>
       </user-internal-nav>
     </template>
   </summary-box>
