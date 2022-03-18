@@ -4,7 +4,7 @@ pytz==2021.3
 Flask-WTF==0.14.3
 WTForms==2.3.3
 email_validator==1.1.3
-stripe==2.63.0
+stripe==2.67.0
 celery==5.2.3
 redis==3.5.3
 validate_email==1.3
@@ -18,5 +18,5 @@ blinker==1.4
 amazon-pay==2.7.1
 nameparser==1.0.6
 slack-sdk==3.12.0
-pydantic==1.8.2
+pydantic==1.9.0
 newrelic>=7.4
