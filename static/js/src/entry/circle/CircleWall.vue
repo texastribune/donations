@@ -25,6 +25,7 @@ export default {
         "Chairman's Circle",
         'Leadership Circle',
         "Editor's Circle",
+        "Founders' Circle",
       ],
     };
   },
