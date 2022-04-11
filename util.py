@@ -31,13 +31,21 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
         or getattr(opportunity, "encouraged_by", False)
         or ""
     )
+
+    campaign_id = (
+        getattr(rdo, "campaign_id", False)
+        or getattr(opportunity, "campaign_id", False)
+        or ""
+    )
+
     period = f"[{rdo.installment_period}]" if rdo else "[one-time]"
     amount = getattr(rdo, "amount", False) or getattr(opportunity, "amount", "")
     amount = float(amount)
     reason = f"({reason})" if reason else ""
+    campaign_id = f"({campaign_id})" if campaign_id else ""
     entity = account.name if account else contact.name
 
-    message = f"{entity} pledged ${amount:.0f} {period} {reason}"
+    message = f"{entity} pledged ${amount:.0f} {period} {reason} {campaign_id}"
 
     logging.info(message)
 
