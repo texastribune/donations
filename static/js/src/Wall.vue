@@ -8,20 +8,22 @@
         :class="{ 'grid_separator--l': groupIndex !== memberGroups.length - 1 }"
         class="wall__group"
       >
-        <h3 class="wall__heading grid_separator--s">{{ group.name }}</h3>
-        <slot name="subheading" :group="group"></slot>
-        <ul class="wall__list">
-          <li
-            v-for="(member, memberIndex) in group.members"
-            :key="memberIndex"
-            class="wall__item"
-          >
-            <span class="wall__star c-icon c-icon--yellow c-icon--baseline"
-              ><svg aria-hidden="true"><use xlink:href="#star"></use></svg
-            ></span>
-            <slot name="member" :member="member"></slot>
-          </li>
-        </ul>
+        <template v-if="group.members">
+          <h3 class="wall__heading grid_separator--s">{{ group.name }}</h3>
+          <slot name="subheading" :group="group"></slot>
+          <ul class="wall__list">
+            <li
+              v-for="(member, memberIndex) in group.members"
+              :key="memberIndex"
+              class="wall__item"
+            >
+              <span class="wall__star c-icon c-icon--yellow c-icon--baseline"
+                ><svg aria-hidden="true"><use xlink:href="#star"></use></svg
+              ></span>
+              <slot name="member" :member="member"></slot>
+            </li>
+          </ul>
+        </template>
       </section>
     </div>
   </section>
