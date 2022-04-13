@@ -9,7 +9,7 @@
       <template v-if="group.name === 'Founders\' Circle'"
         ><p class="grid_separator--s">
           <em
-            >In honor of our three founders — Ross Ramsey, Evan Smith and John
+            >In honor of our three founders: Ross Ramsey, Evan Smith and John
             Thornton</em
           >
         </p></template
