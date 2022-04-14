@@ -6,7 +6,7 @@
         <img src="./img/circle-logo.png" alt="Circle Membership logo" /></figure
     ></template>
     <template #subheading="{ group }">
-      <template v-if="group.name === 'Founders\' Circle'"
+      <template v-if="group.name === foundersLabel"
         ><p class="grid_separator--s">
           <em
             >In honor of our three founders: Ross Ramsey, Evan Smith and John
@@ -37,6 +37,7 @@ export default {
         'Leadership Circle',
         "Editor's Circle",
       ],
+      foundersLabel: "Founders' Circle",
     };
   },
 };
