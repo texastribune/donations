@@ -95,7 +95,7 @@ function bindRouterEvents(router, routeHandler, store) {
 
     // don't disply theremometer if the #thermometer div isn't included,
     // based on the constant USE_THERMOMETER in app.py
-    const thermometerEl = document.getElementById('thermometer') || None;
+    const thermometerEl = document.getElementById('thermometer');
     if (thermometerEl) {
       const thermometer = new Vue({ ...Thermometer, store });
       thermometer.$mount(thermometerEl)
