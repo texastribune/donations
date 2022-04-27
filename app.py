@@ -58,6 +58,7 @@ from util import (
 )
 
 ZONE = timezone(TIMEZONE)
+USE_THERMOMETER = True
 
 if ENABLE_SENTRY:
     import sentry_sdk
@@ -494,6 +495,7 @@ def donate_form():
         bundles=bundles,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+        use_thermometer=USE_THERMOMETER,
     )
 
 
