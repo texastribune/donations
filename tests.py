@@ -283,6 +283,18 @@ def test__format_slack():
     no_desc.stripe_customer = "cus_78MqJSBejMN9gn"
     no_desc.campaign_id = "111111111111111"
 
+    no_campaign = Opportunity(sf_connection=sf)
+    no_campaign.account_id = "0011700000BpR8PAAV"
+    no_campaign.amount = 9
+    no_campaign.encouraged_by = "Because I love the Trib!"
+    no_campaign.name = "D C (dcraigmile+test6@texastribune.org)"
+    no_campaign.stripe_id = "cus_78MqJSBejMN9gn"
+    no_campaign.agreed_to_pay_fees = True
+    no_campaign.referral_id = "1234"
+    no_campaign.lead_source = "Stripe"
+    no_campaign.description = "The Texas Tribune Membership"
+    no_campaign.stripe_customer = "cus_78MqJSBejMN9gn"
+
     rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
     rdo.encouraged_by = "Because I love the Trib!"
@@ -340,6 +352,13 @@ def test__format_slack():
         account=None, rdo=None, opportunity=no_desc, contact=contact
     )
     expected = "D C pledged $9 [one-time] (Because I love the Trib!) (111111111111111)"
+
+    assert actual == expected
+
+    actual = construct_slack_message(
+        account=None, rdo=None, opportunity=no_campaign, contact=contact
+    )
+    expected = "D C pledged $9 [one-time] (Because I love the Trib!) "
 
     assert actual == expected
 
