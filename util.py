@@ -32,9 +32,9 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
         or ""
     )
 
-    description = (
-        getattr(rdo, "description", False)
-        or getattr(opportunity, "description", False)
+    campaign_name = (
+        getattr(rdo, "campaign_name", False)
+        or getattr(opportunity, "campaign_name", False)
         or ""
     )
 
@@ -51,7 +51,7 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
     amount = getattr(rdo, "amount", False) or getattr(opportunity, "amount", "")
     amount = float(amount)
 
-    campaign = description or campaign_id or ""
+    campaign = campaign_name or campaign_id or ""
     campaign = f"({campaign})" if campaign and campaign_id else ""
 
     message = f"{entity} pledged ${amount:.0f} {period} {reason} {campaign}"

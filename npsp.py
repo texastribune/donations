@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
+from re import match
 
 import requests
 from fuzzywuzzy import process
@@ -326,6 +327,7 @@ class Opportunity(SalesforceObject):
         self.donor_selected_amount = 0
         self.close_date = today
         self.campaign_id = None
+        self.campaign_name = None
         self.record_type_name = record_type_name
         self.stage_name = stage_name
         self.type = "Single"
@@ -499,6 +501,11 @@ class Opportunity(SalesforceObject):
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
+    def has_valid_campaign_id_format(self):
+        return (
+            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", self.campaign_id) is not None
+        )
+
     def save(self):
 
         if self.account_id is None:
@@ -508,6 +515,24 @@ class Opportunity(SalesforceObject):
 
         # truncate to 80 chars:
         self.name = self.name[:80]
+
+        if self.campaign_id is not None and self.has_valid_campaign_id_format():
+            query = f"SELECT Name FROM Campaign WHERE Id = '{self.campaign_id}'"
+            try:
+                response = self.sf.query(query)
+            except SalesforceException as e:
+                if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
+                    logging.warning(
+                        "could not retrieve campaign name with bad campaign ID; retrying..."
+                    )
+                    self.campaign_id = None
+                    self.save()
+                else:
+                    raise
+            else:
+                self.campaign_name = response[0]["Name"]
+        else:
+            self.campaign_id = None
 
         try:
             self.sf.save(self)
@@ -561,6 +586,7 @@ class RDO(SalesforceObject):
         self.open_ended_status = None
         self.installment_period = None
         self.campaign_id = None
+        self.campaign_name = None
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
@@ -676,6 +702,11 @@ class RDO(SalesforceObject):
     def amount(self, amount):
         self._amount = amount
 
+    def has_valid_campaign_id_format(self):
+        return (
+            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", self.campaign_id) is not None
+        )
+
     def save(self):
 
         if self.account_id is None and self.contact_id is None:
@@ -685,6 +716,24 @@ class RDO(SalesforceObject):
 
         if self.name is not None:
             self.name = self.name[:80]
+
+        if self.campaign_id is not None and self.has_valid_campaign_id_format():
+            query = f"SELECT Name FROM Campaign WHERE Id = '{self.campaign_id}'"
+            try:
+                response = self.sf.query(query)
+            except SalesforceException as e:
+                if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
+                    logging.warning(
+                        "could not retrieve campaign name with bad campaign ID; retrying..."
+                    )
+                    self.campaign_id = None
+                    self.save()
+                else:
+                    raise
+            else:
+                self.campaign_name = response[0]["Name"]
+        else:
+            self.campaign_id = None
 
         try:
             self.sf.save(self)
