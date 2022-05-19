@@ -32,6 +32,30 @@ DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 # logging.getLogger("urllib3").setLevel(logging.DEBUG)
 
 
+class CampaignMixin:
+    def has_valid_campaign_id_format(self):
+        return (
+            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", str(self.campaign_id))
+            is not None
+        )
+
+    def get_campaign_name(self):
+        query = f"SELECT Name FROM Campaign WHERE Id = '{self.campaign_id}'"
+        try:
+            response = self.sf.query(query)
+        except SalesforceException as e:
+            if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
+                logging.warning(
+                    f"could not retrieve campaign name with campaign ID {self.campaign_id}; continuing..."
+                )
+                self.campaign_id = None
+                return None
+            else:
+                raise
+        else:
+            return response[0]["Name"]
+
+
 class SalesforceException(Exception):
     pass
 
@@ -292,7 +316,7 @@ class SalesforceObject(object):
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
 
-class Opportunity(SalesforceObject):
+class Opportunity(SalesforceObject, CampaignMixin):
 
     api_name = "Opportunity"
 
@@ -501,11 +525,6 @@ class Opportunity(SalesforceObject):
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
-    def has_valid_campaign_id_format(self):
-        return (
-            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", self.campaign_id) is not None
-        )
-
     def save(self):
 
         if self.account_id is None:
@@ -516,23 +535,12 @@ class Opportunity(SalesforceObject):
         # truncate to 80 chars:
         self.name = self.name[:80]
 
-        if self.campaign_id is not None and self.has_valid_campaign_id_format():
-            query = f"SELECT Name FROM Campaign WHERE Id = '{self.campaign_id}'"
-            try:
-                response = self.sf.query(query)
-            except SalesforceException as e:
-                if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
-                    logging.warning(
-                        "could not retrieve campaign name with bad campaign ID; retrying..."
-                    )
-                    self.campaign_id = None
-                    self.save()
-                else:
-                    raise
+        if self.campaign_id is not None:
+            if self.has_valid_campaign_id_format():
+                self.campaign_name = self.get_campaign_name()
             else:
-                self.campaign_name = response[0]["Name"]
-        else:
-            self.campaign_id = None
+                logging.warning(f"bad campaign ID; continuing...")
+                self.campaign_id = None
 
         try:
             self.sf.save(self)
@@ -553,7 +561,7 @@ class Opportunity(SalesforceObject):
                 raise
 
 
-class RDO(SalesforceObject):
+class RDO(SalesforceObject, CampaignMixin):
     """
     Recurring Donation objects.
     """
@@ -702,11 +710,6 @@ class RDO(SalesforceObject):
     def amount(self, amount):
         self._amount = amount
 
-    def has_valid_campaign_id_format(self):
-        return (
-            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", self.campaign_id) is not None
-        )
-
     def save(self):
 
         if self.account_id is None and self.contact_id is None:
@@ -717,23 +720,12 @@ class RDO(SalesforceObject):
         if self.name is not None:
             self.name = self.name[:80]
 
-        if self.campaign_id is not None and self.has_valid_campaign_id_format():
-            query = f"SELECT Name FROM Campaign WHERE Id = '{self.campaign_id}'"
-            try:
-                response = self.sf.query(query)
-            except SalesforceException as e:
-                if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
-                    logging.warning(
-                        "could not retrieve campaign name with bad campaign ID; retrying..."
-                    )
-                    self.campaign_id = None
-                    self.save()
-                else:
-                    raise
+        if self.campaign_id is not None:
+            if self.has_valid_campaign_id_format():
+                self.campaign_name = self.get_campaign_name()
             else:
-                self.campaign_name = response[0]["Name"]
-        else:
-            self.campaign_id = None
+                logging.warning(f"bad campaign ID; continuing...")
+                self.campaign_id = None
 
         try:
             self.sf.save(self)
