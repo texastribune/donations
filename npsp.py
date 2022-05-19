@@ -501,14 +501,13 @@ class Opportunity(SalesforceObject):
 
     def save(self):
 
-        # TODO this will fail if name hasn't been set
-        # truncate to 80 chars:
-        self.name = self.name[:80]
-
         if self.account_id is None:
             raise SalesforceException("Account ID must be specified")
         if not self.name:
             raise SalesforceException("Opportunity name must be specified")
+
+        # truncate to 80 chars:
+        self.name = self.name[:80]
 
         try:
             self.sf.save(self)
@@ -679,13 +678,13 @@ class RDO(SalesforceObject):
 
     def save(self):
 
-        # truncate to 80 characters
-        self.name = self.name[:80]
-
         if self.account_id is None and self.contact_id is None:
             raise SalesforceException(
                 "One of Contact ID or Account ID must be specified."
             )
+
+        if self.name is not None:
+            self.name = self.name[:80]
 
         try:
             self.sf.save(self)
