@@ -543,14 +543,25 @@ class Opportunity(SalesforceObject, CampaignMixin):
             self.sf.save(self)
             # TODO should the client decide what's retryable?
         except SalesforceException as e:
-            if e.content["errorCode"] == "MALFORMED_ID":
-                if e.content["fields"][0] == "CampaignId":
+            err = e.content
+            if err["errorCode"] == "MALFORMED_ID":
+                if err["fields"][0] == "CampaignId":
                     logging.warning("bad campaign ID; retrying...")
                     self.campaign_id = None
                     self.save()
-                elif e.content["fields"][0] == "Referral_ID__c":
+                elif err["fields"][0] == "Referral_ID__c":
                     logging.warning("bad referral ID; retrying...")
                     self.referral_id = None
+                    self.save()
+                else:
+                    raise
+            elif err["errorCode"] == "INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY":
+                if (
+                    err["message"]
+                    == f"insufficient access rights on cross-reference id: {self.campaign_id}"
+                ):
+                    logging.warning("bad campaign ID; retrying...")
+                    self.campaign_id = None
                     self.save()
                 else:
                     raise
@@ -725,14 +736,25 @@ class RDO(SalesforceObject, CampaignMixin):
         try:
             self.sf.save(self)
         except SalesforceException as e:
-            if e.content["errorCode"] == "MALFORMED_ID":
-                if e.content["fields"][0] == "npe03__Recurring_Donation_Campaign__c":
+            err = e.content
+            if err["errorCode"] == "MALFORMED_ID":
+                if err["fields"][0] == "npe03__Recurring_Donation_Campaign__c":
                     logging.warning("bad campaign ID; retrying...")
                     self.campaign_id = None
                     self.save()
-                elif e.content["fields"][0] == "Referral_ID__c":
+                elif err["fields"][0] == "Referral_ID__c":
                     logging.warning("bad referral ID; retrying...")
                     self.referral_id = None
+                    self.save()
+                else:
+                    raise
+            elif err["errorCode"] == "INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY":
+                if (
+                    err["message"]
+                    == f"insufficient access rights on cross-reference id: {self.campaign_id}"
+                ):
+                    logging.warning("bad campaign ID; retrying...")
+                    self.campaign_id = None
                     self.save()
                 else:
                     raise
