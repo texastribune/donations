@@ -67,8 +67,8 @@ class BaseForm(FlaskForm):
         u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
     )
     reason = StringField(u"Encouraged to give by", [validators.Length(max=255)])
-    campaign_id = HiddenField("Campaign ID", [validators.Length(max=18)])
-    referral_id = HiddenField("Referral ID", [validators.Length(max=18)])
+    campaign_id = HiddenField("Campaign ID")
+    referral_id = HiddenField("Referral ID")
 
 
 class DonateForm(BaseForm):
