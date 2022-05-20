@@ -50,6 +50,7 @@ class CampaignMixin:
                 self.campaign_id = None
                 return None
             else:
+                logging.error(e.response.text)
                 raise
         else:
             return response[0]["Name"]

@@ -297,18 +297,7 @@ def test__format_slack():
     opportunity.description = "The Texas Tribune Membership"
     opportunity.stripe_customer = "cus_78MqJSBejMN9gn"
     opportunity.campaign_id = "111111111111111"
-
-    no_desc = Opportunity(sf_connection=sf)
-    no_desc.account_id = "0011700000BpR8PAAV"
-    no_desc.amount = 9
-    no_desc.encouraged_by = "Because I love the Trib!"
-    no_desc.name = "D C (dcraigmile+test6@texastribune.org)"
-    no_desc.stripe_id = "cus_78MqJSBejMN9gn"
-    no_desc.agreed_to_pay_fees = True
-    no_desc.referral_id = "1234"
-    no_desc.lead_source = "Stripe"
-    no_desc.stripe_customer = "cus_78MqJSBejMN9gn"
-    no_desc.campaign_id = "111111111111111"
+    opportunity.campaign_name = "Test Campaign Name"
 
     no_campaign = Opportunity(sf_connection=sf)
     no_campaign.account_id = "0011700000BpR8PAAV"
@@ -337,6 +326,7 @@ def test__format_slack():
     rdo.agreed_to_pay_fees = True
     rdo.type = "Giving Circle"
     rdo.campaign_id = "000000000000000"
+    rdo.campaign_name = "Recurring Test Campaign Name"
 
     contact = Contact(sf_connection=sf)
     contact.email = "dcraigmile+test6@texastribune.org"
@@ -357,28 +347,23 @@ def test__format_slack():
     actual = construct_slack_message(
         account=account, rdo=rdo, opportunity=None, contact=None
     )
-    expected = "Acme Inc. pledged $100 [yearly] (Because I love the Trib!) (Texas Tribune Circle Membership)"
+    expected = "Acme Inc. pledged $100 [yearly] (Because I love the Trib!) (Recurring Test Campaign Name)"
 
     assert actual == expected
 
     actual = construct_slack_message(
         account=None, rdo=rdo, opportunity=None, contact=contact
     )
-    expected = "D C pledged $100 [yearly] (Because I love the Trib!) (Texas Tribune Circle Membership)"
+    expected = "D C pledged $100 [yearly] (Because I love the Trib!) (Recurring Test Campaign Name)"
 
     assert actual == expected
 
     actual = construct_slack_message(
         account=None, rdo=None, opportunity=opportunity, contact=contact
     )
-    expected = "D C pledged $9 [one-time] (Because I love the Trib!) (The Texas Tribune Membership)"
-
-    assert actual == expected
-
-    actual = construct_slack_message(
-        account=None, rdo=None, opportunity=no_desc, contact=contact
+    expected = (
+        "D C pledged $9 [one-time] (Because I love the Trib!) (Test Campaign Name)"
     )
-    expected = "D C pledged $9 [one-time] (Because I love the Trib!) (111111111111111)"
 
     assert actual == expected
 
