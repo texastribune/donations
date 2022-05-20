@@ -33,10 +33,9 @@ DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 
 
 class CampaignMixin:
-    def has_valid_campaign_id_format(self):
+    def has_invalid_campaign_id_format(self):
         return (
-            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", str(self.campaign_id))
-            is not None
+            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", str(self.campaign_id)) is None
         )
 
     def get_campaign_name(self):
@@ -46,7 +45,7 @@ class CampaignMixin:
         except SalesforceException as e:
             if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
                 logging.warning(
-                    f"could not retrieve campaign name with campaign ID {self.campaign_id}; continuing..."
+                    f"could not get campaign name with campaign ID; continuing..."
                 )
                 self.campaign_id = None
                 return None
@@ -536,9 +535,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
         self.name = self.name[:80]
 
         if self.campaign_id is not None:
-            if self.has_valid_campaign_id_format():
-                self.campaign_name = self.get_campaign_name()
-            else:
+            if self.has_invalid_campaign_id_format():
                 logging.warning(f"bad campaign ID; continuing...")
                 self.campaign_id = None
 
@@ -721,9 +718,7 @@ class RDO(SalesforceObject, CampaignMixin):
             self.name = self.name[:80]
 
         if self.campaign_id is not None:
-            if self.has_valid_campaign_id_format():
-                self.campaign_name = self.get_campaign_name()
-            else:
+            if self.has_invalid_campaign_id_format():
                 logging.warning(f"bad campaign ID; continuing...")
                 self.campaign_id = None
 
