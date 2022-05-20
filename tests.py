@@ -256,6 +256,33 @@ zone = timezone("US/Central")
 today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
 
+def test__campaign_id_validation():
+    ID_15_VALID_CHARS = "111AAA222bbb333"
+    ID_18_VALID_CHARS = "111AAA222bbb333ccc"
+
+    ID_15_INVALID_CHARS = "1!1A;-+22bbb333"
+    ID_18_INVALID_CHARS = "111AAA222bbb333#c;"
+
+    ID_INCORRECT_LENGTH = "AAADDD"
+
+    opp = Opportunity(sf_connection=sf)
+
+    opp.campaign_id = ID_15_VALID_CHARS
+    assert not opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_18_VALID_CHARS
+    assert not opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_15_INVALID_CHARS
+    assert opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_18_INVALID_CHARS
+    assert opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_INCORRECT_LENGTH
+    assert opp.has_invalid_campaign_id_format()
+
+
 def test__format_slack():
 
     opportunity = Opportunity(sf_connection=sf)
