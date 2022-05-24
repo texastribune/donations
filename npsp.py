@@ -535,10 +535,9 @@ class Opportunity(SalesforceObject, CampaignMixin):
         # truncate to 80 chars:
         self.name = self.name[:80]
 
-        if self.campaign_id is not None:
-            if self.has_invalid_campaign_id_format():
-                logging.warning(f"bad campaign ID; continuing...")
-                self.campaign_id = None
+        if self.campaign_id and self.has_invalid_campaign_id_format():
+            logging.warning(f"bad campaign ID; continuing...")
+            self.campaign_id = None
 
         try:
             self.sf.save(self)
@@ -726,13 +725,12 @@ class RDO(SalesforceObject, CampaignMixin):
                 "One of Contact ID or Account ID must be specified."
             )
 
-        if self.name is not None:
+        if self.name:
             self.name = self.name[:80]
 
-        if self.campaign_id is not None:
-            if self.has_invalid_campaign_id_format():
-                logging.warning(f"bad campaign ID; continuing...")
-                self.campaign_id = None
+        if self.campaign_id and self.has_invalid_campaign_id_format():
+            logging.warning(f"bad campaign ID; continuing...")
+            self.campaign_id = None
 
         try:
             self.sf.save(self)

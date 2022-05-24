@@ -54,7 +54,7 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     """
 
     opp = opportunity or rdo
-    if opp.campaign_id is not None:
+    if opp.campaign_id:
         opp.campaign_name = opp.get_campaign_name()
 
     text = construct_slack_message(
