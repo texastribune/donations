@@ -47,11 +47,10 @@ class CampaignMixin:
                 logging.warning(
                     f"could not get campaign name with campaign ID; continuing..."
                 )
-                self.campaign_id = None
-                return None
             else:
                 logging.error(e.response.text)
-                raise
+            self.campaign_id = None
+            return None
         else:
             return response[0]["Name"]
 
