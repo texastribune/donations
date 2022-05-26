@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 from decimal import Decimal
 from io import StringIO
+from re import match
 
 import requests
 from fuzzywuzzy import process
@@ -29,6 +30,29 @@ TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
 DEFAULT_RDO_TYPE = os.environ.get("DEFAULT_RDO_TYPE", "Membership")
 
 # logging.getLogger("urllib3").setLevel(logging.DEBUG)
+
+
+class CampaignMixin:
+    def has_invalid_campaign_id_format(self):
+        return (
+            match("^([a-zA-Z0-9]{15}|[a-zA-Z0-9]{18})$", str(self.campaign_id)) is None
+        )
+
+    def get_campaign_name(self):
+        query = f"SELECT Name FROM Campaign WHERE Id = '{self.campaign_id}'"
+        try:
+            response = self.sf.query(query)
+        except SalesforceException as e:
+            if e.content["errorCode"] == "INVALID_QUERY_FILTER_OPERATOR":
+                logging.warning(
+                    f"could not get campaign name with campaign ID; continuing..."
+                )
+            else:
+                logging.error(e.response.text)
+            self.campaign_id = None
+            return None
+        else:
+            return response[0]["Name"]
 
 
 class SalesforceException(Exception):
@@ -291,7 +315,7 @@ class SalesforceObject(object):
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
 
-class Opportunity(SalesforceObject):
+class Opportunity(SalesforceObject, CampaignMixin):
 
     api_name = "Opportunity"
 
@@ -326,6 +350,7 @@ class Opportunity(SalesforceObject):
         self.donor_selected_amount = 0
         self.close_date = today
         self.campaign_id = None
+        self.campaign_name = None
         self.record_type_name = record_type_name
         self.stage_name = stage_name
         self.type = "Single"
@@ -501,27 +526,41 @@ class Opportunity(SalesforceObject):
 
     def save(self):
 
-        # TODO this will fail if name hasn't been set
-        # truncate to 80 chars:
-        self.name = self.name[:80]
-
         if self.account_id is None:
             raise SalesforceException("Account ID must be specified")
         if not self.name:
             raise SalesforceException("Opportunity name must be specified")
 
+        # truncate to 80 chars:
+        self.name = self.name[:80]
+
+        if self.campaign_id and self.has_invalid_campaign_id_format():
+            logging.warning(f"bad campaign ID; continuing...")
+            self.campaign_id = None
+
         try:
             self.sf.save(self)
             # TODO should the client decide what's retryable?
         except SalesforceException as e:
-            if e.content["errorCode"] == "MALFORMED_ID":
-                if e.content["fields"][0] == "CampaignId":
+            err = e.content
+            if err["errorCode"] == "MALFORMED_ID":
+                if err["fields"][0] == "CampaignId":
                     logging.warning("bad campaign ID; retrying...")
                     self.campaign_id = None
                     self.save()
-                elif e.content["fields"][0] == "Referral_ID__c":
+                elif err["fields"][0] == "Referral_ID__c":
                     logging.warning("bad referral ID; retrying...")
                     self.referral_id = None
+                    self.save()
+                else:
+                    raise
+            elif err["errorCode"] == "INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY":
+                if (
+                    err["message"]
+                    == f"insufficient access rights on cross-reference id: {self.campaign_id}"
+                ):
+                    logging.warning("bad campaign ID; retrying...")
+                    self.campaign_id = None
                     self.save()
                 else:
                     raise
@@ -529,7 +568,7 @@ class Opportunity(SalesforceObject):
                 raise
 
 
-class RDO(SalesforceObject):
+class RDO(SalesforceObject, CampaignMixin):
     """
     Recurring Donation objects.
     """
@@ -562,6 +601,7 @@ class RDO(SalesforceObject):
         self.open_ended_status = None
         self.installment_period = None
         self.campaign_id = None
+        self.campaign_name = None
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
@@ -679,25 +719,40 @@ class RDO(SalesforceObject):
 
     def save(self):
 
-        # truncate to 80 characters
-        self.name = self.name[:80]
-
         if self.account_id is None and self.contact_id is None:
             raise SalesforceException(
                 "One of Contact ID or Account ID must be specified."
             )
 
+        if self.name:
+            self.name = self.name[:80]
+
+        if self.campaign_id and self.has_invalid_campaign_id_format():
+            logging.warning(f"bad campaign ID; continuing...")
+            self.campaign_id = None
+
         try:
             self.sf.save(self)
         except SalesforceException as e:
-            if e.content["errorCode"] == "MALFORMED_ID":
-                if e.content["fields"][0] == "npe03__Recurring_Donation_Campaign__c":
+            err = e.content
+            if err["errorCode"] == "MALFORMED_ID":
+                if err["fields"][0] == "npe03__Recurring_Donation_Campaign__c":
                     logging.warning("bad campaign ID; retrying...")
                     self.campaign_id = None
                     self.save()
-                elif e.content["fields"][0] == "Referral_ID__c":
+                elif err["fields"][0] == "Referral_ID__c":
                     logging.warning("bad referral ID; retrying...")
                     self.referral_id = None
+                    self.save()
+                else:
+                    raise
+            elif err["errorCode"] == "INSUFFICIENT_ACCESS_ON_CROSS_REFERENCE_ENTITY":
+                if (
+                    err["message"]
+                    == f"insufficient access rights on cross-reference id: {self.campaign_id}"
+                ):
+                    logging.warning("bad campaign ID; retrying...")
+                    self.campaign_id = None
                     self.save()
                 else:
                     raise

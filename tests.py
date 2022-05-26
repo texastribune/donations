@@ -256,6 +256,33 @@ zone = timezone("US/Central")
 today = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
 
+def test__campaign_id_validation():
+    ID_15_VALID_CHARS = "111AAA222bbb333"
+    ID_18_VALID_CHARS = "111AAA222bbb333ccc"
+
+    ID_15_INVALID_CHARS = "1!1A;-+22bbb333"
+    ID_18_INVALID_CHARS = "111AAA222bbb333#c;"
+
+    ID_INCORRECT_LENGTH = "AAADDD"
+
+    opp = Opportunity(sf_connection=sf)
+
+    opp.campaign_id = ID_15_VALID_CHARS
+    assert not opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_18_VALID_CHARS
+    assert not opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_15_INVALID_CHARS
+    assert opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_18_INVALID_CHARS
+    assert opp.has_invalid_campaign_id_format()
+
+    opp.campaign_id = ID_INCORRECT_LENGTH
+    assert opp.has_invalid_campaign_id_format()
+
+
 def test__format_slack():
 
     opportunity = Opportunity(sf_connection=sf)
@@ -270,6 +297,19 @@ def test__format_slack():
     opportunity.description = "The Texas Tribune Membership"
     opportunity.stripe_customer = "cus_78MqJSBejMN9gn"
     opportunity.campaign_id = "111111111111111"
+    opportunity.campaign_name = "Test Campaign Name"
+
+    no_campaign = Opportunity(sf_connection=sf)
+    no_campaign.account_id = "0011700000BpR8PAAV"
+    no_campaign.amount = 9
+    no_campaign.encouraged_by = "Because I love the Trib!"
+    no_campaign.name = "D C (dcraigmile+test6@texastribune.org)"
+    no_campaign.stripe_id = "cus_78MqJSBejMN9gn"
+    no_campaign.agreed_to_pay_fees = True
+    no_campaign.referral_id = "1234"
+    no_campaign.lead_source = "Stripe"
+    no_campaign.description = "The Texas Tribune Membership"
+    no_campaign.stripe_customer = "cus_78MqJSBejMN9gn"
 
     rdo = RDO(sf_connection=sf)
     rdo.referral_id = "1234"
@@ -286,6 +326,7 @@ def test__format_slack():
     rdo.agreed_to_pay_fees = True
     rdo.type = "Giving Circle"
     rdo.campaign_id = "000000000000000"
+    rdo.campaign_name = "Recurring Test Campaign Name"
 
     contact = Contact(sf_connection=sf)
     contact.email = "dcraigmile+test6@texastribune.org"
@@ -306,23 +347,30 @@ def test__format_slack():
     actual = construct_slack_message(
         account=account, rdo=rdo, opportunity=None, contact=None
     )
-    expected = (
-        "Acme Inc. pledged $100 [yearly] (Because I love the Trib!) (000000000000000)"
-    )
+    expected = "Acme Inc. pledged $100 [yearly] (Because I love the Trib!) (Recurring Test Campaign Name)"
 
     assert actual == expected
 
     actual = construct_slack_message(
         account=None, rdo=rdo, opportunity=None, contact=contact
     )
-    expected = "D C pledged $100 [yearly] (Because I love the Trib!) (000000000000000)"
+    expected = "D C pledged $100 [yearly] (Because I love the Trib!) (Recurring Test Campaign Name)"
 
     assert actual == expected
 
     actual = construct_slack_message(
         account=None, rdo=None, opportunity=opportunity, contact=contact
     )
-    expected = "D C pledged $9 [one-time] (Because I love the Trib!) (111111111111111)"
+    expected = (
+        "D C pledged $9 [one-time] (Because I love the Trib!) (Test Campaign Name)"
+    )
+
+    assert actual == expected
+
+    actual = construct_slack_message(
+        account=None, rdo=None, opportunity=no_campaign, contact=contact
+    )
+    expected = "D C pledged $9 [one-time] (Because I love the Trib!) "
 
     assert actual == expected
 

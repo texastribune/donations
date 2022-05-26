@@ -26,26 +26,22 @@ def construct_slack_message(contact=None, opportunity=None, rdo=None, account=No
     if rdo and opportunity:
         raise SalesforceException("rdo and opportunity can't both be specified")
 
-    reason = (
-        getattr(rdo, "encouraged_by", False)
-        or getattr(opportunity, "encouraged_by", False)
-        or ""
-    )
+    opp = opportunity or rdo
 
-    campaign_id = (
-        getattr(rdo, "campaign_id", False)
-        or getattr(opportunity, "campaign_id", False)
-        or ""
-    )
-
-    period = f"[{rdo.installment_period}]" if rdo else "[one-time]"
-    amount = getattr(rdo, "amount", False) or getattr(opportunity, "amount", "")
-    amount = float(amount)
-    reason = f"({reason})" if reason else ""
-    campaign_id = f"({campaign_id})" if campaign_id else ""
     entity = account.name if account else contact.name
 
-    message = f"{entity} pledged ${amount:.0f} {period} {reason} {campaign_id}"
+    amount = getattr(opp, "amount", False) or ""
+    amount = float(amount)
+
+    period = f"[{rdo.installment_period}]" if rdo else "[one-time]"
+
+    reason = getattr(opp, "encouraged_by", False) or ""
+    reason = f"({reason})" if reason else ""
+
+    campaign = getattr(opp, "campaign_name", False) or ""
+    campaign = f"({campaign})" if campaign else ""
+
+    message = f"{entity} pledged ${amount:.0f} {period} {reason} {campaign}"
 
     logging.info(message)
 
@@ -56,6 +52,10 @@ def notify_slack(contact=None, opportunity=None, rdo=None, account=None):
     """
     Send a notification about a donation to Slack.
     """
+
+    opp = opportunity or rdo
+    if opp.campaign_id:
+        opp.campaign_name = opp.get_campaign_name()
 
     text = construct_slack_message(
         contact=contact, opportunity=opportunity, rdo=rdo, account=account
