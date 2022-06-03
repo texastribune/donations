@@ -6,6 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 from io import StringIO
 from re import match
+from util import chunks
 
 import requests
 from fuzzywuzzy import process
@@ -229,12 +230,6 @@ class SalesforceConnection(object):
 
         return response
 
-    @staticmethod
-    def chunks(lst, n):
-        """Yield successive n-sized chunks from lst."""
-        for i in range(0, len(lst), n):
-            yield lst[i : i + n]
-
     """
     Update the given opportunities with the payout date.
     Do this with the composite API so it's many fewer API calls.
@@ -245,7 +240,7 @@ class SalesforceConnection(object):
         responses = []
 
         # the max number of records that can be updated in one composite API call is 200
-        for chunk in self.chunks(opportunity_ids, 200):
+        for chunk in chunks(opportunity_ids, 200):
             # contruct record entries
             records = []
             for id_ in chunk:

@@ -55,6 +55,7 @@ from util import (
     notify_slack,
     send_email_new_business_membership,
     send_multiple_account_warning,
+    chunks,
 )
 
 ZONE = timezone(TIMEZONE)
@@ -726,22 +727,22 @@ def payout_paid(event):
     for txn in txns.auto_paging_iter():
         txn_list.append(txn)
 
-    # format those ids for query
-    charge_ids = [t.source for t in txn_list]
-    charge_ids = ", ".join(["'{}'".format(value) for value in charge_ids])
-    query = (
-        f"SELECT Id FROM Opportunity WHERE Stripe_Transaction_ID__c IN ({charge_ids})"
-    )
-    logging.info(query)
+    for chunk in chunks(txn_list, 100):
 
-    # get the Opportunity Ids that go with those charges
-    sfc = SalesforceConnection()
-    opps_to_update = sfc.query(query)
-    opps_to_update = [o["Id"] for o in opps_to_update]
+        # format those ids for query
+        charge_ids = [t.source for t in chunk]
+        charge_ids = ", ".join(["'{}'".format(value) for value in charge_ids])
+        query = f"SELECT Id FROM Opportunity WHERE Stripe_Transaction_ID__c IN ({charge_ids})"
+        logging.info(query)
 
-    # set the payout date on those opportunities
-    response = sfc.update_payout_dates(opps_to_update, payout_date)
-    logging.debug(response)
+        # get the Opportunity Ids that go with those charges
+        sfc = SalesforceConnection()
+        opps_to_update = sfc.query(query)
+        opps_to_update = [o["Id"] for o in opps_to_update]
+
+        # set the payout date on those opportunities
+        response = sfc.update_payout_dates(opps_to_update, payout_date)
+        logging.debug(response)
 
 
 @celery.task(name="app.authorization_notification")
