@@ -44,13 +44,13 @@ class BaseForm(FlaskForm):
             return unbound_field.bind(form=form, filters=filters, **options)
 
     first_name = StringField(
-        "First name", [validators.required(message="Your first name is required.")]
+        u"First name", [validators.required(message="Your first name is required.")]
     )
     last_name = StringField(
-        "Last name", [validators.required(message="Your last name is required.")]
+        u"Last name", [validators.required(message="Your last name is required.")]
     )
     amount = StringField(
-        "Amount",
+        u"Amount",
         validators=[
             validators.required(message="Please choose a donation amount."),
             validate_amount,
@@ -60,80 +60,80 @@ class BaseForm(FlaskForm):
     stripeEmail = EmailField(
         "Email address", [validators.DataRequired(), validators.Email()]
     )
-    stripeToken = HiddenField("Stripe token", [validators.InputRequired()])
-    recaptchaToken = HiddenField("Recaptcha token", [validators.InputRequired()])
-    description = HiddenField("Description", [validators.InputRequired()])
+    stripeToken = HiddenField(u"Stripe token", [validators.InputRequired()])
+    recaptchaToken = HiddenField(u"Recaptcha token", [validators.InputRequired()])
+    description = HiddenField(u"Description", [validators.InputRequired()])
     pay_fees_value = HiddenField(
-        "Pay Fees Value", [validators.AnyOf(["True", "False"])]
+        u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
     )
-    reason = StringField("Encouraged to give by", [validators.Length(max=255)])
+    reason = StringField(u"Encouraged to give by", [validators.Length(max=255)])
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
 
 
 class DonateForm(BaseForm):
     installment_period = StringField(
-        "Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
-    zipcode = StringField("ZIP Code", [validators.Length(max=5)])
+    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
 
 
 class CircleForm(BaseForm):
     installment_period = StringField(
-        "Installment Period", [validators.AnyOf(["yearly", "monthly"])]
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
     )
-    zipcode = StringField("ZIP Code", [validators.Length(max=5)])
+    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
 
 
 class BusinessMembershipForm(BaseForm):
-    website = StringField("Web site", [validators.URL(), validators.Length(max=255)])
+    website = StringField(u"Web site", [validators.URL(), validators.Length(max=255)])
     business_name = StringField(
-        "Business name", [validators.InputRequired(), validators.Length(max=255)]
+        u"Business name", [validators.InputRequired(), validators.Length(max=255)]
     )
     shipping_city = StringField("Shipping City", [validators.Length(max=40)])
     shipping_state = StringField("Shipping State", [validators.Length(max=2)])
     shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
-    shipping_postalcode = StringField("ZIP Code", [validators.Length(max=20)])
+    shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
     installment_period = StringField([validators.AnyOf(["yearly", "monthly"])])
 
 
 class BlastForm(FlaskForm):
     first_name = StringField(
-        "First name", [validators.required(message="Your first name is required.")]
+        u"First name", [validators.required(message="Your first name is required.")]
     )
     last_name = StringField(
-        "Last name", [validators.required(message="Your last name is required.")]
+        u"Last name", [validators.required(message="Your last name is required.")]
     )
     amount_choices = [
         ("349", "Annual"),
         ("40", "Monthly"),
         ("325", "Annual Tax-Exempt"),
     ]
-    amount = RadioField("Amount", choices=amount_choices, default="349")
+    amount = RadioField(u"Amount", choices=amount_choices, default="349")
     subscriber_email = EmailField(
         "Subscriber Email address", [validators.DataRequired(), validators.Email()]
     )
-    installment_period = HiddenField("Installment Period")
+    installment_period = HiddenField(u"Installment Period")
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
-    description = HiddenField("Description")
-    pay_fees = BooleanField("Agree to pay fees")
-    pay_fees_value = HiddenField("Pay Fees Value")
+    description = HiddenField(u"Description")
+    pay_fees = BooleanField(u"Agree to pay fees")
+    pay_fees_value = HiddenField(u"Pay Fees Value")
 
 
 class BlastPromoForm(FlaskForm):
     first_name = StringField(
-        "First name", [validators.required(message="Your first name is required.")]
+        u"First name", [validators.required(message="Your first name is required.")]
     )
     last_name = StringField(
-        "Last name", [validators.required(message="Your last name is required.")]
+        u"Last name", [validators.required(message="Your last name is required.")]
     )
     subscriber_email = EmailField(
         "Subscriber Email address", [validators.DataRequired(), validators.Email()]
     )
-    installment_period = HiddenField("Installment Period")
+    installment_period = HiddenField(u"Installment Period")
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
-    description = HiddenField("Description")
-    pay_fees = BooleanField("Agree to pay fees")
-    pay_fees_value = HiddenField("Pay Fees Value")
+    description = HiddenField(u"Description")
+    pay_fees = BooleanField(u"Agree to pay fees")
+    pay_fees_value = HiddenField(u"Pay Fees Value")
