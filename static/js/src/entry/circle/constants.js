@@ -39,6 +39,18 @@ export const CIRCLE_LEVELS = {
     installmentPeriod: 'yearly',
     amount: '5000',
   },
+  foundersMonthly: {
+    bucket: 'founders',
+    bucketFull: "Founders' Circle",
+    installmentPeriod: 'monthly',
+    amount: '834',
+  },
+  foundersYearly: {
+    bucket: 'founders',
+    bucketFull: "Founders' Circle",
+    installmentPeriod: 'yearly',
+    amount: '10000',
+  },
 };
 
 export const CIRCLE_FORM_STATE = {

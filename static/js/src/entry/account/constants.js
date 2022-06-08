@@ -1,23 +1,18 @@
+/* eslint-disable prefer-destructuring */
 export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
 export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
-export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${
-  process.env.PORTAL_CAMPAIGN_ID
-}#join-today`;
+export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${process.env.PORTAL_CAMPAIGN_ID}#join-today`;
 export const CIRCLE_URL = '/circle';
 export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
 export const AUTH_PORTAL_AUDIENCE = process.env.AUTH0_PORTAL_AUDIENCE;
 export const AUTH_PORTAL_CLIENT_ID = process.env.AUTH0_PORTAL_CLIENT_ID;
-export const AUTH_PORTAL_LOGOUT_COMPLETE_URL = `${
-  window.location.origin
-}/account/logged-out/`;
-export const AUTH_PORTAL_LOGIN_COMPLETE_URL = `${
-  window.location.origin
-}/account/logged-in/`;
+export const AUTH_PORTAL_LOGOUT_COMPLETE_URL = `${window.location.origin}/account/logged-out/`;
+export const AUTH_PORTAL_LOGIN_COMPLETE_URL = `${window.location.origin}/account/logged-in/`;
 export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
-export const { SENTRY_DSN } = process.env;
-export const { SENTRY_ENVIRONMENT } = process.env;
+export const SENTRY_DSN = process.env.SENTRY_DSN;
+export const SENTRY_ENVIRONMENT = process.env.SENTRY_ENVIRONMENT;
 export const ENABLE_SENTRY = process.env.ENABLE_SENTRY.toLowerCase() === 'true';
 export const GA_USER_PORTAL_NAV = {
   category: 'user portal navigation',
