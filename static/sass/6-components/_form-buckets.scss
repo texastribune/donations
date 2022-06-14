@@ -6,12 +6,12 @@
     border-style: solid;
     padding: $size-s;
     transition: border-color 0.2s;
-    
+
     &--selected {
       border-color: $color-yellow-tribune;
     }
   }
-  
+
 
 
   &__header {
@@ -19,5 +19,8 @@
     font-size: $size-l;
     font-weight: bold;
     line-height: 1;
+    &--medium {
+      font-size: $size-m;
+    }
   }
 }

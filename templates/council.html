@@ -1,0 +1,163 @@
+{% extends "new_layout.html" %}
+
+{% block title %}Investigative Reporting Council | The Texas Tribune{% endblock %}
+
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/council">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social.png') }}">
+  <meta property="og:title" content="Investigative Reporting Council | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Lead a pioneering program to fund independent investigative journalism that drives accountability and ends corruption. Join The Texas Tribune Investigative Reporting Council to make your impact.">
+{% endblock %}
+
+
+{% block content %}
+  <main class="main">
+    <!-- where the router component attaches -->
+    <div id="app" style="display:none;"></div>
+
+    <!-- hero component -->
+    {% with
+      helperClass="",
+      title="Join Our Investigative Reporting Council",
+      intro="Lead a pioneering program to fund independent investigative journalism that drives accountability and ends corruption. Join The Texas Tribune Investigative Reporting Council to make your impact.",
+      cta="This is how you help fix Texas."
+    %}
+      {% include "includes/hero.html" %}
+    {% endwith %}
+
+    <div class="grid_container grid_padded--xl">
+      <section class="section-padding">
+        <header class="circle-donate__header grid_container--m grid_separator">
+          <div class="border--yellow_notch"></div>
+          <h2 class="circle-donate__hed grid_separator">Your IRC Membership</h2>
+          <div class="prose grid_separator--xl">
+            <p>Lead a pioneering program to fund independent investigative journalism that drives accountability and ends corruption. Join The Texas Tribune Investigative Reporting Council to make your impact.</p>
+            <p>We’re jump-starting a new model to fund independent investigative journalism.</p>
+          </div>
+        </header>
+        <section>
+          <h2 class="is-sr-only">Membership levels</h2>
+          <div class="grid_row grid_wrap--l form-buckets">
+            <div class="form-buckets__item col_4 grid_separator">
+              <h3 class="form-buckets__header form-buckets__header--medium grid_separator--s">
+                Council Member
+              </h3>
+              <p class="t-size-s has-text-gray-dark grid_separator--xs">1-year term</p>
+              <p class="t-serif">$10,000</p>
+              <!--<a href="#" class="form__submit button button--yellow button--s">Join</a>-->
+            </div>
+            <div class="form-buckets__item col_4 grid_separator">
+              <h3 class="form-buckets__header form-buckets__header--medium grid_separator--s">
+                Sustaining Council Member
+              </h3>
+              <p class="t-size-s has-text-gray-dark grid_separator--xs">3-year term</p>
+              <p class="t-serif">$10,000 paid yearly</p>
+              <!--<a href="#" class="form__submit button button--yellow button--s">Join</a>-->
+            </div>
+            <div class="form-buckets__item col_4 grid_separator">
+              <h3 class="form-buckets__header form-buckets__header--medium grid_separator--s">
+                Sustaining Member Council
+              </h3>
+              <p class="t-size-s has-text-gray-dark grid_separator--xs">3-year term</p>
+              <p class="t-serif">$27,000 paid up front</p>
+              <!--<a href="#" class="form__submit button button--yellow button--s">Join</a>-->
+            </div>
+          </div>
+          <div class="prose grid_separator--xl">
+            <p>[Placeholder for info about submitting payment. COPY NEEDED HERE]</p>
+          </div>
+
+        </section>
+      </section>
+
+      <section class="grid_container--m grid_separator--xl section-padding grid_padded print__hide">
+        <header>
+          <div class="border--yellow_notch"></div>
+          <h2 class="link--blue grid_separator">Member benefits:</h2>
+        </header>
+
+        <h3 class="smallcaps--light grid_separator"><strong>Special Recognition</strong></h3>
+        <div class="prose grid_separator--xl">
+          <p>Prominent credentials to demonstrate your community leadership. You’re a leader who stepped up to protect our civil society.</p>
+        </div>
+
+        <h3 class="smallcaps--light grid_separator"><strong>Exclusive Content</strong></h3>
+        <div class="prose grid_separator--xl">
+          <p>
+            The inside scoop and access to the behind-the-scenes “how we broke the story” briefings. You will hear directly from our reporters about what it takes to work on these long investigations.
+          </p>
+        </div>
+        <h3 class="smallcaps--light grid_separator"><strong>Community</strong></h3>
+        <div class="prose">
+          <p>Better business environment in a healthy, stable community with accountable leaders, trust, and fairness.</p>
+        </div>
+      </section>
+
+      <div class="grid_container--l grid_separator--xl">
+        <!-- where the wall component attaches -->
+        <div id="council-wall"></div>
+      </div>
+
+      <section class="grid_container--m section-padding grid_padded">
+        <header>
+          <div class="border--yellow_notch"></div>
+          <h2 class="grid_separator circle-benefits__header">Questions?</h2>
+        </header>
+        <div class="contact grid_row grid_wrap--l grid_separator">
+          <div class="col">
+            <p class="grid_separator--s">For IRC Membership, contact:</p>
+            <p><strong>Irma Fernandez</strong></p>
+            <p>Development Officer</p>
+            <p class="grid_separator"><a href="mailto:irma.fernandez@texastribune.org">irma.fernandez@texastribune.org</a></p>
+          </div>
+          <div class="col">
+            <p class="grid_separator--s">For major gifts or grants, contact:</p>
+            <p><strong>Terry Quinn</strong></p>
+            <p>Chief Development Officer</p>
+            <p>512-716-8613</p>
+            <p class="grid_separator"><a href="mailto:tquinn@texastribune.org">tquinn@texastribune.org</a></p>
+          </div>
+        </div>
+        <div class="contact grid_row grid_wrap--l grid_separator--l">
+          <div class="col">
+            <p class="grid_separator--s">For <a href="https://www.texastribune.org/support-us/corporate-sponsors/">corporate sponsorships</a> and business membership, contact:</p>
+            <p><strong>April Hinkle</strong></p>
+            <p>Chief Revenue Officer</p>
+            <p>512-716-8634</p>
+            <p><a href="mailto:ahinkle@texastribune.org">ahinkle@texastribune.org</a></p>
+          </div>
+          <div class="col">
+            <p class="grid_separator--s">For other membership questions, contact:</p>
+            <p>512-716-8695</p>
+            <p class="grid_separator"><a href="mailto:membership@texastribune.org">membership@texastribune.org</a></p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.__STRIPE_KEY__ = '{{ stripe }}';
+    window.__RECAPTCHA_KEY__ = '{{ recaptcha }}';
+  </script>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha }}"></script>
+  <script>
+    !function () {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://risk.clearbit.com/v1/risk.js';
+      var parent = document.getElementsByTagName('script')[0];
+      parent.parentNode.insertBefore(script, parent);
+    }();
+  </script>
+
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
+  {% endfor %}
+{% endblock %}

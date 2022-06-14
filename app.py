@@ -536,6 +536,19 @@ def business_form():
     )
 
 
+@app.route("/council", methods=["GET", "POST"])
+def council():
+    bundles = get_bundles("council")
+    template = "council.html"
+
+    return render_template(
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+    )
+
+
 @app.route("/blast-promo")
 def the_blast_promo_form():
     bundles = get_bundles("old")
