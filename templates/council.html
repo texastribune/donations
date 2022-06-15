@@ -38,34 +38,31 @@
         </header>
         <section>
           <h2 class="is-sr-only">Membership levels</h2>
-          <div class="grid_row grid_wrap--l form-buckets">
-            <div class="form-buckets__item col_4 grid_separator">
+          <div class="grid_wrap--l form-buckets form-buckets--stacked">
+            <div class="form-buckets__item grid_separator">
               <h3 class="form-buckets__header form-buckets__header--medium grid_separator--s">
                 Council Member
               </h3>
               <p class="t-size-s has-text-gray-dark grid_separator--xs">1-year term</p>
               <p class="t-serif">$10,000</p>
-              <!--<a href="#" class="form__submit button button--yellow button--s">Join</a>-->
             </div>
-            <div class="form-buckets__item col_4 grid_separator">
+            <div class="form-buckets__item grid_separator">
               <h3 class="form-buckets__header form-buckets__header--medium grid_separator--s">
                 Sustaining Council Member
               </h3>
               <p class="t-size-s has-text-gray-dark grid_separator--xs">3-year term</p>
               <p class="t-serif">$10,000 paid yearly</p>
-              <!--<a href="#" class="form__submit button button--yellow button--s">Join</a>-->
             </div>
-            <div class="form-buckets__item col_4 grid_separator">
+            <div class="form-buckets__item grid_separator">
               <h3 class="form-buckets__header form-buckets__header--medium grid_separator--s">
-                Sustaining Member Council
+                Sustaining Council Member
               </h3>
               <p class="t-size-s has-text-gray-dark grid_separator--xs">3-year term</p>
               <p class="t-serif">$27,000 paid up front</p>
-              <!--<a href="#" class="form__submit button button--yellow button--s">Join</a>-->
             </div>
           </div>
-          <div class="prose grid_separator--xl">
-            <p>[Placeholder for info about submitting payment. COPY NEEDED HERE]</p>
+          <div class="prose grid_separator--xl grid_container--m">
+            <p>If you're interested in joining or are ready to make your membership payment, please email <a href="mailto:council@texastribune.org">council@texastribune.org</a>.</p>
           </div>
 
         </section>
@@ -94,9 +91,26 @@
         </div>
       </section>
 
-      <div class="grid_container--l grid_separator--xl">
-        <!-- where the wall component attaches -->
+      <!-- <div class="grid_container--l grid_separator--xl">
         <div id="council-wall"></div>
+      </div> -->
+
+      <div class="grid_container--m grid_separator--xl">
+        <section>
+          <div class="border--yellow_notch"></div>
+          <h2 class="grid_separator">Our Members</h2>
+          <section class="wall__group">
+            <h3 class="wall__heading grid_separator--s"></h3>
+            <ul class="wall__list">
+              {% for member in wall_data %}
+                <li class="wall__item">
+                  <span class="wall__star c-icon c-icon--yellow c-icon--baseline">
+                  <svg aria-hidden="true"><use xlink:href="#star"></use></svg></span> <span class="wall__name">{{ member }}</span>
+                </li>
+              {% endfor %}
+            </ul>
+          </section>
+        </section>
       </div>
 
       <section class="grid_container--m section-padding grid_padded">

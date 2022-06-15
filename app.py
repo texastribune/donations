@@ -541,9 +541,14 @@ def council():
     bundles = get_bundles("council")
     template = "council.html"
 
+    COUNCIL_DATA = [
+        "Andy Sernovitz, Chairman and Founder",
+    ]
+
     return render_template(
         template,
         bundles=bundles,
+        wall_data=COUNCIL_DATA,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )
