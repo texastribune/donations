@@ -2,7 +2,7 @@
 export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
-export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
+export const PORTAL_API_URL = `${process.env.PORTAL_API_DOMAIN}/v1/`;
 export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${process.env.PORTAL_CAMPAIGN_ID}#join-today`;
 export const CIRCLE_URL = '/circle';
 export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
