@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '400', value: 400 },
+        { slug: 'goal', label: '550', value: 550 },
       ],
     };
   },
