@@ -1,5 +1,14 @@
 {% extends "new_layout.html" %}
 
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/donate">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-fmd22.png') }}">
+  <meta property="og:title" content="Support Us | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
 {% block head_scripts %}
 {% if form_data and message %}
 <script>
