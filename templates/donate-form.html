@@ -1,5 +1,14 @@
 {% extends "new_layout.html" %}
 
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/donate">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-fmd22.png') }}">
+  <meta property="og:title" content="Support Us | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="At The Texas Tribune, members make public service journalism possible. Become a member today and donate to support the Tribune's nonprofit newsroom.">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
 {% block head_scripts %}
 {% if form_data and message %}
 <script>
@@ -32,9 +41,11 @@
           <div id="join-today" class="donation_form grid_separator--l">
             <!-- where the router component attaches -->
             <div id="app" style="display:none;"></div>
-            <!-- <div class="c-message grid_separator has-text-gray-dark t-size-s">
-              <p>Use this area for timely messaging (eg. membership drive, giving Tuesday, etc.)</p>
-            </div> -->
+            <div class="c-message grid_separator has-text-gray-dark t-size-s">
+              <p>We’re looking for 550 new members to join us this Fall Member Drive. Are you one of them?</p>
+              <br>
+              <p>Plus, when you donate, your gift will go twice as far, thanks to a $50,000 match from Loewy Law Firm. If you value our journalism, show your support and donate now to see your gift go twice as far.</p>
+            </div>
             <h2 class="grid_separator link--teal">Become a Texas Tribune Member today</h2>
             <!-- where the form attaches -->
             <div id="top-form"></div>
