@@ -15,7 +15,7 @@
           </template>
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
-            <button @click="openPaymentForm = !openPaymentForm" class="right">
+            <button @click="openPaymentForm = !openPaymentForm">
               <icon v-if="!openPaymentForm" name="pencil-fill" :display="{ size: 's' }" />
               <icon v-if="openPaymentForm" name="close" :display="{ size: 's' }" />
             </button>
@@ -49,6 +49,13 @@ export default {
       type: Object,
       required: true,
     },
+  },
+
+  data() {
+    return {
+      openPaymentForm: false,
+      successMessage: ''
+    }
   },
 
   computed: {
@@ -85,13 +92,6 @@ export default {
 
       return data;
     },
-  },
-
-  data() {
-    return {
-      openPaymentForm: false,
-      successMessage: ''
-    }
   },
 
   methods: {

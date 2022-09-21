@@ -41,17 +41,15 @@ export default {
   data() {
     return {
       openPaymentForm: false,
-      formSubmitted: false,
     };
   },
 
   methods: {
     async patchCard() {
-      this.formSubmitted = true;
       await createToken().then(data => {
         this[USER_TYPES.updateCreditCard]({ card: data.token.id });
-        let newCard = data.token.card
-        let successMessage = `Card ending in ${newCard.last4}, expiring ${newCard.exp_month}/${newCard.exp_year} has been saved`;
+        const newCard = data.token.card
+        const successMessage = `Card ending in ${newCard.last4}, expiring ${newCard.exp_month}/${newCard.exp_year} has been saved`;
         this.$emit('onSuccess', successMessage);
       });
 
