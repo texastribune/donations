@@ -41,11 +41,13 @@ export default {
   data() {
     return {
       openPaymentForm: false,
+      formSubmitted: false,
     };
   },
 
   methods: {
     async patchCard() {
+      this.formSubmitted = true;
       await createToken().then(data => {
         this[USER_TYPES.updateCreditCard]({ card: data.token.id });
         const newCard = data.token.card
