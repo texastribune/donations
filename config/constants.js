@@ -19,7 +19,7 @@ const SVG_LIB_FILES = [
   'youtube',
 ];
 
-const SVG_LOCAL_FILES = ['bell', 'check', 'close', 'download', 'star'];
+const SVG_LOCAL_FILES = ['bell', 'check', 'close', 'download', 'pencil-fill', 'star'];
 
 module.exports = {
   SCSS_DIR,

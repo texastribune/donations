@@ -1,6 +1,13 @@
 <template>
   <section class="c-detail-box">
     <div class="has-xxl-btm-marg">
+      <p
+        v-if="successMessage"
+        role="alert"
+        class="has-b-btm-marg has-text-success"
+      >
+        <strong>{{successMessage}}</strong>
+      </p>
       <info-list :items="data">
         <template #text="{ item: { extra, key } }">
           <template v-if="key === 'donation'">
@@ -8,6 +15,14 @@
           </template>
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
+            <button @click="openPaymentForm = !openPaymentForm" class="right">
+              <icon v-if="!openPaymentForm" name="pencil-fill" :display="{ size: 's' }" />
+              <icon v-if="openPaymentForm" name="close" :display="{ size: 's' }" />
+            </button>
+            <card-update
+              v-if="openPaymentForm"
+              @onSuccess="showSuccessMessage"
+            ></card-update>
           </template>
           <template v-if="key === 'next'">
             {{ extra.nextTransactionDate | longDate }}
@@ -22,11 +37,12 @@
 
 <script>
 import InfoList from '../../../components/InfoList.vue';
+import CardUpdate from './CardUpdate.vue';
 
 export default {
   name: 'MembershipRecurringOrCircle',
 
-  components: { InfoList },
+  components: { InfoList, CardUpdate },
 
   props: {
     nextTransaction: {
@@ -70,5 +86,19 @@ export default {
       return data;
     },
   },
+
+  data() {
+    return {
+      openPaymentForm: false,
+      successMessage: ''
+    }
+  },
+
+  methods: {
+    showSuccessMessage(message) {
+      this.successMessage = message;
+      this.openPaymentForm = false;
+    }
+  }
 };
 </script>

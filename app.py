@@ -488,7 +488,12 @@ if ENABLE_PORTAL:
     @app.route("/account/", defaults={"path": ""})
     @app.route("/account/<path>/")
     def account(path):
-        return render_template("account.html", bundles=get_bundles("account"))
+        return render_template(
+            "account.html",
+            bundles=get_bundles("account"),
+            stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+            recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+        )
 
 
 @app.route("/donate", methods=["GET", "POST"])

@@ -7,6 +7,7 @@ export const USER_TYPES = {
   getViewAsUser: `${USER_MODULE}__getViewAsUser`,
   updateUser: `${USER_MODULE}__updateUser`,
   updateIdentity: `${USER_MODULE}__updateIdentity`,
+  updateCreditCard: `${USER_MODULE}__updateCreditCard`,
   linkIdentity: `${USER_MODULE}__linkIdentity`,
   confirmLinkedIdentity: `${USER_MODULE}__confirmLinkedIdentity`,
 };
