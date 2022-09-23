@@ -21,7 +21,7 @@
             </button>
             <card-update
               v-if="openPaymentForm"
-              @onSuccess="showSuccessMessage"
+              @onSuccess="onSuccess"
             ></card-update>
           </template>
           <template v-if="key === 'next'">
@@ -95,7 +95,7 @@ export default {
   },
 
   methods: {
-    showSuccessMessage(message) {
+    onSuccess(message, last4) {
       this.successMessage = message;
       this.openPaymentForm = false;
     }

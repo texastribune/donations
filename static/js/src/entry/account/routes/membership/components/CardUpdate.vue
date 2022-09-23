@@ -49,10 +49,21 @@ export default {
     async patchCard() {
       this.formSubmitted = true;
       await createToken().then(data => {
-        this[USER_TYPES.updateCreditCard]({ card: data.token.id });
         const newCard = data.token.card
+
+        this[USER_TYPES.updateCreditCard]({
+          card: data.token.id,
+          last4: newCard.last4,
+          year: newCard.exp_year,
+          month: newCard.exp_month,
+          brand: newCard.brand
+        });
         const successMessage = `Card ending in ${newCard.last4}, expiring ${newCard.exp_month}/${newCard.exp_year} has been saved`;
-        this.$emit('onSuccess', successMessage);
+        this.$emit(
+          'onSuccess',
+          successMessage,
+          newCard.last4
+        );
       });
 
     },
