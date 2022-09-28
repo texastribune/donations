@@ -21,10 +21,11 @@
 </template>
 
 <script>
+import store from '../../../store';
 import { ValidationObserver } from 'vee-validate';
 import { createToken } from 'vue-stripe-elements-plus';
 import userMixin from '../../../store/user/mixin';
-import { USER_TYPES } from '../../../store/types';
+import { USER_MODULE, USER_TYPES } from '../../../store/types';
 import ManualPay from '../../../../../payment-elements/ManualPay.vue';
 import formStarter from '../../../../../mixins/connected-form/starter';
 
@@ -58,11 +59,13 @@ export default {
           month: newCard.exp_month,
           brand: newCard.brand
         });
+        // store.dispatch(`${USER_MODULE}/${USER_TYPES.getUser}`);
         const successMessage = `Card ending in ${newCard.last4}, expiring ${newCard.exp_month}/${newCard.exp_year} has been saved`;
         this.$emit(
           'onSuccess',
           successMessage,
-          newCard.last4
+          newCard.last4,
+          newCard.brand
         );
       });
 

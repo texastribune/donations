@@ -14,7 +14,12 @@
             {{ extra.amount | currency }}, {{ extra.period }}
           </template>
           <template v-if="key === 'payment'">
-            {{ extra.brand }} ending in {{ extra.last4 }}
+            <span v-if="showOG">
+              {{ extra.brand }} ending in {{ extra.last4 }}
+            </span>
+            <span v-if="!showOG">
+              {{ newBrand }} ending in {{ newLast4 }}
+            </span>
             <button @click="openPaymentForm = !openPaymentForm">
               <icon v-if="!openPaymentForm" name="pencil-fill" :display="{ size: 's' }" />
               <icon v-if="openPaymentForm" name="close" :display="{ size: 's' }" />
@@ -54,7 +59,10 @@ export default {
   data() {
     return {
       openPaymentForm: false,
-      successMessage: ''
+      successMessage: '',
+      showOG: true,
+      newLast4: '',
+      newBrand: '',
     }
   },
 
@@ -95,9 +103,12 @@ export default {
   },
 
   methods: {
-    onSuccess(message, last4) {
+    onSuccess(message, last4, brand) {
       this.successMessage = message;
       this.openPaymentForm = false;
+      this.showOG = false;
+      this.newLast4 = last4
+      this.newBrand = brand
     }
   }
 };
