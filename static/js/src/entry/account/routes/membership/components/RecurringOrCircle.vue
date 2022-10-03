@@ -2,6 +2,13 @@
   <section class="c-detail-box">
     <div class="has-xxl-btm-marg">
       <p
+        v-if="declinedCard"
+        role="alert"
+        class="has-b-btm-marg has-text-error"
+      >
+        <strong>Card was declined</strong>
+      </p>
+      <p
         v-if="successMessage"
         role="alert"
         class="has-b-btm-marg has-text-success"
@@ -26,7 +33,9 @@
             </button>
             <card-update
               v-if="openPaymentForm"
+              @formSubmitted="formSubmitted"
               @onSuccess="onSuccess"
+              @badCard="badCard"
             ></card-update>
           </template>
           <template v-if="key === 'next'">
@@ -60,6 +69,7 @@ export default {
     return {
       openPaymentForm: false,
       successMessage: '',
+      declinedCard: false,
       showOG: true,
       newLast4: '',
       newBrand: '',
@@ -103,12 +113,20 @@ export default {
   },
 
   methods: {
+    formSubmitted() {
+      this.successMessage = '',
+      this.declinedCard = false
+    },
     onSuccess(message, last4, brand) {
       this.successMessage = message;
       this.openPaymentForm = false;
       this.showOG = false;
       this.newLast4 = last4
       this.newBrand = brand
+    },
+    badCard() {
+      this.declinedCard = true;
+      this.openPaymentForm = false;
     }
   }
 };

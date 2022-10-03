@@ -8,6 +8,8 @@ export const USER_TYPES = {
   updateUser: `${USER_MODULE}__updateUser`,
   updateIdentity: `${USER_MODULE}__updateIdentity`,
   updateCreditCard: `${USER_MODULE}__updateCreditCard`,
+  updateStripeCard: `${USER_MODULE}__updateStripeCard`,
+  updateOpportunities: `${USER_MODULE}__updateOpportunities`,
   linkIdentity: `${USER_MODULE}__linkIdentity`,
   confirmLinkedIdentity: `${USER_MODULE}__confirmLinkedIdentity`,
 };

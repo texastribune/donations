@@ -96,6 +96,42 @@ const actions = {
     }
   },
 
+  [USER_TYPES.updateStripeCard]: async (
+    { state, getters, rootState },
+    updates
+  ) => {
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
+
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/cards2/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    }
+  },
+
+  [USER_TYPES.updateOpportunities]: async (
+    { state, getters, rootState },
+    updates
+  ) => {
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
+
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/opportunities/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    }
+  },
+
   [USER_TYPES.linkIdentity]: async (
     { state, getters, rootState },
     identity
