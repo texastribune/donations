@@ -11,6 +11,7 @@ import { PORTAL_API_URL } from '../../constants';
 
 const SET_ME = 'SET_ME';
 const SET_VIEW_AS = 'SET_VIEW_AS';
+const SET_UPDATED_CARD = 'SET_UPDATED_CARD';
 
 const initialState = {
   data: {},
@@ -27,6 +28,16 @@ const mutations = {
     state.data = data;
     state.viewAsEmail = viewAsEmail;
   },
+
+  [SET_UPDATED_CARD](state, cardUpdates) {
+    if (state.data.next_transaction) {
+      state.data.next_transaction.credit_card = {
+        ...state.data.next_transaction.credit_card,
+        last4: cardUpdates.card.last4,
+        brand: cardUpdates.card.brand
+      }
+    }
+  }
 };
 
 const actions = {
@@ -78,8 +89,8 @@ const actions = {
     }
   },
 
-  [USER_TYPES.updateCreditCard]: async (
-    { state, getters, rootState },
+  [USER_TYPES.updateCard]: async (
+    { state, getters, commit, rootState },
     updates
   ) => {
     if (!state.viewAsEmail) {
@@ -93,24 +104,7 @@ const actions = {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-    }
-  },
-
-  [USER_TYPES.updateStripeCard]: async (
-    { state, getters, rootState },
-    updates
-  ) => {
-    if (!state.viewAsEmail) {
-      const { accessToken } = rootState.tokenUser;
-      const { userId } = getters;
-
-      await axios.patch(
-        `${PORTAL_API_URL}persons/${userId}/cards2/`,
-        updates,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
+      commit(SET_UPDATED_CARD, updates);
     }
   },
 

@@ -2,7 +2,7 @@
   <transition name="has-fade">
     <section class="c-detail-box">
       <validation-observer v-slot="{ handleSubmit }">
-        <form @submit.prevent="handleSubmit(patchStripeCard)">
+        <form @submit.prevent="handleSubmit(patchCard)">
           <manual-pay
             :card="card"
             base-classes="form__manual"
@@ -54,29 +54,6 @@ export default {
 
   methods: {
     async patchCard() {
-      this.formSubmitted = true;
-      await createToken().then(data => {
-        const newCard = data.token.card
-
-        this[USER_TYPES.updateCreditCard]({
-          card: data.token.id,
-          last4: newCard.last4,
-          year: newCard.exp_year,
-          month: newCard.exp_month,
-          brand: newCard.brand
-        });
-        // store.dispatch(`${USER_MODULE}/${USER_TYPES.getUser}`);
-        const successMessage = `Card ending in ${newCard.last4}, expiring ${newCard.exp_month}/${newCard.exp_year} has been saved`;
-        this.$emit(
-          'onSuccess',
-          successMessage,
-          newCard.last4,
-          newCard.brand
-        );
-      });
-    },
-
-    async patchStripeCard() {
       this.$emit(
         'formSubmitted'
       )
@@ -106,9 +83,10 @@ export default {
       this.badCard = false;
       console.log(this.stripeTokenId);
       try {
-        await this[USER_TYPES.updateStripeCard]({
-          card: this.stripeTokenId,
-      });
+        await this[USER_TYPES.updateCard]({
+          tokenId: this.stripeTokenId,
+          card: this.stripeCard,
+        });
       } catch (err) {
         this.badCard = true;
         this.$emit(

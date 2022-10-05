@@ -13,7 +13,7 @@
         role="alert"
         class="has-b-btm-marg has-text-success"
       >
-        <strong>{{successMessage}}</strong>
+        <strong>{{ successMessage }}</strong>
       </p>
       <info-list :items="data">
         <template #text="{ item: { extra, key } }">
@@ -21,12 +21,7 @@
             {{ extra.amount | currency }}, {{ extra.period }}
           </template>
           <template v-if="key === 'payment'">
-            <span v-if="showOG">
-              {{ extra.brand }} ending in {{ extra.last4 }}
-            </span>
-            <span v-if="!showOG">
-              {{ newBrand }} ending in {{ newLast4 }}
-            </span>
+            {{ extra.brand }} ending in {{ extra.last4 }}
             <button @click="openPaymentForm = !openPaymentForm">
               <icon v-if="!openPaymentForm" name="pencil-fill" :display="{ size: 's' }" />
               <icon v-if="openPaymentForm" name="close" :display="{ size: 's' }" />
@@ -70,9 +65,6 @@ export default {
       openPaymentForm: false,
       successMessage: '',
       declinedCard: false,
-      showOG: true,
-      newLast4: '',
-      newBrand: '',
     }
   },
 
@@ -120,9 +112,6 @@ export default {
     onSuccess(message, last4, brand) {
       this.successMessage = message;
       this.openPaymentForm = false;
-      this.showOG = false;
-      this.newLast4 = last4
-      this.newBrand = brand
     },
     badCard() {
       this.declinedCard = true;
