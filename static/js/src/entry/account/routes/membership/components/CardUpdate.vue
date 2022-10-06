@@ -21,7 +21,6 @@
 </template>
 
 <script>
-import store from '../../../store';
 import { ValidationObserver } from 'vee-validate';
 import { createToken } from 'vue-stripe-elements-plus';
 import userMixin from '../../../store/user/mixin';
@@ -71,9 +70,7 @@ export default {
         const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved`;
         this.$emit(
           'onSuccess',
-          successMessage,
-          this.stripeCard.last4,
-          this.stripeCard.brand
+          successMessage
         );
       }
       this[CONTEXT_TYPES.setIsFetching](false);
@@ -81,7 +78,6 @@ export default {
 
     async updateStripe() {
       this.badCard = false;
-      console.log(this.stripeTokenId);
       try {
         await this[USER_TYPES.updateCard]({
           tokenId: this.stripeTokenId,

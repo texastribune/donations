@@ -106,10 +106,10 @@ export default {
 
   methods: {
     formSubmitted() {
-      this.successMessage = '',
-      this.declinedCard = false
+      this.successMessage = '';
+      this.declinedCard = false;
     },
-    onSuccess(message, last4, brand) {
+    onSuccess(message) {
       this.successMessage = message;
       this.openPaymentForm = false;
     },
