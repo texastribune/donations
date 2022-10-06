@@ -47,7 +47,6 @@ export default {
       stripeTokenId: '',
       stripeCard: {},
       badCard: false,
-      errMessage: {},
     };
   },
 
