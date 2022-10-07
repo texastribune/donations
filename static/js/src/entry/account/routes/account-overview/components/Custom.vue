@@ -7,7 +7,10 @@
     </template>
 
     <template #links>
-      <user-internal-nav show-donation-history />
+      <user-internal-nav
+        show-donation-history
+        show-update-card
+      />
     </template>
   </summary-box>
 </template>

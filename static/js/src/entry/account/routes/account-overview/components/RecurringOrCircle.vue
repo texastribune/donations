@@ -22,6 +22,7 @@
     <template #links>
       <user-internal-nav
         show-donation-history
+        show-update-card
         show-membership-status
         show-ambassador
       >
