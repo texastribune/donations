@@ -40,6 +40,13 @@ export default {
 
   mixins: [formStarter, contextMixin, userMixin],
 
+  props: {
+    stripeCustomerId: {
+      type: String,
+      required: true,
+    },
+  },
+
   data() {
     return {
       openPaymentForm: false,
@@ -65,7 +72,7 @@ export default {
       await this.updateStripe();
       if (!this.badCard) {
         // opportunities in salesforce can update in the background and log any errors
-        this.updateSalesforce();
+        // this.updateSalesforce();
         const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved`;
         this.$emit(
           'onSuccess',
@@ -81,6 +88,7 @@ export default {
         await this[USER_TYPES.updateCard]({
           tokenId: this.stripeTokenId,
           card: this.stripeCard,
+          stripeCustomerId: this.stripeCustomerId,
         });
       } catch (err) {
         this.badCard = true;

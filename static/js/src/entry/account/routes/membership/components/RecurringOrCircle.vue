@@ -28,6 +28,7 @@
             </button>
             <card-update
               v-if="openPaymentForm"
+              :stripeCustomerId="extra.stripeCustomerId"
               @formSubmitted="formSubmitted"
               @onSuccess="onSuccess"
               @badCard="badCard"
@@ -75,6 +76,7 @@ export default {
         amount,
         period,
         card,
+        stripeCustomerId,
         date: nextTransactionDate,
       } = this.nextTransaction;
 
@@ -90,7 +92,7 @@ export default {
         data.push({
           key: 'payment',
           heading: 'Payment method',
-          extra: { brand, last4 },
+          extra: { brand, last4, stripeCustomerId },
         });
       }
 
