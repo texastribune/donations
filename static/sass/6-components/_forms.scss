@@ -179,6 +179,10 @@
       @extend .form__error;
       @extend .form__error--normal;
     }
+
+    input {
+      font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial;
+    }
   }
 
   // form submit button

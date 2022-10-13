@@ -1,0 +1,11 @@
+.c-info-list-large {
+  display: grid;
+  gap: $size-xl;
+  grid-gap: $size-xl;
+  grid-template-columns: repeat(3, 1fr);
+  list-style: none;
+
+  @include mq($until: bp-l) {
+    grid-template-columns: 1fr;
+  }
+}

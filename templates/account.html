@@ -11,6 +11,11 @@
 
     <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
 
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      window.__STRIPE_KEY__ = '{{ stripe }}';
+      window.__RECAPTCHA_KEY__ = '{{ recaptcha }}';
+    </script>
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
     j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=

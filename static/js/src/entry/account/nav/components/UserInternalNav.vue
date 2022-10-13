@@ -88,6 +88,19 @@
             </router-link>
           </template>
         </link-list-item>
+        <link-list-item v-if="!isNeverGiven && showUpdateCard">
+          <template #main>
+            <router-link
+              ga-on="click"
+              :to="{ name: 'membership' }"
+              :ga-event-category="ga.userPortalNav.category"
+              :ga-event-action="ga.userPortalNav.actions.inline"
+              :ga-event-label="ga.userPortalNav.labels.membership"
+            >
+              Update your payment information
+            </router-link>
+          </template>
+        </link-list-item>
         <link-list-item v-if="hasGivenNotCustom && showMembershipStatus">
           <template #main>
             <router-link
@@ -177,6 +190,11 @@ export default {
 
   props: {
     showDonationHistory: {
+      type: Boolean,
+      default: false,
+    },
+
+    showUpdateCard: {
       type: Boolean,
       default: false,
     },

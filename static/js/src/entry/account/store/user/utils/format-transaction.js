@@ -4,11 +4,13 @@ export default function formatTransaction({
   period,
   payment_type: paymentType,
   credit_card: card,
+  stripe_customer_id: stripeCustomerId,
 }) {
   const transaction = {
     amount,
     date,
     period,
+    stripeCustomerId,
   };
 
   if (paymentType && paymentType.toLowerCase() === 'credit card') {

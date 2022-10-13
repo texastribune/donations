@@ -2,7 +2,7 @@
 export const READ_WRITE_CREDIT_CARD_MESSAGE_KEY = 'readWriteCreditCardMessage';
 export const READ_WRITE_WELCOME_MESSAGE_KEY = 'readWriteWelcomeMessage';
 export const NON_STAFF_CONNECTION = 'Username-Password-Authentication';
-export const PORTAL_API_URL = `https://${process.env.PORTAL_API_DOMAIN}/v1/`;
+export const PORTAL_API_URL = `${process.env.PORTAL_API_DOMAIN}/v1/`;
 export const DONATE_URL = `/donate?installmentPeriod=monthly&amount=15&campaignId=${process.env.PORTAL_CAMPAIGN_ID}#join-today`;
 export const CIRCLE_URL = '/circle';
 export const AUTH_DOMAIN = process.env.AUTH0_DOMAIN;
@@ -57,6 +57,9 @@ export const GA_USER_PORTAL = {
     'edit-zip': 'edit zip',
     'marketing-opt-in': 'marketing opt-in',
     'marketing-opt-out': 'marketing opt-out',
+    'attempt-card-update': 'attempt credit card update',
+    'cancel-card-update': 'cancel credit card update',
+    'submit-card-update': 'submit credit card update',
   },
   labels: {
     home: 'account overview',
@@ -71,6 +74,7 @@ export const GA_USER_PORTAL = {
     'confirm-linked-identity': 'link email confirmation',
     'login-linked-identity': 'link email login',
     'changed-email': 'changed email confirmation',
+    'update-card': 'update credit card',
   },
 };
 export const GA_DONATIONS = {
