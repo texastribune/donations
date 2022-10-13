@@ -115,7 +115,7 @@ export default {
           ) {
             this.$emit(
               'onFailure',
-              'An internal error occurred. We will attempt following up shortly.',
+              'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org',
             )
           }
           else if (
@@ -123,7 +123,7 @@ export default {
           ) {
             this.$emit(
               'onFailure',
-              'The submitted card was declined or invalid. Please check your information and resubmit.'
+              'The submitted card was declined or invalid. Please check your information and resubmit'
             )
           }
         }
