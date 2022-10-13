@@ -23,12 +23,16 @@
 <script>
 import { ValidationObserver } from 'vee-validate';
 import { createToken } from 'vue-stripe-elements-plus';
+
+import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
 import userMixin from '../../../store/user/mixin';
 import contextMixin from '../../../store/context/mixin';
-import { CONTEXT_TYPES, USER_TYPES } from '../../../store/types';
+
 import ManualPay from '../../../../../payment-elements/ManualPay.vue';
-import logError from '../../../utils/log-error';
 import formStarter from '../../../../../mixins/connected-form/starter';
+
+import { AxiosError } from '../../../errors';
+import logError from '../../../utils/log-error';
 
 export default {
   name: 'CardUpdate',
@@ -53,7 +57,7 @@ export default {
       formSubmitted: false,
       stripeTokenId: '',
       stripeCard: {},
-      badCard: false,
+      updateFailure: false,
     };
   },
 
@@ -70,7 +74,7 @@ export default {
       });
       // waiting on this one so we can see if the card is declined
       await this.updateStripe();
-      if (!this.badCard) {
+      if (!this.updateFailure) {
         // opportunities in salesforce can update in the background and log any errors
         this.updateSalesforce();
         const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved`;
@@ -90,7 +94,8 @@ export default {
     },
 
     async updateStripe() {
-      this.badCard = false;
+      this.updateFailure = false;
+
       try {
         await this[USER_TYPES.updateCard]({
           tokenId: this.stripeTokenId,
@@ -98,15 +103,33 @@ export default {
           stripeCustomerId: this.stripeCustomerId,
         });
       } catch (err) {
-        this.badCard = true;
-        this.$emit(
-          'badCard',
-          true,
-        )
+        this.updateFailure = true;
         logError({err, level: 'warning'})
 
+        if (
+          err instanceof AxiosError &&
+          err.status === 400
+        ) {
+          if (
+            err.extra.data.detail === "missing data"
+          ) {
+            this.$emit(
+              'onFailure',
+              'An internal error occurred. We will attempt following up shortly.',
+            )
+          }
+          else if (
+            err.extra.data.detail === "invalid card"
+          ) {
+            this.$emit(
+              'onFailure',
+              'The submitted card was declined or invalid. Please check your information and resubmit.'
+            )
+          }
+        }
       }
     },
+
     updateSalesforce() {
       this[USER_TYPES.updateOpportunities]({
         last4: this.stripeCard.last4,

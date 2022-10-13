@@ -2,11 +2,11 @@
   <section class="c-detail-box">
     <div class="has-xxl-btm-marg">
       <p
-        v-if="declinedCard"
+        v-if="failureMessage"
         role="alert"
         class="has-b-btm-marg has-text-error"
       >
-        <strong>Card was declined</strong>
+        <strong>{{ failureMessage }}</strong>
       </p>
       <p
         v-if="successMessage"
@@ -22,22 +22,24 @@
           </template>
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
-            <button @click="togglePaymentForm" class="has-text-blue-dark">
-              <div v-if="!openPaymentForm">
-                Edit
-                <icon name="pencil-fill" :display="{ size: 's', color: 'blue-dark' }" />
-              </div>
-              <div v-if="openPaymentForm">
-                Close
-                <icon name="close" :display="{ size: 's', color: 'blue-dark' }" />
-              </div>
-            </button>
+            <div>
+              <button @click="togglePaymentForm" class="has-text-teal">
+                <span v-if="!openPaymentForm">
+                  Edit
+                  <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
+                </span>
+                <span v-if="openPaymentForm">
+                  Close
+                  <icon name="close" :display="{ size: 'xs', color: 'teal' }" />
+                </span>
+              </button>
+            </div>
             <card-update
               v-if="openPaymentForm"
               :stripeCustomerId="extra.stripeCustomerId"
               @formSubmitted="formSubmitted"
               @onSuccess="onSuccess"
-              @badCard="badCard"
+              @onFailure="onFailure"
             ></card-update>
           </template>
           <template v-if="key === 'next'">
@@ -71,6 +73,7 @@ export default {
     return {
       openPaymentForm: false,
       successMessage: '',
+      failureMessage: '',
       declinedCard: false,
     }
   },
@@ -132,16 +135,19 @@ export default {
         });
       }
     },
+  
     formSubmitted() {
       this.successMessage = '';
       this.declinedCard = false;
     },
+  
     onSuccess(message) {
       this.successMessage = message;
       this.openPaymentForm = false;
     },
-    badCard() {
-      this.declinedCard = true;
+  
+    onFailure(message) {
+      this.failureMessage = message;
       this.openPaymentForm = false;
     }
   }

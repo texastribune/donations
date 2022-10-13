@@ -1,5 +1,5 @@
 <template>
-  <ul class="c-info-list">
+  <ul class="c-info-list-large">
     <li v-for="item in items" :key="item.key" class="c-info-list__item">
       <h3 class="t-size-s has-xxxs-btm-marg">
         <strong>{{ item.heading }}</strong>
