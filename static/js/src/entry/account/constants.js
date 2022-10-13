@@ -57,6 +57,9 @@ export const GA_USER_PORTAL = {
     'edit-zip': 'edit zip',
     'marketing-opt-in': 'marketing opt-in',
     'marketing-opt-out': 'marketing opt-out',
+    'attempt-card-update': 'attempt credit card update',
+    'cancel-card-update': 'cancel credit card update',
+    'submit-card-update': 'submit credit card update',
   },
   labels: {
     home: 'account overview',
@@ -71,6 +74,7 @@ export const GA_USER_PORTAL = {
     'confirm-linked-identity': 'link email confirmation',
     'login-linked-identity': 'link email login',
     'changed-email': 'changed email confirmation',
+    'update-card': 'update credit card',
   },
 };
 export const GA_DONATIONS = {

@@ -72,7 +72,7 @@ export default {
       await this.updateStripe();
       if (!this.badCard) {
         // opportunities in salesforce can update in the background and log any errors
-        // this.updateSalesforce();
+        this.updateSalesforce();
         const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved`;
         this.$emit(
           'onSuccess',
@@ -80,6 +80,13 @@ export default {
         );
       }
       this[CONTEXT_TYPES.setIsFetching](false);
+
+      window.dataLayer.push({
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaAction: this.ga.userPortal.actions['submit-card-update'],
+        gaLabel: this.ga.userPortal.labels['update-card'],
+      });
     },
 
     async updateStripe() {

@@ -22,7 +22,7 @@
           </template>
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
-            <button @click="openPaymentForm = !openPaymentForm">
+            <button @click="togglePaymentForm">
               <icon v-if="!openPaymentForm" name="pencil-fill" :display="{ size: 's' }" />
               <icon v-if="openPaymentForm" name="close" :display="{ size: 's' }" />
             </button>
@@ -107,6 +107,25 @@ export default {
   },
 
   methods: {
+    togglePaymentForm() {
+      this.openPaymentForm = !this.openPaymentForm;
+      gaCardBase = {
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaLabel: this.ga.userPortal.labels['update-card'],
+      }
+      if (this.openPaymentForm) {
+        window.dataLayer.push({
+          ...gaCardBase,
+          gaAction: this.ga.userPortal.actions['attempt-card-update'],
+        });
+      } else {
+        window.dataLayer.push({
+          ...gaCardBase,
+          gaAction: this.ga.userPortal.actions['cancel-card-update'],
+        });
+      }
+    },
     formSubmitted() {
       this.successMessage = '';
       this.declinedCard = false;
