@@ -91,7 +91,7 @@ var payFeeAmount = function() {
     payFeeElement.text('');
   } else {
     var totalAmount = (goalAmount + .30) / (1 - 0.022);
-    var feeAmount = Math.floor((totalAmount - goalAmount) * 100) / 100;
+    var feeAmount = Math.round((totalAmount - goalAmount) * 100) / 100;
 
     payFeeElement.text('$' + feeAmount.toFixed(2));
   }

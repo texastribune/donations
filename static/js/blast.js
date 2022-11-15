@@ -35,7 +35,7 @@ var listen_for_installments = function() {
 var payFeeAmount = function() {
   var goalAmount = parseFloat($('input[name="amount"]:checked').val()),
       totalAmount = (goalAmount + .30) / (1 - 0.022);
-      feeAmount = Math.floor((totalAmount - goalAmount) * 100) / 100,
+      feeAmount = Math.round((totalAmount - goalAmount) * 100) / 100,
       payFeeElement = $('#pay-fee-amount span');
 
   payFeeElement.text('$' + feeAmount.toFixed(2));
