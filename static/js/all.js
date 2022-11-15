@@ -82,7 +82,6 @@ var listen_for_installments = function() {
   });
 };
 
-// https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
 var payFeeAmount = function() {
   var goalAmount = parseFloat($('input[name="amount"]').val());
   var payFeeElement = $('#pay-fee-amount span');
@@ -90,8 +89,10 @@ var payFeeAmount = function() {
   if (isNaN(goalAmount)) {
     payFeeElement.text('');
   } else {
+    // https://support.stripe.com/questions/passing-the-stripe-fee-on-to-customers
     var totalAmount = (goalAmount + .30) / (1 - 0.022);
-    var feeAmount = Math.floor((totalAmount - goalAmount) * 100) / 100;
+    // Fee rounded to two decimal places.
+    var feeAmount = Math.round((totalAmount - goalAmount) * 100) / 100;
 
     payFeeElement.text('$' + feeAmount.toFixed(2));
   }

@@ -50,8 +50,10 @@ export default {
 
       amount = parseFloat(amount.trim());
 
+      // https://support.stripe.com/questions/passing-the-stripe-fee-on-to-customers
       const total = (amount + 0.3) / (1 - 0.022);
-      const fee = Math.floor((total - amount) * 100) / 100;
+      // Fee rounded to two decimal places.
+      const fee = Math.round((total - amount) * 100) / 100;
 
       return `$${fee.toFixed(2)}`;
     },
