@@ -8,8 +8,8 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} new members</strong> <br />
-      toward goal of {{ data[1].label }}.
+      <strong>{{ data[0].label }}</strong> toward unlocking a <br />
+      {{ data[1].label }} match.
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '$20,000.', value: 20000 },
+        { slug: 'goal', label: '$20,000', value: 20000 },
       ],
     };
   },
