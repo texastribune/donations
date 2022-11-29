@@ -37,11 +37,19 @@
   .text {
     flex-basis: 135px;
     font-size: $size-xs;
+    @include mq($from: bp-s) {
+      display: inline-block;
+      flex-basis: 250px;
+      font-size: $size-s;
+    }
   }
 }
 
 .ribbon {
   width: 100%;
+  max-width: 200px;
+  margin: 0 auto;
+  display: block;
 
   @include mq($until: bp-s) {
     margin-bottom: $size-xxs;
