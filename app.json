@@ -2,6 +2,7 @@
   "name": "donations",
   "scripts": {
   },
+  "stack": "heroku-20",
   "env": {
     "ACCOUNTING_MAIL_RECIPIENT": {
       "required": true
