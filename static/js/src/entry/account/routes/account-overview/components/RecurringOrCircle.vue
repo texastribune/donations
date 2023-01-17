@@ -1,7 +1,7 @@
 <template>
   <summary-box heading="membership">
     <template #content>
-      <p v-if="nextTransaction.card" class="has-text-gray-dark">
+      <p v-if="nextTransaction.card" class="has-text-gray-dark has-l-btm-marg">
         Thank you for being a Texas Tribune member! Your next
         <strong>{{ nextTransaction.period }}</strong> donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
@@ -17,6 +17,7 @@
         <strong>{{ nextTransaction.date | longDate }}</strong
         >.
       </p>
+      <p>Please note that this information does not reflect any business memberships or other sponsorships.</p>
     </template>
 
     <template #links>
