@@ -132,7 +132,7 @@
             :required="false"
             :store-module="storeModule"
             :show-error="showErrors"
-            label-text="encouraged to give by"
+            label-text="I am giving because"
             base-classes="form__text form__text--standard"
             name="reason"
           />
