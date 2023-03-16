@@ -30,6 +30,7 @@ from config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
+    BLOCK_LIST,
     ENABLE_PORTAL,
     ENABLE_SENTRY,
     FLASK_SECRET_KEY,
@@ -444,6 +445,16 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     form_data = form.data
     form_errors = form.errors
     email = form_data["stripeEmail"]
+
+    # hard check on identified bad actors
+    if BLOCK_LIST:
+        name = form_data["first_name"] + " " + form_data["last_name"]
+        if name in BLOCK_LIST:
+            app.logger.error(f"Blocked potential bad actor: {name} - {email}")
+            message = "There was an issue saving your donation information."
+            return render_template(
+                "error.html", message=message, bundles=get_bundles("old")
+            )
 
     if FormType is DonateForm:
         donation_type = "membership"
