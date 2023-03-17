@@ -449,7 +449,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     # hard check on identified bad actors
     if BLOCK_LIST:
         name = form_data["first_name"] + " " + form_data["last_name"]
-        if name in BLOCK_LIST:
+        if name in BLOCK_LIST and form_data["amount"] == 1:
             app.logger.error(f"Blocked potential bad actor: {name} - {email}")
             message = "There was an issue saving your donation information."
             return render_template(
