@@ -206,6 +206,9 @@
     },
     "TZ": {
       "required": true
+    },
+    "BLOCK_LIST": {
+      "required": false
     }
   },
   "formation": {
