@@ -14,6 +14,7 @@ def make_celery(app):
         worker_prefetch_multiplier=1,
         worker_log_format="%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s",
         worker_task_log_format="%(levelname)s %(name)s/%(module)s:%(lineno)d - %(message)s",
+        worker_concurrency=3,
     )
     celery.conf.update(app.config)
     TaskBase = celery.Task
