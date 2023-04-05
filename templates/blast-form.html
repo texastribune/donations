@@ -6,6 +6,15 @@
 <script src="{{ url_for('static', filename='js/blast.js') }}"></script>
 {% endblock %}
 
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/blastform">
+  <meta property="og:image" content="https://static.texastribune.org/media/membership/tt-blast-share.png">
+  <meta property="og:title" content="The Blast | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="The Blast, The Texas Tribune’s premier newsletter, puts to use the full weight of the newsroom’s political team to serve up exclusive reporting, nonpartisan analysis and the first word on happenings in the Capitol three times a week for insiders. Don’t get left behind. Subscribe today.">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
 {% block content %}
 
   <section class="splash splash--blast">
