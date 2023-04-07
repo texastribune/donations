@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>{% block title %}Support Us | The Texas Tribune{% endblock %}</title>
   <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
-  <meta property="og:url" content="https://support.texastribune.org/donate">
   <!-- This is the same image used by our donations app -->
-  <meta property="og:image" content="https://static.texastribune.org/media/membership/FMD16/26234447754_dc97a48275_b.jpg">
-  <meta property="og:title" content="Support Us | The Texas Tribune">
-  <meta property="og:type" content="website">
-  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
+  {% block og_meta %}
+    <meta property="og:url" content="https://support.texastribune.org/donate">
+    <meta property="og:image" content="https://static.texastribune.org/media/membership/FMD16/26234447754_dc97a48275_b.jpg">
+    <meta property="og:title" content="Support Us | The Texas Tribune">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
+  {% endblock %}
   <link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://static.texastribune.org/media/icons/iPhone_Icon_60x60.png">
   <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://static.texastribune.org/media/icons/iPad_Icon_76x76.png">
   <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://static.texastribune.org/media/icons/iPhone_Icon_120x120.png">
