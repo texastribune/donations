@@ -16,6 +16,7 @@ COPY config /app/config
 COPY package.json /app/
 COPY package-lock.json /app/
 COPY babel.config.js /app/
+COPY tests.py /app/
 RUN npm install
 
 RUN pip install --upgrade pip
