@@ -574,6 +574,7 @@ def the_blast_promo_form():
         form=form,
         campaign_id=campaign_id,
         referral_id=referral_id,
+        amount="250",
         installment_period="yearly",
         key=app.config["STRIPE_KEYS"]["publishable_key"],
         bundles=bundles,
