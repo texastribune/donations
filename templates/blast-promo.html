@@ -6,22 +6,22 @@ The Blast | The Texas Tribune
 <script src="{{ url_for('static', filename='js/blast.js') }}"></script>
 <style>
     .subscription li label[for='amount-0']:before {
-    content: 'Discounted rate';
-}
+        content: 'Discounted rate';
+    }
 
-.subscription li label[for='amount-0']:after {
-    content: '$200'
-}
+    .subscription li label[for='amount-0']:after {
+        content: '${{ amount }}'
+    }
 </style>
 {% endblock %}
 
 {% block og_meta %}
-  <meta property="og:url" content="https://support.texastribune.org/blast-promo">
-  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-blast.png') }}">
-  <meta property="og:title" content="The Blast | The Texas Tribune">
-  <meta property="og:type" content="website">
-  <meta property="og:description" content="The Blast, The Texas Tribune’s premier newsletter, puts to use the full weight of the newsroom’s political team to serve up exclusive reporting, nonpartisan analysis and the first word on happenings in the Capitol three times a week for insiders. Don’t get left behind. Subscribe today.">
-  <meta name="twitter:card" content="summary_large_image">
+    <meta property="og:url" content="https://support.texastribune.org/blast-promo">
+    <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-blast.png') }}">
+    <meta property="og:title" content="The Blast | The Texas Tribune">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="The Blast, The Texas Tribune’s premier newsletter, puts to use the full weight of the newsroom’s political team to serve up exclusive reporting, nonpartisan analysis and the first word on happenings in the Capitol three times a week for insiders. Don’t get left behind. Subscribe today.">
+    <meta name="twitter:card" content="summary_large_image">
 {% endblock %}
 
 {% block content %}
@@ -83,7 +83,7 @@ The Blast | The Texas Tribune
                 <div class="col col_5--xl form__box grid_separator">
                     <ul class="subscription grid_row">
                         <li class="col grid_separator">
-                            <input checked id="amount-0" name="amount" type="radio" value="200">
+                            <input checked id="amount-0" name="amount" type="radio" value="{{ amount }}">
                             <label for="amount-0">Annual</label>
                         </li>
                     </ul>
