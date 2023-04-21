@@ -12,3 +12,4 @@ services:
       - 80:5000
     environment:
       REPORT_URI: ''
+    entrypoint: python -m pytest "tests.py" --cov=.
