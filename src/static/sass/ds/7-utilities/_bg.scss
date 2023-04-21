@@ -1,0 +1,17 @@
+.has-white-bg-from-bp-l {
+  @include mq($from: bp-l) {
+    background-color: $color-white-pure;
+  }
+}
+
+.has-white-off-bg-until-bp-l {
+  @include mq($until: bp-l) {
+    background-color: $color-white-off;
+  }
+}
+
+.has-white-off-bg-from-bp-l {
+  @include mq($from: bp-l) {
+    background-color: $color-white-off;
+  }
+}

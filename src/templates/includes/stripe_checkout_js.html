@@ -1,0 +1,183 @@
+<script>
+  (function() {
+
+    var $firstName = $('#first_name'),
+        $lastName = $('#last_name'),
+        $amount = $('#amount'),
+        $form = $('form'),
+        $formError = $('.form-error'),
+        $formErrorMessage = $('.error-form-message'),
+        $chargeDescription = $('#description'),
+        isCircleForm = document.querySelector('#circle'),
+        isBlastForm = document.querySelector('#blast') || document.querySelector('#blast-vip'),
+        handler;
+
+    function bothNamesExist() {
+      return $firstName.val() !== '' && $lastName.val() !== '';
+    }
+
+    function isValidDollarAmount() {
+      return !isNaN($amount.val()) && $amount.val() >= 1;
+    }
+
+    function formIsValid() {
+      return bothNamesExist() && isValidDollarAmount();
+    }
+
+    function checkFormValidity() {
+      var errorMessageText = '',
+          isValid = true;
+
+      if (!bothNamesExist()) {
+        errorMessageText = 'Please enter a first and last name. This information helps us maintain tranparency about our financial supporters.';
+        isValid = false;
+      }
+      if (!isValidDollarAmount()) {
+        errorMessageText += 'Please enter a donation above $1.';
+        isValid = false;
+      }
+
+      if (isValid) {
+        $formError.hide();
+      } else {
+        $formErrorMessage.text(errorMessageText);
+        $formError.show();
+      }
+    }
+
+    function makeAmountReadOnly() {
+      $amount.prop('readonly', true);
+    }
+
+    function makeAmountEditable() {
+      $amount.prop('readonly', false);
+    }
+
+    function bindEvents() {
+      $('.button--donate').click(function(e) {
+        e.preventDefault();
+
+        checkFormValidity();
+
+        if (formIsValid()) {
+          $formError.hide();
+          $formErrorMessage.text('');
+
+          if (!isCircleForm && !isBlastForm) {
+            makeAmountReadOnly();
+          }
+
+          handler.open({
+            name: 'The Texas Tribune',
+            description: $chargeDescription.val(),
+            amount: $amount.val() * 100
+          });
+        }
+      });
+
+      $(window).on('popstate', function() {
+        handler.close();
+      });
+    }
+
+    function buildStripeHandler() {
+      handler = StripeCheckout.configure({
+        key: '{{ key }}',
+        image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
+        locale: 'auto',
+        token: function(token) {
+          appendFormInputs(token.id, token.email);
+          $form.submit();
+        },
+        closed: function() {
+          if (!isCircleForm && !isBlastForm) {
+            makeAmountEditable();
+          }
+
+          removeFormInputs();
+        }
+      });
+    }
+
+    function appendFormInputs(id, email) {
+      var $tokenInput = $('<input />')
+        .attr('type', 'hidden')
+        .attr('id', 'formToken')
+        .attr('name', 'stripeToken')
+        .val(id);
+
+      var $emailInput = $('<input />')
+        .attr('type', 'hidden')
+        .attr('id', 'formEmail')
+        .attr('name', 'stripeEmail')
+        .val(email);
+
+      $form.append($tokenInput);
+      $form.append($emailInput);
+    }
+
+    function removeFormInputs() {
+      $('#formEmail').remove();
+      $('#formToken').remove();
+    }
+
+    function setPublishableKey() {
+      Stripe.setPublishableKey('{{ key }}');
+    }
+
+    function beginApplePay() {
+      var paymentRequest = {
+        countryCode: 'US',
+        currencyCode: 'USD',
+        requiredShippingContactFields: ['email'],
+        total: {
+          label: 'texastribune.org',
+          amount: $amount.val()
+        }
+      };
+
+      var session = Stripe.applePay.buildSession(paymentRequest,
+        function(result, completion) {
+          appendFormInputs(result.token.id, result.shippingContact.emailAddress);
+          completion(ApplePaySession.STATUS_SUCCESS);
+          $form.submit();
+      }, function(error) {
+        window.location.href = '/error';
+      });
+
+      session.oncancel = function() {
+        removeFormInputs();
+      };
+
+      session.begin();
+    }
+
+    function checkForApplePay() {
+      Stripe.applePay.checkAvailability(function(available) {
+        if (available) {
+          var applePayButton = $('#applePayButton');
+          var withoutApple = $('.submit--woApple');
+          var withApple = $('.submit--wApple');
+
+          withApple.removeClass('hidden');
+          withoutApple.addClass('hidden');
+          applePayButton.click(function(e) {
+            e.preventDefault();
+
+            checkFormValidity();
+
+            if (formIsValid()) {
+              beginApplePay();
+            }
+          });
+        }
+      });
+    }
+
+    buildStripeHandler();
+    bindEvents();
+    setPublishableKey();
+    checkForApplePay();
+
+  })();
+</script>

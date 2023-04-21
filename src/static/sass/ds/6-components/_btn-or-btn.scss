@@ -1,0 +1,28 @@
+.c-btn-or-btn {
+  display: grid;
+  gap: $size-xs;
+  grid-gap: $size-xs;
+  grid-template-columns: 1fr $size-xxl 1fr;
+
+  &__first {
+    grid-column: 1;
+  }
+
+  &__word {
+    grid-column: 2;
+  }
+
+  &__last {
+    grid-column: 3;
+  }
+
+  @include mq($until: bp-l) {
+    grid-template-columns: 1fr;
+
+    &__first,
+    &__word,
+    &__last {
+      grid-column: 1;
+    }
+  }
+}

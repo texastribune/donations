@@ -1,0 +1,81 @@
+.rotate-words {
+  span {
+    animation: rotateWord 15s linear 0s 2;
+    // color: $color-fmd-blue-light;
+    color: $color-yellow-tribune;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+
+    &:nth-child(2) {
+      animation-delay: 3s;
+    }
+    &:nth-child(3) {
+      animation-delay: 6s;
+    }
+    &:nth-child(4) {
+      animation-delay: 9s;
+    }
+    &:nth-child(5) {
+      animation: rotateWord 15s linear 12s 1,
+        rotateLastWord 15s linear 27s 1 forwards;
+    }
+  }
+
+  @include mq($until: $animation-single-line-bp) {
+    display: block;
+  }
+}
+
+@keyframes rotateWord {
+  0% {
+    opacity: 0;
+  }
+  2% {
+    opacity: 0;
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  5% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  17% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  20% {
+    opacity: 0;
+    -webkit-transform: translateY(30px);
+    transform: translateY(30px);
+  }
+  80% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes rotateLastWord {
+  0% {
+    opacity: 0;
+  }
+  2% {
+    opacity: 0;
+    -webkit-transform: translateY(-30px);
+    transform: translateY(-30px);
+  }
+  5% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0px);
+    transform: translateY(0px);
+  }
+}

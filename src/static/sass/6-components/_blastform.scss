@@ -1,0 +1,323 @@
+.blast_main {
+  padding: 0 $size-b $size-b;
+}
+.blastform {
+  h1 {
+    margin-top: $size-b;
+  }
+  label,
+  input {
+    width: 100%;
+  }
+
+  input[name='subscriber_email'] {
+    margin-bottom: 0;
+  }
+
+  .form-subtext {
+    font-size: 0.85em;
+    margin-bottom: $size-b;
+    padding: $size-b/4 0 0;
+  }
+
+  #pay_fees {
+    margin: 0px;
+    width: 20px;
+    height: 30px;
+    @include mq($until: bp-l) {
+      margin-left: 0;
+    }
+  }
+
+  #pay-fee-amount {
+    float: left;
+    padding: 0.3em 0 0 0.5em;
+  }
+
+  #pay-fee-info {
+    clear: both;
+    padding: 0;
+    margin-bottom: $size-b;
+  }
+}
+
+.subscription li {
+  box-sizing: border-box;
+  display: inline-block;
+  height: 130px;
+  margin: 0 $size-s $size-b 0;
+  position: relative;
+  text-align: center;
+  vertical-align: top;
+
+  label {
+    border: 2px solid $color-white-off;
+    box-sizing: border-box;
+    background-color: $color-white-pure;
+    color: $color-black-off;
+    cursor: pointer;
+    display: block;
+    height: 100%;
+    hyphens: none;
+    letter-spacing: 0.01em;
+    line-height: 1;
+    min-width: 0;
+    padding: $size-s;
+    transition: all 0.5s ease-in-out;
+    &:hover,
+    &:focus {
+      color: $color-black-off;
+    }
+    &:active {
+      background-color: transparentize($color-yellow-tribune, 0.8);
+      color: $color-black-off;
+    }
+
+    &.fake_option {
+      cursor: default;
+      &:active {
+        background-color: $color-white-pure;
+      }
+    }
+  }
+
+  label:after {
+    display: block;
+    font-size: 1.5em;
+    left: $size-s;
+    line-height: 1.8;
+    position: absolute;
+    width: calc(100% - 2.2rem);
+    @include mq($from: bp-s) {
+      font-size: 2.5em;
+    }
+  }
+
+  label:before {
+    position: absolute;
+    left: 0;
+    right: 0;
+  }
+
+  label[for='amount-0']:after {
+    content: '$349';
+  }
+
+  label[for='amount-vip']:after {
+    content: '$275';
+  }
+
+  label[for='amount-vip']:before {
+    content: 'Save $74';
+    font-size: $size-xs;
+    background-color: $color-yellow-tribune;
+    bottom: 0;
+    padding: $size-s 0;
+  }
+
+  label[for='amount-0']:before {
+    content: '27% Savings';
+    font-size: $size-xs;
+    background-color: $color-yellow-tribune;
+    bottom: 0;
+    padding: $size-s 0;
+  }
+
+  label[for='amount-1']:after {
+    content: '$40';
+  }
+
+  label[for='amount-2']:after {
+    content: '$325';
+    @include mq($from: bp-l) {
+      font-size: 1.8em;
+    }
+  }
+
+  label[for='amount-2']:before {
+    content: 'For government agencies, nonprofits';
+    font-size: $size-b/4;
+    padding: 0 0.25rem;
+    bottom: 0.55rem;
+    line-height: 1.1;
+    letter-spacing: normal;
+  }
+
+  label[for='amount-reg']:after {
+    margin: $size-b/2 0;
+  }
+
+  label[for='amount-reg']:before {
+    content: 'Regular Price';
+    font-size: $size-b/4;
+    padding: 0 0.25rem;
+    bottom: 0.55rem;
+    line-height: 1.1;
+    letter-spacing: normal;
+  }
+
+  /* Input style */
+
+  input[type='radio'] {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+  }
+
+  input[type='radio']:active ~ label {
+    opacity: 1;
+  }
+
+  input[type='radio']:checked ~ label {
+    border-color: $color-yellow-tribune;
+    background-color: transparentize($color-yellow-tribune, 0.8);
+    color: $color-black-off;
+    opacity: 1;
+  }
+}
+
+h1 {
+  margin-top: $size-b;
+}
+
+p {
+  margin: 0;
+  padding: $size-b 0;
+}
+
+label {
+  color: #7f7f7f;
+  cursor: pointer;
+  float: left;
+  font-size: $size-s;
+  font-weight: bold;
+  letter-spacing: 2px;
+  min-width: 150px;
+  text-transform: uppercase;
+}
+
+input {
+  font-size: $size-b;
+  margin: $size-b/2 $size-b/2 $size-b 0;
+  padding: 0.5em 0.25em;
+}
+
+input[type='text'] {
+  width: 100%;
+  border: 1px solid $color-gray-light;
+
+  &.dollar {
+    margin: 0 0 $size-b/2;
+    padding: 0 $size-b/2 0 2rem;
+    position: inherit;
+    width: 100%;
+  }
+
+  &.uneditable {
+    background-color: $color-white-off;
+    border: none;
+    padding: 0;
+    margin: 0;
+  }
+}
+
+// For hiding number input spinner on webkit browsers
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+// Form styles
+.dollar {
+  color: $color-black-pure;
+  font-size: $size-giant;
+  font-weight: 700;
+  margin: 0 0 0 $size-b/2;
+  position: absolute;
+}
+
+.form__box {
+  background-color: $color-white-off;
+  padding: $size-l;
+}
+
+#pay_fees {
+  clear: both;
+  float: left;
+}
+
+#pay-fee-amount {
+  float: left;
+  font-size: $size-b;
+  padding: $size-b/4 0 0 0;
+}
+
+#pay-fee-info {
+  clear: both;
+  font-size: $size-s;
+  padding: 0;
+  margin-bottom: $size-b;
+}
+
+// styles for openended status radio buttons on yearly member form
+#openended_status {
+  li {
+    padding-left: $size-b/2;
+  }
+  input {
+    margin: 0 $size-b/4 $size-b 0;
+  }
+}
+
+label[for='openended_status-0'],
+label[for='openended_status-1'] {
+  float: none;
+}
+
+.payment-buttons {
+  display: inline-block;
+  list-style: none;
+  margin-bottom: $size-b;
+  padding: 0;
+
+  li {
+    display: inline-block;
+    margin-top: $size-b;
+    vertical-align: middle;
+
+    &:first-child {
+      margin-right: $size-b;
+    }
+  }
+}
+
+// Stripe submit button styles
+.submit {
+  text-align: center;
+  &.submit--wApple .text_separator {
+    font-size: $size-xxs;
+    align-self: center;
+  }
+  .button--applePay {
+    background-color: $color-black-pure;
+    background-image: -webkit-named-image(apple-pay-logo-white);
+    background-origin: content-box;
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 100% 90%;
+    border-color: $color-black-pure;
+    margin-right: 0;
+  }
+}
+
+// Error styles
+.form-error {
+  display: none;
+}
+
+.error-form-message {
+  clear: both;
+  color: red;
+}

@@ -1,0 +1,85 @@
+<script>
+var stripe_donation = function() {
+  var first_name_exists = false;
+  var last_name_exists = false;
+  var valid_email = false;
+  var amount_above_one_dollar = false;
+
+  function validateEmail(email) {
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+  }
+
+  var check_required_inputs = function() {
+    first_name_exists = false;
+    last_name_exists = false;
+    valid_email = false;
+    amount_above_one_dollar = false;
+    if ($('#first_name').val()) {
+      first_name_exists = true;
+    }
+    if ($('#last_name').val()) {
+      last_name_exists = true;
+    }
+    if (validateEmail($('#subscriber_email').val())) {
+      valid_email = true;
+    }
+    if ($('input[name="amount"]:checked').val() >= 1) {
+      amount_above_one_dollar = true;
+    }
+  };
+
+  var charge_description = $('#description').val();
+
+  var handler = StripeCheckout.configure({
+    key: '{{ key }}',
+    image: "{{ url_for('static', filename='img/TT_logo.jpg') }}",
+    locale: 'auto',
+    token: function(token) {
+      // Use the token to create the charge with a server-side script.
+      // Uses `token.id` to access the Stripe token ID
+      var $emailInput = $('<input type=hidden name=stripeEmail />').val(token.email);
+      $('form').append($emailInput);
+      var $input = $('<input type=hidden name=stripeToken />').val(token.id);
+      $('form').append($input).submit();
+    }
+  });
+
+  $('#customButton').on('click', function(e) {
+      check_required_inputs();
+
+      var donation_amount = $('input[name="amount"]:checked').val();
+      donation_amount *= 100;
+
+      if (!first_name_exists || !last_name_exists || !valid_email) {
+        $('.form-error').show();
+        $('.error-form-message').text('Please check that you entered a valid email address, and a first and last name.');
+      }
+
+      if (!amount_above_one_dollar) {
+        $('.form-error').show();
+        $('.error-form-message').text('Please enter a donation above $1.');
+      }
+
+      if (first_name_exists & last_name_exists & amount_above_one_dollar & valid_email) {
+        $('.form-error').hide();
+        $('.error-form-message').text('');
+        // If form is valid, open Checkout with further options
+        handler.open({
+          name: 'The Texas Tribune',
+          description: charge_description,
+          amount: donation_amount
+        });
+      }
+
+      e.preventDefault();
+  });
+
+  // Close Checkout on page navigation
+  $(window).on('popstate', function() {
+    handler.close();
+  });
+};
+
+window.onload = stripe_donation();
+</script>

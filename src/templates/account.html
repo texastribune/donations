@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>Your Texas Tribune Account</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+
+    <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
+
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+      window.__STRIPE_KEY__ = '{{ stripe }}';
+      window.__RECAPTCHA_KEY__ = '{{ recaptcha }}';
+    </script>
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-P5L2Z5Z');</script>
+
+    <style>
+      @media screen and (max-width: 52.8025em) {
+        .c-view-as { display: none; }
+      }
+    </style>
+
+    {% include "includes/polyfills.html" %}
+  </head>
+
+  <body>
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+      <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1570461443220689&ev=PageView&noscript=1" />
+    </noscript>
+
+    <div style="display:none;">
+      {% include "includes/base_icons.html" %}
+    </div>
+
+    <div id="account-attach" class="c-full-page-loader c-full-page-loader--opaque">
+      <div class="l-align-center-y has-xl-padding">
+        <div class="c-loading c-loading--tight"></div>
+      </div>
+    </div>
+  </body>
+
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
+  {% endfor %}
+</html>

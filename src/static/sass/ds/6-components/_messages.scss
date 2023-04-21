@@ -1,0 +1,9 @@
+.c-messages {
+  .c-message {
+    margin-bottom: $size-xxl;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,0 +1,33 @@
+.c-side-nav {
+  padding: $size-giant $size-xxl;
+  position: sticky;
+  top: 0;
+
+  ul {
+    list-style: none;
+  }
+
+  a {
+    transition: all .3s;
+    font-weight: bold;
+
+    &.is-active {
+      color: $color-gray-dark;
+      font-weight: normal;
+    }
+  }
+
+  &__outer {
+    > li > a {
+      border-left-color: $color-white-off;
+      border-left-style: solid;
+      border-left-width: 3px;
+      display: block;
+      padding: $size-xs 0 $size-xs $size-b;
+
+      &.is-active {
+        border-left-color: $color-yellow-tribune;
+      }
+    }
+  }
+}

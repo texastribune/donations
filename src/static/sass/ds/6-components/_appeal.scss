@@ -1,0 +1,22 @@
+.c-appeal {
+  @include mq($from: bp-l) {
+    padding-bottom: $size-xxl;
+  }
+
+  @include mq($until: bp-l) {
+    padding-top: $size-xxl;
+  }
+
+  &__item {
+    display: flex;
+
+    .c-icon {
+      margin-right: $size-xxs;
+      margin-top: 0.25rem;
+    }
+
+    &--no {
+      opacity: .5;
+    }
+  }
+}

@@ -1,0 +1,9 @@
+// classes used by Vue's <transition> component
+
+.has-fade-enter-active, .has-fade-leave-active {
+  transition: opacity .2s;
+}
+
+.has-fade-enter, .has-fade-leave-to {
+  opacity: 0;
+}

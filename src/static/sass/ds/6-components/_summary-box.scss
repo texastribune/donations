@@ -1,0 +1,31 @@
+.c-summary-box {
+  border-bottom: 2px solid $color-white-off;
+  padding-bottom: $size-xxl;
+
+  &--has-btm {
+    .c-summary-box__top {
+      @include mq($from: bp-s) {
+        margin-bottom: $size-xxl;
+      }
+    }
+  }
+
+  @include mq($until: bp-l) {
+    border: 1px solid $color-gray-light;
+    border-radius: 3px;
+    padding-bottom: 0;
+
+    &.is-expired {
+      border: 2px solid $color-error;
+    }
+
+    &__top {
+      padding: $size-xl $size-b;
+    }
+
+    &__bottom {
+      border-top: 1px solid $color-gray-light;
+      padding: $size-b;
+    }
+  }
+}

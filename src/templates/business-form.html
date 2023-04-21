@@ -1,0 +1,87 @@
+{% extends "new_layout.html" %}
+
+{% block title %}Business Membership | The Texas Tribune{% endblock %}
+
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/businessform">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/business-social.jpg') }}">
+  <meta property="og:title" content="Business Membership | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Business Member today.">
+{% endblock %}
+
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+  <main class="main">
+    <!-- where the router component attaches -->
+    <div id="app" style="display:none;"></div>
+
+    <!-- hero component -->
+    {% with
+      helperClass="hero--business",
+      title="Join Our Business Membership Program",
+      intro="Make an annual contribution to The Texas Tribune in your organization's name and join a roster of community-minded businesses."
+    %}
+      {% include "includes/hero.html" %}
+    {% endwith %}
+
+    <div class="grid_container grid_padded--xl section-padding">
+      {% include 'includes/business_opening_pitch.html' %}
+    </div>
+
+    <!-- for hash links when a form is invalid -->
+    <div id="join-today"></div>
+    <div class="grid_container grid_padded--xl">
+      <section class="business-form grid_separator--l">
+        <!-- where the form attaches -->
+        <div id="business-form"></div>
+      </section>
+
+      <section class="business-questions grid_separator--xl">
+        {% include 'includes/business_questions.html' %}
+      </section>
+
+      <div class="grid_container--m grid_separator--xl">
+        <!-- where the wall component attaches -->
+        <div id="business-wall"></div>
+      </div>
+    </div>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.__STRIPE_KEY__ = '{{ stripe }}';
+    window.__RECAPTCHA_KEY__ = '{{ recaptcha }}';
+  </script>
+
+  {% if form_data and message %}
+  <script>
+    window.__TOP_FORM_SERVER_ERROR_MESSAGE__ = {{ message | tojson }};
+    window.__BUSINESS_FORM_REHYDRATION__ = {{ form_data | tojson }};
+  </script>
+  {% endif %}
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha }}"></script>
+  <script>
+    !function () {
+      var script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://risk.clearbit.com/v1/risk.js';
+      var parent = document.getElementsByTagName('script')[0];
+      parent.parentNode.insertBefore(script, parent);
+    }();
+  </script>
+
+  {% for script in bundles['js'] %}
+    <script src="{{ script }}"></script>
+  {% endfor %}
+{% endblock %}

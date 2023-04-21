@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block title %}
+  The Blast | The Texas Tribune
+{% endblock %}
+
+{% block extra_script %}
+  {{ super() }}
+{% endblock %}
+
+{% block adwords_conversion_code %}
+<!-- Event snippet for The Blast purchases conversion page -->
+<script>
+  gtag('event', 'conversion', {
+      'send_to': 'AW-1018212315/4d93CMfBwnkQ29_C5QM',
+      'transaction_id': ''
+  });
+</script>
+{% endblock %}
+
+{% block content %}
+<section class="splash splash--blast">
+  <div class="grid_container grid_row grid_padded grid_wrap--m align-bottom">
+    <figure class="col col_9--m col_8--l">
+      <a class="splash__logo" href="https://www.texastribune.org/theblast/" class="unlink"><img src="{{ url_for('static', filename='img/c-blast-header-backup-logo.png') }}"
+          alt="The Blast logo, a product of The Texas Tribune" /></a>
+    </figure>
+    <div class="col"></div>
+  </div>
+</section>
+<div class="grid_container main prose">
+  <div class="grid_row">
+    <div class="col col_9--l">
+      <p>
+        Thank you for subscribing to The Blast! You'll receive an order
+        confirmation email shortly. Should you have any questions about your
+        subscription, please email
+        <a href="mailto:blast@texastribune.org">blast@texastribune.org</a>.
+      </p>
+    </div>
+  </div>
+  <div class="grid_row social-wrapper">
+    <div class="col col_9--l">
+      <a href="mailto:?Subject=Check%20out%20The%20Blast&amp;Body=https://www.texastribune.org/theblast/">
+        <span class="button button--email button--s">
+          Enjoy The Blast? Suggest it to a friend
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.dataLayer.push({
+      event: 'customBlastSuccess',
+      gaAction: 'submit payment',
+      gaLabel: '{{ gtm.event_label }}',
+      gaValue: '{{ gtm.event_value }}'
+    });
+  </script>
+{% endblock %}

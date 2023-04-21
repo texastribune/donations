@@ -1,0 +1,49 @@
+// @todo: 
+// 1. Update class names to use BEM
+// 2. Mirror the filename to component class name
+// 3. Rename this file "goals" or "drive goals" ... something along those lines. (Also rename the HTML include to match). 
+$color-navy-dark: #2f3640;
+$color-navy-medium: #404b56;
+$color-navy-light: #515f6b;
+
+.bucket_card {
+  border: 1px solid $color-yellow-tribune;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: $size-xl $size-l $size-l;
+
+  @include mq($until: bp-s) {
+    &:first-child {
+      margin-bottom: $size-l;
+    }
+  }
+
+  &--title {
+    font-size: $size-m;
+  }
+
+  &--goal {
+    @extend .smallcaps;
+    border-radius: 50px;
+    border: 1px solid $color-navy-light;
+    font-size: $size-xs;
+    left: $size-l;
+    padding: 2px $size-xxs;
+    text-align: center;
+    width: 130px;
+  }
+
+  &--complete {
+    background-color: $color-navy-light;
+    border-color: $color-navy-light;
+    color: $color-white-pure;
+    width: 180px;
+  }
+
+  &--description {
+    @include font-setting('primary');
+    @extend %link--blue;
+    font-size: $size-s;
+  }
+}

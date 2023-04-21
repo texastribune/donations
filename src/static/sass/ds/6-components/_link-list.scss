@@ -1,0 +1,13 @@
+.c-link-list {
+  &__item {
+    margin-bottom: $size-m;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__arrow {
+    margin-right: .3rem;
+  }
+}

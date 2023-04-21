@@ -1,0 +1,16 @@
+.quotes {
+  @extend %link--blue;
+
+  &__quote {
+    @include font-setting('secondary');
+    color: $color-gray-dark;
+    font-size: $size-b;
+  }
+
+  &__attribution {
+    color: $color-teal-gray;
+    font-size: $size-xs;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+}

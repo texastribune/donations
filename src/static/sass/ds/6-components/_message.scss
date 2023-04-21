@@ -1,0 +1,43 @@
+.c-message {
+  background-color: #fef2da;
+  border-radius: 3px;
+  position: relative;
+  padding: $size-b;
+
+  &--on-gray-mobile-bg {
+    @include mq($until: bp-l) {
+      background-color: $color-white-off;
+      border-bottom: 1px solid $color-gray-light;
+      padding: $size-b 0;
+    }
+  }
+
+  &__top {
+    align-items: center;
+    display: flex;
+
+    .c-icon {
+      margin-right: $size-xxs;
+    }
+  }
+
+  &__close {
+    border: 1px solid $color-white-off;
+    border-radius: 50%;
+    cursor: pointer;
+    height: 30px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(50%, -50%);
+    width: 30px;
+
+    @include mq($until: bp-l) {
+      background: none;
+      border: none;
+      right: 5px;
+      top: 5px;
+      transform: initial;
+    }
+  }
+}

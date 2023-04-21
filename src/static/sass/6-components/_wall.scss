@@ -1,0 +1,67 @@
+.wall {
+  &__logo {
+    margin: 0 $size-b $size-l;
+    text-align: center;
+
+    img {
+      max-width: 300px;
+      width: 100%;
+
+      @media print {
+        max-width: 175px;
+      }
+    }
+  }
+
+  &__heading {
+    @include font-setting('secondary');
+
+    @media print {
+      font-size: $size-b;
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style: none;
+
+    @media print {
+      justify-content: center;
+    }
+  }
+
+  &__item {
+    margin: 0 $size-xxs/2 $size-xxs/2 0;
+
+    @include mq($until: bp-s) {
+      flex: 1 1 100%;
+    }
+
+    @media print {
+      display: inline-block;
+      margin-bottom: 0;
+      margin-right: 0.15rem;
+    }
+  }
+
+  &__star {
+    color: $color-yellow-tribune;
+    font-size: $size-xxs;
+  }
+
+  &__name {
+    @include mq($from: bp-s) {
+      font-size: $size-xs;
+    }
+
+    @media print {
+      font-size: 0.6rem;
+    }
+
+    a {
+      color: $color-black-pure;
+      text-decoration: underline;
+    }
+  }
+}

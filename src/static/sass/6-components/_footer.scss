@@ -1,0 +1,12 @@
+// To be removed after this repo is set up to take the base ds-toolbox elements file
+.c-site-footer {
+  padding: $size-l $size-b $size-giant;
+
+  &__links {
+    list-style: none;
+  }
+  &__logo {
+    // hack: nudge bug left for alignment of square
+    margin-left: -$size-tiny;
+  }
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Support Us | The Texas Tribune{% endblock %}</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
+  <!-- This is the same image used by our donations app -->
+  {% block og_meta %}
+    <meta property="og:url" content="https://support.texastribune.org/donate">
+    <meta property="og:image" content="https://static.texastribune.org/media/membership/FMD16/26234447754_dc97a48275_b.jpg">
+    <meta property="og:title" content="Support Us | The Texas Tribune">
+    <meta property="og:type" content="website">
+    <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a member today.">
+  {% endblock %}
+  <link rel="apple-touch-icon-precomposed" sizes="60x60" href="https://static.texastribune.org/media/icons/iPhone_Icon_60x60.png">
+  <link rel="apple-touch-icon-precomposed" sizes="76x76" href="https://static.texastribune.org/media/icons/iPad_Icon_76x76.png">
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="https://static.texastribune.org/media/icons/iPhone_Icon_120x120.png">
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="https://static.texastribune.org/media/icons/iPad_Icon_152x152.png">
+
+  {% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
+  {% endblock %}
+
+  <script src="//use.typekit.net/ngv2xmw.js"></script>
+  <script>try{Typekit.load();}catch(e){}</script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  {% block extra_script %}
+    <script src="{{ url_for('static', filename='js/all.js') }}"></script>
+  {% endblock %}
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-P5L2Z5Z');</script>
+  <!-- End Google Tag Manager -->
+
+  <!-- Global site tag (gtag.js) - Google AdWords: 1018212315 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-1018212315"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-1018212315');
+</script>
+
+{% block adwords_conversion_code %}{% endblock %}
+</head>
+<body>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-P5L2Z5Z"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+  {% block content %}
+  {% include 'includes/navbar.html' %}
+
+  {% endblock %}
+  <footer class="footer grid_padding grid_row grid_wrap--l">
+    <nav class="col_3 grid_separator--s">
+      <ul>
+        <li class="footer__copyright">© {% include "./includes/copyright_year.html" %} <a href="//www.texastribune.org/" class="unlink">The Texas Tribune</a></li>
+      </ul>
+    </nav>
+    <nav class="col_9 hide_until--m">
+      <ul class="footer__links">
+        <li><a href="https://www.texastribune.org/about/">About Us</a></li>
+        <li><a href="https://www.texastribune.org/contact/">Contact Us</a></li>
+        <li><a href="https://www.texastribune.org/support-us/donors-and-members/">Who Funds Us?</a></li>
+        <li><a href="https://www.texastribune.org/terms-of-service/">Terms of Service</a></li>
+        <li><a href="https://www.texastribune.org/ethics/">Code of Ethics</a></li>
+        <li><a href="https://www.texastribune.org/privacy/">Privacy Policy</a></li>
+      </ul>
+    </nav>
+  </footer>
+{% block bottom_script %}{% endblock %}
+</body>
+</html>

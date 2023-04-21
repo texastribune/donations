@@ -1,0 +1,47 @@
+// base
+@import '@texastribune/queso-ui/assets/scss/1-settings/all';
+@import '@texastribune/queso-ui/assets/scss/2-tools/all';
+@import '@texastribune/queso-ui/assets/scss/3-resets/all';
+@import '@texastribune/queso-ui/assets/scss/4-elements/all';
+@import './ds/4-elements/all';
+@import '@texastribune/queso-ui/assets/scss/5-typography/all';
+
+// components
+@import '@texastribune/queso-ui/assets/scss/6-components/button/button';
+@import '@texastribune/queso-ui/assets/scss/6-components/checkbox/checkbox';
+@import '@texastribune/queso-ui/assets/scss/6-components/full-page-loader/full-page-loader';
+@import '@texastribune/queso-ui/assets/scss/6-components/icon/icon';
+@import '@texastribune/queso-ui/assets/scss/6-components/info-list/info-list';
+@import '@texastribune/queso-ui/assets/scss/6-components/loading/loading';
+@import '@texastribune/queso-ui/assets/scss/6-components/mini-form/mini-form';
+@import '@texastribune/queso-ui/assets/scss/6-components/navbar/navbar';
+@import '@texastribune/queso-ui/assets/scss/6-components/table/table';
+@import '@texastribune/queso-ui/assets/scss/6-components/text-input/text-input';
+@import '@texastribune/queso-ui/assets/scss/6-components/site-footer/site-footer';
+@import './ds/6-components/appeal';
+@import './ds/6-components/btn-or-btn';
+@import './ds/6-components/detail-box';
+@import './ds/6-components/info-list-large';
+@import './ds/6-components/link-list';
+@import './ds/6-components/messages';
+@import './ds/6-components/message';
+@import './ds/6-components/modal';
+@import './ds/6-components/help';
+@import './ds/6-components/home-route-loader';
+@import './ds/6-components/payments';
+@import './ds/6-components/side-nav';
+@import './ds/6-components/site-footer';
+@import './ds/6-components/summary-box';
+@import './ds/6-components/summary-boxes';
+
+// layout
+@import '@texastribune/queso-ui/assets/scss/7-layout/all';
+@import './ds/8-layout/containers';
+@import './ds/8-layout/grid';
+@import './ds/8-layout/minimal';
+
+// utilities
+@import '@texastribune/queso-ui/assets/scss/utilities/all';
+@import './ds/7-utilities/bg';
+@import './ds/7-utilities/spacing';
+@import './ds/7-utilities/transitions';

@@ -1,0 +1,25 @@
+.c-site-footer {
+  &__inner {
+    grid-template-columns: repeat(3, 1fr);
+
+    @include mq($until: bp-s) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__links {
+    li {
+      /*
+        Apply margin like this instead of with helpers directly on the
+        list items because the links are conditional based on user
+        (i.e. whether some is a Blast subscriber), and applying conditional
+        helpers via template logic in our Vue components sounds gross.
+      */
+      margin-bottom: $size-xxxs;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+}

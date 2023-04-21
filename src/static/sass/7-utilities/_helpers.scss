@@ -1,0 +1,131 @@
+.section-padding {
+  padding-bottom: $size-xl;
+  padding-top: $size-xl;
+
+  &--filled {
+    background-color: $color-white-off;
+  }
+}
+
+// Standard clearfix to clear floats/grid
+.clearfix,
+.clear {
+  &:after {
+    content: '';
+    display: table;
+    clear: both;
+  }
+}
+
+// Don't rename these classes without running regex-replace to catch usage in stories
+.float {
+  &_left,
+  &_right {
+    width: 50%;
+
+    @include mq($until: bp-s) {
+      width: 100%;
+    }
+  }
+
+  &_left {
+    float: left;
+    margin: 0 $size-s $size-s 0;
+  }
+
+  &_right {
+    float: right;
+    margin: 0 0 $size-s $size-s;
+  }
+}
+
+// apply to an element inside a parent that has position: relative
+.vertical_center {
+  left: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  z-index: 1;
+}
+
+// apply directly to an element assuming it has display: block
+.horizontal_center {
+  margin-left: auto;
+  margin-right: auto;
+}
+// @todo: Create standardization around alignment
+.align-bottom {
+  align-items: baseline;
+}
+
+.text {
+  &__center {
+    text-align: center;
+  }
+
+  &__left {
+    text-align: left;
+  }
+
+  &__right {
+    text-align: right;
+  }
+}
+
+.hidden {
+  display: none !important;
+}
+
+.print {
+  &__hide {
+    @media print {
+      display: none !important;
+    }
+  }
+}
+
+.border {
+  &--yellow {
+    &_bottom {
+      border-bottom: 3px solid $color-yellow-tribune;
+    }
+
+    &_left {
+      border-left: 3px solid $color-yellow-tribune;
+      padding-left: $size-b;
+    }
+
+    &_right {
+      border-right: 3px solid $color-yellow-tribune;
+      padding-right: $size-b;
+    }
+
+    // Small yellow separator, often used under headers
+    &_notch {
+      border-top: 5px solid $color-yellow-tribune;
+      clear: both;
+      color: $color-yellow-tribune;
+      height: 0;
+      margin-bottom: $size-b;
+      text-align: left;
+      width: 40px;
+    }
+
+    // Small yellow separator, often used under headers
+    &_smallnotch {
+      border-top: 3px solid $color-yellow-tribune;
+      clear: both;
+      color: $color-yellow-tribune;
+      height: 0;
+      margin-bottom: $size-xxs;
+      text-align: left;
+      width: 25px;
+    }
+  }
+}
+
+.cta__box {
+  background-color: $color-sand;
+  padding: $size-b;
+}

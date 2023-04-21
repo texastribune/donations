@@ -1,0 +1,45 @@
+.hero {
+  background-position-y: 90%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding-bottom: $size-giant;
+  padding-top: $size-giant;
+  background-color: $color-black-pure;
+
+  &--business {
+    background-image: url('../img/TT-business-member-BG-test-bldg001.jpg');
+  }
+  &--circle {
+    background-image: url('../img/circle-bg.jpg');
+  }
+
+  @include mq($until: bp-l) {
+    padding-bottom: $size-b;
+    padding-top: $size-b;
+  }
+
+  &__title {
+    border-bottom: 3px solid $color-yellow-tribune;
+    color: $color-white-pure;
+    font-size: $size-xl;
+    font-weight: 700;
+    padding-bottom: $size-b;
+
+    @include mq($from: bp-s) {
+      font-size: $size-giant;
+    }
+
+    @include mq($from: bp-xl) {
+      font-size: 3.5rem;
+    }
+  }
+
+  &__intro {
+    color: $color-white-pure;
+  }
+
+  &__cta {
+    color: $color-yellow-tribune;
+    font-weight: 700;
+  }
+}
