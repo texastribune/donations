@@ -5,8 +5,10 @@ services:
   test:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.new
     volumes:
       - .:/app
     ports:
       - 80:5000
+    environment:
+      REPORT_URI: ''

@@ -43,7 +43,7 @@ test: build
 
 test-new:
 	docker-compose up -d --build
-	docker-compose run --entrypoint=python test -m pytest "tests.py" --cov=.
+	docker-compose run --entrypoint=python test -m pytest "tests" --cov=.
 
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .
