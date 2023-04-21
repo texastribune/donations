@@ -41,6 +41,10 @@ test: build
 		--entrypoint=python \
 		texastribune/checkout:dev /usr/local/bin/py.test /app/tests.py --cov=/app
 
+test-new:
+	docker-compose up -d --build
+	docker-compose run test
+
 reconcile-email:
 	docker build --tag=sf-py2 -f Dockerfile.py2 .
 	docker run --env-file=${DOCKER_ENV_FILE} --rm --interactive --tty --name=py2 sf-py2
