@@ -10,4 +10,4 @@ services:
       - .:/app
     ports:
       - 80:5000
-    entrypoint: python -m pytest "tests.py" --cov=.
+    entrypoint: python -m pytest "tests" --cov=.
