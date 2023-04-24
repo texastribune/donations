@@ -1,5 +1,5 @@
 import os
-from config import STRIPE_KEYS
+from .config import STRIPE_KEYS
 from time import sleep
 
 import stripe
