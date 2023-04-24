@@ -24,3 +24,4 @@ npm-debug.log
 .mypy_cache/
 .vscode/
 cov.html
+**/.DS_Store
