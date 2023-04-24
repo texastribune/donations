@@ -34,14 +34,14 @@ backing:
 	docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
 	docker run --detach --name redis redis
 
-test: build
+test-old: build
 	docker run \
 		--workdir=/app \
 		--rm \
 		--entrypoint=python \
 		texastribune/checkout:dev /usr/local/bin/py.test /app/tests.py --cov=/app
 
-test-new:
+test:
 	docker-compose up -d --build
 	docker-compose run test
 
