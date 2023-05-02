@@ -59,7 +59,7 @@ from util import (
 )
 
 ZONE = timezone(TIMEZONE)
-USE_THERMOMETER = False
+USE_THERMOMETER = True
 
 if ENABLE_SENTRY:
     import sentry_sdk
