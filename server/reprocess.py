@@ -7,12 +7,12 @@ Usage:
 
 """
 
-from config import STRIPE_KEYS, TIMEZONE
+from .config import STRIPE_KEYS, TIMEZONE
 
 from pytz import timezone
 
 import stripe
-from batch import Log, process_charges
+from .batch import Log, process_charges
 from docopt import docopt
 
 zone = timezone(TIMEZONE)

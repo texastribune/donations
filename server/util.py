@@ -3,7 +3,7 @@ import hashlib
 import logging
 import smtplib
 from collections import defaultdict
-from config import (
+from .config import (
     BUSINESS_MEMBER_RECIPIENT,
     DEFAULT_MAIL_SENDER,
     ENABLE_SLACK,
@@ -18,7 +18,7 @@ from config import (
 
 import requests
 
-from npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
+from .npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
 
 
 def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):

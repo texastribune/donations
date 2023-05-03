@@ -23,10 +23,10 @@ from nameparser import HumanName
 from pytz import timezone
 from validate_email import validate_email
 
-from app_celery import make_celery
-from bad_actor import BadActor
-from charges import ChargeException, QuarantinedException, charge
-from config import (
+from .app_celery import make_celery
+from .bad_actor import BadActor
+from .charges import ChargeException, QuarantinedException, charge
+from .config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
@@ -43,15 +43,15 @@ from config import (
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
 )
-from forms import (
+from .forms import (
     BlastForm,
     BlastPromoForm,
     BusinessMembershipForm,
     CircleForm,
     DonateForm,
 )
-from npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
-from util import (
+from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
+from .util import (
     clean,
     notify_slack,
     send_email_new_business_membership,
