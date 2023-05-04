@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    ports:
+      - 80:5000
+    environment:
+      - REPORT_URI=""
+    entrypoint: python -m pytest "tests" --cov=.
