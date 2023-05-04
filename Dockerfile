@@ -5,6 +5,7 @@ FROM nikolaik/python-nodejs:python3.9-nodejs12
 
 ENV FLASK_DEBUG 1
 ENV NPM_CONFIG_LOGLEVEL verbose
+ENV REPORT_URI ""
 
 WORKDIR /app
 

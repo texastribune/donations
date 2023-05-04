@@ -14,8 +14,6 @@ services:
     entrypoint:
       - /bin/sh
       - ./startup.sh
-    environment:
-      - REPORT_URI=""
     env_file:
       - ./env-docker
     depends_on:
