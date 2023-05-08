@@ -16,8 +16,6 @@ import stripe
 from amazon_pay.client import AmazonPayClient
 from amazon_pay.ipn_handler import IpnHandler
 from flask import Flask, redirect, render_template, request, send_from_directory
-from flask_limiter import Limiter
-from flask_limiter.util import get_remote_address
 from flask_talisman import Talisman
 from nameparser import HumanName
 from pytz import timezone
@@ -173,14 +171,8 @@ Talisman(
     content_security_policy_report_uri=REPORT_URI,
 )
 
-limiter = Limiter(
-    app, key_func=get_remote_address, default_limits=["200 per day", "50 per hour"]
-)
-
 log_level = logging.getLevelName(LOG_LEVEL)
 app.logger.setLevel(log_level)
-for handler in app.logger.handlers:
-    limiter.logger.addHandler(handler)
 
 app.secret_key = FLASK_SECRET_KEY
 
