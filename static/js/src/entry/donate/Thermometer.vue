@@ -9,7 +9,7 @@
     </div>
     <div class="text">
       <strong>{{ data[0].label }} new members</strong> <br />
-      toward goal of {{ data[1].label }}.
+      toward our stretch goal of {{ data[1].label }}.
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '450', value: 450 },
+        { slug: 'goal', label: '500', value: 500 },
       ],
     };
   },
