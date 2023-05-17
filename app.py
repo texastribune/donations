@@ -204,7 +204,7 @@ support.texastribune.org.
 
 
 @app.route("/blast-vip")
-# @app.route("/blast-promo")
+@app.route("/blast-promo")
 def the_blastvip_form():
     return redirect("/blastform", code=302)
 
@@ -553,7 +553,7 @@ def business_form():
     )
 
 
-@app.route("/blast-promo")
+# @app.route("/blast-promo")
 def the_blast_promo_form():
     bundles = get_bundles("old")
     form = BlastPromoForm()
