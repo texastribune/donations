@@ -4,13 +4,14 @@ FROM nikolaik/python-nodejs:python3.9-nodejs12
 # suitable for production.
 
 ENV FLASK_DEBUG 1
-ENV NPM_CONFIG_LOGLEVEL warn
+ENV NPM_CONFIG_LOGLEVEL verbose
+ENV REPORT_URI ""
 
 WORKDIR /app
 
 ARG ENABLE_SENTRY_RELEASE=False
 
-COPY static /app/static
+COPY server/static /app/static
 COPY webpack /app/webpack
 COPY config /app/config
 COPY package.json /app/
@@ -25,5 +26,7 @@ COPY dev-requirements.txt /app/
 RUN pip install -r /app/dev-requirements.txt
 
 COPY . /app
+
+RUN pip install -e .
 
 ENTRYPOINT /bin/bash

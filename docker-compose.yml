@@ -2,12 +2,45 @@ version: '3.8'
 
 services:
 
-  test:
+  dev:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
       - .:/app
+      - checkout_node_modules-vol:/app/node_modules
     ports:
       - 80:5000
-    entrypoint: python -m pytest "tests" --cov=.
+    entrypoint:
+      - /bin/sh
+      - ./startup.sh
+    env_file:
+      - ./env-docker
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - net
+
+  redis:
+    image: redis:alpine
+    networks:
+      - net
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - target: 5672
+        published: 5672
+        protocol: tcp
+        mode: host
+      - target: 15672
+        published: 15672
+    networks:
+      - net
+
+volumes:
+  checkout_node_modules-vol:
+
+networks:
+  net:
