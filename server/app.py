@@ -21,10 +21,10 @@ from nameparser import HumanName
 from pytz import timezone
 from validate_email import validate_email
 
-from app_celery import make_celery
-from bad_actor import BadActor
-from charges import ChargeException, QuarantinedException, charge
-from config import (
+from .app_celery import make_celery
+from .bad_actor import BadActor
+from .charges import ChargeException, QuarantinedException, charge
+from .config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
@@ -41,15 +41,15 @@ from config import (
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
 )
-from forms import (
+from .forms import (
     BlastForm,
     BlastPromoForm,
     BusinessMembershipForm,
     CircleForm,
     DonateForm,
 )
-from npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
-from util import (
+from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
+from .util import (
     clean,
     notify_slack,
     send_email_new_business_membership,
@@ -162,6 +162,8 @@ csp = {
     ],
 }
 
+stripe.api_version = "2020-03-02"
+
 
 app = Flask(__name__)
 Talisman(
@@ -180,7 +182,7 @@ app.config.from_pyfile("config.py")
 app.config.update(
     CELERY_ACCEPT_CONTENT=["pickle", "json"],
     CELERY_ALWAYS_EAGER=False,
-    CELERY_IMPORTS=("app", "npsp", "batch"),
+    CELERY_IMPORTS=("server", "server.npsp", "server.batch"),
 )
 stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
 
@@ -239,7 +241,7 @@ why they're compiled to /static/js/build/ instead.
 
 def get_bundles(entry):
     root_dir = os.path.dirname(os.getcwd())
-    build_dir = os.path.join("static", "build")
+    build_dir = os.path.join("server", "static", "build")
     asset_path = "/static/build/"
     bundles = {"css": "", "js": []}
     manifest_path = os.path.join(build_dir, "assets.json")
@@ -1204,8 +1206,3 @@ def add_blast_subscription(form=None, customer=None):
         pass
 
     return True
-
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)

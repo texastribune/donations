@@ -1,7 +1,7 @@
 Donations
 =========
 
-Software to collect donations for nonprofits. It integrates with Saleforce, Stripe, Amazon Pay, Slack and Sentry.
+Software to collect donations for nonprofits. It integrates with Salesforce, Stripe, Amazon Pay, Slack and Sentry.
 
 - Python running Flask
 - supports single and recurring donations
@@ -81,15 +81,12 @@ Environment
 Running the Project
 -------------------
 
-Run `make backing`. This will start RabbitMQ and Redis.
-Run `make`. This will drop you into the Flask app.
-Run `make restart`. You can interact with the app at `localhost:80`. This command will also build CSS and JS in watch mode and allow you to make test transactions.
+Run `make`. This simple command file does a few things...
+* spins up RabbitMQ and Redis containers that we connect to
+* starts the flask app via the initializer in server.app
+* builds CSS and JS files in watch mode
 
-```sh
-C_FORCE_ROOT=True celery -A app.celery worker --loglevel=INFO &
-celery beat --app app.celery &
-# gunicorn app:app --log-file=- --bind=0.0.0.0:5000 --access-logfile=-
-```
+After all of this runs, you can interact with the app at `localhost:80`
 
 NOTE: If you are a Tribune engineer, you may need to use `local.texastribune.org/donate` in order to sign in to your account or otherwise interact with the account page.
 
@@ -98,6 +95,11 @@ Running tests
 
 To run the project tests, run
 `make test`
+
+Project Structure
+-----------------
+
+Though flask is pretty unopinionated about project structure, we've opted to use a "simple package" approach to our structure as mentioned as a possible option in the [flask documentation](https://flask.palletsprojects.com/en/2.3.x/patterns/packages/#simple-packages). Thus, the flasky pieces of this project live in the `server` folder. This ends up adhering closest to the current structure of our other major project, creating some consistentcy.
 
 Security
 --------

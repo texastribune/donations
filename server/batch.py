@@ -5,10 +5,10 @@ import redis
 from celery import shared_task
 from pytz import timezone
 
-from charges import ChargeException, QuarantinedException, amount_to_charge, charge
-from config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
-from npsp import Opportunity
-from util import send_email, send_slack_message
+from .charges import ChargeException, QuarantinedException, amount_to_charge, charge
+from .config import ACCOUNTING_MAIL_RECIPIENT, LOG_LEVEL, REDIS_URL, TIMEZONE
+from .npsp import Opportunity
+from .util import send_email, send_slack_message
 
 zone = timezone(TIMEZONE)
 

@@ -4,6 +4,26 @@ NS=texastribune
 DOCKER_ENV_FILE?=env-docker
 LOG_LEVEL?=INFO
 
+# sets up the app to be accessible from localhost
+dev:
+	docker compose up
+
+# runs tests locally
+test:
+	docker compose -f docker-compose.test.yml run test
+
+# stops/removes all running containers and then removes any remaining volumes
+remove:
+	docker compose down -v
+	-docker system prune -af --volumes
+
+# removes all docker images, containers and volumes
+nuclear:
+	-docker rm -vf $$(docker ps -a -q)
+	-docker rmi -f $$(docker images -a -q)
+	-docker system prune -af --volumes
+
+# original commands
 interactive: build backing
 	-docker rm -f ${APP}
 	-docker volume rm ${APP}_node_modules-vol
@@ -34,7 +54,7 @@ backing:
 	docker run --detach --name rabbitmq --publish=15672:15672 rabbitmq:management
 	docker run --detach --name redis redis
 
-test: build
+test-old: build
 	docker run \
 		--workdir=/app \
 		--rm \

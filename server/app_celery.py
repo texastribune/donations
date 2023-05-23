@@ -1,5 +1,5 @@
 from celery import Celery
-from config import SENTRY_DSN
+from .config import SENTRY_DSN
 
 
 def make_celery(app):

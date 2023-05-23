@@ -1,4 +1,4 @@
-from config import BAD_ACTOR_NOTIFICATION_URL
+from server.config import BAD_ACTOR_NOTIFICATION_URL
 from datetime import datetime
 from decimal import Decimal
 
@@ -6,12 +6,12 @@ from pytz import timezone
 from wtforms import validators
 
 import pytest
-from batch import amount_to_charge
-from npsp import RDO, Contact, Opportunity, SalesforceConnection, Account
-from util import clean, construct_slack_message
-from forms import format_amount, validate_amount
-from charges import generate_stripe_description
-from bad_actor import (
+from server.batch import amount_to_charge
+from server.npsp import RDO, Contact, Opportunity, SalesforceConnection, Account
+from server.util import clean, construct_slack_message
+from server.forms import format_amount, validate_amount
+from server.charges import generate_stripe_description
+from server.bad_actor import (
     BadActor,
     BadActorJudgmentType,
     BadActorResponse,

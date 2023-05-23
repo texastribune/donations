@@ -5,7 +5,7 @@ repos:
     hooks:
       -
         id: prettier
-        files: '^static/js/src/.*\.(js|json|vue)'
+        files: '^server/static/js/src/.*\.(js|json|vue)'
   -
     repo: https://github.com/psf/black
     rev: 22.3.0

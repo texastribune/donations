@@ -3,9 +3,9 @@ from decimal import Decimal
 
 import stripe
 
-from config import CIRCLE_FAILURE_RECIPIENT, STRIPE_KEYS
-from npsp import Task, User
-from util import send_slack_message
+from .config import CIRCLE_FAILURE_RECIPIENT, STRIPE_KEYS
+from .npsp import Task, User
+from .util import send_slack_message
 
 stripe.api_key = STRIPE_KEYS["secret_key"]
 

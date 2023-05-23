@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+      - checkout_node_modules-vol:/app/node_modules
+    ports:
+      - 80:5000
+    entrypoint:
+      - /bin/sh
+      - ./startup.sh
+    env_file:
+      - ./env-docker
+    depends_on:
+      - redis
+      - rabbitmq
+    networks:
+      - net
+
+  redis:
+    image: redis:alpine
+    networks:
+      - net
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - 5672:5672
+      - 15672:15672
+    networks:
+      - net
+
+volumes:
+  checkout_node_modules-vol:
+
+networks:
+  net:

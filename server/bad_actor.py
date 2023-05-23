@@ -6,7 +6,7 @@ import requests
 from pydantic import BaseModel
 from slack_sdk.webhook import WebhookClient
 
-from config import (
+from .config import (
     AUTH0_DOMAIN,
     AUTH0_PORTAL_AUDIENCE,
     AUTH0_PORTAL_M2M_CLIENT_ID,
