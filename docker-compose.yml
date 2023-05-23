@@ -30,12 +30,8 @@ services:
   rabbitmq:
     image: rabbitmq:management
     ports:
-      - target: 5672
-        published: 5672
-        protocol: tcp
-        mode: host
-      - target: 15672
-        published: 15672
+      - 5672:5672
+      - 15672:15672
     networks:
       - net
 
