@@ -186,6 +186,9 @@
     "SLACK_CHANNEL": {
       "required": true
     },
+    "STRIPE_PRODUCT_SUSTAINING": {
+      "required": true
+    },
     "STRIPE_WEBHOOK_SECRET": {
       "required": true
     },

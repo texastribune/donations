@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(
-    name='donations',
+    name='server',
     packages=['server'],
     include_package_data=True,
     install_requires=[

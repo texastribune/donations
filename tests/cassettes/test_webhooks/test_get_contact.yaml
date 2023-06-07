@@ -1,0 +1,129 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2020-03-02'
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.67.0
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.67.0", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.9.12", "platform": "Linux-5.10.47-linuxkit-x86_64-with-glibc2.28",
+        "uname": "Linux bac3876d4e08 5.10.47-linuxkit #1 SMP PREEMPT Sat Jul 3 21:50:16
+        UTC 2021 x86_64 "}'
+    method: GET
+    uri: https://api.stripe.com/v1/invoices/in_1NGEpiCUjA8cLeTjuXBosWFk
+  response:
+    body:
+      string: "{\n  \"id\": \"in_1NGEpiCUjA8cLeTjuXBosWFk\",\n  \"object\": \"invoice\",\n
+        \ \"account_country\": \"US\",\n  \"account_name\": null,\n  \"account_tax_ids\":
+        null,\n  \"amount_due\": 500,\n  \"amount_paid\": 500,\n  \"amount_remaining\":
+        0,\n  \"amount_shipping\": 0,\n  \"application\": null,\n  \"application_fee_amount\":
+        null,\n  \"attempt_count\": 1,\n  \"attempted\": true,\n  \"auto_advance\":
+        false,\n  \"automatic_tax\": {\n    \"enabled\": false,\n    \"status\": null\n
+        \ },\n  \"billing_reason\": \"subscription_create\",\n  \"charge\": \"ch_3NGEpiCUjA8cLeTj0pdM9dga\",\n
+        \ \"collection_method\": \"charge_automatically\",\n  \"created\": 1686115378,\n
+        \ \"currency\": \"usd\",\n  \"custom_fields\": null,\n  \"customer\": \"cus_O2JSrJ9SGylC96\",\n
+        \ \"customer_address\": {\n    \"city\": null,\n    \"country\": null,\n    \"line1\":
+        null,\n    \"line2\": null,\n    \"postal_code\": \"78732\",\n    \"state\":
+        null\n  },\n  \"customer_email\": \"matthew.d.mccrary@gmail.com\",\n  \"customer_name\":
+        \"Matthew Dylan\",\n  \"customer_phone\": null,\n  \"customer_shipping\":
+        null,\n  \"customer_tax_exempt\": \"none\",\n  \"customer_tax_ids\": [],\n
+        \ \"default_payment_method\": null,\n  \"default_source\": null,\n  \"default_tax_rates\":
+        [],\n  \"description\": null,\n  \"discount\": null,\n  \"discounts\": [],\n
+        \ \"due_date\": null,\n  \"ending_balance\": 0,\n  \"footer\": null,\n  \"from_invoice\":
+        null,\n  \"hosted_invoice_url\": \"https://invoice.stripe.com/i/acct_1Meg7YCUjA8cLeTj/test_YWNjdF8xTWVnN1lDVWpBOGNMZVRqLF9PMkpTamNJRnpiVENHVVdWVWdSVzRiNXNUY3BRUkNHLDc2NjkwOTUz0200DINVdBmV?s=ap\",\n
+        \ \"invoice_pdf\": \"https://pay.stripe.com/invoice/acct_1Meg7YCUjA8cLeTj/test_YWNjdF8xTWVnN1lDVWpBOGNMZVRqLF9PMkpTamNJRnpiVENHVVdWVWdSVzRiNXNUY3BRUkNHLDc2NjkwOTUz0200DINVdBmV/pdf?s=ap\",\n
+        \ \"last_finalization_error\": null,\n  \"latest_revision\": null,\n  \"lines\":
+        {\n    \"object\": \"list\",\n    \"data\": [\n      {\n        \"id\": \"il_1NGEpiCUjA8cLeTjFjapqKXc\",\n
+        \       \"object\": \"line_item\",\n        \"amount\": 500,\n        \"amount_excluding_tax\":
+        500,\n        \"currency\": \"usd\",\n        \"description\": \"1 \xD7 premium
+        (at $5.00 / month)\",\n        \"discount_amounts\": [],\n        \"discountable\":
+        true,\n        \"discounts\": [],\n        \"livemode\": false,\n        \"metadata\":
+        {\n          \"encouraged_by\": \"testing new sf setup 21\",\n          \"pay_fees\":
+        \"X\",\n          \"quarantine\": \"False\"\n        },\n        \"period\":
+        {\n          \"end\": 1688707378,\n          \"start\": 1686115378\n        },\n
+        \       \"plan\": {\n          \"id\": \"price_1NGEpiCUjA8cLeTjtbp07rjT\",\n
+        \         \"object\": \"plan\",\n          \"active\": false,\n          \"aggregate_usage\":
+        null,\n          \"amount\": 500,\n          \"amount_decimal\": \"500\",\n
+        \         \"billing_scheme\": \"per_unit\",\n          \"created\": 1686115378,\n
+        \         \"currency\": \"usd\",\n          \"interval\": \"month\",\n          \"interval_count\":
+        1,\n          \"livemode\": false,\n          \"metadata\": {},\n          \"nickname\":
+        null,\n          \"product\": \"prod_NPb2UtZqIlyQgU\",\n          \"tiers\":
+        null,\n          \"tiers_mode\": null,\n          \"transform_usage\": null,\n
+        \         \"trial_period_days\": null,\n          \"usage_type\": \"licensed\"\n
+        \       },\n        \"price\": {\n          \"id\": \"price_1NGEpiCUjA8cLeTjtbp07rjT\",\n
+        \         \"object\": \"price\",\n          \"active\": false,\n          \"billing_scheme\":
+        \"per_unit\",\n          \"created\": 1686115378,\n          \"currency\":
+        \"usd\",\n          \"custom_unit_amount\": null,\n          \"livemode\":
+        false,\n          \"lookup_key\": null,\n          \"metadata\": {},\n          \"nickname\":
+        null,\n          \"product\": \"prod_NPb2UtZqIlyQgU\",\n          \"recurring\":
+        {\n            \"aggregate_usage\": null,\n            \"interval\": \"month\",\n
+        \           \"interval_count\": 1,\n            \"trial_period_days\": null,\n
+        \           \"usage_type\": \"licensed\"\n          },\n          \"tax_behavior\":
+        \"unspecified\",\n          \"tiers_mode\": null,\n          \"transform_quantity\":
+        null,\n          \"type\": \"recurring\",\n          \"unit_amount\": 500,\n
+        \         \"unit_amount_decimal\": \"500\"\n        },\n        \"proration\":
+        false,\n        \"proration_details\": {\n          \"credited_items\": null\n
+        \       },\n        \"quantity\": 1,\n        \"subscription\": \"sub_1NGEpiCUjA8cLeTjzlgS0PBT\",\n
+        \       \"subscription_item\": \"si_O2JS9FahK2iNpv\",\n        \"tax_amounts\":
+        [],\n        \"tax_rates\": [],\n        \"type\": \"subscription\",\n        \"unit_amount_excluding_tax\":
+        \"500\"\n      }\n    ],\n    \"has_more\": false,\n    \"total_count\": 1,\n
+        \   \"url\": \"/v1/invoices/in_1NGEpiCUjA8cLeTjuXBosWFk/lines\"\n  },\n  \"livemode\":
+        false,\n  \"metadata\": {},\n  \"next_payment_attempt\": null,\n  \"number\":
+        \"3C569959-0001\",\n  \"on_behalf_of\": null,\n  \"paid\": true,\n  \"paid_out_of_band\":
+        false,\n  \"payment_intent\": \"pi_3NGEpiCUjA8cLeTj0c4Xiigs\",\n  \"payment_settings\":
+        {\n    \"default_mandate\": null,\n    \"payment_method_options\": null,\n
+        \   \"payment_method_types\": null\n  },\n  \"period_end\": 1686115378,\n
+        \ \"period_start\": 1686115378,\n  \"post_payment_credit_notes_amount\": 0,\n
+        \ \"pre_payment_credit_notes_amount\": 0,\n  \"quote\": null,\n  \"receipt_number\":
+        null,\n  \"rendering_options\": null,\n  \"shipping_cost\": null,\n  \"shipping_details\":
+        null,\n  \"starting_balance\": 0,\n  \"statement_descriptor\": null,\n  \"status\":
+        \"paid\",\n  \"status_transitions\": {\n    \"finalized_at\": 1686115378,\n
+        \   \"marked_uncollectible_at\": null,\n    \"paid_at\": 1686115378,\n    \"voided_at\":
+        null\n  },\n  \"subscription\": \"sub_1NGEpiCUjA8cLeTjzlgS0PBT\",\n  \"subtotal\":
+        500,\n  \"subtotal_excluding_tax\": 500,\n  \"tax\": null,\n  \"tax_percent\":
+        null,\n  \"test_clock\": null,\n  \"total\": 500,\n  \"total_discount_amounts\":
+        [],\n  \"total_excluding_tax\": 500,\n  \"total_tax_amounts\": [],\n  \"transfer_data\":
+        null,\n  \"webhooks_delivered_at\": 1686115380\n}"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5505'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 07 Jun 2023 15:02:33 GMT
+      Request-Id:
+      - req_GUALXemUzxcQRt
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Version:
+      - '2020-03-02'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+    status:
+      code: 200
+      message: OK
+version: 1
