@@ -13,8 +13,7 @@ jobs:
             version: 19.03.13
       - run: |
           docker info
-          docker build -f Dockerfile -t texastribune/checkout:dev .
-          docker run -it --rm --workdir=/app --entrypoint=/app/circle.sh texastribune/checkout:dev
+          docker compose -f docker-compose.test.yml run test
 branches:
   ignore:
     - master
