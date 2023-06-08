@@ -853,7 +853,8 @@ def payment_intent_succeeded(event):
             update_next_opportunity(subscription_id=subscription_id)
     else:
         contact = get_contact(invoice)
-        opportunity = log_opportunity(contact, invoice)
+        app.logger.info(f"payment intent: {payment_intent}")
+        opportunity = log_opportunity(contact, payment_intent)
 
         return contact, opportunity
 
@@ -1407,28 +1408,31 @@ def update_next_opportunity(opps=[], subscription_id=None):
     logging.info("opportunity updated")
 
 
-def log_opportunity(contact, invoice):
+def log_opportunity(contact, payment_intent):
     """
     This will log a single donation to Salesforce reflected from Stripe info
     """
     
-    invoice_meta = invoice["metadata"]
-    customer_id = invoice["customer"]
+    payment_meta = payment_intent["metadata"]
+    customer_id = payment_intent["customer"]
 
     logging.info("----Adding opportunity...")
 
     opportunity = Opportunity(contact=contact)
-    opportunity.amount = invoice.get("amount_due", 0) / 100
+    opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
-    opportunity.campaign_id = invoice_meta.get("campaign_id", None)
-    opportunity.referral_id = invoice_meta.get("referral_id", None)
-    opportunity.description = invoice["description"]
-    opportunity.agreed_to_pay_fees = True if invoice_meta.get("pay_fees_value", None) else False
-    opportunity.encouraged_by = invoice_meta.get("reason", None)
+    opportunity.campaign_id = payment_meta.get("campaign_id", None)
+    opportunity.referral_id = payment_meta.get("referral_id", None)
+    opportunity.description = payment_intent["description"]
+    opportunity.agreed_to_pay_fees = True if payment_meta.get("pay_fees_value", None) else False
+    opportunity.encouraged_by = payment_meta.get("reason", None)
     opportunity.lead_source = "Stripe"
-    opportunity.quarantined = True if invoice_meta.get("quarantine", None) else False
+    opportunity.quarantined = True if payment_meta.get("quarantined", None) else False
+    app.logger.info(f"Opportunity quarantined: {opportunity.quarantined}")
+    app.logger.info(f"Payment quarantined: {payment_meta.get('quarantined', None)}")
 
-    card = stripe.Customer.retrieve_source(customer_id, invoice["default_source"])
+    app.logger.info(f"payment_intent in log_opportunity: {payment_intent}")
+    card = stripe.Customer.retrieve_source(customer_id, payment_intent["source"])
     year = card["exp_year"]
     month = card["exp_month"]
     day = calendar.monthrange(year, month)[1]
