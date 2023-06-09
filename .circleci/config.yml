@@ -13,7 +13,11 @@ jobs:
             version: 19.03.13
       - run: |
           docker info
-          docker compose -f docker-compose.test.yml run test
+          docker build -f Dockerfile -t texastribune/checkout:dev .
+          docker run -it --rm --workdir=/app \
+          -e SECRET_KEY='sk_test_circle' \
+          --entrypoint=/app/circle.sh \
+          texastribune/checkout:dev
 branches:
   ignore:
     - master
