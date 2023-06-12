@@ -58,7 +58,7 @@ def amount_to_charge_stripe(form=None):
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
     amount = float(form["amount"])
-    if form["agreed_to_pay_fees"]:
+    if form["pay_fees_value"]:
         if form["installment_period"] == None:
             total = (amount + 0.30) / (1 - 0.022)
         else:

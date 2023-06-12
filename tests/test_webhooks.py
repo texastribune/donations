@@ -96,12 +96,12 @@ def test_get_contact(mocker):
         'server.app.Contact.get_or_create',
         mock_contact_get_or_create
     )
-    invoice = stripe.Invoice.retrieve("in_1NGEpiCUjA8cLeTjuXBosWFk")
-    resp = get_contact(invoice)
+    customer = stripe.Customer.retrieve("cus_O2nNxZMg42Z8e3")
+    resp = get_contact(customer)
     assert resp.email=='matthew.d.mccrary@gmail.com'
     assert resp.first_name=='Matthew'
     assert resp.last_name=='Dylan'
-    assert resp.mailing_postal_code=='78732'
+    assert resp.mailing_postal_code=='78735'
 
 @pytest.mark.vcr
 def test_log_rdo(mocker):

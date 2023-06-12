@@ -831,10 +831,10 @@ def payout_paid(event):
 
 def customer_subscription_created(event):
     subscription = event['data']['object']
-    invoice = stripe.Invoice.retrieve(subscription['latest_invoice'])
-    contact = get_contact(invoice)
+    customer = stripe.Customer.retrieve(subscription['customer'])
+    contact = get_contact(customer)
     rdo = log_rdo(contact, subscription)
-    update_next_opportunity(opps=rdo.opportunities)
+    update_next_opportunity(opps=rdo.opportunities())
 
     return contact, rdo
 
@@ -842,17 +842,18 @@ def customer_subscription_created(event):
 def payment_intent_succeeded(event):
     app.logger.info(f"Payment intent event: {event}")
     payment_intent = event['data']['object']
-    invoice = stripe.Invoice.retrieve(payment_intent['invoice'])
-    app.logger.info(f"Payment intent invoice: {invoice}")
+    invoice_id = payment_intent['invoice']
+    if invoice_id:
+        invoice = stripe.Invoice.retrieve(invoice_id)
+        app.logger.info(f"Payment intent invoice: {invoice}")
 
-    subscription_id = invoice['subscription']
-    if subscription_id:
         # the initial payment intent tied to subscription creation
         # is handled in the log_rdo func, so we ignore it here
         if invoice['billing_reason']!="subscription_create":
-            update_next_opportunity(subscription_id=subscription_id)
+            update_next_opportunity(subscription_id=invoice['subscription'])
     else:
-        contact = get_contact(invoice)
+        customer = stripe.Customer.retrieve(payment_intent['customer'])
+        contact = get_contact(customer)
         app.logger.info(f"payment intent: {payment_intent}")
         opportunity = log_opportunity(contact, payment_intent)
 
@@ -1294,7 +1295,6 @@ def create_subscription(customer=None, form=None, quarantine=None):
         items = [{
             "price_data": {
                 "unit_amount": int(amount * 100),
-                "unit_amount": int(form["amount"]) * 100,
                 "currency": "usd",
                 "product": STRIPE_PRODUCTS["sustaining"],
                 "recurring": {"interval": interval},
@@ -1323,13 +1323,13 @@ def create_payment_intent(customer=None, form=None, quarantine=None):
     return payment
 
 
-def get_contact(invoice):
-    app.logger.info(f"Incoming invoice in get_contact: {invoice}")
-    first_name, last_name = name_splitter(invoice.get("customer_name", ""))
-    zipcode = invoice.get("customer_address", {}).get("postal_code", None)
+def get_contact(customer):
+    app.logger.info(f"Incoming customer in get_contact: {customer}")
+    first_name, last_name = name_splitter(customer.get("name", ""))
+    zipcode = customer.get("address", {}).get("postal_code", None)
     app.logger.info("----Getting contact....")
     contact = Contact.get_or_create(
-        email=invoice.get("customer_email", None),
+        email=customer.get("email", None),
         first_name=first_name,
         last_name=last_name,
         zipcode=zipcode
