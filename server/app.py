@@ -860,6 +860,11 @@ def payment_intent_succeeded(event):
         return contact, opportunity
 
 
+def customer_subscription_deleted(event):
+    subscription = event["data"]["object"]
+    rdo = close_rdo(subscription["id"])
+
+
 @celery.task(name="app.authorization_notification")
 def authorization_notification(payload):
 
@@ -1000,6 +1005,9 @@ def stripehook():
         customer_subscription_created(event)
     if event.type == "payment_intent.succeeded":            
         payment_intent_succeeded(event)
+    if event.type == "customer.subscription.deleted":
+        app.logger.info(f"subscription deleted event: {event}")
+        customer_subscription_deleted(event)
 
     return "Success"
 
@@ -1443,3 +1451,10 @@ def log_opportunity(contact, payment_intent):
 
     opportunity.save()
     return opportunity
+
+
+def close_rdo(subscription_id):
+    rdo = RDO.get(subscription_id=subscription_id)
+    update_details = {"StageName": "Closed Lost"}
+    response = RDO.update([rdo], update_details)
+    app.logger.info(response)

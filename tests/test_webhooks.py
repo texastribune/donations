@@ -156,3 +156,6 @@ def test_name_splitter():
     first_name, last_name = name_splitter('Harry Nilsson')
     assert first_name=='Harry'
     assert last_name=='Nilsson'
+
+def test_close_rdo():
+    pass
