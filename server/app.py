@@ -1001,7 +1001,7 @@ def stripehook():
     if event.type == "payment_intent.succeeded":            
         payment_intent_succeeded(event)
 
-    return "Success"
+    return "Success", 200
 
 
 def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
@@ -1419,6 +1419,7 @@ def log_opportunity(contact, payment_intent):
     logging.info("----Adding opportunity...")
 
     opportunity = Opportunity(contact=contact)
+    opportunity.stage_name = "Closed Won"
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
     opportunity.campaign_id = payment_meta.get("campaign_id", None)
