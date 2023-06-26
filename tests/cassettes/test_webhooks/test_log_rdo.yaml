@@ -65,7 +65,7 @@ interactions:
         \ \"latest_invoice\": \"in_1N6yrwCUjA8cLeTjjVP1TslF\",\n  \"livemode\": false,\n
         \ \"metadata\": {\n    \"campaign_id\": \"limeinthecoconut123456789\",\n    \"pay_fees\":
         \"x\",\n    \"reason\": \"Let the good times roll\",\n    \"referral_id\":
-        \"puppysong123456789\"\n  },\n  \"next_pending_invoice_item_invoice\": null,\n
+        \"puppysong123456789\"\n    \"donor_selected_amount\": \"15\",\n  },\n  \"next_pending_invoice_item_invoice\": null,\n
         \ \"on_behalf_of\": null,\n  \"pause_collection\": null,\n  \"payment_settings\":
         {\n    \"payment_method_options\": null,\n    \"payment_method_types\": null,\n
         \   \"save_default_payment_method\": \"off\"\n  },\n  \"pending_invoice_item_interval\":

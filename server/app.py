@@ -1475,7 +1475,7 @@ def log_rdo(contact, subscription):
     return rdo
 
 
-def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, amount=0):
+def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, amount=None):
 
     if not opps:
         opps = Opportunity.list(
@@ -1493,8 +1493,10 @@ def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, 
     charge_details = {
         "StageName": "Closed Won",
         "Stripe_Transaction_ID__c": transaction_id,
-        "Amount": amount
     }
+    if amount:
+        charge_details["Amount"] = amount
+
     response = Opportunity.update_stage([opp], charge_details)
 
 
