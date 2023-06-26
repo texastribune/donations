@@ -413,10 +413,28 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     #     )
 
     if period is None:
+        if quarantine:
+            contact = get_or_create_contact(form)
+            opportunity = add_opportunity(
+                contact=contact, form=form, customer=customer, quarantine=quarantine
+            )
+            bad_actor_response.notify_bad_actor(
+                transaction_type="Opportunity", transaction=opportunity
+            )
+            return True
+
         logging.info("----Creating one time payment...")
         payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
         return True
     else:
+        if quarantine:
+            contact = get_or_create_contact(form)
+            rdo = add_recurring_donation(
+                contact=contact, form=form, customer=customer, quarantine=quarantine
+            )
+            bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
+            return True
+
         logging.info("----Creating recurring payment...")
         subscription = create_subscription(customer=customer, form=form, quarantine=quarantine)
         return True
@@ -829,16 +847,17 @@ def payout_paid(event):
         logging.debug(response)
 
 
+@celery.task(name="app.customer_subscription_created")
 def customer_subscription_created(event):
-    subscription = event['data']['object']
-    customer = stripe.Customer.retrieve(subscription['customer'])
+    subscription = event["data"]["object"]
+    customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
     rdo = log_rdo(contact, subscription)
-    update_next_opportunity(opps=rdo.opportunities())
+    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
+    update_next_opportunity(opps=rdo.opportunities(), transaction_id=invoice["payment_intent"], amount=invoice["amount_paid"])
 
-    return contact, rdo
 
-
+@celery.task(name="app.payment_intent_succeeded")
 def payment_intent_succeeded(event):
     app.logger.info(f"Payment intent event: {event}")
     payment_intent = event['data']['object']
@@ -850,16 +869,18 @@ def payment_intent_succeeded(event):
         # the initial payment intent tied to subscription creation
         # is handled in the log_rdo func, so we ignore it here
         if invoice['billing_reason']!="subscription_create":
-            update_next_opportunity(subscription_id=invoice['subscription'])
+            update_next_opportunity(
+                subscription_id=invoice["subscription"],
+                transaction_id=payment_intent["id"],
+                amount=invoice["amount_paid"]
+            )
     else:
         customer = stripe.Customer.retrieve(payment_intent['customer'])
         contact = get_contact(customer)
-        app.logger.info(f"payment intent: {payment_intent}")
         opportunity = log_opportunity(contact, payment_intent)
+    
 
-        return contact, opportunity
-
-
+@celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
     subscription = event["data"]["object"]
     rdo = close_rdo(subscription["id"])
@@ -982,8 +1003,6 @@ def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
 
-    # app.logger.info(payload)
-
     try:
         event = stripe.Webhook.construct_event(
             payload, signature, STRIPE_WEBHOOK_SECRET
@@ -991,25 +1010,62 @@ def stripehook():
     except ValueError:
         app.logger.warning("Error while decoding event!")
         return "Bad payload", 400
-    except stripe.error.SignatureVerificationError as e:
-        app.logger.warning(e)
+    except stripe.error.SignatureVerificationError:
+        app.logger.warning("Invalid signature!")
         return "Bad signature", 400
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
 
+    # setting celery's delay on these keeps the stripe call from erroring out
     if event.type == "customer.source.updated":
         customer_source_updated.delay(event)
     if event.type == "payout.paid":
         payout_paid.delay(event)
     if event.type == "customer.subscription.created":
-        customer_subscription_created(event)
+        customer_subscription_created.delay(event)
     if event.type == "payment_intent.succeeded":            
-        payment_intent_succeeded(event)
+        payment_intent_succeeded.delay(event)
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
-        customer_subscription_deleted(event)
+        customer_subscription_deleted.delay(event)
 
     return "Success", 200
+
+
+# this is just a temp func version of a piece of add_donation we're
+# reusing for quarantined records during the move to stripe subscriptions
+def get_or_create_contact(form=None):
+    first_name = form["first_name"]
+    last_name = form["last_name"]
+    email = form["stripeEmail"]
+    zipcode = form["zipcode"]
+
+    logging.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+    )
+    logging.info(contact)
+
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
+
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)
+
+    return contact
 
 
 def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
@@ -1323,11 +1379,12 @@ def create_subscription(customer=None, form=None, quarantine=None):
         default_source = source["id"],
         description = "Texas Tribune Sustaining Membership",
         metadata = {
+            "donor_selected_amount": form.get("amount", 0),
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
             "pay_fees": 'X' if form["pay_fees_value"] else None,
             "encouraged_by": form["reason"],
-            "quarantine": quarantine,
+            "quarantine": 'X' if quarantine else None,
         },
         items = [{
             "price_data": {
@@ -1353,7 +1410,7 @@ def create_payment_intent(customer=None, form=None, quarantine=None):
             "referral_id": form["referral_id"],
             "pay_fees": 'X' if form["pay_fees_value"] else None,
             "encouraged_by": form["reason"],
-            "quarantine": quarantine,
+            "quarantine": 'X' if quarantine else None,
         },
         confirm = True
     )
@@ -1388,8 +1445,6 @@ def log_rdo(contact, subscription):
     customer_id = subscription["customer"]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
-    print(sub_plan)
-
     rdo = RDO(contact=contact)
 
     rdo.stripe_customer = customer_id
@@ -1400,7 +1455,7 @@ def log_rdo(contact, subscription):
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("reason", None)
     rdo.lead_source = "Stripe"
-    rdo.amount = sub_plan["amount"] / 100
+    rdo.amount = sub_meta.get("donor_selected_amount", 0)
     rdo.installments = None
     rdo.installment_period = installment_period
     rdo.open_ended_status = "Open"
@@ -1420,16 +1475,12 @@ def log_rdo(contact, subscription):
     return rdo
 
 
-def update_next_opportunity(opps=[], subscription_id=None):
-
-    charge_details = dict()
+def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, amount=0):
 
     if not opps:
         opps = Opportunity.list(
             stage_name="Pledged", stripe_subscription_id=subscription_id
         )
-
-    # app.logger.info(f'opps based on subscription_id: {opps}')
 
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
     opp = [
@@ -1439,10 +1490,12 @@ def update_next_opportunity(opps=[], subscription_id=None):
     ][0]
     app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
 
-    charge_details["StageName"] = "Closed Won"
+    charge_details = {
+        "StageName": "Closed Won",
+        "Stripe_Transaction_ID__c": transaction_id,
+        "Amount": amount
+    }
     response = Opportunity.update_stage([opp], charge_details)
-    logging.info(response)
-    logging.info("opportunity updated")
 
 
 def log_opportunity(contact, payment_intent):
@@ -1453,12 +1506,13 @@ def log_opportunity(contact, payment_intent):
     payment_meta = payment_intent["metadata"]
     customer_id = payment_intent["customer"]
 
-    logging.info("----Adding opportunity...")
+    app.logger.info("----Adding opportunity...")
 
     opportunity = Opportunity(contact=contact)
     opportunity.stage_name = "Closed Won"
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
+    opportunity.stripe_transaction_id = payment_intent["id"]
     opportunity.campaign_id = payment_meta.get("campaign_id", None)
     opportunity.referral_id = payment_meta.get("referral_id", None)
     opportunity.description = payment_intent["description"]
@@ -1466,18 +1520,16 @@ def log_opportunity(contact, payment_intent):
     opportunity.encouraged_by = payment_meta.get("reason", None)
     opportunity.lead_source = "Stripe"
     opportunity.quarantined = True if payment_meta.get("quarantined", None) else False
-    app.logger.info(f"Opportunity quarantined: {opportunity.quarantined}")
-    app.logger.info(f"Payment quarantined: {payment_meta.get('quarantined', None)}")
 
-    app.logger.info(f"payment_intent in log_opportunity: {payment_intent}")
     card = stripe.Customer.retrieve_source(customer_id, payment_intent["source"])
     year = card["exp_year"]
     month = card["exp_month"]
     day = calendar.monthrange(year, month)[1]
 
+    opportunity.stripe_card = card["id"]
     opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
-    opportunity.stripe_card_brand = card.brand
-    opportunity.stripe_card_last_4 = card.last4
+    opportunity.stripe_card_brand = card["brand"]
+    opportunity.stripe_card_last_4 = card["last4"]
 
     opportunity.save()
     return opportunity
@@ -1485,6 +1537,7 @@ def log_opportunity(contact, payment_intent):
 
 def close_rdo(subscription_id):
     rdo = RDO.get(subscription_id=subscription_id)
-    update_details = {"StageName": "Closed Lost"}
+    update_details = {"npe03__Open_Ended_Status__c": "Closed"}
     response = RDO.update([rdo], update_details)
     app.logger.info(response)
+    return rdo
