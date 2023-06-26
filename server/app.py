@@ -854,7 +854,12 @@ def customer_subscription_created(event):
     contact = get_contact(customer)
     rdo = log_rdo(contact, subscription)
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
-    update_next_opportunity(opps=rdo.opportunities(), transaction_id=invoice["payment_intent"], amount=invoice["amount_paid"])
+    update_next_opportunity(
+        opps=rdo.opportunities(),
+        transaction_id=invoice["payment_intent"],
+        amount=invoice.get("amount_paid", 0) / 100
+    )
+    notify_slack(contact=contact, rdo=rdo)
 
 
 @celery.task(name="app.payment_intent_succeeded")
@@ -872,13 +877,14 @@ def payment_intent_succeeded(event):
             update_next_opportunity(
                 subscription_id=invoice["subscription"],
                 transaction_id=payment_intent["id"],
-                amount=invoice["amount_paid"]
+                amount=invoice.get("amount_paid", 0) / 100
             )
     else:
         customer = stripe.Customer.retrieve(payment_intent['customer'])
         contact = get_contact(customer)
         opportunity = log_opportunity(contact, payment_intent)
-    
+        notify_slack(contact=contact, opportunity=opportunity)
+
 
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
@@ -1401,7 +1407,7 @@ def create_subscription(customer=None, form=None, quarantine=None):
 def create_payment_intent(customer=None, form=None, quarantine=None):
     amount = amount_to_charge_stripe(form)
     payment = stripe.PaymentIntent.create(
-        amount = int(amount) * 100,
+        amount = int(amount * 100),
         currency = "usd",
         customer = customer["id"],
         description = "Texas Tribune Membership",
