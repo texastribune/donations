@@ -23,7 +23,7 @@ from validate_email import validate_email
 
 from .app_celery import make_celery
 from .bad_actor import BadActor
-from .charges import ChargeException, QuarantinedException, charge
+from .charges import ChargeException, QuarantinedException, charge, amount_to_charge_stripe
 from .config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
@@ -38,6 +38,7 @@ from .config import (
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
+    STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
 )
@@ -54,10 +55,26 @@ from .util import (
     notify_slack,
     send_email_new_business_membership,
     send_multiple_account_warning,
+    name_splitter,
 )
 
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = False
+
+SUBSCRIPTION_TYPE = {
+    "Texas Tribune Sustaining Membership": {
+        "type": "Sustaining Membership",
+    },
+    "Texas Tribune Business Membership": {
+        "type": "Business Membership",
+    },
+    "Texas Tribune Circle Membership": {
+        "type": "Giving Circle",
+    },
+    "Blast Subscription": {
+        "type": "The Blast",
+    },
+}
 
 if ENABLE_SENTRY:
     import sentry_sdk
@@ -368,6 +385,43 @@ def add_donation(form=None, customer=None, donation_type=None, bad_actor_request
     return True
 
 
+@celery.task(name="app.add_stripe_donation")
+def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_request=None):
+    """
+    Add a contact and their donation into SF. This is done in the background
+    because there are a lot of API calls and there's no point in making the
+    payer wait for them. It sends a notification about the donation to Slack (if configured).
+    """
+    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
+    quarantine = bad_actor_response.quarantine
+
+    form = clean(form)
+    period = form["installment_period"]
+
+    # TODO is this code still necessary?
+    # if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+    #     logging.info(f"Changing name of contact to {first_name} {last_name}")
+    #     contact.first_name = first_name
+    #     contact.last_name = last_name
+    #     contact.mailing_postal_code = zipcode
+    #     contact.save()
+
+    #TODO same here... at the least, with the way get_or_create is being called, I don't think this will ever be triggered
+    # if contact.first_name != first_name or contact.last_name != last_name:
+    #     logging.info(
+    #         f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+    #     )
+
+    if period is None:
+        logging.info("----Creating one time payment...")
+        payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
+        return True
+    else:
+        logging.info("----Creating recurring payment...")
+        subscription = create_subscription(customer=customer, form=form, quarantine=quarantine)
+        return True
+
+
 def do_charge_or_show_errors(form_data, template, bundles, function, donation_type):
     app.logger.debug("----Creating Stripe customer...")
 
@@ -375,9 +429,19 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     installment_period = form_data["installment_period"]
     amount = form_data["amount"]
     stripe_token = form_data["stripeToken"]
+    name = " ".join((form_data["first_name"], form_data["last_name"]))
+    zipcode = form_data["zipcode"]
 
     try:
-        customer = stripe.Customer.create(email=email, card=stripe_token)
+        customer = stripe.Customer.create(
+            email=email,
+            name=name,
+            address={
+                "postal_code": zipcode
+            },
+            card=stripe_token
+        )
+        app.logger.debug("----Stripe customer created...")
     except stripe.error.CardError as e:
         body = e.json_body
         err = body.get("error", {})
@@ -452,6 +516,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if FormType is DonateForm:
         donation_type = "membership"
+        function = add_stripe_donation.delay
     elif FormType is CircleForm:
         donation_type = "circle"
     elif FormType is BlastForm:
@@ -764,6 +829,37 @@ def payout_paid(event):
         logging.debug(response)
 
 
+def customer_subscription_created(event):
+    subscription = event['data']['object']
+    customer = stripe.Customer.retrieve(subscription['customer'])
+    contact = get_contact(customer)
+    rdo = log_rdo(contact, subscription)
+    update_next_opportunity(opps=rdo.opportunities())
+
+    return contact, rdo
+
+
+def payment_intent_succeeded(event):
+    app.logger.info(f"Payment intent event: {event}")
+    payment_intent = event['data']['object']
+    invoice_id = payment_intent['invoice']
+    if invoice_id:
+        invoice = stripe.Invoice.retrieve(invoice_id)
+        app.logger.info(f"Payment intent invoice: {invoice}")
+
+        # the initial payment intent tied to subscription creation
+        # is handled in the log_rdo func, so we ignore it here
+        if invoice['billing_reason']!="subscription_create":
+            update_next_opportunity(subscription_id=invoice['subscription'])
+    else:
+        customer = stripe.Customer.retrieve(payment_intent['customer'])
+        contact = get_contact(customer)
+        app.logger.info(f"payment intent: {payment_intent}")
+        opportunity = log_opportunity(contact, payment_intent)
+
+        return contact, opportunity
+
+
 @celery.task(name="app.authorization_notification")
 def authorization_notification(payload):
 
@@ -881,7 +977,7 @@ def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
 
-    app.logger.info(payload)
+    # app.logger.info(payload)
 
     try:
         event = stripe.Webhook.construct_event(
@@ -890,8 +986,8 @@ def stripehook():
     except ValueError:
         app.logger.warning("Error while decoding event!")
         return "Bad payload", 400
-    except stripe.error.SignatureVerificationError:
-        app.logger.warning("Invalid signature!")
+    except stripe.error.SignatureVerificationError as e:
+        app.logger.warning(e)
         return "Bad signature", 400
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
@@ -900,11 +996,12 @@ def stripehook():
         customer_source_updated.delay(event)
     if event.type == "payout.paid":
         payout_paid.delay(event)
+    if event.type == "customer.subscription.created":
+        customer_subscription_created(event)
+    if event.type == "payment_intent.succeeded":            
+        payment_intent_succeeded(event)
 
-    # TODO change this to debug later
-    app.logger.info(event)
-
-    return "", 200
+    return "Success", 200
 
 
 def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
@@ -1206,3 +1303,173 @@ def add_blast_subscription(form=None, customer=None):
         pass
 
     return True
+
+
+# TODO can these funcs be moved somewhere else? (maybe util.py?)
+def create_subscription(customer=None, form=None, quarantine=None):
+    amount = amount_to_charge_stripe(form)
+    source = customer["sources"]["data"][0]
+    interval = "month" if form["installment_period"] == "monthly" else "year"
+    subscription = stripe.Subscription.create(
+        customer = customer["id"],
+        default_source = source["id"],
+        description = "Texas Tribune Sustaining Membership",
+        metadata = {
+            "campaign_id": form["campaign_id"],
+            "referral_id": form["referral_id"],
+            "pay_fees": 'X' if form["pay_fees_value"] else None,
+            "encouraged_by": form["reason"],
+            "quarantine": quarantine,
+        },
+        items = [{
+            "price_data": {
+                "unit_amount": int(amount * 100),
+                "currency": "usd",
+                "product": STRIPE_PRODUCTS["sustaining"],
+                "recurring": {"interval": interval},
+            }
+        }]
+    )
+    return subscription
+
+
+def create_payment_intent(customer=None, form=None, quarantine=None):
+    amount = amount_to_charge_stripe(form)
+    payment = stripe.PaymentIntent.create(
+        amount = int(amount) * 100,
+        currency = "usd",
+        customer = customer["id"],
+        description = "Texas Tribune Membership",
+        metadata = {
+            "campaign_id": form["campaign_id"],
+            "referral_id": form["referral_id"],
+            "pay_fees": 'X' if form["pay_fees_value"] else None,
+            "encouraged_by": form["reason"],
+            "quarantine": quarantine,
+        },
+        confirm = True
+    )
+    return payment
+
+
+def get_contact(customer):
+    app.logger.info(f"Incoming customer in get_contact: {customer}")
+    first_name, last_name = name_splitter(customer.get("name", ""))
+    zipcode = customer.get("address", {}).get("postal_code", None)
+    app.logger.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=customer.get("email", None),
+        first_name=first_name,
+        last_name=last_name,
+        zipcode=zipcode
+    )
+
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)   
+    
+    return contact
+
+
+def log_rdo(contact, subscription):    
+    sub_meta = subscription["metadata"]
+    sub_plan = subscription["plan"]
+    customer_id = subscription["customer"]
+    installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
+
+    print(sub_plan)
+
+    rdo = RDO(contact=contact)
+
+    rdo.stripe_customer = customer_id
+    rdo.stripe_subscription = subscription["id"]
+    rdo.campaign_id = sub_meta.get("campaign_id", None)
+    rdo.referral_id = sub_meta.get("referral_id", None)
+    rdo.description = "Texas Tribune Sustaining Membership"
+    rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
+    rdo.encouraged_by = sub_meta.get("reason", None)
+    rdo.lead_source = "Stripe"
+    rdo.amount = sub_plan["amount"] / 100
+    rdo.installments = None
+    rdo.installment_period = installment_period
+    rdo.open_ended_status = "Open"
+    rdo.quarantined = True if sub_meta.get("quarantine", None) else False
+
+    card = stripe.Customer.retrieve_source(customer_id, subscription["default_source"])
+    year = card["exp_year"]
+    month = card["exp_month"]
+    day = calendar.monthrange(year, month)[1]
+
+    rdo.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    rdo.stripe_card_brand = card["brand"]
+    rdo.stripe_card_last_4 = card["last4"]
+
+    rdo.save()
+
+    return rdo
+
+
+def update_next_opportunity(opps=[], subscription_id=None):
+
+    charge_details = dict()
+
+    if not opps:
+        opps = Opportunity.list(
+            stage_name="Pledged", stripe_subscription_id=subscription_id
+        )
+
+    # app.logger.info(f'opps based on subscription_id: {opps}')
+
+    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    opp = [
+        opportunity
+        for opportunity in opps
+        if opportunity.expected_giving_date == today
+    ][0]
+    app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
+
+    charge_details["StageName"] = "Closed Won"
+    response = Opportunity.update_stage([opp], charge_details)
+    logging.info(response)
+    logging.info("opportunity updated")
+
+
+def log_opportunity(contact, payment_intent):
+    """
+    This will log a single donation to Salesforce reflected from Stripe info
+    """
+    
+    payment_meta = payment_intent["metadata"]
+    customer_id = payment_intent["customer"]
+
+    logging.info("----Adding opportunity...")
+
+    opportunity = Opportunity(contact=contact)
+    opportunity.stage_name = "Closed Won"
+    opportunity.amount = payment_intent.get("amount", 0) / 100
+    opportunity.stripe_customer = customer_id
+    opportunity.campaign_id = payment_meta.get("campaign_id", None)
+    opportunity.referral_id = payment_meta.get("referral_id", None)
+    opportunity.description = payment_intent["description"]
+    opportunity.agreed_to_pay_fees = True if payment_meta.get("pay_fees_value", None) else False
+    opportunity.encouraged_by = payment_meta.get("reason", None)
+    opportunity.lead_source = "Stripe"
+    opportunity.quarantined = True if payment_meta.get("quarantined", None) else False
+    app.logger.info(f"Opportunity quarantined: {opportunity.quarantined}")
+    app.logger.info(f"Payment quarantined: {payment_meta.get('quarantined', None)}")
+
+    app.logger.info(f"payment_intent in log_opportunity: {payment_intent}")
+    card = stripe.Customer.retrieve_source(customer_id, payment_intent["source"])
+    year = card["exp_year"]
+    month = card["exp_month"]
+    day = calendar.monthrange(year, month)[1]
+
+    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    opportunity.stripe_card_brand = card.brand
+    opportunity.stripe_card_last_4 = card.last4
+
+    opportunity.save()
+    return opportunity

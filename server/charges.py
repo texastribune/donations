@@ -48,6 +48,26 @@ def amount_to_charge(opportunity):
     return quantize(total)
 
 
+def amount_to_charge_stripe(form=None):
+    """
+    Determine the amount to charge. This depends on whether the payer agreed
+    to pay fees or not. If they did then we add that to the amount charged.
+    Stripe charges 2.2% + $0.30 on single charges and 2.2% + 0.5% + $0.30
+    on recurring charges.
+
+    https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
+    """
+    amount = float(form["amount"])
+    if form["pay_fees_value"]:
+        if form["installment_period"] == None:
+            total = (amount + 0.30) / (1 - 0.022)
+        else:
+            total = (amount + 0.30) / (1 - 0.027)
+    else:
+        total = amount
+    return quantize(total)
+
+
 def quantize(amount):
     return Decimal(amount).quantize(TWOPLACES)
 
