@@ -34,6 +34,16 @@ export default {
   },
 
   computed: {
+    installmentPeriod() {
+      const installmentPeriod = this.getValue({
+        storeModule: this.storeModule,
+        key: 'installment_period',
+      });
+
+      if (installmentPeriod === 'None') return '';
+      return installmentPeriod.toLowerCase();
+    },
+
     feeAmount() {
       let amount = this.getValue({
         storeModule: this.storeModule,
@@ -51,21 +61,12 @@ export default {
       amount = parseFloat(amount.trim());
 
       // https://support.stripe.com/questions/passing-the-stripe-fee-on-to-customers
-      const total = (amount + 0.3) / (1 - 0.022);
+      const feeRate = this.installmentPeriod ? 0.027 : 0.022
+      const total = (amount + 0.3) / (1 - feeRate);
       // Fee rounded to two decimal places.
       const fee = Math.round((total - amount) * 100) / 100;
 
       return `$${fee.toFixed(2)}`;
-    },
-
-    installmentPeriod() {
-      const installmentPeriod = this.getValue({
-        storeModule: this.storeModule,
-        key: 'installment_period',
-      });
-
-      if (installmentPeriod === 'None') return '';
-      return installmentPeriod.toLowerCase();
     },
 
     isChecked() {

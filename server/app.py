@@ -1009,7 +1009,7 @@ def stripehook():
         app.logger.info(f"subscription deleted event: {event}")
         customer_subscription_deleted(event)
 
-    return "Success"
+    return "Success", 200
 
 
 def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
@@ -1072,6 +1072,35 @@ def add_circle_membership(contact=None, form=None, customer=None, quarantine=Fal
 
     rdo.installment_period = installment_period
     rdo.open_ended_status = "None"
+    rdo.quarantined = quarantine
+
+    apply_card_details(rdo=rdo, customer=customer)
+    rdo.save()
+
+    return rdo
+
+
+def add_recurring_donation(contact=None, form=None, customer=None, quarantine=False):
+    """
+    This will add a recurring donation to Salesforce.
+    """
+
+    if form["installment_period"] is None:
+        raise Exception("installment_period must have a value")
+
+    rdo = RDO(contact=contact)
+
+    rdo.stripe_customer = customer["id"]
+    rdo.campaign_id = form["campaign_id"]
+    rdo.referral_id = form["referral_id"]
+    rdo.description = "Texas Tribune Sustaining Membership"
+    rdo.agreed_to_pay_fees = form["pay_fees_value"]
+    rdo.encouraged_by = form["reason"]
+    rdo.lead_source = "Stripe"
+    rdo.amount = form.get("amount", 0)
+    rdo.installments = None
+    rdo.installment_period = form["installment_period"]
+    rdo.open_ended_status = "Open"
     rdo.quarantined = quarantine
 
     apply_card_details(rdo=rdo, customer=customer)
@@ -1427,6 +1456,7 @@ def log_opportunity(contact, payment_intent):
     logging.info("----Adding opportunity...")
 
     opportunity = Opportunity(contact=contact)
+    opportunity.stage_name = "Closed Won"
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
     opportunity.campaign_id = payment_meta.get("campaign_id", None)
