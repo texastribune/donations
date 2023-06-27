@@ -1459,7 +1459,7 @@ def log_rdo(contact, subscription):
     rdo.referral_id = sub_meta.get("referral_id", None)
     rdo.description = "Texas Tribune Sustaining Membership"
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
-    rdo.encouraged_by = sub_meta.get("reason", None)
+    rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
     rdo.amount = sub_meta.get("donor_selected_amount", 0)
     rdo.installments = None
@@ -1525,7 +1525,7 @@ def log_opportunity(contact, payment_intent):
     opportunity.referral_id = payment_meta.get("referral_id", None)
     opportunity.description = payment_intent["description"]
     opportunity.agreed_to_pay_fees = True if payment_meta.get("pay_fees_value", None) else False
-    opportunity.encouraged_by = payment_meta.get("reason", None)
+    opportunity.encouraged_by = payment_meta.get("encouraged_by", None)
     opportunity.lead_source = "Stripe"
     opportunity.quarantined = True if payment_meta.get("quarantined", None) else False
 
