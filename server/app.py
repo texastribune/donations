@@ -856,7 +856,7 @@ def customer_subscription_created(event):
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     update_next_opportunity(
         opps=rdo.opportunities(),
-        transaction_id=invoice["payment_intent"],
+        transaction_id=invoice["charge"],
         amount=invoice.get("amount_paid", 0) / 100
     )
     notify_slack(contact=contact, rdo=rdo)
@@ -873,10 +873,10 @@ def payment_intent_succeeded(event):
 
         # the initial payment intent tied to subscription creation
         # is handled in the log_rdo func, so we ignore it here
-        if invoice['billing_reason']!="subscription_create":
+        if invoice['billing_reason'] != "subscription_create":
             update_next_opportunity(
                 subscription_id=invoice["subscription"],
-                transaction_id=payment_intent["id"],
+                transaction_id=invoice["charge"],
                 amount=invoice.get("amount_paid", 0) / 100
             )
     else:
@@ -1520,7 +1520,7 @@ def log_opportunity(contact, payment_intent):
     opportunity.stage_name = "Closed Won"
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
-    opportunity.stripe_transaction_id = payment_intent["id"]
+    opportunity.stripe_transaction_id = payment_intent["latest_charge"]
     opportunity.campaign_id = payment_meta.get("campaign_id", None)
     opportunity.referral_id = payment_meta.get("referral_id", None)
     opportunity.description = payment_intent["description"]
