@@ -1,0 +1,204 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2020-03-02'
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.67.0
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_FMLp2kkxhYymMN", "request_duration_ms":
+        29}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.67.0", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.9.12", "platform": "Linux-5.10.47-linuxkit-x86_64-with-glibc2.28",
+        "uname": "Linux 6fc71a3a3edf 5.10.47-linuxkit #1 SMP PREEMPT Sat Jul 3 21:50:16
+        UTC 2021 x86_64 "}'
+    method: GET
+    uri: https://api.stripe.com/v1/payment_intents/pi_3NGhmhCUjA8cLeTj1bBvkJ1o
+  response:
+    body:
+      string: "{\n  \"id\": \"pi_3NGhmhCUjA8cLeTj1bBvkJ1o\",\n  \"object\": \"payment_intent\",\n
+        \ \"amount\": 2000,\n  \"amount_capturable\": 0,\n  \"amount_details\": {\n
+        \   \"tip\": {}\n  },\n  \"amount_received\": 2000,\n  \"application\": null,\n
+        \ \"application_fee_amount\": null,\n  \"automatic_payment_methods\": null,\n
+        \ \"canceled_at\": null,\n  \"cancellation_reason\": null,\n  \"capture_method\":
+        \"automatic\",\n  \"charges\": {\n    \"object\": \"list\",\n    \"data\":
+        [\n      {\n        \"id\": \"ch_3NGhmhCUjA8cLeTj1k5bUtV2\",\n        \"object\":
+        \"charge\",\n        \"amount\": 2000,\n        \"amount_captured\": 2000,\n
+        \       \"amount_refunded\": 0,\n        \"application\": null,\n        \"application_fee\":
+        null,\n        \"application_fee_amount\": null,\n        \"balance_transaction\":
+        \"txn_3NGhmhCUjA8cLeTj113jjKnB\",\n        \"billing_details\": {\n          \"address\":
+        {\n            \"city\": null,\n            \"country\": null,\n            \"line1\":
+        null,\n            \"line2\": null,\n            \"postal_code\": null,\n
+        \           \"state\": null\n          },\n          \"email\": null,\n          \"name\":
+        null,\n          \"phone\": null\n        },\n        \"calculated_statement_descriptor\":
+        \"Stripe\",\n        \"captured\": true,\n        \"created\": 1686226667,\n
+        \       \"currency\": \"usd\",\n        \"customer\": \"cus_O2nNxZMg42Z8e3\",\n
+        \       \"description\": \"Texas Tribune Membership\",\n        \"destination\":
+        null,\n        \"dispute\": null,\n        \"disputed\": false,\n        \"failure_balance_transaction\":
+        null,\n        \"failure_code\": null,\n        \"failure_message\": null,\n
+        \       \"fraud_details\": {},\n        \"invoice\": null,\n        \"livemode\":
+        false,\n        \"metadata\": {\n          \"encouraged_by\": \"testing new
+        sf setup 24\",\n          \"pay_fees\": \"X\",\n          \"quarantine\":
+        \"False\"\n        },\n        \"on_behalf_of\": null,\n        \"order\":
+        null,\n        \"outcome\": {\n          \"network_status\": \"approved_by_network\",\n
+        \         \"reason\": null,\n          \"risk_level\": \"normal\",\n          \"risk_score\":
+        37,\n          \"seller_message\": \"Payment complete.\",\n          \"type\":
+        \"authorized\"\n        },\n        \"paid\": true,\n        \"payment_intent\":
+        \"pi_3NGhmhCUjA8cLeTj1bBvkJ1o\",\n        \"payment_method\": \"card_1NGhmdCUjA8cLeTjA0q71h1z\",\n
+        \       \"payment_method_details\": {\n          \"card\": {\n            \"brand\":
+        \"visa\",\n            \"checks\": {\n              \"address_line1_check\":
+        null,\n              \"address_postal_code_check\": null,\n              \"cvc_check\":
+        \"pass\"\n            },\n            \"country\": \"US\",\n            \"exp_month\":
+        4,\n            \"exp_year\": 2024,\n            \"fingerprint\": \"wWjWsxYlB3occtKP\",\n
+        \           \"funding\": \"credit\",\n            \"installments\": null,\n
+        \           \"last4\": \"4242\",\n            \"mandate\": null,\n            \"network\":
+        \"visa\",\n            \"network_token\": {\n              \"used\": false\n
+        \           },\n            \"three_d_secure\": null,\n            \"wallet\":
+        null\n          },\n          \"type\": \"card\"\n        },\n        \"receipt_email\":
+        null,\n        \"receipt_number\": null,\n        \"receipt_url\": \"https://pay.stripe.com/receipts/payment/CAcaFwoVYWNjdF8xTWVnN1lDVWpBOGNMZVRqKKWeh6QGMgZq0vOveeE6LBainy0mUFFj1F1JAiiegfyeJRYLiZ7EeTycGFt2J63SNEgwzS8roPoMCX8N\",\n
+        \       \"refunded\": false,\n        \"refunds\": {\n          \"object\":
+        \"list\",\n          \"data\": [],\n          \"has_more\": false,\n          \"total_count\":
+        0,\n          \"url\": \"/v1/charges/ch_3NGhmhCUjA8cLeTj1k5bUtV2/refunds\"\n
+        \       },\n        \"review\": null,\n        \"shipping\": null,\n        \"source\":
+        {\n          \"id\": \"card_1NGhmdCUjA8cLeTjA0q71h1z\",\n          \"object\":
+        \"card\",\n          \"address_city\": null,\n          \"address_country\":
+        null,\n          \"address_line1\": null,\n          \"address_line1_check\":
+        null,\n          \"address_line2\": null,\n          \"address_state\": null,\n
+        \         \"address_zip\": null,\n          \"address_zip_check\": null,\n
+        \         \"brand\": \"Visa\",\n          \"country\": \"US\",\n          \"customer\":
+        \"cus_O2nNxZMg42Z8e3\",\n          \"cvc_check\": \"pass\",\n          \"dynamic_last4\":
+        null,\n          \"exp_month\": 4,\n          \"exp_year\": 2024,\n          \"fingerprint\":
+        \"wWjWsxYlB3occtKP\",\n          \"funding\": \"credit\",\n          \"last4\":
+        \"4242\",\n          \"metadata\": {},\n          \"name\": null,\n          \"tokenization_method\":
+        null,\n          \"wallet\": null\n        },\n        \"source_transfer\":
+        null,\n        \"statement_descriptor\": null,\n        \"statement_descriptor_suffix\":
+        null,\n        \"status\": \"succeeded\",\n        \"transfer_data\": null,\n
+        \       \"transfer_group\": null\n      }\n    ],\n    \"has_more\": false,\n
+        \   \"total_count\": 1,\n    \"url\": \"/v1/charges?payment_intent=pi_3NGhmhCUjA8cLeTj1bBvkJ1o\"\n
+        \ },\n  \"client_secret\": \"pi_3NGhmhCUjA8cLeTj1bBvkJ1o_secret_Wv8JNiWNB05PxalkvwhA8gCop\",\n
+        \ \"confirmation_method\": \"automatic\",\n  \"created\": 1686226667,\n  \"currency\":
+        \"usd\",\n  \"customer\": \"cus_O2nNxZMg42Z8e3\",\n  \"description\": \"Texas
+        Tribune Membership\",\n  \"invoice\": null,\n  \"last_payment_error\": null,\n
+        \ \"latest_charge\": \"ch_3NGhmhCUjA8cLeTj1k5bUtV2\",\n  \"livemode\": false,\n
+        \ \"metadata\": {\n    \"campaign_id\": \"\",\n    \"encouraged_by\": \"testing
+        new sf setup 24\",\n    \"pay_fees\": \"X\",\n    \"quarantine\": \"False\",\n
+        \   \"referral_id\": \"\"\n  },\n  \"next_action\": null,\n  \"on_behalf_of\":
+        null,\n  \"payment_method\": null,\n  \"payment_method_options\": {\n    \"card\":
+        {\n      \"installments\": null,\n      \"mandate_options\": null,\n      \"network\":
+        null,\n      \"request_three_d_secure\": \"automatic\"\n    }\n  },\n  \"payment_method_types\":
+        [\n    \"card\"\n  ],\n  \"processing\": null,\n  \"receipt_email\": null,\n
+        \ \"review\": null,\n  \"setup_future_usage\": null,\n  \"shipping\": null,\n
+        \ \"source\": \"card_1NGhmdCUjA8cLeTjA0q71h1z\",\n  \"statement_descriptor\":
+        null,\n  \"statement_descriptor_suffix\": null,\n  \"status\": \"succeeded\",\n
+        \ \"transfer_data\": null,\n  \"transfer_group\": null\n}"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5699'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Jun 2023 12:52:53 GMT
+      Request-Id:
+      - req_SqGilyZIt3SPnX
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Version:
+      - '2020-03-02'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2020-03-02'
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.67.0
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_SqGilyZIt3SPnX", "request_duration_ms":
+        814}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.67.0", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.9.12", "platform": "Linux-5.10.47-linuxkit-x86_64-with-glibc2.28",
+        "uname": "Linux 6fc71a3a3edf 5.10.47-linuxkit #1 SMP PREEMPT Sat Jul 3 21:50:16
+        UTC 2021 x86_64 "}'
+    method: GET
+    uri: https://api.stripe.com/v1/customers/cus_O2nNxZMg42Z8e3/sources/card_1NGhmdCUjA8cLeTjA0q71h1z
+  response:
+    body:
+      string: "{\n  \"id\": \"card_1NGhmdCUjA8cLeTjA0q71h1z\",\n  \"object\": \"card\",\n
+        \ \"address_city\": null,\n  \"address_country\": null,\n  \"address_line1\":
+        null,\n  \"address_line1_check\": null,\n  \"address_line2\": null,\n  \"address_state\":
+        null,\n  \"address_zip\": null,\n  \"address_zip_check\": null,\n  \"brand\":
+        \"Visa\",\n  \"country\": \"US\",\n  \"customer\": \"cus_O2nNxZMg42Z8e3\",\n
+        \ \"cvc_check\": \"pass\",\n  \"dynamic_last4\": null,\n  \"exp_month\": 4,\n
+        \ \"exp_year\": 2024,\n  \"fingerprint\": \"wWjWsxYlB3occtKP\",\n  \"funding\":
+        \"credit\",\n  \"last4\": \"4242\",\n  \"metadata\": {},\n  \"name\": null,\n
+        \ \"tokenization_method\": null,\n  \"wallet\": null\n}"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '594'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Jun 2023 12:52:53 GMT
+      Request-Id:
+      - req_6A929KRXRNLYbA
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Version:
+      - '2020-03-02'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+    status:
+      code: 200
+      message: OK
+version: 1

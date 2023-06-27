@@ -1,6 +1,7 @@
 env
 **/*.pyc
 env-docker
+env-docker-test
 .env
 server/static/css/
 server/static/build/*.js

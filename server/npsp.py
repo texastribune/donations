@@ -355,6 +355,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
         self.stage_name = stage_name
         self.type = "Single"
         self.stripe_customer = None
+        self.stripe_subscription = None
         self.referral_id = None
         self.lead_source = None
         self.description = None
@@ -378,6 +379,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
         end=None,
         stage_name="Pledged",
         stripe_customer_id=None,
+        stripe_subscription_id=None,
         stripe_transaction_id=None,
         sf_connection=None,
     ):
@@ -387,12 +389,17 @@ class Opportunity(SalesforceObject, CampaignMixin):
 
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
-        if stripe_customer_id is None:
+        if stripe_customer_id is None and stripe_subscription_id is None:
             where = f"""
             WHERE Expected_Giving_Date__c <= {end}
             AND Expected_Giving_Date__c >= {begin}
             AND StageName = '{stage_name}'
         """
+        elif stripe_subscription_id:
+            where = f"""
+                WHERE Stripe_Subscription_Id__c = '{stripe_subscription_id}'
+                AND StageName = '{stage_name}'
+            """
         else:
             where = f"""
                 WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
@@ -407,6 +414,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 Donor_Selected_Amount__c,
                 Name,
                 Stripe_Customer_ID__c,
+                Stripe_Subscription_Id__c,
                 Description,
                 Stripe_Agreed_to_pay_fees__c,
                 CloseDate,
@@ -442,6 +450,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
             y.net_amount = item["Net_Amount__c"]
             y.donor_selected_amount = item["Donor_Selected_Amount__c"]
             y.stripe_customer = item["Stripe_Customer_ID__c"]
+            y.stripe_subscription = item["Stripe_Subscription_Id__c"]
             y.description = item["Description"]
             y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
             y.stage_name = "Pledged"
@@ -499,6 +508,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
             "StageName": self.stage_name,
             "Type": self.type,
             "Stripe_Customer_ID__c": self.stripe_customer,
+            "Stripe_Subscription_Id__c": self.stripe_subscription,
             "Referral_ID__c": self.referral_id,
             "LeadSource": self.lead_source,
             "Description": self.description,
@@ -520,6 +530,11 @@ class Opportunity(SalesforceObject, CampaignMixin):
             raise SalesforceException("at least one Opportunity must be specified")
         sf = SalesforceConnection() if sf_connection is None else sf_connection
         return sf.updates(opportunities, card_details)
+
+    @classmethod
+    def update_stage(cls, opportunities, charge_details, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        return sf.updates(opportunities, charge_details)
 
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
@@ -607,6 +622,7 @@ class RDO(SalesforceObject, CampaignMixin):
         self.type = "Recurring Donation"
         self.date_established = today
         self.stripe_customer = None
+        self.stripe_subscription = None
         self.lead_source = None
         self.description = None
         self.agreed_to_pay_fees = False
@@ -641,6 +657,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "npe03__Date_Established__c": self.date_established,
             "Name": self.name,
             "Stripe_Customer_ID__c": self.stripe_customer,
+            "Stripe_Subscription_Id__c": self.stripe_subscription,
             "Lead_Source__c": self.lead_source,
             "Stripe_Description__c": self.description,
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
@@ -658,6 +675,60 @@ class RDO(SalesforceObject, CampaignMixin):
         }
         return recurring_donation
 
+    @classmethod
+    def get(cls, id=None, subscription_id=None, sf_connection=None):
+
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        if id is None and subscription_id is None:
+            raise SalesforceException("id or subscription_id must be specified")
+        if id and subscription_id:
+            raise SalesforceException("id and subscription_id can't both be specified")
+        if subscription_id:
+            query = f"""
+                SELECT Id, npe03__Organization__c, Referral_ID__c, npe03__Recurring_Donation_Campaign__c,
+                npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
+                Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
+                Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
+                npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
+                Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
+                FROM npe03__Recurring_Donation__c
+                WHERE Stripe_Subscription_Id__c = '{subscription_id}'
+                """
+            response = sf.query(query)
+            # should only be one result here because we're
+            # querying by id
+            response = response[0]
+            rdo = RDO()
+            rdo.id = response["Id"]
+            rdo.account_id = response["npe03__Organization__c"]
+            rdo.referral_id = response["Referral_ID__c"]
+            rdo.campaign_id = response["npe03__Recurring_Donation_Campaign__c"]
+            rdo.contact_id = response["npe03__Contact__c"]
+            rdo.amount = response["npe03__Amount__c"]
+            rdo.date_established = response["npe03__Date_Established__c"]
+            rdo.name = response["Name"]
+            rdo.stripe_customer = response["Stripe_Customer_Id__c"]
+            rdo.stripe_subscription = response["Stripe_Subscription_Id__c"]
+            rdo.lead_source = response["Lead_Source__c"]
+            rdo.description = response["Stripe_Description__c"]
+            rdo.agreed_to_pay_fees = response["Stripe_Agreed_to_pay_fees__c"]
+            rdo.encouraged_by = response["Encouraged_to_contribute_by__c"]
+            rdo.open_ended_status = response["npe03__Open_Ended_Status__c"]
+            rdo.installments = response["npe03__Installments__c"]
+            rdo.installment_period = response["npe03__Installment_Period__c"]
+            rdo.blast_subscription_email = response["Blast_Subscription_Email__c"]
+            rdo.billing_email = response["Billing_Email__c"]
+            rdo.type = response["Type__c"]
+            rdo.stripe_card_brand = response["Stripe_Card_Brand__c"]
+            rdo.stripe_card_expiration = response["Stripe_Card_Expiration__c"]
+            rdo.stripe_card_last_4 = response["Stripe_Card_Last_4__c"]
+            rdo.quarantined = response["Quarantined__c"]
+            return rdo
+
+        else:
+            return None
+
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
 
@@ -667,10 +738,10 @@ class RDO(SalesforceObject, CampaignMixin):
 
     def opportunities(self):
         query = f"""
-            SELECT Id, Amount, Name, Stripe_Customer_ID__c, Description,
-            Stripe_Agreed_to_pay_fees__c, CloseDate, CampaignId,
-            RecordType.Name, Type, Referral_ID__c, LeadSource,
-            Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
+            SELECT Id, Amount, Name, Stripe_Customer_ID__c,
+            Stripe_Subscription_Id__c, Description, Stripe_Agreed_to_pay_fees__c,
+            CloseDate, CampaignId, RecordType.Name, Type, Referral_ID__c,
+            LeadSource, Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
             Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
             Expected_Giving_Date__c, Stripe_Card_Brand__c,
             Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
@@ -686,6 +757,7 @@ class RDO(SalesforceObject, CampaignMixin):
             y.name = item["Name"]
             y.amount = item["Amount"]
             y.stripe_customer = item["Stripe_Customer_ID__c"]
+            y.stripe_subscription = item["Stripe_Subscription_Id__c"]
             y.description = item["Description"]
             y.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
             y.stage_name = "Pledged"
@@ -780,6 +852,11 @@ class RDO(SalesforceObject, CampaignMixin):
         )
         update = {"RecordType": {"Name": self.record_type_name}}
         self.sf.updates(self.opportunities(), update)
+
+    @classmethod
+    def update(cls, rdo, update_details, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        return sf.updates(rdo, update_details)
 
 
 class Account(SalesforceObject):
