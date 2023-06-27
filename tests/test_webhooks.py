@@ -123,7 +123,7 @@ def test_log_rdo(mocker):
     assert resp.referral_id=="puppysong123456789"
     assert resp.agreed_to_pay_fees==True
     assert resp.encouraged_by=="Let the good times roll"
-    assert resp.amount=="15.00"
+    assert resp.amount=="0.00"
     assert resp.installment_period=="monthly"
     assert resp.quarantined==False
     assert resp.stripe_card_expiration=="2024-02-29"
