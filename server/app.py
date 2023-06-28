@@ -398,20 +398,6 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     form = clean(form)
     period = form["installment_period"]
 
-    # TODO is this code still necessary?
-    # if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-    #     logging.info(f"Changing name of contact to {first_name} {last_name}")
-    #     contact.first_name = first_name
-    #     contact.last_name = last_name
-    #     contact.mailing_postal_code = zipcode
-    #     contact.save()
-
-    #TODO same here... at the least, with the way get_or_create is being called, I don't think this will ever be triggered
-    # if contact.first_name != first_name or contact.last_name != last_name:
-    #     logging.info(
-    #         f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
-    #     )
-
     if period is None:
         if quarantine:
             contact = get_or_create_contact(form)
@@ -1434,6 +1420,21 @@ def get_contact(customer):
         last_name=last_name,
         zipcode=zipcode
     )
+
+    # TODO had initially commented out these next two ifs but within a day the "Subscriber Subscriber"
+    # issue came up, so clearly still relevant. Probably worth looking into if we can clean up the
+    # data Salesforce side so we don't need to include these fix-em lines.
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        app.logger.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        app.logger.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
 
     if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
         contact.mailing_postal_code = zipcode
