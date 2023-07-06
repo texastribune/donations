@@ -422,7 +422,10 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
             return True
 
         logging.info("----Creating recurring payment...")
-        subscription = create_subscription(customer=customer, form=form, quarantine=quarantine)
+        if donation_type == "membership":
+            subscription = create_custom_subscription(customer=customer, form=form, quarantine=quarantine)
+        else:
+            subscription = create_subscription(donation_type=donation_type, level="big_tex", customer=customer, form=form, quarantine=quarantine)
         return True
 
 
@@ -434,14 +437,29 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     amount = form_data["amount"]
     stripe_token = form_data["stripeToken"]
     name = " ".join((form_data["first_name"], form_data["last_name"]))
-    zipcode = form_data["zipcode"]
+    shipping_city = form_data.get("shipping_city", None)
+    shipping_street = form_data.get("shipping_street", None)
+    shipping_state = form_data.get("shipping_state", None)
+    if "zipcode" in form_data:
+        zipcode = form_data["zipcode"]
+    else:
+        zipcode = form_data["shipping_postalcode"]
+    website = form_data.get("website", None)
+    business_name = form_data.get("business_name", None)
 
     try:
         customer = stripe.Customer.create(
             email=email,
             name=name,
             address={
-                "postal_code": zipcode
+                "line1": shipping_street,
+                "city": shipping_city,
+                "state": shipping_state,
+                "postal_code": zipcode,
+            },
+            metadata={
+                "website": website,
+                "business_name": business_name,
             },
             card=stripe_token
         )
@@ -466,10 +484,6 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     app.logger.info(f"Customer id: {customer.id}")
     bad_actor_request = None
     try:
-        if "zipcode" in form_data:
-            zipcode = form_data["zipcode"]
-        else:
-            zipcode = form_data["shipping_postalcode"]
         bad_actor_request = BadActor.create_bad_actor_request(
             headers=request.headers,
             captcha_token=form_data["recaptchaToken"],
@@ -527,6 +541,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
+        function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
 
@@ -836,9 +851,18 @@ def payout_paid(event):
 @celery.task(name="app.customer_subscription_created")
 def customer_subscription_created(event):
     subscription = event["data"]["object"]
+    donation_type = subscription["metadata"]["donation_type"]
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
-    rdo = log_rdo(contact, subscription)
+    if donation_type == "business_membership":
+        account = get_account(customer)
+        rdo = log_rdo(account=account, subscription=subscription)
+        affiliation = Affiliation.get_or_create(
+            account=account, contact=contact, role="Business Member Donor"
+        )
+        send_email_new_business_membership(account=account, contact=contact)
+    else:
+        rdo = log_rdo(contact=contact, subscription=subscription)
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     update_next_opportunity(
         opps=rdo.opportunities(),
@@ -1362,7 +1386,7 @@ def add_blast_subscription(form=None, customer=None):
 
 
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
-def create_subscription(customer=None, form=None, quarantine=None):
+def create_custom_subscription(customer=None, form=None, quarantine=None):
     amount = amount_to_charge_stripe(form)
     source = customer["sources"]["data"][0]
     interval = "month" if form["installment_period"] == "monthly" else "year"
@@ -1371,6 +1395,7 @@ def create_subscription(customer=None, form=None, quarantine=None):
         default_source = source["id"],
         description = "Texas Tribune Sustaining Membership",
         metadata = {
+            "donation_type": "membership",
             "donor_selected_amount": form.get("amount", 0),
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
@@ -1388,6 +1413,49 @@ def create_subscription(customer=None, form=None, quarantine=None):
         }]
     )
     return subscription
+
+
+# TODO can these funcs be moved somewhere else? (maybe util.py?)
+def create_subscription(donation_type=None, level=None, customer=None, form=None, quarantine=None):
+    app.logger.info(f"business form: {form}")
+    logging.info(f"business form: {form}")
+    product = STRIPE_PRODUCTS[level]
+    prices_list = stripe.Price.list(product=product)
+    price = find_price(
+        prices=prices_list,
+        period=form["installment_period"],
+        pay_fees=form["pay_fees_value"],
+    )        
+    app.logger.info(f"chosen price from stripe: {price}")
+    logging.info(f"chosen price from stripe: {price}")
+    source = customer["sources"]["data"][0]
+    subscription = stripe.Subscription.create(
+        customer = customer["id"],
+        default_source = source["id"],
+        description = "Texas Tribune Business Membership",
+        metadata = {
+            "donation_type": donation_type,
+            "donor_selected_amount": form.get("amount", 0),
+            "campaign_id": form["campaign_id"],
+            "referral_id": form["referral_id"],
+            "pay_fees": 'X' if form["pay_fees_value"] else None,
+            "encouraged_by": form["reason"],
+            "quarantine": 'X' if quarantine else None,
+        },
+        items = [{
+            "price": price
+        }]
+    )
+    return subscription
+
+
+def find_price(prices=[], period=None, pay_fees=False):
+    nickname = "fees" if pay_fees else None
+    interval = "month" if period == "monthly" else "year"
+    for price in prices:
+        if price["recurring"]["interval"] == interval \
+            and price["nickname"] == nickname:
+            return price
 
 
 def create_payment_intent(customer=None, form=None, quarantine=None):
@@ -1446,19 +1514,43 @@ def get_contact(customer):
     return contact
 
 
-def log_rdo(contact, subscription):    
+def get_account(customer):
+    address = customer["address"]
+    metadata = customer["metadata"]
+    
+    account = Account.get_or_create(
+        record_type_name="Organization",
+        website=metadata.get("website", None),
+        name=metadata.get("business_name", None),
+        shipping_street=address.get("line1", None),
+        shipping_city=address.get("city", None),
+        shipping_state=address.get("state", None),
+        shipping_postalcode=address.get("postal_code", None)
+    )
+
+    return account
+
+
+def log_rdo(contact=None, account=None, subscription=None):    
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
-    rdo = RDO(contact=contact)
+    if account:
+        rdo = RDO(account=account)
+        year = datetime.now(tz=ZONE).strftime("%Y")
+        rdo.name = f"{year} Business {account.name} Recurring"
+        rdo.type = "Business Membership"
+        rdo.record_type_name = "Business Membership"
+    else:
+        rdo = RDO(contact=contact)
 
     rdo.stripe_customer = customer_id
     rdo.stripe_subscription = subscription["id"]
+    rdo.description = subscription["description"]
     rdo.campaign_id = sub_meta.get("campaign_id", None)
     rdo.referral_id = sub_meta.get("referral_id", None)
-    rdo.description = "Texas Tribune Sustaining Membership"
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
