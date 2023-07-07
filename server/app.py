@@ -425,7 +425,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         if donation_type == "membership":
             subscription = create_custom_subscription(customer=customer, form=form, quarantine=quarantine)
         else:
-            subscription = create_subscription(donation_type=donation_type, level="big_tex", customer=customer, form=form, quarantine=quarantine)
+            subscription = create_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         return True
 
 
@@ -1416,10 +1416,10 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 
 
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
-def create_subscription(donation_type=None, level=None, customer=None, form=None, quarantine=None):
+def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     app.logger.info(f"business form: {form}")
     logging.info(f"business form: {form}")
-    product = STRIPE_PRODUCTS[level]
+    product = STRIPE_PRODUCTS[form["level"]]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
         prices=prices_list,

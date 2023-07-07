@@ -66,9 +66,12 @@ STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PRODUCTS = {
     "sustaining": os.getenv("STRIPE_PRODUCT_SUSTAINING", ""),
     "circle": os.getenv("STRIPE_PRODUCT_CIRCLE", ""),
-    "big_tex": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
-    "lone_star": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
-    "hats_off": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
+    "bigTexMonthly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
+    "bigTexYearly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
+    "loneStarMonthly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
+    "loneStarYearly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
+    "hatsOffMonthly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
+    "hatsOffYearly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
     "blast": os.getenv("STRIPE_PRODUCT_BLAST", "")
 }
 

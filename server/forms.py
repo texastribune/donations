@@ -95,6 +95,7 @@ class BusinessMembershipForm(BaseForm):
     shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
     shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
     installment_period = StringField([validators.AnyOf(["yearly", "monthly"])])
+    level = HiddenField(u"Level", [validators.InputRequired()])
 
 
 class BlastForm(FlaskForm):
