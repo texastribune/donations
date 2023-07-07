@@ -393,7 +393,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
     bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
-    quarantine = bad_actor_response.quarantine
+    quarantine = bad_actor_response.quarantine if donation_type == "membership" else False
 
     form = clean(form)
     period = form["installment_period"]
@@ -628,7 +628,6 @@ def business_form():
             BusinessMembershipForm,
             bundles=bundles,
             template=template,
-            function=add_business_membership.delay,
         )
 
     return render_template(
@@ -1179,146 +1178,6 @@ def add_recurring_donation(contact=None, form=None, customer=None, quarantine=Fa
     rdo.save()
 
     return rdo
-
-
-def add_business_rdo(account=None, form=None, customer=None, quarantine=False):
-    """
-    Adds a recurring business membership to Salesforce.
-    """
-
-    if form["installment_period"] is None:
-        raise Exception("installment_period must have a value")
-
-    year = datetime.now(tz=ZONE).strftime("%Y")
-
-    rdo = RDO(account=account)
-    rdo.name = f"{year} Business {account.name} Recurring"
-    rdo.type = "Business Membership"
-    rdo.record_type_name = "Business Membership"
-    rdo.stripe_customer = customer["id"]
-    rdo.campaign_id = form["campaign_id"]
-    rdo.referral_id = form["referral_id"]
-    rdo.description = "Texas Tribune Business Membership"
-    rdo.agreed_to_pay_fees = form["pay_fees_value"]
-    rdo.encouraged_by = form["reason"]
-    rdo.lead_source = "Stripe"
-    rdo.amount = form.get("amount", 0)
-    rdo.installments = None
-    rdo.open_ended_status = "Open"
-    rdo.installment_period = form["installment_period"]
-    rdo.quarantined = quarantine
-
-    apply_card_details(rdo=rdo, customer=customer)
-    rdo.save()
-
-    return rdo
-
-
-@celery.task(name="app.add_business_membership")
-def add_business_membership(
-    form=None,
-    customer=None,
-    donation_type="business_membership",
-    bad_actor_request=None,
-):
-    """
-    Adds a business membership. Both single and recurring.
-
-    It will look for a matching Contact (or create one). Then it will look for a
-    matching Account (or create one). Then it will add the single or recurring donation
-    to the Account. Then it will add an Affiliation to link the Contact with the
-    Account. It sends a notification to Slack (if configured). It will send email
-    notification about the new membership.
-
-    """
-
-    form = clean(form)
-
-    first_name = form["first_name"]
-    last_name = form["last_name"]
-    email = form["stripeEmail"]
-
-    website = form["website"]
-    business_name = form["business_name"]
-    shipping_city = form["shipping_city"]
-    shipping_street = form["shipping_street"]
-    shipping_state = form["shipping_state"]
-    shipping_postalcode = form["shipping_postalcode"]
-
-    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
-    quarantine = bad_actor_response.quarantine
-
-    logging.info("----Getting contact....")
-    contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name
-    )
-    if contact.work_email is None:
-        contact.work_email = email
-        contact.save()
-    logging.info(contact)
-
-    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(f"Changing name of contact to {first_name} {last_name}")
-        contact.first_name = first_name
-        contact.last_name = last_name
-        contact.save()
-
-    if contact.first_name != first_name or contact.last_name != last_name:
-        logging.info(
-            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
-        )
-
-    logging.info("----Getting account....")
-
-    account = Account.get_or_create(
-        record_type_name="Organization",
-        website=website,
-        name=business_name,
-        shipping_street=shipping_street,
-        shipping_city=shipping_city,
-        shipping_state=shipping_state,
-        shipping_postalcode=shipping_postalcode,
-    )
-    logging.info(account)
-
-    if form["installment_period"] not in ["yearly", "monthly"]:
-        raise Exception("Business membership must be either yearly or monthly")
-
-    logging.info("----Creating recurring business membership...")
-    rdo = add_business_rdo(
-        account=account, form=form, customer=customer, quarantine=False
-    )
-    logging.info(rdo)
-
-    logging.info("----Getting affiliation...")
-
-    affiliation = Affiliation.get_or_create(
-        account=account, contact=contact, role="Business Member Donor"
-    )
-    logging.info(affiliation)
-
-    send_email_new_business_membership(account=account, contact=contact)
-
-    # get opportunities
-    opportunities = rdo.opportunities()
-    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
-    opp = [
-        opportunity
-        for opportunity in opportunities
-        if opportunity.expected_giving_date == today
-    ][0]
-    try:
-        charge(opp)
-        notify_slack(account=account, contact=contact, rdo=rdo)
-    except ChargeException as e:
-        e.send_slack_notification()
-    except QuarantinedException:
-        bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
-
-    if contact.duplicate_found:
-        send_multiple_account_warning(contact)
-
-    return True
 
 
 @celery.task(name="app.add_blast_subcription")
