@@ -849,10 +849,17 @@ def payout_paid(event):
 
 @celery.task(name="app.customer_subscription_created")
 def customer_subscription_created(event):
+    # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
+    # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
     donation_type = subscription["metadata"]["donation_type"]
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
+
+    # For a business membership, look for a matching Account (or create one).
+    # Then add a recurring donation to the Account. Next, add an Affiliation to
+    # link the Contact with the Account. Lastly, send a notification to Slack (if configured)
+    # and send an email notification about the new membership.
     if donation_type == "business_membership":
         account = get_account(customer)
         rdo = log_rdo(account=account, subscription=subscription)
@@ -1277,16 +1284,17 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
 def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     app.logger.info(f"business form: {form}")
-    logging.info(f"business form: {form}")
     product = STRIPE_PRODUCTS[form["level"]]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
         prices=prices_list,
         period=form["installment_period"],
         pay_fees=form["pay_fees_value"],
-    )        
+    )
+    if not price:
+        app.logger.warning(f"No {form['installment_period']} price ({form['pay_fees_value']}) was found for level: {form['level']}")
+
     app.logger.info(f"chosen price from stripe: {price}")
-    logging.info(f"chosen price from stripe: {price}")
     source = customer["sources"]["data"][0]
     subscription = stripe.Subscription.create(
         customer = customer["id"],
