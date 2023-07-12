@@ -61,18 +61,21 @@ from .util import (
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = False
 
-SUBSCRIPTION_TYPE = {
-    "Texas Tribune Sustaining Membership": {
-        "type": "Sustaining Membership",
+DONATION_TYPE_INFO = {
+    "membership": {
+        "type": "Recurring Donation",
+        "description": "Texas Tribune Sustaining Membership",
     },
-    "Texas Tribune Business Membership": {
+    "business_membership": {
         "type": "Business Membership",
+        "description": "Texas Tribune Business Membership",
     },
-    "Texas Tribune Circle Membership": {
-        "type": "Giving Circle",
+    "circle": {
+        "description": "Texas Tribune Circle Membership",
     },
-    "Blast Subscription": {
+    "blast": {
         "type": "The Blast",
+        "description": "Blast Subscription",
     },
 }
 
@@ -392,8 +395,10 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     because there are a lot of API calls and there's no point in making the
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
-    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
-    quarantine = bad_actor_response.quarantine if donation_type == "membership" else False
+    quarantine = False
+    if donation_type == "membership":
+        bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
+        quarantine = bad_actor_response.quarantine
 
     form = clean(form)
     period = form["installment_period"]
@@ -716,12 +721,15 @@ def submit_blast():
     app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
+    name = " ".join((request.form["first_name"], request.form["last_name"]))
     email_is_valid = validate_email(request.form["stripeEmail"])
     amount = request.form["amount"]
 
     if email_is_valid:
         customer = stripe.Customer.create(
-            email=request.form["stripeEmail"], card=request.form["stripeToken"]
+            name=name,
+            email=request.form["stripeEmail"],
+            card=request.form["stripeToken"],
         )
         app.logger.info(f"Customer id: {customer.id}")
     else:
@@ -729,14 +737,22 @@ def submit_blast():
         return render_template("error.html", message=message, bundles=bundles)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
-        add_blast_subscription.delay(customer=customer, form=clean(request.form))
+        form = clean(request.form)
 
         if amount == "349":
+            form["level"] = "blast"
+            form["installment_period"] = "yearly"
             event_label = "annual"
         elif amount == "40":
+            form["level"] = "blast"
+            form["installment_period"] = "monthly"
             event_label = "monthly"
         elif amount == "325":
+            form["level"] = "blastTaxExempt"
+            form["installment_period"] = "yearly"
             event_label = "annual tax exempt"
+
+        add_stripe_donation.delay(donation_type="blast", customer=customer, form=form)
 
         gtm = {"event_value": amount, "event_label": event_label}
 
@@ -862,13 +878,13 @@ def customer_subscription_created(event):
     # and send an email notification about the new membership.
     if donation_type == "business_membership":
         account = get_account(customer)
-        rdo = log_rdo(account=account, subscription=subscription)
+        rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
         affiliation = Affiliation.get_or_create(
             account=account, contact=contact, role="Business Member Donor"
         )
         send_email_new_business_membership(account=account, contact=contact)
     else:
-        rdo = log_rdo(contact=contact, subscription=subscription)
+        rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     update_next_opportunity(
         opps=rdo.opportunities(),
@@ -1283,7 +1299,7 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
 def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
-    app.logger.info(f"business form: {form}")
+    app.logger.info(f"{donation_type} form: {form}")
     product = STRIPE_PRODUCTS[form["level"]]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
@@ -1291,22 +1307,26 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
         period=form["installment_period"],
         pay_fees=form["pay_fees_value"],
     )
+
     if not price:
         app.logger.warning(f"No {form['installment_period']} price ({form['pay_fees_value']}) was found for level: {form['level']}")
 
     app.logger.info(f"chosen price from stripe: {price}")
     source = customer["sources"]["data"][0]
+    donation_type_info = DONATION_TYPE_INFO[donation_type]
+
     subscription = stripe.Subscription.create(
         customer = customer["id"],
         default_source = source["id"],
-        description = "Texas Tribune Business Membership",
+        description = donation_type_info["description"],
         metadata = {
             "donation_type": donation_type,
             "donor_selected_amount": form.get("amount", 0),
-            "campaign_id": form["campaign_id"],
-            "referral_id": form["referral_id"],
+            "campaign_id": form.get("campaign_id", None),
+            "referral_id": form.get("referral_id", None),
             "pay_fees": 'X' if form["pay_fees_value"] else None,
-            "encouraged_by": form["reason"],
+            "encouraged_by": form.get("reason", None),
+            "subscriber_email": form.get("subscriber_email", None),
             "quarantine": 'X' if quarantine else None,
         },
         items = [{
@@ -1347,7 +1367,8 @@ def create_payment_intent(customer=None, form=None, quarantine=None):
 def get_contact(customer):
     app.logger.info(f"Incoming customer in get_contact: {customer}")
     first_name, last_name = name_splitter(customer.get("name", ""))
-    zipcode = customer.get("address", {}).get("postal_code", None)
+    address = customer.get("address", None)
+    zipcode = address.get("postal_code", None) if address else None
     app.logger.info("----Getting contact....")
     contact = Contact.get_or_create(
         email=customer.get("email", None),
@@ -1398,24 +1419,30 @@ def get_account(customer):
     return account
 
 
-def log_rdo(contact=None, account=None, subscription=None):    
+def log_rdo(type=None, contact=None, account=None, subscription=None):    
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
+    donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
-    if account:
+    if type == "business_membership" and account:
         rdo = RDO(account=account)
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
-        rdo.type = "Business Membership"
         rdo.record_type_name = "Business Membership"
     else:
         rdo = RDO(contact=contact)
+        if type == "blast":
+            now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+            rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
+            rdo.billing_email = contact.email
+            rdo.blast_subscription_email = sub_meta.get("subscriber_email", None)
 
+    rdo.type = donation_type_info.get("type", None)
     rdo.stripe_customer = customer_id
     rdo.stripe_subscription = subscription["id"]
-    rdo.description = subscription["description"]
+    rdo.description = donation_type_info.get("description", None)
     rdo.campaign_id = sub_meta.get("campaign_id", None)
     rdo.referral_id = sub_meta.get("referral_id", None)
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False

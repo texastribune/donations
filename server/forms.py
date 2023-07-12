@@ -120,6 +120,7 @@ class BlastForm(FlaskForm):
     description = HiddenField(u"Description")
     pay_fees = BooleanField(u"Agree to pay fees")
     pay_fees_value = HiddenField(u"Pay Fees Value")
+    level = HiddenField(u"Subscription level")
 
 
 class BlastPromoForm(FlaskForm):

@@ -72,7 +72,8 @@ STRIPE_PRODUCTS = {
     "loneStarYearly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
     "hatsOffMonthly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
     "hatsOffYearly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
-    "blast": os.getenv("STRIPE_PRODUCT_BLAST", "")
+    "blast": os.getenv("STRIPE_PRODUCT_BLAST", ""),
+    "blastTaxExempt": os.getenv("STRIPE_PRODUCT_BLAST_TAX_EXEMPT", ""),
 }
 
 #######
