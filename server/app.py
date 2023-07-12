@@ -859,7 +859,7 @@ def payout_paid(event):
         # get the Opportunity Ids that go with those charges
         sfc = SalesforceConnection()
         opps_to_update = sfc.query(query)
-        opps_to_updkate = [o["Id"] for o in opps_to_update]
+        opps_to_update = [o["Id"] for o in opps_to_update]
 
         # set the payout date on those opportunities
         response = sfc.update_payout_dates(opps_to_update, payout_date)
