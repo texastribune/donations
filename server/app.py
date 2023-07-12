@@ -65,12 +65,10 @@ DONATION_TYPE_INFO = {
     "membership": {
         "type": "Recurring Donation",
         "description": "Texas Tribune Sustaining Membership",
-        "installments": None,
     },
     "business_membership": {
         "type": "Business Membership",
         "description": "Texas Tribune Business Membership",
-        "installments": None,
     },
     "circle": {
         "description": "Texas Tribune Circle Membership",
@@ -78,7 +76,6 @@ DONATION_TYPE_INFO = {
     "blast": {
         "type": "The Blast",
         "description": "Blast Subscription",
-        "installments": 0,
     },
 }
 
@@ -1452,7 +1449,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
     rdo.amount = sub_meta.get("donor_selected_amount", 0)
-    rdo.installments = donation_type_info.get("installments", None)
+    rdo.installments = None
     rdo.installment_period = installment_period
     rdo.open_ended_status = "Open"
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
