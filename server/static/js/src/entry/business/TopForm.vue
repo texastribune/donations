@@ -228,6 +228,7 @@
       <hidden name="pay_fees_value" :store-module="storeModule" />
       <hidden name="installment_period" :store-module="storeModule" />
       <hidden name="amount" :store-module="storeModule" />
+      <hidden name="level" :store-module="storeModule" />
     </div>
   </form>
 </template>
