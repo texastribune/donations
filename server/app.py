@@ -1370,7 +1370,8 @@ def create_payment_intent(customer=None, form=None, quarantine=None):
 def get_contact(customer):
     app.logger.info(f"Incoming customer in get_contact: {customer}")
     first_name, last_name = name_splitter(customer.get("name", ""))
-    zipcode = customer.get("address", {}).get("postal_code", None)
+    address = customer.get("address", None)
+    zipcode = address.get("postal_code", None) if address else None
     app.logger.info("----Getting contact....")
     contact = Contact.get_or_create(
         email=customer.get("email", None),
