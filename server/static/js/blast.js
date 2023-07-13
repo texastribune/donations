@@ -34,7 +34,8 @@ var listen_for_installments = function() {
 var payFeeAmount = function() {
   var goalAmount = parseFloat($('input[name="amount"]:checked').val()),
       // https://support.stripe.com/questions/passing-the-stripe-fee-on-to-customers
-      totalAmount = (goalAmount + .30) / (1 - 0.022);
+      // updating to include subscription costs as of 7/23
+      totalAmount = (goalAmount + .30) / (1 - 0.027);
       // Fee rounded to two decimal places.
       feeAmount = Math.round((totalAmount - goalAmount) * 100) / 100,
       payFeeElement = $('#pay-fee-amount span');

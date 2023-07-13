@@ -117,7 +117,7 @@ def test_log_rdo(mocker):
     contact.first_name = "Harry"
     contact.last_name = "Nilsson"
 
-    resp = log_rdo(contact, subscription)
+    resp = log_rdo(type="membership", contact=contact, subscription=subscription)
     assert resp.stripe_customer=="cus_NskMDwAXZUuQFZ"
     assert resp.campaign_id=="limeinthecoconut123456789"
     assert resp.referral_id=="puppysong123456789"
