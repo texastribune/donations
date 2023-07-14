@@ -508,7 +508,6 @@ class Opportunity(SalesforceObject, CampaignMixin):
             "StageName": self.stage_name,
             "Type": self.type,
             "Stripe_Customer_ID__c": self.stripe_customer,
-            "Stripe_Subscription_Id__c": self.stripe_subscription,
             "Referral_ID__c": self.referral_id,
             "LeadSource": self.lead_source,
             "Description": self.description,
