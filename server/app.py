@@ -877,6 +877,10 @@ def customer_subscription_created(event):
     # link the Contact with the Account. Lastly, send a notification to Slack (if configured)
     # and send an email notification about the new membership.
     if donation_type == "business_membership":
+        if contact.work_email is None:
+            contact.work_email = contact.email
+            contact.save()
+
         account = get_account(customer)
         rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
         affiliation = Affiliation.get_or_create(
@@ -891,7 +895,8 @@ def customer_subscription_created(event):
         transaction_id=invoice["charge"],
         amount=invoice.get("amount_paid", 0) / 100
     )
-    notify_slack(contact=contact, rdo=rdo)
+    if donation_type != "blast":
+        notify_slack(contact=contact, rdo=rdo)
 
 
 @celery.task(name="app.payment_intent_succeeded")
