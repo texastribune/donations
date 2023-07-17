@@ -133,6 +133,7 @@ AUTH0_PORTAL_AUDIENCE = os.getenv(
 ########
 # Bad Actor
 #
+ENABLE_BAD_ACTOR_API = bool_env("ENABLE_BAD_ACTOR_API")
 BAD_ACTOR_API_URL = os.getenv("BAD_ACTOR_API_URL", None)
 BAD_ACTOR_NOTIFICATION_URL = os.getenv("BAD_ACTOR_NOTIFICATION_URL", None)
 BLOCK_LIST = os.getenv("BLOCK_LIST", None)

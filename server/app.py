@@ -29,6 +29,7 @@ from .config import (
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
     BLOCK_LIST,
+    ENABLE_BAD_ACTOR_API,
     ENABLE_PORTAL,
     ENABLE_SENTRY,
     FLASK_SECRET_KEY,
@@ -396,7 +397,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
     quarantine = False
-    if donation_type == "membership":
+    if donation_type == "membership" and ENABLE_BAD_ACTOR_API:
         bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
         quarantine = bad_actor_response.quarantine
 
