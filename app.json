@@ -45,6 +45,9 @@
     "DEFAULT_MAIL_SENDER": {
       "required": true
     },
+    "ENABLE_BAD_ACTOR_API": {
+      "required": true
+    },
     "ENABLE_PORTAL": {
       "required": true
     },

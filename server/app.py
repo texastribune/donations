@@ -29,6 +29,7 @@ from .config import (
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
     BLOCK_LIST,
+    ENABLE_BAD_ACTOR_API,
     ENABLE_PORTAL,
     ENABLE_SENTRY,
     FLASK_SECRET_KEY,
@@ -396,7 +397,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
     quarantine = False
-    if donation_type == "membership":
+    if donation_type == "membership" and ENABLE_BAD_ACTOR_API:
         bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
         quarantine = bad_actor_response.quarantine
 
@@ -877,6 +878,10 @@ def customer_subscription_created(event):
     # link the Contact with the Account. Lastly, send a notification to Slack (if configured)
     # and send an email notification about the new membership.
     if donation_type == "business_membership":
+        if contact.work_email is None:
+            contact.work_email = contact.email
+            contact.save()
+
         account = get_account(customer)
         rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
         affiliation = Affiliation.get_or_create(
@@ -891,7 +896,8 @@ def customer_subscription_created(event):
         transaction_id=invoice["charge"],
         amount=invoice.get("amount_paid", 0) / 100
     )
-    notify_slack(contact=contact, rdo=rdo)
+    if donation_type != "blast":
+        notify_slack(contact=contact, rdo=rdo)
 
 
 @celery.task(name="app.payment_intent_succeeded")
