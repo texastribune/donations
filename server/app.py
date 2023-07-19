@@ -71,6 +71,7 @@ DONATION_TYPE_INFO = {
         "description": "Texas Tribune Business Membership",
     },
     "circle": {
+        "type": "Giving Circle",
         "description": "Texas Tribune Circle Membership",
     },
     "blast": {
@@ -542,6 +543,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     elif FormType is CircleForm:
         donation_type = "circle"
+        function = add_stripe_donation.delay
     elif FormType is BlastForm:
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
@@ -1433,7 +1435,9 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         rdo.record_type_name = "Business Membership"
     else:
         rdo = RDO(contact=contact)
-        if type == "blast":
+        if type == "circle":
+            rdo.installments = 36 if sub_plan["interval"] == "month" else 3
+        elif type == "blast":
             now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
             rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
             rdo.billing_email = contact.email
