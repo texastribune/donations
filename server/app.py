@@ -1433,8 +1433,10 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
+        rdo.installments = None
     else:
         rdo = RDO(contact=contact)
+        rdo.installments = None
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
         elif type == "blast":
@@ -1453,7 +1455,6 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
     rdo.amount = sub_meta.get("donor_selected_amount", 0)
-    rdo.installments = None
     rdo.installment_period = installment_period
     rdo.open_ended_status = "Open"
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
