@@ -1302,11 +1302,12 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
 def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     app.logger.info(f"{donation_type} form: {form}")
+    period = form["installment_period"]
     product = STRIPE_PRODUCTS[form["level"]]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
         prices=prices_list,
-        period=form["installment_period"],
+        period=period,
         pay_fees=form["pay_fees_value"],
     )
 
@@ -1316,25 +1317,41 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
     app.logger.info(f"chosen price from stripe: {price}")
     source = customer["sources"]["data"][0]
     donation_type_info = DONATION_TYPE_INFO[donation_type]
+    metadata = {
+        "donation_type": donation_type,
+        "donor_selected_amount": form.get("amount", 0),
+        "campaign_id": form.get("campaign_id", None),
+        "referral_id": form.get("referral_id", None),
+        "pay_fees": 'X' if form["pay_fees_value"] else None,
+        "encouraged_by": form.get("reason", None),
+        "subscriber_email": form.get("subscriber_email", None),
+        "quarantine": 'X' if quarantine else None,
+    },
 
-    subscription = stripe.Subscription.create(
-        customer = customer["id"],
-        default_source = source["id"],
-        description = donation_type_info["description"],
-        metadata = {
-            "donation_type": donation_type,
-            "donor_selected_amount": form.get("amount", 0),
-            "campaign_id": form.get("campaign_id", None),
-            "referral_id": form.get("referral_id", None),
-            "pay_fees": 'X' if form["pay_fees_value"] else None,
-            "encouraged_by": form.get("reason", None),
-            "subscriber_email": form.get("subscriber_email", None),
-            "quarantine": 'X' if quarantine else None,
-        },
-        items = [{
-            "price": price
-        }]
-    )
+    if donation_type == "circle":
+        subscription = stripe.SubscriptionSchedule.create(
+            customer=customer["id"],
+            default_source = source["id"],
+            description = donation_type_info["description"],
+            metadata = metadata,
+            end_behavior = "cancel",
+            phases = [{
+                "items": [{
+                    "price": price
+                }],
+                "iterations": 36 if period == "monthly" else 3,
+            }],
+        )
+    else:
+        subscription = stripe.Subscription.create(
+            customer = customer["id"],
+            default_source = source["id"],
+            description = donation_type_info["description"],
+            metadata = metadata,
+            items = [{
+                "price": price,
+            }],
+        )
     return subscription
 
 
