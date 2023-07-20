@@ -1331,6 +1331,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
     if donation_type == "circle":
         subscription = stripe.SubscriptionSchedule.create(
             customer=customer["id"],
+            start_date="now",
             end_behavior="cancel",
             phases=[{
                 "description": donation_type_info["description"],
