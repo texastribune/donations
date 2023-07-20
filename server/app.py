@@ -1326,28 +1326,28 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
         "encouraged_by": form.get("reason", None),
         "subscriber_email": form.get("subscriber_email", None),
         "quarantine": 'X' if quarantine else None,
-    },
+    }
 
     if donation_type == "circle":
         subscription = stripe.SubscriptionSchedule.create(
             customer=customer["id"],
-            metadata = metadata,
-            end_behavior = "cancel",
-            phases = [{
+            end_behavior="cancel",
+            phases=[{
                 "description": donation_type_info["description"],
                 "items": [{
                     "price": price
                 }],
                 "iterations": 36 if period == "monthly" else 3,
+                "metadata": metadata,
             }],
         )
     else:
         subscription = stripe.Subscription.create(
-            customer = customer["id"],
-            default_source = source["id"],
-            description = donation_type_info["description"],
-            metadata = metadata,
-            items = [{
+            customer=customer["id"],
+            default_source=source["id"],
+            description=donation_type_info["description"],
+            metadata=metadata,
+            items=[{
                 "price": price,
             }],
         )
@@ -1366,11 +1366,11 @@ def find_price(prices=[], period=None, pay_fees=False):
 def create_payment_intent(customer=None, form=None, quarantine=None):
     amount = amount_to_charge_stripe(form)
     payment = stripe.PaymentIntent.create(
-        amount = int(amount * 100),
-        currency = "usd",
-        customer = customer["id"],
-        description = "Texas Tribune Membership",
-        metadata = {
+        amount=int(amount * 100),
+        currency="usd",
+        customer=customer["id"],
+        description="Texas Tribune Membership",
+        metadata={
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
             "pay_fees": 'X' if form["pay_fees_value"] else None,
