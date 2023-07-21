@@ -890,8 +890,7 @@ def customer_subscription_created(event):
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     update_next_opportunity(
         opps=rdo.opportunities(),
-        transaction_id=invoice["charge"],
-        amount=invoice.get("amount_paid", 0) / 100
+        invoice=invoice,
     )
     notify_slack(contact=contact, rdo=rdo)
 
@@ -909,9 +908,7 @@ def payment_intent_succeeded(event):
         # is handled in the log_rdo func, so we ignore it here
         if invoice['billing_reason'] != "subscription_create":
             update_next_opportunity(
-                subscription_id=invoice["subscription"],
-                transaction_id=invoice["charge"],
-                amount=invoice.get("amount_paid", 0) / 100
+                invoice=invoice,
             )
     else:
         customer = stripe.Customer.retrieve(payment_intent['customer'])
@@ -1455,8 +1452,10 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     else:
         rdo = RDO(contact=contact)
         rdo.installments = None
+        rdo.open_ended_status = "Open"
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
+            rdo.open_ended_status = "None"
         elif type == "blast":
             now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
             rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
@@ -1474,7 +1473,6 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.lead_source = "Stripe"
     rdo.amount = sub_meta.get("donor_selected_amount", 0)
     rdo.installment_period = installment_period
-    rdo.open_ended_status = "Open"
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
     source = subscription.get("default_source", None)
@@ -1494,9 +1492,10 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     return rdo
 
 
-def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, amount=None):
+def update_next_opportunity(opps=[], invoice=None):
 
     if not opps:
+        subscription_id = invoice["subscription"]
         opps = Opportunity.list(
             stage_name="Pledged", stripe_subscription_id=subscription_id
         )
@@ -1508,7 +1507,8 @@ def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, 
         if opportunity.expected_giving_date == today
     ][0]
     app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
-
+    transaction_id = invoice["charge"]
+    amount = invoice.get("amount_paid", 0) / 100
     charge_details = {
         "StageName": "Closed Won",
         "Stripe_Transaction_ID__c": transaction_id,
