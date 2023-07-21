@@ -34,26 +34,6 @@ services:
       - 15672:15672
     networks:
       - net
-  
-  shell:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
-      - checkout_node_modules-vol:/app/node_modules
-    ports:
-      - 80:5000
-    entrypoint:
-      - /bin/sh
-    command: -c "flask --app server shell"
-    env_file:
-      - ./env-docker
-    depends_on:
-      - redis
-      - rabbitmq
-    networks:
-      - net
 
 volumes:
   checkout_node_modules-vol:

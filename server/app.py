@@ -1335,6 +1335,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
             end_behavior="cancel",
             phases=[{
                 "description": donation_type_info["description"],
+                "default_payment_method": source["id"],
                 "items": [{
                     "price": price
                 }],
@@ -1476,7 +1477,10 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.open_ended_status = "Open"
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
-    card = stripe.Customer.retrieve_source(customer_id, subscription["default_source"])
+    source = subscription.get("default_source", None)
+    if not source:
+        source = subscription.get("default_payment_method", None)
+    card = stripe.Customer.retrieve_source(customer_id, source)
     year = card["exp_year"]
     month = card["exp_month"]
     day = calendar.monthrange(year, month)[1]
