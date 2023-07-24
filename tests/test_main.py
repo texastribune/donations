@@ -402,7 +402,6 @@ def test__format_opportunity():
         "RecordType": {"Name": "Membership"},
         "StageName": "Pledged",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
-        "Stripe_Subscription_Id__c": None,
         "Referral_ID__c": "1234",
         "Description": "The Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
