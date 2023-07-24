@@ -872,6 +872,8 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
     donation_type = subscription["metadata"]["donation_type"]
+    latest_invoice = subscription["latest_invoice"]
+    invoice = None
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
 
@@ -891,12 +893,22 @@ def customer_subscription_created(event):
         )
         send_email_new_business_membership(account=account, contact=contact)
     else:
+        # For a circle membership, we set up a subscription schedule which defaults to all charges
+        # being on hold for an hour before going through. We manually push through the first charge
+        # at subscription creation here.
+        if donation_type == "circle":
+            stripe.Invoice.finalize_invoice(latest_invoice)
+            invoice = stripe.Invoice.pay(latest_invoice)
+
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
-    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
+
+    # if we already received an invoice object, as in the case of a circle membership,
+    # use that, otherwise retrieve the latest invoice from stripe
     update_next_opportunity(
         opps=rdo.opportunities(),
-        invoice=invoice,
+        invoice=invoice if invoice else stripe.Invoice.retrieve(latest_invoice),
     )
+
     if donation_type != "blast":
         notify_slack(contact=contact, rdo=rdo)
 
@@ -910,8 +922,8 @@ def payment_intent_succeeded(event):
         invoice = stripe.Invoice.retrieve(invoice_id)
         app.logger.info(f"Payment intent invoice: {invoice}")
 
-        # the initial payment intent tied to subscription creation
-        # is handled in the log_rdo func, so we ignore it here
+        # the initial invoice tied to a subscription is handled in the
+        # customer_subscription_created func, so we ignore it here
         if invoice['billing_reason'] != "subscription_create":
             update_next_opportunity(
                 invoice=invoice,
@@ -1499,11 +1511,9 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
 
 
 def update_next_opportunity(opps=[], invoice=None):
-
     if not opps:
-        subscription_id = invoice["subscription"]
         opps = Opportunity.list(
-            stage_name="Pledged", stripe_subscription_id=subscription_id
+            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]
         )
 
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
