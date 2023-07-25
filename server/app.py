@@ -66,18 +66,22 @@ DONATION_TYPE_INFO = {
     "membership": {
         "type": "Recurring Donation",
         "description": "Texas Tribune Sustaining Membership",
+        "open_ended_status": "Open",
     },
     "business_membership": {
         "type": "Business Membership",
         "description": "Texas Tribune Business Membership",
+        "open_ended_status": "Open",
     },
     "circle": {
         "type": "Giving Circle",
         "description": "Texas Tribune Circle Membership",
+        "open_ended_status": "None",
     },
     "blast": {
         "type": "The Blast",
         "description": "Blast Subscription",
+        "open_ended_status": "Open",
     },
 }
 
@@ -1470,10 +1474,8 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     else:
         rdo = RDO(contact=contact)
         rdo.installments = None
-        rdo.open_ended_status = "Open"
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
-            rdo.open_ended_status = "None"
         elif type == "blast":
             now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
             rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
@@ -1491,6 +1493,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.lead_source = "Stripe"
     rdo.amount = sub_meta.get("donor_selected_amount", 0)
     rdo.installment_period = installment_period
+    rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
     source = subscription.get("default_source", None)
