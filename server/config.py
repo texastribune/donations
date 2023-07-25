@@ -65,13 +65,20 @@ STRIPE_KEYS = {
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PRODUCTS = {
     "sustaining": os.getenv("STRIPE_PRODUCT_SUSTAINING", ""),
-    "circle": os.getenv("STRIPE_PRODUCT_CIRCLE", ""),
     "bigTexMonthly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
     "bigTexYearly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
     "loneStarMonthly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
     "loneStarYearly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
     "hatsOffMonthly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
     "hatsOffYearly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
+    "foundersMonthly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
+    "foundersYearly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
+    "chairmanMonthly": os.getenv("STRIPE_PRODUCT_CHAIRMAN", ""),
+    "chairmanYearly": os.getenv("STRIPE_PRODUCT_CHAIRMAN", ""),
+    "leadershipMonthly": os.getenv("STRIPE_PRODUCT_LEADERSHIP", ""),
+    "leadershipYearly": os.getenv("STRIPE_PRODUCT_LEADERSHIP", ""),
+    "editorMonthly": os.getenv("STRIPE_PRODUCT_EDITOR", ""),
+    "editorYearly": os.getenv("STRIPE_PRODUCT_EDITOR", ""),
     "blast": os.getenv("STRIPE_PRODUCT_BLAST", ""),
     "blastTaxExempt": os.getenv("STRIPE_PRODUCT_BLAST_TAX_EXEMPT", ""),
 }

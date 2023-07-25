@@ -66,17 +66,22 @@ DONATION_TYPE_INFO = {
     "membership": {
         "type": "Recurring Donation",
         "description": "Texas Tribune Sustaining Membership",
+        "open_ended_status": "Open",
     },
     "business_membership": {
         "type": "Business Membership",
         "description": "Texas Tribune Business Membership",
+        "open_ended_status": "Open",
     },
     "circle": {
+        "type": "Giving Circle",
         "description": "Texas Tribune Circle Membership",
+        "open_ended_status": "None",
     },
     "blast": {
         "type": "The Blast",
         "description": "Blast Subscription",
+        "open_ended_status": "Open",
     },
 }
 
@@ -543,6 +548,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     elif FormType is CircleForm:
         donation_type = "circle"
+        function = add_stripe_donation.delay
     elif FormType is BlastForm:
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
@@ -870,6 +876,8 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
     donation_type = subscription["metadata"]["donation_type"]
+    latest_invoice = subscription["latest_invoice"]
+    invoice = None
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
 
@@ -889,13 +897,22 @@ def customer_subscription_created(event):
         )
         send_email_new_business_membership(account=account, contact=contact)
     else:
+        # For a circle membership, we set up a subscription schedule which defaults to all charges
+        # being on hold for an hour before going through. We manually push through the first charge
+        # at subscription creation here.
+        if donation_type == "circle":
+            stripe.Invoice.finalize_invoice(latest_invoice)
+            invoice = stripe.Invoice.pay(latest_invoice)
+
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
-    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
+
+    # if we already received an invoice object, as in the case of a circle membership,
+    # use that, otherwise retrieve the latest invoice from stripe
     update_next_opportunity(
         opps=rdo.opportunities(),
-        transaction_id=invoice["charge"],
-        amount=invoice.get("amount_paid", 0) / 100
+        invoice=invoice if invoice else stripe.Invoice.retrieve(latest_invoice),
     )
+
     if donation_type != "blast":
         notify_slack(contact=contact, rdo=rdo)
 
@@ -909,13 +926,11 @@ def payment_intent_succeeded(event):
         invoice = stripe.Invoice.retrieve(invoice_id)
         app.logger.info(f"Payment intent invoice: {invoice}")
 
-        # the initial payment intent tied to subscription creation
-        # is handled in the log_rdo func, so we ignore it here
+        # the initial invoice tied to a subscription is handled in the
+        # customer_subscription_created func, so we ignore it here
         if invoice['billing_reason'] != "subscription_create":
             update_next_opportunity(
-                subscription_id=invoice["subscription"],
-                transaction_id=invoice["charge"],
-                amount=invoice.get("amount_paid", 0) / 100
+                invoice=invoice,
             )
     else:
         customer = stripe.Customer.retrieve(payment_intent['customer'])
@@ -1306,11 +1321,12 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
 def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     app.logger.info(f"{donation_type} form: {form}")
+    period = form["installment_period"]
     product = STRIPE_PRODUCTS[form["level"]]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
         prices=prices_list,
-        period=form["installment_period"],
+        period=period,
         pay_fees=form["pay_fees_value"],
     )
 
@@ -1320,25 +1336,42 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
     app.logger.info(f"chosen price from stripe: {price}")
     source = customer["sources"]["data"][0]
     donation_type_info = DONATION_TYPE_INFO[donation_type]
+    metadata = {
+        "donation_type": donation_type,
+        "donor_selected_amount": form.get("amount", 0),
+        "campaign_id": form.get("campaign_id", None),
+        "referral_id": form.get("referral_id", None),
+        "pay_fees": 'X' if form["pay_fees_value"] else None,
+        "encouraged_by": form.get("reason", None),
+        "subscriber_email": form.get("subscriber_email", None),
+        "quarantine": 'X' if quarantine else None,
+    }
 
-    subscription = stripe.Subscription.create(
-        customer = customer["id"],
-        default_source = source["id"],
-        description = donation_type_info["description"],
-        metadata = {
-            "donation_type": donation_type,
-            "donor_selected_amount": form.get("amount", 0),
-            "campaign_id": form.get("campaign_id", None),
-            "referral_id": form.get("referral_id", None),
-            "pay_fees": 'X' if form["pay_fees_value"] else None,
-            "encouraged_by": form.get("reason", None),
-            "subscriber_email": form.get("subscriber_email", None),
-            "quarantine": 'X' if quarantine else None,
-        },
-        items = [{
-            "price": price
-        }]
-    )
+    if donation_type == "circle":
+        subscription = stripe.SubscriptionSchedule.create(
+            customer=customer["id"],
+            start_date="now",
+            end_behavior="cancel",
+            phases=[{
+                "description": donation_type_info["description"],
+                "default_payment_method": source["id"],
+                "items": [{
+                    "price": price
+                }],
+                "iterations": 36 if period == "monthly" else 3,
+                "metadata": metadata,
+            }],
+        )
+    else:
+        subscription = stripe.Subscription.create(
+            customer=customer["id"],
+            default_source=source["id"],
+            description=donation_type_info["description"],
+            metadata=metadata,
+            items=[{
+                "price": price,
+            }],
+        )
     return subscription
 
 
@@ -1354,11 +1387,11 @@ def find_price(prices=[], period=None, pay_fees=False):
 def create_payment_intent(customer=None, form=None, quarantine=None):
     amount = amount_to_charge_stripe(form)
     payment = stripe.PaymentIntent.create(
-        amount = int(amount * 100),
-        currency = "usd",
-        customer = customer["id"],
-        description = "Texas Tribune Membership",
-        metadata = {
+        amount=int(amount * 100),
+        currency="usd",
+        customer=customer["id"],
+        description="Texas Tribune Membership",
+        metadata={
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
             "pay_fees": 'X' if form["pay_fees_value"] else None,
@@ -1437,9 +1470,13 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
+        rdo.installments = None
     else:
         rdo = RDO(contact=contact)
-        if type == "blast":
+        rdo.installments = None
+        if type == "circle":
+            rdo.installments = 36 if sub_plan["interval"] == "month" else 3
+        elif type == "blast":
             now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
             rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
             rdo.billing_email = contact.email
@@ -1455,12 +1492,14 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
     rdo.amount = sub_meta.get("donor_selected_amount", 0)
-    rdo.installments = None
     rdo.installment_period = installment_period
-    rdo.open_ended_status = "Open"
+    rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
-    card = stripe.Customer.retrieve_source(customer_id, subscription["default_source"])
+    source = subscription.get("default_source", None)
+    if not source:
+        source = subscription.get("default_payment_method", None)
+    card = stripe.Customer.retrieve_source(customer_id, source)
     year = card["exp_year"]
     month = card["exp_month"]
     day = calendar.monthrange(year, month)[1]
@@ -1474,11 +1513,10 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     return rdo
 
 
-def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, amount=None):
-
+def update_next_opportunity(opps=[], invoice=None):
     if not opps:
         opps = Opportunity.list(
-            stage_name="Pledged", stripe_subscription_id=subscription_id
+            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]
         )
 
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
@@ -1488,7 +1526,8 @@ def update_next_opportunity(opps=[], subscription_id=None, transaction_id=None, 
         if opportunity.expected_giving_date == today
     ][0]
     app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
-
+    transaction_id = invoice["charge"]
+    amount = invoice.get("amount_paid", 0) / 100
     charge_details = {
         "StageName": "Closed Won",
         "Stripe_Transaction_ID__c": transaction_id,

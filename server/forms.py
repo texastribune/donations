@@ -83,6 +83,7 @@ class CircleForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    level = HiddenField(u"Level", [validators.InputRequired()])
 
 
 class BusinessMembershipForm(BaseForm):
