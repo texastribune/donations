@@ -53,6 +53,7 @@ class BadActor:
         self.bad_actor_request = bad_actor_request
         self.transaction = None
         self.transaction_type = None
+        self.info_dict = None
 
         try:
             self.bad_actor_api_response = self._call_bad_actor_api(bad_actor_request)
@@ -119,7 +120,7 @@ class BadActor:
                 "block_id": "choices",
                 "elements": [
                     {
-                        "action_id": "approve",
+                        "action_id": "approve_new",
                         "type": "button",
                         "text": {
                             "type": "plain_text",
@@ -127,10 +128,10 @@ class BadActor:
                             "text": "Approve",
                         },
                         "style": "primary",
-                        "value": f"{self.transaction_type}:{self.transaction.id}",
+                        "value": f"{self.transaction_type}:{self.transaction.id}:{self.info_dict}",
                     },
                     {
-                        "action_id": "reject",
+                        "action_id": "reject_new",
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",

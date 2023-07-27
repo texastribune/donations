@@ -412,11 +412,8 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     if period is None:
         if quarantine:
             contact = get_or_create_contact(form)
-            opportunity = add_opportunity(
-                contact=contact, form=form, customer=customer, quarantine=quarantine
-            )
             bad_actor_response.notify_bad_actor(
-                transaction_type="Opportunity", transaction=opportunity
+                transaction_type="Opportunity", transaction=contact
             )
             return True
 
@@ -426,10 +423,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     else:
         if quarantine:
             contact = get_or_create_contact(form)
-            rdo = add_recurring_donation(
-                contact=contact, form=form, customer=customer, quarantine=quarantine
-            )
-            bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
+            bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=contact)
             return True
 
         logging.info("----Creating recurring payment...")
@@ -1471,6 +1465,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
         rdo.installments = None
+
     else:
         rdo = RDO(contact=contact)
         rdo.installments = None
