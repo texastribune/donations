@@ -135,7 +135,7 @@ class BadActor:
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",
-                        "value": f"{self.transaction_type}:{self.transaction.id}",
+                        "value": f"{self.transaction_type}:{self.transaction.id}:{self.info_dict}",
                     },
                 ],
             },
