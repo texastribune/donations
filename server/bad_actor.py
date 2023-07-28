@@ -1,5 +1,6 @@
 from enum import Enum
 import logging
+import json
 from typing import List, Union
 
 import requests
@@ -53,7 +54,6 @@ class BadActor:
         self.bad_actor_request = bad_actor_request
         self.transaction = None
         self.transaction_type = None
-        self.info_dict = None
 
         try:
             self.bad_actor_api_response = self._call_bad_actor_api(bad_actor_request)
@@ -92,7 +92,7 @@ class BadActor:
         )
         self.bad_actor_api_response.items.append(sf_link_item)
 
-        info_items = [
+        bad_actor_items = [
             x
             for x in self.bad_actor_api_response.items
             if x.judgment == BadActorJudgmentType.information
@@ -103,7 +103,7 @@ class BadActor:
             if x.judgment != BadActorJudgmentType.information
         ]
 
-        info_items = self._slackify_items(info_items)
+        info_items = self._slackify_items(bad_actor_items)
         judgment_items = self._slackify_items(judgment_items)
 
         return [
@@ -128,14 +128,14 @@ class BadActor:
                             "text": "Approve",
                         },
                         "style": "primary",
-                        "value": f"{self.transaction_type}:{self.transaction.id}:{info_items}",
+                        "value": json.dumps(bad_actor_items),
                     },
                     {
                         "action_id": "reject_new",
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",
-                        "value": f"{self.transaction_type}:{self.transaction.id}:{info_items}",
+                        "value": json.dumps(bad_actor_items),
                     },
                 ],
             },
