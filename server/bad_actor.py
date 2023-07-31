@@ -92,12 +92,15 @@ class BadActor:
         )
         self.bad_actor_api_response.items.append(sf_link_item)
 
+        info_items = []
+        judgment_items = []
+        bad_actor_dict = {}
         for x in self.bad_actor_api_response.items:
             if x.judgment == BadActorJudgmentType.information:
-                info_items += [x]
-                bad_actor_dict += {x.label: x.value}
+                info_items.append(x)
+                bad_actor_dict[x.label] = x.value
             else:
-                judgment_items += [x]
+                judgment_items.append(x)
         
         logging.info(f'bad_actor_dict: {bad_actor_dict}')
         logging.info(f'info_items: {info_items}')
