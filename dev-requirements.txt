@@ -3,4 +3,4 @@ pytest-cov
 ipdb==0.13.9
 black==22.3.0
 mypy==0.910
-flake8==4.0.1
+flake8==6.1.0
