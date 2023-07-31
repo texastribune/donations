@@ -149,7 +149,7 @@ class BadActor:
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",
-                        "value": json.dumps(bad_actor_items),
+                        "value": json.dumps(bad_actor_dict),
                     },
                 ],
             },
