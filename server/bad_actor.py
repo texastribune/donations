@@ -92,7 +92,18 @@ class BadActor:
         )
         self.bad_actor_api_response.items.append(sf_link_item)
 
-        bad_actor_items = [
+        for x in self.bad_actor_api_response.items:
+            if x.judgment == BadActorJudgmentType.information:
+                info_items += [x]
+                bad_actor_dict += {x.label: x.value}
+            else:
+                judgment_items += [x]
+        
+        logging.info(f'bad_actor_dict: {bad_actor_dict}')
+        logging.info(f'info_items: {info_items}')
+        logging.info(f'judgment_items: {judgment_items}')
+                
+        info_items = [
             x
             for x in self.bad_actor_api_response.items
             if x.judgment == BadActorJudgmentType.information
@@ -103,7 +114,7 @@ class BadActor:
             if x.judgment != BadActorJudgmentType.information
         ]
 
-        info_items = self._slackify_items(bad_actor_items)
+        info_items = self._slackify_items(info_items)
         judgment_items = self._slackify_items(judgment_items)
 
         return [
@@ -128,7 +139,7 @@ class BadActor:
                             "text": "Approve",
                         },
                         "style": "primary",
-                        "value": json.dumps(bad_actor_items),
+                        "value": json.dumps(bad_actor_dict),
                     },
                     {
                         "action_id": "reject_new",
