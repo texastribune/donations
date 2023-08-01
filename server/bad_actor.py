@@ -108,7 +108,7 @@ class BadActor:
                 bad_actor_dict[x.label] = x.value
             else:
                 if x.label == "amount":
-                    bad_actor_dict["amount"] = int(x.value)
+                    bad_actor_dict["amount"] = int(float(x.value))
                 judgment_items.append(x)
         
         logging.info(f'bad_actor_dict: {bad_actor_dict}')
