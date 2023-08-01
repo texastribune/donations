@@ -53,8 +53,8 @@ class BadActor:
     def __init__(self, bad_actor_request):
         self.bad_actor_request = bad_actor_request
         self.transaction = None
-        self.transaction_source = None
         self.transaction_type = None
+        self.transaction_data = {}
 
         try:
             self.bad_actor_api_response = self._call_bad_actor_api(bad_actor_request)
@@ -91,30 +91,8 @@ class BadActor:
             value=slackified_txn_link,
             judgment=BadActorJudgmentType.information,
         )
-        source_item = BadActorResponseItem(
-            label="source",
-            value=self.transaction_source,
-            judgment=BadActorJudgmentType.information,
-        )
         self.bad_actor_api_response.items.append(sf_link_item)
-        self.bad_actor_api_response.items.append(source_item)
 
-        info_items = []
-        judgment_items = []
-        bad_actor_dict = {}
-        for x in self.bad_actor_api_response.items:
-            if x.judgment == BadActorJudgmentType.information:
-                info_items.append(x)
-                bad_actor_dict[x.label] = x.value
-            else:
-                if x.label == "amount":
-                    bad_actor_dict["amount"] = int(float(x.value))
-                judgment_items.append(x)
-        
-        logging.info(f'bad_actor_dict: {bad_actor_dict}')
-        logging.info(f'info_items: {info_items}')
-        logging.info(f'judgment_items: {judgment_items}')
-                
         info_items = [
             x
             for x in self.bad_actor_api_response.items
@@ -128,6 +106,8 @@ class BadActor:
 
         info_items = self._slackify_items(info_items)
         judgment_items = self._slackify_items(judgment_items)
+
+
 
         return [
             {
@@ -151,14 +131,14 @@ class BadActor:
                             "text": "Approve",
                         },
                         "style": "primary",
-                        "value": json.dumps(bad_actor_dict),
+                        "value": json.dumps(self.transaction_data),
                     },
                     {
                         "action_id": "reject_new",
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",
-                        "value": json.dumps(bad_actor_dict),
+                        "value": json.dumps(self.transaction_data),
                     },
                 ],
             },
@@ -175,10 +155,15 @@ class BadActor:
         response = webhook.send(blocks=blocks)
         logging.info(response)
 
-    def notify_bad_actor(self, transaction_type, transaction, transaction_source):
+    def notify_bad_actor(
+            self,
+            transaction_type,
+            transaction,
+            transaction_data):
+
         self.transaction_type = transaction_type
         self.transaction = transaction
-        self.transaction_source = transaction_source
+        self.transaction_data = transaction_data
 
         if self.bad_actor_api_response.overall_judgment < BadActorJudgmentType.suspect:
             logging.info("not a bad actor; returning")
