@@ -413,7 +413,9 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         if quarantine:
             contact = get_or_create_contact(form)
             bad_actor_response.notify_bad_actor(
-                transaction_type="Opportunity", transaction=contact
+                transaction_type="Opportunity",
+                transaction=contact,
+                transaction_source=customer["id"],
             )
             return True
 
@@ -423,7 +425,11 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     else:
         if quarantine:
             contact = get_or_create_contact(form)
-            bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=contact)
+            bad_actor_response.notify_bad_actor(
+                transaction_type="RDO",
+                transaction=contact,
+                transaction_source=customer["id"],
+            )
             return True
 
         logging.info("----Creating recurring payment...")

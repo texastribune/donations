@@ -53,6 +53,7 @@ class BadActor:
     def __init__(self, bad_actor_request):
         self.bad_actor_request = bad_actor_request
         self.transaction = None
+        self.transaction_source = None
         self.transaction_type = None
 
         try:
@@ -90,7 +91,13 @@ class BadActor:
             value=slackified_txn_link,
             judgment=BadActorJudgmentType.information,
         )
+        source_item = BadActorResponseItem(
+            label="source",
+            value=self.transaction_source,
+            judgment=BadActorJudgmentType.information,
+        )
         self.bad_actor_api_response.items.append(sf_link_item)
+        self.bad_actor_api_response.items.append(source_item)
 
         info_items = []
         judgment_items = []
@@ -166,9 +173,10 @@ class BadActor:
         response = webhook.send(blocks=blocks)
         logging.info(response)
 
-    def notify_bad_actor(self, transaction_type, transaction):
+    def notify_bad_actor(self, transaction_type, transaction, transaction_source):
         self.transaction_type = transaction_type
         self.transaction = transaction
+        self.transaction_source = transaction_source
 
         if self.bad_actor_api_response.overall_judgment < BadActorJudgmentType.suspect:
             logging.info("not a bad actor; returning")
