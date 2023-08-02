@@ -413,8 +413,8 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         if quarantine:
             contact = get_or_create_contact(form)
             form["source"] = customer["id"]
+            form["amount_w_fees"] = amount_to_charge_stripe(form)
             bad_actor_response.notify_bad_actor(
-                transaction_type="Opportunity",
                 transaction=contact,
                 transaction_data=form
             )
@@ -427,8 +427,8 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         if quarantine:
             contact = get_or_create_contact(form)
             form["source"] = customer["id"]
+            form["amount_w_fees"] = amount_to_charge_stripe(form)
             bad_actor_response.notify_bad_actor(
-                transaction_type="RDO",
                 transaction=contact,
                 transaction_data=form
             )

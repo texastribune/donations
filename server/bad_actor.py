@@ -53,7 +53,6 @@ class BadActor:
     def __init__(self, bad_actor_request):
         self.bad_actor_request = bad_actor_request
         self.transaction = None
-        self.transaction_type = None
         self.transaction_data = {}
 
         try:
@@ -107,8 +106,6 @@ class BadActor:
         info_items = self._slackify_items(info_items)
         judgment_items = self._slackify_items(judgment_items)
 
-
-
         return [
             {
                 "type": "section",
@@ -157,11 +154,9 @@ class BadActor:
 
     def notify_bad_actor(
             self,
-            transaction_type,
             transaction,
             transaction_data):
 
-        self.transaction_type = transaction_type
         self.transaction = transaction
         self.transaction_data = transaction_data
 
