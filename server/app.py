@@ -414,6 +414,8 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
             contact = get_or_create_contact(form)
             form["source"] = customer["id"]
             form["amount_w_fees"] = amount_to_charge_stripe(form)
+            logging.info(f"amount_w_fees og: {form['amount_w_fees']}")
+            logging.info(f"amount_w_fees floating: {float(form['amount_w_fees'])}")
             bad_actor_response.notify_bad_actor(
                 transaction=contact,
                 transaction_data=form
