@@ -903,6 +903,7 @@ def customer_subscription_created(event):
     update_next_opportunity(
         opps=rdo.opportunities(),
         invoice=invoice if invoice else stripe.Invoice.retrieve(latest_invoice),
+        subscription=subscription
     )
 
     if donation_type != "blast":
@@ -915,7 +916,7 @@ def payment_intent_succeeded(event):
     payment_intent = event['data']['object']
     invoice_id = payment_intent['invoice']
     if invoice_id:
-        invoice = stripe.Invoice.retrieve(invoice_id)
+        invoice = stripe.Invoice.retrieve(invoice_id, expand=['subscription'])
         app.logger.info(f"Payment intent invoice: {invoice}")
 
         # the initial invoice tied to a subscription is handled in the
@@ -923,6 +924,7 @@ def payment_intent_succeeded(event):
         if invoice['billing_reason'] != "subscription_create":
             update_next_opportunity(
                 invoice=invoice,
+                subscription=invoice["subscription"]
             )
     else:
         customer = stripe.Customer.retrieve(payment_intent['customer'])
@@ -1506,7 +1508,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     return rdo
 
 
-def update_next_opportunity(opps=[], invoice=None):
+def update_next_opportunity(opps=[], invoice=None, subscription=None):
     if not opps:
         opps = Opportunity.list(
             stage_name="Pledged", stripe_subscription_id=invoice["subscription"]
@@ -1519,11 +1521,11 @@ def update_next_opportunity(opps=[], invoice=None):
         if opportunity.expected_giving_date == today
     ][0]
     app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
-    transaction_id = invoice["charge"]
     amount = invoice.get("amount_paid", 0) / 100
     charge_details = {
         "StageName": "Closed Won",
-        "Stripe_Transaction_ID__c": transaction_id,
+        "Stripe_Transaction_ID__c": invoice.get("charge"),
+        "Description": subscription.get("description", "Texas Tribune Membership"),
     }
     if amount:
         charge_details["Amount"] = amount
