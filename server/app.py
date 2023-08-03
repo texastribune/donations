@@ -923,8 +923,10 @@ def payment_intent_succeeded(event):
     payment_intent = event['data']['object']
     invoice_id = payment_intent['invoice']
     if invoice_id:
-        invoice = stripe.Invoice.retrieve(invoice_id)
+        invoice = stripe.Invoice.retrieve(invoice_id, expand=['subscription'])
         app.logger.info(f"Payment intent invoice: {invoice}")
+        description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        stripe.PaymentIntent.modify(payment_intent["id"], description=description)
 
         # the initial invoice tied to a subscription is handled in the
         # customer_subscription_created func, so we ignore it here
