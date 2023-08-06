@@ -1525,7 +1525,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
 def update_next_opportunity(opps=[], invoice=None):
     if not opps:
         opps = Opportunity.list(
-            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]
+            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
         )
 
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
