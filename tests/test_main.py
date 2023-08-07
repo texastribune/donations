@@ -87,12 +87,12 @@ def test_slackify_all():
         overall_judgment=BadActorJudgmentType.suspect,
         items=[bad_actor_item1, bad_actor_item2],
     )
-    opportunity = Opportunity(sf_connection=sf)
-    opportunity.id = "baz"
+    contact = Contact(sf_connection=sf)
+    contact.id = "baz"
     bad_actor = BadActor(bad_actor_request=None)
     bad_actor.bad_actor_api_response = bad_actor_response
-    bad_actor.transaction = opportunity
-    bad_actor.transaction_type = "Opportunity"
+    bad_actor.transaction = contact
+    bad_actor.transaction_data = {"ham": "eggs"}
     expected = [
         {
             "fields": [{"text": "<quux/baz|Salesforce>", "type": "mrkdwn"}],
@@ -109,18 +109,18 @@ def test_slackify_all():
             "block_id": "choices",
             "elements": [
                 {
-                    "action_id": "approve",
+                    "action_id": "approve_new",
                     "style": "primary",
                     "text": {"emoji": True, "text": "Approve", "type": "plain_text"},
                     "type": "button",
-                    "value": "Opportunity:baz",
+                    "value": "{'ham': 'eggs'}",
                 },
                 {
-                    "action_id": "reject",
+                    "action_id": "reject_new",
                     "style": "danger",
                     "text": {"emoji": True, "text": "Reject", "type": "plain_text"},
                     "type": "button",
-                    "value": "Opportunity:baz",
+                    "value": "{'ham': 'eggs'}",
                 },
             ],
             "type": "actions",
