@@ -917,8 +917,17 @@ def payment_intent_succeeded(event):
     payment_intent = event['data']['object']
     invoice_id = payment_intent['invoice']
     if invoice_id:
-        invoice = stripe.Invoice.retrieve(invoice_id)
+        try:
+            invoice = stripe.Invoice.retrieve(invoice_id, expand=['subscription'])
+        except stripe.error.StripeError as e:
+            app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
+            return # process can not continue without invoice and will need to be retriggered from stripe
         app.logger.info(f"Payment intent invoice: {invoice}")
+        description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        try:
+            stripe.PaymentIntent.modify(payment_intent["id"], description=description)
+        except stripe.error.StripeError as e:
+            app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
 
         # the initial invoice tied to a subscription is handled in the
         # customer_subscription_created func, so we ignore it here
@@ -1511,7 +1520,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
 def update_next_opportunity(opps=[], invoice=None):
     if not opps:
         opps = Opportunity.list(
-            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]
+            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
         )
 
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
