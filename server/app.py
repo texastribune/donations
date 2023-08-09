@@ -409,29 +409,21 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     form = clean(form)
     period = form["installment_period"]
 
-    if period is None:
-        if quarantine:
-            contact = get_or_create_contact(form)
-            opportunity = add_opportunity(
-                contact=contact, form=form, customer=customer, quarantine=quarantine
-            )
-            bad_actor_response.notify_bad_actor(
-                transaction_type="Opportunity", transaction=opportunity
-            )
-            return True
+    if quarantine:
+        contact = get_or_create_contact(form)
+        form["source"] = customer["id"]
+        form["amount_w_fees"] = float(amount_to_charge_stripe(form))
+        bad_actor_response.notify_bad_actor(
+            transaction=contact,
+            transaction_data=form
+        )
+        return True
 
+    if period is None:
         logging.info("----Creating one time payment...")
         payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
         return True
     else:
-        if quarantine:
-            contact = get_or_create_contact(form)
-            rdo = add_recurring_donation(
-                contact=contact, form=form, customer=customer, quarantine=quarantine
-            )
-            bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
-            return True
-
         logging.info("----Creating recurring payment...")
         if donation_type == "membership":
             subscription = create_custom_subscription(customer=customer, form=form, quarantine=quarantine)
@@ -1480,6 +1472,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
         rdo.installments = None
+
     else:
         rdo = RDO(contact=contact)
         rdo.installments = None

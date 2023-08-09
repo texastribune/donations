@@ -13,7 +13,7 @@ shell:
 
 # runs tests locally
 test:
-	docker compose -f docker-compose.test.yml run test
+	docker compose -f docker-compose.test.yml run test -vv
 
 # stops/removes all running containers and then removes any remaining volumes
 remove:
