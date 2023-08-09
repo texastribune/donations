@@ -53,7 +53,7 @@ class BadActor:
     def __init__(self, bad_actor_request):
         self.bad_actor_request = bad_actor_request
         self.transaction = None
-        self.transaction_type = None
+        self.transaction_data = {}
 
         try:
             self.bad_actor_api_response = self._call_bad_actor_api(bad_actor_request)
@@ -92,7 +92,7 @@ class BadActor:
         )
         self.bad_actor_api_response.items.append(sf_link_item)
 
-        bad_actor_items = [
+        info_items = [
             x
             for x in self.bad_actor_api_response.items
             if x.judgment == BadActorJudgmentType.information
@@ -103,7 +103,7 @@ class BadActor:
             if x.judgment != BadActorJudgmentType.information
         ]
 
-        info_items = self._slackify_items(bad_actor_items)
+        info_items = self._slackify_items(info_items)
         judgment_items = self._slackify_items(judgment_items)
 
         return [
@@ -128,14 +128,14 @@ class BadActor:
                             "text": "Approve",
                         },
                         "style": "primary",
-                        "value": json.dumps(bad_actor_items),
+                        "value": json.dumps(self.transaction_data),
                     },
                     {
                         "action_id": "reject_new",
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",
-                        "value": json.dumps(bad_actor_items),
+                        "value": json.dumps(self.transaction_data),
                     },
                 ],
             },
@@ -152,9 +152,13 @@ class BadActor:
         response = webhook.send(blocks=blocks)
         logging.info(response)
 
-    def notify_bad_actor(self, transaction_type, transaction):
-        self.transaction_type = transaction_type
+    def notify_bad_actor(
+            self,
+            transaction,
+            transaction_data):
+
         self.transaction = transaction
+        self.transaction_data = transaction_data
 
         if self.bad_actor_api_response.overall_judgment < BadActorJudgmentType.suspect:
             logging.info("not a bad actor; returning")

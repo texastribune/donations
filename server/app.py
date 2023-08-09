@@ -409,23 +409,21 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     form = clean(form)
     period = form["installment_period"]
 
-    if period is None:
-        if quarantine:
-            contact = get_or_create_contact(form)
-            bad_actor_response.notify_bad_actor(
-                transaction_type="Opportunity", transaction=contact
-            )
-            return True
+    if quarantine:
+        contact = get_or_create_contact(form)
+        form["source"] = customer["id"]
+        form["amount_w_fees"] = float(amount_to_charge_stripe(form))
+        bad_actor_response.notify_bad_actor(
+            transaction=contact,
+            transaction_data=form
+        )
+        return True
 
+    if period is None:
         logging.info("----Creating one time payment...")
         payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
         return True
     else:
-        if quarantine:
-            contact = get_or_create_contact(form)
-            bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=contact)
-            return True
-
         logging.info("----Creating recurring payment...")
         if donation_type == "membership":
             subscription = create_custom_subscription(customer=customer, form=form, quarantine=quarantine)
