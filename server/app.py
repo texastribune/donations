@@ -1521,11 +1521,11 @@ def update_next_opportunity(opps=[], invoice=None):
             stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
         )
 
-    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    charged_on = datetime.fromtimestamp(invoice["created"]).strftime('%Y-%m-%d')
     opp = [
         opportunity
         for opportunity in opps
-        if opportunity.expected_giving_date == today
+        if opportunity.expected_giving_date == charged_on
     ][0]
     app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
     transaction_id = invoice["charge"]
