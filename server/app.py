@@ -23,12 +23,13 @@ from validate_email import validate_email
 
 from .app_celery import make_celery
 from .bad_actor import BadActor
-from .charges import ChargeException, QuarantinedException, charge
+from .charges import ChargeException, QuarantinedException, charge, amount_to_charge_stripe
 from .config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
     AMAZON_SANDBOX,
     BLOCK_LIST,
+    ENABLE_BAD_ACTOR_API,
     ENABLE_PORTAL,
     ENABLE_SENTRY,
     FLASK_SECRET_KEY,
@@ -38,6 +39,7 @@ from .config import (
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
+    STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
 )
@@ -54,10 +56,34 @@ from .util import (
     notify_slack,
     send_email_new_business_membership,
     send_multiple_account_warning,
+    name_splitter,
 )
 
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = False
+
+DONATION_TYPE_INFO = {
+    "membership": {
+        "type": "Recurring Donation",
+        "description": "Texas Tribune Sustaining Membership",
+        "open_ended_status": "Open",
+    },
+    "business_membership": {
+        "type": "Business Membership",
+        "description": "Texas Tribune Business Membership",
+        "open_ended_status": "Open",
+    },
+    "circle": {
+        "type": "Giving Circle",
+        "description": "Texas Tribune Circle Membership",
+        "open_ended_status": "None",
+    },
+    "blast": {
+        "type": "The Blast",
+        "description": "Blast Subscription",
+        "open_ended_status": "Open",
+    },
+}
 
 if ENABLE_SENTRY:
     import sentry_sdk
@@ -368,6 +394,44 @@ def add_donation(form=None, customer=None, donation_type=None, bad_actor_request
     return True
 
 
+@celery.task(name="app.add_stripe_donation")
+def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_request=None):
+    """
+    Add a contact and their donation into SF. This is done in the background
+    because there are a lot of API calls and there's no point in making the
+    payer wait for them. It sends a notification about the donation to Slack (if configured).
+    """
+    quarantine = False
+    if donation_type == "membership" and ENABLE_BAD_ACTOR_API:
+        bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
+        quarantine = bad_actor_response.quarantine
+
+    form = clean(form)
+    period = form["installment_period"]
+
+    if quarantine:
+        contact = get_or_create_contact(form)
+        form["source"] = customer["id"]
+        form["amount_w_fees"] = float(amount_to_charge_stripe(form))
+        bad_actor_response.notify_bad_actor(
+            transaction=contact,
+            transaction_data=form
+        )
+        return True
+
+    if period is None:
+        logging.info("----Creating one time payment...")
+        payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
+        return True
+    else:
+        logging.info("----Creating recurring payment...")
+        if donation_type == "membership":
+            subscription = create_custom_subscription(customer=customer, form=form, quarantine=quarantine)
+        else:
+            subscription = create_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
+        return True
+
+
 def do_charge_or_show_errors(form_data, template, bundles, function, donation_type):
     app.logger.debug("----Creating Stripe customer...")
 
@@ -375,9 +439,34 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     installment_period = form_data["installment_period"]
     amount = form_data["amount"]
     stripe_token = form_data["stripeToken"]
+    name = " ".join((form_data["first_name"], form_data["last_name"]))
+    shipping_city = form_data.get("shipping_city", None)
+    shipping_street = form_data.get("shipping_street", None)
+    shipping_state = form_data.get("shipping_state", None)
+    if "zipcode" in form_data:
+        zipcode = form_data["zipcode"]
+    else:
+        zipcode = form_data["shipping_postalcode"]
+    website = form_data.get("website", None)
+    business_name = form_data.get("business_name", None)
 
     try:
-        customer = stripe.Customer.create(email=email, card=stripe_token)
+        customer = stripe.Customer.create(
+            email=email,
+            name=name,
+            address={
+                "line1": shipping_street,
+                "city": shipping_city,
+                "state": shipping_state,
+                "postal_code": zipcode,
+            },
+            metadata={
+                "website": website,
+                "business_name": business_name,
+            },
+            card=stripe_token
+        )
+        app.logger.debug("----Stripe customer created...")
     except stripe.error.CardError as e:
         body = e.json_body
         err = body.get("error", {})
@@ -398,10 +487,6 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     app.logger.info(f"Customer id: {customer.id}")
     bad_actor_request = None
     try:
-        if "zipcode" in form_data:
-            zipcode = form_data["zipcode"]
-        else:
-            zipcode = form_data["shipping_postalcode"]
         bad_actor_request = BadActor.create_bad_actor_request(
             headers=request.headers,
             captcha_token=form_data["recaptchaToken"],
@@ -452,12 +537,15 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if FormType is DonateForm:
         donation_type = "membership"
+        function = add_stripe_donation.delay
     elif FormType is CircleForm:
         donation_type = "circle"
+        function = add_stripe_donation.delay
     elif FormType is BlastForm:
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
+        function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
 
@@ -544,7 +632,6 @@ def business_form():
             BusinessMembershipForm,
             bundles=bundles,
             template=template,
-            function=add_business_membership.delay,
         )
 
     return render_template(
@@ -633,12 +720,15 @@ def submit_blast():
     app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
 
+    name = " ".join((request.form["first_name"], request.form["last_name"]))
     email_is_valid = validate_email(request.form["stripeEmail"])
     amount = request.form["amount"]
 
     if email_is_valid:
         customer = stripe.Customer.create(
-            email=request.form["stripeEmail"], card=request.form["stripeToken"]
+            name=name,
+            email=request.form["stripeEmail"],
+            card=request.form["stripeToken"],
         )
         app.logger.info(f"Customer id: {customer.id}")
     else:
@@ -646,14 +736,22 @@ def submit_blast():
         return render_template("error.html", message=message, bundles=bundles)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
-        add_blast_subscription.delay(customer=customer, form=clean(request.form))
+        form = clean(request.form)
 
         if amount == "349":
+            form["level"] = "blast"
+            form["installment_period"] = "yearly"
             event_label = "annual"
         elif amount == "40":
+            form["level"] = "blast"
+            form["installment_period"] = "monthly"
             event_label = "monthly"
         elif amount == "325":
+            form["level"] = "blastTaxExempt"
+            form["installment_period"] = "yearly"
             event_label = "annual tax exempt"
+
+        add_stripe_donation.delay(donation_type="blast", customer=customer, form=form)
 
         gtm = {"event_value": amount, "event_label": event_label}
 
@@ -762,6 +860,90 @@ def payout_paid(event):
         # set the payout date on those opportunities
         response = sfc.update_payout_dates(opps_to_update, payout_date)
         logging.debug(response)
+
+
+@celery.task(name="app.customer_subscription_created")
+def customer_subscription_created(event):
+    # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
+    # It starts by looking for a matching Contact (or creating one).
+    subscription = event["data"]["object"]
+    donation_type = subscription["metadata"]["donation_type"]
+    latest_invoice = subscription["latest_invoice"]
+    invoice = None
+    customer = stripe.Customer.retrieve(subscription["customer"])
+    contact = get_contact(customer)
+
+    # For a business membership, look for a matching Account (or create one).
+    # Then add a recurring donation to the Account. Next, add an Affiliation to
+    # link the Contact with the Account. Lastly, send a notification to Slack (if configured)
+    # and send an email notification about the new membership.
+    if donation_type == "business_membership":
+        if contact.work_email is None:
+            contact.work_email = contact.email
+            contact.save()
+
+        account = get_account(customer)
+        rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
+        affiliation = Affiliation.get_or_create(
+            account=account, contact=contact, role="Business Member Donor"
+        )
+        send_email_new_business_membership(account=account, contact=contact)
+    else:
+        # For a circle membership, we set up a subscription schedule which defaults to all charges
+        # being on hold for an hour before going through. We manually push through the first charge
+        # at subscription creation here.
+        if donation_type == "circle":
+            stripe.Invoice.finalize_invoice(latest_invoice)
+            invoice = stripe.Invoice.pay(latest_invoice)
+
+        rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
+
+    # if we already received an invoice object, as in the case of a circle membership,
+    # use that, otherwise retrieve the latest invoice from stripe
+    update_next_opportunity(
+        opps=rdo.opportunities(),
+        invoice=invoice if invoice else stripe.Invoice.retrieve(latest_invoice),
+    )
+
+    if donation_type != "blast":
+        notify_slack(contact=contact, rdo=rdo)
+
+
+@celery.task(name="app.payment_intent_succeeded")
+def payment_intent_succeeded(event):
+    app.logger.info(f"Payment intent event: {event}")
+    payment_intent = event['data']['object']
+    invoice_id = payment_intent['invoice']
+    if invoice_id:
+        try:
+            invoice = stripe.Invoice.retrieve(invoice_id, expand=['subscription'])
+        except stripe.error.StripeError as e:
+            app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
+            return # process can not continue without invoice and will need to be retriggered from stripe
+        app.logger.info(f"Payment intent invoice: {invoice}")
+        description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        try:
+            stripe.PaymentIntent.modify(payment_intent["id"], description=description)
+        except stripe.error.StripeError as e:
+            app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
+
+        # the initial invoice tied to a subscription is handled in the
+        # customer_subscription_created func, so we ignore it here
+        if invoice['billing_reason'] != "subscription_create":
+            update_next_opportunity(
+                invoice=invoice,
+            )
+    else:
+        customer = stripe.Customer.retrieve(payment_intent['customer'])
+        contact = get_contact(customer)
+        opportunity = log_opportunity(contact, payment_intent)
+        notify_slack(contact=contact, opportunity=opportunity)
+
+
+@celery.task(name="app.customer_subscription_deleted")
+def customer_subscription_deleted(event):
+    subscription = event["data"]["object"]
+    rdo = close_rdo(subscription["id"])
 
 
 @celery.task(name="app.authorization_notification")
@@ -881,8 +1063,6 @@ def stripehook():
     payload = request.data.decode("utf-8")
     signature = request.headers.get("Stripe-Signature", None)
 
-    app.logger.info(payload)
-
     try:
         event = stripe.Webhook.construct_event(
             payload, signature, STRIPE_WEBHOOK_SECRET
@@ -896,15 +1076,56 @@ def stripehook():
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
 
+    # setting celery's delay on these keeps the stripe call from erroring out
     if event.type == "customer.source.updated":
         customer_source_updated.delay(event)
     if event.type == "payout.paid":
         payout_paid.delay(event)
+    if event.type == "customer.subscription.created":
+        customer_subscription_created.delay(event)
+    if event.type == "payment_intent.succeeded":            
+        payment_intent_succeeded.delay(event)
+    if event.type == "customer.subscription.deleted":
+        app.logger.info(f"subscription deleted event: {event}")
+        customer_subscription_deleted.delay(event)
 
-    # TODO change this to debug later
-    app.logger.info(event)
+    return "Success", 200
 
-    return "", 200
+
+# this is just a temp func version of a piece of add_donation we're
+# reusing for quarantined records during the move to stripe subscriptions
+def get_or_create_contact(form=None):
+    first_name = form["first_name"]
+    last_name = form["last_name"]
+    email = form["stripeEmail"]
+    zipcode = form["zipcode"]
+
+    logging.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+    )
+    logging.info(contact)
+
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        logging.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        logging.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
+
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)
+
+    return contact
 
 
 def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
@@ -1004,146 +1225,6 @@ def add_recurring_donation(contact=None, form=None, customer=None, quarantine=Fa
     return rdo
 
 
-def add_business_rdo(account=None, form=None, customer=None, quarantine=False):
-    """
-    Adds a recurring business membership to Salesforce.
-    """
-
-    if form["installment_period"] is None:
-        raise Exception("installment_period must have a value")
-
-    year = datetime.now(tz=ZONE).strftime("%Y")
-
-    rdo = RDO(account=account)
-    rdo.name = f"{year} Business {account.name} Recurring"
-    rdo.type = "Business Membership"
-    rdo.record_type_name = "Business Membership"
-    rdo.stripe_customer = customer["id"]
-    rdo.campaign_id = form["campaign_id"]
-    rdo.referral_id = form["referral_id"]
-    rdo.description = "Texas Tribune Business Membership"
-    rdo.agreed_to_pay_fees = form["pay_fees_value"]
-    rdo.encouraged_by = form["reason"]
-    rdo.lead_source = "Stripe"
-    rdo.amount = form.get("amount", 0)
-    rdo.installments = None
-    rdo.open_ended_status = "Open"
-    rdo.installment_period = form["installment_period"]
-    rdo.quarantined = quarantine
-
-    apply_card_details(rdo=rdo, customer=customer)
-    rdo.save()
-
-    return rdo
-
-
-@celery.task(name="app.add_business_membership")
-def add_business_membership(
-    form=None,
-    customer=None,
-    donation_type="business_membership",
-    bad_actor_request=None,
-):
-    """
-    Adds a business membership. Both single and recurring.
-
-    It will look for a matching Contact (or create one). Then it will look for a
-    matching Account (or create one). Then it will add the single or recurring donation
-    to the Account. Then it will add an Affiliation to link the Contact with the
-    Account. It sends a notification to Slack (if configured). It will send email
-    notification about the new membership.
-
-    """
-
-    form = clean(form)
-
-    first_name = form["first_name"]
-    last_name = form["last_name"]
-    email = form["stripeEmail"]
-
-    website = form["website"]
-    business_name = form["business_name"]
-    shipping_city = form["shipping_city"]
-    shipping_street = form["shipping_street"]
-    shipping_state = form["shipping_state"]
-    shipping_postalcode = form["shipping_postalcode"]
-
-    bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
-    quarantine = bad_actor_response.quarantine
-
-    logging.info("----Getting contact....")
-    contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name
-    )
-    if contact.work_email is None:
-        contact.work_email = email
-        contact.save()
-    logging.info(contact)
-
-    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
-        logging.info(f"Changing name of contact to {first_name} {last_name}")
-        contact.first_name = first_name
-        contact.last_name = last_name
-        contact.save()
-
-    if contact.first_name != first_name or contact.last_name != last_name:
-        logging.info(
-            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
-        )
-
-    logging.info("----Getting account....")
-
-    account = Account.get_or_create(
-        record_type_name="Organization",
-        website=website,
-        name=business_name,
-        shipping_street=shipping_street,
-        shipping_city=shipping_city,
-        shipping_state=shipping_state,
-        shipping_postalcode=shipping_postalcode,
-    )
-    logging.info(account)
-
-    if form["installment_period"] not in ["yearly", "monthly"]:
-        raise Exception("Business membership must be either yearly or monthly")
-
-    logging.info("----Creating recurring business membership...")
-    rdo = add_business_rdo(
-        account=account, form=form, customer=customer, quarantine=False
-    )
-    logging.info(rdo)
-
-    logging.info("----Getting affiliation...")
-
-    affiliation = Affiliation.get_or_create(
-        account=account, contact=contact, role="Business Member Donor"
-    )
-    logging.info(affiliation)
-
-    send_email_new_business_membership(account=account, contact=contact)
-
-    # get opportunities
-    opportunities = rdo.opportunities()
-    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
-    opp = [
-        opportunity
-        for opportunity in opportunities
-        if opportunity.expected_giving_date == today
-    ][0]
-    try:
-        charge(opp)
-        notify_slack(account=account, contact=contact, rdo=rdo)
-    except ChargeException as e:
-        e.send_slack_notification()
-    except QuarantinedException:
-        bad_actor_response.notify_bad_actor(transaction_type="RDO", transaction=rdo)
-
-    if contact.duplicate_found:
-        send_multiple_account_warning(contact)
-
-    return True
-
-
 @celery.task(name="app.add_blast_subcription")
 def add_blast_subscription(form=None, customer=None):
     """
@@ -1206,3 +1287,299 @@ def add_blast_subscription(form=None, customer=None):
         pass
 
     return True
+
+
+# TODO can these funcs be moved somewhere else? (maybe util.py?)
+def create_custom_subscription(customer=None, form=None, quarantine=None):
+    amount = amount_to_charge_stripe(form)
+    source = customer["sources"]["data"][0]
+    interval = "month" if form["installment_period"] == "monthly" else "year"
+    subscription = stripe.Subscription.create(
+        customer = customer["id"],
+        default_source = source["id"],
+        description = "Texas Tribune Sustaining Membership",
+        metadata = {
+            "donation_type": "membership",
+            "donor_selected_amount": form.get("amount", 0),
+            "campaign_id": form["campaign_id"],
+            "referral_id": form["referral_id"],
+            "pay_fees": 'X' if form["pay_fees_value"] else None,
+            "encouraged_by": form["reason"],
+            "quarantine": 'X' if quarantine else None,
+        },
+        items = [{
+            "price_data": {
+                "unit_amount": int(amount * 100),
+                "currency": "usd",
+                "product": STRIPE_PRODUCTS["sustaining"],
+                "recurring": {"interval": interval},
+            }
+        }]
+    )
+    return subscription
+
+
+# TODO can these funcs be moved somewhere else? (maybe util.py?)
+def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
+    app.logger.info(f"{donation_type} form: {form}")
+    period = form["installment_period"]
+    product = STRIPE_PRODUCTS[form["level"]]
+    prices_list = stripe.Price.list(product=product)
+    price = find_price(
+        prices=prices_list,
+        period=period,
+        pay_fees=form["pay_fees_value"],
+    )
+
+    if not price:
+        app.logger.warning(f"No {form['installment_period']} price ({form['pay_fees_value']}) was found for level: {form['level']}")
+
+    app.logger.info(f"chosen price from stripe: {price}")
+    source = customer["sources"]["data"][0]
+    donation_type_info = DONATION_TYPE_INFO[donation_type]
+    metadata = {
+        "donation_type": donation_type,
+        "donor_selected_amount": form.get("amount", 0),
+        "campaign_id": form.get("campaign_id", None),
+        "referral_id": form.get("referral_id", None),
+        "pay_fees": 'X' if form["pay_fees_value"] else None,
+        "encouraged_by": form.get("reason", None),
+        "subscriber_email": form.get("subscriber_email", None),
+        "quarantine": 'X' if quarantine else None,
+    }
+
+    if donation_type == "circle":
+        subscription = stripe.SubscriptionSchedule.create(
+            customer=customer["id"],
+            start_date="now",
+            end_behavior="cancel",
+            phases=[{
+                "description": donation_type_info["description"],
+                "default_payment_method": source["id"],
+                "items": [{
+                    "price": price
+                }],
+                "iterations": 36 if period == "monthly" else 3,
+                "metadata": metadata,
+            }],
+        )
+    else:
+        subscription = stripe.Subscription.create(
+            customer=customer["id"],
+            default_source=source["id"],
+            description=donation_type_info["description"],
+            metadata=metadata,
+            items=[{
+                "price": price,
+            }],
+        )
+    return subscription
+
+
+def find_price(prices=[], period=None, pay_fees=False):
+    nickname = "fees" if pay_fees else None
+    interval = "month" if period == "monthly" else "year"
+    for price in prices:
+        if price["recurring"]["interval"] == interval \
+            and price["nickname"] == nickname:
+            return price
+
+
+def create_payment_intent(customer=None, form=None, quarantine=None):
+    amount = amount_to_charge_stripe(form)
+    payment = stripe.PaymentIntent.create(
+        amount=int(amount * 100),
+        currency="usd",
+        customer=customer["id"],
+        description="Texas Tribune Membership",
+        metadata={
+            "campaign_id": form["campaign_id"],
+            "referral_id": form["referral_id"],
+            "pay_fees": 'X' if form["pay_fees_value"] else None,
+            "encouraged_by": form["reason"],
+            "quarantine": 'X' if quarantine else None,
+        },
+        confirm = True
+    )
+    return payment
+
+
+def get_contact(customer):
+    app.logger.info(f"Incoming customer in get_contact: {customer}")
+    first_name, last_name = name_splitter(customer.get("name", ""))
+    address = customer.get("address", None)
+    zipcode = address.get("postal_code", None) if address else None
+    app.logger.info("----Getting contact....")
+    contact = Contact.get_or_create(
+        email=customer.get("email", None),
+        first_name=first_name,
+        last_name=last_name,
+        zipcode=zipcode
+    )
+
+    # TODO had initially commented out these next two ifs but within a day the "Subscriber Subscriber"
+    # issue came up, so clearly still relevant. Probably worth looking into if we can clean up the
+    # data Salesforce side so we don't need to include these fix-em lines.
+    if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
+        app.logger.info(f"Changing name of contact to {first_name} {last_name}")
+        contact.first_name = first_name
+        contact.last_name = last_name
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.first_name != first_name or contact.last_name != last_name:
+        app.logger.info(
+            f"Contact name doesn't match: {contact.first_name} {contact.last_name}"
+        )
+
+    if zipcode and not contact.created and contact.mailing_postal_code != zipcode:
+        contact.mailing_postal_code = zipcode
+        contact.save()
+
+    if contact.duplicate_found:
+        send_multiple_account_warning(contact)   
+    
+    return contact
+
+
+def get_account(customer):
+    address = customer["address"]
+    metadata = customer["metadata"]
+    
+    account = Account.get_or_create(
+        record_type_name="Organization",
+        website=metadata.get("website", None),
+        name=metadata.get("business_name", None),
+        shipping_street=address.get("line1", None),
+        shipping_city=address.get("city", None),
+        shipping_state=address.get("state", None),
+        shipping_postalcode=address.get("postal_code", None)
+    )
+
+    return account
+
+
+def log_rdo(type=None, contact=None, account=None, subscription=None):    
+    sub_meta = subscription["metadata"]
+    sub_plan = subscription["plan"]
+    customer_id = subscription["customer"]
+    donation_type_info = DONATION_TYPE_INFO[type]
+    installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
+
+    if type == "business_membership" and account:
+        rdo = RDO(account=account)
+        year = datetime.now(tz=ZONE).strftime("%Y")
+        rdo.name = f"{year} Business {account.name} Recurring"
+        rdo.record_type_name = "Business Membership"
+        rdo.installments = None
+
+    else:
+        rdo = RDO(contact=contact)
+        rdo.installments = None
+        if type == "circle":
+            rdo.installments = 36 if sub_plan["interval"] == "month" else 3
+        elif type == "blast":
+            now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+            rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
+            rdo.billing_email = contact.email
+            rdo.blast_subscription_email = sub_meta.get("subscriber_email", None)
+
+    rdo.type = donation_type_info.get("type", None)
+    rdo.stripe_customer = customer_id
+    rdo.stripe_subscription = subscription["id"]
+    rdo.description = donation_type_info.get("description", None)
+    rdo.campaign_id = sub_meta.get("campaign_id", None)
+    rdo.referral_id = sub_meta.get("referral_id", None)
+    rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
+    rdo.encouraged_by = sub_meta.get("encouraged_by", None)
+    rdo.lead_source = "Stripe"
+    rdo.amount = sub_meta.get("donor_selected_amount", 0)
+    rdo.installment_period = installment_period
+    rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
+    rdo.quarantined = True if sub_meta.get("quarantine", None) else False
+
+    source = subscription.get("default_source", None)
+    if not source:
+        source = subscription.get("default_payment_method", None)
+    card = stripe.Customer.retrieve_source(customer_id, source)
+    year = card["exp_year"]
+    month = card["exp_month"]
+    day = calendar.monthrange(year, month)[1]
+
+    rdo.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    rdo.stripe_card_brand = card["brand"]
+    rdo.stripe_card_last_4 = card["last4"]
+
+    rdo.save()
+
+    return rdo
+
+
+def update_next_opportunity(opps=[], invoice=None):
+    if not opps:
+        opps = Opportunity.list(
+            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
+        )
+
+    charged_on = datetime.fromtimestamp(invoice["created"]).strftime('%Y-%m-%d')
+    opp = [
+        opportunity
+        for opportunity in opps
+        if opportunity.expected_giving_date == charged_on
+    ][0]
+    app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
+    transaction_id = invoice["charge"]
+    amount = invoice.get("amount_paid", 0) / 100
+    charge_details = {
+        "StageName": "Closed Won",
+        "Stripe_Transaction_ID__c": transaction_id,
+    }
+    if amount:
+        charge_details["Amount"] = amount
+
+    response = Opportunity.update_stage([opp], charge_details)
+
+
+def log_opportunity(contact, payment_intent):
+    """
+    This will log a single donation to Salesforce reflected from Stripe info
+    """
+    
+    payment_meta = payment_intent["metadata"]
+    customer_id = payment_intent["customer"]
+
+    app.logger.info("----Adding opportunity...")
+
+    opportunity = Opportunity(contact=contact)
+    opportunity.stage_name = "Closed Won"
+    opportunity.amount = payment_intent.get("amount", 0) / 100
+    opportunity.stripe_customer = customer_id
+    opportunity.stripe_transaction_id = payment_intent["latest_charge"]
+    opportunity.campaign_id = payment_meta.get("campaign_id", None)
+    opportunity.referral_id = payment_meta.get("referral_id", None)
+    opportunity.description = payment_intent["description"]
+    opportunity.agreed_to_pay_fees = True if payment_meta.get("pay_fees_value", None) else False
+    opportunity.encouraged_by = payment_meta.get("encouraged_by", None)
+    opportunity.lead_source = "Stripe"
+    opportunity.quarantined = True if payment_meta.get("quarantined", None) else False
+
+    card = stripe.Customer.retrieve_source(customer_id, payment_intent["source"])
+    year = card["exp_year"]
+    month = card["exp_month"]
+    day = calendar.monthrange(year, month)[1]
+
+    opportunity.stripe_card = card["id"]
+    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
+    opportunity.stripe_card_brand = card["brand"]
+    opportunity.stripe_card_last_4 = card["last4"]
+
+    opportunity.save()
+    return opportunity
+
+
+def close_rdo(subscription_id):
+    rdo = RDO.get(subscription_id=subscription_id)
+    update_details = {"npe03__Open_Ended_Status__c": "Closed"}
+    response = RDO.update([rdo], update_details)
+    app.logger.info(response)
+    return rdo

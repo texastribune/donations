@@ -33,7 +33,7 @@ CELERY_ALWAYS_EAGER = bool_env("CELERY_ALWAYS_EAGER")
 # deprecated:
 CELERYBEAT_SCHEDULE = {
     "every-day": {
-        "task": "batch.charge_cards",
+        "task": "server.batch.charge_cards",
         "schedule": crontab(minute="0", hour=BATCH_HOURS),
     }
 }
@@ -63,6 +63,25 @@ STRIPE_KEYS = {
     "publishable_key": os.getenv("PUBLISHABLE_KEY"),
 }
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+STRIPE_PRODUCTS = {
+    "sustaining": os.getenv("STRIPE_PRODUCT_SUSTAINING", ""),
+    "bigTexMonthly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
+    "bigTexYearly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
+    "loneStarMonthly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
+    "loneStarYearly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
+    "hatsOffMonthly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
+    "hatsOffYearly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
+    "foundersMonthly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
+    "foundersYearly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
+    "chairmanMonthly": os.getenv("STRIPE_PRODUCT_CHAIRMAN", ""),
+    "chairmanYearly": os.getenv("STRIPE_PRODUCT_CHAIRMAN", ""),
+    "leadershipMonthly": os.getenv("STRIPE_PRODUCT_LEADERSHIP", ""),
+    "leadershipYearly": os.getenv("STRIPE_PRODUCT_LEADERSHIP", ""),
+    "editorMonthly": os.getenv("STRIPE_PRODUCT_EDITOR", ""),
+    "editorYearly": os.getenv("STRIPE_PRODUCT_EDITOR", ""),
+    "blast": os.getenv("STRIPE_PRODUCT_BLAST", ""),
+    "blastTaxExempt": os.getenv("STRIPE_PRODUCT_BLAST_TAX_EXEMPT", ""),
+}
 
 #######
 # Slack
@@ -121,6 +140,7 @@ AUTH0_PORTAL_AUDIENCE = os.getenv(
 ########
 # Bad Actor
 #
+ENABLE_BAD_ACTOR_API = bool_env("ENABLE_BAD_ACTOR_API")
 BAD_ACTOR_API_URL = os.getenv("BAD_ACTOR_API_URL", None)
 BAD_ACTOR_NOTIFICATION_URL = os.getenv("BAD_ACTOR_NOTIFICATION_URL", None)
 BLOCK_LIST = os.getenv("BLOCK_LIST", None)

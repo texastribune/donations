@@ -8,9 +8,12 @@ LOG_LEVEL?=INFO
 dev:
 	docker compose up
 
+shell:
+	docker compose -f docker-compose.yml run shell
+
 # runs tests locally
 test:
-	docker compose -f docker-compose.test.yml run test
+	docker compose -f docker-compose.test.yml run test -vv
 
 # stops/removes all running containers and then removes any remaining volumes
 remove:

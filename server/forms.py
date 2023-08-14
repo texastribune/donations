@@ -83,6 +83,7 @@ class CircleForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    level = HiddenField(u"Level", [validators.InputRequired()])
 
 
 class BusinessMembershipForm(BaseForm):
@@ -95,6 +96,7 @@ class BusinessMembershipForm(BaseForm):
     shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
     shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
     installment_period = StringField([validators.AnyOf(["yearly", "monthly"])])
+    level = HiddenField(u"Level", [validators.InputRequired()])
 
 
 class BlastForm(FlaskForm):
@@ -119,6 +121,7 @@ class BlastForm(FlaskForm):
     description = HiddenField(u"Description")
     pay_fees = BooleanField(u"Agree to pay fees")
     pay_fees_value = HiddenField(u"Pay Fees Value")
+    level = HiddenField(u"Subscription level")
 
 
 class BlastPromoForm(FlaskForm):

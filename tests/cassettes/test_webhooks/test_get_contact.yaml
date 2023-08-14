@@ -1,0 +1,86 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2020-03-02'
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.67.0
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.67.0", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.9.12", "platform": "Linux-5.10.47-linuxkit-x86_64-with-glibc2.28",
+        "uname": "Linux b049b77b397a 5.10.47-linuxkit #1 SMP PREEMPT Sat Jul 3 21:50:16
+        UTC 2021 x86_64 "}'
+    method: GET
+    uri: https://api.stripe.com/v1/customers/cus_O2nNxZMg42Z8e3
+  response:
+    body:
+      string: "{\n  \"id\": \"cus_O2nNxZMg42Z8e3\",\n  \"object\": \"customer\",\n
+        \ \"address\": {\n    \"city\": null,\n    \"country\": null,\n    \"line1\":
+        null,\n    \"line2\": null,\n    \"postal_code\": \"78735\",\n    \"state\":
+        null\n  },\n  \"balance\": 0,\n  \"created\": 1686226664,\n  \"currency\":
+        null,\n  \"default_currency\": null,\n  \"default_source\": \"card_1NGhmdCUjA8cLeTjA0q71h1z\",\n
+        \ \"delinquent\": false,\n  \"description\": null,\n  \"discount\": null,\n
+        \ \"email\": \"matthew.d.mccrary@gmail.com\",\n  \"invoice_prefix\": \"87A85D15\",\n
+        \ \"invoice_settings\": {\n    \"custom_fields\": null,\n    \"default_payment_method\":
+        null,\n    \"footer\": null,\n    \"rendering_options\": null\n  },\n  \"livemode\":
+        false,\n  \"metadata\": {},\n  \"name\": \"Matthew Dylan\",\n  \"next_invoice_sequence\":
+        1,\n  \"phone\": null,\n  \"preferred_locales\": [],\n  \"shipping\": null,\n
+        \ \"sources\": {\n    \"object\": \"list\",\n    \"data\": [\n      {\n        \"id\":
+        \"card_1NGhmdCUjA8cLeTjA0q71h1z\",\n        \"object\": \"card\",\n        \"address_city\":
+        null,\n        \"address_country\": null,\n        \"address_line1\": null,\n
+        \       \"address_line1_check\": null,\n        \"address_line2\": null,\n
+        \       \"address_state\": null,\n        \"address_zip\": null,\n        \"address_zip_check\":
+        null,\n        \"brand\": \"Visa\",\n        \"country\": \"US\",\n        \"customer\":
+        \"cus_O2nNxZMg42Z8e3\",\n        \"cvc_check\": \"pass\",\n        \"dynamic_last4\":
+        null,\n        \"exp_month\": 4,\n        \"exp_year\": 2024,\n        \"fingerprint\":
+        \"wWjWsxYlB3occtKP\",\n        \"funding\": \"credit\",\n        \"last4\":
+        \"4242\",\n        \"metadata\": {},\n        \"name\": null,\n        \"tokenization_method\":
+        null,\n        \"wallet\": null\n      }\n    ],\n    \"has_more\": false,\n
+        \   \"total_count\": 1,\n    \"url\": \"/v1/customers/cus_O2nNxZMg42Z8e3/sources\"\n
+        \ },\n  \"subscriptions\": {\n    \"object\": \"list\",\n    \"data\": [],\n
+        \   \"has_more\": false,\n    \"total_count\": 0,\n    \"url\": \"/v1/customers/cus_O2nNxZMg42Z8e3/subscriptions\"\n
+        \ },\n  \"tax_exempt\": \"none\",\n  \"tax_ids\": {\n    \"object\": \"list\",\n
+        \   \"data\": [],\n    \"has_more\": false,\n    \"total_count\": 0,\n    \"url\":
+        \"/v1/customers/cus_O2nNxZMg42Z8e3/tax_ids\"\n  },\n  \"test_clock\": null\n}"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2068'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 12 Jun 2023 17:05:08 GMT
+      Request-Id:
+      - req_78NGd3WgKRmSRZ
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Version:
+      - '2020-03-02'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+    status:
+      code: 200
+      message: OK
+version: 1
