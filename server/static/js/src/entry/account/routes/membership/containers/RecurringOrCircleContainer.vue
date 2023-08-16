@@ -3,12 +3,15 @@
     <recurring-or-circle
       v-if="shouldShow"
       :next-transaction="user.nextTransaction"
+      :recurring-transactions="user.recurringTransactions"
+      :can-view-as="tokenUser.canViewAs"
     />
   </transition>
 </template>
 
 <script>
 import userMixin from '../../../store/user/mixin';
+import tokenUserMixin from '../../../store/token-user/mixin';
 
 const RecurringOrCircle = () =>
   import(/* webpackChunkName: "membership-recurring-or-circle" */ '../components/RecurringOrCircle.vue');
@@ -18,7 +21,7 @@ export default {
 
   components: { RecurringOrCircle },
 
-  mixins: [userMixin],
+  mixins: [userMixin, tokenUserMixin],
 
   computed: {
     shouldShow() {

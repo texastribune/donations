@@ -89,6 +89,28 @@ const actions = {
     }
   },
 
+  [USER_TYPES.closeRdo]: async (
+    { state, getters, commit, rootState },
+    updates
+  ) => {
+    if (state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
+
+      console.log('just before the axios patch, friend');
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/rdos/close/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      console.log('the deed is done');
+    } else {
+      console.log('huh, in here I guess?');
+    }
+  },
+
   [USER_TYPES.updateCard]: async (
     { state, getters, commit, rootState },
     updates
@@ -303,6 +325,9 @@ const getters = {
 
   transactions: ({ data: { transactions = [] } }) =>
     transactions.map(transaction => formatTransaction(transaction)),
+  
+  recurringTransactions: ({ data: { recurring_transactions: recurringTransactions } }) =>
+    recurringTransactions,
 
   nextTransaction: ({ data: { next_transaction: nextTransaction } }) => {
     if (nextTransaction) {

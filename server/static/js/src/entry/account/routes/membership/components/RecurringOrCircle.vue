@@ -1,6 +1,6 @@
 <template>
   <section class="c-detail-box">
-    <div class="has-xxl-btm-marg">
+    <!-- <div class="has-xxl-btm-marg">
       <p
         v-if="failureMessage"
         role="alert"
@@ -44,37 +44,119 @@
           </template>
           <template v-if="key === 'next'">
             {{ extra.nextTransactionDate | longDate }}
+            <button @click="togglePaymentForm" class="has-text-teal">
+              <span v-if="!openPaymentForm">
+                <icon name="close" :display="{ size: 'xs', color: 'teal' }" />
+              </span>
+            </button>
           </template>
         </template>
       </info-list>
-    </div>
+    </div> -->
+    <table v-if="canViewAs" class="c-table c-table--bordered l-width-full">
+      <thead>
+        <tr>
+          <th class="t-align-left"><strong>Donation</strong></th>
+          <th class="t-align-left"><strong>Payment Method</strong></th>
+          <th class="t-align-left"><strong>Next Payment</strong></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="rdo in recurringTransactions" :key="rdo.id">
+          <td>
+            <slot name="donation" :donation="rdo.period">
+              {{ rdo.amount | currency }}, {{ rdo.period }}
+            </slot>
+          </td>
+          <td>
+            <slot name="method" :method="rdo.credit_card">
+              {{ rdo.credit_card.brand }} ending in {{ rdo.credit_card.last4 }}
+              <button
+                aria-label="change card"
+                @click="togglePaymentForm(rdo)"
+              >
+                <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
+              </button>
+            </slot>
+          </td>
+          <td>
+            <slot name="next" :next="rdo.next_payment_date">
+              {{ rdo.next_payment_date }}
+              <button
+                aria-label="cancel subscription"
+                @click="cancelDonation(rdo)"
+              >
+                <icon name="close" :display="{ size: 'b', color: 'teal' }" />
+              </button>
+            </slot>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <h1 v-show="openPaymentForm">Hell yeah!</h1>
 
     <user-internal-nav show-donation-history />
+    <card-update-new
+      :stripeCustomerId="stagedCustomerId"
+      @formSubmitted="formSubmitted"
+      @onSuccess="onSuccess"
+      @onFailure="onFailure"
+      @onClose="onClose" />
+    <confirm-modal
+      :resolve="checkModalResolve"
+      :message="'Cancel Recurring Donation?'"
+      :rejectText="'No'"
+      :acceptText="'Yes'" />
   </section>
 </template>
 
 <script>
+import { USER_TYPES } from '../../../store/types';
+
+import userMixin from '../../../store/user/mixin';
+
+import logError from '../../../utils/log-error';
+import { AxiosError } from '../../../errors';
+
+import ConfirmModal from '../../../components/ConfirmModal.vue';
 import InfoList from '../../../components/InfoList.vue';
-import CardUpdate from './CardUpdate.vue';
+import CardUpdateNew from './CardUpdateNew.vue';
 
 export default {
   name: 'MembershipRecurringOrCircle',
 
-  components: { InfoList, CardUpdate },
+  components: {
+    ConfirmModal,
+    InfoList,
+    CardUpdateNew,
+  },
+
+  mixins: [userMixin],
 
   props: {
     nextTransaction: {
       type: Object,
       required: true,
     },
+    recurringTransactions: {
+      type: Array,
+      required: false,
+    },
+    canViewAs: {
+      type: Boolean,
+      required: false,
+    }
   },
 
   data() {
     return {
       openPaymentForm: false,
+      openConfirmModal: false,
       successMessage: '',
       failureMessage: '',
       declinedCard: false,
+      checkModalResolve: () => {},
+      stagedCustomerId: '',
     }
   },
 
@@ -88,6 +170,9 @@ export default {
         stripeCustomerId,
         date: nextTransactionDate,
       } = this.nextTransaction;
+
+      console.log('well, hello there');
+      console.log(this.recurringTransactions);
 
       data.push({
         key: 'donation',
@@ -116,8 +201,10 @@ export default {
   },
 
   methods: {
-    togglePaymentForm() {
-      this.openPaymentForm = !this.openPaymentForm;
+    togglePaymentForm(rdo) {
+      this.stagedCustomerId = rdo.stripe_customer_id;
+      console.log(this.stagedCustomerId);
+      this.$modal.show('cardModal');
       const gaCardBase = {
         event: this.ga.customEventName,
         gaCategory: this.ga.userPortal.category,
@@ -143,13 +230,74 @@ export default {
   
     onSuccess(message) {
       this.successMessage = message;
-      this.openPaymentForm = false;
+      this.$modal.hide('cardModal');
     },
   
     onFailure(message) {
       this.failureMessage = message;
-      this.openPaymentForm = false;
-    }
+      this.$modal.hide('cardModal');
+    },
+
+    onClose() {
+      this.$modal.hide('cardModal');
+    },
+
+    async cancelDonation(rdo) {
+      this.updateFailure = false;
+
+      console.log(rdo.id)
+      console.log(rdo.stripe_subscription_id)
+      this.$modal.show('confirmModal');
+
+      const shouldCancel = await this.checkModalAction();
+
+      this.$modal.hide('confirmModal');
+
+      console.log('after hide modal');
+      if (shouldCancel) {
+        console.log('yup, in here');
+        try {
+          await this[USER_TYPES.closeRdo]({
+            rdoId: rdo.id,
+            stripeSubscriptionId: rdo.stripe_subscription_id,
+          });
+        } catch (err) {
+          this.updateFailure = true;
+          console.log(err);
+          // logError({err, level: 'warning'})
+
+          if (
+            err instanceof AxiosError &&
+            err.status === 400
+          ) {
+            if (
+              err.extra.data.detail === "missing data"
+            ) {
+              this.$emit(
+                'onFailure',
+                'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org',
+              )
+            }
+            else if (
+              err.extra.data.detail === "invalid card"
+            ) {
+              this.$emit(
+                'onFailure',
+                'The submitted card was declined or invalid. Please check your information and resubmit'
+              )
+            }
+          }
+        }
+      } else {
+        console.log('wait, in here?');
+      }
+    },
+
+    checkModalAction() {
+       return new Promise((resolve) => {
+         this.checkModalResolve = resolve;
+       });
+     },
   }
 };
 </script>

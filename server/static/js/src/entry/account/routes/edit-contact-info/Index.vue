@@ -22,7 +22,11 @@
       </template>
     </contact-us>
 
-    <confirm-modal :resolve="checkModalResolve" />
+    <confirm-modal
+      :resolve="checkModalResolve"
+      :message="'You have unsaved changes'"
+      :rejectText="'Keep editing'" 
+      :acceptText="'Do not save'" />
   </div>
 </template>
 
@@ -32,7 +36,7 @@ import routeMixin from '../mixin';
 import EditForm from './containers/EditFormContainer.vue';
 
 import ContactUs from '../../components/ContactUs.vue';
-import ConfirmModal from './components/ConfirmModal.vue';
+import ConfirmModal from '../../components/ConfirmModal.vue';
 import InternalNav from './components/InternalNav.vue';
 
 export default {
