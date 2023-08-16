@@ -115,7 +115,7 @@ const actions = {
     { state, getters, commit, rootState },
     updates
   ) => {
-    if (!state.viewAsEmail) {
+    if (state.viewAsEmail) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
