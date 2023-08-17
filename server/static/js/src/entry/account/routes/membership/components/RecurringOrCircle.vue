@@ -1,6 +1,6 @@
 <template>
   <section class="c-detail-box">
-    <!-- <div class="has-xxl-btm-marg">
+    <div class="has-xxl-btm-marg">
       <p
         v-if="failureMessage"
         role="alert"
@@ -15,7 +15,7 @@
       >
         <strong>{{ successMessage }}</strong>
       </p>
-      <info-list :items="data">
+      <info-list v-if="!canViewAs" :items="data">
         <template #text="{ item: { extra, key } }">
           <template v-if="key === 'donation'">
             {{ extra.amount | currency }}, {{ extra.period }}
@@ -52,49 +52,55 @@
           </template>
         </template>
       </info-list>
-    </div> -->
-    <table v-if="canViewAs" class="c-table c-table--bordered l-width-full">
-      <thead>
-        <tr>
-          <th class="t-align-left"><strong>Donation</strong></th>
-          <th class="t-align-left"><strong>Payment Method</strong></th>
-          <th class="t-align-left"><strong>Next Payment</strong></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="rdo in recurringTransactions" :key="rdo.id">
-          <td>
-            <slot name="donation" :donation="rdo.period">
-              {{ rdo.amount | currency }}, {{ rdo.period }}
-            </slot>
-          </td>
-          <td>
-            <slot name="method" :method="rdo.credit_card">
-              {{ rdo.credit_card.brand }} ending in {{ rdo.credit_card.last4 }}
-              <button
-                aria-label="change card"
-                @click="togglePaymentForm(rdo)"
-              >
-                <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
-              </button>
-            </slot>
-          </td>
-          <td>
-            <slot name="next" :next="rdo.next_payment_date">
-              {{ rdo.next_payment_date }}
-              <button
-                aria-label="cancel subscription"
-                @click="cancelDonation(rdo)"
-              >
-                <icon name="close" :display="{ size: 'b', color: 'teal' }" />
-              </button>
-            </slot>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <h1 v-show="openPaymentForm">Hell yeah!</h1>
-
+      <table v-if="canViewAs" class="c-table l-width-full">
+        <thead>
+          <tr>
+            <th class="t-align-left"><strong>Donation</strong></th>
+            <th class="t-align-left"><strong>Payment Method</strong></th>
+            <th class="t-align-left"><strong>Next Payment</strong></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="rdo in recurringTransactions" :key="rdo.id">
+            <td>
+              <slot name="donation" :donation="rdo.period">
+                {{ rdo.amount | currency }}, {{ rdo.period }}
+              </slot>
+            </td>
+            <td>
+              <slot name="method" :method="rdo.credit_card">
+                {{ rdo.credit_card.brand }} ending in {{ rdo.credit_card.last4 }}
+                <div>
+                  <button
+                    aria-label="change card"
+                    @click="togglePaymentForm(rdo)"
+                    class="has-text-teal"
+                  >
+                    Edit
+                    <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
+                  </button>
+                </div>
+              </slot>
+            </td>
+            <td>
+              <slot name="next" :next="rdo.next_payment_date">
+                {{ rdo.next_payment_date }}
+                <div>
+                  <button
+                    aria-label="cancel subscription"
+                    @click="cancelDonation(rdo)"
+                    class="has-text-teal"
+                  >
+                    Cancel
+                    <icon name="close" :display="{ size: 'b', color: 'teal' }" />
+                  </button>
+                </div>
+              </slot>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
     <user-internal-nav show-donation-history />
     <card-update-new
       :stripeCustomerId="stagedCustomerId"
@@ -265,6 +271,7 @@ export default {
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
+          this.successMessage = `Recurring donation of ${rdo.amount} (${rdo.period}) has been cancelled`;
         } catch (err) {
           this.updateFailure = true;
           console.log(err);
@@ -277,21 +284,16 @@ export default {
             if (
               err.extra.data.detail === "missing data"
             ) {
-              this.$emit(
-                'onFailure',
-                'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org',
-              )
+              this.failureMessage = 'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org'
             }
             else if (
               err.extra.data.detail === "invalid card"
             ) {
-              this.$emit(
-                'onFailure',
-                'The submitted card was declined or invalid. Please check your information and resubmit'
-              )
+              this.failureMessage = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
           }
         }
+
       } else {
         console.log('wait, in here?');
       }
