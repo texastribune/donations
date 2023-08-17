@@ -98,6 +98,7 @@
     <user-internal-nav show-donation-history />
     <card-update-new
       :stripeCustomerId="stagedCustomerId"
+      :rdoId="stagedRdoId"
       @formSubmitted="formSubmitted"
       @onSuccess="onSuccess"
       @onFailure="onFailure"
@@ -157,6 +158,7 @@ export default {
       declinedCard: false,
       checkModalResolve: () => {},
       stagedCustomerId: '',
+      stagedRdoId: '',
     }
   },
 
@@ -203,7 +205,9 @@ export default {
   methods: {
     togglePaymentForm(rdo) {
       this.stagedCustomerId = rdo.stripe_customer_id;
+      this.stagedRdoId = rdo.id;
       console.log(this.stagedCustomerId);
+      console.log(this.stagedRdoId);
       this.$modal.show('cardModal');
       const gaCardBase = {
         event: this.ga.customEventName,

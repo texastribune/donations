@@ -66,6 +66,10 @@ export default {
       type: String,
       required: true,
     },
+    rdoId: {
+      type: String,
+      required: true,
+    }
   },
 
   data() {
@@ -148,11 +152,14 @@ export default {
     },
 
     updateSalesforce() {
-      this[USER_TYPES.updateOpportunities]({
-        last4: this.stripeCard.last4,
-        year: this.stripeCard.exp_year,
-        month: this.stripeCard.exp_month,
-        brand: this.stripeCard.brand
+      this[USER_TYPES.updateRdoCard]({
+        rdoId: this.rdoId,
+        card: {
+          last4: this.stripeCard.last4,
+          year: this.stripeCard.exp_year,
+          month: this.stripeCard.exp_month,
+          brand: this.stripeCard.brand,
+        }
       });
     }
   },

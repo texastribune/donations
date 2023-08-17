@@ -97,7 +97,7 @@ const actions = {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
-      console.log('just before the axios patch, friend');
+      console.log('just before the axios patch, friend: close');
       await axios.patch(
         `${PORTAL_API_URL}persons/${userId}/rdos/close/`,
         updates,
@@ -105,9 +105,9 @@ const actions = {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log('the deed is done');
+      console.log('the deed is done: close');
     } else {
-      console.log('huh, in here I guess?');
+      console.log('huh, in here I guess?: close');
     }
   },
 
@@ -127,6 +127,28 @@ const actions = {
         }
       );
       commit(SET_UPDATED_CARD, updates);
+    }
+  },
+
+  [USER_TYPES.updateRdoCard]: async (
+    { state, getters, commit, rootState },
+    updates
+  ) => {
+    if (state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
+
+      console.log('just before the axios patch, friend: card');
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/rdos/card/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      console.log('the deed is done: card');
+    } else {
+      console.log('huh, in here I guess?: card');
     }
   },
 
