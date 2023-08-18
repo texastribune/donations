@@ -239,5 +239,5 @@ def send_email_new_business_membership(account, contact):
 
 
 def name_splitter(name) -> tuple:
-    name_array = name.split(" ", 1)
+    name_array = name.split(" ", 1) if name else ["", ""]
     return name_array[0], name_array[1]
