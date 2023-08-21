@@ -69,6 +69,10 @@ export default {
     rdoId: {
       type: String,
       required: true,
+    },
+    rdo: {
+      type: Object,
+      required: true,
     }
   },
 

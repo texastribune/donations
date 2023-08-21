@@ -12,6 +12,8 @@ import { PORTAL_API_URL } from '../../constants';
 const SET_ME = 'SET_ME';
 const SET_VIEW_AS = 'SET_VIEW_AS';
 const SET_UPDATED_CARD = 'SET_UPDATED_CARD';
+const SET_UPDATED_RDO_CARD = 'SET_UPDATED_RDO_CARD';
+const REMOVE_CLOSED_RDO = 'REMOVE_CLOSED_RDO';
 
 const initialState = {
   data: {},
@@ -37,6 +39,26 @@ const mutations = {
         brand: cardUpdates.card.brand
       }
     }
+  },
+
+  [SET_UPDATED_RDO_CARD](state, rdo) {
+    state.data.recurring_transactions.forEach(item => {
+      if (item.id == rdo.rdoId) {
+        item.credit_card = {
+          ...item.credit_card,
+          last4: rdo.card.last4,
+          brand: rdo.card.brand
+        }
+      }
+    })
+  },
+
+  [REMOVE_CLOSED_RDO](state, rdo) {
+    const recurringTransactions = state.data.recurring_transactions.filter(item =>
+      item.id !== rdo.rdoId
+    );
+    console.log(recurringTransactions);
+    state.data.recurring_transactions = recurringTransactions;
   }
 };
 
@@ -106,6 +128,7 @@ const actions = {
         }
       );
       console.log('the deed is done: close');
+      commit(REMOVE_CLOSED_RDO, updates);
     } else {
       console.log('huh, in here I guess?: close');
     }
@@ -146,9 +169,7 @@ const actions = {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log('the deed is done: card');
-    } else {
-      console.log('huh, in here I guess?: card');
+      commit(SET_UPDATED_RDO_CARD, updates);
     }
   },
 

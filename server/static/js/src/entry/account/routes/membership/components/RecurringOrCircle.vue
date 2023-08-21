@@ -179,9 +179,6 @@ export default {
         date: nextTransactionDate,
       } = this.nextTransaction;
 
-      console.log('well, hello there');
-      console.log(this.recurringTransactions);
-
       data.push({
         key: 'donation',
         heading: 'Donation',
@@ -212,8 +209,7 @@ export default {
     togglePaymentForm(rdo) {
       this.stagedCustomerId = rdo.stripe_customer_id;
       this.stagedRdoId = rdo.id;
-      console.log(this.stagedCustomerId);
-      console.log(this.stagedRdoId);
+
       this.$modal.show('cardModal');
       const gaCardBase = {
         event: this.ga.customEventName,
@@ -255,8 +251,6 @@ export default {
     async cancelDonation(rdo) {
       this.updateFailure = false;
 
-      console.log(rdo.id)
-      console.log(rdo.stripe_subscription_id)
       this.$modal.show('confirmModal');
 
       const shouldCancel = await this.checkModalAction();
@@ -265,13 +259,12 @@ export default {
 
       console.log('after hide modal');
       if (shouldCancel) {
-        console.log('yup, in here');
         try {
           await this[USER_TYPES.closeRdo]({
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
-          this.successMessage = `Recurring donation of ${rdo.amount} (${rdo.period}) has been cancelled`;
+          this.successMessage = `Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled`;
         } catch (err) {
           this.updateFailure = true;
           console.log(err);
