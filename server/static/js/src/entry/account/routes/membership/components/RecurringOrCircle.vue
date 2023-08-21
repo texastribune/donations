@@ -23,7 +23,7 @@
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
             <div>
-              <button @click="togglePaymentForm" class="has-text-teal">
+              <button class="has-text-teal" @click="togglePaymentForm">
                 <span v-if="!openPaymentForm">
                   Edit
                   <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
@@ -36,7 +36,7 @@
             </div>
             <card-update
               v-if="openPaymentForm"
-              :stripeCustomerId="extra.stripeCustomerId"
+              :stripe-customer-id="extra.stripeCustomerId"
               @formSubmitted="formSubmitted"
               @onSuccess="onSuccess"
               @onFailure="onFailure"
@@ -44,7 +44,7 @@
           </template>
           <template v-if="key === 'next'">
             {{ extra.nextTransactionDate | longDate }}
-            <button @click="togglePaymentForm" class="has-text-teal">
+            <button class="has-text-teal" @click="togglePaymentForm">
               <span v-if="!openPaymentForm">
                 <icon name="close" :display="{ size: 'xs', color: 'teal' }" />
               </span>
@@ -73,8 +73,8 @@
                 <div>
                   <button
                     aria-label="change card"
-                    @click="togglePaymentForm(rdo)"
                     class="has-text-teal"
+                    @click="togglePaymentForm(rdo)"
                   >
                     Edit
                     <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
@@ -88,8 +88,8 @@
                 <div>
                   <button
                     aria-label="cancel subscription"
-                    @click="cancelDonation(rdo)"
                     class="has-text-teal"
+                    @click="cancelDonation(rdo)"
                   >
                     Cancel
                     <icon name="close" :display="{ size: 'b', color: 'teal' }" />
@@ -111,8 +111,8 @@
     <confirm-modal
       :resolve="checkModalResolve"
       :message="'Cancel Recurring Donation?'"
-      :rejectText="'No'"
-      :acceptText="'Yes'" />
+      :reject-text="'No'"
+      :accept-text="'Yes'" />
   </section>
 </template>
 
@@ -146,7 +146,7 @@ export default {
     },
     recurringTransactions: {
       type: Array,
-      required: false,
+      required: true,
     },
     canViewAs: {
       type: Boolean,
@@ -263,7 +263,7 @@ export default {
           this.successMessage = `Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled`;
         } catch (err) {
           this.updateFailure = true;
-          // logError({err, level: 'warning'})
+          logError({err, level: 'warning'})
 
           if (
             err instanceof AxiosError &&

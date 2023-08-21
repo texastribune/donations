@@ -43,7 +43,7 @@ const mutations = {
 
   [SET_UPDATED_RDO_CARD](state, rdo) {
     state.data.recurring_transactions.forEach(item => {
-      if (item.id == rdo.rdoId) {
+      if (item.id === rdo.rdoId) {
         item.credit_card = {
           ...item.credit_card,
           last4: rdo.card.last4,

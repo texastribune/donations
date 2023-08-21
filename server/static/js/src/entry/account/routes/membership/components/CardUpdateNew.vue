@@ -80,7 +80,6 @@ export default {
 
   methods: {
     async patchCard() {
-      console.log(this.rdo);
       this.$emit(
         'formSubmitted'
       )
