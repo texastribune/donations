@@ -57,7 +57,6 @@ const mutations = {
     const recurringTransactions = state.data.recurring_transactions.filter(item =>
       item.id !== rdo.rdoId
     );
-    console.log(recurringTransactions);
     state.data.recurring_transactions = recurringTransactions;
   }
 };
@@ -119,7 +118,6 @@ const actions = {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
-      console.log('just before the axios patch, friend: close');
       await axios.patch(
         `${PORTAL_API_URL}persons/${userId}/rdos/close/`,
         updates,
@@ -127,10 +125,7 @@ const actions = {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log('the deed is done: close');
       commit(REMOVE_CLOSED_RDO, updates);
-    } else {
-      console.log('huh, in here I guess?: close');
     }
   },
 
@@ -138,7 +133,7 @@ const actions = {
     { state, getters, commit, rootState },
     updates
   ) => {
-    if (state.viewAsEmail) {
+    if (!state.viewAsEmail) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -161,7 +156,6 @@ const actions = {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
-      console.log('just before the axios patch, friend: card');
       await axios.patch(
         `${PORTAL_API_URL}persons/${userId}/rdos/card/`,
         updates,

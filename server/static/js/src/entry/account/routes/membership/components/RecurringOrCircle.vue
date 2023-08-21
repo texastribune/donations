@@ -103,8 +103,7 @@
     </div>
     <user-internal-nav show-donation-history />
     <card-update-new
-      :stripeCustomerId="stagedCustomerId"
-      :rdoId="stagedRdoId"
+      :rdo="stagedRdo"
       @formSubmitted="formSubmitted"
       @onSuccess="onSuccess"
       @onFailure="onFailure"
@@ -163,8 +162,7 @@ export default {
       failureMessage: '',
       declinedCard: false,
       checkModalResolve: () => {},
-      stagedCustomerId: '',
-      stagedRdoId: '',
+      stagedRdo: {},
     }
   },
 
@@ -207,8 +205,7 @@ export default {
 
   methods: {
     togglePaymentForm(rdo) {
-      this.stagedCustomerId = rdo.stripe_customer_id;
-      this.stagedRdoId = rdo.id;
+      this.stagedRdo = rdo;
 
       this.$modal.show('cardModal');
       const gaCardBase = {
@@ -257,7 +254,6 @@ export default {
 
       this.$modal.hide('confirmModal');
 
-      console.log('after hide modal');
       if (shouldCancel) {
         try {
           await this[USER_TYPES.closeRdo]({
@@ -267,7 +263,6 @@ export default {
           this.successMessage = `Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled`;
         } catch (err) {
           this.updateFailure = true;
-          console.log(err);
           // logError({err, level: 'warning'})
 
           if (
@@ -286,9 +281,6 @@ export default {
             }
           }
         }
-
-      } else {
-        console.log('wait, in here?');
       }
     },
 

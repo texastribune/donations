@@ -62,14 +62,6 @@ export default {
   mixins: [formStarter, contextMixin, userMixin],
 
   props: {
-    stripeCustomerId: {
-      type: String,
-      required: true,
-    },
-    rdoId: {
-      type: String,
-      required: true,
-    },
     rdo: {
       type: Object,
       required: true,
@@ -88,6 +80,7 @@ export default {
 
   methods: {
     async patchCard() {
+      console.log(this.rdo);
       this.$emit(
         'formSubmitted'
       )
@@ -102,7 +95,8 @@ export default {
       if (!this.updateFailure) {
         // opportunities in salesforce can update in the background and log any errors
         this.updateSalesforce();
-        const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved`;
+        const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved \
+          for donation of $${this.rdo.amount} (${this.rdo.period})`;
         this.$emit(
           'onSuccess',
           successMessage
@@ -125,7 +119,7 @@ export default {
         await this[USER_TYPES.updateCard]({
           tokenId: this.stripeTokenId,
           card: this.stripeCard,
-          stripeCustomerId: this.stripeCustomerId,
+          stripeCustomerId: this.rdo.stripe_customer_id,
         });
       } catch (err) {
         this.updateFailure = true;
@@ -157,7 +151,7 @@ export default {
 
     updateSalesforce() {
       this[USER_TYPES.updateRdoCard]({
-        rdoId: this.rdoId,
+        rdoId: this.rdo.id,
         card: {
           last4: this.stripeCard.last4,
           year: this.stripeCard.exp_year,
