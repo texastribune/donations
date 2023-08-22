@@ -44,11 +44,6 @@
           </template>
           <template v-if="key === 'next'">
             {{ extra.nextTransactionDate | longDate }}
-            <button class="has-text-teal" @click="togglePaymentForm">
-              <span v-if="!openPaymentForm">
-                <icon name="close" :display="{ size: 'xs', color: 'teal' }" />
-              </span>
-            </button>
           </template>
         </template>
       </info-list>
@@ -92,7 +87,7 @@
                     @click="cancelDonation(rdo)"
                   >
                     Cancel
-                    <icon name="close" :display="{ size: 'b', color: 'teal' }" />
+                    <icon name="close" :display="{ size: 's', color: 'teal' }" />
                   </button>
                 </div>
               </slot>
