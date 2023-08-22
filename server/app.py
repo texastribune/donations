@@ -922,6 +922,7 @@ def payment_intent_succeeded(event):
             return # process can not continue without invoice and will need to be retriggered from stripe
         app.logger.info(f"Payment intent invoice: {invoice}")
         description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        rerun = invoice.get("metadata", {}).get("rerun")
         try:
             stripe.PaymentIntent.modify(payment_intent["id"], description=description)
         except stripe.error.StripeError as e:
@@ -929,7 +930,7 @@ def payment_intent_succeeded(event):
 
         # the initial invoice tied to a subscription is handled in the
         # customer_subscription_created func, so we ignore it here
-        if invoice['billing_reason'] != "subscription_create":
+        if invoice['billing_reason'] != "subscription_create" or rerun:
             update_next_opportunity(
                 invoice=invoice,
             )
