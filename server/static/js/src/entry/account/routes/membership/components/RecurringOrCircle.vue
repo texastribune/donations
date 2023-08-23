@@ -26,11 +26,15 @@
               <button class="has-text-teal" @click="togglePaymentForm">
                 <span v-if="!openPaymentForm">
                   Edit
-                  <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
+                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s"
+                    ><svg aria-hidden="true"><use href="#pencil-fill"></use></svg
+                  ></span>
                 </span>
                 <span v-if="openPaymentForm">
                   Close
-                  <icon name="close" :display="{ size: 'xs', color: 'teal' }" />
+                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s"
+                    ><svg aria-hidden="true"><use href="#close"></use></svg
+                  ></span>
                 </span>
               </button>
             </div>
@@ -72,7 +76,9 @@
                     @click="togglePaymentForm(rdo)"
                   >
                     Edit
-                    <icon name="pencil-fill" :display="{ size: 'xs', color: 'teal' }" />
+                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs"
+                      ><svg aria-hidden="true"><use href="#pencil-fill"></use></svg
+                    ></span>
                   </button>
                 </div>
               </slot>
@@ -87,7 +93,9 @@
                     @click="cancelDonation(rdo)"
                   >
                     Cancel
-                    <icon name="close" :display="{ size: 's', color: 'teal' }" />
+                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs"
+                      ><svg aria-hidden="true"><use href="#close"></use></svg
+                    ></span>
                   </button>
                 </div>
               </slot>
