@@ -58,7 +58,7 @@ const mutations = {
       item.id !== rdo.rdoId
     );
     state.data.recurring_transactions = recurringTransactions;
-  }
+  },
 };
 
 const actions = {
@@ -114,7 +114,8 @@ const actions = {
     { state, getters, commit, rootState },
     updates
   ) => {
-    if (state.viewAsEmail) {
+    const { idTokenPayload } = rootState.tokenUser;
+    if (idTokenPayload['https://texastribune.org/is_staff']) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -152,7 +153,8 @@ const actions = {
     { state, getters, commit, rootState },
     updates
   ) => {
-    if (state.viewAsEmail) {
+    const { idTokenPayload } = rootState.tokenUser;
+    if (idTokenPayload['https://texastribune.org/is_staff']) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
