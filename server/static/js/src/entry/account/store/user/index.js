@@ -111,7 +111,7 @@ const actions = {
   },
 
   [USER_TYPES.closeRdo]: async (
-    { state, getters, commit, rootState },
+    { getters, commit, rootState },
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
@@ -150,7 +150,7 @@ const actions = {
   },
 
   [USER_TYPES.updateRdoCard]: async (
-    { state, getters, commit, rootState },
+    { getters, commit, rootState },
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;

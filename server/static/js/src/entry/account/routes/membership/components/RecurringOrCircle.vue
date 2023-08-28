@@ -23,7 +23,7 @@
           <template v-if="key === 'payment'">
             {{ extra.brand }} ending in {{ extra.last4 }}
             <div>
-              <button class="has-text-teal" @click="togglePaymentForm">
+              <button class="has-text-teal" @click="toggleInlinePaymentForm">
                 <span v-if="!openPaymentForm">
                   Edit
                   <span class="c-icon c-icon--teal c-icon--baseline t-size-s"
@@ -42,8 +42,8 @@
               v-if="openPaymentForm"
               :stripe-customer-id="extra.stripeCustomerId"
               @formSubmitted="formSubmitted"
-              @onSuccess="onSuccess"
-              @onFailure="onFailure"
+              @onSuccess="onInlineSuccess"
+              @onFailure="onInlineFailure"
             ></card-update>
           </template>
           <template v-if="key === 'next'">
@@ -207,6 +207,36 @@ export default {
   },
 
   methods: {
+    toggleInlinePaymentForm() {
+      this.openPaymentForm = !this.openPaymentForm;
+      const gaCardBase = {
+        event: this.ga.customEventName,
+        gaCategory: this.ga.userPortal.category,
+        gaLabel: this.ga.userPortal.labels['update-card'],
+      };
+      if (this.openPaymentForm) {
+        window.dataLayer.push({
+          ...gaCardBase,
+          gaAction: this.ga.userPortal.actions['attempt-card-update'],
+        });
+      } else {
+        window.dataLayer.push({
+          ...gaCardBase,
+          gaAction: this.ga.userPortal.actions['cancel-card-update'],
+        });
+      }
+    },
+
+    onInlineSuccess(message) {
+      this.successMessage = message;
+      this.$modal.hide('cardModal');
+    },
+  
+    onInlineFailure(message) {
+      this.failureMessage = message;
+      this.$modal.hide('cardModal');
+    },
+
     togglePaymentForm(rdo) {
       this.stagedRdo = rdo;
 
