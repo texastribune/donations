@@ -26,15 +26,15 @@
               <button class="has-text-teal" @click="toggleInlinePaymentForm">
                 <span v-if="!openPaymentForm">
                   Edit
-                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s"
-                    ><svg aria-hidden="true"><use href="#pencil-fill"></use></svg
-                  ></span>
+                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s">
+                    <svg aria-hidden="true"><use href="#pencil-fill"></use></svg>
+                  </span>
                 </span>
                 <span v-if="openPaymentForm">
                   Close
-                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s"
-                    ><svg aria-hidden="true"><use href="#close"></use></svg
-                  ></span>
+                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s">
+                    <svg aria-hidden="true"><use href="#close"></use></svg>
+                  </span>
                 </span>
               </button>
             </div>
@@ -76,9 +76,9 @@
                     @click="togglePaymentForm(rdo)"
                   >
                     Edit
-                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs"
-                      ><svg aria-hidden="true"><use href="#pencil-fill"></use></svg
-                    ></span>
+                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs">
+                      <svg aria-hidden="true"><use href="#pencil-fill"></use></svg>
+                    </span>
                   </button>
                 </div>
               </slot>
@@ -93,9 +93,9 @@
                     @click="cancelDonation(rdo)"
                   >
                     Cancel
-                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs"
-                      ><svg aria-hidden="true"><use href="#close"></use></svg
-                    ></span>
+                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs">
+                      <svg aria-hidden="true"><use href="#close"></use></svg>
+                    </span>
                   </button>
                 </div>
               </slot>
@@ -130,6 +130,7 @@ import { AxiosError } from '../../../errors';
 import ConfirmModal from '../../../components/ConfirmModal.vue';
 import InfoList from '../../../components/InfoList.vue';
 import CardUpdateNew from './CardUpdateNew.vue';
+import CardUpdate from './CardUpdate.vue';
 
 export default {
   name: 'MembershipRecurringOrCircle',
@@ -138,6 +139,7 @@ export default {
     ConfirmModal,
     InfoList,
     CardUpdateNew,
+    CardUpdate,
   },
 
   mixins: [userMixin],
@@ -229,12 +231,12 @@ export default {
 
     onInlineSuccess(message) {
       this.successMessage = message;
-      this.$modal.hide('cardModal');
+      this.openPaymentForm = false;
     },
   
     onInlineFailure(message) {
       this.failureMessage = message;
-      this.$modal.hide('cardModal');
+      this.openPaymentForm = false;
     },
 
     togglePaymentForm(rdo) {
