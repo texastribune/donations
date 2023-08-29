@@ -2,26 +2,26 @@
   <modal
     :max-width="450"
     :click-to-close="false"
-    name="modal"
+    name="confirmModal"
     width="80%"
     height="auto"
     adaptive
   >
     <div class="c-modal">
       <div class="c-modal__top l-align-center-children has-padding">
-        <h2 class="t-size-b t-align-center t-lh-b">You have unsaved changes</h2>
+        <h2 class="t-size-b t-align-center t-lh-b">{{ message }}</h2>
       </div>
       <ul class="c-modal__buttons l-width-full">
         <li>
           <base-button
-            text="Keep editing"
+            :text="rejectText"
             :display="{ size: 's' }"
             @onClick="onKeepEditing"
           />
         </li>
         <li>
           <base-button
-            text="Don't save"
+            :text="acceptText"
             :display="{ size: 's' }"
             @onClick="onAbandon"
           />
@@ -47,6 +47,18 @@ export default {
       type: Function,
       required: true,
     },
+    message: {
+      type: String,
+      required: true,
+    },
+    acceptText: {
+      type: String,
+      required: true,
+    },
+    rejectText: {
+      type: String,
+      required: true,
+    }
   },
 
   methods: {

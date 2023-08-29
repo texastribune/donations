@@ -12,6 +12,8 @@ import { PORTAL_API_URL } from '../../constants';
 const SET_ME = 'SET_ME';
 const SET_VIEW_AS = 'SET_VIEW_AS';
 const SET_UPDATED_CARD = 'SET_UPDATED_CARD';
+const SET_UPDATED_RDO_CARD = 'SET_UPDATED_RDO_CARD';
+const REMOVE_CLOSED_RDO = 'REMOVE_CLOSED_RDO';
 
 const initialState = {
   data: {},
@@ -37,7 +39,26 @@ const mutations = {
         brand: cardUpdates.card.brand
       }
     }
-  }
+  },
+
+  [SET_UPDATED_RDO_CARD](state, rdo) {
+    state.data.recurring_transactions.forEach(item => {
+      if (item.id === rdo.rdoId) {
+        item.credit_card = {
+          ...item.credit_card,
+          last4: rdo.card.last4,
+          brand: rdo.card.brand
+        }
+      }
+    })
+  },
+
+  [REMOVE_CLOSED_RDO](state, rdo) {
+    const recurringTransactions = state.data.recurring_transactions.filter(item =>
+      item.id !== rdo.rdoId
+    );
+    state.data.recurring_transactions = recurringTransactions;
+  },
 };
 
 const actions = {
@@ -89,6 +110,26 @@ const actions = {
     }
   },
 
+  [USER_TYPES.closeRdo]: async (
+    { getters, commit, rootState },
+    updates
+  ) => {
+    const { idTokenPayload } = rootState.tokenUser;
+    if (idTokenPayload['https://texastribune.org/is_staff']) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
+
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/rdos/close/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      commit(REMOVE_CLOSED_RDO, updates);
+    }
+  },
+
   [USER_TYPES.updateCard]: async (
     { state, getters, commit, rootState },
     updates
@@ -105,6 +146,26 @@ const actions = {
         }
       );
       commit(SET_UPDATED_CARD, updates);
+    }
+  },
+
+  [USER_TYPES.updateRdoCard]: async (
+    { getters, commit, rootState },
+    updates
+  ) => {
+    const { idTokenPayload } = rootState.tokenUser;
+    if (idTokenPayload['https://texastribune.org/is_staff']) {
+      const { accessToken } = rootState.tokenUser;
+      const { userId } = getters;
+
+      await axios.patch(
+        `${PORTAL_API_URL}persons/${userId}/rdos/card/`,
+        updates,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+      commit(SET_UPDATED_RDO_CARD, updates);
     }
   },
 
@@ -303,6 +364,9 @@ const getters = {
 
   transactions: ({ data: { transactions = [] } }) =>
     transactions.map(transaction => formatTransaction(transaction)),
+  
+  recurringTransactions: ({ data: { recurring_transactions: recurringTransactions } }) =>
+    recurringTransactions,
 
   nextTransaction: ({ data: { next_transaction: nextTransaction } }) => {
     if (nextTransaction) {
