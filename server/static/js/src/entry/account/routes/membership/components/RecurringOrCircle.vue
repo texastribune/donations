@@ -110,19 +110,25 @@
       @formSubmitted="formSubmitted"
       @onSuccess="onSuccess"
       @onFailure="onFailure"
-      @onClose="onClose" />
+      @onClose="onClose('cardModal')" />
     <confirm-modal
       :resolve="checkModalResolve"
-      :message="'Cancel Recurring Donation?'"
+      :heading="'Cancel Recurring Donation?'"
       :reject-text="'No'"
       :accept-text="'Yes'" />
+    <message-modal
+      :heading="heading"
+      :messageType="messageType"
+      :messageBody="messageBody" 
+      @onClose="onClose('messageModal')" />
   </section>
 </template>
 
 <script>
-import { USER_TYPES } from '../../../store/types';
+import { USER_TYPES, CONTEXT_TYPES } from '../../../store/types';
 
 import userMixin from '../../../store/user/mixin';
+import contextMixin from '../../../store/context/mixin';
 
 import logError from '../../../utils/log-error';
 import { AxiosError } from '../../../errors';
@@ -131,6 +137,7 @@ import ConfirmModal from '../../../components/ConfirmModal.vue';
 import InfoList from '../../../components/InfoList.vue';
 import CardUpdateNew from './CardUpdateNew.vue';
 import CardUpdate from './CardUpdate.vue';
+import MessageModal from '../../../components/MessageModal.vue';
 
 export default {
   name: 'MembershipRecurringOrCircle',
@@ -140,9 +147,10 @@ export default {
     InfoList,
     CardUpdateNew,
     CardUpdate,
+    MessageModal,
   },
 
-  mixins: [userMixin],
+  mixins: [contextMixin, userMixin],
 
   props: {
     nextTransaction: {
@@ -165,6 +173,9 @@ export default {
       openConfirmModal: false,
       successMessage: '',
       failureMessage: '',
+      heading: '',
+      messageBody: '',
+      messageType: '',
       declinedCard: false,
       checkModalResolve: () => {},
       stagedRdo: {},
@@ -267,17 +278,23 @@ export default {
     },
   
     onSuccess(message) {
-      this.successMessage = message;
+      this.heading = "Credit Card Update Succeeded"
+      this.messageBody = message;
+      this.messageType = 'success';
       this.$modal.hide('cardModal');
+      this.$modal.show('messageModal');
     },
   
     onFailure(message) {
-      this.failureMessage = message;
+      this.heading = "Credit Card Update Failed";
+      this.messageBody = message;
+      this.messageType = 'failure';
       this.$modal.hide('cardModal');
+      this.$modal.show('messageModal');
     },
 
-    onClose() {
-      this.$modal.hide('cardModal');
+    onClose(modal) {
+      this.$modal.hide(modal);
     },
 
     async cancelDonation(rdo) {
@@ -290,12 +307,18 @@ export default {
       this.$modal.hide('confirmModal');
 
       if (shouldCancel) {
+        this[CONTEXT_TYPES.setIsFetching](true);
         try {
           await this[USER_TYPES.closeRdo]({
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
-          this.successMessage = `Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled`;
+          this.heading='Donation Cancelled Successfully';
+          this.messageBody = `<p>Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</p>
+                              <p>We're sorry to see you go. If possible, could you let us know why 
+                                <a href="https://airtable.com/appyo1zuQd8f4hBVx/shr6ZCx0OAnhrm1BJ">here</a>?
+                              </p>`;
+          this.messageType = 'success';
         } catch (err) {
           this.updateFailure = true;
           logError({err, level: 'warning'})
@@ -314,8 +337,13 @@ export default {
             ) {
               this.failureMessage = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
+            this.heading = "Donation Cancelation Failed";
+            this.messageBody = this.failureMessage;
+            this.messageType = 'failure';
           }
         }
+      this[CONTEXT_TYPES.setIsFetching](false);
+      this.$modal.show('messageModal');
       }
     },
 
