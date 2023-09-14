@@ -9,7 +9,7 @@
   >
     <div class="c-modal">
       <div class="c-modal__heading l-align-center-children">
-        <h3 class="t-size-b t-align-center t-lh-b">Update Card</h3>
+        <h3 class="t-size-b t-align-center t-lh-b has-text-gray-dark">Update Card</h3>
       </div>
       <validation-observer v-slot="{ handleSubmit }">
         <form @submit.prevent="handleSubmit(patchCard)">

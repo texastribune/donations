@@ -113,11 +113,13 @@
       @onClose="onClose('cardModal')" />
     <confirm-modal
       :resolve="checkModalResolve"
-      :heading="'Cancel Recurring Donation?'"
+      :heading="confirmHeading"
+      :message="confirmBody"
       :reject-text="'No'"
-      :accept-text="'Yes'" />
+      :accept-text="'Yes'" 
+      @onClose="onClose('confirmModal')" />
     <message-modal
-      :heading="heading"
+      :heading="messageHeading"
       :messageType="messageType"
       :messageBody="messageBody" 
       @onClose="onClose('messageModal')" />
@@ -173,7 +175,9 @@ export default {
       openConfirmModal: false,
       successMessage: '',
       failureMessage: '',
-      heading: '',
+      confirmHeading: '',
+      confirmBody: '',
+      messageHeading: '',
       messageBody: '',
       messageType: '',
       declinedCard: false,
@@ -278,7 +282,7 @@ export default {
     },
   
     onSuccess(message) {
-      this.heading = "Credit Card Update Succeeded"
+      this.messageHeading = "We've updated your payment info"
       this.messageBody = message;
       this.messageType = 'success';
       this.$modal.hide('cardModal');
@@ -286,7 +290,7 @@ export default {
     },
   
     onFailure(message) {
-      this.heading = "Credit Card Update Failed";
+      this.messageHeading = "Credit Card Update Failed";
       this.messageBody = message;
       this.messageType = 'failure';
       this.$modal.hide('cardModal');
@@ -299,6 +303,10 @@ export default {
 
     async cancelDonation(rdo) {
       this.updateFailure = false;
+      this.confirmHeading = 'Cancel Recurring Donation?';
+      this.confirmBody = `<p>By selecting <b>yes</b>, you are canceling your recurring donation
+                            and will not be charged at your next scheduled renewal date.
+                          </p>`;
 
       this.$modal.show('confirmModal');
 
@@ -313,11 +321,15 @@ export default {
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
-          this.heading='Donation Cancelled Successfully';
-          this.messageBody = `<p>Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</p>
-                              <p>We're sorry to see you go. If possible, could you let us know why 
-                                <a href="https://airtable.com/appyo1zuQd8f4hBVx/shr6ZCx0OAnhrm1BJ">here</a>?
-                              </p>`;
+          this.messageHeading='Donation Cancelled Successfully';
+          this.messageBody = `<div class="t-size-s">Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</div>
+                              <hr/>
+                              <div>We're sorry to see you go! Can you let us know why?</div>
+                              <base-button
+                                :text="'Share your feedback'"
+                                :link="'https://airtable.com/appyo1zuQd8f4hBVx/shr6ZCx0OAnhrm1BJ'"
+                                :display="{ size: 's' }"
+                              />`;
           this.messageType = 'success';
         } catch (err) {
           this.updateFailure = true;
@@ -337,7 +349,7 @@ export default {
             ) {
               this.failureMessage = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
-            this.heading = "Donation Cancelation Failed";
+            this.messageHeading = "Donation Cancelation Failed";
             this.messageBody = this.failureMessage;
             this.messageType = 'failure';
           }

@@ -6,7 +6,12 @@
     :disabled="disabled"
     @click="onClick"
   >
-    {{ text }}
+    <span v-if="link">
+      <a href="https://airtable.com/appyo1zuQd8f4hBVx/shr6ZCx0OAnhrm1BJ">{{ text }}</a>
+    </span>
+    <span v-else>
+      {{ text }}
+    </span>
   </button>
 </template>
 
@@ -33,6 +38,11 @@ export default {
     extraClasses: {
       type: Array,
       default: () => [],
+    },
+
+    link: {
+      type: String,
+      required: false,
     },
   },
 

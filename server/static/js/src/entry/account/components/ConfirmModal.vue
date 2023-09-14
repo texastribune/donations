@@ -9,10 +9,10 @@
   >
     <div class="c-modal">
       <div class="c-modal__heading l-align-center-children has-padding">
-        <h2 class="t-size-b t-align-center t-lh-b">{{ heading }}</h2>
+        <h2 class="t-size-b t-align-center t-lh-b has-text-gray-dark">{{ heading }}</h2>
       </div>
       <div class="c-modal__body" v-if="message">
-        {{ message }}
+        <div class="t-align-center" v-html="message"></div>
       </div>
       <ul class="c-modal__buttons l-width-full">
         <li>

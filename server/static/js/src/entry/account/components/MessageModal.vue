@@ -8,15 +8,17 @@
   >
     <div class="c-modal">
       <div class="c-modal__heading l-align-center-children has-padding">
-        <h2 class="t-size-b t-align-center t-lh-b">{{ heading }}</h2>
+        <h2 class="t-size-b t-align-center t-lh-b has-text-gray-dark">
+          <span class="c-icon c-icon--baseline t-size-b">
+            <svg aria-hidden="true">
+              <use class="has-text-success" v-if="messageType == 'success'" href="#check"></use>
+              <use v-if="messageType == 'failure'" href="#close"></use>
+            </svg>
+          </span>
+          {{ heading }}
+        </h2>
       </div>
       <div class="t-align-center">
-        <span class="c-icon c-icon--teal c-icon--baseline t-size-xl">
-          <svg aria-hidden="true">
-            <use v-if="messageType == 'success'" href="#check"></use>
-            <use v-if="messageType == 'failure'" href="#close"></use>
-          </svg>
-        </span>
         <div class="c-modal__body" v-if="messageBody">
           <div v-html="messageBody"></div>
         </div>
