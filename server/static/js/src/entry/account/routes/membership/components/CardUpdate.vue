@@ -1,9 +1,20 @@
 <template>
-  <transition name="has-fade">
-    <section class="c-detail-box">
+  <modal
+    :max-width="450"
+    :click-to-close="false"
+    name="cardModal"
+    width="80%"
+    height="auto"
+    adaptive
+  >
+    <div class="c-modal">
+      <div class="c-modal__heading l-align-center-children">
+        <h3 class="t-size-b t-align-center t-lh-b has-text-gray-dark">Update Card</h3>
+      </div>
       <validation-observer v-slot="{ handleSubmit }">
         <form @submit.prevent="handleSubmit(patchCard)">
           <manual-pay
+            class="c-modal__body"
             :card="card"
             base-classes="form__manual"
             @setCardValue="setCardValue"
@@ -16,8 +27,15 @@
           </button>
         </form>
       </validation-observer>
-    </section>
-  </transition>
+    </div>
+    <button
+      class="c-modal__close has-bg-white has-text-gray"
+      aria-label="close modal"
+      @click="$emit('onClose')"
+    >
+      <icon name="close" :display="{ size: 'xxs', color: 'gray' }" />
+    </button>
+  </modal>
 </template>
 
 <script>
@@ -45,16 +63,14 @@ export default {
   mixins: [formStarter, contextMixin, userMixin],
 
   props: {
-    stripeCustomerId: {
-      type: String,
+    rdo: {
+      type: Object,
       required: true,
-    },
+    }
   },
 
   data() {
     return {
-      openPaymentForm: false,
-      formSubmitted: false,
       stripeTokenId: '',
       stripeCard: {},
       updateFailure: false,
@@ -63,11 +79,7 @@ export default {
 
   methods: {
     async patchCard() {
-      this.$emit(
-        'formSubmitted'
-      )
       this[CONTEXT_TYPES.setIsFetching](true);
-      this.formSubmitted = true;
       await createToken().then(data => {
         this.stripeTokenId = data.token.id;
         this.stripeCard = data.token.card;
@@ -76,8 +88,9 @@ export default {
       await this.updateStripe();
       if (!this.updateFailure) {
         // opportunities in salesforce can update in the background and log any errors
-        this.updateSalesforce();
-        const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved`;
+        await this.updateSalesforce();
+        const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved \
+          for donation of $${this.rdo.amount} (${this.rdo.period})`;
         this.$emit(
           'onSuccess',
           successMessage
@@ -100,7 +113,7 @@ export default {
         await this[USER_TYPES.updateCard]({
           tokenId: this.stripeTokenId,
           card: this.stripeCard,
-          stripeCustomerId: this.stripeCustomerId,
+          stripeCustomerId: this.rdo.stripe_customer_id,
         });
       } catch (err) {
         this.updateFailure = true;
@@ -130,12 +143,15 @@ export default {
       }
     },
 
-    updateSalesforce() {
-      this[USER_TYPES.updateOpportunities]({
-        last4: this.stripeCard.last4,
-        year: this.stripeCard.exp_year,
-        month: this.stripeCard.exp_month,
-        brand: this.stripeCard.brand
+    async updateSalesforce() {
+      await this[USER_TYPES.updateRdoCard]({
+        rdoId: this.rdo.id,
+        card: {
+          last4: this.stripeCard.last4,
+          year: this.stripeCard.exp_year,
+          month: this.stripeCard.exp_month,
+          brand: this.stripeCard.brand,
+        }
       });
     }
   },

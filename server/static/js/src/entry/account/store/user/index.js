@@ -111,11 +111,12 @@ const actions = {
   },
 
   [USER_TYPES.closeRdo]: async (
-    { getters, commit, rootState },
+    { state, getters, commit, rootState },
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
-    if (idTokenPayload['https://texastribune.org/is_staff']) {
+    if (!state.viewAsEmail || 
+      (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -134,7 +135,8 @@ const actions = {
     { state, getters, commit, rootState },
     updates
   ) => {
-    if (!state.viewAsEmail) {
+    if (!state.viewAsEmail || 
+      (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -150,11 +152,12 @@ const actions = {
   },
 
   [USER_TYPES.updateRdoCard]: async (
-    { getters, commit, rootState },
+    { state, getters, commit, rootState },
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
-    if (idTokenPayload['https://texastribune.org/is_staff']) {
+    if (!state.viewAsEmail || 
+      (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -166,24 +169,6 @@ const actions = {
         }
       );
       commit(SET_UPDATED_RDO_CARD, updates);
-    }
-  },
-
-  [USER_TYPES.updateOpportunities]: async (
-    { state, getters, rootState },
-    updates
-  ) => {
-    if (!state.viewAsEmail) {
-      const { accessToken } = rootState.tokenUser;
-      const { userId } = getters;
-
-      await axios.patch(
-        `${PORTAL_API_URL}persons/${userId}/opportunities/`,
-        updates,
-        {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        }
-      );
     }
   },
 
