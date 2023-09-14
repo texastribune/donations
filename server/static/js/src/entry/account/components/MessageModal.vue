@@ -21,6 +21,12 @@
       <div class="t-align-center">
         <div class="c-modal__body" v-if="messageBody">
           <div v-html="messageBody"></div>
+          <base-button
+            v-if="link"
+            :text="linkText"
+            :display="{ isFullWidth: false, size: 's' }"
+            @onClick="onClick(link)"
+          />
         </div>
       </div>
     </div>
@@ -35,7 +41,9 @@
 </template>
 
 <script>
+import BaseButton from './BaseButton.vue';
 export default {
+  components: { BaseButton },
   name: 'MessageModal',
 
   props: {
@@ -43,14 +51,32 @@ export default {
       type: String,
       required: true,
     },
+
     messageType: {
       type: String,
       required: true,
     },
+
     messageBody: {
       type: String,
       required: true,
     },
+
+    link: {
+      type: String,
+      required: false,
+    },
+
+    linkText: {
+      type: String,
+      required: false,
+    },
   },
+
+  methods: {
+    onClick(link) {
+      window.open(link);
+    }
+  }
 };
 </script>

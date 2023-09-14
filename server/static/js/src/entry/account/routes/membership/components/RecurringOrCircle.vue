@@ -121,7 +121,9 @@
     <message-modal
       :heading="messageHeading"
       :messageType="messageType"
-      :messageBody="messageBody" 
+      :messageBody="messageBody"
+      :link="messageLink"
+      :linkText="messageLinkText"
       @onClose="onClose('messageModal')" />
   </section>
 </template>
@@ -159,6 +161,18 @@ export default {
       type: Object,
       required: true,
     },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+    },
     recurringTransactions: {
       type: Array,
       required: true,
@@ -180,6 +194,8 @@ export default {
       messageHeading: '',
       messageBody: '',
       messageType: '',
+      messageLink: '',
+      messageLinkText: '',
       declinedCard: false,
       checkModalResolve: () => {},
       stagedRdo: {},
@@ -290,7 +306,7 @@ export default {
     },
   
     onFailure(message) {
-      this.messageHeading = "Credit Card Update Failed";
+      this.messageHeading = "We weren't able to update your payment info";
       this.messageBody = message;
       this.messageType = 'failure';
       this.$modal.hide('cardModal');
@@ -321,16 +337,13 @@ export default {
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
-          this.messageHeading='Donation Cancelled Successfully';
+          this.messageHeading="We've cancelled your recurring donation";
           this.messageBody = `<div class="t-size-s">Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</div>
-                              <hr/>
-                              <div>We're sorry to see you go! Can you let us know why?</div>
-                              <base-button
-                                :text="'Share your feedback'"
-                                :link="'https://airtable.com/appyo1zuQd8f4hBVx/shr6ZCx0OAnhrm1BJ'"
-                                :display="{ size: 's' }"
-                              />`;
+                              <hr class="has-b-btm-marg"/>
+                              <div class="has-b-btm-marg">We're sorry to see you go! Can you let us know why?</div>`;
           this.messageType = 'success';
+          this.messageLink = `https://airtable.com/appmeSLgv6yUW4HcC/shraO409FOodYJs68?prefill_First+name=${this.firstName}&prefill_Last+name=${this.lastName}&prefill_Email=${this.email}`;
+          this.messageLinkText = "Share your feedback";
         } catch (err) {
           this.updateFailure = true;
           logError({err, level: 'warning'})
@@ -349,7 +362,7 @@ export default {
             ) {
               this.failureMessage = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
-            this.messageHeading = "Donation Cancelation Failed";
+            this.messageHeading = "We weren't able to cancel your donation";
             this.messageBody = this.failureMessage;
             this.messageType = 'failure';
           }
