@@ -135,6 +135,7 @@ const actions = {
     { state, getters, commit, rootState },
     updates
   ) => {
+    const { idTokenPayload } = rootState.tokenUser;
     if (!state.viewAsEmail || 
       (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
