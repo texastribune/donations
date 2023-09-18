@@ -207,7 +207,7 @@ export default {
             gaLabel: this.ga.userPortal.labels['cancel-donation'],
           });
           this.messageHeading="We've cancelled your recurring donation";
-          this.messageBody = `<div class="t-size-s">Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</div>
+          this.messageBody = `<div class="t-size-s">Your ${rdo.period} donation of $${rdo.amount} has been cancelled.</div>
                               <hr class="has-b-btm-marg"/>
                               <div class="has-b-btm-marg">We're sorry to see you go! Can you let us know why?</div>`;
           this.messageType = 'success';

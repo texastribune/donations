@@ -89,8 +89,8 @@ export default {
       if (!this.updateFailure) {
         // opportunities in salesforce can update in the background and log any errors
         await this.updateSalesforce();
-        const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved \
-          for donation of $${this.rdo.amount} (${this.rdo.period})`;
+        const successMessage = `Card ending in <b>${this.stripeCard.last4}</b>, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved \
+          for your ${this.rdo.period} donation of $${this.rdo.amount}`;
         this.$emit(
           'onSuccess',
           successMessage
