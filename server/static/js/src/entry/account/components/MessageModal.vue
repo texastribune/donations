@@ -12,7 +12,7 @@
           <span class="c-icon c-icon--baseline t-size-b">
             <svg aria-hidden="true">
               <use class="has-text-success" v-if="messageType == 'success'" href="#check"></use>
-              <use v-if="messageType == 'failure'" href="#close"></use>
+              <use class="has-text-failure" v-if="messageType == 'failure'" href="#close"></use>
             </svg>
           </span>
           {{ heading }}

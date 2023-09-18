@@ -232,7 +232,6 @@ export default {
               this.messageBody = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
             this.messageHeading = "We weren't able to cancel your donation";
-            this.messageBody = this.failureMessage;
             this.messageType = 'failure';
           }
         }
