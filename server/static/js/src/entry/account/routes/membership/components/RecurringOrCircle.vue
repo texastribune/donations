@@ -159,6 +159,8 @@ export default {
       this.messageHeading = "We've updated your payment info"
       this.messageBody = message;
       this.messageType = 'success';
+      this.messageLink = '';
+      this.messageLinkText = '';
       this.$modal.hide('cardModal');
       this.$modal.show('messageModal');
     },
@@ -167,6 +169,8 @@ export default {
       this.messageHeading = "We weren't able to update your payment info";
       this.messageBody = message;
       this.messageType = 'failure';
+      this.messageLink = '';
+      this.messageLinkText = '';
       this.$modal.hide('cardModal');
       this.$modal.show('messageModal');
     },
@@ -206,7 +210,7 @@ export default {
             gaAction: this.ga.userPortal.actions['successful-cancel-donation'],
             gaLabel: this.ga.userPortal.labels['cancel-donation'],
           });
-          this.messageHeading="We've cancelled your recurring donation";
+          this.messageHeading = "We've cancelled your recurring donation";
           this.messageBody = `<div class="t-size-s">Your ${rdo.period} donation of $${rdo.amount} has been cancelled.</div>
                               <hr class="has-b-btm-marg"/>
                               <div class="has-b-btm-marg">We're sorry to see you go! Can you let us know why?</div>`;
@@ -233,6 +237,8 @@ export default {
             }
             this.messageHeading = "We weren't able to cancel your donation";
             this.messageType = 'failure';
+            this.messageLink = '';
+            this.messageLinkText = '';
           }
         }
       this[CONTEXT_TYPES.setIsFetching](false);
