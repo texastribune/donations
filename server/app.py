@@ -60,7 +60,7 @@ from .util import (
 )
 
 ZONE = timezone(TIMEZONE)
-USE_THERMOMETER = False
+USE_THERMOMETER = True
 
 DONATION_TYPE_INFO = {
     "membership": {
@@ -1084,7 +1084,7 @@ def stripehook():
         payout_paid.delay(event)
     if event.type == "customer.subscription.created":
         customer_subscription_created.delay(event)
-    if event.type == "payment_intent.succeeded":            
+    if event.type == "payment_intent.succeeded":
         payment_intent_succeeded.delay(event)
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
@@ -1438,15 +1438,15 @@ def get_contact(customer):
         contact.save()
 
     if contact.duplicate_found:
-        send_multiple_account_warning(contact)   
-    
+        send_multiple_account_warning(contact)
+
     return contact
 
 
 def get_account(customer):
     address = customer["address"]
     metadata = customer["metadata"]
-    
+
     account = Account.get_or_create(
         record_type_name="Organization",
         website=metadata.get("website", None),
@@ -1460,7 +1460,7 @@ def get_account(customer):
     return account
 
 
-def log_rdo(type=None, contact=None, account=None, subscription=None):    
+def log_rdo(type=None, contact=None, account=None, subscription=None):
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
@@ -1545,7 +1545,7 @@ def log_opportunity(contact, payment_intent):
     """
     This will log a single donation to Salesforce reflected from Stripe info
     """
-    
+
     payment_meta = payment_intent["metadata"]
     customer_id = payment_intent["customer"]
 
