@@ -58,8 +58,9 @@ export const GA_USER_PORTAL = {
     'marketing-opt-in': 'marketing opt-in',
     'marketing-opt-out': 'marketing opt-out',
     'attempt-card-update': 'attempt credit card update',
-    'cancel-card-update': 'cancel credit card update',
-    'submit-card-update': 'submit credit card update',
+    'successful-card-update': 'successful credit card update',
+    'attempt-cancel-donation': 'attempt donation cancellation',
+    'successful-cancel-donation': 'successful donation cancellation',
   },
   labels: {
     home: 'account overview',
@@ -75,6 +76,7 @@ export const GA_USER_PORTAL = {
     'login-linked-identity': 'link email login',
     'changed-email': 'changed email confirmation',
     'update-card': 'update credit card',
+    'cancel-donation': 'cancel recurring donation',
   },
 };
 export const GA_DONATIONS = {

@@ -1,57 +1,7 @@
 <template>
   <section class="c-detail-box">
     <div class="has-xxl-btm-marg">
-      <p
-        v-if="failureMessage"
-        role="alert"
-        class="has-b-btm-marg has-text-error"
-      >
-        <strong>{{ failureMessage }}</strong>
-      </p>
-      <p
-        v-if="successMessage"
-        role="alert"
-        class="has-b-btm-marg has-text-success"
-      >
-        <strong>{{ successMessage }}</strong>
-      </p>
-      <info-list v-if="!canViewAs" :items="data">
-        <template #text="{ item: { extra, key } }">
-          <template v-if="key === 'donation'">
-            {{ extra.amount | currency }}, {{ extra.period }}
-          </template>
-          <template v-if="key === 'payment'">
-            {{ extra.brand }} ending in {{ extra.last4 }}
-            <div>
-              <button class="has-text-teal" @click="toggleInlinePaymentForm">
-                <span v-if="!openPaymentForm">
-                  Edit
-                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s">
-                    <svg aria-hidden="true"><use href="#pencil-fill"></use></svg>
-                  </span>
-                </span>
-                <span v-if="openPaymentForm">
-                  Close
-                  <span class="c-icon c-icon--teal c-icon--baseline t-size-s">
-                    <svg aria-hidden="true"><use href="#close"></use></svg>
-                  </span>
-                </span>
-              </button>
-            </div>
-            <card-update
-              v-if="openPaymentForm"
-              :stripe-customer-id="extra.stripeCustomerId"
-              @formSubmitted="formSubmitted"
-              @onSuccess="onInlineSuccess"
-              @onFailure="onInlineFailure"
-            ></card-update>
-          </template>
-          <template v-if="key === 'next'">
-            {{ extra.nextTransactionDate | longDate }}
-          </template>
-        </template>
-      </info-list>
-      <table v-if="canViewAs" class="c-table l-width-full">
+      <table class="c-table l-width-full">
         <thead>
           <tr>
             <th class="t-align-left"><strong>Donation</strong></th>
@@ -69,7 +19,7 @@
             <td>
               <slot name="method" :method="rdo.credit_card">
                 {{ rdo.credit_card.brand }} ending in {{ rdo.credit_card.last4 }}
-                <div>
+                <div v-if="rdo.type != 'Giving Circle'">
                   <button
                     aria-label="change card"
                     class="has-text-teal"
@@ -105,9 +55,8 @@
       </table>
     </div>
     <user-internal-nav show-donation-history />
-    <card-update-new
+    <card-update
       :rdo="stagedRdo"
-      @formSubmitted="formSubmitted"
       @onSuccess="onSuccess"
       @onFailure="onFailure"
       @onClose="onClose('cardModal')" />
@@ -137,30 +86,22 @@ import contextMixin from '../../../store/context/mixin';
 import logError from '../../../utils/log-error';
 import { AxiosError } from '../../../errors';
 
-import ConfirmModal from '../../../components/ConfirmModal.vue';
-import InfoList from '../../../components/InfoList.vue';
-import CardUpdateNew from './CardUpdateNew.vue';
 import CardUpdate from './CardUpdate.vue';
+import ConfirmModal from '../../../components/ConfirmModal.vue';
 import MessageModal from '../../../components/MessageModal.vue';
 
 export default {
   name: 'MembershipRecurringOrCircle',
 
   components: {
-    ConfirmModal,
-    InfoList,
-    CardUpdateNew,
     CardUpdate,
+    ConfirmModal,
     MessageModal,
   },
 
   mixins: [contextMixin, userMixin],
 
   props: {
-    nextTransaction: {
-      type: Object,
-      required: true,
-    },
     firstName: {
       type: String,
       required: true,
@@ -185,10 +126,6 @@ export default {
 
   data() {
     return {
-      openPaymentForm: false,
-      openConfirmModal: false,
-      successMessage: '',
-      failureMessage: '',
       confirmHeading: '',
       confirmBody: '',
       messageHeading: '',
@@ -196,111 +133,34 @@ export default {
       messageType: '',
       messageLink: '',
       messageLinkText: '',
-      declinedCard: false,
       checkModalResolve: () => {},
       stagedRdo: {},
     }
   },
 
-  computed: {
-    data() {
-      const data = [];
-      const {
-        amount,
-        period,
-        card,
-        stripeCustomerId,
-        date: nextTransactionDate,
-      } = this.nextTransaction;
-
-      data.push({
-        key: 'donation',
-        heading: 'Donation',
-        extra: { amount, period },
-      });
-
-      if (card) {
-        const { brand, last4 } = card;
-
-        data.push({
-          key: 'payment',
-          heading: 'Payment method',
-          extra: { brand, last4, stripeCustomerId },
-        });
-      }
-
-      data.push({
-        key: 'next',
-        heading: 'Next payment',
-        extra: { nextTransactionDate },
-      });
-
-      return data;
-    },
-  },
-
   methods: {
-    toggleInlinePaymentForm() {
-      this.openPaymentForm = !this.openPaymentForm;
-      const gaCardBase = {
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaLabel: this.ga.userPortal.labels['update-card'],
-      };
-      if (this.openPaymentForm) {
-        window.dataLayer.push({
-          ...gaCardBase,
-          gaAction: this.ga.userPortal.actions['attempt-card-update'],
-        });
-      } else {
-        window.dataLayer.push({
-          ...gaCardBase,
-          gaAction: this.ga.userPortal.actions['cancel-card-update'],
-        });
-      }
-    },
-
-    onInlineSuccess(message) {
-      this.successMessage = message;
-      this.openPaymentForm = false;
-    },
-  
-    onInlineFailure(message) {
-      this.failureMessage = message;
-      this.openPaymentForm = false;
-    },
-
     togglePaymentForm(rdo) {
-      this.stagedRdo = rdo;
-
-      this.$modal.show('cardModal');
-      const gaCardBase = {
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
+      window.dataLayer.push({
+        event: 'customUserPortalEditPaymentIntent',
+        gaAction: this.ga.userPortal.actions['attempt-card-update'],
         gaLabel: this.ga.userPortal.labels['update-card'],
-      };
-      if (this.openPaymentForm) {
-        window.dataLayer.push({
-          ...gaCardBase,
-          gaAction: this.ga.userPortal.actions['attempt-card-update'],
-        });
-      } else {
-        window.dataLayer.push({
-          ...gaCardBase,
-          gaAction: this.ga.userPortal.actions['cancel-card-update'],
-        });
-      }
-    },
-  
-    formSubmitted() {
-      this.successMessage = '';
-      this.declinedCard = false;
+      });
+
+      this.stagedRdo = rdo;
+      this.$modal.show('cardModal');
     },
   
     onSuccess(message) {
+      window.dataLayer.push({
+        event: 'customUserPortalEditPaymentSuccess',
+        gaAction: this.ga.userPortal.actions['successful-card-update'],
+        gaLabel: this.ga.userPortal.labels['update-card'],
+      });
       this.messageHeading = "We've updated your payment info"
       this.messageBody = message;
       this.messageType = 'success';
+      this.messageLink = '';
+      this.messageLinkText = '';
       this.$modal.hide('cardModal');
       this.$modal.show('messageModal');
     },
@@ -309,6 +169,8 @@ export default {
       this.messageHeading = "We weren't able to update your payment info";
       this.messageBody = message;
       this.messageType = 'failure';
+      this.messageLink = '';
+      this.messageLinkText = '';
       this.$modal.hide('cardModal');
       this.$modal.show('messageModal');
     },
@@ -318,6 +180,12 @@ export default {
     },
 
     async cancelDonation(rdo) {
+      window.dataLayer.push({
+        event: 'customUserPortalCancelIntent',
+        gaAction: this.ga.userPortal.actions['attempt-cancel-donation'],
+        gaLabel: this.ga.userPortal.labels['cancel-donation'],
+      });
+
       this.updateFailure = false;
       this.confirmHeading = 'Cancel Recurring Donation?';
       this.confirmBody = `<p>By selecting <b>yes</b>, you are canceling your recurring donation
@@ -337,8 +205,13 @@ export default {
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
-          this.messageHeading="We've cancelled your recurring donation";
-          this.messageBody = `<div class="t-size-s">Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</div>
+          window.dataLayer.push({
+            event: 'customUserPortalCancelSuccess',
+            gaAction: this.ga.userPortal.actions['successful-cancel-donation'],
+            gaLabel: this.ga.userPortal.labels['cancel-donation'],
+          });
+          this.messageHeading = "We've cancelled your recurring donation";
+          this.messageBody = `<div class="t-size-s">Your ${rdo.period} donation of $${rdo.amount} has been cancelled.</div>
                               <hr class="has-b-btm-marg"/>
                               <div class="has-b-btm-marg">We're sorry to see you go! Can you let us know why?</div>`;
           this.messageType = 'success';
@@ -355,16 +228,17 @@ export default {
             if (
               err.extra.data.detail === "missing data"
             ) {
-              this.failureMessage = 'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org'
+              this.messageBody = 'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org'
             }
             else if (
               err.extra.data.detail === "invalid card"
             ) {
-              this.failureMessage = 'The submitted card was declined or invalid. Please check your information and resubmit'
+              this.messageBody = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
             this.messageHeading = "We weren't able to cancel your donation";
-            this.messageBody = this.failureMessage;
             this.messageType = 'failure';
+            this.messageLink = '';
+            this.messageLinkText = '';
           }
         }
       this[CONTEXT_TYPES.setIsFetching](false);
