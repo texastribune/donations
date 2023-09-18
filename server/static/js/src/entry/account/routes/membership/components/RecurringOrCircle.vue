@@ -151,6 +151,11 @@ export default {
     },
   
     onSuccess(message) {
+      window.dataLayer.push({
+        event: 'customUserPortalEditPaymentSuccess',
+        gaAction: this.ga.userPortal.actions['successful-card-update'],
+        gaLabel: this.ga.userPortal.labels['update-card'],
+      });
       this.messageHeading = "We've updated your payment info"
       this.messageBody = message;
       this.messageType = 'success';
@@ -195,6 +200,11 @@ export default {
           await this[USER_TYPES.closeRdo]({
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
+          });
+          window.dataLayer.push({
+            event: 'customUserPortalCancelSuccess',
+            gaAction: this.ga.userPortal.actions['successful-cancel-donation'],
+            gaLabel: this.ga.userPortal.labels['cancel-donation'],
           });
           this.messageHeading="We've cancelled your recurring donation";
           this.messageBody = `<div class="t-size-s">Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</div>

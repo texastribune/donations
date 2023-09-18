@@ -97,13 +97,6 @@ export default {
         );
       }
       this[CONTEXT_TYPES.setIsFetching](false);
-
-      window.dataLayer.push({
-        event: this.ga.customEventName,
-        gaCategory: this.ga.userPortal.category,
-        gaAction: this.ga.userPortal.actions['submit-card-update'],
-        gaLabel: this.ga.userPortal.labels['update-card'],
-      });
     },
 
     async updateStripe() {
