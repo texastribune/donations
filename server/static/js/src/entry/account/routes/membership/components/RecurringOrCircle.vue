@@ -23,6 +23,7 @@
                   <button
                     aria-label="change card"
                     class="has-text-teal"
+                    :disabled="rdo.type == 'Giving Circle'"
                     @click="togglePaymentForm(rdo)"
                   >
                     Edit
