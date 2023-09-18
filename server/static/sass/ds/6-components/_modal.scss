@@ -6,6 +6,17 @@
     height: 6.25rem;
   }
 
+  &__heading {
+    display: flex;
+    height: 3.75rem;
+  }
+
+  &__body {
+    padding-left: $size-b;
+    padding-right: $size-b;
+    padding-bottom: $size-b;
+  }
+
   &__buttons {
     display: grid;
     gap: .1rem;

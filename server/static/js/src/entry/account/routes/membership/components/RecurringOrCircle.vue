@@ -110,19 +110,29 @@
       @formSubmitted="formSubmitted"
       @onSuccess="onSuccess"
       @onFailure="onFailure"
-      @onClose="onClose" />
+      @onClose="onClose('cardModal')" />
     <confirm-modal
       :resolve="checkModalResolve"
-      :message="'Cancel Recurring Donation?'"
+      :heading="confirmHeading"
+      :message="confirmBody"
       :reject-text="'No'"
-      :accept-text="'Yes'" />
+      :accept-text="'Yes'" 
+      @onClose="onClose('confirmModal')" />
+    <message-modal
+      :heading="messageHeading"
+      :messageType="messageType"
+      :messageBody="messageBody"
+      :link="messageLink"
+      :linkText="messageLinkText"
+      @onClose="onClose('messageModal')" />
   </section>
 </template>
 
 <script>
-import { USER_TYPES } from '../../../store/types';
+import { USER_TYPES, CONTEXT_TYPES } from '../../../store/types';
 
 import userMixin from '../../../store/user/mixin';
+import contextMixin from '../../../store/context/mixin';
 
 import logError from '../../../utils/log-error';
 import { AxiosError } from '../../../errors';
@@ -131,6 +141,7 @@ import ConfirmModal from '../../../components/ConfirmModal.vue';
 import InfoList from '../../../components/InfoList.vue';
 import CardUpdateNew from './CardUpdateNew.vue';
 import CardUpdate from './CardUpdate.vue';
+import MessageModal from '../../../components/MessageModal.vue';
 
 export default {
   name: 'MembershipRecurringOrCircle',
@@ -140,13 +151,26 @@ export default {
     InfoList,
     CardUpdateNew,
     CardUpdate,
+    MessageModal,
   },
 
-  mixins: [userMixin],
+  mixins: [contextMixin, userMixin],
 
   props: {
     nextTransaction: {
       type: Object,
+      required: true,
+    },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
       required: true,
     },
     recurringTransactions: {
@@ -165,6 +189,13 @@ export default {
       openConfirmModal: false,
       successMessage: '',
       failureMessage: '',
+      confirmHeading: '',
+      confirmBody: '',
+      messageHeading: '',
+      messageBody: '',
+      messageType: '',
+      messageLink: '',
+      messageLinkText: '',
       declinedCard: false,
       checkModalResolve: () => {},
       stagedRdo: {},
@@ -267,21 +298,31 @@ export default {
     },
   
     onSuccess(message) {
-      this.successMessage = message;
+      this.messageHeading = "We've updated your payment info"
+      this.messageBody = message;
+      this.messageType = 'success';
       this.$modal.hide('cardModal');
+      this.$modal.show('messageModal');
     },
   
     onFailure(message) {
-      this.failureMessage = message;
+      this.messageHeading = "We weren't able to update your payment info";
+      this.messageBody = message;
+      this.messageType = 'failure';
       this.$modal.hide('cardModal');
+      this.$modal.show('messageModal');
     },
 
-    onClose() {
-      this.$modal.hide('cardModal');
+    onClose(modal) {
+      this.$modal.hide(modal);
     },
 
     async cancelDonation(rdo) {
       this.updateFailure = false;
+      this.confirmHeading = 'Cancel Recurring Donation?';
+      this.confirmBody = `<p>By selecting <b>yes</b>, you are canceling your recurring donation
+                            and will not be charged at your next scheduled renewal date.
+                          </p>`;
 
       this.$modal.show('confirmModal');
 
@@ -290,12 +331,19 @@ export default {
       this.$modal.hide('confirmModal');
 
       if (shouldCancel) {
+        this[CONTEXT_TYPES.setIsFetching](true);
         try {
           await this[USER_TYPES.closeRdo]({
             rdoId: rdo.id,
             stripeSubscriptionId: rdo.stripe_subscription_id,
           });
-          this.successMessage = `Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled`;
+          this.messageHeading="We've cancelled your recurring donation";
+          this.messageBody = `<div class="t-size-s">Recurring donation of $${rdo.amount} (${rdo.period}) has been cancelled.</div>
+                              <hr class="has-b-btm-marg"/>
+                              <div class="has-b-btm-marg">We're sorry to see you go! Can you let us know why?</div>`;
+          this.messageType = 'success';
+          this.messageLink = `https://airtable.com/appmeSLgv6yUW4HcC/shraO409FOodYJs68?prefill_First+name=${this.firstName}&prefill_Last+name=${this.lastName}&prefill_Email=${this.email}`;
+          this.messageLinkText = "Share your feedback";
         } catch (err) {
           this.updateFailure = true;
           logError({err, level: 'warning'})
@@ -314,8 +362,13 @@ export default {
             ) {
               this.failureMessage = 'The submitted card was declined or invalid. Please check your information and resubmit'
             }
+            this.messageHeading = "We weren't able to cancel your donation";
+            this.messageBody = this.failureMessage;
+            this.messageType = 'failure';
           }
         }
+      this[CONTEXT_TYPES.setIsFetching](false);
+      this.$modal.show('messageModal');
       }
     },
 

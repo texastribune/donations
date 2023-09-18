@@ -3,6 +3,9 @@
     <recurring-or-circle
       v-if="shouldShow"
       :next-transaction="user.nextTransaction"
+      :first-name="user.firstName"
+      :last-name="user.lastName"
+      :email="user.email"
       :recurring-transactions="user.recurringTransactions"
       :can-view-as="tokenUser.canViewAs"
     />

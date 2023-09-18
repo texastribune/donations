@@ -24,7 +24,7 @@
 
     <confirm-modal
       :resolve="checkModalResolve"
-      :message="'You have unsaved changes'"
+      :heading="'You have unsaved changes'"
       :reject-text="'Keep editing'" 
       :accept-text="'Do not save'" />
   </div>

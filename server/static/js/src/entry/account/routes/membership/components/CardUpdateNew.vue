@@ -8,12 +8,13 @@
     adaptive
   >
     <div class="c-modal">
-      <div class="c-modal__top l-align-center-children">
-        <h3 class="t-size-b t-align-center t-lh-b">Update Card</h3>
+      <div class="c-modal__heading l-align-center-children">
+        <h3 class="t-size-b t-align-center t-lh-b has-text-gray-dark">Update Card</h3>
       </div>
       <validation-observer v-slot="{ handleSubmit }">
         <form @submit.prevent="handleSubmit(patchCard)">
           <manual-pay
+            class="c-modal__body"
             :card="card"
             base-classes="form__manual"
             @setCardValue="setCardValue"
@@ -30,7 +31,7 @@
     <button
       class="c-modal__close has-bg-white has-text-gray"
       aria-label="close modal"
-      @click="$emit('onClose', true)"
+      @click="$emit('onClose')"
     >
       <icon name="close" :display="{ size: 'xxs', color: 'gray' }" />
     </button>
@@ -93,7 +94,7 @@ export default {
       await this.updateStripe();
       if (!this.updateFailure) {
         // opportunities in salesforce can update in the background and log any errors
-        this.updateSalesforce();
+        await this.updateSalesforce();
         const successMessage = `Card ending in ${this.stripeCard.last4}, expiring ${this.stripeCard.exp_month}/${this.stripeCard.exp_year} has been saved \
           for donation of $${this.rdo.amount} (${this.rdo.period})`;
         this.$emit(
@@ -148,8 +149,8 @@ export default {
       }
     },
 
-    updateSalesforce() {
-      this[USER_TYPES.updateRdoCard]({
+    async updateSalesforce() {
+      await this[USER_TYPES.updateRdoCard]({
         rdoId: this.rdo.id,
         card: {
           last4: this.stripeCard.last4,

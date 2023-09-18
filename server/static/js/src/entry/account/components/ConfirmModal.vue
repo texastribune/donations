@@ -8,8 +8,11 @@
     adaptive
   >
     <div class="c-modal">
-      <div class="c-modal__top l-align-center-children has-padding">
-        <h2 class="t-size-b t-align-center t-lh-b">{{ message }}</h2>
+      <div class="c-modal__heading l-align-center-children has-padding">
+        <h2 class="t-size-b t-align-center t-lh-b has-text-gray-dark">{{ heading }}</h2>
+      </div>
+      <div class="c-modal__body" v-if="message">
+        <div class="t-align-center" v-html="message"></div>
       </div>
       <ul class="c-modal__buttons l-width-full">
         <li>
@@ -47,9 +50,13 @@ export default {
       type: Function,
       required: true,
     },
-    message: {
+    heading: {
       type: String,
       required: true,
+    },
+    message: {
+      type: String,
+      required: false,
     },
     acceptText: {
       type: String,
