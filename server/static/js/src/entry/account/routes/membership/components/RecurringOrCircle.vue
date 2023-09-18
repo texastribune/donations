@@ -19,11 +19,10 @@
             <td>
               <slot name="method" :method="rdo.credit_card">
                 {{ rdo.credit_card.brand }} ending in {{ rdo.credit_card.last4 }}
-                <div>
+                <div v-if="rdo.type != 'Giving Circle'">
                   <button
                     aria-label="change card"
                     class="has-text-teal"
-                    :disabled="rdo.type == 'Giving Circle'"
                     @click="togglePaymentForm(rdo)"
                   >
                     Edit
