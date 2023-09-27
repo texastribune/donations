@@ -1083,6 +1083,7 @@ def stripehook():
     if event.type == "payout.paid":
         payout_paid.delay(event)
     if event.type == "customer.subscription.created":
+        app.logger.info(f"subscription created event: {event}")
         customer_subscription_created.delay(event)
     if event.type == "payment_intent.succeeded":
         payment_intent_succeeded.delay(event)
