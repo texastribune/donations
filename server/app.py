@@ -869,10 +869,10 @@ def customer_subscription_created(event):
     subscription = event["data"]["object"]
     donation_type = subscription["metadata"]["donation_type"]
     latest_invoice = subscription["latest_invoice"]
-    invoice = None
+    invoice = stripe.Invoice.retrieve(latest_invoice)
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
-    app.logger.info(f'the invoice is here => {latest_invoice}')
+    app.logger.info(f'the invoice is here => {invoice}')
 
     # For a business membership, look for a matching Account (or create one).
     # Then add a recurring donation to the Account. Next, add an Affiliation to
