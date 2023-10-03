@@ -868,11 +868,13 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
     donation_type = subscription["metadata"]["donation_type"]
-    latest_invoice = subscription["latest_invoice"]
-    invoice = stripe.Invoice.retrieve(latest_invoice)
+    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
+    if invoice["status"] == "open":
+        app.logger.warning(f"Subscription {subscription['id']} was created but its first invoice is still open.\
+                           Please follow up with the subscription to proceed.")
+        return ''
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
-    app.logger.info(f'the invoice is here => {invoice}')
 
     # For a business membership, look for a matching Account (or create one).
     # Then add a recurring donation to the Account. Next, add an Affiliation to
@@ -894,8 +896,8 @@ def customer_subscription_created(event):
         # being on hold for an hour before going through. We manually push through the first charge
         # at subscription creation here.
         if donation_type == "circle":
-            stripe.Invoice.finalize_invoice(latest_invoice)
-            invoice = stripe.Invoice.pay(latest_invoice)
+            stripe.Invoice.finalize_invoice(invoice["id"])
+            stripe.Invoice.pay(invoice["id"])
 
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
 
@@ -903,7 +905,7 @@ def customer_subscription_created(event):
     # use that, otherwise retrieve the latest invoice from stripe
     update_next_opportunity(
         opps=rdo.opportunities(),
-        invoice=invoice if invoice else stripe.Invoice.retrieve(latest_invoice),
+        invoice=invoice,
     )
 
     if donation_type != "blast":
@@ -1084,7 +1086,6 @@ def stripehook():
     if event.type == "payout.paid":
         payout_paid.delay(event)
     if event.type == "customer.subscription.created":
-        app.logger.info(f"subscription created event: {event}")
         customer_subscription_created.delay(event)
     if event.type == "payment_intent.succeeded":
         payment_intent_succeeded.delay(event)
