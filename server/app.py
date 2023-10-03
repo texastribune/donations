@@ -872,6 +872,7 @@ def customer_subscription_created(event):
     invoice = None
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
+    app.logger.info(f'the invoice is here => {latest_invoice}')
 
     # For a business membership, look for a matching Account (or create one).
     # Then add a recurring donation to the Account. Next, add an Affiliation to
@@ -1407,7 +1408,7 @@ def create_payment_intent(customer=None, form=None, quarantine=None):
 
 
 def get_contact(customer):
-    app.logger.info(f"Incoming customer in get_contact: {customer}")
+    # app.logger.info(f"Incoming customer in get_contact: {customer}")
     first_name, last_name = name_splitter(customer.get("name"))
     address = customer.get("address", None)
     zipcode = address.get("postal_code", None) if address else None
