@@ -870,9 +870,8 @@ def customer_subscription_created(event):
     donation_type = subscription["metadata"]["donation_type"]
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     if invoice["status"] == "open":
-        app.logger.warning(f"Subscription {subscription['id']} was created but its first invoice is still open.\
+        raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
                            Please follow up with the subscription to proceed.")
-        return ''
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
 
