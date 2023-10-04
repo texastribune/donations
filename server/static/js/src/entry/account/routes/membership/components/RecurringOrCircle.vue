@@ -19,18 +19,16 @@
             <td>
               <slot name="method" :method="rdo.credit_card">
                 {{ rdo.credit_card.brand }} ending in {{ rdo.credit_card.last4 }}
-                <div v-if="rdo.type != 'Giving Circle'">
-                  <button
-                    aria-label="change card"
-                    class="has-text-teal"
-                    @click="togglePaymentForm(rdo)"
-                  >
-                    Edit
-                    <span class="c-icon c-icon--teal c-icon--baseline t-size-xs">
-                      <svg aria-hidden="true"><use href="#pencil-fill"></use></svg>
-                    </span>
-                  </button>
-                </div>
+                <button
+                  aria-label="change card"
+                  class="has-text-teal"
+                  @click="togglePaymentForm(rdo)"
+                >
+                  Edit
+                  <span class="c-icon c-icon--teal c-icon--baseline t-size-xs">
+                    <svg aria-hidden="true"><use href="#pencil-fill"></use></svg>
+                  </span>
+                </button>
               </slot>
             </td>
             <td>
