@@ -1,5 +1,5 @@
 Flask==2.2.3
-# pinning requests; 2.30.0 uses urllib3 2.0 and it breaks our things
+Werkzeug==2.3.7
 requests==2.31.0
 gunicorn==20.1.0
 pytz==2021.3
