@@ -868,8 +868,10 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
     donation_type = subscription["metadata"]["donation_type"]
-    latest_invoice = subscription["latest_invoice"]
-    invoice = None
+    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
+    if invoice["status"] == "open":
+        raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
+                        Please follow up with the subscription to proceed.")
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
 
@@ -893,8 +895,8 @@ def customer_subscription_created(event):
         # being on hold for an hour before going through. We manually push through the first charge
         # at subscription creation here.
         if donation_type == "circle":
-            stripe.Invoice.finalize_invoice(latest_invoice)
-            invoice = stripe.Invoice.pay(latest_invoice)
+            stripe.Invoice.finalize_invoice(invoice["id"])
+            stripe.Invoice.pay(invoice["id"])
 
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
 
@@ -902,7 +904,7 @@ def customer_subscription_created(event):
     # use that, otherwise retrieve the latest invoice from stripe
     update_next_opportunity(
         opps=rdo.opportunities(),
-        invoice=invoice if invoice else stripe.Invoice.retrieve(latest_invoice),
+        invoice=invoice,
     )
 
     if donation_type != "blast":
@@ -1406,7 +1408,7 @@ def create_payment_intent(customer=None, form=None, quarantine=None):
 
 
 def get_contact(customer):
-    app.logger.info(f"Incoming customer in get_contact: {customer}")
+    # app.logger.info(f"Incoming customer in get_contact: {customer}")
     first_name, last_name = name_splitter(customer.get("name"))
     address = customer.get("address", None)
     zipcode = address.get("postal_code", None) if address else None
