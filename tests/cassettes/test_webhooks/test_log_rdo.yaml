@@ -1,0 +1,188 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2020-03-02'
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.67.0
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_GUALXemUzxcQRt", "request_duration_ms":
+        42}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.67.0", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.9.12", "platform": "Linux-5.10.47-linuxkit-x86_64-with-glibc2.28",
+        "uname": "Linux 4eed9f3597a4 5.10.47-linuxkit #1 SMP PREEMPT Sat Jul 3 21:50:16
+        UTC 2021 x86_64 "}'
+    method: GET
+    uri: https://api.stripe.com/v1/subscriptions/sub_1N6yrwCUjA8cLeTjW4JOOjwx
+  response:
+    body:
+      string: "{\n  \"id\": \"sub_1N6yrwCUjA8cLeTjW4JOOjwx\",\n  \"object\": \"subscription\",\n
+        \ \"application\": null,\n  \"application_fee_percent\": null,\n  \"automatic_tax\":
+        {\n    \"enabled\": false\n  },\n  \"billing_cycle_anchor\": 1683909060,\n
+        \ \"billing_thresholds\": null,\n  \"cancel_at\": null,\n  \"cancel_at_period_end\":
+        false,\n  \"canceled_at\": null,\n  \"cancellation_details\": {\n    \"comment\":
+        null,\n    \"feedback\": null,\n    \"reason\": null\n  },\n  \"collection_method\":
+        \"charge_automatically\",\n  \"created\": 1683909060,\n  \"currency\": \"usd\",\n
+        \ \"current_period_end\": 1686587460,\n  \"current_period_start\": 1683909060,\n
+        \ \"customer\": \"cus_NskMDwAXZUuQFZ\",\n  \"days_until_due\": null,\n  \"default_payment_method\":
+        null,\n  \"default_source\": \"card_1NBekKCUjA8cLeTjCS8HDxhy\",\n  \"default_tax_rates\":
+        [],\n  \"description\": \"Texas Tribune Sustaining Membership\",\n  \"discount\":
+        null,\n  \"ended_at\": null,\n  \"items\": {\n    \"object\": \"list\",\n
+        \   \"data\": [\n      {\n        \"id\": \"si_NskMwgnStGyGKv\",\n        \"object\":
+        \"subscription_item\",\n        \"billing_thresholds\": null,\n        \"created\":
+        1683909060,\n        \"metadata\": {},\n        \"plan\": {\n          \"id\":
+        \"price_1N6yrvCUjA8cLeTjGbMGDuJn\",\n          \"object\": \"plan\",\n          \"active\":
+        true,\n          \"aggregate_usage\": null,\n          \"amount\": 1500,\n
+        \         \"amount_decimal\": \"1500\",\n          \"billing_scheme\": \"per_unit\",\n
+        \         \"created\": 1683909059,\n          \"currency\": \"usd\",\n          \"interval\":
+        \"month\",\n          \"interval_count\": 1,\n          \"livemode\": false,\n
+        \         \"metadata\": {},\n          \"nickname\": null,\n          \"product\":
+        \"prod_NskMd7u2HQ0ov4\",\n          \"tiers\": null,\n          \"tiers_mode\":
+        null,\n          \"transform_usage\": null,\n          \"trial_period_days\":
+        null,\n          \"usage_type\": \"licensed\"\n        },\n        \"price\":
+        {\n          \"id\": \"price_1N6yrvCUjA8cLeTjGbMGDuJn\",\n          \"object\":
+        \"price\",\n          \"active\": true,\n          \"billing_scheme\": \"per_unit\",\n
+        \         \"created\": 1683909059,\n          \"currency\": \"usd\",\n          \"custom_unit_amount\":
+        null,\n          \"livemode\": false,\n          \"lookup_key\": null,\n          \"metadata\":
+        {},\n          \"nickname\": null,\n          \"product\": \"prod_NskMd7u2HQ0ov4\",\n
+        \         \"recurring\": {\n            \"aggregate_usage\": null,\n            \"interval\":
+        \"month\",\n            \"interval_count\": 1,\n            \"trial_period_days\":
+        null,\n            \"usage_type\": \"licensed\"\n          },\n          \"tax_behavior\":
+        \"unspecified\",\n          \"tiers_mode\": null,\n          \"transform_quantity\":
+        null,\n          \"type\": \"recurring\",\n          \"unit_amount\": 1500,\n
+        \         \"unit_amount_decimal\": \"1500\"\n        },\n        \"quantity\":
+        1,\n        \"subscription\": \"sub_1N6yrwCUjA8cLeTjW4JOOjwx\",\n        \"tax_rates\":
+        []\n      }\n    ],\n    \"has_more\": false,\n    \"total_count\": 1,\n    \"url\":
+        \"/v1/subscription_items?subscription=sub_1N6yrwCUjA8cLeTjW4JOOjwx\"\n  },\n
+        \ \"latest_invoice\": \"in_1N6yrwCUjA8cLeTjjVP1TslF\",\n  \"livemode\": false,\n
+        \ \"metadata\": {\n    \"campaign_id\": \"limeinthecoconut123456789\",\n    \"pay_fees\":
+        \"x\",\n    \"encouraged_by\": \"Let the good times roll\",\n    \"referral_id\":
+        \"puppysong123456789\"\n  },\n  \"next_pending_invoice_item_invoice\": null,\n
+        \ \"on_behalf_of\": null,\n  \"pause_collection\": null,\n  \"payment_settings\":
+        {\n    \"payment_method_options\": null,\n    \"payment_method_types\": null,\n
+        \   \"save_default_payment_method\": \"off\"\n  },\n  \"pending_invoice_item_interval\":
+        null,\n  \"pending_setup_intent\": null,\n  \"pending_update\": null,\n  \"plan\":
+        {\n    \"id\": \"price_1N6yrvCUjA8cLeTjGbMGDuJn\",\n    \"object\": \"plan\",\n
+        \   \"active\": true,\n    \"aggregate_usage\": null,\n    \"amount\": 1500,\n
+        \   \"amount_decimal\": \"1500\",\n    \"billing_scheme\": \"per_unit\",\n
+        \   \"created\": 1683909059,\n    \"currency\": \"usd\",\n    \"interval\":
+        \"month\",\n    \"interval_count\": 1,\n    \"livemode\": false,\n    \"metadata\":
+        {},\n    \"nickname\": null,\n    \"product\": \"prod_NskMd7u2HQ0ov4\",\n
+        \   \"tiers\": null,\n    \"tiers_mode\": null,\n    \"transform_usage\":
+        null,\n    \"trial_period_days\": null,\n    \"usage_type\": \"licensed\"\n
+        \ },\n  \"quantity\": 1,\n  \"schedule\": null,\n  \"start_date\": 1683909060,\n
+        \ \"status\": \"active\",\n  \"tax_percent\": null,\n  \"test_clock\": null,\n
+        \ \"transfer_data\": null,\n  \"trial_end\": null,\n  \"trial_settings\":
+        {\n    \"end_behavior\": {\n      \"missing_payment_method\": \"create_invoice\"\n
+        \   }\n  },\n  \"trial_start\": null\n}"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4300'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Jun 2023 10:56:22 GMT
+      Request-Id:
+      - req_24ARMxJ4BYNZ74
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Version:
+      - '2020-03-02'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Stripe-Version:
+      - '2020-03-02'
+      User-Agent:
+      - Stripe/v1 PythonBindings/2.67.0
+      X-Stripe-Client-Telemetry:
+      - '{"last_request_metrics": {"request_id": "req_24ARMxJ4BYNZ74", "request_duration_ms":
+        489}}'
+      X-Stripe-Client-User-Agent:
+      - '{"bindings_version": "2.67.0", "lang": "python", "publisher": "stripe", "httplib":
+        "requests", "lang_version": "3.9.12", "platform": "Linux-5.10.47-linuxkit-x86_64-with-glibc2.28",
+        "uname": "Linux 4eed9f3597a4 5.10.47-linuxkit #1 SMP PREEMPT Sat Jul 3 21:50:16
+        UTC 2021 x86_64 "}'
+    method: GET
+    uri: https://api.stripe.com/v1/customers/cus_NskMDwAXZUuQFZ/sources/card_1NBekKCUjA8cLeTjCS8HDxhy
+  response:
+    body:
+      string: "{\n  \"id\": \"card_1NBekKCUjA8cLeTjCS8HDxhy\",\n  \"object\": \"card\",\n
+        \ \"address_city\": null,\n  \"address_country\": null,\n  \"address_line1\":
+        null,\n  \"address_line1_check\": null,\n  \"address_line2\": null,\n  \"address_state\":
+        null,\n  \"address_zip\": null,\n  \"address_zip_check\": null,\n  \"brand\":
+        \"MasterCard\",\n  \"country\": \"US\",\n  \"customer\": \"cus_NskMDwAXZUuQFZ\",\n
+        \ \"cvc_check\": \"pass\",\n  \"dynamic_last4\": null,\n  \"exp_month\": 2,\n
+        \ \"exp_year\": 2024,\n  \"fingerprint\": \"4sFnRoT3ZjY7bqSE\",\n  \"funding\":
+        \"credit\",\n  \"last4\": \"4444\",\n  \"metadata\": {},\n  \"name\": null,\n
+        \ \"tokenization_method\": null,\n  \"wallet\": null\n}"
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Methods:
+      - GET, POST, HEAD, OPTIONS, DELETE
+      Access-Control-Allow-Origin:
+      - '*'
+      Access-Control-Expose-Headers:
+      - Request-Id, Stripe-Manage-Version, X-Stripe-External-Auth-Required, X-Stripe-Privileged-Session-Required
+      Access-Control-Max-Age:
+      - '300'
+      Cache-Control:
+      - no-cache, no-store
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '600'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 08 Jun 2023 10:56:22 GMT
+      Request-Id:
+      - req_FMLp2kkxhYymMN
+      Server:
+      - nginx
+      Strict-Transport-Security:
+      - max-age=63072000; includeSubDomains; preload
+      Stripe-Version:
+      - '2020-03-02'
+      X-Stripe-Routing-Context-Priority-Tier:
+      - api-testmode
+    status:
+      code: 200
+      message: OK
+version: 1

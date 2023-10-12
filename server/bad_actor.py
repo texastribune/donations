@@ -1,5 +1,6 @@
 from enum import Enum
 import logging
+import json
 from typing import List, Union
 
 import requests
@@ -52,7 +53,7 @@ class BadActor:
     def __init__(self, bad_actor_request):
         self.bad_actor_request = bad_actor_request
         self.transaction = None
-        self.transaction_type = None
+        self.transaction_data = {}
 
         try:
             self.bad_actor_api_response = self._call_bad_actor_api(bad_actor_request)
@@ -119,7 +120,7 @@ class BadActor:
                 "block_id": "choices",
                 "elements": [
                     {
-                        "action_id": "approve",
+                        "action_id": "approve_new",
                         "type": "button",
                         "text": {
                             "type": "plain_text",
@@ -127,14 +128,14 @@ class BadActor:
                             "text": "Approve",
                         },
                         "style": "primary",
-                        "value": f"{self.transaction_type}:{self.transaction.id}",
+                        "value": json.dumps(self.transaction_data),
                     },
                     {
-                        "action_id": "reject",
+                        "action_id": "reject_new",
                         "type": "button",
                         "text": {"type": "plain_text", "emoji": True, "text": "Reject"},
                         "style": "danger",
-                        "value": f"{self.transaction_type}:{self.transaction.id}",
+                        "value": json.dumps(self.transaction_data),
                     },
                 ],
             },
@@ -151,9 +152,13 @@ class BadActor:
         response = webhook.send(blocks=blocks)
         logging.info(response)
 
-    def notify_bad_actor(self, transaction_type, transaction):
-        self.transaction_type = transaction_type
+    def notify_bad_actor(
+            self,
+            transaction,
+            transaction_data):
+
         self.transaction = transaction
+        self.transaction_data = transaction_data
 
         if self.bad_actor_api_response.overall_judgment < BadActorJudgmentType.suspect:
             logging.info("not a bad actor; returning")

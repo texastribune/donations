@@ -163,6 +163,7 @@
       <local-hidden :value="stripeToken" name="stripeToken" />
       <local-hidden :value="recaptchaToken" name="recaptchaToken" />
       <hidden name="amount" :store-module="storeModule" />
+      <hidden name="level" :store-module="storeModule" />
       <hidden name="installment_period" :store-module="storeModule" />
       <hidden name="description" :store-module="storeModule" />
       <hidden name="campaign_id" :store-module="storeModule" />

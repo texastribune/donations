@@ -102,7 +102,7 @@ def charge_cards():
     )
 
     for opportunity in opportunities:
-        if not opportunity.stripe_customer:
+        if not opportunity.stripe_customer or opportunity.stripe_subscription:
             continue
         amount = amount_to_charge(opportunity)
         try:

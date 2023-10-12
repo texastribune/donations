@@ -12,6 +12,7 @@ LICENSE
 .pylintrc
 .editorconfig
 env-docker
+env-docker-test
 server/templates/includes/base_icons.html
 server/static/build
 **/__pycache__

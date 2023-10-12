@@ -87,12 +87,12 @@ def test_slackify_all():
         overall_judgment=BadActorJudgmentType.suspect,
         items=[bad_actor_item1, bad_actor_item2],
     )
-    opportunity = Opportunity(sf_connection=sf)
-    opportunity.id = "baz"
+    contact = Contact(sf_connection=sf)
+    contact.id = "baz"
     bad_actor = BadActor(bad_actor_request=None)
     bad_actor.bad_actor_api_response = bad_actor_response
-    bad_actor.transaction = opportunity
-    bad_actor.transaction_type = "Opportunity"
+    bad_actor.transaction = contact
+    bad_actor.transaction_data = {"ham": "eggs"}
     expected = [
         {
             "fields": [{"text": "<quux/baz|Salesforce>", "type": "mrkdwn"}],
@@ -109,18 +109,18 @@ def test_slackify_all():
             "block_id": "choices",
             "elements": [
                 {
-                    "action_id": "approve",
+                    "action_id": "approve_new",
                     "style": "primary",
                     "text": {"emoji": True, "text": "Approve", "type": "plain_text"},
                     "type": "button",
-                    "value": "Opportunity:baz",
+                    "value": '{"ham": "eggs"}',
                 },
                 {
-                    "action_id": "reject",
+                    "action_id": "reject_new",
                     "style": "danger",
                     "text": {"emoji": True, "text": "Reject", "type": "plain_text"},
                     "type": "button",
-                    "value": "Opportunity:baz",
+                    "value": '{"ham": "eggs"}',
                 },
             ],
             "type": "actions",
@@ -447,6 +447,7 @@ def test__format_circle_donation():
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "yearly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Stripe_Subscription_Id__c": None,
         "Billing_Email__c": None,
         "Blast_Subscription_Email__c": None,
         "npe03__Organization__c": None,
@@ -493,6 +494,7 @@ def test__format_cent_circle_donation():
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "yearly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Stripe_Subscription_Id__c": None,
         "npe03__Amount__c": "4503.03",  # 3 * 1501.01
         "Name": "foo",
         "npe03__Installments__c": 3,
@@ -539,6 +541,7 @@ def test__format_recurring_donation():
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "monthly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Stripe_Subscription_Id__c": None,
         "npe03__Amount__c": "9.00",
         "Name": "foo",
         "npe03__Installments__c": 0,
@@ -588,6 +591,7 @@ def test__format_recurring_donation_decimal():
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "monthly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Stripe_Subscription_Id__c": None,
         "npe03__Amount__c": "9.15",
         "Name": "foo",
         "npe03__Installments__c": 0,
@@ -634,6 +638,7 @@ def test__format_blast_rdo():
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "monthly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
+        "Stripe_Subscription_Id__c": None,
         "npe03__Amount__c": "40.00",
         "Name": "foo",
         "npe03__Installments__c": 0,

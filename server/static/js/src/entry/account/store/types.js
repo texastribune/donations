@@ -8,7 +8,9 @@ export const USER_TYPES = {
   updateUser: `${USER_MODULE}__updateUser`,
   updateIdentity: `${USER_MODULE}__updateIdentity`,
   updateCard: `${USER_MODULE}__updateCard`,
+  updateRdoCard: `${USER_MODULE}__updateRdoCard`,
   updateOpportunities: `${USER_MODULE}__updateOpportunities`,
+  closeRdo: `${USER_MODULE}__closeRdo`,
   linkIdentity: `${USER_MODULE}__linkIdentity`,
   confirmLinkedIdentity: `${USER_MODULE}__confirmLinkedIdentity`,
 };
