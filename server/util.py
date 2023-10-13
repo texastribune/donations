@@ -188,7 +188,7 @@ def send_email(recipient, subject, body, sender=None):
 
     TO = recipient if type(recipient) is list else [recipient]
     SUBJECT = subject
-    TEXT = body
+    TEXT = body.encode('ascii', errors='ignore').decode('ascii')
 
     # Prepare actual message
     message = """\From: %s\nTo: %s\nSubject: %s\n\n%s
@@ -206,6 +206,7 @@ def send_email(recipient, subject, body, sender=None):
         server.sendmail(FROM, TO, message)
         server.close()
         logging.debug("successfully sent the mail")
+        logging.debug(message)
     except Exception as e:
         logging.error(f"failed to send mail: {e}")
 
