@@ -57,7 +57,7 @@ from .util import (
     send_email_new_business_membership,
     send_multiple_account_warning,
     name_splitter,
-    get_products_type,
+    get_donation_type,
 )
 
 ZONE = timezone(TIMEZONE)
@@ -871,7 +871,7 @@ def customer_subscription_created(event):
     donation_type = subscription["metadata"].get("donation_type")
 
     if not donation_type:
-        donation_type = get_products_type(subscription["price"]["product"])
+        donation_type = get_donation_type(subscription)
 
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     if invoice["status"] == "open":

@@ -16,7 +16,7 @@ from .config import (
     SLACK_CHANNEL,
     STRIPE_PRODUCTS,
 )
-from constants import BUSINESS_PRODUCTS, CIRCLE_PRODUCTS, BLAST_PRODUCTS
+from .constants import BUSINESS_PRODUCTS, CIRCLE_PRODUCTS, BLAST_PRODUCTS
 
 import requests
 
@@ -245,7 +245,7 @@ def name_splitter(name) -> tuple:
     return name_array[0], name_array[1]
 
 
-def type_getter(product) -> str:
+def type_getter(product: str) -> str:
     if product in BUSINESS_PRODUCTS:
         return 'business_membership'
     elif product in CIRCLE_PRODUCTS:
@@ -256,10 +256,11 @@ def type_getter(product) -> str:
         return 'membership'
 
 
-def get_products_type(product) -> str:
-    for k, v in STRIPE_PRODUCTS:
-        if product == v:
-            donation_type = type_getter(k)
+def get_donation_type(subscription: dict) -> str:
+    product = subscription["price"]["product"]
+    for key, value in STRIPE_PRODUCTS.items():
+        if product == value:
+            donation_type = type_getter(key)
             return donation_type
         
-    return 'membership'
+    raise Exception(f"Invalid product used for a new subscription. Follow up with subscription {subscription['id']}.")
