@@ -2,6 +2,8 @@ import json
 import hashlib
 import logging
 import smtplib
+import stripe
+from datetime import datetime
 from collections import defaultdict
 from .config import (
     BUSINESS_MEMBER_RECIPIENT,
@@ -14,11 +16,13 @@ from .config import (
     MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
     SLACK_API_KEY,
     SLACK_CHANNEL,
+    STRIPE_PRODUCTS,
 )
 
 import requests
 
 from .npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
+from .charges import amount_to_charge_stripe
 
 
 def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
@@ -241,3 +245,35 @@ def send_email_new_business_membership(account, contact):
 def name_splitter(name) -> tuple:
     name_array = name.split(" ", 1) if name else ["", ""]
     return name_array[0], name_array[1]
+
+
+def subscription_adder(customer: str|object, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
+    final_amount = amount_to_charge_stripe(amount, pay_fees, interval)
+
+    if customer is str:
+        customer = stripe.Customer.retrieve(customer)
+
+    source = customer["sources"]["data"][0]
+    timestamp = datetime(year, month, day).timestamp()
+
+    subscription = stripe.Subscription.create(
+        customer = customer["id"],
+        default_source = source["id"],
+        billing_cycle_anchor = timestamp,
+        description = "Texas Tribune Sustaining Membership",
+        metadata = {
+            "donation_type": "membership",
+            "donor_selected_amount": amount,
+            "pay_fees": 'X' if pay_fees else None,
+            # "encouraged_by": form["reason"],
+        },
+        items = [{
+            "price_data": {
+                "unit_amount": int(final_amount * 100),
+                "currency": "usd",
+                "product": STRIPE_PRODUCTS["sustaining"],
+                "recurring": {"interval": interval},
+            }
+        }]
+    )
+    return subscription

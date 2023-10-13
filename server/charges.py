@@ -48,7 +48,7 @@ def amount_to_charge(opportunity):
     return quantize(total)
 
 
-def amount_to_charge_stripe(form=None):
+def amount_to_charge_stripe(amount: int, pay_fees: bool, interval: str) -> Decimal:
     """
     Determine the amount to charge. This depends on whether the payer agreed
     to pay fees or not. If they did then we add that to the amount charged.
@@ -57,10 +57,12 @@ def amount_to_charge_stripe(form=None):
 
     https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
     """
-    amount = float(form["amount"])
-    logging.info(f"pay_fees_value: {form['pay_fees_value']}")
-    if form["pay_fees_value"]:
-        if form["installment_period"] == None:
+    # amount = float(form["amount"])
+    amount = float(amount)
+    # if form["pay_fees_value"]:
+    if pay_fees:
+        # if form["installment_period"] == None:
+        if interval == None:
             total = (amount + 0.30) / (1 - 0.022)
         else:
             total = (amount + 0.30) / (1 - 0.027)
