@@ -57,6 +57,7 @@ from .util import (
     send_email_new_business_membership,
     send_multiple_account_warning,
     name_splitter,
+    get_products_type,
 )
 
 ZONE = timezone(TIMEZONE)
@@ -867,7 +868,11 @@ def customer_subscription_created(event):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
-    donation_type = subscription["metadata"]["donation_type"]
+    donation_type = subscription["metadata"].get("donation_type")
+
+    if not donation_type:
+        donation_type = get_products_type(subscription["price"]["product"])
+
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     if invoice["status"] == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
