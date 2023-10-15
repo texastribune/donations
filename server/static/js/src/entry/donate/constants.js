@@ -35,7 +35,7 @@ export const BASE_FORM_STATE = {
   zipcode: {
     value: '',
     isValid: false,
-    validator: validators.isEmptyOrZip,
+    validator: validators.isZip,
     message: 'Enter a 5-digit zip code',
   },
   amount: {
