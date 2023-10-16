@@ -5,6 +5,8 @@ import smtplib
 import stripe
 from datetime import datetime
 from collections import defaultdict
+from decimal import Decimal
+from zoneinfo import ZoneInfo
 from .config import (
     BUSINESS_MEMBER_RECIPIENT,
     DEFAULT_MAIL_SENDER,
@@ -17,12 +19,14 @@ from .config import (
     SLACK_API_KEY,
     SLACK_CHANNEL,
     STRIPE_PRODUCTS,
+    TIMEZONE,
 )
 
 import requests
 
 from .npsp import SalesforceConnection, SalesforceException, DEFAULT_RDO_TYPE
-from .charges import amount_to_charge_stripe
+
+TWOPLACES = Decimal(10) ** -2  # same as Decimal('0.01')
 
 
 def construct_slack_message(contact=None, opportunity=None, rdo=None, account=None):
@@ -247,19 +251,46 @@ def name_splitter(name) -> tuple:
     return name_array[0], name_array[1]
 
 
-def subscription_adder(customer: str|object, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
-    final_amount = amount_to_charge_stripe(amount, pay_fees, interval)
+def amount_to_charge(form=None, amount=None, pay_fees=None, interval=None) -> Decimal:
+    """
+    Determine the amount to charge. This depends on whether the payer agreed
+    to pay fees or not. If they did then we add that to the amount charged.
+    Stripe charges 2.2% + $0.30 on single charges and 2.2% + 0.5% + $0.30
+    on recurring charges.
 
-    if customer is str:
-        customer = stripe.Customer.retrieve(customer)
+    https://support.stripe.com/questions/can-i-charge-my-stripe-fees-to-my-customers
+    """
+    if form:
+        amount = form["amount"]
+        pay_fees = form["pay_fees_value"]
+        interval = form["installment_period"]
 
-    source = customer["sources"]["data"][0]
-    timestamp = datetime(year, month, day).timestamp()
+    amount = float(amount)
+    if pay_fees:
+        if interval == None:
+            total = (amount + 0.30) / (1 - 0.022)
+        else:
+            total = (amount + 0.30) / (1 - 0.027)
+    else:
+        total = amount
+    return quantize(total)
+
+
+def quantize(amount):
+    return Decimal(amount).quantize(TWOPLACES)
+
+
+def subscription_adder(customer: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
+    final_amount = amount_to_charge(amount=amount, pay_fees=pay_fees, interval=interval)
+    customer = stripe.Customer.retrieve(customer)
+    source = customer.sources.data[0]
+    timestamp = datetime(year, month, day, tzinfo=ZoneInfo(TIMEZONE)).timestamp()
 
     subscription = stripe.Subscription.create(
         customer = customer["id"],
         default_source = source["id"],
-        billing_cycle_anchor = timestamp,
+        trial_end = int(timestamp),
+        proration_behavior = None,
         description = "Texas Tribune Sustaining Membership",
         metadata = {
             "donation_type": "membership",

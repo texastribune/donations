@@ -9,7 +9,7 @@ dev:
 	docker compose up
 
 shell:
-	docker compose -f docker-compose.yml run shell
+	docker compose -f docker-compose.shell.yml run shell
 
 # runs tests locally
 test:

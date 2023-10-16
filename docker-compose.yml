@@ -35,20 +35,6 @@ services:
     networks:
       - net
 
-  shell:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - .:/app
-      - checkout_node_modules-vol:/app/node_modules
-    entrypoint:
-      - /bin/sh
-      - ./shell.sh
-    env_file:
-      - ./env-docker
-
-
 volumes:
   checkout_node_modules-vol:
 
