@@ -1509,7 +1509,13 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     source = subscription.get("default_source", None)
     if not source:
         source = subscription.get("default_payment_method", None)
-    card = stripe.Customer.retrieve_source(customer_id, source)
+
+    if source:
+        card = stripe.Customer.retrieve_source(customer_id, source)
+    else:
+        customer = stripe.Customer.retrieve(customer_id)
+        card = customer.sources.retrieve(customer.sources.data[0].id)
+
     year = card["exp_year"]
     month = card["exp_month"]
     day = calendar.monthrange(year, month)[1]
