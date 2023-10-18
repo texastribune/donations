@@ -245,7 +245,10 @@ def name_splitter(name) -> tuple:
 
 
 def get_donation_type(subscription: dict) -> str:
-    product = subscription["price"]["product"]
+    product = subscription.get("plan", {}).get("product", None)
+    if not product:
+        raise Exception(f"Product can not be found for a new subscription. Follow up with subscription {subscription['id']}.")
+    
     for key, value in STRIPE_PRODUCTS.items():
         if product == value["id"]:
             return value["type"]
