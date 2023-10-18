@@ -1319,7 +1319,7 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
             "price_data": {
                 "unit_amount": int(amount * 100),
                 "currency": "usd",
-                "product": STRIPE_PRODUCTS["sustaining"],
+                "product": STRIPE_PRODUCTS["sustaining"]["id"],
                 "recurring": {"interval": interval},
             }
         }]
@@ -1331,7 +1331,7 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     app.logger.info(f"{donation_type} form: {form}")
     period = form["installment_period"]
-    product = STRIPE_PRODUCTS[form["level"]]
+    product = STRIPE_PRODUCTS[form["level"]]["id"]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
         prices=prices_list,
