@@ -867,11 +867,14 @@ def payout_paid(event):
 def customer_subscription_created(event):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
-    subscription = event["data"]["object"]
+    subscription_id = event["data"]["object"]["id"]
+    subscription = stripe.Subscription.retrieve(subscription_id, expandable=["latest_invoice"])
     donation_type = subscription["plan"]["metadata"].get("type", "membership")
 
-    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
-    if invoice["status"] == "open":
+    invoice = subscription["latest_invoice"]
+    invoice_status = invoice["status"]
+    app.logger.info(f'printing new invoice grab: {invoice}')
+    if invoice_status == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
                         Please follow up with the subscription to proceed.")
     customer = stripe.Customer.retrieve(subscription["customer"])
@@ -896,7 +899,7 @@ def customer_subscription_created(event):
         # For a circle membership, we set up a subscription schedule which defaults to all charges
         # being on hold for an hour before going through. We manually push through the first charge
         # at subscription creation here.
-        if donation_type == "circle":
+        if donation_type == "circle" and invoice_status == "draft":
             stripe.Invoice.finalize_invoice(invoice["id"])
             stripe.Invoice.pay(invoice["id"])
 
