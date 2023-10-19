@@ -14,7 +14,6 @@ from .config import (
     MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
     SLACK_API_KEY,
     SLACK_CHANNEL,
-    STRIPE_PRODUCTS,
 )
 
 import requests
@@ -242,15 +241,3 @@ def send_email_new_business_membership(account, contact):
 def name_splitter(name) -> tuple:
     name_array = name.split(" ", 1) if name else ["", ""]
     return name_array[0], name_array[1]
-
-
-def get_donation_type(subscription: dict) -> str:
-    product = subscription.get("plan", {}).get("product", None)
-    if not product:
-        raise Exception(f"Product can not be found for a new subscription. Follow up with subscription {subscription['id']}.")
-    
-    for key, value in STRIPE_PRODUCTS.items():
-        if product == value["id"]:
-            return value["type"]
-        
-    raise Exception(f"Invalid product used for a new subscription. Follow up with subscription {subscription['id']}.")

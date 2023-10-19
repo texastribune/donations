@@ -57,7 +57,6 @@ from .util import (
     send_email_new_business_membership,
     send_multiple_account_warning,
     name_splitter,
-    get_donation_type,
 )
 
 ZONE = timezone(TIMEZONE)
@@ -873,7 +872,6 @@ def customer_subscription_created(event):
 
     invoice = subscription["latest_invoice"]
     invoice_status = invoice["status"]
-    app.logger.info(f'printing new invoice grab: {invoice}')
     if invoice_status == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
                         Please follow up with the subscription to proceed.")
@@ -1319,7 +1317,7 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
             "price_data": {
                 "unit_amount": int(amount * 100),
                 "currency": "usd",
-                "product": STRIPE_PRODUCTS["sustaining"]["id"],
+                "product": STRIPE_PRODUCTS["sustaining"],
                 "recurring": {"interval": interval},
             }
         }]
@@ -1331,7 +1329,7 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
 def create_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     app.logger.info(f"{donation_type} form: {form}")
     period = form["installment_period"]
-    product = STRIPE_PRODUCTS[form["level"]]["id"]
+    product = STRIPE_PRODUCTS[form["level"]]
     prices_list = stripe.Price.list(product=product)
     price = find_price(
         prices=prices_list,
