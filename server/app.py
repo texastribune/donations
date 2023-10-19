@@ -868,7 +868,7 @@ def customer_subscription_created(event):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
     subscription_id = event["data"]["object"]["id"]
-    subscription = stripe.Subscription.retrieve(subscription_id, expandable=["latest_invoice"])
+    subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
     donation_type = subscription["plan"]["metadata"].get("type", "membership")
 
     invoice = subscription["latest_invoice"]
