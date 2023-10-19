@@ -868,10 +868,7 @@ def customer_subscription_created(event):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
     subscription = event["data"]["object"]
-    donation_type = subscription["metadata"].get("donation_type")
-
-    if not donation_type:
-        donation_type = get_donation_type(subscription)
+    donation_type = subscription["plan"]["metadata"].get("type", "membership")
 
     invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
     if invoice["status"] == "open":
@@ -1501,7 +1498,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
-    rdo.amount = sub_meta.get("donor_selected_amount", 0)
+    rdo.amount = sub_plan["metadata"].get("donor_amount", 0)
     rdo.installment_period = installment_period
     rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
