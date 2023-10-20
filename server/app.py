@@ -866,10 +866,13 @@ def payout_paid(event):
 def customer_subscription_created(event):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
-    subscription = event["data"]["object"]
-    donation_type = subscription["metadata"]["donation_type"]
-    invoice = stripe.Invoice.retrieve(subscription["latest_invoice"])
-    if invoice["status"] == "open":
+    subscription_id = event["data"]["object"]["id"]
+    subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
+    donation_type = subscription["metadata"].get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+
+    invoice = subscription["latest_invoice"]
+    invoice_status = invoice["status"]
+    if invoice_status == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
                         Please follow up with the subscription to proceed.")
     customer = stripe.Customer.retrieve(subscription["customer"])
@@ -894,7 +897,7 @@ def customer_subscription_created(event):
         # For a circle membership, we set up a subscription schedule which defaults to all charges
         # being on hold for an hour before going through. We manually push through the first charge
         # at subscription creation here.
-        if donation_type == "circle":
+        if donation_type == "circle" and invoice_status == "draft":
             stripe.Invoice.finalize_invoice(invoice["id"])
             stripe.Invoice.pay(invoice["id"])
 
@@ -1496,7 +1499,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
-    rdo.amount = sub_meta.get("donor_selected_amount", 0)
+    rdo.amount = sub_meta.get("donor_selected_amount", sub_plan["metadata"].get("donor_amount", 0))
     rdo.installment_period = installment_period
     rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
@@ -1504,7 +1507,13 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     source = subscription.get("default_source", None)
     if not source:
         source = subscription.get("default_payment_method", None)
-    card = stripe.Customer.retrieve_source(customer_id, source)
+
+    if source:
+        card = stripe.Customer.retrieve_source(customer_id, source)
+    else:
+        customer = stripe.Customer.retrieve(customer_id)
+        card = customer.sources.retrieve(customer.sources.data[0].id)
+
     year = card["exp_year"]
     month = card["exp_month"]
     day = calendar.monthrange(year, month)[1]
