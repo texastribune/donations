@@ -868,7 +868,7 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription_id = event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
-    donation_type = subscription["plan"]["metadata"].get("type", "membership")
+    donation_type = subscription["metadata"].get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
 
     invoice = subscription["latest_invoice"]
     invoice_status = invoice["status"]
@@ -1499,7 +1499,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
-    rdo.amount = sub_plan["metadata"].get("donor_amount", 0)
+    rdo.amount = sub_meta.get("donor_selected_amount", sub_plan["metadata"].get("donor_amount", 0))
     rdo.installment_period = installment_period
     rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
