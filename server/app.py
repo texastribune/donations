@@ -906,10 +906,11 @@ def customer_subscription_created(event):
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
-    update_next_opportunity(
-        opps=rdo.opportunities(),
-        invoice=invoice,
-    )
+    if not subscription["trial_end"]:
+        update_next_opportunity(
+            opps=rdo.opportunities(),
+            invoice=invoice,
+        )
 
     if donation_type != "blast":
         notify_slack(contact=contact, rdo=rdo)
