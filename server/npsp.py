@@ -589,17 +589,20 @@ class RDO(SalesforceObject, CampaignMixin):
 
     api_name = "npe03__Recurring_Donation__c"
 
-    def __init__(self, id=None, contact=None, account=None, sf_connection=None):
+    def __init__(self, id=None, contact=None, account=None, date=None, sf_connection=None):
         super().__init__(sf_connection=sf_connection)
 
         if account and contact:
             raise SalesforceException("Account and Contact can't both be specified")
 
-        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        if not date:
+            date = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        else:
+            date = datetime.fromtimestamp(date).strftime('%Y-%m-%d')
 
         if contact is not None:
             self.contact_id = contact.id
-            self.name = f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
+            self.name = f"{date} for {contact.first_name} {contact.last_name} ({contact.email})"
             self.account_id = None
         elif account is not None:
             self.account_id = account.id
@@ -619,7 +622,7 @@ class RDO(SalesforceObject, CampaignMixin):
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
-        self.date_established = today
+        self.date_established = date
         self.stripe_customer = None
         self.stripe_subscription = None
         self.lead_source = None

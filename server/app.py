@@ -1467,6 +1467,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
+    trial_end = subscription["trial_end"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
@@ -1478,7 +1479,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         rdo.installments = None
 
     else:
-        rdo = RDO(contact=contact)
+        rdo = RDO(contact=contact, date=trial_end)
         rdo.installments = None
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
