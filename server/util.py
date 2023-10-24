@@ -280,7 +280,7 @@ def quantize(amount):
     return Decimal(amount).quantize(TWOPLACES)
 
 
-def subscription_adder(customer: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
+def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
     final_amount = amount_to_charge(amount=amount, pay_fees=pay_fees, interval=interval)
     customer = stripe.Customer.retrieve(customer)
     source = customer.sources.data[0]
