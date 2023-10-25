@@ -296,8 +296,8 @@ def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, ye
         metadata = {
             "donation_type": "membership",
             "donor_selected_amount": amount,
-            "pay_fees": 'X' if pay_fees else None,
-            # "encouraged_by": form["reason"],
+            "pay_fees": "X" if pay_fees else None,
+            "skip_notification": "X",
         },
         items = [{
             "price_data": {

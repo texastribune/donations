@@ -869,7 +869,9 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription_id = event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
-    donation_type = subscription["metadata"].get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+    sub_meta = subscription["metadata"]
+    donation_type = sub_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+    skip_notification = sub_meta.get("skip_notification", False)
 
     invoice = subscription["latest_invoice"]
     invoice_status = invoice["status"]
@@ -912,7 +914,7 @@ def customer_subscription_created(event):
             invoice=invoice,
         )
 
-    if donation_type != "blast":
+    if not skip_notification and donation_type != "blast":
         notify_slack(contact=contact, rdo=rdo)
 
 
