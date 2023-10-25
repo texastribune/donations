@@ -26,6 +26,12 @@ export const BASE_FORM_STATE = {
     validator: validators.isNotEmpty,
     message: 'Enter your last name',
   },
+  address: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmpty,
+    message: 'Enter your address',
+  },
   reason: {
     value: '',
     isValid: false,

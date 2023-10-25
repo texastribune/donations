@@ -88,6 +88,19 @@
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
+          label-text="Address"
+          base-classes="form__text form__text--standard"
+          name="address"
+        />
+      </div>
+    </div>
+
+    <div class="grid_row grid_wrap--s">
+      <div class="col_6 grid_separator">
+        <text-input
+          :store-module="storeModule"
+          :required="false"
+          :show-error="showErrors"
           label-text="I am giving because"
           base-classes="form__text form__text--standard"
           name="reason"
