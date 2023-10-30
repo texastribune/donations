@@ -82,13 +82,20 @@
       </div>
     </div>
 
+    <div class="grid_row grid_separator">
+      <div class="col">
+        <vue-google-autocomplete>
+        </vue-google-autocomplete>
+      </div>
+    </div>
+
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
-          label-text="Address"
+          label-text="address"
           base-classes="form__text form__text--standard"
           name="address"
         />
@@ -143,7 +150,8 @@
       v-if="nativeIsSupported && showManualPay"
       class="grid_separator--l"
       aria-hidden="true"
-    />
+    >
+    </div>
 
     <div
       :aria-live="nativeIsSupported ? 'polite' : false"
@@ -209,6 +217,7 @@
 </template>
 
 <script>
+import { VueGoogleAutocomplete } from 'vue-google-autocomplete';
 import Hidden from '../../connected-elements/Hidden.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
@@ -232,6 +241,7 @@ export default {
     ManualPay,
     ManualSubmit,
     NativePay,
+    VueGoogleAutocomplete,
   },
 
   mixins: [formStarter, updateValue],
