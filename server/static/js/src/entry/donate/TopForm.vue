@@ -217,7 +217,7 @@
 </template>
 
 <script>
-import { VueGoogleAutocomplete } from 'vue-google-autocomplete';
+import VueGoogleAutocomplete from 'vue-google-autocomplete';
 import Hidden from '../../connected-elements/Hidden.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
