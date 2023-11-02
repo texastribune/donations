@@ -602,6 +602,7 @@ def donate_form():
         bundles=bundles,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+        autocomplete=app.config["ADDRESS_AUTOCOMPLETE_KEY"],
         use_thermometer=USE_THERMOMETER,
     )
 

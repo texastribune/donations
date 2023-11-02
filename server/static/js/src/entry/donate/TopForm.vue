@@ -82,12 +82,17 @@
       </div>
     </div>
 
-    <!-- <div class="grid_row grid_separator">
+    <div class="grid_row grid_separator">
       <div class="col">
-        <vue-google-autocomplete>
+        <vue-google-autocomplete
+          id="map"
+          classname="form-control"
+          placeholder="Start typing that addy"
+          @v-on:placechanged="getAddressData"
+        >
         </vue-google-autocomplete>
       </div>
-    </div> -->
+    </div>
 
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
@@ -258,5 +263,14 @@ export default {
       ],
     };
   },
+
+/* eslint no-console: ["off", { allow: ["log", "warn", "error"] }] */
+  methods: {
+    getAddressData(addressData, placeResultData, id) {
+      console.log(addressData);
+      console.log(placeResultData);
+      console.log(id);
+    }
+  }
 };
 </script>
