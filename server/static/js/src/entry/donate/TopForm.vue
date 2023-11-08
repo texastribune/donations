@@ -88,7 +88,7 @@
           id="map"
           classname="form-control"
           placeholder="Start typing that addy"
-          @v-on:placechanged="getAddressData"
+          @placechanged="getAddressData"
         >
         </vue-google-autocomplete>
       </div>
