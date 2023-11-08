@@ -276,7 +276,7 @@ export default {
       console.log(addressData);
       console.log(placeResultData);
       console.log(id);
-      this.address.street = addressData.formatted_address;
+      this.address.street = placeResultData.formatted_address;
       console.log(this.address);
     }
   }
