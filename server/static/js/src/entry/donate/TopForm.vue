@@ -97,6 +97,7 @@
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
+          v-model="address.street"
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
@@ -261,6 +262,11 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
+      address: {
+        street: '',
+        city: '',
+        state: '',
+      }
     };
   },
 
@@ -270,6 +276,7 @@ export default {
       console.log(addressData);
       console.log(placeResultData);
       console.log(id);
+      this.address.street = addressData.formatted_address
     }
   }
 };
