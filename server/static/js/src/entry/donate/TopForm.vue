@@ -97,7 +97,7 @@
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
-          v-model="address.street"
+          v-model="streetAddress"
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
@@ -268,6 +268,12 @@ export default {
         state: '',
       }
     };
+  },
+
+  computed: {
+    streetAddress() {
+      return this.address.street;
+    },
   },
 
 /* eslint no-console: ["off", { allow: ["log", "warn", "error"] }] */
