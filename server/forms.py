@@ -77,6 +77,7 @@ class DonateForm(BaseForm):
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
     address = StringField(u"Address")
+    city = StringField(u"City")
 
 
 class CircleForm(BaseForm):

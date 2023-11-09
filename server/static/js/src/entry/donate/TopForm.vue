@@ -271,19 +271,7 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
-      address: {
-        street: '',
-        city: '',
-        state: '',
-      }
     };
-  },
-
-  computed: {
-    streetAddress() {
-      console.log(this.address.street);
-      return this.address.street;
-    },
   },
 
 /* eslint no-console: ["off", { allow: ["log", "warn", "error"] }] */
@@ -297,6 +285,11 @@ export default {
         storeModule: this.storeModule,
         key: 'address',
         value: placeResultData.name,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'city',
+        value: addressData.locality,
       });
     }
   }
