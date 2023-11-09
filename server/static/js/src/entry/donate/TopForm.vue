@@ -105,6 +105,28 @@
           name="address"
         />
       </div>
+
+      <div class="col_6 grid_separator">
+        <text-input
+          :store-module="storeModule"
+          :required="false"
+          :show-error="showErrors"
+          label-text="city"
+          base-classes="form__text form__text--standard"
+          name="city"
+        />
+      </div>
+
+      <div class="col_6 grid_separator">
+        <text-input
+          :store-module="storeModule"
+          :required="false"
+          :show-error="showErrors"
+          label-text="state"
+          base-classes="form__text form__text--standard"
+          name="state"
+        />
+      </div>
     </div>
 
     <div class="grid_row grid_wrap--s">
@@ -269,13 +291,6 @@ export default {
     };
   },
 
-  computed: {
-    streetAddress() {
-      console.log(this.address.street);
-      return this.address.street;
-    },
-  },
-
 /* eslint no-console: ["off", { allow: ["log", "warn", "error"] }] */
   methods: {
     getAddressData(addressData, placeResultData, id) {
@@ -286,7 +301,22 @@ export default {
       this.updateValue({
         storeModule: this.storeModule,
         key: 'address',
-        value: placeResultData.formatted_address,
+        value: placeResultData.name,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'city',
+        value: addressData.locality,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'state',
+        value: addressData.administrative_area_level_1,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'zipcode',
+        value: addressData.postal_code,
       });
     }
   }
