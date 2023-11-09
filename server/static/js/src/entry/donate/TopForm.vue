@@ -123,9 +123,9 @@
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
-          label-text="I am giving because"
+          label-text="State"
           base-classes="form__text form__text--standard"
-          name="reason"
+          name="state"
         />
       </div>
       <div class="col_6 grid_separator">
@@ -137,6 +137,19 @@
           base-classes="form__text form__text--standard"
           name="zipcode"
           inputmode="numeric"
+        />
+      </div>
+    </div>
+
+    <div class="grid_row grid_separator">
+      <div class="col">
+        <text-input
+          :store-module="storeModule"
+          :required="false"
+          :show-error="showErrors"
+          label-text="I am giving because"
+          base-classes="form__text form__text--standard"
+          name="reason"
         />
       </div>
     </div>
@@ -290,6 +303,16 @@ export default {
         storeModule: this.storeModule,
         key: 'city',
         value: addressData.locality,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'state',
+        value: addressData.administrative_area_level_1
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'zipcode',
+        value: addressData.postal_code
       });
     }
   }

@@ -38,6 +38,12 @@ export const BASE_FORM_STATE = {
     validator: validators.isNotEmpty,
     message: 'Enter your city',
   },
+  state: {
+    value: '',
+    isValid: false,
+    validator: validators.isNotEmpty,
+    message: 'Enter your state',
+  },
   reason: {
     value: '',
     isValid: false,
