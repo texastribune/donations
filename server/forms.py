@@ -76,6 +76,7 @@ class DonateForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    address = StringField(u"Address")
 
 
 class CircleForm(BaseForm):

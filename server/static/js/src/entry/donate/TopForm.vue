@@ -97,7 +97,6 @@
     <div class="grid_row grid_wrap--s">
       <div class="col_6 grid_separator">
         <text-input
-          v-model="streetAddress"
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
@@ -272,6 +271,7 @@ export default {
 
   computed: {
     streetAddress() {
+      console.log(this.address.street);
       return this.address.street;
     },
   },
@@ -282,8 +282,12 @@ export default {
       console.log(addressData);
       console.log(placeResultData);
       console.log(id);
-      this.address.street = placeResultData.formatted_address;
       console.log(this.address);
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'address',
+        value: placeResultData.formatted_address,
+      });
     }
   }
 };
