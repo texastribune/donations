@@ -105,6 +105,16 @@
           name="address"
         />
       </div>
+      <div class="col_6 grid_separator">
+        <text-input
+          :store-module="storeModule"
+          :required="false"
+          :show-error="showErrors"
+          label-text="city"
+          base-classes="form__text form__text--standard"
+          name="city"
+        />
+      </div>
     </div>
 
     <div class="grid_row grid_wrap--s">
@@ -286,7 +296,7 @@ export default {
       this.updateValue({
         storeModule: this.storeModule,
         key: 'address',
-        value: placeResultData.formatted_address,
+        value: placeResultData.name,
       });
     }
   }
