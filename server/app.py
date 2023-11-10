@@ -1533,7 +1533,7 @@ def update_next_opportunity(opps=[], invoice=None):
             stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
         )
 
-    charged_on = datetime.fromtimestamp(invoice["created"]).strftime('%Y-%m-%d')
+    charged_on = datetime.fromtimestamp(invoice["effective_at"]).strftime('%Y-%m-%d')
     opp = [
         opportunity
         for opportunity in opps
