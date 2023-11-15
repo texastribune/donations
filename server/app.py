@@ -899,7 +899,7 @@ def customer_subscription_created(event):
         # at subscription creation here.
         if donation_type == "circle" and invoice_status == "draft":
             stripe.Invoice.finalize_invoice(invoice["id"])
-            stripe.Invoice.pay(invoice["id"])
+            invoice = stripe.Invoice.pay(invoice["id"])
 
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
 
