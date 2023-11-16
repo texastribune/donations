@@ -86,7 +86,7 @@
       <div class="col">
         <vue-google-autocomplete
           id="map"
-          classname="form-control"
+          classname="c-text-input__input l-display-block l-width-full has-text-gray-dark t-lh-b"
           placeholder="Start typing that addy"
           @placechanged="getAddressData"
         >
