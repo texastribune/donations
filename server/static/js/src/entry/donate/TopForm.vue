@@ -84,13 +84,16 @@
 
     <div class="grid_row grid_separator">
       <div class="col">
-        <vue-google-autocomplete
-          id="map"
-          classname="c-text-input__input l-display-block l-width-full has-text-gray-dark t-lh-b"
-          placeholder="Start typing that addy"
-          @placechanged="getAddressData"
-        >
-        </vue-google-autocomplete>
+        <div class="form__text form__text--standard">
+          <label>Address Lookup</label>
+          <vue-google-autocomplete
+            id="map"
+            classname="form-control"
+            placeholder="Start typing that addy"
+            @placechanged="getAddressData"
+          >
+          </vue-google-autocomplete>
+        </div>
       </div>
     </div>
 
