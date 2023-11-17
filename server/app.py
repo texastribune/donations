@@ -900,7 +900,7 @@ def customer_subscription_created(event):
         # at subscription creation here.
         if donation_type == "circle" and invoice_status == "draft":
             stripe.Invoice.finalize_invoice(invoice["id"])
-            stripe.Invoice.pay(invoice["id"])
+            invoice = stripe.Invoice.pay(invoice["id"])
 
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
 
@@ -1534,7 +1534,7 @@ def update_next_opportunity(opps=[], invoice=None):
             stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
         )
 
-    charged_on = datetime.fromtimestamp(invoice["created"]).strftime('%Y-%m-%d')
+    charged_on = datetime.fromtimestamp(invoice["effective_at"]).strftime('%Y-%m-%d')
     opp = [
         opportunity
         for opportunity in opps
