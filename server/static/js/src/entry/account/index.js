@@ -8,7 +8,6 @@ import {
   numeric as numericRule,
 } from 'vee-validate/dist/rules';
 import VueClipboard from 'vue-clipboard2';
-import VueGoogleAutocomplete from 'vue-google-autocomplete';
 import axios from 'axios';
 import { Vue as VueIntegration } from '@sentry/integrations';
 import { init as initSentry } from '@sentry/browser';
@@ -91,7 +90,6 @@ Vue.mixin({
 Vue.use(VModal);
 Vue.use(VueRouter);
 Vue.use(VueClipboard);
-Vue.use(VueGoogleAutocomplete);
 
 Vue.component('UserSiteFooter', UserSiteFooter);
 Vue.component('BasicSiteFooter', BasicSiteFooter);
