@@ -290,13 +290,8 @@ export default {
     };
   },
 
-/* eslint no-console: ["off", { allow: ["log", "warn", "error"] }] */
   methods: {
-    getAddressData(addressData, placeResultData, id) {
-      console.log(addressData);
-      console.log(placeResultData);
-      console.log(id);
-      console.log(this.address);
+    getAddressData(addressData, placeResultData) {
       this.updateValue({
         storeModule: this.storeModule,
         key: 'address',
