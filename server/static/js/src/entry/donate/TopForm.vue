@@ -89,7 +89,7 @@
           <vue-google-autocomplete
             id="map"
             classname="form-control"
-            placeholder="Start typing that addy"
+            placeholder="Lookup your address"
             @placechanged="getAddressData"
           >
           </vue-google-autocomplete>
@@ -106,15 +106,7 @@
           label-text="address"
           base-classes="form__text form__text--standard"
           name="address"
-        >
-          <vue-google-autocomplete
-            id="map"
-            classname="form-control"
-            placeholder="Start typing that addy"
-            @placechanged="getAddressData"
-          >
-          </vue-google-autocomplete>
-        </text-input>
+        />
       </div>
       <div class="col_6 grid_separator">
         <text-input
