@@ -4,6 +4,7 @@ run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
 
 """
 import calendar
+import click
 import json
 import locale
 import logging
@@ -1600,3 +1601,10 @@ def close_rdo(subscription_id):
     response = RDO.update([rdo], update_details)
     app.logger.info(response)
     return rdo
+
+
+@app.cli.command("rdo_to_subscription")
+@click.argument("email")
+def rdo_to_subscription(email):
+    rdos = RDO.list()
+    print(f'There you go again, {name}')
