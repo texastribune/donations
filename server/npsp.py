@@ -978,6 +978,9 @@ class Contact(SalesforceObject):
         self.created = False
         self.email = None
         self.lead_source = "Stripe"
+        self.mailing_street = None
+        self.mailing_city = None
+        self.mailing_state = None
         self.mailing_postal_code = None
         self.duplicate_found = False
         self.work_email = None
@@ -1006,12 +1009,15 @@ class Contact(SalesforceObject):
             "FirstName": self.first_name,
             "LastName": self.last_name,
             "LeadSource": self.lead_source,
+            "MailingStreet": self.mailing_street,
+            "MailingCity": self.mailing_city,
+            "MailingState": self.mailing_state,
             "MailingPostalCode": self.mailing_postal_code,
             "npe01__WorkEmail__c": self.work_email,
         }
 
     @classmethod
-    def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None):
+    def get_or_create(cls, email, first_name=None, last_name=None, street=None, city=None, state=None, zipcode=None):
         contact = cls.get(email=email)
         if contact:
             logging.debug(f"Contact found: {contact}")
@@ -1021,6 +1027,9 @@ class Contact(SalesforceObject):
         contact.email = email
         contact.first_name = first_name
         contact.last_name = last_name
+        contact.mailing_street = street
+        contact.mailing_city = city
+        contact.mailing_state = state
         contact.mailing_postal_code = zipcode
         contact.save()
         return contact

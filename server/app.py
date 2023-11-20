@@ -320,11 +320,14 @@ def add_donation(form=None, customer=None, donation_type=None, bad_actor_request
     last_name = form["last_name"]
     period = form["installment_period"]
     email = form["stripeEmail"]
+    street = form["address"]
+    city = form["city"]
+    state = form["state"]
     zipcode = form["zipcode"]
 
     logging.info("----Getting contact....")
     contact = Contact.get_or_create(
-        email=email, first_name=first_name, last_name=last_name, zipcode=zipcode
+        email=email, first_name=first_name, last_name=last_name, street=street, city=city, state=state, zipcode=zipcode
     )
     logging.info(contact)
 
@@ -1105,6 +1108,9 @@ def get_or_create_contact(form=None):
     first_name = form["first_name"]
     last_name = form["last_name"]
     email = form["stripeEmail"]
+    address = form["address"]
+    city = form["city"]
+    state = form["state"]
     zipcode = form["zipcode"]
 
     logging.info("----Getting contact....")
