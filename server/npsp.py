@@ -1060,6 +1060,9 @@ class Contact(SalesforceObject):
             contact.last_name = response["LastName"]
             contact.email = response["Email"]
             contact.lead_source = response["LeadSource"]
+            contact.mailing_street = response["MailingStreet"]
+            contact.mailing_city = response["MailingCity"]
+            contact.mailing_state = response["MailingState"]
             contact.mailing_postal_code = response["MailingPostalCode"]
             contact.work_email = response["npe01__WorkEmail__c"]
             contact.created = False

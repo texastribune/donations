@@ -329,7 +329,7 @@ def add_donation(form=None, customer=None, donation_type=None, bad_actor_request
     contact = Contact.get_or_create(
         email=email, first_name=first_name, last_name=last_name, street=street, city=city, state=state, zipcode=zipcode
     )
-    logging.info(contact)
+    logging.info(contact.__dict__)
 
     if contact.first_name == "Subscriber" and contact.last_name == "Subscriber":
         logging.info(f"Changing name of contact to {first_name} {last_name}")
