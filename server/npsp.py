@@ -1009,9 +1009,9 @@ class Contact(SalesforceObject):
             "FirstName": self.first_name,
             "LastName": self.last_name,
             "LeadSource": self.lead_source,
-            "MailingStreet": self.mailing_street,
-            "MailingCity": self.mailing_city,
-            "MailingState": self.mailing_state,
+            "npe01__MailingStreet__c": self.mailing_street,
+            "npe01__MailingCity__c": self.mailing_city,
+            "npe01__MailingState__c": self.mailing_state,
             "MailingPostalCode": self.mailing_postal_code,
             "npe01__WorkEmail__c": self.work_email,
         }
@@ -1060,9 +1060,9 @@ class Contact(SalesforceObject):
             contact.last_name = response["LastName"]
             contact.email = response["Email"]
             contact.lead_source = response["LeadSource"]
-            contact.mailing_street = response["MailingStreet"]
-            contact.mailing_city = response["MailingCity"]
-            contact.mailing_state = response["MailingState"]
+            contact.mailing_street = response["npe01__MailingStreet__c"]
+            contact.mailing_city = response["npe01__MailingCity__c"]
+            contact.mailing_state = response["npe01__MailingState__c"]
             contact.mailing_postal_code = response["MailingPostalCode"]
             contact.work_email = response["npe01__WorkEmail__c"]
             contact.created = False
