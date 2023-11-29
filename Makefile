@@ -25,6 +25,7 @@ nuclear:
 	-docker rm -vf $$(docker ps -a -q)
 	-docker rmi -f $$(docker images -a -q)
 	-docker system prune -af --volumes
+	-docker volume rm donations_checkout_node_modules-vol
 
 # original commands
 interactive: build backing

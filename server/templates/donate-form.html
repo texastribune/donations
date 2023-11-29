@@ -10,11 +10,12 @@
 {% endblock %}
 
 {% block head_scripts %}
-{% if form_data and message %}
-<script>
-  window.location.replace('#join-today');
-</script>
-{% endif %}
+  <script src="https://maps.googleapis.com/maps/api/js?key={{autocomplete}}&libraries=places"></script>
+  {% if form_data and message %}
+  <script>
+    window.location.replace('#join-today');
+  </script>
+  {% endif %}
 {% endblock %}
 
 {% block content %}

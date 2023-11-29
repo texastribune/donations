@@ -63,6 +63,7 @@
     "vee-validate": "^3.2.1",
     "vue": "^2.7.0",
     "vue-clipboard2": "^0.3.0",
+    "vue-google-autocomplete": "^1.1.4",
     "vue-js-modal": "^2.0.1",
     "vue-loader": "^15.7.0",
     "vue-router": "^3.5.2",

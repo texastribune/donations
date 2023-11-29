@@ -82,8 +82,8 @@
       </div>
     </div>
 
-    <div class="grid_row grid_wrap--s">
-      <div class="col_6 grid_separator">
+    <div class="grid_row grid_separator">
+      <div class="col">
         <text-input
           :store-module="storeModule"
           :required="false"
@@ -93,89 +93,145 @@
           name="reason"
         />
       </div>
-      <div class="col_6 grid_separator">
-        <text-input
-          :store-module="storeModule"
-          :required="false"
-          :show-error="showErrors"
-          label-text="zip code"
-          base-classes="form__text form__text--standard"
-          name="zipcode"
-          inputmode="numeric"
-        />
-      </div>
     </div>
 
-    <div class="grid_row grid_separator">
-      <div class="col">
-        <pay-fees :store-module="storeModule" base-classes="form__fees" />
-      </div>
-    </div>
-
-    <div class="grid_row">
-      <div class="col">
-        <native-pay
-          :store-module="storeModule"
-          :form-is-valid="isValid"
-          :supported="nativeIsSupported"
-          base-classes="form__native"
-          @setLocalValue="setLocalValue"
-          @setCardValue="setCardValue"
-          @onSubmit="onSubmit"
-        />
-      </div>
-    </div>
-
-    <div
-      v-if="nativeIsSupported && showManualPay"
-      class="grid_separator--l"
-      aria-hidden="true"
-    />
-
-    <div
-      :aria-live="nativeIsSupported ? 'polite' : false"
-      class="grid_separator"
-    >
-      <div v-if="showManualPay">
-        <div class="grid_row">
-          <div class="col">
-            <manual-pay
-              :card="card"
-              base-classes="form__manual"
-              @setCardValue="setCardValue"
-            />
-          </div>
-        </div>
-
-        <div class="grid_row">
-          <div class="col">
-            <manual-submit
-              :form-is-valid="isValid && card.isValid"
-              :is-fetching-token="isFetchingToken"
-              base-classes="form__submit button button--yellow button--l"
-              value="Donate"
-              @setLocalValue="setLocalValue"
-              @setCardValue="setCardValue"
-              @onSubmit="onSubmit"
-            />
+    <div class="has-bg-white-off has-padding">
+      <h4 class="grid_row grid_separator">Billing Information</h4>
+      <div v-if="showLookup" class="grid_row grid_separator">
+        <div class="col">
+          <div class="form__text form__text--standard">
+            <label>Address</label>
+            <vue-google-autocomplete
+              id="map"
+              classname="form-control"
+              placeholder="Lookup your address"
+              @placechanged="getAddressData"
+            >
+            </vue-google-autocomplete>
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="genericErrorMessage" class="grid_separator">
+      <div v-if="showField" class="grid_row grid_separator" @v-on:focus.native="onAddressFocus">
+        <div class="col">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="address"
+            base-classes="form__text form__text--standard"
+            name="address"
+          />
+        </div>
+      </div>
+
+      <div class="grid_row grid_wrap--s">
+        <div class="col_6 grid_separator">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="city"
+            base-classes="form__text form__text--standard"
+            name="city"
+          />
+        </div>
+        <div class="col_3 grid_separator">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="State"
+            base-classes="form__text form__text--standard"
+            name="state"
+          />
+        </div>
+        <div class="col_3 grid_separator">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="zip code"
+            base-classes="form__text form__text--standard"
+            name="zipcode"
+            inputmode="numeric"
+          />
+        </div>
+      </div>
+
+      <div class="grid_row grid_separator">
+        <div class="col">
+          <pay-fees :store-module="storeModule" base-classes="form__fees" />
+        </div>
+      </div>
+
       <div class="grid_row">
         <div class="col">
-          <p
-            role="alert"
-            class="form__error form__error--normal form__error--centered"
-          >
-            {{ genericErrorMessage }}
-          </p>
+          <native-pay
+            :store-module="storeModule"
+            :form-is-valid="isValid"
+            :supported="nativeIsSupported"
+            base-classes="form__native"
+            @setLocalValue="setLocalValue"
+            @setCardValue="setCardValue"
+            @onSubmit="onSubmit"
+          />
+        </div>
+      </div>
+
+      <div
+        v-if="nativeIsSupported && showManualPay"
+        class="grid_separator--l"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div
+        :aria-live="nativeIsSupported ? 'polite' : false"
+        class="grid_separator"
+      >
+        <div v-if="showManualPay">
+          <div class="grid_row">
+            <div class="col">
+              <manual-pay
+                :card="card"
+                base-classes="form__manual"
+                @setCardValue="setCardValue"
+              />
+            </div>
+          </div>
+
+          <div class="grid_row">
+            <div class="col">
+              <manual-submit
+                :form-is-valid="isValid && card.isValid"
+                :is-fetching-token="isFetchingToken"
+                base-classes="form__submit button button--yellow button--l"
+                value="Donate"
+                @setLocalValue="setLocalValue"
+                @setCardValue="setCardValue"
+                @onSubmit="onSubmit"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="genericErrorMessage" class="grid_separator">
+        <div class="grid_row">
+          <div class="col">
+            <p
+              role="alert"
+              class="form__error form__error--normal form__error--centered"
+            >
+              {{ genericErrorMessage }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
+    <br>
     <p class="subtext">
        By donating, you will receive member communications at the email address you provide.
     </p>
@@ -196,6 +252,7 @@
 </template>
 
 <script>
+import VueGoogleAutocomplete from 'vue-google-autocomplete';
 import Hidden from '../../connected-elements/Hidden.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
 import Radios from '../../connected-elements/Radios.vue';
@@ -219,6 +276,7 @@ export default {
     ManualPay,
     ManualSubmit,
     NativePay,
+    VueGoogleAutocomplete,
   },
 
   mixins: [formStarter, updateValue],
@@ -233,7 +291,42 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
+      showLookup: true,
+      showField: false
     };
   },
+
+  methods: {
+    getAddressData(addressData, placeResultData) {
+      this.showLookup = false;
+      this.showField = true;
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'address',
+        value: placeResultData.name,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'city',
+        value: addressData.locality,
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'state',
+        value: addressData.administrative_area_level_1
+      });
+      this.updateValue({
+        storeModule: this.storeModule,
+        key: 'zipcode',
+        value: addressData.postal_code
+      });
+    },
+    onAddressFocus(event) {
+      // eslint-disable-next-line no-console
+      console.log(event);
+      this.showField = false;
+      this.showLookup = true;
+    }
+  }
 };
 </script>
