@@ -8,8 +8,8 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }}</strong> toward unlocking a <br />
-      {{ data[1].label }} match.
+      <strong>{{ data[0].label }} new members</strong> <br />
+      toward goal of {{ data[1].label }}.
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '$25,000', value: 25000 },
+        { slug: 'goal', label: '500', value: 500 },
       ],
     };
   },
@@ -43,7 +43,7 @@ export default {
 
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/gt2023.json';
+      const url = 'https://membership.texastribune.org/fmd2023.json';
 
       axios
         .get(url)
