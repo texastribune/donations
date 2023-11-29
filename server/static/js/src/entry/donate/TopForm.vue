@@ -112,7 +112,7 @@
         </div>
       </div>
 
-      <div v-if="showField" class="grid_row grid_separator">
+      <div v-if="showField" class="grid_row grid_separator" @v-on:focus.native="onAddressFocus">
         <div class="col">
           <text-input
             :store-module="storeModule"
@@ -320,6 +320,12 @@ export default {
         key: 'zipcode',
         value: addressData.postal_code
       });
+    },
+    onAddressFocus(event) {
+      // eslint-disable-next-line no-console
+      console.log(event);
+      this.showField = false;
+      this.showLookup = true;
     }
   }
 };
