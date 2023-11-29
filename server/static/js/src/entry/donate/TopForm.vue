@@ -84,68 +84,6 @@
 
     <div class="grid_row grid_separator">
       <div class="col">
-        <div class="form__text form__text--standard">
-          <label>Address Lookup</label>
-          <vue-google-autocomplete
-            id="map"
-            classname="form-control"
-            placeholder="Lookup your address"
-            @placechanged="getAddressData"
-          >
-          </vue-google-autocomplete>
-        </div>
-      </div>
-    </div>
-
-    <div class="grid_row grid_wrap--s">
-      <div class="col_6 grid_separator">
-        <text-input
-          :store-module="storeModule"
-          :required="false"
-          :show-error="showErrors"
-          label-text="address"
-          base-classes="form__text form__text--standard"
-          name="address"
-        />
-      </div>
-      <div class="col_6 grid_separator">
-        <text-input
-          :store-module="storeModule"
-          :required="false"
-          :show-error="showErrors"
-          label-text="city"
-          base-classes="form__text form__text--standard"
-          name="city"
-        />
-      </div>
-    </div>
-
-    <div class="grid_row grid_wrap--s">
-      <div class="col_6 grid_separator">
-        <text-input
-          :store-module="storeModule"
-          :required="false"
-          :show-error="showErrors"
-          label-text="State"
-          base-classes="form__text form__text--standard"
-          name="state"
-        />
-      </div>
-      <div class="col_6 grid_separator">
-        <text-input
-          :store-module="storeModule"
-          :required="false"
-          :show-error="showErrors"
-          label-text="zip code"
-          base-classes="form__text form__text--standard"
-          name="zipcode"
-          inputmode="numeric"
-        />
-      </div>
-    </div>
-
-    <div class="grid_row grid_separator">
-      <div class="col">
         <text-input
           :store-module="storeModule"
           :required="false"
@@ -157,77 +95,143 @@
       </div>
     </div>
 
-    <div class="grid_row grid_separator">
-      <div class="col">
-        <pay-fees :store-module="storeModule" base-classes="form__fees" />
-      </div>
-    </div>
-
-    <div class="grid_row">
-      <div class="col">
-        <native-pay
-          :store-module="storeModule"
-          :form-is-valid="isValid"
-          :supported="nativeIsSupported"
-          base-classes="form__native"
-          @setLocalValue="setLocalValue"
-          @setCardValue="setCardValue"
-          @onSubmit="onSubmit"
-        />
-      </div>
-    </div>
-
-    <div
-      v-if="nativeIsSupported && showManualPay"
-      class="grid_separator--l"
-      aria-hidden="true"
-    >
-    </div>
-
-    <div
-      :aria-live="nativeIsSupported ? 'polite' : false"
-      class="grid_separator"
-    >
-      <div v-if="showManualPay">
-        <div class="grid_row">
-          <div class="col">
-            <manual-pay
-              :card="card"
-              base-classes="form__manual"
-              @setCardValue="setCardValue"
-            />
-          </div>
-        </div>
-
-        <div class="grid_row">
-          <div class="col">
-            <manual-submit
-              :form-is-valid="isValid && card.isValid"
-              :is-fetching-token="isFetchingToken"
-              base-classes="form__submit button button--yellow button--l"
-              value="Donate"
-              @setLocalValue="setLocalValue"
-              @setCardValue="setCardValue"
-              @onSubmit="onSubmit"
-            />
+    <div class="has-bg-white-off has-padding">
+      <h4 class="grid_row grid_separator">Billing Information</h4>
+      <div v-if="showLookup" class="grid_row grid_separator">
+        <div class="col">
+          <div class="form__text form__text--standard">
+            <label>Address</label>
+            <vue-google-autocomplete
+              id="map"
+              classname="form-control"
+              placeholder="Lookup your address"
+              @placechanged="getAddressData"
+            >
+            </vue-google-autocomplete>
           </div>
         </div>
       </div>
-    </div>
 
-    <div v-if="genericErrorMessage" class="grid_separator">
+      <div v-if="showField" class="grid_row grid_separator">
+        <div class="col">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="address"
+            base-classes="form__text form__text--standard"
+            name="address"
+          />
+        </div>
+      </div>
+
+      <div class="grid_row grid_wrap--s">
+        <div class="col_6 grid_separator">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="city"
+            base-classes="form__text form__text--standard"
+            name="city"
+          />
+        </div>
+        <div class="col_3 grid_separator">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="State"
+            base-classes="form__text form__text--standard"
+            name="state"
+          />
+        </div>
+        <div class="col_3 grid_separator">
+          <text-input
+            :store-module="storeModule"
+            :required="false"
+            :show-error="showErrors"
+            label-text="zip code"
+            base-classes="form__text form__text--standard"
+            name="zipcode"
+            inputmode="numeric"
+          />
+        </div>
+      </div>
+
+      <div class="grid_row grid_separator">
+        <div class="col">
+          <pay-fees :store-module="storeModule" base-classes="form__fees" />
+        </div>
+      </div>
+
       <div class="grid_row">
         <div class="col">
-          <p
-            role="alert"
-            class="form__error form__error--normal form__error--centered"
-          >
-            {{ genericErrorMessage }}
-          </p>
+          <native-pay
+            :store-module="storeModule"
+            :form-is-valid="isValid"
+            :supported="nativeIsSupported"
+            base-classes="form__native"
+            @setLocalValue="setLocalValue"
+            @setCardValue="setCardValue"
+            @onSubmit="onSubmit"
+          />
+        </div>
+      </div>
+
+      <div
+        v-if="nativeIsSupported && showManualPay"
+        class="grid_separator--l"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div
+        :aria-live="nativeIsSupported ? 'polite' : false"
+        class="grid_separator"
+      >
+        <div v-if="showManualPay">
+          <div class="grid_row">
+            <div class="col">
+              <manual-pay
+                :card="card"
+                base-classes="form__manual"
+                @setCardValue="setCardValue"
+              />
+            </div>
+          </div>
+
+          <div class="grid_row">
+            <div class="col">
+              <manual-submit
+                :form-is-valid="isValid && card.isValid"
+                :is-fetching-token="isFetchingToken"
+                base-classes="form__submit button button--yellow button--l"
+                value="Donate"
+                @setLocalValue="setLocalValue"
+                @setCardValue="setCardValue"
+                @onSubmit="onSubmit"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div v-if="genericErrorMessage" class="grid_separator">
+        <div class="grid_row">
+          <div class="col">
+            <p
+              role="alert"
+              class="form__error form__error--normal form__error--centered"
+            >
+              {{ genericErrorMessage }}
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
+    <br>
     <p class="subtext">
        By donating, you will receive member communications at the email address you provide.
     </p>
@@ -287,11 +291,15 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
+      showLookup: true,
+      showField: false
     };
   },
 
   methods: {
     getAddressData(addressData, placeResultData) {
+      this.showLookup = false;
+      this.showField = true;
       this.updateValue({
         storeModule: this.storeModule,
         key: 'address',
