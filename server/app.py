@@ -59,6 +59,7 @@ from .util import (
     send_email_new_business_membership,
     send_multiple_account_warning,
     name_splitter,
+    donation_adder,
 )
 
 ZONE = timezone(TIMEZONE)
@@ -871,6 +872,13 @@ def customer_subscription_created(event):
     subscription_id = event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
     sub_meta = subscription["metadata"]
+
+    # When migrating existing recurring donations from salesforce to stripe subscriptions, we pass a field
+    # called "skip_sync" to the subscription metadata to let us know that we don't need to push anything back
+    # to salesforce. In that instance, we exit the function at this point.
+    if sub_meta.get("skip_sync", False):
+        return None
+
     donation_type = sub_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
     skip_notification = sub_meta.get("skip_notification", False)
 
@@ -1605,6 +1613,33 @@ def close_rdo(subscription_id):
 
 @app.cli.command("rdo_to_subscription")
 @click.argument("email")
-def rdo_to_subscription(email):
-    rdos = RDO.list()
-    print(f'There you go again, {name}')
+def rdo_to_subscription(email=None):
+    rdos = []
+    if email:
+        rdos = RDO.list(email=email)
+    else:
+        pass
+    
+    for rdo in rdos:
+        if not rdo.stripe_subscription:
+            date = None
+            opps = rdo.opportunities()
+            for opp in opps:
+                if opp.stage_name == "Pledged":
+                    date = datetime.strptime(opp.close_date, "%Y-%m-%d")
+            
+            if not date:
+                raise Exception("A proper date couldn't be found for RDO {rdo.id}, making it ineligble for conversion.")
+
+            sub = donation_adder(
+                customer = rdo.stripe_customer,
+                amount = rdo.amount,
+                pay_fees = rdo.agree_to_pay_fees,
+                interval = rdo.installment_period[:-2],
+                year = date.year,
+                month = date.month,
+                day = date.day,
+            )
+
+            print(sub)
+            rdo.stripe_subscription = sub.get("id", "filler")
