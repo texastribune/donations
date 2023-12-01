@@ -1642,4 +1642,6 @@ def rdo_to_subscription(email=None):
             )
 
             print(sub)
-            rdo.stripe_subscription = sub.get("id", "filler")
+            update_details = {"Stripe_Subscription_Id__c": sub.get("id", "sub_filler")}
+            response = RDO.update([rdo], update_details)
+            print(response)
