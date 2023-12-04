@@ -39,13 +39,13 @@ export const CIRCLE_LEVELS = {
     installmentPeriod: 'yearly',
     amount: '5000',
   },
-  CEOMonthly: {
+  ceoMonthly: {
     bucket: 'CEO',
     bucketFull: "CEO's Circle",
     installmentPeriod: 'monthly',
     amount: '834',
   },
-  CEOYearly: {
+  ceoYearly: {
     bucket: 'CEO',
     bucketFull: "CEO's Circle",
     installmentPeriod: 'yearly',
