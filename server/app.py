@@ -868,15 +868,15 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription_id = event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
-    sub_meta = subscription["metadata"]
+    subscription_meta = subscription["metadata"]
 
     # When migrating existing recurring donations from salesforce to stripe subscriptions, we pass a field
     # called "skip_sync" to the subscription metadata to let us know that we don't need to push anything back
     # to salesforce. In that instance, we exit the function at this point.
-    if sub_meta.get("skip_sync", False):
+    if subscription_meta.get("skip_sync", False):
         return None
 
-    donation_type = sub_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+    donation_type = subscription_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
 
     invoice = subscription["latest_invoice"]
     invoice_status = invoice["status"]
