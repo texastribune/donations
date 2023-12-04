@@ -1618,7 +1618,7 @@ def rdo_to_subscription(email=None):
     if email:
         rdos = RDO.list(email=email)
     else:
-        pass
+        return "An email must be passed"
     
     for rdo in rdos:
         if not rdo.stripe_subscription:
@@ -1627,6 +1627,7 @@ def rdo_to_subscription(email=None):
             for opp in opps:
                 if opp.stage_name == "Pledged":
                     date = datetime.strptime(opp.close_date, "%Y-%m-%d")
+                    break
             
             if not date:
                 raise Exception("A proper date couldn't be found for RDO {rdo.id}, making it ineligble for conversion.")
@@ -1634,7 +1635,7 @@ def rdo_to_subscription(email=None):
             sub = donation_adder(
                 customer = rdo.stripe_customer,
                 amount = rdo.amount,
-                pay_fees = rdo.agree_to_pay_fees,
+                pay_fees = rdo.agreed_to_pay_fees,
                 interval = rdo.installment_period[:-2],
                 year = date.year,
                 month = date.month,
