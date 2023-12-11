@@ -106,7 +106,7 @@ class BadActor:
         info_items = self._slackify_items(info_items)
         judgment_items = self._slackify_items(judgment_items)
 
-        return [
+        slack_block = [
             {
                 "type": "section",
                 "fields": info_items,
@@ -115,7 +115,10 @@ class BadActor:
                 "type": "section",
                 "fields": judgment_items,
             },
-            {
+        ]
+
+        if not self.bad_actor_api_response.auto_rejected:
+            slack_block.append({
                 "type": "actions",
                 "block_id": "choices",
                 "elements": [
@@ -138,8 +141,17 @@ class BadActor:
                         "value": json.dumps(self.transaction_data),
                     },
                 ],
-            },
-        ]
+            })
+        else:
+            slack_block.append({
+                "type": "section",
+                "fields": [{
+                    "type": "mrkdwn",
+                    "text": "Donation auto-rejected by CageAI"
+                }]
+            })
+
+        return slack_block
 
     def _send_to_slack(self):
 
