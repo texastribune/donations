@@ -10,6 +10,7 @@ import locale
 import logging
 import os
 import re
+import requests
 from datetime import datetime
 from pprint import pformat
 
@@ -1611,17 +1612,50 @@ def close_rdo(subscription_id):
     return rdo
 
 
-@app.cli.command("rdo_to_subscription")
-@click.argument("email")
-def rdo_to_subscription(email=None):
-    rdos = []
-    if email:
-        rdos = RDO.list(email=email)
-    else:
-        return "An email must be passed"
+# The rdo_converter command finds existing recurring donations that are only tracked in salesforce
+# and converts them to stripe subscriptions. Stripe then passes the new subscription id back to
+# salesforce so that the two systems are in sync. Any recurring donations that are converted will
+# no longer run on the nightly load and will be handled by stripe's scheduled charges instead.
+# Finally, a recurring donation's next charge date is used as the next date that stripe should attempt
+# charging the donor, so no charge occurs at time of conversion.
+@app.cli.command('rdo_converter')
+@click.option('-l', '--limit', default=0,
+              help="The number of initial donation records to look at for conversion. Good for testing small batches.")
+@click.option('-t', '--donation-type', 'donation_type', default=None, 
+            help="The type of donation to convert. Can be one of 'Recurring Donation', 'Business Membership', 'Giving Circle' or 'The Blast'.") 
+@click.option('-s', '--only-staff', 'only_staff', is_flag=True, default=False,
+              help="A flag to limit conversions to recurring donations given by current staff.")
+@click.option('-e', '--email', default=None,
+              help="The particular email address used for some amount of recurring donations. Use this if you only need to convert one persons donations.")
+def rdo_converter(limit, donation_type, only_staff, email):
+    if not donation_type and not email:
+        return "A donation type or email must be passed"
+
+    # If any of the vars passed here are null, they're ignored and the query
+    # is built without them
+    rdos = RDO.list(limit=limit, donation_type=donation_type, email=email)
+    staff_names = []
+
+    # is there a better way to get a list of staff?
+    if only_staff:
+        response = requests.get('https://www.texastribune.org/api/v2/authors/?staff=true&limit=100')
+        staff_results = response.json()['results']
+        staff_names = [staff["name"] for staff in staff_results]
     
     for rdo in rdos:
         if not rdo.stripe_subscription:
+            if only_staff:
+                # Rather hacky, but email isn't a good source of connection between donations
+                # and our staff, so we slice up the recurring donation name to get the donor name
+                # and reference that against our staff_names list.
+                try:
+                    name = " ".join(rdo.name.split(' ')[2:-1])
+                except Exception:
+                    continue
+
+                if name not in staff_names:
+                    continue
+
             date = None
             opps = rdo.opportunities()
             for opp in opps:
@@ -1631,8 +1665,9 @@ def rdo_to_subscription(email=None):
             
             if not date:
                 raise Exception("A proper date couldn't be found for RDO {rdo.id}, making it ineligble for conversion.")
-
-            sub = donation_adder(
+            
+            print(f'Creating {rdo.installment_period} subscription of {rdo.amount} for customer {rdo.stripe_customer} to begin on {str(date)} from {rdo.name}')
+            subscription = donation_adder(
                 customer = rdo.stripe_customer,
                 amount = rdo.amount,
                 pay_fees = rdo.agreed_to_pay_fees,
@@ -1642,7 +1677,12 @@ def rdo_to_subscription(email=None):
                 day = date.day,
             )
 
-            print(sub)
-            update_details = {"Stripe_Subscription_Id__c": sub.get("id", "sub_filler")}
-            response = RDO.update([rdo], update_details)
-            print(response)
+            subscription_id = subscription.get("id", None)
+            if subscription_id is None:
+                print(f"Follow up with {rdo.id} for customer {rdo.stripe_customer}. A subscription was created but no id was passed.")
+                continue
+            update_details = {"Stripe_Subscription_Id__c": subscription_id}
+            try:
+                RDO.update([rdo], update_details)
+            except Exception as e:
+                print(f"Follow up with {rdo.id}. Updating stripe_subscription with subscription {subscription_id} failed.")

@@ -732,57 +732,60 @@ class RDO(SalesforceObject, CampaignMixin):
             return None
 
     @classmethod
-    def list(cls, email=None, sf_connection=None):
+    def list(cls, donation_type=None, email=None, limit=0, sf_connection=None):
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
-        if email is None:
-            raise SalesforceException("email must be specified")
-        if email:
-            query = f"""
-                SELECT Id, npe03__Organization__c, Referral_ID__c, npe03__Recurring_Donation_Campaign__c,
-                npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
-                Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
-                Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
-                npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
-                Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
-                FROM npe03__Recurring_Donation__c
-                WHERE Billing_Email__c = '{email}'
-                """
-            response = sf.query(query)
-            # should only be one result here because we're
-            # querying by id
-            results = list()
-            for item in response:
-                rdo = cls()
-                rdo.id = item["Id"]
-                rdo.account_id = item["npe03__Organization__c"]
-                rdo.referral_id = item["Referral_ID__c"]
-                rdo.campaign_id = item["npe03__Recurring_Donation_Campaign__c"]
-                rdo.contact_id = item["npe03__Contact__c"]
-                rdo.amount = item["npe03__Amount__c"]
-                rdo.date_established = item["npe03__Date_Established__c"]
-                rdo.name = item["Name"]
-                rdo.stripe_customer = item["Stripe_Customer_Id__c"]
-                rdo.stripe_subscription = item["Stripe_Subscription_Id__c"]
-                rdo.lead_source = item["Lead_Source__c"]
-                rdo.description = item["Stripe_Description__c"]
-                rdo.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
-                rdo.encouraged_by = item["Encouraged_to_contribute_by__c"]
-                rdo.open_ended_status = item["npe03__Open_Ended_Status__c"]
-                rdo.installments = item["npe03__Installments__c"]
-                rdo.installment_period = item["npe03__Installment_Period__c"]
-                rdo.blast_subscription_email = item["Blast_Subscription_Email__c"]
-                rdo.billing_email = item["Billing_Email__c"]
-                rdo.type = item["Type__c"]
-                rdo.stripe_card_brand = item["Stripe_Card_Brand__c"]
-                rdo.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
-                rdo.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
-                rdo.quarantined = item["Quarantined__c"]
-                results.append(rdo)
-            return results
+        query = f"""
+            SELECT Id, npe03__Organization__c, Referral_ID__c, npe03__Recurring_Donation_Campaign__c,
+            npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
+            Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
+            Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
+            npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
+            Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
+            FROM npe03__Recurring_Donation__c
+            WHERE npe03__Open_Ended_Status__c != 'Closed'
+            """
 
-        else:
-            return None
+        if donation_type:
+            query += f"AND Type__c = '{donation_type}'"
+        
+        if email:
+            query += f"AND Contact_Email__c = '{email}'"
+
+        if limit:
+            query += f"LIMIT {limit}"
+
+        response = sf.query(query)
+        results = list()
+        for item in response:
+            rdo = cls()
+            rdo.id = item["Id"]
+            rdo.account_id = item["npe03__Organization__c"]
+            rdo.referral_id = item["Referral_ID__c"]
+            rdo.campaign_id = item["npe03__Recurring_Donation_Campaign__c"]
+            rdo.contact_id = item["npe03__Contact__c"]
+            rdo.amount = item["npe03__Amount__c"]
+            rdo.date_established = item["npe03__Date_Established__c"]
+            rdo.name = item["Name"]
+            rdo.stripe_customer = item["Stripe_Customer_Id__c"]
+            rdo.stripe_subscription = item["Stripe_Subscription_Id__c"]
+            rdo.lead_source = item["Lead_Source__c"]
+            rdo.description = item["Stripe_Description__c"]
+            rdo.agreed_to_pay_fees = item["Stripe_Agreed_to_pay_fees__c"]
+            rdo.encouraged_by = item["Encouraged_to_contribute_by__c"]
+            rdo.open_ended_status = item["npe03__Open_Ended_Status__c"]
+            rdo.installments = item["npe03__Installments__c"]
+            rdo.installment_period = item["npe03__Installment_Period__c"]
+            rdo.blast_subscription_email = item["Blast_Subscription_Email__c"]
+            rdo.billing_email = item["Billing_Email__c"]
+            rdo.type = item["Type__c"]
+            rdo.stripe_card_brand = item["Stripe_Card_Brand__c"]
+            rdo.stripe_card_expiration = item["Stripe_Card_Expiration__c"]
+            rdo.stripe_card_last_4 = item["Stripe_Card_Last_4__c"]
+            rdo.quarantined = item["Quarantined__c"]
+            results.append(rdo)
+        
+        return results
 
     def __str__(self):
         return f"{self.id}: {self.name} for {self.amount} ({self.description})"
