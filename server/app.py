@@ -23,7 +23,7 @@ from validate_email import validate_email
 
 from .app_celery import make_celery
 from .bad_actor import BadActor
-from .charges import ChargeException, QuarantinedException, charge, amount_to_charge_stripe
+from .charges import ChargeException, QuarantinedException, charge
 from .config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
@@ -52,6 +52,7 @@ from .forms import (
 )
 from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
 from .util import (
+    amount_to_charge,
     clean,
     notify_slack,
     send_email_new_business_membership,
@@ -412,7 +413,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     if quarantine:
         contact = get_or_create_contact(form)
         form["source"] = customer["id"]
-        form["amount_w_fees"] = float(amount_to_charge_stripe(form))
+        form["amount_w_fees"] = float(amount_to_charge(form))
         bad_actor_response.notify_bad_actor(
             transaction=contact,
             transaction_data=form
@@ -877,6 +878,7 @@ def customer_subscription_created(event):
         return None
 
     donation_type = subscription_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+    skip_notification = subscription_meta.get("skip_notification", False)
 
     invoice = subscription["latest_invoice"]
     invoice_status = invoice["status"]
@@ -913,12 +915,13 @@ def customer_subscription_created(event):
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
-    update_next_opportunity(
-        opps=rdo.opportunities(),
-        invoice=invoice,
-    )
+    if not subscription["trial_end"]:
+        update_next_opportunity(
+            opps=rdo.opportunities(),
+            invoice=invoice,
+        )
 
-    if donation_type != "blast":
+    if not skip_notification and donation_type != "blast":
         notify_slack(contact=contact, rdo=rdo)
 
 
@@ -1305,7 +1308,7 @@ def add_blast_subscription(form=None, customer=None):
 
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
 def create_custom_subscription(customer=None, form=None, quarantine=None):
-    amount = amount_to_charge_stripe(form)
+    amount = amount_to_charge(form)
     source = customer["sources"]["data"][0]
     interval = "month" if form["installment_period"] == "monthly" else "year"
     subscription = stripe.Subscription.create(
@@ -1400,7 +1403,7 @@ def find_price(prices=[], period=None, pay_fees=False):
 
 
 def create_payment_intent(customer=None, form=None, quarantine=None):
-    amount = amount_to_charge_stripe(form)
+    amount = amount_to_charge(form)
     payment = stripe.PaymentIntent.create(
         amount=int(amount * 100),
         currency="usd",
@@ -1477,6 +1480,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
+    trial_end = subscription["trial_end"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
@@ -1488,7 +1492,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         rdo.installments = None
 
     else:
-        rdo = RDO(contact=contact)
+        rdo = RDO(contact=contact, date=trial_end)
         rdo.installments = None
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
