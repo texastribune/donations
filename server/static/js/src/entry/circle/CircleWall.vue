@@ -33,6 +33,7 @@ export default {
     return {
       orderedGroupNames: [
         "Founders' Circle",
+        "CEO's Circle",
         "Chairman's Circle",
         'Leadership Circle',
         "Editor's Circle",

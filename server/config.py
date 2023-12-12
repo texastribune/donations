@@ -73,6 +73,8 @@ STRIPE_PRODUCTS = {
     "hatsOffYearly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
     "foundersMonthly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
     "foundersYearly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
+    "ceoMonthly": os.getenv("STRIPE_PRODUCT_CEO", ""),
+    "ceoYearly": os.getenv("STRIPE_PRODUCT_CEO", ""),
     "chairmanMonthly": os.getenv("STRIPE_PRODUCT_CHAIRMAN", ""),
     "chairmanYearly": os.getenv("STRIPE_PRODUCT_CHAIRMAN", ""),
     "leadershipMonthly": os.getenv("STRIPE_PRODUCT_LEADERSHIP", ""),
