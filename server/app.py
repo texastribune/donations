@@ -61,7 +61,7 @@ from .util import (
 )
 
 ZONE = timezone(TIMEZONE)
-USE_THERMOMETER = False
+USE_THERMOMETER = True
 
 DONATION_TYPE_INFO = {
     "membership": {
@@ -869,9 +869,16 @@ def customer_subscription_created(event):
     # It starts by looking for a matching Contact (or creating one).
     subscription_id = event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
-    sub_meta = subscription["metadata"]
-    donation_type = sub_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
-    skip_notification = sub_meta.get("skip_notification", False)
+    subscription_meta = subscription["metadata"]
+
+    # When migrating existing recurring donations from salesforce to stripe subscriptions, we pass a field
+    # called "skip_sync" to the subscription metadata to let us know that we don't need to push anything back
+    # to salesforce. In that instance, we exit the function at this point.
+    if subscription_meta.get("skip_sync", False):
+        return None
+
+    donation_type = subscription_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+    skip_notification = subscription_meta.get("skip_notification", False)
 
     invoice = subscription["latest_invoice"]
     invoice_status = invoice["status"]
@@ -902,7 +909,7 @@ def customer_subscription_created(event):
         # at subscription creation here.
         if donation_type == "circle" and invoice_status == "draft":
             stripe.Invoice.finalize_invoice(invoice["id"])
-            stripe.Invoice.pay(invoice["id"])
+            invoice = stripe.Invoice.pay(invoice["id"])
 
         rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
 
@@ -1538,7 +1545,7 @@ def update_next_opportunity(opps=[], invoice=None):
             stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
         )
 
-    charged_on = datetime.fromtimestamp(invoice["created"]).strftime('%Y-%m-%d')
+    charged_on = datetime.fromtimestamp(invoice["effective_at"]).strftime('%Y-%m-%d')
     opp = [
         opportunity
         for opportunity in opps
