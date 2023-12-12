@@ -287,6 +287,10 @@ def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, ye
     source = customer.sources.data[0]
     timestamp = datetime(year, month, day, tzinfo=ZoneInfo(TIMEZONE)).timestamp()
 
+    # We use stripe's subscription trial functionality here so that we can control when the next charge for the donor
+    # will take place (trial_end). This means we can create the subscription now, even though the next expected charge
+    # date won't be for another 13 days. Handy for moving existing recurring donations to stripe subscriptions or for
+    # setting a donor up with a different recurring donation amount but keeping to the same date. 
     subscription = stripe.Subscription.create(
         customer = customer["id"],
         default_source = source["id"],
