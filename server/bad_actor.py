@@ -33,6 +33,7 @@ class BadActorResponseItem(BaseModel):
 
 class BadActorResponse(BaseModel):
     overall_judgment: BadActorJudgmentType
+    auto_rejected: bool
     items: List[BadActorResponseItem]
 
 
