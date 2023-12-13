@@ -47,10 +47,10 @@ bad_actor_request = {
 
 def test_bad_actor_init():
     bad_actor_response_suspect = BadActorResponse(
-        overall_judgment=BadActorJudgmentType.suspect, items=[]
+        overall_judgment=BadActorJudgmentType.suspect, auto_rejected=False, items=[]
     )
     bad_actor_response_good = BadActorResponse(
-        overall_judgment=BadActorJudgmentType.good, items=[]
+        overall_judgment=BadActorJudgmentType.good, auto_rejected=False, items=[]
     )
     bad_actor = BadActor(bad_actor_request=bad_actor_request)
 
@@ -85,6 +85,7 @@ def test_slackify_all():
     )
     bad_actor_response = BadActorResponse(
         overall_judgment=BadActorJudgmentType.suspect,
+        auto_rejected=False,
         items=[bad_actor_item1, bad_actor_item2],
     )
     contact = Contact(sf_connection=sf)
