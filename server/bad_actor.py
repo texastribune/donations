@@ -117,7 +117,15 @@ class BadActor:
             },
         ]
 
-        if not self.bad_actor_api_response.auto_rejected:
+        if self.bad_actor_api_response.auto_rejected:
+            slack_block.append({
+                "type": "section",
+                "fields": [{
+                    "type": "mrkdwn",
+                    "text": "Donation auto-rejected"
+                }]
+            })
+        else:
             slack_block.append({
                 "type": "actions",
                 "block_id": "choices",
@@ -141,14 +149,6 @@ class BadActor:
                         "value": json.dumps(self.transaction_data),
                     },
                 ],
-            })
-        else:
-            slack_block.append({
-                "type": "section",
-                "fields": [{
-                    "type": "mrkdwn",
-                    "text": "Donation auto-rejected by CageAI"
-                }]
             })
 
         return slack_block
