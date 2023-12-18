@@ -282,7 +282,9 @@ def quantize(amount):
 
 
 def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
-    final_amount = amount_to_charge(amount=amount, pay_fees=pay_fees, interval=interval)
+    # we take into account if the donor chose to pay fees and what the interval of the gift is to determine the final donation amount
+    # then we multiply that by 100 to get the needed format for stripe (i.e. 1058 instead of 10.58)
+    stripe_amount = int(amount_to_charge(amount=amount, pay_fees=pay_fees, interval=interval) * 100)
     customer = stripe.Customer.retrieve(customer)
     source = customer.sources.data[0]
     timestamp = datetime(year, month, day, tzinfo=ZoneInfo(TIMEZONE)).timestamp()
@@ -302,7 +304,7 @@ def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, ye
         },
         items = [{
             "price_data": {
-                "unit_amount": int(final_amount * 100),
+                "unit_amount": stripe_amount,
                 "currency": "usd",
                 "product": STRIPE_PRODUCTS["sustaining"],
                 "recurring": {"interval": interval},
