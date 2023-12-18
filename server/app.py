@@ -1623,39 +1623,18 @@ def close_rdo(subscription_id):
               help="The number of initial donation records to look at for conversion. Good for testing small batches.")
 @click.option('-t', '--donation-type', 'donation_type', default=None, 
             help="The type of donation to convert. Can be one of 'Recurring Donation', 'Business Membership', 'Giving Circle' or 'The Blast'.") 
-@click.option('-s', '--only-staff', 'only_staff', is_flag=True, default=False,
-              help="A flag to limit conversions to recurring donations given by current staff.")
 @click.option('-e', '--email', default=None,
-              help="The particular email address used for some amount of recurring donations. Use this if you only need to convert one persons donations.")
-def rdo_converter(limit, donation_type, only_staff, email):
+              help="Will retrieve all recurring donations tied to an email. Wildcards can be used for LIKE functionality.")
+def rdo_converter(limit, donation_type, only_trib, email):
     if not donation_type and not email:
         return "A donation type or email must be passed"
 
     # If any of the vars passed here are null, they're ignored and the query
     # is built without them
     rdos = RDO.list(limit=limit, donation_type=donation_type, email=email)
-    staff_names = []
-
-    # is there a better way to get a list of staff?
-    if only_staff:
-        response = requests.get('https://www.texastribune.org/api/v2/authors/?staff=true&limit=100')
-        staff_results = response.json()['results']
-        staff_names = [staff["name"] for staff in staff_results]
     
     for rdo in rdos:
         if not rdo.stripe_subscription:
-            if only_staff:
-                # Rather hacky, but email isn't a good source of connection between donations
-                # and our staff, so we slice up the recurring donation name to get the donor name
-                # and reference that against our staff_names list.
-                try:
-                    name = " ".join(rdo.name.split(' ')[2:-1])
-                except Exception:
-                    continue
-
-                if name not in staff_names:
-                    continue
-
             date = None
             opps = rdo.opportunities()
             for opp in opps:
@@ -1671,6 +1650,9 @@ def rdo_converter(limit, donation_type, only_staff, email):
                 customer = rdo.stripe_customer,
                 amount = rdo.amount,
                 pay_fees = rdo.agreed_to_pay_fees,
+                # installment_period can be either "monthly" or "yearly"
+                # we ignore the last two chars because stripe expects "month"
+                # or "year" instead
                 interval = rdo.installment_period[:-2],
                 year = date.year,
                 month = date.month,

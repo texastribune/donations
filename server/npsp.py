@@ -750,7 +750,7 @@ class RDO(SalesforceObject, CampaignMixin):
             query += f"AND Type__c = '{donation_type}'"
         
         if email:
-            query += f"AND Contact_Email__c = '{email}'"
+            query += f"AND Contact_Email__c LIKE '{email}'"
 
         if limit:
             query += f"LIMIT {limit}"
