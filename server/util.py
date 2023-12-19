@@ -21,6 +21,7 @@ from .config import (
     STRIPE_PRODUCTS,
     TIMEZONE,
 )
+from .constants import DONATION_TYPE_INFO
 
 import requests
 
@@ -252,7 +253,7 @@ def name_splitter(name) -> tuple:
     return name_array[0], name_array[1]
 
 
-def amount_to_charge(form=None, amount=None, pay_fees=None, interval=None) -> Decimal:
+def amount_to_charge(form=None, amount=None, pay_fees=None, is_new_recurring=False) -> Decimal:
     """
     Determine the amount to charge. This depends on whether the payer agreed
     to pay fees or not. If they did then we add that to the amount charged.
@@ -264,14 +265,14 @@ def amount_to_charge(form=None, amount=None, pay_fees=None, interval=None) -> De
     if form:
         amount = form["amount"]
         pay_fees = form["pay_fees_value"]
-        interval = form["installment_period"]
+        is_new_recurring = True if form["installment_period"] else False
 
     amount = float(amount)
     if pay_fees:
-        if interval == None:
-            total = (amount + 0.30) / (1 - 0.022)
-        else:
+        if is_new_recurring:
             total = (amount + 0.30) / (1 - 0.027)
+        else:
+            total = (amount + 0.30) / (1 - 0.022)
     else:
         total = amount
     return quantize(total)
@@ -281,34 +282,35 @@ def quantize(amount):
     return Decimal(amount).quantize(TWOPLACES)
 
 
-def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
-    # we take into account if the donor chose to pay fees and what the interval of the gift is to determine the final donation amount
-    # then we multiply that by 100 to get the needed format for stripe (i.e. 1058 instead of 10.58)
-    stripe_amount = int(amount_to_charge(amount=amount, pay_fees=pay_fees, interval=interval) * 100)
+def donation_adder(customer: str, donation_type: str, amount: int, pay_fees: bool, interval: str, is_new_recurring: bool, year: int, month: int, day: int) -> object:
+    # We take into account if the donor chose to pay fees and if the donation is a new recurring donation, a legacy recurring donation or a sigle donation 
+    # to determine the final donation amount. Lastly, we multiply that by 100 to get the needed format for stripe (i.e. 1058 instead of 10.58, etc.)
+    stripe_amount = int(amount_to_charge(amount=amount, pay_fees=pay_fees, is_new_recurring=is_new_recurring) * 100)
     customer = stripe.Customer.retrieve(customer)
     source = customer.sources.data[0]
     timestamp = datetime(year, month, day, tzinfo=ZoneInfo(TIMEZONE)).timestamp()
 
-    subscription = stripe.Subscription.create(
-        customer = customer["id"],
-        default_source = source["id"],
-        trial_end = int(timestamp),
-        proration_behavior = None,
-        description = "Texas Tribune Sustaining Membership",
-        metadata = {
-            "donation_type": "membership",
-            "donor_selected_amount": amount,
-            "pay_fees": "X" if pay_fees else None,
-            "skip_notification": "X",
-            "skip_sync": "X",
-        },
-        items = [{
-            "price_data": {
-                "unit_amount": stripe_amount,
-                "currency": "usd",
-                "product": STRIPE_PRODUCTS["sustaining"],
-                "recurring": {"interval": interval},
-            }
-        }]
-    )
-    return subscription
+    if donation_type == DONATION_TYPE_INFO["membership"]["type"]:
+        subscription = stripe.Subscription.create(
+            customer = customer["id"],
+            default_source = source["id"],
+            trial_end = int(timestamp),
+            proration_behavior = None,
+            description = "Texas Tribune Sustaining Membership",
+            metadata = {
+                "donation_type": "membership",
+                "donor_selected_amount": amount,
+                "pay_fees": "X" if pay_fees else None,
+                "skip_notification": "X",
+                "skip_sync": "X",
+            },
+            items = [{
+                "price_data": {
+                    "unit_amount": stripe_amount,
+                    "currency": "usd",
+                    "product": STRIPE_PRODUCTS["sustaining"],
+                    "recurring": {"interval": interval},
+                }
+            }]
+        )
+        return subscription
