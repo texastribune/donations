@@ -4,11 +4,13 @@ run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
 
 """
 import calendar
+import click
 import json
 import locale
 import logging
 import os
 import re
+import requests
 from datetime import datetime
 from pprint import pformat
 
@@ -43,6 +45,7 @@ from .config import (
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
 )
+from .constants import DONATION_TYPE_INFO
 from .forms import (
     BlastForm,
     BlastPromoForm,
@@ -58,33 +61,11 @@ from .util import (
     send_email_new_business_membership,
     send_multiple_account_warning,
     name_splitter,
+    donation_adder,
 )
 
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = True
-
-DONATION_TYPE_INFO = {
-    "membership": {
-        "type": "Recurring Donation",
-        "description": "Texas Tribune Sustaining Membership",
-        "open_ended_status": "Open",
-    },
-    "business_membership": {
-        "type": "Business Membership",
-        "description": "Texas Tribune Business Membership",
-        "open_ended_status": "Open",
-    },
-    "circle": {
-        "type": "Giving Circle",
-        "description": "Texas Tribune Circle Membership",
-        "open_ended_status": "None",
-    },
-    "blast": {
-        "type": "The Blast",
-        "description": "Blast Subscription",
-        "open_ended_status": "Open",
-    },
-}
 
 if ENABLE_SENTRY:
     import sentry_sdk
@@ -1607,3 +1588,67 @@ def close_rdo(subscription_id):
     response = RDO.update([rdo], update_details)
     app.logger.info(response)
     return rdo
+
+
+# The rdo_converter command finds existing recurring donations that are only tracked in salesforce
+# and converts them to stripe subscriptions. Stripe then passes the new subscription id back to
+# salesforce so that the two systems are in sync. Any recurring donations that are converted will
+# no longer run on the nightly load and will be handled by stripe's scheduled charges instead.
+# Finally, a recurring donation's next charge date is used as the next date that stripe should attempt
+# charging the donor, so no charge occurs at time of conversion.
+@app.cli.command('rdo_converter')
+@click.option('-l', '--limit', default=0,
+              help="The number of initial donation records to look at for conversion. Good for testing small batches.")
+@click.option('-t', '--donation-type', 'donation_type', default=None, 
+            help="The type of donation to convert. Can be one of 'Recurring Donation', 'Business Membership', 'Giving Circle' or 'The Blast'.") 
+@click.option('-e', '--email', default=None,
+              help="Will retrieve all recurring donations tied to an email. Wildcards can be used for LIKE functionality.")
+def rdo_converter(limit, donation_type, email):
+    if not donation_type and not email:
+        return "A donation type or email must be passed"
+
+    # If any of the vars passed here are null, they're ignored and the query
+    # is built without them
+    rdos = RDO.list(limit=limit, donation_type=donation_type, email=email)
+    
+    for rdo in rdos:
+        if not rdo.stripe_subscription:
+            date = None
+            opps = rdo.opportunities()
+            for opp in opps:
+                if opp.stage_name == "Pledged":
+                    date = datetime.strptime(opp.close_date, "%Y-%m-%d")
+                    break
+            
+            if not date:
+                raise Exception("A proper date couldn't be found for RDO {rdo.id}, making it ineligble for conversion.")
+            
+            subscription = donation_adder(
+                customer = rdo.stripe_customer,
+                donation_type=rdo.donation_type,
+                amount = rdo.amount,
+                pay_fees = rdo.agreed_to_pay_fees,
+                # installment_period can be either "monthly" or "yearly"
+                # we ignore the last two chars because stripe expects "month"
+                # or "year" instead
+                interval = rdo.installment_period[:-2],
+                is_new_recurring=False,
+                year = date.year,
+                month = date.month,
+                day = date.day,
+            )
+
+            if not subscription:
+                continue
+
+            subscription_id = subscription.get("id", None)
+            if subscription_id is None:
+                print(f"Follow up with {rdo.id} for customer {rdo.stripe_customer}. A subscription was created but no id was passed.")
+                continue
+
+            print(f'Created {rdo.installment_period} subscription of {rdo.amount} for customer {rdo.stripe_customer} to begin on {str(date)} from {rdo.name}')
+            update_details = {"Stripe_Subscription_Id__c": subscription_id}
+            try:
+                RDO.update([rdo], update_details)
+            except Exception as e:
+                print(f"Follow up with {rdo.id}. Updating stripe_subscription with subscription {subscription_id} failed.")
