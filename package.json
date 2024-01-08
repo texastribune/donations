@@ -44,7 +44,7 @@
     "@texastribune/queso-tools": "^2.3.1",
     "@texastribune/queso-ui": "^10.3.1",
     "auth0-js": "^9.17.0",
-    "axios": "^0.21.4",
+    "axios": "^1.6.5",
     "babel-loader": "^8.2.3",
     "camelcase": "^5.3.1",
     "clean-webpack-plugin": "^2.0.2",
