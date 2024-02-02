@@ -969,10 +969,22 @@ def customer_subscription_deleted(event):
 
 @celery.task(name="app.subscription_schedule_updated")
 def subscription_schedule_updated(event):
+    app.logger.info(f"subscription schedule updated event: {event}")
+
     sub_schedule = event["data"]["object"]
     rdo = RDO.get(subscription_id=sub_schedule["id"])
-    
+    subscription_id = sub_schedule["subscription"]
 
+    if subscription_id:
+        update_details = {"Stripe_Subscription_Id__c": subscription_id}
+        try:
+            RDO.update([rdo], update_details)
+        except Exception as e:
+            app.logger.error(f"Follow up with {rdo.id}. Updating recurring donation with subscription {subscription_id} failed.")
+    elif not rdo.stripe_subscription:
+        app.logger.warning(
+            f"Subscription scheduler ({sub_schedule['id']}) for rdo ({rdo.id}) updated without a new subscription id. Follow up with the scheduler."
+        )
 
 
 @celery.task(name="app.authorization_notification")
