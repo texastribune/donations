@@ -937,16 +937,20 @@ def payment_intent_succeeded(event):
             app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
             return # process can not continue without invoice and will need to be retriggered from stripe
         app.logger.info(f"Payment intent invoice: {invoice}")
-        description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        subscription = invoice.get("subscription", {})
         rerun = invoice.get("metadata", {}).get("rerun")
+        opp_sync = subscription.get("metadata", {}).get("skip_sync")
         try:
-            stripe.PaymentIntent.modify(payment_intent["id"], description=description)
+            stripe.PaymentIntent.modify(
+                payment_intent["id"],
+                description=subscription.get("description", "Texas Tribune Membership")
+            )
         except stripe.error.StripeError as e:
             app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
 
         # the initial invoice tied to a subscription is handled in the
         # customer_subscription_created func, so we ignore it here
-        if invoice['billing_reason'] != "subscription_create" or rerun:
+        if invoice['billing_reason'] != "subscription_create" or rerun or opp_sync:
             update_next_opportunity(
                 invoice=invoice,
             )
@@ -961,6 +965,14 @@ def payment_intent_succeeded(event):
 def customer_subscription_deleted(event):
     subscription = event["data"]["object"]
     rdo = close_rdo(subscription["id"])
+
+
+@celery.task(name="app.subscription_schedule_updated")
+def subscription_schedule_updated(event):
+    sub_schedule = event["data"]["object"]
+    rdo = RDO.get(subscription_id=sub_schedule["id"])
+    
+
 
 
 @celery.task(name="app.authorization_notification")
@@ -1105,6 +1117,8 @@ def stripehook():
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
         customer_subscription_deleted.delay(event)
+    if event.type == "subscription_schedule.updated":
+        subscription_schedule_updated.delay(event)
 
     return "Success", 200
 
