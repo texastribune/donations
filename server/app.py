@@ -915,7 +915,7 @@ def customer_subscription_created(event):
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
-    if not subscription["trial_end"]:
+    if not subscription["trial_end"] and invoice_status != "draft":
         update_next_opportunity(
             opps=rdo.opportunities(),
             invoice=invoice,
@@ -972,7 +972,11 @@ def subscription_schedule_updated(event):
     app.logger.info(f"subscription schedule updated event: {event}")
 
     sub_schedule = event["data"]["object"]
-    rdo = RDO.get(subscription_id=sub_schedule["id"])
+    try:
+        rdo = RDO.get(subscription_id=sub_schedule["id"])
+    except Exception:
+        return # if no RDO is found with the given subscription schedule id, then there is nothing to update
+    
     subscription_id = sub_schedule["subscription"]
 
     if subscription_id:
