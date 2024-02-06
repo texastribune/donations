@@ -881,6 +881,9 @@ def customer_subscription_created(event):
     skip_notification = subscription_meta.get("skip_notification", False)
 
     invoice = subscription["latest_invoice"]
+    if type(invoice) is str:
+        invoice = stripe.Invoice.retrieve(invoice)
+
     invoice_status = invoice["status"]
     if invoice_status == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
