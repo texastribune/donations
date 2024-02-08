@@ -881,6 +881,9 @@ def customer_subscription_created(event):
     skip_notification = subscription_meta.get("skip_notification", False)
 
     invoice = subscription["latest_invoice"]
+    if type(invoice) is str:
+        invoice = stripe.Invoice.retrieve(invoice)
+
     invoice_status = invoice["status"]
     if invoice_status == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
@@ -915,7 +918,7 @@ def customer_subscription_created(event):
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
-    if not subscription["trial_end"]:
+    if not subscription["trial_end"] and invoice_status != "draft":
         update_next_opportunity(
             opps=rdo.opportunities(),
             invoice=invoice,
@@ -937,16 +940,20 @@ def payment_intent_succeeded(event):
             app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
             return # process can not continue without invoice and will need to be retriggered from stripe
         app.logger.info(f"Payment intent invoice: {invoice}")
-        description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        subscription = invoice.get("subscription", {})
         rerun = invoice.get("metadata", {}).get("rerun")
+        opp_sync = subscription.get("metadata", {}).get("skip_sync")
         try:
-            stripe.PaymentIntent.modify(payment_intent["id"], description=description)
+            stripe.PaymentIntent.modify(
+                payment_intent["id"],
+                description=subscription.get("description", "Texas Tribune Membership")
+            )
         except stripe.error.StripeError as e:
             app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
 
         # the initial invoice tied to a subscription is handled in the
         # customer_subscription_created func, so we ignore it here
-        if invoice['billing_reason'] != "subscription_create" or rerun:
+        if invoice['billing_reason'] != "subscription_create" or rerun or opp_sync:
             update_next_opportunity(
                 invoice=invoice,
             )
@@ -961,6 +968,30 @@ def payment_intent_succeeded(event):
 def customer_subscription_deleted(event):
     subscription = event["data"]["object"]
     rdo = close_rdo(subscription["id"])
+
+
+@celery.task(name="app.subscription_schedule_updated")
+def subscription_schedule_updated(event):
+    app.logger.info(f"subscription schedule updated event: {event}")
+
+    sub_schedule = event["data"]["object"]
+    try:
+        rdo = RDO.get(subscription_id=sub_schedule["id"])
+    except Exception:
+        return # if no RDO is found with the given subscription schedule id, then there is nothing to update
+    
+    subscription_id = sub_schedule["subscription"]
+
+    if subscription_id:
+        update_details = {"Stripe_Subscription_Id__c": subscription_id}
+        try:
+            RDO.update([rdo], update_details)
+        except Exception as e:
+            app.logger.error(f"Follow up with {rdo.id}. Updating recurring donation with subscription {subscription_id} failed.")
+    elif not rdo.stripe_subscription:
+        app.logger.warning(
+            f"Subscription scheduler ({sub_schedule['id']}) for rdo ({rdo.id}) updated without a new subscription id. Follow up with the scheduler."
+        )
 
 
 @celery.task(name="app.authorization_notification")
@@ -1105,6 +1136,8 @@ def stripehook():
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
         customer_subscription_deleted.delay(event)
+    if event.type == "subscription_schedule.updated":
+        subscription_schedule_updated.delay(event)
 
     return "Success", 200
 
