@@ -1637,7 +1637,7 @@ def log_opportunity(contact, payment_intent):
 
 def close_rdo(subscription_id, user_initiated=False):
     rdo = RDO.get(subscription_id=subscription_id)
-    update_details = {"npe03__Open_Ended_Status__c": "Closed"}
+    update_details = {"npe03__Open_Ended_Status__c": "Closed", "Cancellation_Date__c": datetime.now()}
     if user_initiated:
         update_details["Cancellation_Method__c"] = "Member Portal"
     response = RDO.update([rdo], update_details)
