@@ -1653,7 +1653,7 @@ def close_rdo(subscription_id, user_initiated=False, contact=None):
     if user_initiated:
         rdo_update_details["Cancellation_Method__c"] = "Member Portal"
 
-        contact_update_details = {"Requested_Recurring_Cancellation__c": True}
+        contact_update_details = {"Requested_Recurring_Cancellation__c": datetime.now()}
         Contact.update([contact], contact_update_details)
 
     response = RDO.update([rdo], rdo_update_details)
