@@ -969,15 +969,19 @@ def payment_intent_succeeded(event):
 def customer_subscription_deleted(event):
     subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer"])
     customer = subscription["customer"]
-    details = subscription["cancellation_details"]
+    method = subscription["cancellation_details"].get('comment', 'Staff')
+    reason = subscription["cancellation_details"].get('reason')
 
     contact = Contact.get(email=customer["email"])
-    rdo = close_rdo(subscription["id"], user_initiated=details["comment"], contact=contact)
+    rdo = close_rdo(subscription["id"], method=method, contact=contact)
+    text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {reason}"
+    if reason == "cancellation_requested":
+        text += f" ({method})"
 
     message = {
-        "text": f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {details['reason']}",
+        "text": text,
         "channel": "#tech-test",
-        "icon_emoji": ":no-good:"
+        "icon_emoji": ":no_good:"
     }
 
     send_slack_message(message, username="Cancellation bot")
@@ -1647,13 +1651,15 @@ def log_opportunity(contact, payment_intent):
     return opportunity
 
 
-def close_rdo(subscription_id, user_initiated=False, contact=None):
+def close_rdo(subscription_id, method=None, contact=None):
     rdo = RDO.get(subscription_id=subscription_id)
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
-    rdo_update_details = {"npe03__Open_Ended_Status__c": "Closed", "Cancellation_Date__c": today}
-    if user_initiated:
-        rdo_update_details["Cancellation_Method__c"] = "Member Portal"
-
+    rdo_update_details = {
+        "npe03__Open_Ended_Status__c": "Closed",
+        "Cancellation_Date__c": today,
+        "Cancellation_Method__c": method,
+    }
+    if method == "Member Portal":
         contact_update_details = {"Requested_Recurring_Cancellation__c": today}
         Contact.update([contact], contact_update_details)
 
