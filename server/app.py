@@ -57,6 +57,7 @@ from .util import (
     notify_slack,
     send_email_new_business_membership,
     send_multiple_account_warning,
+    send_slack_message,
     name_splitter,
 )
 
@@ -966,9 +967,20 @@ def payment_intent_succeeded(event):
 
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
-    subscription = event["data"]["object"]
-    # user_initiated = True if subscription["cancellation_details"]["comment"] else False
-    rdo = close_rdo(subscription["id"], user_initiated=subscription["cancellation_details"]["comment"])
+    subscription = stripe.Subscription.retrieve(event["data"]["object"], expand=["customer"])
+    customer = subscription["customer"]
+    details = subscription["cancellation_details"]
+
+    contact = Contact.get(email=customer["email"])
+    rdo = close_rdo(subscription["id"], user_initiated=details["comment"], contact=contact)
+
+    message = {
+        "text": f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {details['reason']}",
+        "channel": "#tech-test",
+        "icon_emoji": ":no-good:"
+    }
+
+    send_slack_message(message, username="Cancellation bot")
 
 
 @celery.task(name="app.subscription_schedule_updated")
@@ -1635,11 +1647,15 @@ def log_opportunity(contact, payment_intent):
     return opportunity
 
 
-def close_rdo(subscription_id, user_initiated=False):
+def close_rdo(subscription_id, user_initiated=False, contact=None):
     rdo = RDO.get(subscription_id=subscription_id)
-    update_details = {"npe03__Open_Ended_Status__c": "Closed", "Cancellation_Date__c": datetime.now()}
+    rdo_update_details = {"npe03__Open_Ended_Status__c": "Closed", "Cancellation_Date__c": datetime.now()}
     if user_initiated:
-        update_details["Cancellation_Method__c"] = "Member Portal"
-    response = RDO.update([rdo], update_details)
+        rdo_update_details["Cancellation_Method__c"] = "Member Portal"
+
+        contact_update_details = {"Requested_Recurring_Cancellation__c": True}
+        Contact.update([contact], contact_update_details)
+
+    response = RDO.update([rdo], rdo_update_details)
     app.logger.info(response)
     return rdo
