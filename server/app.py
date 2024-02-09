@@ -967,7 +967,7 @@ def payment_intent_succeeded(event):
 
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
-    subscription = stripe.Subscription.retrieve(event["data"]["object"], expand=["customer"])
+    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer"])
     customer = subscription["customer"]
     details = subscription["cancellation_details"]
 
