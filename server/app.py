@@ -969,6 +969,7 @@ def payment_intent_succeeded(event):
 def customer_subscription_deleted(event):
     subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer"])
     customer = subscription["customer"]
+    app.logger.info(f"subscription cancellation_details: {subscription['cancellation_details']}")
     method = subscription["cancellation_details"].get('comment', 'Staff')
     reason = subscription["cancellation_details"].get('reason')
 
