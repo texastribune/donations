@@ -39,6 +39,7 @@ from .config import (
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
+    SLACK_CHANNEL_CANCELLATIONS,
     STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
@@ -969,8 +970,7 @@ def payment_intent_succeeded(event):
 def customer_subscription_deleted(event):
     subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer"])
     customer = subscription["customer"]
-    app.logger.info(f"subscription cancellation_details: {subscription['cancellation_details']}")
-    method = subscription["cancellation_details"].get('comment', 'Staff')
+    method = subscription["cancellation_details"].get('comment') or 'Staff'
     reason = subscription["cancellation_details"].get('reason')
 
     contact = Contact.get(email=customer["email"])
@@ -981,7 +981,7 @@ def customer_subscription_deleted(event):
 
     message = {
         "text": text,
-        "channel": "#tech-test",
+        "channel": SLACK_CHANNEL_CANCELLATIONS,
         "icon_emoji": ":no_good:"
     }
 
