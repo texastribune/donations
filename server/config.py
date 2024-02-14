@@ -90,6 +90,7 @@ STRIPE_PRODUCTS = {
 #
 ENABLE_SLACK = bool_env("ENABLE_SLACK")
 SLACK_CHANNEL = os.getenv("SLACK_CHANNEL", "#stripe")
+SLACK_CHANNEL_CANCELLATIONS = os.getenv("SLACK_CHANNEL_CANCELLATIONS", "#tech-test")
 SLACK_API_KEY = os.getenv("SLACK_API_KEY")
 
 ########

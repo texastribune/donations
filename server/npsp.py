@@ -314,6 +314,11 @@ class SalesforceObject(object):
         self.id = None
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
+    @classmethod
+    def update(cls, obj_list, update_dict, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        return sf.updates(obj_list, update_dict)
+
 
 class Opportunity(SalesforceObject, CampaignMixin):
 
@@ -854,11 +859,6 @@ class RDO(SalesforceObject, CampaignMixin):
         )
         update = {"RecordType": {"Name": self.record_type_name}}
         self.sf.updates(self.opportunities(), update)
-
-    @classmethod
-    def update(cls, rdo, update_details, sf_connection=None):
-        sf = SalesforceConnection() if sf_connection is None else sf_connection
-        return sf.updates(rdo, update_details)
 
 
 class Account(SalesforceObject):

@@ -39,6 +39,7 @@ from .config import (
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
+    SLACK_CHANNEL_CANCELLATIONS,
     STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
@@ -57,6 +58,7 @@ from .util import (
     notify_slack,
     send_email_new_business_membership,
     send_multiple_account_warning,
+    send_slack_message,
     name_splitter,
 )
 
@@ -966,8 +968,24 @@ def payment_intent_succeeded(event):
 
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
-    subscription = event["data"]["object"]
-    rdo = close_rdo(subscription["id"])
+    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer"])
+    customer = subscription["customer"]
+    method = subscription["cancellation_details"].get('comment') or 'Staff'
+    reason = subscription["cancellation_details"].get('reason')
+
+    contact = Contact.get(email=customer["email"])
+    rdo = close_rdo(subscription["id"], method=method, contact=contact)
+    text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {reason}"
+    if reason == "cancellation_requested":
+        text += f" ({method})"
+
+    message = {
+        "text": text,
+        "channel": SLACK_CHANNEL_CANCELLATIONS,
+        "icon_emoji": ":no_good:"
+    }
+
+    send_slack_message(message, username="Cancellation bot")
 
 
 @celery.task(name="app.subscription_schedule_updated")
@@ -1634,9 +1652,18 @@ def log_opportunity(contact, payment_intent):
     return opportunity
 
 
-def close_rdo(subscription_id):
+def close_rdo(subscription_id, method=None, contact=None):
     rdo = RDO.get(subscription_id=subscription_id)
-    update_details = {"npe03__Open_Ended_Status__c": "Closed"}
-    response = RDO.update([rdo], update_details)
+    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    rdo_update_details = {
+        "npe03__Open_Ended_Status__c": "Closed",
+        "Cancellation_Date__c": today,
+        "Cancellation_Method__c": method,
+    }
+    if method == "Member Portal":
+        contact_update_details = {"Requested_Recurring_Cancellation__c": today}
+        Contact.update([contact], contact_update_details)
+
+    response = RDO.update([rdo], rdo_update_details)
     app.logger.info(response)
     return rdo

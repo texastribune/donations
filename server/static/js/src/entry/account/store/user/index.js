@@ -119,6 +119,7 @@ const actions = {
       (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
+      updates.userInitiated = !state.viewAsEmail
 
       await axios.patch(
         `${PORTAL_API_URL}persons/${userId}/rdos/close/`,
