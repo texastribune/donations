@@ -1604,9 +1604,9 @@ def update_next_opportunity(opps=[], invoice=None):
     next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
     app.logger.info("in here 2")
     charged_on = datetime.fromtimestamp(invoice["effective_at"])
-    app.logger.info("in here 3")
+    app.logger.info(f"in here 3 with next_opp_date: {next_opp_date} and charged_on: {charged_on}")
     days_difference = abs((charged_on - next_opp_date).days)
-    app.logger.info("in here 4")
+    app.logger.info(f"in here 4 with days_difference: {days_difference}")
     if days_difference > 30:
         raise Exception(f"""There is a large discrepancy between the charge date of invoice: {invoice["id"]}
                         and the giving date of opp: {next_opp.id} that should be reviewed before further updates.""")
@@ -1623,7 +1623,7 @@ def update_next_opportunity(opps=[], invoice=None):
     app.logger.info("in here 6")
 
     response = Opportunity.update_stage([next_opp], charge_details)
-    app.logger.info("in here last with response: {response}")
+    app.logger.info(f"in here last with response: {response}")
 
 
 
