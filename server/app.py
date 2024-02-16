@@ -1593,16 +1593,19 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
 def update_next_opportunity(opps=[], invoice=None):
     if not opps:
         opps = Opportunity.list(
-            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
+            stage_name="Pledged",
+            stripe_subscription_id=invoice["subscription"]["id"],
+            asc_order=True
         )
 
-    charged_on = datetime.fromtimestamp(invoice["effective_at"]).strftime('%Y-%m-%d')
-    opp = [
-        opportunity
-        for opportunity in opps
-        if opportunity.expected_giving_date == charged_on
-    ][0]
-    app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
+    next_opp = opps[0]
+    next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
+    charged_on = datetime.fromtimestamp(invoice["effective_at"])
+    days_difference = abs((charged_on - next_opp_date).days)
+    if days_difference > 30:
+        raise Exception(f"""There is a large discrepancy between the charge date of invoice: {invoice["id"]}
+                        and the giving date of opp: {next_opp.id} that should be reviewed before further updates.""")
+
     transaction_id = invoice["charge"]
     amount = invoice.get("amount_paid", 0) / 100
     charge_details = {
@@ -1612,7 +1615,7 @@ def update_next_opportunity(opps=[], invoice=None):
     if amount:
         charge_details["Amount"] = amount
 
-    response = Opportunity.update_stage([opp], charge_details)
+    response = Opportunity.update_stage([next_opp], charge_details)
 
 
 def log_opportunity(contact, payment_intent):
