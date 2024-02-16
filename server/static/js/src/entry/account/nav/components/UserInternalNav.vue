@@ -153,19 +153,6 @@
             </router-link>
           </template>
         </link-list-item>
-        <link-list-item v-if="showAmbassador">
-          <template #main>
-            <router-link
-              ga-on="click"
-              :to="{ name: 'ambassador' }"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.inline"
-              :ga-event-label="ga.userPortalNav.labels.ambassador"
-            >
-              Become a Tribune Ambassador
-            </router-link>
-          </template>
-        </link-list-item>
       </link-list>
     </div>
   </user-provider>
@@ -215,11 +202,6 @@ export default {
     },
 
     showEditProfile: {
-      type: Boolean,
-      default: false,
-    },
-
-    showAmbassador: {
       type: Boolean,
       default: false,
     },
