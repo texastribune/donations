@@ -1667,7 +1667,7 @@ def close_rdo(subscription_id, method=None, contact=None, reason=None):
         return None
 
     try:
-        next_opp = rdo.opportunities(order_pledges=True)[0]
+        next_opp = rdo.opportunities(ordered_pledges=True)[0]
     except Exception:
         app.logger.error(f"The next pledged opportunity for recurring donation {rdo.id} was not found and the Salesforce cancellation process was halted.")
         return None
