@@ -64,6 +64,7 @@ from .util import (
 
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = False
+MAX_SYNC_DAYS_DIFFERENCE = 10
 
 DONATION_TYPE_INFO = {
     "membership": {
@@ -1600,9 +1601,9 @@ def update_next_opportunity(opps=[], invoice=None):
 
     next_opp = opps[0]
     next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
-    charged_on = datetime.fromtimestamp(invoice["effective_at"])
-    days_difference = abs((charged_on - next_opp_date).days)
-    if days_difference > 30:
+    charged_on_date = datetime.fromtimestamp(invoice["effective_at"])
+    days_difference = abs((charged_on_date - next_opp_date).days)
+    if days_difference > MAX_SYNC_DAYS_DIFFERENCE:
         raise Exception(f"""There is a large discrepancy between the charge date of invoice: {invoice["id"]}
                         and the giving date of opp: {next_opp.id} that should be reviewed before further updates.""")
 
