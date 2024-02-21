@@ -266,12 +266,6 @@ const getters = {
   linkedEmails: ({ data: { identities = [] } }) =>
     identities.map(({ email }) => email),
 
-  twitterUrl: ({ data: { twitter_share_url: twitterUrl } }) => twitterUrl,
-
-  facebookUrl: ({ data: { facebook_share_url: facebookUrl } }) => facebookUrl,
-
-  emailUrl: ({ data: { email_share_url: emailUrl } }) => emailUrl,
-
   membershipExpirationDate: ({
     data: { membership_expiration_date: membershipExpirationDate },
   }) => membershipExpirationDate,
