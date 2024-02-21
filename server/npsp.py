@@ -387,6 +387,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
         stripe_subscription_id=None,
         stripe_transaction_id=None,
         sf_connection=None,
+        asc_order=False
     ):
 
         # TODO a more generic dserializing method
@@ -410,6 +411,8 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
                 AND StageName = '{stage_name}'
             """
+        
+        order_by = f"""ORDER BY Expected_Giving_Date__c ASC""" if asc_order else ""
 
         query = f"""
             SELECT
@@ -441,6 +444,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 Quarantined__c
             FROM Opportunity
             {where}
+            {order_by}
         """
 
         response = sf.query(query)
