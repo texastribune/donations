@@ -1534,6 +1534,7 @@ def get_account(customer):
 
 
 def log_rdo(type=None, contact=None, account=None, subscription=None):
+    app.logger.info(f"printing out the sub here for clarity: {subscription}")
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
@@ -1580,9 +1581,8 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     if source:
         card = stripe.Customer.retrieve_source(customer_id, source)
     else:
-        customer = stripe.Customer.retrieve(customer_id, expand=["sources"])
-        app.logger.info(customer)
-        card = customer["sources"]["data"][0]
+        customer = stripe.Customer.retrieve(customer_id)
+        card = stripe.Customer.retrieve_source(customer_id, customer["invoice_settings"]["default_payment_method"])
         # card = customer.sources.retrieve(customer.sources.data[0].id)
         # app.logger.info(f"in here too! {card}")
 
