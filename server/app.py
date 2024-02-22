@@ -904,7 +904,7 @@ def customer_subscription_created(event):
             contact.save()
 
         account = get_account(customer)
-        rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
+        rdo = log_rdo(type=donation_type, account=account, customer=customer, subscription=subscription)
         affiliation = Affiliation.get_or_create(
             account=account, contact=contact, role="Business Member Donor"
         )
@@ -917,7 +917,7 @@ def customer_subscription_created(event):
             stripe.Invoice.finalize_invoice(invoice["id"])
             invoice = stripe.Invoice.pay(invoice["id"])
 
-        rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
+        rdo = log_rdo(type=donation_type, contact=contact, customer=customer, subscription=subscription)
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
@@ -1534,8 +1534,7 @@ def get_account(customer):
     return account
 
 
-def log_rdo(type=None, contact=None, account=None, subscription=None):
-    app.logger.info(f"printing out the sub here for clarity: {subscription}")
+def log_rdo(type=None, contact=None, account=None, customer=None, subscription=None):
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
@@ -1582,10 +1581,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     if source:
         card = stripe.Customer.retrieve_source(customer_id, source)
     else:
-        customer = stripe.Customer.retrieve(customer_id)
         card = stripe.Customer.retrieve_source(customer_id, customer["invoice_settings"]["default_payment_method"])
-        # card = customer.sources.retrieve(customer.sources.data[0].id)
-        # app.logger.info(f"in here too! {card}")
 
     year = card["exp_year"]
     month = card["exp_month"]
