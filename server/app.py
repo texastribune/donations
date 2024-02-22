@@ -923,7 +923,7 @@ def customer_subscription_created(event):
     # use that, otherwise retrieve the latest invoice from stripe
     if not subscription["trial_end"] and invoice_status != "draft":
         update_next_opportunity(
-            opps=rdo.opportunities(),
+            opps=rdo.opportunities(ordered_pledges=True),
             invoice=invoice,
         )
 
