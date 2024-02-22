@@ -1580,9 +1580,11 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     if source:
         card = stripe.Customer.retrieve_source(customer_id, source)
     else:
-        customer = stripe.Customer.retrieve(customer_id)
-        card = customer.sources.retrieve(customer.sources.data[0].id)
-        app.logger.info(f"in here too! {card}")
+        customer = stripe.Customer.retrieve(customer_id, expand=["sources"])
+        app.logger.info(customer)
+        card = customer["sources"]["data"][0]
+        # card = customer.sources.retrieve(customer.sources.data[0].id)
+        # app.logger.info(f"in here too! {card}")
 
     year = card["exp_year"]
     month = card["exp_month"]
