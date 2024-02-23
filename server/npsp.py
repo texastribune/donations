@@ -747,7 +747,14 @@ class RDO(SalesforceObject, CampaignMixin):
     # has changed? The opportunities themselves may've changed even when the RDO hasn't so
     # this may not be doable.
 
-    def opportunities(self):
+    def opportunities(self, ordered_pledges=False):
+        order_by = ""
+        if ordered_pledges:
+            order_by = f"""
+                AND StageName = 'Pledged'
+                ORDER BY Expected_Giving_Date__c ASC
+                """
+        
         query = f"""
             SELECT Id, Amount, Name, Stripe_Customer_ID__c,
             Stripe_Subscription_Id__c, Description, Stripe_Agreed_to_pay_fees__c,
@@ -758,6 +765,7 @@ class RDO(SalesforceObject, CampaignMixin):
             Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
             FROM Opportunity
             WHERE npe03__Recurring_Donation__c = '{self.id}'
+            {order_by}
         """
         # TODO must make this dynamic
         response = self.sf.query(query)
