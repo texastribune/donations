@@ -754,7 +754,7 @@ class RDO(SalesforceObject, CampaignMixin):
                 AND StageName = 'Pledged'
                 ORDER BY Expected_Giving_Date__c ASC
                 """
-        
+
         query = f"""
             SELECT Id, Amount, Name, Stripe_Customer_ID__c,
             Stripe_Subscription_Id__c, Description, Stripe_Agreed_to_pay_fees__c,

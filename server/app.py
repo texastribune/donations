@@ -904,7 +904,7 @@ def customer_subscription_created(event):
             contact.save()
 
         account = get_account(customer)
-        rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
+        rdo = log_rdo(type=donation_type, account=account, customer=customer, subscription=subscription)
         affiliation = Affiliation.get_or_create(
             account=account, contact=contact, role="Business Member Donor"
         )
@@ -917,7 +917,7 @@ def customer_subscription_created(event):
             stripe.Invoice.finalize_invoice(invoice["id"])
             invoice = stripe.Invoice.pay(invoice["id"])
 
-        rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
+        rdo = log_rdo(type=donation_type, contact=contact, customer=customer, subscription=subscription)
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
@@ -969,13 +969,19 @@ def payment_intent_succeeded(event):
 
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
-    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer"])
+    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer", "latest_invoice.charge"])
     customer = subscription["customer"]
+    charge = subscription["latest_invoice"]["charge"]
     method = subscription["cancellation_details"].get('comment') or 'Staff'
-    reason = subscription["cancellation_details"].get('reason')
+    reason = subscription["cancellation_details"].get('reason') or charge["outcome"]["seller_message"]
 
     contact = Contact.get(email=customer["email"])
-    rdo = close_rdo(subscription["id"], method=method, contact=contact)
+    rdo = close_rdo(subscription["id"], method=method, contact=contact, reason=reason)
+    # if nothing is returned from close_rdo, we want to halt the process
+    # after a fix is in place, the event will need to be resent from Stripe
+    if rdo is None:
+        return
+
     text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {reason}"
     if reason == "cancellation_requested":
         text += f" ({method})"
@@ -1528,7 +1534,7 @@ def get_account(customer):
     return account
 
 
-def log_rdo(type=None, contact=None, account=None, subscription=None):
+def log_rdo(type=None, contact=None, account=None, customer=None, subscription=None):
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
@@ -1575,8 +1581,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     if source:
         card = stripe.Customer.retrieve_source(customer_id, source)
     else:
-        customer = stripe.Customer.retrieve(customer_id)
-        card = customer.sources.retrieve(customer.sources.data[0].id)
+        card = stripe.Customer.retrieve_source(customer_id, customer["invoice_settings"]["default_payment_method"])
 
     year = card["exp_year"]
     month = card["exp_month"]
@@ -1656,8 +1661,27 @@ def log_opportunity(contact, payment_intent):
     return opportunity
 
 
-def close_rdo(subscription_id, method=None, contact=None):
-    rdo = RDO.get(subscription_id=subscription_id)
+def close_rdo(subscription_id, method=None, contact=None, reason=None):
+    try:
+        rdo = RDO.get(subscription_id=subscription_id)
+    except Exception:
+        app.logger.error(f"The recurring donation for subscription {subscription_id} was not found and the Salesforce cancellation process was halted.")
+        return None
+
+    try:
+        next_opp = rdo.opportunities(ordered_pledges=True)[0]
+    except Exception:
+        app.logger.error(f"The next pledged opportunity for recurring donation {rdo.id} was not found and the Salesforce cancellation process was halted.")
+        return None
+
+    #first we'll mark the next opportunity "Closed Lost" and provide a reason
+    opp_update_details = {
+        'npsp__Closed_Lost_Reason__c': reason,
+        'StageName': "Closed Lost",
+    }
+    Opportunity.update([next_opp], opp_update_details)
+
+    #next we'll update the rdo to reflect the cancellation
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
     rdo_update_details = {
         "npe03__Open_Ended_Status__c": "Closed",
