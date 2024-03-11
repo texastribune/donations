@@ -42,8 +42,6 @@ import {
   GA_USER_PORTAL,
   GA_DONATIONS,
   GA_BLAST_INTENT,
-  GA_TRIBUNE_AMBASSADORS,
-  GA_AMBASSADORS_CUSTOM_EVENT_NAME,
   GA_CUSTOM_EVENT_NAME,
   DONATE_URL,
   CIRCLE_URL,
@@ -71,9 +69,7 @@ Vue.mixin({
         userPortalNav: GA_USER_PORTAL_NAV,
         donations: GA_DONATIONS,
         blastIntent: GA_BLAST_INTENT,
-        tribuneAmbassadors: GA_TRIBUNE_AMBASSADORS,
         customEventName: GA_CUSTOM_EVENT_NAME,
-        ambassadorsCustomEventName: GA_AMBASSADORS_CUSTOM_EVENT_NAME,
       },
       urls: {
         donate: DONATE_URL,

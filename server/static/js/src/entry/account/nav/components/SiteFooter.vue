@@ -67,17 +67,6 @@
               Donation History
             </router-link>
           </li>
-          <li>
-            <router-link
-              ga-on="click"
-              :ga-event-category="ga.userPortalNav.category"
-              :ga-event-action="ga.userPortalNav.actions.footer"
-              :ga-event-label="ga.userPortalNav.labels.ambassador"
-              :to="{ name: 'ambassador' }"
-            >
-              Tribune Ambassadors
-            </router-link>
-          </li>
           <li v-if="showBlastLinks">
             <router-link
               ga-on="click"
