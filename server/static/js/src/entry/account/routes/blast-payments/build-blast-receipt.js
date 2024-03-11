@@ -64,14 +64,14 @@ export default async function buildBlastReceipt({ date, amount, card }) {
     doc.setFont('helvetica', 'normal');
     doc.text(`${card.brand} ${card.last4}`, leftEdge, 256);
     doc.text(
-      'If you have any questions, email us at blast@texastribune.org or call 512-716-8695.',
+      'If you have any questions, email us at blast@texastribune.org or call 512-993-0166.',
       leftEdge,
       286,
       { maxWidth: '385' }
     );
   } else {
     doc.text(
-      'If you have any questions, email us at blast@texastribune.org or call 512-716-8695.',
+      'If you have any questions, email us at blast@texastribune.org or call 512-993-0166.',
       leftEdge,
       244,
       { maxWidth: '385' }

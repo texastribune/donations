@@ -27,7 +27,6 @@ export const GA_USER_PORTAL_NAV = {
     membership: 'membership overview',
     payments: 'donation history',
     blast: 'the blast overview',
-    ambassador: 'ambassador profile',
     'blast-payments': 'the blast payment history',
     'edit-contact-info': 'profile editor',
     'confirm-linked-identity': 'link email confirmation',
@@ -67,7 +66,6 @@ export const GA_USER_PORTAL = {
     membership: 'membership overview',
     payments: 'donation history',
     blast: 'the blast overview',
-    ambassador: 'ambassador profile',
     error: 'error page',
     unverified: 'unverified page',
     'blast-payments': 'the blast payment history',
@@ -102,20 +100,7 @@ export const GA_BLAST_INTENT = {
     'user-portal': 'user portal',
   },
 };
-export const GA_TRIBUNE_AMBASSADORS = {
-  category: 'tribune ambassadors',
-  actions: {
-    facebook: 'membership share - facebook',
-    twitter: 'membership share - twitter',
-    email: 'membership share - email',
-    link: 'membership share - copy link',
-  },
-  labels: {
-    ambassador: 'ambassador profile',
-  },
-};
 export const GA_CUSTOM_EVENT_NAME = 'customUserPortal';
-export const GA_AMBASSADORS_CUSTOM_EVENT_NAME = 'customTribuneAmbassadors';
 export const REDIRECTS_META = {
   donate: {
     external: true,

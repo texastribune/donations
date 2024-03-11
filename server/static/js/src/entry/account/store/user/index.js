@@ -115,10 +115,11 @@ const actions = {
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
-    if (!state.viewAsEmail || 
+    if (!state.viewAsEmail ||
       (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
+      updates.userInitiated = !state.viewAsEmail
 
       await axios.patch(
         `${PORTAL_API_URL}persons/${userId}/rdos/close/`,
@@ -136,7 +137,7 @@ const actions = {
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
-    if (!state.viewAsEmail || 
+    if (!state.viewAsEmail ||
       (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
@@ -157,7 +158,7 @@ const actions = {
     updates
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
-    if (!state.viewAsEmail || 
+    if (!state.viewAsEmail ||
       (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
@@ -265,14 +266,6 @@ const getters = {
   linkedEmails: ({ data: { identities = [] } }) =>
     identities.map(({ email }) => email),
 
-  twitterUrl: ({ data: { twitter_share_url: twitterUrl } }) => twitterUrl,
-
-  facebookUrl: ({ data: { facebook_share_url: facebookUrl } }) => facebookUrl,
-
-  emailUrl: ({ data: { email_share_url: emailUrl } }) => emailUrl,
-
-  ambassadorUrl: ({ data: { ambassador_url: ambassadorUrl } }) => ambassadorUrl,
-
   membershipExpirationDate: ({
     data: { membership_expiration_date: membershipExpirationDate },
   }) => membershipExpirationDate,
@@ -350,7 +343,7 @@ const getters = {
 
   transactions: ({ data: { transactions = [] } }) =>
     transactions.map(transaction => formatTransaction(transaction)),
-  
+
   recurringTransactions: ({ data: { recurring_transactions: recurringTransactions } }) =>
     recurringTransactions,
 

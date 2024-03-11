@@ -27,7 +27,6 @@
         show-donation-history
         show-membership-status
         show-become-sustaining
-        show-ambassador
       >
         <template #membership-text> More about your membership </template>
       </user-internal-nav>

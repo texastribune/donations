@@ -62,6 +62,7 @@ Environment
 | `ENABLE_SLACK`              |                                          False |
 | `SLACK_API_KEY`             |                                                |
 | `SLACK_CHANNEL`             |                                     #donations |
+| `SLACK_CHANNEL_CANCELLATIONS` |                           #bot-cancellations |
 | `DEFAULT_MAIL_SENDER`       |                                    foo@bar.org |
 | `MAIL_SERVER`               |                                mail.server.com |
 | `MAIL_USERNAME`             |                                                |

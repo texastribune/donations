@@ -25,7 +25,6 @@
         show-donation-history
         show-update-card
         show-membership-status
-        show-ambassador
       >
         <template #membership-text> More about your membership </template>
       </user-internal-nav>

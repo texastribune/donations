@@ -155,19 +155,6 @@
             <strong>Profile Settings</strong>
           </router-link>
         </li>
-        <li v-if="showUserLinks" class="c-navbar__dropdown-item">
-          <router-link
-            class="c-navbar__clickable"
-            active-class="is-active"
-            ga-on="click"
-            :to="{ name: 'ambassador' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.top"
-            :ga-event-label="ga.userPortalNav.labels.ambassador"
-          >
-            <strong>Tribune Ambassadors</strong>
-          </router-link>
-        </li>
         <li
           v-if="showUserLinks && showBlastLink"
           class="c-navbar__dropdown-item"

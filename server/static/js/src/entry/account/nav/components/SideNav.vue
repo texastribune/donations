@@ -55,19 +55,6 @@
             Donation History
           </router-link>
         </li>
-        <li class="has-xxs-btm-marg">
-          <router-link
-            exact
-            class="has-text-black-off has-text-hover-gray"
-            active-class="is-active"
-            :to="{ name: 'ambassador' }"
-            :ga-event-category="ga.userPortalNav.category"
-            :ga-event-action="ga.userPortalNav.actions.side"
-            :ga-event-label="ga.userPortalNav.labels.ambassador"
-          >
-            Tribune Ambassadors
-          </router-link>
-        </li>
         <li v-if="showBlastLink">
           <router-link
             class="has-text-black-off has-text-hover-gray"

@@ -8,8 +8,6 @@ const AccountOverview = () =>
   import(/* webpackChunkName: "account-overview-route" */ './account-overview/Index.vue');
 const EditContactInfo = () =>
   import(/* webpackChunkName: "edit-contact-info-route" */ './edit-contact-info/Index.vue');
-const Ambassador = () =>
-  import(/* webpackChunkName: "ambassador-route" */ './ambassador/Index.vue');
 const Membership = () =>
   import(/* webpackChunkName: "membership-route" */ './membership/Index.vue');
 const Payments = () =>
@@ -99,17 +97,6 @@ const routes = [
         meta: {
           isProtected: true,
           title: 'Your Profile Settings',
-          requiresParentFetch: false,
-        },
-      },
-      {
-        path: 'ambassador/',
-        name: 'ambassador',
-        component: Ambassador,
-        pathToRegexpOptions: { strict: true },
-        meta: {
-          isProtected: true,
-          title: 'Refer a Friend',
           requiresParentFetch: false,
         },
       },
