@@ -63,6 +63,7 @@ from .util import (
     send_multiple_account_warning,
     send_slack_message,
     name_splitter,
+    find_price,
     donation_adder,
 )
 
@@ -1139,7 +1140,7 @@ def stripehook():
         customer_subscription_created.delay(event)
     if event.type == "payment_intent.succeeded":
         payment_intent_succeeded.delay(event)
-    if event.type == "customer.subscription.deleted":
+    if event.type in ("customer.subscription.deleted", "subscription_schedule.canceled"):
         app.logger.info(f"subscription deleted event: {event}")
         customer_subscription_deleted.delay(event)
     if event.type == "subscription_schedule.updated":
@@ -1432,15 +1433,6 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
     return subscription
 
 
-def find_price(prices=[], period=None, pay_fees=False):
-    nickname = "fees" if pay_fees else None
-    interval = "month" if period == "monthly" else "year"
-    for price in prices:
-        if price["recurring"]["interval"] == interval \
-            and price["nickname"] == nickname:
-            return price
-
-
 def create_payment_intent(customer=None, form=None, quarantine=None):
     amount = amount_to_charge(form)
     payment = stripe.PaymentIntent.create(
@@ -1691,52 +1683,94 @@ def close_rdo(subscription_id, method=None, contact=None, reason=None):
             help="The type of donation to convert. Can be one of 'Recurring Donation', 'Business Membership', 'Giving Circle' or 'The Blast'.") 
 @click.option('-e', '--email', default=None,
               help="Will retrieve all recurring donations tied to an email. Wildcards can be used for LIKE functionality.")
-def rdo_converter(limit, donation_type, email):
-    if not donation_type and not email:
-        return "A donation type or email must be passed"
+@click.option('-i', '--interval', default=None,
+              help="Can optionally include interval ('monthly' or 'yearly') by which to filter.")
+@click.option('-p', '--product', default=None,
+              help="Specific name of the donation product. Refer to STRIPE_PRODUCTS const. Requried for business, blast and circle donations.")
+@click.option('-x', '--test', is_flag=True,
+              help="Switch to turn off actual subscription creation and rdo updating in order to get numbers and catch bugs before running.")
+def rdo_converter(limit, donation_type, email, interval, product, test):
+    import csv
 
-    # If any of the vars passed here are null, they're ignored and the query
-    # is built without them
-    rdos = RDO.list(limit=limit, donation_type=donation_type, email=email)
-    
-    for rdo in rdos:
-        if not rdo.stripe_subscription:
-            date = None
-            opps = rdo.opportunities()
-            for opp in opps:
-                if opp.stage_name == "Pledged":
-                    date = datetime.strptime(opp.close_date, "%Y-%m-%d")
-                    break
-            
-            if not date:
-                raise Exception("A proper date couldn't be found for RDO {rdo.id}, making it ineligble for conversion.")
-            
-            subscription = donation_adder(
-                customer = rdo.stripe_customer,
-                donation_type=rdo.donation_type,
-                amount = rdo.amount,
-                pay_fees = rdo.agreed_to_pay_fees,
-                # installment_period can be either "monthly" or "yearly"
-                # we ignore the last two chars because stripe expects "month"
-                # or "year" instead
-                interval = rdo.installment_period[:-2],
-                is_new_recurring=False,
-                year = date.year,
-                month = date.month,
-                day = date.day,
-            )
+    with open('testing.csv', mode='w') as t_file:
+        writer = csv.writer(t_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-            if not subscription:
-                continue
+        total_cnt = 0
+        converted_cnt = 0
+        if not donation_type and not email:
+            return "A donation type or email must be passed"
 
-            subscription_id = subscription.get("id", None)
-            if subscription_id is None:
-                print(f"Follow up with {rdo.id} for customer {rdo.stripe_customer}. A subscription was created but no id was passed.")
-                continue
+        # If any of the vars passed here are null, they're ignored and the query
+        # is built without them
+        rdos = RDO.list(limit=limit, donation_type=donation_type, email=email)
+        
+        for k,v in DONATION_TYPE_INFO.items():
+            if donation_type in v.values():
+                donation_type = k
 
-            print(f'Created {rdo.installment_period} subscription of {rdo.amount} for customer {rdo.stripe_customer} to begin on {str(date)} from {rdo.name}')
-            update_details = {"Stripe_Subscription_Id__c": subscription_id}
-            try:
-                RDO.update([rdo], update_details)
-            except Exception as e:
-                print(f"Follow up with {rdo.id}. Updating stripe_subscription with subscription {subscription_id} failed.")
+        for rdo in rdos:
+            if not rdo.stripe_subscription:
+                if interval and rdo.installment_period != interval:
+                    continue
+
+                opps = rdo.opportunities(ordered_pledges=True)
+                
+                if not opps:
+                    continue
+
+                date = datetime.strptime(opps[0].close_date, "%Y-%m-%d") if opps else None
+                amount = rdo.installment_amount if donation_type == DONATION_TYPE_INFO['circle']['name'] else rdo.amount
+                iterations = len(opps) if donation_type == DONATION_TYPE_INFO['circle']['name'] else None
+                print(f'Up in here with new date of {date} and {iterations} iterations!')
+
+                if not rdo.stripe_customer:
+                    if test:
+                        print(f'RDO {rdo.id} has no linked Stripe customer and can not be converted at this time.')
+                    continue
+
+                if not date:
+                    if test:
+                        print(f"A proper date couldn't be found for RDO {rdo.id}, making it ineligble for conversion.")
+                    continue
+
+                print(f"Now to convert {rdo.id}, a {amount}/{rdo.installment_period} which will begin on {date}...")
+                total_cnt += 1
+                
+                subscription = donation_adder(
+                    customer = rdo.stripe_customer,
+                    donation_type = donation_type,
+                    amount = amount,
+                    pay_fees = rdo.agreed_to_pay_fees,
+                    interval = rdo.installment_period,
+                    is_new_recurring = False,
+                    year = date.year,
+                    month = date.month,
+                    day = date.day,
+                    iterations = iterations,
+                    product_name = product,
+                    test = test
+                )
+
+                if not subscription:
+                    continue
+
+                if test:
+                    converted_cnt += 1
+                    print(subscription)
+                else:
+                    subscription_id = subscription.get("id", None)
+                    if subscription_id is None:
+                        print(f"Follow up with {rdo.id} for customer {rdo.stripe_customer}. A subscription was created but no id was passed.")
+                        continue
+
+                    print(f'Created {rdo.installment_period} subscription of {amount} for customer {rdo.stripe_customer} to begin on {str(date)} from {rdo.name}')
+                    writer.writerow([rdo.stripe_customer, rdo.id, date.strftime("%m/%d/%y")])
+                    update_details = {"Stripe_Subscription_Id__c": subscription_id}
+                    try:
+                        RDO.update([rdo], update_details)
+                        converted_cnt += 1
+                    except Exception as e:
+                        print(f"Follow up with {rdo.id}. Updating stripe_subscription with subscription {subscription_id} failed.")
+
+    print(f'Found {total_cnt} rdos to convert to subscriptions')
+    print(f'Converted {converted_cnt} rdos to subscriptions')

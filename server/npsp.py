@@ -626,6 +626,7 @@ class RDO(SalesforceObject, CampaignMixin):
         self.installments = None
         self.open_ended_status = None
         self.installment_period = None
+        self.installment_amount = None
         self.campaign_id = None
         self.campaign_name = None
         self.referral_id = None
@@ -701,7 +702,7 @@ class RDO(SalesforceObject, CampaignMixin):
                 npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
                 Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
                 Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
-                npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
+                npe03__Installment_Period__c, npe03__Installment_Amount_c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
                 Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
                 FROM npe03__Recurring_Donation__c
                 WHERE Stripe_Subscription_Id__c = '{subscription_id}'
@@ -735,13 +736,14 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.stripe_card_expiration = response["Stripe_Card_Expiration__c"]
             rdo.stripe_card_last_4 = response["Stripe_Card_Last_4__c"]
             rdo.quarantined = response["Quarantined__c"]
+            print(response["npe03__Installment_Amount__c"])
             return rdo
 
         else:
             return None
 
     @classmethod
-    def list(cls, donation_type=None, email=None, limit=0, sf_connection=None):
+    def list(cls, donation_type=None, email=None, amount=None, limit=0, sf_connection=None):
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
         query = f"""
@@ -749,8 +751,8 @@ class RDO(SalesforceObject, CampaignMixin):
             npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
             Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
             Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
-            npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
-            Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
+            npe03__Installment_Period__c, npe03__Installment_Amount__c, Blast_Subscription_Email__c, Billing_Email__c,
+            Type__c, Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
             FROM npe03__Recurring_Donation__c
             WHERE npe03__Open_Ended_Status__c != 'Closed'
             """
@@ -760,6 +762,9 @@ class RDO(SalesforceObject, CampaignMixin):
         
         if email:
             query += f"AND Contact_Email__c LIKE '{email}'"
+        
+        if amount:
+            query += f"AND npe03__Amount__c = {amount}"
 
         if limit:
             query += f"LIMIT {limit}"
@@ -785,6 +790,7 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.open_ended_status = item["npe03__Open_Ended_Status__c"]
             rdo.installments = item["npe03__Installments__c"]
             rdo.installment_period = item["npe03__Installment_Period__c"]
+            rdo.installment_amount = item["npe03__Installment_Amount__c"]
             rdo.blast_subscription_email = item["Blast_Subscription_Email__c"]
             rdo.billing_email = item["Billing_Email__c"]
             rdo.type = item["Type__c"]
@@ -823,6 +829,7 @@ class RDO(SalesforceObject, CampaignMixin):
             WHERE npe03__Recurring_Donation__c = '{self.id}'
             {order_by}
         """
+
         # TODO must make this dynamic
         response = self.sf.query(query)
         results = list()

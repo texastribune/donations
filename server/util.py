@@ -282,7 +282,32 @@ def quantize(amount):
     return Decimal(amount).quantize(TWOPLACES)
 
 
-def donation_adder(customer: str, donation_type: str, amount: int, pay_fees: bool, interval: str, is_new_recurring: bool, year: int, month: int, day: int) -> object:
+def find_price(prices=[], period=None, pay_fees=False, legacy=False):
+    nickname = None
+    if pay_fees:
+        nickname = "legacy fees" if legacy else "fees"
+
+    interval = "month" if period == "monthly" else "year"
+    for price in prices:
+        if price["recurring"]["interval"] == interval \
+            and price["nickname"] == nickname:
+            return price
+
+
+def donation_adder(
+        customer: str,
+        donation_type: str,
+        amount: int,
+        pay_fees: bool,
+        interval: str,
+        is_new_recurring: bool,
+        year: int,
+        month: int,
+        day: int,
+        iterations: int,
+        product_name: str,
+        test: bool,
+    ) -> object:
     # We take into account if the donor chose to pay fees and if the donation is a new recurring donation, a legacy recurring donation or a sigle donation 
     # to determine the final donation amount. Lastly, we multiply that by 100 to get the needed format for stripe (i.e. 1058 instead of 10.58, etc.)
     stripe_amount = int(amount_to_charge(amount=amount, pay_fees=pay_fees, is_new_recurring=is_new_recurring) * 100)
@@ -294,27 +319,92 @@ def donation_adder(customer: str, donation_type: str, amount: int, pay_fees: boo
     # will take place (trial_end). This means we can create the subscription now, even though the next expected charge
     # date won't be for another 13 days. Handy for moving existing recurring donations to stripe subscriptions or for
     # setting a donor up with a different recurring donation amount but keeping to the same date. 
-    if donation_type == DONATION_TYPE_INFO["membership"]["type"]:
-        subscription = stripe.Subscription.create(
-            customer = customer["id"],
-            default_source = source["id"],
-            trial_end = int(timestamp),
-            proration_behavior = None,
-            description = "Texas Tribune Sustaining Membership",
-            metadata = {
-                "donation_type": "membership",
-                "donor_selected_amount": amount,
-                "pay_fees": "X" if pay_fees else None,
-                "skip_notification": "X",
-                "skip_sync": "X",
-            },
-            items = [{
-                "price_data": {
-                    "unit_amount": stripe_amount,
-                    "currency": "usd",
-                    "product": STRIPE_PRODUCTS["sustaining"],
-                    "recurring": {"interval": interval},
-                }
-            }]
+    # product = STRIPE_PRODUCTS[product_name + interval.capitalize()]
+    product = STRIPE_PRODUCTS[product_name]
+    customer_chooses = False
+
+    if donation_type != DONATION_TYPE_INFO["membership"]["name"]:
+        prices_list = stripe.Price.list(product=product)
+        price = find_price(
+            prices=prices_list,
+            period=interval,
+            pay_fees=pay_fees,
+            # remove after conversions are completed
+            legacy=True
         )
+
+        if not price:
+            if test:
+                print(f"No {interval} price ({pay_fees}) was found for product: {product}")
+            return None
+
+        # remove after stripe conversions completed
+        if price["unit_amount"] != stripe_amount:
+            customer_chooses = True
+            if test:
+                print(f"Product price {price['unit_amount']} does not match calculated amount of {stripe_amount}")
+            return None
+
+        if test:
+            print(f"chosen price from stripe: {price}")
+    else:
+        customer_chooses = True
+        print("Motion sustained")
+
+    source = customer["sources"]["data"][0]
+    donation_type_info = DONATION_TYPE_INFO[donation_type]
+    sub_items = []
+    if customer_chooses:
+        sub_items = [{
+            "price_data": {
+                "unit_amount": stripe_amount,
+                "currency": "usd",
+                "product": product,
+                "recurring": {"interval": interval[:-2]},
+            }
+        }]
+    else:
+        sub_items = [{"price": price}]
+
+    metadata = {
+        # make this fire off of DONATION_TYPE_INFO after conversions are completed
+        "donation_type": donation_type,
+        "donor_selected_amount": amount,
+        "pay_fees": 'X' if pay_fees else None,
+        "skip_notification": "" if is_new_recurring else "X",
+        "skip_sync": "" if is_new_recurring else "X",
+    }
+
+    if test:
+        return True
+    elif donation_type == DONATION_TYPE_INFO['circle']['name']:
+        subscription = stripe.SubscriptionSchedule.create(
+            customer = customer["id"],
+            start_date = int(timestamp),
+            end_behavior = "cancel",
+            phases=[{
+                "billing_cycle_anchor": "phase_start",
+                "description": donation_type_info['description'],
+                "default_payment_method": source["id"],
+                "proration_behavior": 'none',
+                "iterations": iterations,
+                "items": sub_items,
+                "metadata": metadata,
+            }],
+        )
+        return subscription
+    else:
+        subscription = stripe.SubscriptionSchedule.create(
+            customer = customer["id"],
+            start_date = int(timestamp),
+            phases = [{
+                "billing_cycle_anchor": "phase_start",
+                "description": donation_type_info["description"],
+                "default_payment_method": source["id"],
+                "proration_behavior": 'none',
+                "items": sub_items,
+                "metadata": metadata,
+            }],
+        )
+        print(subscription)
         return subscription
