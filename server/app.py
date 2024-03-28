@@ -970,6 +970,7 @@ def payment_intent_succeeded(event):
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
     subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer", "latest_invoice.charge"])
+    donation_type = subscription.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
     customer = subscription["customer"]
     charge = subscription["latest_invoice"]["charge"]
     method = subscription["cancellation_details"].get('comment') or 'Staff'
@@ -982,16 +983,25 @@ def customer_subscription_deleted(event):
     if rdo is None:
         return
 
-    text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {reason}"
-    if reason == "cancellation_requested":
-        text += f" ({method})"
+    # Slack notifications for ended donations
+    # if the donation is a circle membership, we send all notifications a specific circle channel
+    # if reason is "cancellation_requested" we send to the general cancellations channel
+    base_text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} {donation_type} subscription was cancelled"
+    channel = SLACK_CHANNEL_CANCELLATIONS
+
+    if reason == "cancellation_requested" and donation_type != 'circle':
+        text = f"{base_text} ({method})"
+    elif donation_type == 'circle':
+        text = f"{base_text} due to {reason}"
+        channel = "#circle-failures"
+        if reason == "cancellation_requested":
+            text += f" ({method})"
 
     message = {
         "text": text,
-        "channel": SLACK_CHANNEL_CANCELLATIONS,
+        "channel": channel,
         "icon_emoji": ":no_good:"
     }
-
     send_slack_message(message, username="Cancellation bot")
 
 
@@ -1004,7 +1014,7 @@ def subscription_schedule_updated(event):
         rdo = RDO.get(subscription_id=sub_schedule["id"])
     except Exception:
         return # if no RDO is found with the given subscription schedule id, then there is nothing to update
-    
+
     subscription_id = sub_schedule["subscription"]
 
     if subscription_id:
