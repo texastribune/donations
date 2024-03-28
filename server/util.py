@@ -145,7 +145,7 @@ def send_cancellation_notification(contact, rdo, donation_type, reason, method):
     name = contact.name if contact.name else "An unknown user"
     amount = rdo.amount
 
-    if reason != "cancellation_requested" or donation_type != 'circle':
+    if reason != "cancellation_requested" and donation_type != 'circle':
         logging.info(f"Skipping cancellation notification for {name}. Reason: {reason} Donation type: {donation_type} Method: {method} Amount: {amount}")
         return
 
