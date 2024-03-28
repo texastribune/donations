@@ -134,6 +134,42 @@ def construct_slack_attachment(
 
     return attachment
 
+def send_cancellation_notification(contact, rdo, donation_type, reason, method):
+    """
+    Send a notification about a donation cancellation to Slack.
+    Rules:
+    - If the donation is a circle membership, we send all notifications to a specific circle channel
+    - Otherwise if the reason is "cancellation_requested" we send to the general cancellations channel
+    """
+
+    name = contact.name if contact.name else "An unknown user"
+    amount = rdo.amount
+
+    if reason != "cancellation_requested" or donation_type != 'circle':
+        logging.info(f"Skipping cancellation notification for {name}. Reason: {reason} Donation type: {donation_type} Method: {method} Amount: {amount}")
+        return
+
+    channel = SLACK_CHANNEL_CANCELLATIONS
+
+    if donation_type == 'circle':
+        channel = "#circle-failures"
+        # update amount so that it doesn't show total three year amount
+        amount = rdo.amount / 3
+        if rdo.installment_period == "monthly":
+            amount = amount / 12
+        text = f"{name}'s ${amount}/{rdo.installment_period} Circle donation was cancelled due to {reason}"
+        if reason == "cancellation_requested":
+            text += f" ({method})"
+    elif reason == "cancellation_requested":
+        text = f"{name}'s ${amount}/{rdo.installment_period} {donation_type} subscription was cancelled ({method})"
+
+    message = {
+        "text": text,
+        "channel": channel,
+        "icon_emoji": ":no_good:"
+    }
+    send_slack_message(message, username="Cancellation bot")
+
 
 def send_multiple_account_warning(contact):
     """
@@ -290,7 +326,7 @@ def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, ye
     # We use stripe's subscription trial functionality here so that we can control when the next charge for the donor
     # will take place (trial_end). This means we can create the subscription now, even though the next expected charge
     # date won't be for another 13 days. Handy for moving existing recurring donations to stripe subscriptions or for
-    # setting a donor up with a different recurring donation amount but keeping to the same date. 
+    # setting a donor up with a different recurring donation amount but keeping to the same date.
     subscription = stripe.Subscription.create(
         customer = customer["id"],
         default_source = source["id"],

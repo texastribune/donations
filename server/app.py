@@ -59,6 +59,7 @@ from .util import (
     send_email_new_business_membership,
     send_multiple_account_warning,
     send_slack_message,
+    send_cancellation_notification,
     name_splitter,
 )
 
@@ -983,27 +984,12 @@ def customer_subscription_deleted(event):
     if rdo is None:
         return
 
-    # Slack notifications for ended donations
-    # if the donation is a circle membership, we send all notifications a specific circle channel
-    # if reason is "cancellation_requested" we send to the general cancellations channel
-    name = contact.name if contact.name else "An unknown user"
-    base_text = f"{name}'s ${rdo.amount}/{rdo.installment_period} {donation_type} subscription was cancelled"
-    channel = SLACK_CHANNEL_CANCELLATIONS
+    # notifications for ended donations
+    try:
+        send_cancellation_notification(contact, rdo, donation_type, reason, method)
+    except Exception as e:
+        app.logger.error(f"Failed to send cancellation notification: {e}")
 
-    if reason == "cancellation_requested" and donation_type != 'circle':
-        text = f"{base_text} ({method})"
-    elif donation_type == 'circle':
-        text = f"{base_text} due to {reason}"
-        channel = "#circle-failures"
-        if reason == "cancellation_requested":
-            text += f" ({method})"
-
-    message = {
-        "text": text,
-        "channel": channel,
-        "icon_emoji": ":no_good:"
-    }
-    send_slack_message(message, username="Cancellation bot")
 
 
 @celery.task(name="app.subscription_schedule_updated")
