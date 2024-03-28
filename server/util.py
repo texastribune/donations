@@ -155,9 +155,10 @@ def send_cancellation_notification(contact, rdo, donation_type, reason, method):
     if donation_type == 'circle':
         channel = "#circle-failures"
         # update amount so that it doesn't show total three year amount
-        amount = rdo.amount / 3
+        amount = int(rdo.amount) / 3
         if rdo.installment_period == "monthly":
             amount = amount / 12
+        amount = str(amount)
         text = f"{name}'s ${amount}/{rdo.installment_period} Circle donation was cancelled due to {reason}"
         if reason == "cancellation_requested":
             text += f" ({method})"
