@@ -986,7 +986,8 @@ def customer_subscription_deleted(event):
     # Slack notifications for ended donations
     # if the donation is a circle membership, we send all notifications a specific circle channel
     # if reason is "cancellation_requested" we send to the general cancellations channel
-    base_text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} {donation_type} subscription was cancelled"
+    name = contact.name if contact.name else "An unknown user"
+    base_text = f"{name}'s ${rdo.amount}/{rdo.installment_period} {donation_type} subscription was cancelled"
     channel = SLACK_CHANNEL_CANCELLATIONS
 
     if reason == "cancellation_requested" and donation_type != 'circle':
