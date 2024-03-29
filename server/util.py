@@ -19,6 +19,7 @@ from .config import (
     SLACK_API_KEY,
     SLACK_CHANNEL,
     SLACK_CHANNEL_CANCELLATIONS,
+    SLACK_CIRCLE_NOTIFICATIONS,
     STRIPE_PRODUCTS,
     TIMEZONE,
 )
@@ -153,7 +154,7 @@ def send_cancellation_notification(contact, rdo, donation_type, reason, method):
     channel = SLACK_CHANNEL_CANCELLATIONS
 
     if donation_type == 'circle':
-        channel = "#circle-failures"
+        channel = SLACK_CIRCLE_NOTIFICATIONS
         # update amount so that it doesn't show total three year amount
         amount = float(rdo.amount) / 3
         if rdo.installment_period == "monthly":
