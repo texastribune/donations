@@ -136,16 +136,29 @@ def construct_slack_attachment(
 
     return attachment
 
+def get_circle_amount(rdo):
+    """
+    Get the amount for a circle donation based on the three year total.
+    """
+    amount = rdo.amount
+    period = rdo.installment_period
+    amount = quantize(amount) / 3
+    if period == "monthly":
+        amount = amount / 12
+    return amount
+
 def send_cancellation_notification(contact, rdo, donation_type, reason, method):
     """
     Send a notification about a donation cancellation to Slack.
     Rules:
-    - If the donation is a circle membership, we send all notifications to a specific circle channel
-    - Otherwise if the reason is "cancellation_requested" we send to the general cancellations channel
+    - If the donation is a circle membership, notifications go to circle channel
+    - Only circle gets notfications for anything other than "cancellation_requested"
+    - For non-cirlce, if the reason is "cancellation_requested" we send to the general cancellations channel
     """
 
     name = contact.name if contact.name else "An unknown user"
     amount = rdo.amount
+    period = rdo.installment_period
 
     if reason != "cancellation_requested" and donation_type != 'circle':
         logging.info(f"Skipping cancellation notification for {name}. Reason: {reason} Donation type: {donation_type} Method: {method} Amount: {amount}")
@@ -155,17 +168,16 @@ def send_cancellation_notification(contact, rdo, donation_type, reason, method):
 
     if donation_type == 'circle':
         channel = SLACK_CIRCLE_NOTIFICATIONS
-        # update amount so that it doesn't show total three year amount
-        amount = float(rdo.amount) / 3
-        if rdo.installment_period == "monthly":
-            amount = amount / 12
-        # show two decimal places
-        amount = "{:.2f}".format(amount)
-        text = f"{name}'s ${amount}/{rdo.installment_period} Circle donation was cancelled due to {reason}"
-        if reason == "cancellation_requested":
-            text += f" ({method})"
-    elif reason == "cancellation_requested":
-        text = f"{name}'s ${amount}/{rdo.installment_period} {donation_type} subscription was cancelled ({method})"
+        try:
+            amount = get_circle_amount(rdo)
+        except Exception as e:
+            logging.error(f"Error getting circle amount: {e}")
+        text = f"{name}'s ${amount}/{period} Circle donation was cancelled due to {reason}"
+    else:
+        text = f"{name}'s ${amount}/{period} {donation_type} subscription was cancelled"
+
+    if reason == "cancellation_requested":
+        text += f" ({method})"
 
     message = {
         "text": text,
