@@ -192,6 +192,9 @@
     "SLACK_CHANNEL_CANCELLATIONS": {
       "required": true
     },
+    "SLACK_CIRCLE_NOTIFICATIONS": {
+      "required": true
+    },
     "STRIPE_PRODUCT_SUSTAINING": {
       "required": true
     },

@@ -18,6 +18,8 @@ from .config import (
     MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT,
     SLACK_API_KEY,
     SLACK_CHANNEL,
+    SLACK_CHANNEL_CANCELLATIONS,
+    SLACK_CIRCLE_NOTIFICATIONS,
     STRIPE_PRODUCTS,
     TIMEZONE,
 )
@@ -133,6 +135,56 @@ def construct_slack_attachment(
         attachment["text"] = reason
 
     return attachment
+
+def get_circle_amount(rdo):
+    """
+    Get the amount for a circle donation based on the three year total.
+    """
+    amount = rdo.amount
+    period = rdo.installment_period
+    amount = quantize(amount) / 3
+    if period == "monthly":
+        amount = amount / 12
+    return amount
+
+def send_cancellation_notification(contact, rdo, donation_type, reason, method):
+    """
+    Send a notification about a donation cancellation to Slack.
+    Rules:
+    - If the donation is a circle membership, notifications go to circle channel
+    - Only circle gets notfications for anything other than "cancellation_requested"
+    - For non-circle, if the reason is "cancellation_requested" we send to the general cancellations channel
+    """
+
+    name = contact.name if contact.name else "An unknown user"
+    amount = rdo.amount
+    period = rdo.installment_period
+
+    if reason != "cancellation_requested" and donation_type != 'circle':
+        logging.info(f"Skipping cancellation notification for {name}. Reason: {reason} Donation type: {donation_type} Method: {method} Amount: {amount}")
+        return
+
+    channel = SLACK_CHANNEL_CANCELLATIONS
+
+    if donation_type == 'circle':
+        channel = SLACK_CIRCLE_NOTIFICATIONS
+        try:
+            amount = get_circle_amount(rdo)
+        except Exception as e:
+            logging.error(f"Error getting circle amount: {e}")
+        text = f"{name}'s ${amount}/{period} Circle donation was cancelled due to {reason}"
+    else:
+        text = f"{name}'s ${amount}/{period} {donation_type} subscription was cancelled"
+
+    if reason == "cancellation_requested":
+        text += f" ({method})"
+
+    message = {
+        "text": text,
+        "channel": channel,
+        "icon_emoji": ":no_good:"
+    }
+    send_slack_message(message, username="Cancellation bot")
 
 
 def send_multiple_account_warning(contact):
@@ -290,7 +342,7 @@ def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, ye
     # We use stripe's subscription trial functionality here so that we can control when the next charge for the donor
     # will take place (trial_end). This means we can create the subscription now, even though the next expected charge
     # date won't be for another 13 days. Handy for moving existing recurring donations to stripe subscriptions or for
-    # setting a donor up with a different recurring donation amount but keeping to the same date. 
+    # setting a donor up with a different recurring donation amount but keeping to the same date.
     subscription = stripe.Subscription.create(
         customer = customer["id"],
         default_source = source["id"],
