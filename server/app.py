@@ -978,6 +978,8 @@ def customer_subscription_deleted(event):
 
     contact = Contact.get(email=customer["email"])
     rdo = close_rdo(subscription["id"], method=method, contact=contact, reason=reason)
+    print("INSTALLMENT AMOUNT")
+    print(rdo.installment_amount)
     # if nothing is returned from close_rdo, we want to halt the process
     # after a fix is in place, the event will need to be resent from Stripe
     if rdo is None:
@@ -1005,7 +1007,7 @@ def subscription_schedule_updated(event):
         rdo = RDO.get(subscription_id=sub_schedule["id"])
     except Exception:
         return # if no RDO is found with the given subscription schedule id, then there is nothing to update
-    
+
     subscription_id = sub_schedule["subscription"]
 
     if subscription_id:
