@@ -23,7 +23,7 @@ from validate_email import validate_email
 
 from .app_celery import make_celery
 from .bad_actor import BadActor
-from .charges import ChargeException, QuarantinedException, charge, amount_to_charge_stripe
+from .charges import ChargeException, QuarantinedException, charge
 from .config import (
     AMAZON_CAMPAIGN_ID,
     AMAZON_MERCHANT_ID,
@@ -39,6 +39,7 @@ from .config import (
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
+    SLACK_CHANNEL_CANCELLATIONS,
     STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
@@ -52,15 +53,18 @@ from .forms import (
 )
 from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
 from .util import (
+    amount_to_charge,
     clean,
     notify_slack,
     send_email_new_business_membership,
     send_multiple_account_warning,
+    send_slack_message,
     name_splitter,
 )
 
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = False
+MAX_SYNC_DAYS_DIFFERENCE = 10
 
 DONATION_TYPE_INFO = {
     "membership": {
@@ -412,7 +416,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     if quarantine:
         contact = get_or_create_contact(form)
         form["source"] = customer["id"]
-        form["amount_w_fees"] = float(amount_to_charge_stripe(form))
+        form["amount_w_fees"] = float(amount_to_charge(form))
         bad_actor_response.notify_bad_actor(
             transaction=contact,
             transaction_data=form
@@ -877,8 +881,12 @@ def customer_subscription_created(event):
         return None
 
     donation_type = subscription_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+    skip_notification = subscription_meta.get("skip_notification", False)
 
     invoice = subscription["latest_invoice"]
+    if type(invoice) is str:
+        invoice = stripe.Invoice.retrieve(invoice)
+
     invoice_status = invoice["status"]
     if invoice_status == "open":
         raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
@@ -896,7 +904,7 @@ def customer_subscription_created(event):
             contact.save()
 
         account = get_account(customer)
-        rdo = log_rdo(type=donation_type, account=account, subscription=subscription)
+        rdo = log_rdo(type=donation_type, account=account, customer=customer, subscription=subscription)
         affiliation = Affiliation.get_or_create(
             account=account, contact=contact, role="Business Member Donor"
         )
@@ -908,17 +916,19 @@ def customer_subscription_created(event):
         if donation_type == "circle" and invoice_status == "draft":
             stripe.Invoice.finalize_invoice(invoice["id"])
             invoice = stripe.Invoice.pay(invoice["id"])
+            invoice_status = invoice["status"]
 
-        rdo = log_rdo(type=donation_type, contact=contact, subscription=subscription)
+        rdo = log_rdo(type=donation_type, contact=contact, customer=customer, subscription=subscription)
 
     # if we already received an invoice object, as in the case of a circle membership,
     # use that, otherwise retrieve the latest invoice from stripe
-    update_next_opportunity(
-        opps=rdo.opportunities(),
-        invoice=invoice,
-    )
+    if not subscription["trial_end"] and invoice_status != "draft":
+        update_next_opportunity(
+            opps=rdo.opportunities(ordered_pledges=True),
+            invoice=invoice,
+        )
 
-    if donation_type != "blast":
+    if not skip_notification and donation_type != "blast":
         notify_slack(contact=contact, rdo=rdo)
 
 
@@ -934,16 +944,20 @@ def payment_intent_succeeded(event):
             app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
             return # process can not continue without invoice and will need to be retriggered from stripe
         app.logger.info(f"Payment intent invoice: {invoice}")
-        description = invoice.get("subscription", {}).get("description", "Texas Tribune Membership")
+        subscription = invoice.get("subscription", {})
         rerun = invoice.get("metadata", {}).get("rerun")
+        opp_sync = subscription.get("metadata", {}).get("skip_sync")
         try:
-            stripe.PaymentIntent.modify(payment_intent["id"], description=description)
+            stripe.PaymentIntent.modify(
+                payment_intent["id"],
+                description=subscription.get("description", "Texas Tribune Membership")
+            )
         except stripe.error.StripeError as e:
             app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
 
         # the initial invoice tied to a subscription is handled in the
         # customer_subscription_created func, so we ignore it here
-        if invoice['billing_reason'] != "subscription_create" or rerun:
+        if invoice['billing_reason'] != "subscription_create" or rerun or opp_sync:
             update_next_opportunity(
                 invoice=invoice,
             )
@@ -956,8 +970,54 @@ def payment_intent_succeeded(event):
 
 @celery.task(name="app.customer_subscription_deleted")
 def customer_subscription_deleted(event):
-    subscription = event["data"]["object"]
-    rdo = close_rdo(subscription["id"])
+    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer", "latest_invoice.charge"])
+    customer = subscription["customer"]
+    charge = subscription["latest_invoice"]["charge"]
+    method = subscription["cancellation_details"].get('comment') or 'Staff'
+    reason = subscription["cancellation_details"].get('reason') or charge["outcome"]["seller_message"]
+
+    contact = Contact.get(email=customer["email"])
+    rdo = close_rdo(subscription["id"], method=method, contact=contact, reason=reason)
+    # if nothing is returned from close_rdo, we want to halt the process
+    # after a fix is in place, the event will need to be resent from Stripe
+    if rdo is None:
+        return
+
+    text = f"{contact.name}'s ${rdo.amount}/{rdo.installment_period} donation was cancelled due to {reason}"
+    if reason == "cancellation_requested":
+        text += f" ({method})"
+
+    message = {
+        "text": text,
+        "channel": SLACK_CHANNEL_CANCELLATIONS,
+        "icon_emoji": ":no_good:"
+    }
+
+    send_slack_message(message, username="Cancellation bot")
+
+
+@celery.task(name="app.subscription_schedule_updated")
+def subscription_schedule_updated(event):
+    app.logger.info(f"subscription schedule updated event: {event}")
+
+    sub_schedule = event["data"]["object"]
+    try:
+        rdo = RDO.get(subscription_id=sub_schedule["id"])
+    except Exception:
+        return # if no RDO is found with the given subscription schedule id, then there is nothing to update
+    
+    subscription_id = sub_schedule["subscription"]
+
+    if subscription_id:
+        update_details = {"Stripe_Subscription_Id__c": subscription_id}
+        try:
+            RDO.update([rdo], update_details)
+        except Exception as e:
+            app.logger.error(f"Follow up with {rdo.id}. Updating recurring donation with subscription {subscription_id} failed.")
+    elif not rdo.stripe_subscription:
+        app.logger.warning(
+            f"Subscription scheduler ({sub_schedule['id']}) for rdo ({rdo.id}) updated without a new subscription id. Follow up with the scheduler."
+        )
 
 
 @celery.task(name="app.authorization_notification")
@@ -1102,6 +1162,8 @@ def stripehook():
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
         customer_subscription_deleted.delay(event)
+    if event.type == "subscription_schedule.updated":
+        subscription_schedule_updated.delay(event)
 
     return "Success", 200
 
@@ -1305,7 +1367,7 @@ def add_blast_subscription(form=None, customer=None):
 
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
 def create_custom_subscription(customer=None, form=None, quarantine=None):
-    amount = amount_to_charge_stripe(form)
+    amount = amount_to_charge(form)
     source = customer["sources"]["data"][0]
     interval = "month" if form["installment_period"] == "monthly" else "year"
     subscription = stripe.Subscription.create(
@@ -1400,7 +1462,7 @@ def find_price(prices=[], period=None, pay_fees=False):
 
 
 def create_payment_intent(customer=None, form=None, quarantine=None):
-    amount = amount_to_charge_stripe(form)
+    amount = amount_to_charge(form)
     payment = stripe.PaymentIntent.create(
         amount=int(amount * 100),
         currency="usd",
@@ -1473,10 +1535,11 @@ def get_account(customer):
     return account
 
 
-def log_rdo(type=None, contact=None, account=None, subscription=None):
+def log_rdo(type=None, contact=None, account=None, customer=None, subscription=None):
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
+    trial_end = subscription["trial_end"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
@@ -1488,7 +1551,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
         rdo.installments = None
 
     else:
-        rdo = RDO(contact=contact)
+        rdo = RDO(contact=contact, date=trial_end)
         rdo.installments = None
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
@@ -1519,8 +1582,7 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
     if source:
         card = stripe.Customer.retrieve_source(customer_id, source)
     else:
-        customer = stripe.Customer.retrieve(customer_id)
-        card = customer.sources.retrieve(customer.sources.data[0].id)
+        card = stripe.Customer.retrieve_source(customer_id, customer["invoice_settings"]["default_payment_method"])
 
     year = card["exp_year"]
     month = card["exp_month"]
@@ -1538,16 +1600,19 @@ def log_rdo(type=None, contact=None, account=None, subscription=None):
 def update_next_opportunity(opps=[], invoice=None):
     if not opps:
         opps = Opportunity.list(
-            stage_name="Pledged", stripe_subscription_id=invoice["subscription"]["id"]
+            stage_name="Pledged",
+            stripe_subscription_id=invoice["subscription"]["id"],
+            asc_order=True
         )
 
-    charged_on = datetime.fromtimestamp(invoice["effective_at"]).strftime('%Y-%m-%d')
-    opp = [
-        opportunity
-        for opportunity in opps
-        if opportunity.expected_giving_date == charged_on
-    ][0]
-    app.logger.info(f'opps with giving_date today on subscription_id: {opp}')
+    next_opp = opps[0]
+    next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
+    charged_on_date = datetime.fromtimestamp(invoice["effective_at"])
+    days_difference = abs((charged_on_date - next_opp_date).days)
+    if days_difference > MAX_SYNC_DAYS_DIFFERENCE:
+        raise Exception(f"""There is a large discrepancy between the charge date of invoice: {invoice["id"]}
+                        and the giving date of opp: {next_opp.id} that should be reviewed before further updates.""")
+
     transaction_id = invoice["charge"]
     amount = invoice.get("amount_paid", 0) / 100
     charge_details = {
@@ -1557,7 +1622,7 @@ def update_next_opportunity(opps=[], invoice=None):
     if amount:
         charge_details["Amount"] = amount
 
-    response = Opportunity.update_stage([opp], charge_details)
+    response = Opportunity.update_stage([next_opp], charge_details)
 
 
 def log_opportunity(contact, payment_intent):
@@ -1597,9 +1662,37 @@ def log_opportunity(contact, payment_intent):
     return opportunity
 
 
-def close_rdo(subscription_id):
-    rdo = RDO.get(subscription_id=subscription_id)
-    update_details = {"npe03__Open_Ended_Status__c": "Closed"}
-    response = RDO.update([rdo], update_details)
+def close_rdo(subscription_id, method=None, contact=None, reason=None):
+    try:
+        rdo = RDO.get(subscription_id=subscription_id)
+    except Exception:
+        app.logger.error(f"The recurring donation for subscription {subscription_id} was not found and the Salesforce cancellation process was halted.")
+        return None
+
+    try:
+        next_opp = rdo.opportunities(ordered_pledges=True)[0]
+    except Exception:
+        app.logger.error(f"The next pledged opportunity for recurring donation {rdo.id} was not found and the Salesforce cancellation process was halted.")
+        return None
+
+    #first we'll mark the next opportunity "Closed Lost" and provide a reason
+    opp_update_details = {
+        'npsp__Closed_Lost_Reason__c': reason,
+        'StageName': "Closed Lost",
+    }
+    Opportunity.update([next_opp], opp_update_details)
+
+    #next we'll update the rdo to reflect the cancellation
+    today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+    rdo_update_details = {
+        "npe03__Open_Ended_Status__c": "Closed",
+        "Cancellation_Date__c": today,
+        "Cancellation_Method__c": method,
+    }
+    if method == "Member Portal":
+        contact_update_details = {"Requested_Recurring_Cancellation__c": today}
+        Contact.update([contact], contact_update_details)
+
+    response = RDO.update([rdo], rdo_update_details)
     app.logger.info(response)
     return rdo

@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+
+  shell:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    entrypoint:
+      - /bin/sh
+      - ./shell.sh
+    env_file:
+      - ./env-docker

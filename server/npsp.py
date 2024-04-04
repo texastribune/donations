@@ -314,6 +314,11 @@ class SalesforceObject(object):
         self.id = None
         self.sf = SalesforceConnection() if sf_connection is None else sf_connection
 
+    @classmethod
+    def update(cls, obj_list, update_dict, sf_connection=None):
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+        return sf.updates(obj_list, update_dict)
+
 
 class Opportunity(SalesforceObject, CampaignMixin):
 
@@ -382,6 +387,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
         stripe_subscription_id=None,
         stripe_transaction_id=None,
         sf_connection=None,
+        asc_order=False
     ):
 
         # TODO a more generic dserializing method
@@ -405,6 +411,8 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
                 AND StageName = '{stage_name}'
             """
+        
+        order_by = f"""ORDER BY Expected_Giving_Date__c ASC""" if asc_order else ""
 
         query = f"""
             SELECT
@@ -436,6 +444,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 Quarantined__c
             FROM Opportunity
             {where}
+            {order_by}
         """
 
         response = sf.query(query)
@@ -589,17 +598,20 @@ class RDO(SalesforceObject, CampaignMixin):
 
     api_name = "npe03__Recurring_Donation__c"
 
-    def __init__(self, id=None, contact=None, account=None, sf_connection=None):
+    def __init__(self, id=None, contact=None, account=None, date=None, sf_connection=None):
         super().__init__(sf_connection=sf_connection)
 
         if account and contact:
             raise SalesforceException("Account and Contact can't both be specified")
 
-        today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        if not date:
+            date = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+        else:
+            date = datetime.fromtimestamp(date).strftime('%Y-%m-%d')
 
         if contact is not None:
             self.contact_id = contact.id
-            self.name = f"{today} for {contact.first_name} {contact.last_name} ({contact.email})"
+            self.name = f"{date} for {contact.first_name} {contact.last_name} ({contact.email})"
             self.account_id = None
         elif account is not None:
             self.account_id = account.id
@@ -619,7 +631,7 @@ class RDO(SalesforceObject, CampaignMixin):
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
-        self.date_established = today
+        self.date_established = date
         self.stripe_customer = None
         self.stripe_subscription = None
         self.lead_source = None
@@ -735,7 +747,14 @@ class RDO(SalesforceObject, CampaignMixin):
     # has changed? The opportunities themselves may've changed even when the RDO hasn't so
     # this may not be doable.
 
-    def opportunities(self):
+    def opportunities(self, ordered_pledges=False):
+        order_by = ""
+        if ordered_pledges:
+            order_by = f"""
+                AND StageName = 'Pledged'
+                ORDER BY Expected_Giving_Date__c ASC
+                """
+
         query = f"""
             SELECT Id, Amount, Name, Stripe_Customer_ID__c,
             Stripe_Subscription_Id__c, Description, Stripe_Agreed_to_pay_fees__c,
@@ -746,6 +765,7 @@ class RDO(SalesforceObject, CampaignMixin):
             Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
             FROM Opportunity
             WHERE npe03__Recurring_Donation__c = '{self.id}'
+            {order_by}
         """
         # TODO must make this dynamic
         response = self.sf.query(query)
@@ -851,11 +871,6 @@ class RDO(SalesforceObject, CampaignMixin):
         )
         update = {"RecordType": {"Name": self.record_type_name}}
         self.sf.updates(self.opportunities(), update)
-
-    @classmethod
-    def update(cls, rdo, update_details, sf_connection=None):
-        sf = SalesforceConnection() if sf_connection is None else sf_connection
-        return sf.updates(rdo, update_details)
 
 
 class Account(SalesforceObject):

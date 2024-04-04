@@ -189,6 +189,9 @@
     "SLACK_CHANNEL": {
       "required": true
     },
+    "SLACK_CHANNEL_CANCELLATIONS": {
+      "required": true
+    },
     "STRIPE_PRODUCT_SUSTAINING": {
       "required": true
     },
