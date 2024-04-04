@@ -153,7 +153,7 @@ def send_cancellation_notification(contact, rdo, donation_type, reason, method):
     Rules:
     - If the donation is a circle membership, notifications go to circle channel
     - Only circle gets notfications for anything other than "cancellation_requested"
-    - For non-cirlce, if the reason is "cancellation_requested" we send to the general cancellations channel
+    - For non-circle, if the reason is "cancellation_requested" we send to the general cancellations channel
     """
 
     name = contact.name if contact.name else "An unknown user"
