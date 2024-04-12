@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
-import Thermometer from './Thermometer.vue';
+// import Thermometer from './Thermometer.vue';
 import ThermometerMinimal from './ThermometerMinimal.vue';
 import TopForm from './TopForm.vue';
 import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
