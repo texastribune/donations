@@ -16,7 +16,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '$10,000', value: 10000 },
+        { slug: 'goal', label: '$20,000', value: 20000 },
       ],
     };
   },
