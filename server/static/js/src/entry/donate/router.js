@@ -3,7 +3,8 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
-import Thermometer from './Thermometer.vue';
+// import Thermometer from './Thermometer.vue';
+import ThermometerMinimal from './ThermometerMinimal.vue';
 import TopForm from './TopForm.vue';
 import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import sanitizeParams from '../../utils/sanitize-params';
@@ -97,7 +98,7 @@ function bindRouterEvents(router, routeHandler, store) {
     // based on the constant USE_THERMOMETER in app.py
     const thermometerEl = document.getElementById('thermometer');
     if (thermometerEl) {
-      const thermometer = new Vue({ ...Thermometer, store });
+      const thermometer = new Vue({ ...ThermometerMinimal, store });
       thermometer.$mount(thermometerEl)
     }
   });
