@@ -43,5 +43,9 @@
       transform: rotate(0deg);
     }
   }
+  // hide iOS arrow
+  details summary::-webkit-details-marker {
+    display:none;
+  }
 
 }
