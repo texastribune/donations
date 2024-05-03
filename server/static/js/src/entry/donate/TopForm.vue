@@ -30,7 +30,7 @@
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
-          label-text="amount ($)"
+          label-text="amount* ($)"
           base-classes="form__text form__text--heavy"
           name="amount"
           inputmode="decimal"
@@ -52,7 +52,7 @@
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
-          label-text="email address"
+          label-text="email address*"
           type="email"
           base-classes="form__text form__text--standard"
           name="stripeEmail"
@@ -66,7 +66,7 @@
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
-          label-text="first name"
+          label-text="first name*"
           base-classes="form__text form__text--standard"
           name="first_name"
         />
@@ -75,7 +75,7 @@
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
-          label-text="last name"
+          label-text="last name*"
           base-classes="form__text form__text--standard"
           name="last_name"
         />
@@ -98,7 +98,7 @@
           :store-module="storeModule"
           :required="false"
           :show-error="showErrors"
-          label-text="zip code"
+          label-text="zip code*"
           base-classes="form__text form__text--standard"
           name="zipcode"
           inputmode="numeric"
