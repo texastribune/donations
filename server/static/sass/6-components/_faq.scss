@@ -1,0 +1,47 @@
+// FAQ (c-faq)
+//
+// Dropdown of questions and answers. Todo: Add globally to queso.
+//
+// Found: donate-form.html
+//
+.c-faq {
+  list-style: none;
+
+  a {
+    color: inherit;
+  }
+
+  &__item {
+    border-bottom: 1px solid $color-gray-light;
+    position: relative;
+
+    &:last-child {
+      border-bottom: none;
+      margin-bottom: -$size-xxs;
+    }
+  }
+
+  &__summary{
+    cursor: pointer;
+    padding-bottom: $size-xxs;
+    padding-right: $size-xxl;
+    padding-top: $size-xxs;
+
+    &:focus {
+      color: $color-teal-gray;
+      outline: none;
+    }
+  }
+
+  &__icon {
+    align-items: center;
+    right: 0;
+    top: 0;
+    transform: rotate(-90deg);
+    transition: transform 0.3s;
+    [open] & {
+      transform: rotate(0deg);
+    }
+  }
+
+}

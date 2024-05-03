@@ -36,8 +36,8 @@
 
   <main class="main">
     <section class="grid_container grid_padded--xl grid_separator--xl">
-      <div class="grid_row grid_wrap--l">
-        <div class="col_8">
+      <div class="grid_row grid_wrap--l gap-s">
+        <div class="col_7">
           <div id="join-today" class="donation_form grid_separator--l">
             <!-- where the router component attaches -->
             <div id="app" style="display:none;"></div>
@@ -50,20 +50,19 @@
             <div class="grid_separator"></div>
             <p class="t-size-xs has-text-gray-dark"><strong>You can also give via <a href='https://www.paypal.me/texastribune'><img src="https://www.paypalobjects.com/webstatic/en_US/i/buttons/PP_logo_h_100x26.png" alt="PayPal" width="70" height="18" class="l-display-ib" style="vertical-align: middle; margin-left: 3px;"></strong></a></p>
           </div>
-          <div class="member_benefits section-padding">
-            {% include 'includes/benefits.html' %}
-          </div>
         </div>
-        <div class="col_1"></div>
-        <div class="col_3">
-          {% include 'includes/quotes.html' %}
+        <div class="col_5">
+          {% include 'includes/faq.html' %}
         </div>
       </div>
     </section>
 
     <section class="section-padding section-padding--filled">
       <div class="grid_separator--xl"></div>
-      {% include 'includes/faq.html' %}
+      <div class="member_benefits section-padding grid_container">
+        {% include 'includes/benefits.html' %}
+      </div>
+
     </section>
   </main>
 {% endblock %}
@@ -97,3 +96,5 @@
     <script src="{{ script }}"></script>
   {% endfor %}
 {% endblock %}
+
+

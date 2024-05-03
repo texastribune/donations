@@ -9,6 +9,7 @@ const SCSS_FILES = ['account', 'business', 'charge', 'circle', 'donate', 'old'];
 const SVG_LIB_FILES = [
   'bars',
   'bug',
+  'caret-down',
   'camera',
   'facebook',
   'instagram',
