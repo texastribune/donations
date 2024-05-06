@@ -176,3 +176,29 @@
     Already a member? <a class="t-weight-bold has-text-teal" href="/account">Log in</a>
   </div>
 </div>
+
+<script>
+  (function () {
+    // Tracking opened questions in GTM
+    var summary = document.querySelectorAll('.gtm-custom-qa-dropdown');
+    function onOpen(title, question) {
+      if ( window.dataLayer !== undefined ) {
+        window.dataLayer.push({
+          event: 'faqDonations',
+          gaLabel: question,
+        });
+      }
+    }
+    function onClick() {
+      var openAttr = this.parentNode.getAttribute('open');
+      var question = this.dataset.qaQuestion || "";
+      var title = this.dataset.qaTitle || "";
+      if(!openAttr && typeof(openAttr) !== 'string') {
+        onOpen(title, question);
+      }
+    }
+    for (var i = 0; i < summary.length; i++) {
+      summary[i].addEventListener('click', onClick);
+    }
+  }());
+</script>
