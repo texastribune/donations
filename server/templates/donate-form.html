@@ -18,11 +18,7 @@
 {% endblock %}
 
 {% block content %}
-  {% if use_thermometer %}
-    {% include "includes/thermometer.html" %}
-  {% endif %}
-
-  <section class="splash splash--tall grid_separator--l">
+  <section class="splash splash--tall">
     <div class="grid_container grid_padded--xl">
       <div class="grid_row grid_wrap--l">
         <div class="col_12">
@@ -34,6 +30,10 @@
     </div>
   </section>
 
+  {% if use_thermometer %}
+    {% include "includes/thermometer.html" %}
+  {% endif %}
+
   <main class="main">
     <section class="grid_container grid_padded--xl grid_separator--xl">
       <div class="grid_row grid_wrap--l">
@@ -42,9 +42,8 @@
             <!-- where the router component attaches -->
             <div id="app" style="display:none;"></div>
             <div class="c-message grid_separator has-text-gray-dark t-size-s">
-              <p class="has-b-btm-marg">The Texas Tribune’s journalism is supported by readers. We are the most-read publication covering Texas state policy and politics because Texans trust the news they read here.</p>
-              <p class="has-b-btm-marg">If you donate at least $100 during this Spring Member Drive, you will be entered to <strong>win two Premium Tickets to The Texas Tribune Festival</strong>, Sept. 5-7 in downtown Austin, a $5,000 value. To be entered to win, your new donation must be made between May 9 and May 23. The winner will be randomly selected and notified by email.</p>
-              <p>To support this serious journalism that connects, holds power to account, engages and educates, make a donation and become a Texas Tribune member now during our Spring Member Drive. We have a goal to have 500 new members join us before May 23. Make your donation today for independent Texas journalism. </p>
+              <p class="has-b-btm-marg">If you donate or pledge at least $100 during this Spring Member Drive, you will be entered for a chance to <strong>win two Premium Tickets to The Texas Tribune Festival</strong>, Sept. 5-7 in downtown Austin, a $5,000 value. To be entered to win, your new donation must be made between May 9 and May 23. The winner will be randomly selected and notified by email.</p>
+              <p>Our goal is to have 500 new members join us before May 23. Make your donation today for independent Texas journalism.</p>
             </div>
             <h2 class="grid_separator link--teal">Become a Texas Tribune Member today</h2>
             <!-- where the form attaches -->
