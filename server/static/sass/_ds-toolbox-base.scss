@@ -18,14 +18,17 @@
 // c-icon component used for SVGs
 @import "@texastribune/queso-ui/assets/scss/6-components/icon/icon";
 
-// c-site-footer
+@import "@texastribune/queso-ui/assets/scss/6-components/button/button";
 @import "@texastribune/queso-ui/assets/scss/6-components/navbar/navbar";
 @import "@texastribune/queso-ui/assets/scss/6-components/site-footer/site-footer";
 
 // layout
 @import "@texastribune/queso-ui/assets/scss/7-layout/align";
 @import "@texastribune/queso-ui/assets/scss/7-layout/container";
+@import "@texastribune/queso-ui/assets/scss/7-layout/height";
 @import "@texastribune/queso-ui/assets/scss/7-layout/display";
+@import "@texastribune/queso-ui/assets/scss/7-layout/position";
+
 
 // utilities
 @import "@texastribune/queso-ui/assets/scss/utilities/color-helpers";

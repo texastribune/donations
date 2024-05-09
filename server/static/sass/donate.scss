@@ -11,6 +11,7 @@
 
 @import '6-components/buttons';
 @import '6-components/contact';
+@import '6-components/faq';
 @import '6-components/footer';
 @import '6-components/forms';
 @import '6-components/images';
@@ -31,4 +32,8 @@ h2 {
   @include mq($until: bp-m) {
     font-size: 1.3rem;
   }
+}
+
+.gap-s {
+  gap: $size-s;
 }
