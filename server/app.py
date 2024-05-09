@@ -63,7 +63,7 @@ from .util import (
 )
 
 ZONE = timezone(TIMEZONE)
-USE_THERMOMETER = False
+USE_THERMOMETER = True
 MAX_SYNC_DAYS_DIFFERENCE = 10
 
 DONATION_TYPE_INFO = {
@@ -1580,15 +1580,19 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     else:
         card = stripe.Customer.retrieve_source(customer_id, customer["invoice_settings"]["default_payment_method"])
 
-    year = card["exp_year"]
-    month = card["exp_month"]
-    day = calendar.monthrange(year, month)[1]
+    year = card.get("exp_year", None)
+    month = card.get("exp_month", None)
+    if year and month:
+        day = calendar.monthrange(year, month)[1]
+        rdo.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
 
-    rdo.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
-    rdo.stripe_card_brand = card["brand"]
-    rdo.stripe_card_last_4 = card["last4"]
+    rdo.stripe_card_brand = card.get("brand", None)
+    rdo.stripe_card_last_4 = card.get("last4", None)
 
     rdo.save()
+
+    if not rdo.stripe_card_expiration or not rdo.stripe_card_last_4:
+        app.logger.error(f'Stripe was not able to provide the full card information for subscription {subscription["id"]}.')
 
     return rdo
 
