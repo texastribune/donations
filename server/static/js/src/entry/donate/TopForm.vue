@@ -30,6 +30,7 @@
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
+          :show-frequency="true"
           label-text="amount* ($)"
           base-classes="form__text form__text--heavy"
           name="amount"

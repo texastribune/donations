@@ -199,3 +199,21 @@
 .grecaptcha-badge {
   visibility: hidden;
 }
+
+
+// Frequency display
+.c-freq {
+  position: relative;
+
+  input {
+    // cushion for the frequency display
+    padding-right: 100px;
+  }
+
+  &__label {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
