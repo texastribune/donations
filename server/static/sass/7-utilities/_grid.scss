@@ -301,3 +301,11 @@
 .grid_separator--extra {
   margin: $size-b*4 0;
 }
+
+.grid_align--end {
+  align-items: flex-end;
+}
+
+.grid_gap {
+  gap: $size-xxxs;
+}

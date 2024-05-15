@@ -25,8 +25,8 @@
       </div>
     </div>
 
-    <div class="grid_row grid_separator--xs">
-      <div class="col">
+    <div class="grid_row grid_wrap--s grid_separator grid_align--end grid_gap">
+      <div class="col_7">
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
@@ -37,13 +37,10 @@
           inputmode="decimal"
         />
       </div>
-    </div>
-
-    <div class="grid_row grid_separator">
-      <div class="col">
+      <div class="col_5">
         <p class="subtext">
           For three-year commitments of $1,000 or more, join our
-          <a href="/circle">Circle Membership program</a>.
+          <a class="l-display-ib" href="/circle">Circle Membership program</a>.
         </p>
       </div>
     </div>
