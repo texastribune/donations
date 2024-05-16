@@ -28,7 +28,7 @@ export default {
       });
 
       if (installmentPeriod === 'None') return '';
-      return '/' + installmentPeriod.toLowerCase();
+      return `/${installmentPeriod.toLowerCase()}`;
     },
   },
 
