@@ -1649,16 +1649,21 @@ def log_opportunity(contact, payment_intent):
     opportunity.quarantined = True if payment_meta.get("quarantined", None) else False
 
     card = stripe.Customer.retrieve_source(customer_id, payment_intent["source"])
-    year = card["exp_year"]
-    month = card["exp_month"]
-    day = calendar.monthrange(year, month)[1]
+    year = card.get("exp_year", None)
+    month = card.get("exp_month", None)
+    if year and month:
+        day = calendar.monthrange(year, month)[1]
+        opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
 
-    opportunity.stripe_card = card["id"]
-    opportunity.stripe_card_expiration = f"{year}-{month:02d}-{day:02d}"
-    opportunity.stripe_card_brand = card["brand"]
-    opportunity.stripe_card_last_4 = card["last4"]
+    opportunity.stripe_card = card.get("id", None)
+    opportunity.stripe_card_brand = card.get("brand", None)
+    opportunity.stripe_card_last_4 = card.get("last4", None)
 
     opportunity.save()
+
+    if not opportunity.stripe_card_expiration or not opportunity.stripe_card_last_4:
+        app.logger.error(f'Stripe was not able to provide the full card information for opportunity {opportunity["id"]}.')
+
     return opportunity
 
 
