@@ -1,18 +1,23 @@
 <template>
   <div :class="classesWithValidation">
     <label v-if="hasLabel" :for="connector">{{ labelText }}</label>
-    <input
-      :id="connector"
-      :aria-label="ariaLabel"
-      :aria-invalid="!isValid ? true : false"
-      :aria-required="required"
-      :value="value"
-      :name="name"
-      :placeholder="placeholder"
-      :type="type"
-      :inputmode="inputmode"
-      @input="updateSingleValue($event.target.value)"
-    />
+    <div :class="{ 'c-freq' : showFrequency }">
+      <input
+        :id="connector"
+        :aria-label="ariaLabel"
+        :aria-invalid="!isValid ? true : false"
+        :aria-required="required"
+        :value="value"
+        :name="name"
+        :placeholder="placeholder"
+        :type="type"
+        :inputmode="inputmode"
+        @input="updateSingleValue($event.target.value)"
+      />
+      <div v-if="showFrequency" class="c-freq__label">
+        <frequency-display :store-module="storeModule" />
+      </div>
+    </div>
     <p v-if="showError && !isValid" role="alert">{{ message }}</p>
   </div>
 </template>
@@ -20,9 +25,14 @@
 <script>
 import connectedElement from './mixins/connected-element';
 import labelConnector from './mixins/label-connector';
+import FrequencyDisplay from './FrequencyDisplay.vue';
 
 export default {
   name: 'TextInput',
+
+  components: {
+    FrequencyDisplay,
+  },
 
   mixins: [connectedElement, labelConnector],
 
@@ -55,6 +65,12 @@ export default {
     inputmode: {
       type: String,
       default: null,
+      required: false,
+    },
+
+    showFrequency: {
+      type: Boolean,
+      default: false,
       required: false,
     },
   },
