@@ -1662,7 +1662,7 @@ def log_opportunity(contact, payment_intent):
     opportunity.save()
 
     if not opportunity.stripe_card_expiration or not opportunity.stripe_card_last_4:
-        app.logger.error(f'Stripe was not able to provide the full card information for opportunity {opportunity["id"]}.')
+        app.logger.error(f'Stripe was not able to provide the full card information for opportunity {opportunity.id}.')
 
     return opportunity
 
