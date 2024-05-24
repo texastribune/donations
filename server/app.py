@@ -63,7 +63,7 @@ from .util import (
 )
 
 ZONE = timezone(TIMEZONE)
-USE_THERMOMETER = True
+USE_THERMOMETER = False
 MAX_SYNC_DAYS_DIFFERENCE = 10
 
 DONATION_TYPE_INFO = {
