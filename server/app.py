@@ -1549,19 +1549,19 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
-    trial_end = subscription["trial_end"]
+    start_date = subscription["start_date"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
     if type == "business_membership" and account:
-        rdo = RDO(account=account)
+        rdo = RDO(account=account, date=start_date)
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
         rdo.installments = None
 
     else:
-        rdo = RDO(contact=contact, date=trial_end)
+        rdo = RDO(contact=contact, date=start_date)
         rdo.installments = None
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
