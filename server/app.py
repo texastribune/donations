@@ -1146,6 +1146,12 @@ def stripehook():
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
 
+    process_stripe_event(event)
+
+    return "Success", 200
+
+
+def process_stripe_event(event):
     # setting celery's delay on these keeps the stripe call from erroring out
     if event.type == "customer.source.updated":
         customer_source_updated.delay(event)
@@ -1161,7 +1167,15 @@ def stripehook():
     if event.type == "subscription_schedule.updated":
         subscription_schedule_updated.delay(event)
 
-    return "Success", 200
+    return True
+
+
+def sync_stripe_event(event):
+    stripe_event = stripe.Event.retrieve(event)
+
+    process_stripe_event(stripe_event)
+
+    return stripe_event
 
 
 # this is just a temp func version of a piece of add_donation we're
