@@ -867,10 +867,9 @@ def payout_paid(event):
 
 
 @celery.task(name="app.customer_subscription_created")
-def customer_subscription_created(event=None, sub_id=None):
+def customer_subscription_created(subscription_id):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
-    subscription_id = sub_id if sub_id else event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
     subscription_meta = subscription["metadata"]
 
@@ -933,8 +932,7 @@ def customer_subscription_created(event=None, sub_id=None):
 
 
 @celery.task(name="app.payment_intent_succeeded")
-def payment_intent_succeeded(event=None, pi_id=None):
-    payment_intent_id = pi_id if pi_id else event["data"]["object"]["id"]
+def payment_intent_succeeded(payment_intent_id):
     payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id, expand=["invoice.subscription"])
     invoice = payment_intent["invoice"]
     if invoice:
@@ -964,8 +962,7 @@ def payment_intent_succeeded(event=None, pi_id=None):
 
 
 @celery.task(name="app.customer_subscription_deleted")
-def customer_subscription_deleted(event=None, sub_id=None):
-    subscription_id = sub_id if sub_id else event["data"]["object"]["id"]
+def customer_subscription_deleted(subscription_id):
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["customer", "latest_invoice.charge"])
     donation_type = subscription.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
     customer = subscription["customer"]
@@ -1153,12 +1150,15 @@ def process_stripe_event(event):
     if event.type == "payout.paid":
         payout_paid.delay(event)
     if event.type == "customer.subscription.created":
-        customer_subscription_created.delay(event=event)
+        subscription_id = event["data"]["object"]["id"]
+        customer_subscription_created.delay(subscription_id)
     if event.type == "payment_intent.succeeded":
-        payment_intent_succeeded.delay(event=event)
+        payment_intent_id = event["data"]["object"]["id"]
+        payment_intent_succeeded.delay(payment_intent_id)
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
-        customer_subscription_deleted.delay(event=event)
+        subscription_id = event["data"]["object"]["id"]
+        customer_subscription_deleted.delay(subscription_id)
     if event.type == "subscription_schedule.updated":
         subscription_schedule_updated.delay(event)
 
