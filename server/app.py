@@ -867,10 +867,10 @@ def payout_paid(event):
 
 
 @celery.task(name="app.customer_subscription_created")
-def customer_subscription_created(event):
+def customer_subscription_created(event=None, sub_id=None):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
-    subscription_id = event["data"]["object"]["id"]
+    subscription_id = sub_id if sub_id else event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
     subscription_meta = subscription["metadata"]
 
@@ -889,7 +889,7 @@ def customer_subscription_created(event):
 
     invoice_status = invoice["status"]
     if invoice_status == "open":
-        raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
+        raise Exception(f"Subscription {subscription["id"]} was created but its first invoice is still open.\
                         Please follow up with the subscription to proceed.")
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
@@ -933,23 +933,18 @@ def customer_subscription_created(event):
 
 
 @celery.task(name="app.payment_intent_succeeded")
-def payment_intent_succeeded(event):
-    app.logger.info(f"Payment intent event: {event}")
-    payment_intent = event['data']['object']
-    invoice_id = payment_intent['invoice']
-    if invoice_id:
-        try:
-            invoice = stripe.Invoice.retrieve(invoice_id, expand=['subscription'])
-        except stripe.error.StripeError as e:
-            app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
-            return # process can not continue without invoice and will need to be retriggered from stripe
+def payment_intent_succeeded(event=None, pi_id=None):
+    payment_intent_id = pi_id if pi_id else event["data"]["object"]["id"]
+    payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id, expand=["invoice.subscription"])
+    invoice = payment_intent["invoice"]
+    if invoice:
         app.logger.info(f"Payment intent invoice: {invoice}")
         subscription = invoice.get("subscription", {})
         rerun = invoice.get("metadata", {}).get("rerun")
         opp_sync = subscription.get("metadata", {}).get("skip_sync")
         try:
             stripe.PaymentIntent.modify(
-                payment_intent["id"],
+                payment_intent_id,
                 description=subscription.get("description", "Texas Tribune Membership")
             )
         except stripe.error.StripeError as e:
@@ -969,8 +964,9 @@ def payment_intent_succeeded(event):
 
 
 @celery.task(name="app.customer_subscription_deleted")
-def customer_subscription_deleted(event):
-    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer", "latest_invoice.charge"])
+def customer_subscription_deleted(event=None, sub_id=None):
+    subscription_id = sub_id if sub_id else event["data"]["object"]["id"]
+    subscription = stripe.Subscription.retrieve(subscription_id, expand=["customer", "latest_invoice.charge"])
     donation_type = subscription.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
     customer = subscription["customer"]
     charge = subscription["latest_invoice"]["charge"]
@@ -989,7 +985,6 @@ def customer_subscription_deleted(event):
         send_cancellation_notification(contact, rdo, donation_type, reason, method)
     except Exception as e:
         app.logger.error(f"Failed to send cancellation notification: {e}")
-
 
 
 @celery.task(name="app.subscription_schedule_updated")
@@ -1158,12 +1153,12 @@ def process_stripe_event(event):
     if event.type == "payout.paid":
         payout_paid.delay(event)
     if event.type == "customer.subscription.created":
-        customer_subscription_created.delay(event)
+        customer_subscription_created.delay(event=event)
     if event.type == "payment_intent.succeeded":
-        payment_intent_succeeded.delay(event)
+        payment_intent_succeeded.delay(event=event)
     if event.type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
-        customer_subscription_deleted.delay(event)
+        customer_subscription_deleted.delay(event=event)
     if event.type == "subscription_schedule.updated":
         subscription_schedule_updated.delay(event)
 
