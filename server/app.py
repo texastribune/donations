@@ -888,7 +888,7 @@ def customer_subscription_created(subscription_id):
 
     invoice_status = invoice["status"]
     if invoice_status == "open":
-        raise Exception(f"Subscription {subscription["id"]} was created but its first invoice is still open.\
+        raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
                         Please follow up with the subscription to proceed.")
     customer = stripe.Customer.retrieve(subscription["customer"])
     contact = get_contact(customer)
