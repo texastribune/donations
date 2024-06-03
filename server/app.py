@@ -867,10 +867,9 @@ def payout_paid(event):
 
 
 @celery.task(name="app.customer_subscription_created")
-def customer_subscription_created(event):
+def customer_subscription_created(subscription_id):
     # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
     # It starts by looking for a matching Contact (or creating one).
-    subscription_id = event["data"]["object"]["id"]
     subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
     subscription_meta = subscription["metadata"]
 
@@ -933,23 +932,17 @@ def customer_subscription_created(event):
 
 
 @celery.task(name="app.payment_intent_succeeded")
-def payment_intent_succeeded(event):
-    app.logger.info(f"Payment intent event: {event}")
-    payment_intent = event['data']['object']
-    invoice_id = payment_intent['invoice']
-    if invoice_id:
-        try:
-            invoice = stripe.Invoice.retrieve(invoice_id, expand=['subscription'])
-        except stripe.error.StripeError as e:
-            app.logger.error(f"Issue finding invoice for {payment_intent['id']} with message: {e}")
-            return # process can not continue without invoice and will need to be retriggered from stripe
+def payment_intent_succeeded(payment_intent_id):
+    payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id, expand=["invoice.subscription"])
+    invoice = payment_intent["invoice"]
+    if invoice:
         app.logger.info(f"Payment intent invoice: {invoice}")
         subscription = invoice.get("subscription", {})
         rerun = invoice.get("metadata", {}).get("rerun")
         opp_sync = subscription.get("metadata", {}).get("skip_sync")
         try:
             stripe.PaymentIntent.modify(
-                payment_intent["id"],
+                payment_intent_id,
                 description=subscription.get("description", "Texas Tribune Membership")
             )
         except stripe.error.StripeError as e:
@@ -969,8 +962,8 @@ def payment_intent_succeeded(event):
 
 
 @celery.task(name="app.customer_subscription_deleted")
-def customer_subscription_deleted(event):
-    subscription = stripe.Subscription.retrieve(event["data"]["object"]["id"], expand=["customer", "latest_invoice.charge"])
+def customer_subscription_deleted(subscription_id):
+    subscription = stripe.Subscription.retrieve(subscription_id, expand=["customer", "latest_invoice.charge"])
     donation_type = subscription.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
     customer = subscription["customer"]
     charge = subscription["latest_invoice"]["charge"]
@@ -989,7 +982,6 @@ def customer_subscription_deleted(event):
         send_cancellation_notification(contact, rdo, donation_type, reason, method)
     except Exception as e:
         app.logger.error(f"Failed to send cancellation notification: {e}")
-
 
 
 @celery.task(name="app.subscription_schedule_updated")
@@ -1146,22 +1138,38 @@ def stripehook():
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
 
-    # setting celery's delay on these keeps the stripe call from erroring out
-    if event.type == "customer.source.updated":
-        customer_source_updated.delay(event)
-    if event.type == "payout.paid":
-        payout_paid.delay(event)
-    if event.type == "customer.subscription.created":
-        customer_subscription_created.delay(event)
-    if event.type == "payment_intent.succeeded":
-        payment_intent_succeeded.delay(event)
-    if event.type == "customer.subscription.deleted":
-        app.logger.info(f"subscription deleted event: {event}")
-        customer_subscription_deleted.delay(event)
-    if event.type == "subscription_schedule.updated":
-        subscription_schedule_updated.delay(event)
+    process_stripe_event(event)
 
     return "Success", 200
+
+
+def process_stripe_event(event):
+    event_type = event["type"]
+    event_object = event["data"]["object"]
+    # setting celery's delay on these keeps the stripe call from erroring out
+    if event_type == "customer.source.updated":
+        customer_source_updated.delay(event)
+    if event_type == "payout.paid":
+        payout_paid.delay(event)
+    if event_type == "customer.subscription.created":
+        customer_subscription_created.delay(event_object["id"])
+    if event_type == "payment_intent.succeeded":
+        payment_intent_succeeded.delay(event_object["id"])
+    if event_type == "customer.subscription.deleted":
+        app.logger.info(f"subscription deleted event: {event}")
+        customer_subscription_deleted.delay(event_object["id"])
+    if event_type == "subscription_schedule.updated":
+        subscription_schedule_updated.delay(event)
+
+    return True
+
+
+def sync_stripe_event(event):
+    stripe_event = stripe.Event.retrieve(event)
+
+    process_stripe_event(stripe_event)
+
+    return stripe_event
 
 
 # this is just a temp func version of a piece of add_donation we're
@@ -1535,19 +1543,19 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
-    trial_end = subscription["trial_end"]
+    start_date = subscription["start_date"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
 
     if type == "business_membership" and account:
-        rdo = RDO(account=account)
+        rdo = RDO(account=account, date=start_date)
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
         rdo.installments = None
 
     else:
-        rdo = RDO(contact=contact, date=trial_end)
+        rdo = RDO(contact=contact, date=start_date)
         rdo.installments = None
         if type == "circle":
             rdo.installments = 36 if sub_plan["interval"] == "month" else 3
