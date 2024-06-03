@@ -1144,22 +1144,21 @@ def stripehook():
 
 
 def process_stripe_event(event):
+    event_type = event["type"]
+    event_object_id = event["data"]["object"]["id"]
     # setting celery's delay on these keeps the stripe call from erroring out
-    if event.type == "customer.source.updated":
+    if event_type == "customer.source.updated":
         customer_source_updated.delay(event)
-    if event.type == "payout.paid":
+    if event_type == "payout.paid":
         payout_paid.delay(event)
-    if event.type == "customer.subscription.created":
-        subscription_id = event["data"]["object"]["id"]
-        customer_subscription_created.delay(subscription_id)
-    if event.type == "payment_intent.succeeded":
-        payment_intent_id = event["data"]["object"]["id"]
-        payment_intent_succeeded.delay(payment_intent_id)
-    if event.type == "customer.subscription.deleted":
+    if event_type == "customer.subscription.created":
+        customer_subscription_created.delay(event_object_id)
+    if event_type == "payment_intent.succeeded":
+        payment_intent_succeeded.delay(event_object_id)
+    if event_type == "customer.subscription.deleted":
         app.logger.info(f"subscription deleted event: {event}")
-        subscription_id = event["data"]["object"]["id"]
-        customer_subscription_deleted.delay(subscription_id)
-    if event.type == "subscription_schedule.updated":
+        customer_subscription_deleted.delay(event_object_id)
+    if event_type == "subscription_schedule.updated":
         subscription_schedule_updated.delay(event)
 
     return True
