@@ -1,0 +1,70 @@
+{% extends "new_layout.html" %}
+
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/donate">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social.png') }}">
+  <meta property="og:title" content="Support Us with Donor-Advised Funds | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Members make our journalism possible. Support The Texas Tribune with a donation today.">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
+{% block content %}
+
+  <section class="splash splash--tall grid_separator--l">
+    <div class="grid_container grid_padded--xl">
+      <div class="grid_row grid_wrap--l">
+        <div class="col_12">
+          <h1 class="splash__headline">
+            Texans need truth. <span class="has-text-yellow">Help us report it.</span>
+          </h1>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="main">
+    <section class="grid_container grid_padded--xl grid_separator--xl">
+      <div class="grid_row grid_wrap--l gap-s">
+        <div class="col_7">
+          <div id="join-today" class="donation_form grid_separator--l">
+            <p class="has-b-btm-marg t-links-underlined t-size-s"><a href="/donate" class="has-text-gray-dark">Back to donate page</a></p>
+
+            <h2 class="grid_separator has-text-gray-dark">Donor-Advised Funds</h2>
+            <p>Recommend grants to The Texas Tribune through your donor-advised fund and help us to continue to bring trusted journalism to Texas and beyond.</p>
+
+            <div class="grid_separator"></div>
+            <style>
+              .c-daf-button {
+                text-align: center;
+                padding: 20px;
+                border-radius: 5px;
+                position: relative;
+              }
+              a.daf-button-link {
+                color: #fff;
+                text-decoration: none;
+                margin: 0;
+                background-color: #348094;
+                padding: 10px 20px;
+                border-radius: 10px;
+              }
+              a.daf-button-link:hover,
+              a.daf-button-link:active {
+                background-color: #2a6e7b;
+                color: #fff;
+              }
+            </style>
+            <div class="has-padding c-daf-button">
+              <script>var _msdaf_id = 'a5d544ab288ed';</script><script src='https://app.dafwidget.com/api/js/source.js'></script>
+            </div>
+            <p class="has-text-gray-dark t-size-s">This search tool will open a third-party website, owned and operated by an independent party. We assume no responsibility for the material.</p>
+          </div>
+        </div>
+        <div class="col_5">
+          {% include 'includes/faq.html' %}
+        </div>
+      </div>
+    </section>
+  </main>
+{% endblock %}
