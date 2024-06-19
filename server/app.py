@@ -766,6 +766,16 @@ def submit_blast():
         return render_template("error.html", message=message, bundles=bundles)
 
 
+@app.route("/donor-advised-funds")
+def daf():
+    bundles = get_bundles("donate")
+    template = "daf.html"
+
+    return render_template(
+        template,
+        bundles=bundles,
+    )
+
 @app.route("/error")
 def error():
     bundles = get_bundles("old")
