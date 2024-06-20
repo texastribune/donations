@@ -64,13 +64,13 @@ function createInitialFormState(queryParams) {
   return mergeValuesIntoStartState(BASE_FORM_STATE, {
     amount,
     zipcode,
+    reason,
     first_name: firstName,
     last_name: lastName,
     stripeEmail: email,
     campaign_id: campaignId,
     referral_id: referralId,
     installment_period: installmentPeriod,
-    reason: reason,
   });
 }
 
