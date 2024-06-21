@@ -32,6 +32,7 @@ function createInitialFormState(queryParams) {
     email = '',
     zipcode = '',
     code = '',
+    reason = '',
   } = cleanParams;
   let amount;
   let installmentPeriod;
@@ -63,6 +64,7 @@ function createInitialFormState(queryParams) {
   return mergeValuesIntoStartState(BASE_FORM_STATE, {
     amount,
     zipcode,
+    reason,
     first_name: firstName,
     last_name: lastName,
     stripeEmail: email,
