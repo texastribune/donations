@@ -1583,8 +1583,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     #these nested gets hit three separate fields in order to try and get a card to lookup
     source = subscription.get(
         "default_source", subscription.get(
-            "default_payment_method", customer["invoice_settings"].get(
-                "default_payment_method", None)))
+            "default_payment_method", customer["invoice_settings"]["default_payment_method"] if customer else None))
 
     # attempt retrieving a card as a source and if that errors try as a payment_method
     try:
