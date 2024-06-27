@@ -1540,6 +1540,7 @@ def get_account(customer):
 
 
 def log_rdo(type=None, contact=None, account=None, customer=None, subscription=None):
+    card = {}
     sub_meta = subscription["metadata"]
     sub_plan = subscription["plan"]
     customer_id = subscription["customer"]
@@ -1579,14 +1580,20 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
-    source = subscription.get("default_source", None)
-    if not source:
-        source = subscription.get("default_payment_method", None)
+    #these nested gets hit three separate fields in order to try and get a card to lookup
+    source = subscription.get(
+        "default_source", subscription.get(
+            "default_payment_method", customer["invoice_settings"].get(
+                "default_payment_method", None)))
 
-    if source:
+    # attempt retrieving a card as a source and if that errors try as a payment_method
+    try:
         card = stripe.Customer.retrieve_source(customer_id, source)
-    else:
-        card = stripe.Customer.retrieve_source(customer_id, customer["invoice_settings"]["default_payment_method"])
+    except:
+        try:
+            card = stripe.PaymentMethod.retrieve(source)
+        except:
+            app.logger.error(f'Stripe was not able to provide the full card information for subscription {subscription["id"]}.')
 
     year = card.get("exp_year", None)
     month = card.get("exp_month", None)
@@ -1598,9 +1605,6 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     rdo.stripe_card_last_4 = card.get("last4", None)
 
     rdo.save()
-
-    if not rdo.stripe_card_expiration or not rdo.stripe_card_last_4:
-        app.logger.error(f'Stripe was not able to provide the full card information for subscription {subscription["id"]}.')
 
     return rdo
 
