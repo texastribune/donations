@@ -1435,7 +1435,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
             end_behavior="cancel",
             phases=[{
                 "description": donation_type_info["description"],
-                "default_payment_method": source["id"],
+                "default_source": source["id"],
                 "items": [{
                     "price": price
                 }],
@@ -1591,7 +1591,8 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
         card = stripe.Customer.retrieve_source(customer_id, source)
     except:
         try:
-            card = stripe.PaymentMethod.retrieve(source)
+            payment_method = stripe.PaymentMethod.retrieve(source)
+            card = payment_method["card"]
         except:
             app.logger.error(f'Stripe was not able to provide the full card information for subscription {subscription["id"]}.')
 
