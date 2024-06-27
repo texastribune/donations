@@ -1435,7 +1435,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
             end_behavior="cancel",
             phases=[{
                 "description": donation_type_info["description"],
-                "default_source": source["id"],
+                "default_payment_method": source["id"],
                 "items": [{
                     "price": price
                 }],
