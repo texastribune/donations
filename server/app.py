@@ -518,11 +518,12 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         donation_type=donation_type,
         bad_actor_request=bad_actor_request,
     )
+    charge_template = "charge.html" if donation_type != "waco" else "charge_waco.html"
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
     }
-    return render_template("charge.html", gtm=gtm, bundles=get_bundles("charge"))
+    return render_template(charge_template, gtm=gtm, bundles=get_bundles("charge"))
 
 
 def validate_form(FormType, bundles, template, function=add_donation.delay):
