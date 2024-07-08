@@ -26,7 +26,7 @@
     </div>
 
     <div class="grid_row grid_wrap--s grid_separator grid_align--end grid_gap">
-      <div class="col_7">
+      <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
@@ -37,10 +37,8 @@
           inputmode="decimal"
         />
       </div>
-    </div>
 
-    <div class="grid_row grid_separator">
-      <div class="col">
+      <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
