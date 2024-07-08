@@ -90,7 +90,7 @@ DONATION_TYPE_INFO = {
     },
     "waco": {
         "type": "Waco Membership",
-        "description": "Waco Tribune Sustaining Membership",
+        "description": "Waco Local News Sustaining Membership",
         "open_ended_status": "Open",
     }
 }
