@@ -1,6 +1,6 @@
 import * as validators from '../../utils/validators';
 
-// eslint-disable-next-line prefer-default-export
+// eslint-disable-next-line import/prefer-default-export
 export const BASE_FORM_STATE = {
   stripeEmail: {
     value: '',
