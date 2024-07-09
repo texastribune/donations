@@ -431,7 +431,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
 
     if period is None:
         logging.info("----Creating one time payment...")
-        payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
+        payment = create_payment_intent(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         return True
     else:
         logging.info("----Creating recurring payment...")
@@ -1493,13 +1493,13 @@ def find_price(prices=[], period=None, pay_fees=False):
             return price
 
 
-def create_payment_intent(customer=None, form=None, quarantine=None):
+def create_payment_intent(donation_type=None, customer=None, form=None, quarantine=None):
     amount = amount_to_charge(form)
     payment = stripe.PaymentIntent.create(
         amount=int(amount * 100),
         currency="usd",
         customer=customer["id"],
-        description="Texas Tribune Membership",
+        description="Texas Tribune Membership" if donation_type != "waco" else "Waco Local News Membership",
         metadata={
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
