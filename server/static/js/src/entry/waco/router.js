@@ -31,7 +31,6 @@ function createInitialFormState(queryParams) {
     lastName = '',
     email = '',
     zipcode = '',
-    code = '',
     reason = '',
   } = cleanParams;
   let amount;

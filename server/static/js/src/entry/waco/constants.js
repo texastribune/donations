@@ -1,6 +1,6 @@
 import * as validators from '../../utils/validators';
 
-export const BASE_FORM_STATE = {
+const BASE_FORM_STATE = {
   stripeEmail: {
     value: '',
     isValid: false,
@@ -58,3 +58,5 @@ export const BASE_FORM_STATE = {
   campaign_id: { value: '', isValid: true, validator: null, message: null },
   referral_id: { value: '', isValid: true, validator: null, message: null },
 };
+
+export default BASE_FORM_STATE;
