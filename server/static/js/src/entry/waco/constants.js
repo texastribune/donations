@@ -1,6 +1,7 @@
 import * as validators from '../../utils/validators';
 
-const BASE_FORM_STATE = {
+// eslint-disable-next-line prefer-default-export
+export const BASE_FORM_STATE = {
   stripeEmail: {
     value: '',
     isValid: false,
@@ -58,5 +59,3 @@ const BASE_FORM_STATE = {
   campaign_id: { value: '', isValid: true, validator: null, message: null },
   referral_id: { value: '', isValid: true, validator: null, message: null },
 };
-
-export default BASE_FORM_STATE;
