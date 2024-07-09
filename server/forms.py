@@ -101,7 +101,7 @@ class BusinessMembershipForm(BaseForm):
 
 class WacoForm(BaseForm):
     installment_period = StringField(
-        u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
 
