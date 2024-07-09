@@ -3,7 +3,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import RouteHandler from '../../RouteHandler.vue';
-import Thermometer from './Thermometer.vue';
+// import Thermometer from './Thermometer.vue';
 // use this for a simple number output - See PR #1178
 // import ThermometerMinimal from './ThermometerMinimal.vue';
 import TopForm from './TopForm.vue';
@@ -95,11 +95,11 @@ function bindRouterEvents(router, routeHandler, store) {
 
     // don't disply theremometer if the #thermometer div isn't included,
     // based on the constant USE_THERMOMETER in app.py
-    const thermometerEl = document.getElementById('thermometer');
-    if (thermometerEl) {
-      const thermometer = new Vue({ ...Thermometer, store });
-      thermometer.$mount(thermometerEl)
-    }
+    // const thermometerEl = document.getElementById('thermometer');
+    // if (thermometerEl) {
+    //   const thermometer = new Vue({ ...Thermometer, store });
+    //   thermometer.$mount(thermometerEl)
+    // }
   });
 }
 
