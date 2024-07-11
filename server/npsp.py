@@ -605,13 +605,15 @@ class RDO(SalesforceObject, CampaignMixin):
             raise SalesforceException("Account and Contact can't both be specified")
 
         if not date:
-            date = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+            date = datetime.now(tz=ZONE)
         else:
-            date = datetime.fromtimestamp(date).strftime('%Y-%m-%d')
+            date = datetime.fromtimestamp(date)
+        
+        date_formatted = date.strftime("%Y-%m-%d")
 
         if contact is not None:
             self.contact_id = contact.id
-            self.name = f"{date} for {contact.first_name} {contact.last_name} ({contact.email})"
+            self.name = f"{date_formatted} for {contact.first_name} {contact.last_name} ({contact.email})"
             self.account_id = None
         elif account is not None:
             self.account_id = account.id
@@ -631,7 +633,8 @@ class RDO(SalesforceObject, CampaignMixin):
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
-        self.date_established = date
+        self.date_established = date_formatted
+        self.day_of_month = date.day
         self.stripe_customer = None
         self.stripe_subscription = None
         self.lead_source = None
@@ -666,6 +669,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "npe03__Contact__c": self.contact_id,
             "npe03__Amount__c": amount,
             "npe03__Date_Established__c": self.date_established,
+            "npsp__Day_of_Month__c": self.day_of_month,
             "Name": self.name,
             "Stripe_Customer_ID__c": self.stripe_customer,
             "Stripe_Subscription_Id__c": self.stripe_subscription,
