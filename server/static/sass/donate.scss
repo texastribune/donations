@@ -37,3 +37,12 @@ h2 {
 .gap-s {
   gap: $size-s;
 }
+
+.give-options {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: center;
+  line-height: 1;
+}
