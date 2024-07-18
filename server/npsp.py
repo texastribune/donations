@@ -626,7 +626,7 @@ class RDO(SalesforceObject, CampaignMixin):
 
         self.id = id
         self.installments = None
-        self.open_ended_status = None
+        self.recurring_type = None
         self.installment_period = None
         self.campaign_id = None
         self.campaign_name = None
@@ -677,7 +677,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "Stripe_Description__c": self.description,
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
             "Encouraged_to_contribute_by__c": self.encouraged_by,
-            "npe03__Open_Ended_Status__c": self.open_ended_status,
+            "npsp__RecurringType__c": self.recurring_type,
             "npe03__Installments__c": self.installments,
             "npe03__Installment_Period__c": self.installment_period,
             "Blast_Subscription_Email__c": self.blast_subscription_email,
@@ -704,7 +704,7 @@ class RDO(SalesforceObject, CampaignMixin):
                 SELECT Id, npe03__Organization__c, Referral_ID__c, npe03__Recurring_Donation_Campaign__c,
                 npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
                 Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
-                Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
+                Encouraged_to_contribute_by__c, npsp__RecurringType__c, npe03__Installments__c,
                 npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
                 Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
                 FROM npe03__Recurring_Donation__c
@@ -729,7 +729,7 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.description = response["Stripe_Description__c"]
             rdo.agreed_to_pay_fees = response["Stripe_Agreed_to_pay_fees__c"]
             rdo.encouraged_by = response["Encouraged_to_contribute_by__c"]
-            rdo.open_ended_status = response["npe03__Open_Ended_Status__c"]
+            rdo.recurring_type = response["npsp__RecurringType__c"]
             rdo.installments = response["npe03__Installments__c"]
             rdo.installment_period = response["npe03__Installment_Period__c"]
             rdo.blast_subscription_email = response["Blast_Subscription_Email__c"]
@@ -865,7 +865,7 @@ class RDO(SalesforceObject, CampaignMixin):
         # SF side
         if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
             return
-        if self.open_ended_status == "Open":
+        if self.recurring_type == "Open":
             logging.warning(
                 f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
             )
