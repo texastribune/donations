@@ -1,0 +1,33 @@
+{% extends "new_layout.html" %}
+{% from "./includes/icon.html" import icon %}
+
+{% block content %}
+<div id="charge" class="main grid_container--m grid_padded--m">
+  <section class="section-padding">
+    <div class="grid_container--m grid_separator--l">
+      <div class="grid_row grid_separator">
+        <figure class="image_default">
+          <img src="https://static.texastribune.org/media/marketing/TT-support_thankyou.png" />
+        </figure>
+      </div>
+      <div class="grid_row">
+        <div class="prose">
+          <p>Your donation makes you a Founding Donor to our Waco Local News Initiative. You’re part of a growing community of people in Waco and beyond who support trusted journalism that connects communities and provides a stronger sense of belonging.</p>
+          <p>When our newsroom launches, you’ll hear from us!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block bottom_script %}
+  <script>
+    window.dataLayer.push({
+      event: 'customDonationSuccess',
+      gaAction: 'waco donation submit',
+      gaLabel: '{{ gtm.event_label }}',
+      gaValue: '{{ gtm.event_value }}'
+    });
+  </script>
+{% endblock %}

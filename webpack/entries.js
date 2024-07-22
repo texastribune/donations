@@ -5,6 +5,7 @@ const entriesNames = [
   'charge',
   'circle',
   'business',
+  'waco',
   'old',
   'account',
 ];
