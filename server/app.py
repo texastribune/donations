@@ -1547,24 +1547,27 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     start_date = subscription["start_date"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
+    amount = sub_meta.get("donor_selected_amount", sub_plan["metadata"].get("donor_amount", 0))
 
     if type == "business_membership" and account:
         rdo = RDO(account=account, date=start_date)
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
-        rdo.installments = None
-
     else:
         rdo = RDO(contact=contact, date=start_date)
-        rdo.installments = None
-        if type == "circle":
-            rdo.installments = 36 if sub_plan["interval"] == "month" else 3
-        elif type == "blast":
-            now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
-            rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
-            rdo.billing_email = contact.email
-            rdo.blast_subscription_email = sub_meta.get("subscriber_email", None)
+        
+    if type == "blast":
+        now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+        rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
+        rdo.billing_email = contact.email
+        rdo.blast_subscription_email = sub_meta.get("subscriber_email", None)
+
+    if type == "circle":
+        rdo.installments = 36 if sub_plan["interval"] == "month" else 3
+        rdo.amount = amount * rdo.installments
+    else:
+        rdo.amount = amount
 
     rdo.type = donation_type_info.get("type", None)
     rdo.stripe_customer = customer_id
@@ -1575,10 +1578,12 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
-    rdo.amount = sub_meta.get("donor_selected_amount", sub_plan["metadata"].get("donor_amount", 0))
     rdo.installment_period = installment_period
     rdo.recurring_type = donation_type_info.get("recurring_type", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
+
+    if not rdo.amount:
+        rdo.amount = amount
 
     #these nested gets hit three separate fields in order to try and get a card to lookup
     source = subscription.get(
