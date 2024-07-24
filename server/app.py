@@ -1565,7 +1565,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
 
     if type == "circle":
         rdo.installments = 36 if sub_plan["interval"] == "month" else 3
-        rdo.amount = amount * rdo.installments
+        rdo.amount = amount
     else:
         rdo.amount = amount
 
