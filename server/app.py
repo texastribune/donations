@@ -1582,9 +1582,6 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     rdo.recurring_type = donation_type_info.get("recurring_type", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
-    if not rdo.amount:
-        rdo.amount = amount
-
     #these nested gets hit three separate fields in order to try and get a card to lookup
     source = subscription.get(
         "default_source", subscription.get(
