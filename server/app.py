@@ -49,6 +49,7 @@ from .forms import (
     BusinessMembershipForm,
     CircleForm,
     DonateForm,
+    WacoForm,
 )
 from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
 from .util import (
@@ -87,6 +88,11 @@ DONATION_TYPE_INFO = {
         "description": "Blast Subscription",
         "recurring_type": "Open",
     },
+    "waco": {
+        "type": "Waco Membership",
+        "description": "Waco Local News Sustaining Membership",
+        "open_ended_status": "Open",
+    }
 }
 
 if ENABLE_SENTRY:
@@ -425,12 +431,12 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
 
     if period is None:
         logging.info("----Creating one time payment...")
-        payment = create_payment_intent(customer=customer, form=form, quarantine=quarantine)
+        payment = create_payment_intent(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         return True
     else:
         logging.info("----Creating recurring payment...")
-        if donation_type == "membership":
-            subscription = create_custom_subscription(customer=customer, form=form, quarantine=quarantine)
+        if donation_type in ["membership", "waco"]:
+            subscription = create_custom_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         else:
             subscription = create_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         return True
@@ -512,11 +518,12 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         donation_type=donation_type,
         bad_actor_request=bad_actor_request,
     )
+    charge_template = "charge.html" if donation_type != "waco" else "charge_waco.html"
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
     }
-    return render_template("charge.html", gtm=gtm, bundles=get_bundles("charge"))
+    return render_template(charge_template, gtm=gtm, bundles=get_bundles("charge"))
 
 
 def validate_form(FormType, bundles, template, function=add_donation.delay):
@@ -549,6 +556,9 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
+        function = add_stripe_donation.delay
+    elif FormType is WacoForm:
+        donation_type = "waco"
         function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
@@ -643,6 +653,23 @@ def business_form():
         bundles=bundles,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+    )
+
+
+@app.route("/waco", methods=["GET", "POST"])
+def waco_form():
+    bundles = get_bundles("waco")
+    template = "waco-form.html"
+
+    if request.method == "POST":
+        return validate_form(WacoForm, bundles=bundles, template=template)
+
+    return render_template(
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+        use_thermometer=USE_THERMOMETER,
     )
 
 
@@ -765,6 +792,16 @@ def submit_blast():
         message = "There was an issue saving your donation information."
         return render_template("error.html", message=message, bundles=bundles)
 
+
+@app.route("/donor-advised-funds")
+def daf():
+    bundles = get_bundles("donate")
+    template = "daf.html"
+
+    return render_template(
+        template,
+        bundles=bundles,
+    )
 
 @app.route("/error")
 def error():
@@ -1370,16 +1407,17 @@ def add_blast_subscription(form=None, customer=None):
 
 
 # TODO can these funcs be moved somewhere else? (maybe util.py?)
-def create_custom_subscription(customer=None, form=None, quarantine=None):
+def create_custom_subscription(donation_type=None, customer=None, form=None, quarantine=None):
     amount = amount_to_charge(form)
     source = customer["sources"]["data"][0]
     interval = "month" if form["installment_period"] == "monthly" else "year"
+    donation_type_info = DONATION_TYPE_INFO[donation_type]
     subscription = stripe.Subscription.create(
         customer = customer["id"],
         default_source = source["id"],
-        description = "Texas Tribune Sustaining Membership",
+        description = donation_type_info["description"],
         metadata = {
-            "donation_type": "membership",
+            "donation_type": donation_type,
             "donor_selected_amount": form.get("amount", 0),
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
@@ -1391,7 +1429,7 @@ def create_custom_subscription(customer=None, form=None, quarantine=None):
             "price_data": {
                 "unit_amount": int(amount * 100),
                 "currency": "usd",
-                "product": STRIPE_PRODUCTS["sustaining"],
+                "product": STRIPE_PRODUCTS[donation_type],
                 "recurring": {"interval": interval},
             }
         }]
@@ -1465,13 +1503,13 @@ def find_price(prices=[], period=None, pay_fees=False):
             return price
 
 
-def create_payment_intent(customer=None, form=None, quarantine=None):
+def create_payment_intent(donation_type=None, customer=None, form=None, quarantine=None):
     amount = amount_to_charge(form)
     payment = stripe.PaymentIntent.create(
         amount=int(amount * 100),
         currency="usd",
         customer=customer["id"],
-        description="Texas Tribune Membership",
+        description="Texas Tribune Membership" if donation_type != "waco" else "Waco Local News Membership",
         metadata={
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],

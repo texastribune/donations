@@ -1,7 +1,7 @@
 <template>
   <form
     ref="form"
-    action="/donate"
+    action="/waco"
     method="post"
     class="form"
     @submit="$event.preventDefault()"
@@ -26,7 +26,7 @@
     </div>
 
     <div class="grid_row grid_wrap--s grid_separator grid_align--end grid_gap">
-      <div class="col_7">
+      <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
@@ -37,16 +37,8 @@
           inputmode="decimal"
         />
       </div>
-      <div class="col_5">
-        <p class="subtext">
-          For three-year commitments of $1,000 or more, join our
-          <a class="l-display-ib" href="/circle">Circle Membership program</a>.
-        </p>
-      </div>
-    </div>
 
-    <div class="grid_row grid_separator">
-      <div class="col">
+      <div class="col_6 grid_separator">
         <text-input
           :store-module="storeModule"
           :show-error="showErrors"
@@ -175,7 +167,11 @@
     </div>
 
     <p class="subtext">
-      By donating, you will receive member communications at the email address you provide. This site is protected by reCAPTCHA and the Google
+       By donating, you will receive member communications at the email address you provide.
+    </p>
+
+    <p class="subtext">
+      This site is protected by reCAPTCHA and the Google
       <a href="https://policies.google.com/privacy">Privacy Policy</a> and
       <a href="https://policies.google.com/terms">Terms of Service</a> apply.
     </p>

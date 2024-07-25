@@ -333,7 +333,7 @@ def quantize(amount):
     return Decimal(amount).quantize(TWOPLACES)
 
 
-def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
+def donation_adder(customer: str, donation_type: str, amount: int, pay_fees: bool, interval: str, year: int, month: int, day: int) -> object:
     final_amount = amount_to_charge(amount=amount, pay_fees=pay_fees, interval=interval)
     customer = stripe.Customer.retrieve(customer)
     source = customer.sources.data[0]
@@ -359,7 +359,7 @@ def donation_adder(customer: str, amount: int, pay_fees: bool, interval: str, ye
             "price_data": {
                 "unit_amount": int(final_amount * 100),
                 "currency": "usd",
-                "product": STRIPE_PRODUCTS["sustaining"],
+                "product": STRIPE_PRODUCTS[donation_type if donation_type else "membership"],
                 "recurring": {"interval": interval},
             }
         }]
