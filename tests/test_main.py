@@ -454,7 +454,7 @@ def test__format_circle_donation():
         "Billing_Email__c": None,
         "Blast_Subscription_Email__c": None,
         "npe03__Organization__c": None,
-        "npe03__Amount__c": "300.0",  # 3 * 100
+        "npe03__Amount__c": "100.0",
         "Name": "foo",
         "npe03__Installments__c": 3,
         "npsp__RecurringType__c": "Fixed",
@@ -499,7 +499,7 @@ def test__format_cent_circle_donation():
         "npe03__Installment_Period__c": "yearly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
         "Stripe_Subscription_Id__c": None,
-        "npe03__Amount__c": "4503.03",  # 3 * 1501.01
+        "npe03__Amount__c": "1501.01",
         "Name": "foo",
         "npe03__Installments__c": 3,
         "npsp__RecurringType__c": "Fixed",
@@ -530,7 +530,7 @@ def test__format_recurring_donation():
     rdo.amount = 9
     rdo.name = "foo"
     rdo.installments = 0
-    rdo.recurring_type = None
+    rdo.recurring_type = "Open"
     rdo.description = "Texas Tribune Membership"
     rdo.agreed_to_pay_fees = True
 
@@ -578,7 +578,7 @@ def test__format_recurring_donation_decimal():
     rdo.amount = 9.15
     rdo.name = "foo"
     rdo.installments = 0
-    rdo.recurring_type = None
+    rdo.recurring_type = "Open"
     rdo.description = "Texas Tribune Membership"
     rdo.agreed_to_pay_fees = True
     rdo.quarantined = True
