@@ -454,7 +454,7 @@ def test__format_circle_donation():
         "Billing_Email__c": None,
         "Blast_Subscription_Email__c": None,
         "npe03__Organization__c": None,
-        "npe03__Amount__c": "100.0",
+        "npe03__Amount__c": "100.00",
         "Name": "foo",
         "npe03__Installments__c": 3,
         "npsp__RecurringType__c": "Fixed",
