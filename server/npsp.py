@@ -658,7 +658,7 @@ class RDO(SalesforceObject, CampaignMixin):
         # TODO be sure to reverse this on deserialization
         amount = self.amount
 
-        # TODO should this be in the client?
+        # TODO this is deprecated for the salesforce migration and can be removed after a success
         # if self.installments:
         #     amount = str(float(self.amount) * int(self.installments))
 
