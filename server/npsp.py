@@ -704,7 +704,7 @@ class RDO(SalesforceObject, CampaignMixin):
                 SELECT Id, npe03__Organization__c, Referral_ID__c, npe03__Recurring_Donation_Campaign__c,
                 npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
                 Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
-                Encouraged_to_contribute_by__c, npsp__RecurringType__c, npe03__Installments__c,
+                Encouraged_to_contribute_by__c, npsp__RecurringType__c, npe03__Installments__c, npsp__Day_of_Month__c,
                 npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
                 Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
                 FROM npe03__Recurring_Donation__c
@@ -722,6 +722,7 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.contact_id = response["npe03__Contact__c"]
             rdo.amount = response["npe03__Amount__c"]
             rdo.date_established = response["npe03__Date_Established__c"]
+            rdo.day_of_month = response["npsp__Day_of_Month__c"]
             rdo.name = response["Name"]
             rdo.stripe_customer = response["Stripe_Customer_Id__c"]
             rdo.stripe_subscription = response["Stripe_Subscription_Id__c"]
