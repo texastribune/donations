@@ -1175,6 +1175,8 @@ def stripehook():
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
 
+    return "Temporarily blocked", 400
+
     process_stripe_event(event)
 
     return "Success", 200
