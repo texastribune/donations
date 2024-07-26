@@ -1740,7 +1740,7 @@ def close_rdo(subscription_id, method=None, contact=None, reason=None):
     #next we'll update the rdo to reflect the cancellation
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
     rdo_update_details = {
-        "npsp__RecurringType__c": "Closed",
+        "npsp__Status__c": "Closed",
         "Cancellation_Date__c": today,
         "Cancellation_Method__c": method,
     }
