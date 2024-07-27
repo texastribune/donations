@@ -84,8 +84,8 @@ class BadActor:
     def _slackify_all(self) -> list:
 
         # add another item for the Salesforce link
-        txn_url = f"{self.transaction.sf.instance_url}/{self.transaction.id}"
-        slackified_txn_link = f"<{txn_url}|Salesforce>"
+        txn_url = f"https://dashboard.stripe.com/customers/{self.transaction["id"]}"
+        slackified_txn_link = f"<{txn_url}|Stripe>"
         sf_link_item = BadActorResponseItem(
             label="",
             value=slackified_txn_link,

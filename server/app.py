@@ -420,11 +420,13 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     period = form["installment_period"]
 
     if quarantine:
-        contact = get_or_create_contact(form)
+        # contact = get_or_create_contact(form)
+        app.logger.warning(f"New contact will need to be created for {customer['id']}")
+        app.logger.info(f"Form for {customer['id']}: {form}")
         form["source"] = customer["id"]
         form["amount_w_fees"] = float(amount_to_charge(form))
         bad_actor_response.notify_bad_actor(
-            transaction=contact,
+            transaction=customer,
             transaction_data=form
         )
         return True
