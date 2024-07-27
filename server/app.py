@@ -597,11 +597,9 @@ if ENABLE_PORTAL:
     @app.route("/account/", defaults={"path": ""})
     @app.route("/account/<path>/")
     def account(path):
+        message = "The membership dashboard is temporarily unavailable during site maintenance. Expect the dashboard to be available again by Sunday, July 28th. Any further downtime will be announced here."
         return render_template(
-            "account.html",
-            bundles=get_bundles("account"),
-            stripe=app.config["STRIPE_KEYS"]["publishable_key"],
-            recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+            "error.html", message=message, bundles=get_bundles("old")
         )
 
 
