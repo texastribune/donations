@@ -420,13 +420,11 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     period = form["installment_period"]
 
     if quarantine:
-        # contact = get_or_create_contact(form)
-        app.logger.warning(f"New contact will need to be created for {customer['id']}")
-        app.logger.info(f"Form for {customer['id']}: {form}")
+        contact = get_or_create_contact(form)
         form["source"] = customer["id"]
         form["amount_w_fees"] = float(amount_to_charge(form))
         bad_actor_response.notify_bad_actor(
-            transaction=customer,
+            transaction=contact,
             transaction_data=form
         )
         return True
@@ -597,9 +595,11 @@ if ENABLE_PORTAL:
     @app.route("/account/", defaults={"path": ""})
     @app.route("/account/<path>/")
     def account(path):
-        message = "The membership dashboard is temporarily unavailable during site maintenance. Expect the dashboard to be available again by Sunday, July 28th. Any further downtime will be announced here."
         return render_template(
-            "error.html", message=message, bundles=get_bundles("old")
+            "account.html",
+            bundles=get_bundles("account"),
+            stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+            recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
         )
 
 
@@ -1174,8 +1174,6 @@ def stripehook():
         return "Bad signature", 400
 
     app.logger.info(f"Received event: id={event.id}, type={event.type}")
-
-    return "Temporarily blocked", 400
 
     process_stripe_event(event)
 
