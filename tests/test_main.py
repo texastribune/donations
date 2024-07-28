@@ -254,7 +254,8 @@ def test_check_response():
 
 zone = timezone("US/Central")
 
-today = datetime.now(tz=zone).strftime("%Y-%m-%d")
+today = datetime.now(tz=zone)
+today_formatted = datetime.now(tz=zone).strftime("%Y-%m-%d")
 
 
 def test__campaign_id_validation():
@@ -396,7 +397,7 @@ def test__format_opportunity():
         "AccountId": "0011700000BpR8PAAV",
         "CampaignId": None,
         "Amount": "9.00",
-        "CloseDate": today,
+        "CloseDate": today_formatted,
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
         "LeadSource": "Stripe",
         "Name": "D C (dcraigmile+test6@texastribune.org)",
@@ -433,7 +434,7 @@ def test__format_circle_donation():
     rdo.amount = 100
     rdo.name = "foo"
     rdo.installments = 3
-    rdo.open_ended_status = None
+    rdo.recurring_type = "Fixed"
     rdo.description = "Texas Tribune Circle Membership"
     rdo.agreed_to_pay_fees = True
     rdo.type = "Giving Circle"
@@ -443,7 +444,8 @@ def test__format_circle_donation():
     expected_response = {
         "Referral_ID__c": "1234",
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
-        "npe03__Date_Established__c": today,
+        "npe03__Date_Established__c": today_formatted,
+        "npsp__Day_of_Month__c": today.day,
         "Lead_Source__c": "Stripe",
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "yearly",
@@ -452,10 +454,10 @@ def test__format_circle_donation():
         "Billing_Email__c": None,
         "Blast_Subscription_Email__c": None,
         "npe03__Organization__c": None,
-        "npe03__Amount__c": "300.0",  # 3 * 100
+        "npe03__Amount__c": "100.00",
         "Name": "foo",
         "npe03__Installments__c": 3,
-        "npe03__Open_Ended_Status__c": None,
+        "npsp__RecurringType__c": "Fixed",
         "Stripe_Description__c": "Texas Tribune Circle Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Giving Circle",
@@ -480,7 +482,7 @@ def test__format_cent_circle_donation():
     rdo.amount = 1501.01
     rdo.name = "foo"
     rdo.installments = 3
-    rdo.open_ended_status = None
+    rdo.recurring_type = "Fixed"
     rdo.description = "Texas Tribune Circle Membership"
     rdo.agreed_to_pay_fees = True
     rdo.type = "Giving Circle"
@@ -489,17 +491,18 @@ def test__format_cent_circle_donation():
     expected_response = {
         "Referral_ID__c": "1234",
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
-        "npe03__Date_Established__c": today,
+        "npe03__Date_Established__c": today_formatted,
+        "npsp__Day_of_Month__c": today.day,
         "Lead_Source__c": "Stripe",
         "npe03__Organization__c": None,
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "yearly",
         "Stripe_Customer_ID__c": "cus_78MqJSBejMN9gn",
         "Stripe_Subscription_Id__c": None,
-        "npe03__Amount__c": "4503.03",  # 3 * 1501.01
+        "npe03__Amount__c": "1501.01",
         "Name": "foo",
         "npe03__Installments__c": 3,
-        "npe03__Open_Ended_Status__c": None,
+        "npsp__RecurringType__c": "Fixed",
         "Stripe_Description__c": "Texas Tribune Circle Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Giving Circle",
@@ -527,7 +530,7 @@ def test__format_recurring_donation():
     rdo.amount = 9
     rdo.name = "foo"
     rdo.installments = 0
-    rdo.open_ended_status = None
+    rdo.recurring_type = "Open"
     rdo.description = "Texas Tribune Membership"
     rdo.agreed_to_pay_fees = True
 
@@ -537,7 +540,8 @@ def test__format_recurring_donation():
         "Referral_ID__c": "1234",
         "npe03__Organization__c": None,
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
-        "npe03__Date_Established__c": today,
+        "npe03__Date_Established__c": today_formatted,
+        "npsp__Day_of_Month__c": today.day,
         "Lead_Source__c": "Stripe",
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "monthly",
@@ -546,7 +550,7 @@ def test__format_recurring_donation():
         "npe03__Amount__c": "9.00",
         "Name": "foo",
         "npe03__Installments__c": 0,
-        "npe03__Open_Ended_Status__c": None,
+        "npsp__RecurringType__c": "Open",
         "Stripe_Description__c": "Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Recurring Donation",
@@ -574,7 +578,7 @@ def test__format_recurring_donation_decimal():
     rdo.amount = 9.15
     rdo.name = "foo"
     rdo.installments = 0
-    rdo.open_ended_status = None
+    rdo.recurring_type = "Open"
     rdo.description = "Texas Tribune Membership"
     rdo.agreed_to_pay_fees = True
     rdo.quarantined = True
@@ -586,7 +590,8 @@ def test__format_recurring_donation_decimal():
         "npe03__Organization__c": None,
         "Billing_Email__c": None,
         "Encouraged_to_contribute_by__c": "Because I love the Trib!",
-        "npe03__Date_Established__c": today,
+        "npe03__Date_Established__c": today_formatted,
+        "npsp__Day_of_Month__c": today.day,
         "Lead_Source__c": "Stripe",
         "Blast_Subscription_Email__c": None,
         "npe03__Contact__c": "0031700000BHQzBAAX",
@@ -596,7 +601,7 @@ def test__format_recurring_donation_decimal():
         "npe03__Amount__c": "9.15",
         "Name": "foo",
         "npe03__Installments__c": 0,
-        "npe03__Open_Ended_Status__c": None,
+        "npsp__RecurringType__c": "Open",
         "Stripe_Description__c": "Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "Recurring Donation",
@@ -621,7 +626,7 @@ def test__format_blast_rdo():
     rdo.amount = 40
     rdo.name = "foo"
     rdo.installments = 0
-    rdo.open_ended_status = "Open"
+    rdo.recurring_type = "Open"
     rdo.description = "Monthly Blast Subscription"
     rdo.agreed_to_pay_fees = True
     rdo.type = "The Blast"
@@ -634,7 +639,8 @@ def test__format_blast_rdo():
     expected_response = {
         "Referral_ID__c": "1234",
         "Encouraged_to_contribute_by__c": None,
-        "npe03__Date_Established__c": today,
+        "npe03__Date_Established__c": today_formatted,
+        "npsp__Day_of_Month__c": today.day,
         "Lead_Source__c": "Stripe",
         "npe03__Contact__c": "0031700000BHQzBAAX",
         "npe03__Installment_Period__c": "monthly",
@@ -643,7 +649,7 @@ def test__format_blast_rdo():
         "npe03__Amount__c": "40.00",
         "Name": "foo",
         "npe03__Installments__c": 0,
-        "npe03__Open_Ended_Status__c": "Open",
+        "npsp__RecurringType__c": "Open",
         "Stripe_Description__c": "Monthly Blast Subscription",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type__c": "The Blast",

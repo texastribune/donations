@@ -71,22 +71,22 @@ DONATION_TYPE_INFO = {
     "membership": {
         "type": "Recurring Donation",
         "description": "Texas Tribune Sustaining Membership",
-        "open_ended_status": "Open",
+        "recurring_type": "Open",
     },
     "business_membership": {
         "type": "Business Membership",
         "description": "Texas Tribune Business Membership",
-        "open_ended_status": "Open",
+        "recurring_type": "Open",
     },
     "circle": {
         "type": "Giving Circle",
         "description": "Texas Tribune Circle Membership",
-        "open_ended_status": "None",
+        "recurring_type": "Fixed",
     },
     "blast": {
         "type": "The Blast",
         "description": "Blast Subscription",
-        "open_ended_status": "Open",
+        "recurring_type": "Open",
     },
     "waco": {
         "type": "Waco Membership",
@@ -1304,7 +1304,7 @@ def add_circle_membership(contact=None, form=None, customer=None, quarantine=Fal
         rdo.installments = 3
 
     rdo.installment_period = installment_period
-    rdo.open_ended_status = "None"
+    rdo.recurring_type = "Fixed"
     rdo.quarantined = quarantine
 
     apply_card_details(rdo=rdo, customer=customer)
@@ -1333,7 +1333,7 @@ def add_recurring_donation(contact=None, form=None, customer=None, quarantine=Fa
     rdo.amount = form.get("amount", 0)
     rdo.installments = None
     rdo.installment_period = form["installment_period"]
-    rdo.open_ended_status = "Open"
+    rdo.recurring_type = "Open"
     rdo.quarantined = quarantine
 
     apply_card_details(rdo=rdo, customer=customer)
@@ -1374,7 +1374,7 @@ def add_blast_subscription(form=None, customer=None):
     # Blast specific:
     rdo.installments = 0
     rdo.description = "Blast Subscription"
-    rdo.open_ended_status = "Open"
+    rdo.recurring_type = "Open"
     if int(float(rdo.amount)) == 40:
         rdo.installment_period = "monthly"
     else:
@@ -1585,25 +1585,26 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     start_date = subscription["start_date"]
     donation_type_info = DONATION_TYPE_INFO[type]
     installment_period = "yearly" if sub_plan["interval"] == "year" else "monthly"
+    amount = sub_meta.get("donor_selected_amount", sub_plan["metadata"].get("donor_amount", 0))
 
     if type == "business_membership" and account:
         rdo = RDO(account=account, date=start_date)
         year = datetime.now(tz=ZONE).strftime("%Y")
         rdo.name = f"{year} Business {account.name} Recurring"
         rdo.record_type_name = "Business Membership"
-        rdo.installments = None
-
     else:
         rdo = RDO(contact=contact, date=start_date)
-        rdo.installments = None
-        if type == "circle":
-            rdo.installments = 36 if sub_plan["interval"] == "month" else 3
-        elif type == "blast":
-            now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
-            rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
-            rdo.billing_email = contact.email
-            rdo.blast_subscription_email = sub_meta.get("subscriber_email", None)
+        
+    if type == "blast":
+        now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
+        rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
+        rdo.billing_email = contact.email
+        rdo.blast_subscription_email = sub_meta.get("subscriber_email", None)
 
+    if type == "circle":
+        rdo.installments = 36 if sub_plan["interval"] == "month" else 3
+    
+    rdo.amount = amount
     rdo.type = donation_type_info.get("type", None)
     rdo.stripe_customer = customer_id
     rdo.stripe_subscription = subscription["id"]
@@ -1613,9 +1614,8 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     rdo.agreed_to_pay_fees = True if sub_meta.get("pay_fees", None) else False
     rdo.encouraged_by = sub_meta.get("encouraged_by", None)
     rdo.lead_source = "Stripe"
-    rdo.amount = sub_meta.get("donor_selected_amount", sub_plan["metadata"].get("donor_amount", 0))
     rdo.installment_period = installment_period
-    rdo.open_ended_status = donation_type_info.get("open_ended_status", None)
+    rdo.recurring_type = donation_type_info.get("recurring_type", None)
     rdo.quarantined = True if sub_meta.get("quarantine", None) else False
 
     #these nested gets hit three separate fields in order to try and get a card to lookup
@@ -1740,7 +1740,7 @@ def close_rdo(subscription_id, method=None, contact=None, reason=None):
     #next we'll update the rdo to reflect the cancellation
     today = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
     rdo_update_details = {
-        "npe03__Open_Ended_Status__c": "Closed",
+        "npsp__Status__c": "Closed",
         "Cancellation_Date__c": today,
         "Cancellation_Method__c": method,
     }
