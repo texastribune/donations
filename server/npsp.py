@@ -605,13 +605,15 @@ class RDO(SalesforceObject, CampaignMixin):
             raise SalesforceException("Account and Contact can't both be specified")
 
         if not date:
-            date = datetime.now(tz=ZONE).strftime("%Y-%m-%d")
+            date = datetime.now(tz=ZONE)
         else:
-            date = datetime.fromtimestamp(date).strftime('%Y-%m-%d')
+            date = datetime.fromtimestamp(date)
+        
+        date_formatted = date.strftime("%Y-%m-%d")
 
         if contact is not None:
             self.contact_id = contact.id
-            self.name = f"{date} for {contact.first_name} {contact.last_name} ({contact.email})"
+            self.name = f"{date_formatted} for {contact.first_name} {contact.last_name} ({contact.email})"
             self.account_id = None
         elif account is not None:
             self.account_id = account.id
@@ -624,14 +626,15 @@ class RDO(SalesforceObject, CampaignMixin):
 
         self.id = id
         self.installments = None
-        self.open_ended_status = None
+        self.recurring_type = None
         self.installment_period = None
         self.campaign_id = None
         self.campaign_name = None
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
-        self.date_established = date
+        self.date_established = date_formatted
+        self.day_of_month = date.day
         self.stripe_customer = None
         self.stripe_subscription = None
         self.lead_source = None
@@ -655,9 +658,9 @@ class RDO(SalesforceObject, CampaignMixin):
         # TODO be sure to reverse this on deserialization
         amount = self.amount
 
-        # TODO should this be in the client?
-        if self.installments:
-            amount = str(float(self.amount) * int(self.installments))
+        # TODO this is deprecated for the salesforce migration and can be removed after a success
+        # if self.installments:
+        #     amount = str(float(self.amount) * int(self.installments))
 
         recurring_donation = {
             "npe03__Organization__c": self.account_id,
@@ -666,6 +669,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "npe03__Contact__c": self.contact_id,
             "npe03__Amount__c": amount,
             "npe03__Date_Established__c": self.date_established,
+            "npsp__Day_of_Month__c": self.day_of_month,
             "Name": self.name,
             "Stripe_Customer_ID__c": self.stripe_customer,
             "Stripe_Subscription_Id__c": self.stripe_subscription,
@@ -673,7 +677,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "Stripe_Description__c": self.description,
             "Stripe_Agreed_to_pay_fees__c": self.agreed_to_pay_fees,
             "Encouraged_to_contribute_by__c": self.encouraged_by,
-            "npe03__Open_Ended_Status__c": self.open_ended_status,
+            "npsp__RecurringType__c": self.recurring_type,
             "npe03__Installments__c": self.installments,
             "npe03__Installment_Period__c": self.installment_period,
             "Blast_Subscription_Email__c": self.blast_subscription_email,
@@ -700,7 +704,7 @@ class RDO(SalesforceObject, CampaignMixin):
                 SELECT Id, npe03__Organization__c, Referral_ID__c, npe03__Recurring_Donation_Campaign__c,
                 npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
                 Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
-                Encouraged_to_contribute_by__c, npe03__Open_Ended_Status__c, npe03__Installments__c,
+                Encouraged_to_contribute_by__c, npsp__RecurringType__c, npe03__Installments__c, npsp__Day_of_Month__c,
                 npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
                 Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
                 FROM npe03__Recurring_Donation__c
@@ -718,6 +722,7 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.contact_id = response["npe03__Contact__c"]
             rdo.amount = response["npe03__Amount__c"]
             rdo.date_established = response["npe03__Date_Established__c"]
+            rdo.day_of_month = response["npsp__Day_of_Month__c"]
             rdo.name = response["Name"]
             rdo.stripe_customer = response["Stripe_Customer_Id__c"]
             rdo.stripe_subscription = response["Stripe_Subscription_Id__c"]
@@ -725,7 +730,7 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.description = response["Stripe_Description__c"]
             rdo.agreed_to_pay_fees = response["Stripe_Agreed_to_pay_fees__c"]
             rdo.encouraged_by = response["Encouraged_to_contribute_by__c"]
-            rdo.open_ended_status = response["npe03__Open_Ended_Status__c"]
+            rdo.recurring_type = response["npsp__RecurringType__c"]
             rdo.installments = response["npe03__Installments__c"]
             rdo.installment_period = response["npe03__Installment_Period__c"]
             rdo.blast_subscription_email = response["Blast_Subscription_Email__c"]
@@ -861,7 +866,7 @@ class RDO(SalesforceObject, CampaignMixin):
         # SF side
         if self.record_type_name == DEFAULT_RDO_TYPE or self.record_type_name is None:
             return
-        if self.open_ended_status == "Open":
+        if self.recurring_type == "Open":
             logging.warning(
                 f"RDO {self} is open-ended so new opportunities won't have type {self.record_type_name}"
             )
