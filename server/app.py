@@ -42,6 +42,7 @@ from .config import (
     STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
+    WACO_CAMPAIGN_ID,
 )
 from .forms import (
     BlastForm,
@@ -559,6 +560,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     elif FormType is WacoForm:
         donation_type = "waco"
+        form_data["campaign_id"] = WACO_CAMPAIGN_ID
         function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")

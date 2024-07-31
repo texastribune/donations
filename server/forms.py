@@ -8,7 +8,6 @@ from wtforms.fields import (
     StringField,
 )
 from wtforms.fields.html5 import EmailField
-from .config import WACO_CAMPAIGN_ID
 
 
 # amount must be $1 or higher
@@ -105,8 +104,6 @@ class WacoForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
-    campaign_id = HiddenField("Campaign ID", default=WACO_CAMPAIGN_ID)
-
 
 
 class BlastForm(FlaskForm):
