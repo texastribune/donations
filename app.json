@@ -201,6 +201,9 @@
     "STRIPE_WEBHOOK_SECRET": {
       "required": true
     },
+    "WACO_CAMPAIGN_ID": {
+      "required": false
+    },
     "AUTH0_PORTAL_M2M_CLIENT_ID": {
       "required": true
     },
