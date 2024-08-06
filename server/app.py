@@ -34,6 +34,7 @@ from .config import (
     ENABLE_SENTRY,
     FLASK_SECRET_KEY,
     LOG_LEVEL,
+    MAX_SYNC_DAYS_DIFFERENCE,
     MWS_ACCESS_KEY,
     MWS_SECRET_KEY,
     REPORT_URI,
@@ -66,7 +67,6 @@ from .util import (
 
 ZONE = timezone(TIMEZONE)
 USE_THERMOMETER = False
-MAX_SYNC_DAYS_DIFFERENCE = 10
 
 DONATION_TYPE_INFO = {
     "membership": {
@@ -992,6 +992,7 @@ def payment_intent_succeeded(payment_intent_id):
         if invoice['billing_reason'] != "subscription_create" or rerun or opp_sync:
             update_next_opportunity(
                 invoice=invoice,
+                rerun=rerun,
             )
     else:
         customer = stripe.Customer.retrieve(payment_intent['customer'])
@@ -1649,7 +1650,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     return rdo
 
 
-def update_next_opportunity(opps=[], invoice=None):
+def update_next_opportunity(opps=[], invoice=None, rerun=False):
     if not opps:
         opps = Opportunity.list(
             stage_name="Pledged",
@@ -1661,7 +1662,7 @@ def update_next_opportunity(opps=[], invoice=None):
     next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
     charged_on_date = datetime.fromtimestamp(invoice["effective_at"])
     days_difference = abs((charged_on_date - next_opp_date).days)
-    if days_difference > MAX_SYNC_DAYS_DIFFERENCE:
+    if days_difference > MAX_SYNC_DAYS_DIFFERENCE and not rerun:
         raise Exception(f"""There is a large discrepancy between the charge date of invoice: {invoice["id"]}
                         and the giving date of opp: {next_opp.id} that should be reviewed before further updates.""")
 
