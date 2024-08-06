@@ -11,6 +11,7 @@ def bool_env(val):
 
 
 TIMEZONE = os.getenv("TIMEZONE", "US/Central")
+MAX_SYNC_DAYS_DIFFERENCE = os.getenv("MAX_SYNC_DAYS_DIFFERENCE", 10)
 
 #######
 # Flask

@@ -105,6 +105,9 @@
     "MAILTRAP_API_TOKEN": {
       "required": true
     },
+    "MAX_SYNC_DAYS_DIFFERENCE": {
+      "required": false
+    },
     "MULTIPLE_ACCOUNT_WARNING_MAIL_RECIPIENT": {
       "required": true
     },
