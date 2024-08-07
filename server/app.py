@@ -1662,7 +1662,7 @@ def update_next_opportunity(opps=[], invoice=None, rerun=False):
     next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
     charged_on_date = datetime.fromtimestamp(invoice["effective_at"])
     days_difference = abs((charged_on_date - next_opp_date).days)
-    if days_difference > MAX_SYNC_DAYS_DIFFERENCE and not rerun:
+    if days_difference > int(MAX_SYNC_DAYS_DIFFERENCE) and not rerun:
         raise Exception(f"""There is a large discrepancy between the charge date of invoice: {invoice["id"]}
                         and the giving date of opp: {next_opp.id} that should be reviewed before further updates.""")
 
