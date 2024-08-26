@@ -13,6 +13,7 @@ export const USER_TYPES = {
   closeRdo: `${USER_MODULE}__closeRdo`,
   linkIdentity: `${USER_MODULE}__linkIdentity`,
   confirmLinkedIdentity: `${USER_MODULE}__confirmLinkedIdentity`,
+  createDonation: `${USER_MODULE}__createPayment`,
 };
 
 export const TOKEN_USER_TYPES = {

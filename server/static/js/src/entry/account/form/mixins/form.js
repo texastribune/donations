@@ -2,6 +2,7 @@ import { ValidationProvider, ValidationObserver } from 'vee-validate';
 
 import TextInput from '../components/TextInput.vue';
 import Checkbox from '../components/Checkbox.vue';
+import Radios from '../components/Radios.vue';
 import Submit from '../components/Submit.vue';
 
 export default {
@@ -9,6 +10,7 @@ export default {
     TextInput,
     Checkbox,
     Submit,
+    Radios,
     ValidationProvider,
     ValidationObserver,
   },

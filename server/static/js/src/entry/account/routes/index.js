@@ -16,6 +16,8 @@ const Blast = () =>
   import(/* webpackChunkName: "blast-route" */ './blast/Index.vue');
 const BlastPayments = () =>
   import(/* webpackChunkName: "blast-payments-route" */ './blast-payments/Index.vue');
+const Donate = () =>
+  import(/* webpackChunkName: "donate" */ './donate/Index.vue');
 const LoggedIn = () =>
   import(/* webpackChunkName: "logged-in-route" */ './logged-in/Index.vue');
 const LoggedOut = () =>
@@ -177,6 +179,17 @@ const routes = [
             return next();
           }
           return next({ name: 'accountOverview' });
+        },
+      },
+      {
+        path: 'donate/',
+        name: 'donate',
+        component: Donate,
+        pathToRegexpOptions: { strict: true },
+        meta: {
+          isProtected: true,
+          title: 'Create a New Donation',
+          requiresParentFetch: false,
         },
       },
       { path: '*', name: 'not-found', redirect: { name: 'accountOverview' } },
