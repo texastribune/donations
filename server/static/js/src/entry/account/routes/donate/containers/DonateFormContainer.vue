@@ -45,6 +45,12 @@ export default {
   },
 
   methods: {
+    resetSuccess(formIsPristine) {
+      if (!formIsPristine) {
+        this.showSuccess = false;
+      }
+    },
+
     buildPaymentInfo(fields) {
       const paymentInfo = {};
       
@@ -82,6 +88,8 @@ export default {
           throw err;
         }
       }
+
+      this.showSuccess = true;
 
       this[CONTEXT_TYPES.setIsFetching](false);
     },
