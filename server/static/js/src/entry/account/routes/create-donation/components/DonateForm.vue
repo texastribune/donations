@@ -122,7 +122,7 @@
         </div>
       </validation-provider>
 
-      <submit value="Donate" />
+      <submit value="Create Donation" />
     </form>
   </validation-observer>
 </template>

@@ -16,8 +16,8 @@ const Blast = () =>
   import(/* webpackChunkName: "blast-route" */ './blast/Index.vue');
 const BlastPayments = () =>
   import(/* webpackChunkName: "blast-payments-route" */ './blast-payments/Index.vue');
-const Donate = () =>
-  import(/* webpackChunkName: "donate" */ './donate/Index.vue');
+const CreateDonation = () =>
+  import(/* webpackChunkName: "create-donation" */ './create-donation/Index.vue');
 const LoggedIn = () =>
   import(/* webpackChunkName: "logged-in-route" */ './logged-in/Index.vue');
 const LoggedOut = () =>
@@ -182,9 +182,9 @@ const routes = [
         },
       },
       {
-        path: 'donate/',
-        name: 'donate',
-        component: Donate,
+        path: 'create-donation/',
+        name: 'create-donation',
+        component: CreateDonation,
         pathToRegexpOptions: { strict: true },
         meta: {
           isProtected: true,
