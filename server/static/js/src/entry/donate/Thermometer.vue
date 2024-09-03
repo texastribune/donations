@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '500', value: 500 },
+        { slug: 'goal', label: '550', value: 550 },
       ],
     };
   },
@@ -43,7 +43,7 @@ export default {
 
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/smd2024.json';
+      const url = 'https://membership.texastribune.org/fmd2024.json';
 
       axios
         .get(url)
