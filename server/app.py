@@ -37,6 +37,7 @@ from .config import (
     MAX_SYNC_DAYS_DIFFERENCE,
     MWS_ACCESS_KEY,
     MWS_SECRET_KEY,
+    NEWS_ENTITY,
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
@@ -607,11 +608,17 @@ if ENABLE_PORTAL:
 
 @app.route("/donate", methods=["GET", "POST"])
 def donate_form():
-    bundles = get_bundles("donate")
-    template = "donate-form.html"
+    if NEWS_ENTITY == "waco":
+        bundles = get_bundles("waco")
+        template = "waco-form.html"
+        form = WacoForm
+    else:
+        bundles = get_bundles("donate")
+        template = "donate-form.html"
+        form = DonateForm
 
     if request.method == "POST":
-        return validate_form(DonateForm, bundles=bundles, template=template)
+        return validate_form(form, bundles=bundles, template=template)
 
     return render_template(
         template,

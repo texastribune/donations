@@ -9,7 +9,7 @@ def bool_env(val):
     """Replaces string based environment values with Python booleans"""
     return True if os.environ.get(val, False) == "True" else False
 
-
+NEWS_ENTITY = os.getenv("NEWS_ENTITY", "texas")
 TIMEZONE = os.getenv("TIMEZONE", "US/Central")
 MAX_SYNC_DAYS_DIFFERENCE = os.getenv("MAX_SYNC_DAYS_DIFFERENCE", 10)
 
