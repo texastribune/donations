@@ -111,7 +111,7 @@
         <div class="has-b-btm-marg">
           <checkbox
             v-model="currentFields.payFees.value"
-            label="I agree to pay $1.28 monthly for processing fees. This directs more money to our mission."
+            :label="`I agree to pay ${feeAmount} ${currentFields.installmentPeriod.value} for processing fees. This directs more money to our mission.`"
             name="payFees"
             :error-messages="errors"
             :pristine="pristine"
@@ -131,6 +131,7 @@
 import { localize } from 'vee-validate';
 
 import formMixin from '../../../form/mixins/form';
+import { isValidDonationAmount } from '../../../../../utils/validators';
 
 localize({
   en: {
@@ -167,10 +168,38 @@ export default {
   data() {
     return {
       frequencyOptions: [
-        { id: 0, text: 'One-time donation', value: 'once' },
-        { id: 1, text: 'Monthly donation', value: 'monthly' },
-        { id: 2, text: 'Yearly donation', value: 'yearly' },
+        { id: 0, text: 'One-time donation', value: 'once', recurring: false },
+        { id: 1, text: 'Monthly donation', value: 'monthly', recurring: true },
+        { id: 2, text: 'Yearly donation', value: 'yearly', recurring: true },
       ],
+    }
+  },
+
+  computed: {
+    feeAmount() {
+      if ("amount" in this.currentFields) {
+        let amount = this.currentFields.amount.value;
+        let recurring = this.currentFields.installmentPeriod.recurring;
+
+        if (!isValidDonationAmount(amount)) {
+          return "";
+        }
+
+        if (amount.charAt(0) === '$') {
+          amount = amount.substring(1);
+        }
+
+        amount = parseFloat(amount.trim());
+
+        // https://support.stripe.com/questions/passing-the-stripe-fee-on-to-customers
+        const feeRate = recurring ? 0.027 : 0.022
+        const total = (amount + 0.3) / (1 - feeRate);
+        // Fee rounded to two decimal places.
+        const fee = Math.round((total - amount) * 100) / 100;
+
+        return `$${fee.toFixed(2)}`;
+      }
+      return "";
     }
   },
 
