@@ -1068,7 +1068,7 @@ def setup_intent_succeeded(setup_intent_id):
             },
             items = [{
                 "price_data": {
-                    "unit_amount": int(metadata["amount"] * 100),
+                    "unit_amount": int(float(metadata["amount"]) * 100),
                     "currency": "usd",
                     "product": STRIPE_PRODUCTS["membership"],
                     "recurring": {"interval": metadata["interval"]},
@@ -1232,6 +1232,7 @@ def process_stripe_event(event):
     if event_type == "subscription_schedule.updated":
         subscription_schedule_updated.delay(event)
     if event_type == "setup_intent.succeeded":
+        app.logger.info(f"setup intent succeeded event: {event}")
         setup_intent_succeeded.delay(event_object["id"])
 
     return True
