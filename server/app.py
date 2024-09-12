@@ -1052,6 +1052,37 @@ def subscription_schedule_updated(event):
         )
 
 
+@celery.task(name="app.setup_intent_succeeded")
+def setup_intent_succeeded(setup_intent_id):
+    try:
+        setup_intent = stripe.SetupIntent.retrieve(setup_intent_id, expand=["latest_attempt"])
+    except Exception as e:
+        app.logger.error(f"In-person recurring donation failed card retrieval with error: {e}")
+
+    metadata = setup_intent["metadata"]
+    try:
+        payment = stripe.Subscription.create(
+            customer = setup_intent["customer"],
+            default_payment_method = setup_intent["latest_attempt"]["payment_method_details"]["card_present"]["generated_card"],
+            metadata = {
+                "donation_type": "membership",
+                "donor_selected_amount": metadata["amount"],
+                "campaign_id": metadata["campaign_id"],
+                "pay_fees": metadata["pay_fees"],
+            },
+            items = [{
+                "price_data": {
+                    "unit_amount": int(float(metadata["amount"]) * 100),
+                    "currency": "usd",
+                    "product": STRIPE_PRODUCTS["membership"],
+                    "recurring": {"interval": metadata["interval"]},
+                }
+            }]
+        )
+    except Exception as e:
+        app.logger.error(f"In-person recurring donation failed subscription creation with error: {e}")
+
+
 @celery.task(name="app.authorization_notification")
 def authorization_notification(payload):
 
@@ -1204,6 +1235,9 @@ def process_stripe_event(event):
         customer_subscription_deleted.delay(event_object["id"])
     if event_type == "subscription_schedule.updated":
         subscription_schedule_updated.delay(event)
+    if event_type == "setup_intent.succeeded":
+        app.logger.info(f"setup intent succeeded event: {event}")
+        setup_intent_succeeded.delay(event_object["id"])
 
     return True
 
