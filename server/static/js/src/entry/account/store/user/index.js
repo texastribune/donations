@@ -210,7 +210,7 @@ const actions = {
     }
   },
   [USER_TYPES.createDonation]: async (
-    { state, getters, rootState },
+    { state, rootState },
     donation
   ) => {
     if (!state.viewAsEmail) {
