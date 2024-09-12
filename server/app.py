@@ -15,7 +15,7 @@ from pprint import pformat
 import stripe
 from amazon_pay.client import AmazonPayClient
 from amazon_pay.ipn_handler import IpnHandler
-from flask import Flask, redirect, render_template, request, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 from flask_talisman import Talisman
 from nameparser import HumanName
 from pytz import timezone
@@ -37,7 +37,7 @@ from .config import (
     MAX_SYNC_DAYS_DIFFERENCE,
     MWS_ACCESS_KEY,
     MWS_SECRET_KEY,
-    NEWS_ENTITY,
+    NEWSROOM,
     REPORT_URI,
     SENTRY_DSN,
     SENTRY_ENVIRONMENT,
@@ -52,7 +52,6 @@ from .forms import (
     BusinessMembershipForm,
     CircleForm,
     DonateForm,
-    WacoForm,
 )
 from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
 from .util import (
@@ -72,17 +71,17 @@ USE_THERMOMETER = True
 DONATION_TYPE_INFO = {
     "membership": {
         "type": "Recurring Donation",
-        "description": "Texas Tribune Sustaining Membership",
+        "description": f"{NEWSROOM['title']} Sustaining Membership",
         "recurring_type": "Open",
     },
     "business_membership": {
         "type": "Business Membership",
-        "description": "Texas Tribune Business Membership",
+        "description": f"{NEWSROOM['title']} Business Membership",
         "recurring_type": "Open",
     },
     "circle": {
         "type": "Giving Circle",
-        "description": "Texas Tribune Circle Membership",
+        "description": f"{NEWSROOM['title']} Circle Membership",
         "recurring_type": "Fixed",
     },
     "blast": {
@@ -90,11 +89,6 @@ DONATION_TYPE_INFO = {
         "description": "Blast Subscription",
         "recurring_type": "Open",
     },
-    "waco": {
-        "type": "Waco Membership",
-        "description": "Waco Local News Sustaining Membership",
-        "open_ended_status": "Open",
-    }
 }
 
 if ENABLE_SENTRY:
@@ -437,7 +431,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         return True
     else:
         logging.info("----Creating recurring payment...")
-        if donation_type in ["membership", "waco"]:
+        if donation_type == "membership":
             subscription = create_custom_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         else:
             subscription = create_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
@@ -520,7 +514,7 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         donation_type=donation_type,
         bad_actor_request=bad_actor_request,
     )
-    charge_template = "charge.html" if donation_type != "waco" else "charge_waco.html"
+    charge_template = f"charge_{NEWSROOM['name']}.html"
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -550,6 +544,9 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if FormType is DonateForm:
         donation_type = "membership"
+        # TODO discuss when we don't need to default to the WACO_CAMPAIGN_ID
+        if NEWSROOM["name"] == "waco":
+            form_data["campaign_id"] = WACO_CAMPAIGN_ID
         function = add_stripe_donation.delay
     elif FormType is CircleForm:
         donation_type = "circle"
@@ -559,12 +556,10 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
         function = add_stripe_donation.delay
-    elif FormType is WacoForm:
-        donation_type = "waco"
-        form_data["campaign_id"] = WACO_CAMPAIGN_ID
-        function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
+    
+
 
     if not validate_email(email):
         message = "There was an issue saving your email address."
@@ -608,17 +603,15 @@ if ENABLE_PORTAL:
 
 @app.route("/donate", methods=["GET", "POST"])
 def donate_form():
-    if NEWS_ENTITY == "waco":
+    if NEWSROOM["name"] == "waco":
         bundles = get_bundles("waco")
         template = "waco-form.html"
-        form = WacoForm
     else:
         bundles = get_bundles("donate")
         template = "donate-form.html"
-        form = DonateForm
 
     if request.method == "POST":
-        return validate_form(form, bundles=bundles, template=template)
+        return validate_form(DonateForm, bundles=bundles, template=template)
 
     return render_template(
         template,
@@ -631,6 +624,9 @@ def donate_form():
 
 @app.route("/circle", methods=["GET", "POST"])
 def circle_form():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("circle")
     template = "circle-form.html"
 
@@ -647,6 +643,9 @@ def circle_form():
 
 @app.route("/business", methods=["GET", "POST"])
 def business_form():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("business")
     template = "business-form.html"
 
@@ -665,25 +664,11 @@ def business_form():
     )
 
 
-@app.route("/waco", methods=["GET", "POST"])
-def waco_form():
-    bundles = get_bundles("waco")
-    template = "waco-form.html"
-
-    if request.method == "POST":
-        return validate_form(WacoForm, bundles=bundles, template=template)
-
-    return render_template(
-        template,
-        bundles=bundles,
-        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
-        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
-        use_thermometer=USE_THERMOMETER,
-    )
-
-
 @app.route("/blast-promo")
 def the_blast_promo_form():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("old")
     form = BlastPromoForm()
 
@@ -704,6 +689,9 @@ def the_blast_promo_form():
 
 @app.route("/submit-blast-promo", methods=["POST"])
 def submit_blast_promo():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("old")
     app.logger.info(pformat(request.form))
     form = BlastPromoForm(request.form)
@@ -731,6 +719,9 @@ def submit_blast_promo():
 
 @app.route("/blastform")
 def the_blast_form():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("old")
     form = BlastForm()
     if request.args.get("amount"):
@@ -756,6 +747,9 @@ def the_blast_form():
 
 @app.route("/submit-blast", methods=["POST"])
 def submit_blast():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("old")
     app.logger.info(pformat(request.form))
     form = BlastForm(request.form)
@@ -804,6 +798,9 @@ def submit_blast():
 
 @app.route("/donor-advised-funds")
 def daf():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
     bundles = get_bundles("donate")
     template = "daf.html"
 
@@ -1428,6 +1425,7 @@ def create_custom_subscription(donation_type=None, customer=None, form=None, qua
         description = donation_type_info["description"],
         metadata = {
             "donation_type": donation_type,
+            "newsroom": NEWSROOM["name"],
             "donor_selected_amount": form.get("amount", 0),
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
@@ -1467,6 +1465,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
     donation_type_info = DONATION_TYPE_INFO[donation_type]
     metadata = {
         "donation_type": donation_type,
+        "newsroom": NEWSROOM["name"],
         "donor_selected_amount": form.get("amount", 0),
         "campaign_id": form.get("campaign_id", None),
         "referral_id": form.get("referral_id", None),
@@ -1519,8 +1518,9 @@ def create_payment_intent(donation_type=None, customer=None, form=None, quaranti
         amount=int(amount * 100),
         currency="usd",
         customer=customer["id"],
-        description="Texas Tribune Membership" if donation_type != "waco" else "Waco Local News Membership",
+        description=f"{NEWSROOM['title']} Membership",
         metadata={
+            "newsroom": NEWSROOM["name"],
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
             "pay_fees": 'X' if form["pay_fees_value"] else None,
@@ -1616,6 +1616,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     
     rdo.amount = amount
     rdo.type = donation_type_info.get("type", None)
+    rdo.newsroom = sub_meta.get("newsroom", None)
     rdo.stripe_customer = customer_id
     rdo.stripe_subscription = subscription["id"]
     rdo.description = donation_type_info.get("description", None)
@@ -1697,6 +1698,7 @@ def log_opportunity(contact, payment_intent):
 
     opportunity = Opportunity(contact=contact)
     opportunity.stage_name = "Closed Won"
+    opportunity.newsroom = payment_meta.get("newsroom", None)
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
     opportunity.stripe_transaction_id = payment_intent["latest_charge"]

@@ -99,13 +99,6 @@ class BusinessMembershipForm(BaseForm):
     level = HiddenField(u"Level", [validators.InputRequired()])
 
 
-class WacoForm(BaseForm):
-    installment_period = StringField(
-        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
-    )
-    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
-
-
 class BlastForm(FlaskForm):
     first_name = StringField(
         u"First name", [validators.required(message="Your first name is required.")]
