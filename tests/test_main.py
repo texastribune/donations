@@ -408,6 +408,7 @@ def test__format_opportunity():
         "Description": "The Texas Tribune Membership",
         "Stripe_Agreed_to_pay_fees__c": True,
         "Type": "Single",
+        "Newsroom__c": None,
         "Stripe_Card__c": None,
         "Stripe_Transaction_ID__c": None,
         "npsp__Closed_Lost_Reason__c": None,
