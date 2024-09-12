@@ -13,7 +13,6 @@ import contextMixin from '../../../store/context/mixin';
 
 import DonateForm from '../components/DonateForm.vue';
 
-import { logOut } from '../../../utils/auth-actions';
 import logError from '../../../utils/log-error';
 
 import { AxiosError } from '../../../errors';

@@ -215,7 +215,6 @@ const actions = {
   ) => {
     if (!state.viewAsEmail) {
       const { accessToken } = rootState.tokenUser;
-      const { userId, identityId } = getters;
 
       await axios.patch(
         `${PORTAL_API_URL}payments/inperson/`,

@@ -16,14 +16,10 @@
   
 <script>
   import formElementMixin from '../mixins/element';
-
-  import Errors from './Errors.vue';
   
   export default {
     name: 'Frequency',
   
-    components: { Errors },
-
     mixins: [formElementMixin],
 
     props: {
