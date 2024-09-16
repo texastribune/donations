@@ -1683,7 +1683,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
     
     rdo.amount = amount
     rdo.type = donation_type_info.get("type", None)
-    rdo.newsroom = sub_meta.get("newsroom", None)
+    rdo.newsroom = sub_meta.get("newsroom", "").lower()
     rdo.stripe_customer = customer_id
     rdo.stripe_subscription = subscription["id"]
     rdo.description = donation_type_info.get("description", None)
@@ -1765,7 +1765,7 @@ def log_opportunity(contact, payment_intent):
 
     opportunity = Opportunity(contact=contact)
     opportunity.stage_name = "Closed Won"
-    opportunity.newsroom = payment_meta.get("newsroom", None)
+    opportunity.newsroom = payment_meta.get("newsroom", "").lower()
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
     opportunity.stripe_transaction_id = payment_intent["latest_charge"]
