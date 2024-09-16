@@ -99,15 +99,10 @@ function bindRouterEvents(router, routeHandler, store) {
 
     // don't disply theremometer if the #thermometer div isn't included,
     // based on the constant USE_THERMOMETER in app.py
-    const thermometerEl1 = document.getElementById('thermometer1');
-    if (thermometerEl1) {
+    const thermometerEl = document.getElementById('thermometer');
+    if (thermometerEl) {
       const thermometer = new Vue({ ...Thermometer, store });
-      thermometer.$mount(thermometerEl1)
-    }
-    const thermometerEl2 = document.getElementById('thermometer2');
-    if (thermometerEl2) {
-      const thermometer = new Vue({ ...Thermometer, store });
-      thermometer.$mount(thermometerEl2)
+      thermometer.$mount(thermometerEl)
     }
   });
 }
