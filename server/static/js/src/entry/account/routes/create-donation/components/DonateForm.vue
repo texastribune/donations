@@ -180,6 +180,7 @@ export default {
       if ("amount" in this.currentFields) {
         let amount = this.currentFields.amount.value;
         const { installmentPeriod: { recurring } } = this.currentFields;
+
         if (!isValidDonationAmount(amount)) {
           return "";
         }
