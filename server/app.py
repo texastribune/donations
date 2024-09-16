@@ -32,6 +32,7 @@ from .config import (
     ENABLE_BAD_ACTOR_API,
     ENABLE_PORTAL,
     ENABLE_SENTRY,
+    ENABLE_WACO,
     FLASK_SECRET_KEY,
     LOG_LEVEL,
     MAX_SYNC_DAYS_DIFFERENCE,
@@ -52,6 +53,7 @@ from .forms import (
     BusinessMembershipForm,
     CircleForm,
     DonateForm,
+    WacoForm,
 )
 from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
 from .util import (
@@ -89,6 +91,11 @@ DONATION_TYPE_INFO = {
         "description": "Blast Subscription",
         "recurring_type": "Open",
     },
+    "waco": {
+         "type": "Waco Membership",
+         "description": "Waco Bridge Sustaining Membership",
+         "open_ended_status": "Open",
+     },
 }
 
 if ENABLE_SENTRY:
@@ -408,7 +415,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
     quarantine = False
-    if donation_type == "membership" and ENABLE_BAD_ACTOR_API:
+    if donation_type in ["membership", "waco"] and ENABLE_BAD_ACTOR_API:
         bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
         quarantine = bad_actor_response.quarantine
 
@@ -431,7 +438,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         return True
     else:
         logging.info("----Creating recurring payment...")
-        if donation_type == "membership":
+        if donation_type in ["membership", "waco"]:
             subscription = create_custom_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         else:
             subscription = create_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
@@ -514,7 +521,7 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         donation_type=donation_type,
         bad_actor_request=bad_actor_request,
     )
-    charge_template = f"charge_{NEWSROOM['name']}.html"
+    charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -555,6 +562,11 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
+        function = add_stripe_donation.delay
+    #remove this after Waco launch
+    elif FormType is WacoForm:
+        donation_type = "waco"
+        form_data["campaign_id"] = WACO_CAMPAIGN_ID
         function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
@@ -603,9 +615,9 @@ if ENABLE_PORTAL:
 
 @app.route("/donate", methods=["GET", "POST"])
 def donate_form():
-    if NEWSROOM["name"] == "waco":
-        bundles = get_bundles("waco")
-        template = "waco-form.html"
+    if NEWSROOM["name"] != "texas":
+        bundles = get_bundles(f"{NEWSROOM['name']}")
+        template = f"{NEWSROOM['name']}-form.html"
     else:
         bundles = get_bundles("donate")
         template = "donate-form.html"
@@ -661,6 +673,26 @@ def business_form():
         bundles=bundles,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+    )
+
+
+@app.route("/waco", methods=["GET", "POST"])
+def waco_form():
+    if not ENABLE_WACO:
+        return redirect(url_for("donate_form"))
+
+    bundles = get_bundles("waco")
+    template = "waco-form.html"
+
+    if request.method == "POST":
+        return validate_form(WacoForm, bundles=bundles, template=template)
+
+    return render_template(
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+        use_thermometer=USE_THERMOMETER,
     )
 
 
@@ -986,7 +1018,7 @@ def payment_intent_succeeded(payment_intent_id):
         try:
             stripe.PaymentIntent.modify(
                 payment_intent_id,
-                description=subscription.get("description", "Texas Tribune Membership")
+                description=subscription.get("description", payment_intent["description"])
             )
         except stripe.error.StripeError as e:
             app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
@@ -1459,7 +1491,7 @@ def create_custom_subscription(donation_type=None, customer=None, form=None, qua
         description = donation_type_info["description"],
         metadata = {
             "donation_type": donation_type,
-            "newsroom": NEWSROOM["name"],
+            "newsroom": NEWSROOM["name"] if donation_type != "waco" else "waco",
             "donor_selected_amount": form.get("amount", 0),
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
@@ -1552,9 +1584,10 @@ def create_payment_intent(donation_type=None, customer=None, form=None, quaranti
         amount=int(amount * 100),
         currency="usd",
         customer=customer["id"],
-        description=f"{NEWSROOM['title']} Membership",
+        description=f"{NEWSROOM['title']} Membership" if donation_type != "waco" else "Waco Bridge Membership",
         metadata={
-            "newsroom": NEWSROOM["name"],
+            "newsroom": NEWSROOM["name"] if donation_type != "waco" else "waco",
+            "donation_type": donation_type,
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
             "pay_fees": 'X' if form["pay_fees_value"] else None,

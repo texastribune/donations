@@ -157,4 +157,5 @@ BLOCK_LIST = os.getenv("BLOCK_LIST", None)
 ########
 # Waco
 #
+ENABLE_WACO = bool_env("ENABLE_WACO")
 WACO_CAMPAIGN_ID = os.getenv("WACO_CAMPAIGN_ID", None)
