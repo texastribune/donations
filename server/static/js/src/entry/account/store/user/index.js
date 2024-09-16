@@ -210,12 +210,11 @@ const actions = {
     }
   },
   [USER_TYPES.createDonation]: async (
-    { state, getters, rootState },
+    { state, rootState },
     donation
   ) => {
     if (!state.viewAsEmail) {
       const { accessToken } = rootState.tokenUser;
-      const { userId, identityId } = getters;
 
       await axios.patch(
         `${PORTAL_API_URL}payments/inperson/`,
