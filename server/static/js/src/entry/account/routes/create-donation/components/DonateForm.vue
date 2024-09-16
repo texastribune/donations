@@ -179,8 +179,7 @@ export default {
     feeAmount() {
       if ("amount" in this.currentFields) {
         let amount = this.currentFields.amount.value;
-        let recurring = this.currentFields.installmentPeriod.recurring;
-
+        const { installmentPeriod: { recurring } } = this.currentFields;
         if (!isValidDonationAmount(amount)) {
           return "";
         }
