@@ -1,6 +1,28 @@
-@import 'ds-toolbox-base';
+// same as ds-toolbox-base (with some overrides)
+@import '@texastribune/queso-ui/assets/scss/1-settings/all';
+@import '1-settings/colors-waco'; // color overrides (need to include for utility classes)
+@import '@texastribune/queso-ui/assets/scss/2-tools/all';
+@import '@texastribune/queso-ui/assets/scss/5-typography/t-helpers';
+@import '@texastribune/queso-ui/assets/scss/5-typography/t-size';
+@import '@texastribune/queso-ui/assets/scss/5-typography/links';
+@import '@texastribune/queso-ui/assets/scss/6-components/icon/icon';
+@import '@texastribune/queso-ui/assets/scss/6-components/button/button';
+@import '@texastribune/queso-ui/assets/scss/6-components/navbar/navbar';
+@import '@texastribune/queso-ui/assets/scss/6-components/site-footer/site-footer';
+@import '@texastribune/queso-ui/assets/scss/7-layout/align';
+@import '@texastribune/queso-ui/assets/scss/7-layout/container';
+@import '@texastribune/queso-ui/assets/scss/7-layout/height';
+@import '@texastribune/queso-ui/assets/scss/7-layout/display';
+@import '@texastribune/queso-ui/assets/scss/7-layout/position';
+@import '@texastribune/queso-ui/assets/scss/utilities/color-helpers';
+@import '@texastribune/queso-ui/assets/scss/utilities/hidden';
+@import '@texastribune/queso-ui/assets/scss/utilities/notch';
+@import '@texastribune/queso-ui/assets/scss/utilities/spacing';
+@import '@texastribune/queso-ui/assets/scss/utilities/sr-only';
 
 @import '1-settings/all';
+@import '1-settings/colors-waco'; // color overrides
+@import '1-settings/fonts-waco'; // font overrides
 @import '2-tools/all';
 @import '3-generic/all';
 @import '4-elements/all';
@@ -8,6 +30,13 @@
 // Include components & typography as needed
 @import '5-typography/links';
 @import '5-typography/typography';
+
+// typography overrides
+.prose {
+  p {
+    @include font-setting('primary');
+  }
+}
 
 @import '6-components/buttons';
 @import '6-components/contact';
@@ -36,4 +65,62 @@ h2 {
 
 .gap-s {
   gap: $size-s;
+}
+
+// template overrides
+
+ body {
+  color: $color-black-off
+ }
+
+.c-navbar-newsroom {
+  border-bottom: 2px solid #d6d5a0;
+  padding: 1rem 0;
+  margin-bottom: 3rem;
+
+  &__inner {
+    margin: auto;
+    max-width: 90vw;
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 150px;
+  }
+
+  &__menu-btn {
+    background-color: transparent;
+    border: none;
+  }
+
+  @media (min-width: 768px) {
+    &__logo {
+      width: 200px;
+    }
+  }
+}
+
+.c-footer-newsroom {
+  &__inner {
+    // layout TK
+    margin: auto;
+    max-width: 90vw;
+    padding: 1rem 0;
+    width: 1200px;
+    display: flex;
+    gap: 20px;
+  }
+  &__logo {
+    width: 150px;
+  }
+  ul {
+    list-style: none;
+  }
+}
+
+.button--yellow {
+  color: #fff;
 }

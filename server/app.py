@@ -570,7 +570,7 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
-    
+
 
 
     if not validate_email(email):
@@ -631,6 +631,7 @@ def donate_form():
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
         use_thermometer=USE_THERMOMETER,
+        newsroom=NEWSROOM,
     )
 
 
@@ -1671,7 +1672,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
         rdo.record_type_name = "Business Membership"
     else:
         rdo = RDO(contact=contact, date=start_date)
-        
+
     if type == "blast":
         now = datetime.now(tz=ZONE).strftime("%Y-%m-%d %I:%M:%S %p %Z")
         rdo.name = f"{contact.first_name} {contact.last_name} - {now} - The Blast"
@@ -1680,7 +1681,7 @@ def log_rdo(type=None, contact=None, account=None, customer=None, subscription=N
 
     if type == "circle":
         rdo.installments = 36 if sub_plan["interval"] == "month" else 3
-    
+
     rdo.amount = amount
     rdo.type = donation_type_info.get("type", None)
     rdo.newsroom = sub_meta.get("newsroom", "").lower()
