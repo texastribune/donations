@@ -70,7 +70,8 @@ h2 {
 // template overrides
 
  body {
-  color: $color-black-off
+  color: $color-black-off;
+  -webkit-font-smoothing: antialiased;
  }
 
 .c-navbar-newsroom {
@@ -105,6 +106,7 @@ h2 {
 
 .c-footer-newsroom {
   &__inner {
+    list-style: none;
     // layout TK
     margin: auto;
     max-width: 90vw;
@@ -117,6 +119,23 @@ h2 {
   }
   &__logo {
     width: 150px;
+  }
+  &__list-top {
+    font-size: 15px;
+    line-height: 26px;
+  }
+  &__list-btm {
+    font-size: 11px;
+    line-height: 19.2px;
+  }
+  @media (min-width: 768px) {
+    &__list-top {
+      font-size: 16px;
+
+    }
+    &__list-btm {
+      font-size: 12px;
+    }
   }
   ul {
     list-style: none;
