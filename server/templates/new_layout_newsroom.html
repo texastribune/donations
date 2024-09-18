@@ -25,12 +25,14 @@
       <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
     {% endblock %}
 
-    <!-- ADD GA HERE -->
+    <!-- Page tracking -->
+    {% include 'includes/tracking_' + newsroom.name +  '.html' %}
 
     {% block adwords_conversion_code %}{% endblock %}
     {% block head_scripts %}{% endblock %}
   </head>
   <body>
+    {% include 'includes/tracking_nojs_' + newsroom.name +  '.html' %}
 
     {% block icon_sprite %}
       {# SVG sprite include #}
