@@ -1,0 +1,9 @@
+// font overrides:
+$font-family-primary: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-secondary: 'Oswald', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+%font-serif {
+  font-family: $font-family-primary;
+}
+%font-sansserif {
+  font-family: $font-family-secondary;
+}
