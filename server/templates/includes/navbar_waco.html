@@ -13,10 +13,11 @@
     </button>
   </div>
 </header>
+<div id="overlay" class="c-overlay" aria-hidden="true"></div>
 <nav id="menu" class="c-menu has-bg-black-off has-text-white" aria-hidden="true">
   <button id="menu-close" class="c-menu__close c-navbar-newsroom__btn font-secondary" aria-label="Close menu">
-    <span class="c-icon c-icon--baseline t-size-b">
-      <svg class="svg-icon" width="20" height="20" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <span class="c-icon c-icon--baseline t-size-l">
+      <svg class="svg-icon" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
         <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#fff"></path>
       </svg>
     </span>
@@ -44,10 +45,17 @@
     var menuToggle = document.getElementById('menu-toggle');
     var menu = document.getElementById('menu');
     var menuClose = document.getElementById('menu-close');
+    var overlay = document.getElementById('overlay');
 
     function toggleMenu(open) {
       menuToggle.setAttribute('aria-expanded', open);
       menu.setAttribute('aria-hidden', !open);
+
+      if (open) {
+        overlay.classList.add('visible');
+      } else {
+        overlay.classList.remove('visible');
+      }
     }
 
     menuToggle.addEventListener('click', function () {
@@ -56,6 +64,10 @@
     });
 
     menuClose.addEventListener('click', function () {
+      toggleMenu(false);
+    });
+
+    overlay.addEventListener('click', function () {
       toggleMenu(false);
     });
   });
