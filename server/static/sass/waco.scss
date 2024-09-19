@@ -72,10 +72,10 @@ h2 {
 
 // template overrides
 
- body {
+body {
   color: $color-black-off;
   -webkit-font-smoothing: antialiased;
- }
+}
 
 .c-navbar-newsroom {
   border-bottom: 2px solid #d6d5a0;
@@ -95,7 +95,7 @@ h2 {
     width: 150px;
   }
 
-  &__menu-btn {
+  &__btn {
     background-color: transparent;
     border: none;
   }
@@ -107,6 +107,92 @@ h2 {
   }
 }
 
+.c-menu {
+  @include font-setting('secondary');
+  position: fixed;
+  top: 0;
+  width: 90vw;
+  height: 100%;
+  left: auto;
+  right: -100%;
+  transition: right 0.3s ease;
+  padding: 54px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+
+  @media only screen and (min-width: 1000px) {
+    width: 25vw;
+    padding: 60px;
+  }
+
+  &[aria-hidden='false'] {
+    right: 0; /* Slide in */
+  }
+
+  &__logo {
+    text-align: center;
+  }
+
+  &__inner {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 27px;
+    line-height: 43.2px;
+
+    li {
+      border-top: solid white 1px;
+      padding: 5px 0;
+
+      &:first-child {
+        border-top: none;
+      }
+    }
+
+    @media only screen and (min-width: 600px) {
+      font-size: 30px;
+      line-height: 48px;
+    }
+  }
+  a {
+    color: $color-white-pure;
+    text-decoration: none;
+  }
+  &__close {
+    position: absolute;
+    top: 1em;
+    right: 60px;
+    cursor: pointer;
+    font-size: 17px;
+    @media only screen and (min-width: 1000px) {
+      right: 54px;
+    }
+  }
+}
+.c-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  z-index: 1;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+}
 .c-footer-newsroom {
   &__inner {
     list-style: none;
@@ -134,7 +220,6 @@ h2 {
   @media (min-width: 768px) {
     &__list-top {
       font-size: 16px;
-
     }
     &__list-btm {
       font-size: 12px;
