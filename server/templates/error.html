@@ -1,12 +1,16 @@
-{% extends "layout.html" %} {% block title %} {{ super() }} {% endblock %} {%
+{% extends "new_layout_newsroom.html" %} {% block title %} {{ super() }} {% endblock %} {%
 block extra_script %} {{ super() }} {% endblock %} {% block content %} {{
 super() }}
 <div class="main grid_container--m prose grid_padded--xl">
   <div class="grid_row">
     <figure class="image_default">
-      <img
-        src="https://static.texastribune.org/media/marketing/tt-404_sorry.png"
-      />
+      {% if newsroom.name == "texas" %}
+        <img
+          src="https://static.texastribune.org/media/marketing/tt-404_sorry.png"
+        />
+      {% else %}
+        <h1 style="font-family: oswald; font-size: 60px;">We're sorry!</h1>
+      {% endif %}
     </figure>
   </div>
   <h2>{{ message }}</h2>
@@ -14,16 +18,18 @@ super() }}
     If you're trying to become a member or make a donation, you can go to
     <a href="/donate">our membership and donation page</a> for more info on how
     to support us or contact us at
-    <a href="mailto:membership@texastribune.org">membership@texastribune.org</a
+    <a href="mailto:membership@{{ newsroom.domain }}">membership@{{ newsroom.domain }}</a
     >.
   </p>
-  <p>
-    If you're having trouble signing up for The Blast, please email
-    <a href="mailto:blast@texastribune.org">blast@texastribune.org</a>.
-  </p>
+  {% if newsroom.name == "texas" %}
+    <p>
+      If you're having trouble signing up for The Blast, please email
+      <a href="mailto:blast@texastribune.org">blast@texastribune.org</a>.
+    </p>
+  {% endif %}
   <p>
     Visit
-    <a href="https://www.texastribune.org/">The Texas Tribune homepage</a> to
+    <a href="https://www.{{ newsroom.domain }}/">{{ newsroom.title }} homepage</a> to
     read and explore our content.
   </p>
 </div>
