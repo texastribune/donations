@@ -214,8 +214,14 @@ body {
     gap: 20px;
     word-break: break-word;
   }
+  &__col {
+    width: 100%;
+  }
   &__logo {
-    width: 150px;
+    img {
+      max-width: 100%;
+      width: 278px;
+    }
   }
   &__list-top {
     font-size: 15px;
