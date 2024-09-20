@@ -18,6 +18,7 @@ const SVG_LIB_FILES = [
   'twitter',
   'your-texas',
   'youtube',
+  'long-arrow-right'
 ];
 
 const SVG_LOCAL_FILES = ['bell', 'check', 'close', 'download', 'pencil-fill', 'star'];
