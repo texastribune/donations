@@ -66,6 +66,7 @@ h2 {
   }
 }
 
+
 .gap-s {
   gap: $size-s;
 }
@@ -74,7 +75,14 @@ h2 {
 
 body {
   color: $color-black-off;
-  -webkit-font-smoothing: antialiased;
+}
+
+// oswald helper
+.t-font-secondary {
+  @include font-setting('secondary');
+}
+.t-weight-medium {
+  font-weight: 500;
 }
 
 .c-navbar-newsroom {
@@ -227,13 +235,15 @@ body {
   }
   ul {
     list-style: none;
-
-    a {
-      text-decoration: underline;
-    }
   }
 }
 
 .button--yellow {
   color: #fff;
 }
+
+.c-benefits {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
