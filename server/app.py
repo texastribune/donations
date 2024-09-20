@@ -522,11 +522,12 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         bad_actor_request=bad_actor_request,
     )
     charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
+    bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
     }
-    return render_template(charge_template, gtm=gtm, bundles=get_bundles("charge"))
+    return render_template(charge_template, gtm=gtm, bundles=bundles, newsroom=NEWSROOM)
 
 
 def validate_form(FormType, bundles, template, function=add_donation.delay):
@@ -546,7 +547,10 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
             app.logger.error(f"Blocked potential bad actor: {name} - {email}")
             message = "There was an issue saving your donation information."
             return render_template(
-                "error.html", message=message, bundles=get_bundles("old")
+                "error.html",
+                message=message,
+                bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old"),
+                newsroom=NEWSROOM,
             )
 
     if FormType is DonateForm:
@@ -572,17 +576,22 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         raise Exception("Unrecognized form type")
 
 
-
     if not validate_email(email):
         message = "There was an issue saving your email address."
         return render_template(
-            "error.html", message=message, bundles=get_bundles("old")
+            "error.html",
+            message=message,
+            bundles=get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old"),
+            newsroom=NEWSROOM,
         )
     if not form.validate():
         app.logger.error(f"Form validation errors: {form_errors}")
         message = "There was an issue saving your donation information."
         return render_template(
-            "error.html", message=message, bundles=get_bundles("old")
+            "error.html",
+            message=message,
+            bundles=get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old"),
+            newsroom=NEWSROOM,
         )
 
     return do_charge_or_show_errors(
@@ -738,7 +747,7 @@ def submit_blast_promo():
         app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message, bundles=bundles)
+        return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         add_blast_subscription.delay(customer=customer, form=clean(request.form))
@@ -747,7 +756,7 @@ def submit_blast_promo():
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message, bundles=bundles)
+        return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
 
 
 @app.route("/blastform")
@@ -800,7 +809,7 @@ def submit_blast():
         app.logger.info(f"Customer id: {customer.id}")
     else:
         message = "There was an issue saving your email address."
-        return render_template("error.html", message=message, bundles=bundles)
+        return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
     if form.validate():
         app.logger.info("----Adding Blast subscription...")
         form = clean(request.form)
@@ -826,7 +835,7 @@ def submit_blast():
     else:
         app.logger.error("Failed to validate form")
         message = "There was an issue saving your donation information."
-        return render_template("error.html", message=message, bundles=bundles)
+        return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
 
 
 @app.route("/donor-advised-funds")
@@ -844,16 +853,16 @@ def daf():
 
 @app.route("/error")
 def error():
-    bundles = get_bundles("old")
+    bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
     message = "Something went wrong!"
-    return render_template("error.html", message=message, bundles=bundles)
+    return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    bundles = get_bundles("old")
+    bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
     message = "The page you requested can't be found."
-    return render_template("error.html", message=message, bundles=bundles), 404
+    return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM), 404
 
 
 @app.route("/.well-known/apple-developer-merchantid-domain-association")
