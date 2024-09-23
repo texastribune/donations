@@ -12,7 +12,7 @@
 
     {% block og_meta %}
       <meta property="og:url" content="https://support.{{ newsroom.domain}}/donate">
-      <meta property="og:image" content="https://support.{{ newsroom.domain}}{{ url_for('static', filename='img/social-' + newsroom.name + '.png') }}">
+      <meta property="og:image" content="{{ url_for('static', filename='img/social-' + newsroom.name + '.png') }}">
       <meta property="og:title" content="Support Us | {{ newsroom.title }}">
       <meta property="og:type" content="website">
       <meta property="og:description" content="Members make all the difference. Join me in supporting {{ newsroom.title }}’s nonprofit newsroom by becoming a member today.">
