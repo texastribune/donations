@@ -207,11 +207,11 @@ body {
     // layout TK
     margin: auto;
     max-width: 90vw;
-    padding: clamp(2rem, -1.06rem + 10.2vw, 5.06rem);
-    width: 1200px;
+    padding: clamp(min(1.5rem, 3.5rem), -0.06rem + 10.2vw, max(3.06rem, 5.06rem));
+    width: 1300px;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    gap: 30px;
     word-break: break-word;
   }
   &__col {
@@ -220,12 +220,16 @@ body {
   &__logo {
     img {
       max-width: 100%;
-      width: 278px;
+      width: 237px;
     }
   }
+  &__list-top-border {
+    border-top: solid white 1px;
+  }
   &__list-top {
-    font-size: 15px;
-    line-height: 26px;
+    margin-top: 10px;
+    font-size: 22px;
+    line-height: 29px;
   }
   &__list-btm {
     font-size: 11px;
