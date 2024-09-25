@@ -679,7 +679,7 @@ def business_form():
 @app.route("/waco", methods=["GET", "POST"])
 def waco_form():
     if not ENABLE_WACO:
-        return redirect(url_for("donate_form"))
+        return redirect("https://support.wacobridge.org")
 
     bundles = get_bundles("waco")
     template = "waco-form.html"
