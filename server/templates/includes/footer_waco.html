@@ -2,7 +2,9 @@
   <div class="c-footer-newsroom__inner">
     <div class="c-footer-newsroom__col">
       <div class="c-footer-newsroom__logo">
-        <img src="{{ url_for('static', filename='/img/waco-footer-logo.png') }}" alt="{{ newsroom.title }} logo"/>
+        <a href="https://{{ newsroom.domain }}">
+          <img src="{{ url_for('static', filename='/img/waco-footer-logo.png') }}" alt="{{ newsroom.title }} logo"/>
+        </a>
       </div>
     </div>
     <div class="c-footer-newsroom__col t-uppercase">
@@ -15,7 +17,7 @@
           <a href="https://{{ newsroom.domain }}/jobs/" class="has-text-white">Jobs</a>
         </li>
         <li>
-          <a href="https://{{ newsroom.domain }}/support/" class="has-text-white">Support</a>
+          <a href="https://support.{{ newsroom.domain }}/" class="has-text-white">Support</a>
         </li>
         <li>
           <a href="https://www.facebook.com/wacobridge" class="has-text-white">Facebook</a>
