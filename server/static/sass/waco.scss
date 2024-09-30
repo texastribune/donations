@@ -1,6 +1,28 @@
-@import 'ds-toolbox-base';
+// same as ds-toolbox-base (with some overrides)
+@import '@texastribune/queso-ui/assets/scss/1-settings/all';
+@import '1-settings/colors-waco'; // color overrides (need to include for utility classes)
+@import '@texastribune/queso-ui/assets/scss/2-tools/all';
+@import '@texastribune/queso-ui/assets/scss/5-typography/t-helpers';
+@import '@texastribune/queso-ui/assets/scss/5-typography/t-size';
+@import '@texastribune/queso-ui/assets/scss/5-typography/links';
+@import '@texastribune/queso-ui/assets/scss/6-components/icon/icon';
+@import '@texastribune/queso-ui/assets/scss/6-components/button/button';
+@import '@texastribune/queso-ui/assets/scss/6-components/navbar/navbar';
+@import '@texastribune/queso-ui/assets/scss/6-components/site-footer/site-footer';
+@import '@texastribune/queso-ui/assets/scss/7-layout/align';
+@import '@texastribune/queso-ui/assets/scss/7-layout/container';
+@import '@texastribune/queso-ui/assets/scss/7-layout/height';
+@import '@texastribune/queso-ui/assets/scss/7-layout/display';
+@import '@texastribune/queso-ui/assets/scss/7-layout/position';
+@import '@texastribune/queso-ui/assets/scss/utilities/color-helpers';
+@import '@texastribune/queso-ui/assets/scss/utilities/hidden';
+@import '@texastribune/queso-ui/assets/scss/utilities/notch';
+@import '@texastribune/queso-ui/assets/scss/utilities/spacing';
+@import '@texastribune/queso-ui/assets/scss/utilities/sr-only';
 
 @import '1-settings/all';
+@import '1-settings/colors-waco'; // color overrides
+@import '1-settings/fonts-waco'; // font overrides
 @import '2-tools/all';
 @import '3-generic/all';
 @import '4-elements/all';
@@ -8,6 +30,16 @@
 // Include components & typography as needed
 @import '5-typography/links';
 @import '5-typography/typography';
+
+// typography overrides
+.prose {
+  p {
+    @include font-setting('primary');
+  }
+}
+.list--bulleted {
+  @include font-setting('primary');
+}
 
 @import '6-components/buttons';
 @import '6-components/contact';
@@ -34,6 +66,194 @@ h2 {
   }
 }
 
+
 .gap-s {
   gap: $size-s;
 }
+
+// template overrides
+
+body {
+  color: $color-black-off;
+}
+
+// oswald helper
+.t-font-secondary {
+  @include font-setting('secondary');
+}
+.t-weight-medium {
+  font-weight: 500;
+}
+
+.c-navbar-newsroom {
+  border-bottom: 2px solid #d6d5a0;
+  padding: 1.85rem 0 1rem;
+  margin-bottom: 3rem;
+
+  &__inner {
+    margin: auto;
+    max-width: 90vw;
+    width: 1200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__logo {
+    width: 150px;
+  }
+
+  &__btn {
+    background-color: transparent;
+    border: none;
+  }
+
+  @media (min-width: 768px) {
+    &__logo {
+      width: 200px;
+    }
+  }
+}
+
+.c-menu {
+  @include font-setting('secondary');
+  position: fixed;
+  top: 0;
+  width: 90vw;
+  height: 100%;
+  left: auto;
+  right: -100%;
+  transition: right 0.3s ease;
+  padding: 54px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+
+  @media only screen and (min-width: 1000px) {
+    width: 25vw;
+    padding: 60px;
+  }
+
+  &[aria-hidden='false'] {
+    right: 0; /* Slide in */
+  }
+
+  &__logo {
+    text-align: center;
+  }
+
+  &__inner {
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 27px;
+    line-height: 43.2px;
+
+    li {
+      border-top: solid white 1px;
+      padding: 5px 0;
+
+      &:first-child {
+        border-top: none;
+      }
+    }
+
+    @media only screen and (min-width: 600px) {
+      font-size: 30px;
+      line-height: 48px;
+    }
+  }
+  a {
+    color: $color-white-pure;
+    text-decoration: none;
+  }
+  &__close {
+    position: absolute;
+    top: 1em;
+    right: 60px;
+    cursor: pointer;
+    font-size: 17px;
+    @media only screen and (min-width: 1000px) {
+      right: 54px;
+    }
+  }
+}
+.c-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+  z-index: 1;
+
+  &.visible {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+}
+.c-footer-newsroom {
+  &__inner {
+    list-style: none;
+    // layout TK
+    margin: auto;
+    max-width: 90vw;
+    padding: clamp(min(1.5rem, 3.5rem), -0.06rem + 10.2vw, max(3.06rem, 5.06rem));
+    width: 1300px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    word-break: break-word;
+  }
+  &__col {
+    width: 100%;
+  }
+  &__logo {
+    img {
+      max-width: 100%;
+      width: 237px;
+    }
+  }
+  &__list-top-border {
+    border-top: solid white 1px;
+  }
+  &__list-top {
+    margin-top: 10px;
+    font-size: 22px;
+    line-height: 29px;
+  }
+  &__list-btm {
+    font-size: 11px;
+    line-height: 19.2px;
+  }
+  @media (min-width: 768px) {
+    &__list-top {
+      font-size: 16px;
+    }
+    &__list-btm {
+      font-size: 12px;
+    }
+  }
+  ul {
+    list-style: none;
+  }
+}
+
+.button--yellow {
+  color: #fff;
+}
+
+.c-benefits {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+

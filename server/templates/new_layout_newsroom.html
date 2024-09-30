@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <title>{% block title %}Support Us | {{ newsroom.title }}{% endblock %}</title>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="{{ newsroom.title }} nonprofit newsroom membership and donations page.">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='img/favicon-' + newsroom.name + '.png') }}">
+
+    {% block og_meta %}
+      <meta property="og:url" content="https://support.{{ newsroom.domain}}/donate">
+      <meta property="og:image" content="{{ url_for('static', filename='img/social-' + newsroom.name + '.png') }}">
+      <meta property="og:title" content="Support Us | {{ newsroom.title }}">
+      <meta property="og:type" content="website">
+      <meta property="og:description" content="Members make all the difference. Join me in supporting {{ newsroom.title }}’s nonprofit newsroom by becoming a member today.">
+      <meta name="twitter:card" content="summary_large_image">
+    {% endblock %}
+
+
+    {% block stylesheets %}
+    {% include 'includes/fonts_' + newsroom.name +  '.html' %}
+      <link rel="stylesheet" type="text/css" href="{{ bundles['css'] }}">
+    {% endblock %}
+
+    <!-- Page tracking -->
+    {% include 'includes/tracking_' + newsroom.name +  '.html' %}
+
+    {% block adwords_conversion_code %}{% endblock %}
+    {% block head_scripts %}{% endblock %}
+  </head>
+  <body>
+    {% include 'includes/tracking_nojs_' + newsroom.name +  '.html' %}
+
+    {% block icon_sprite %}
+      {# SVG sprite include #}
+      <div style="display:none;">
+        {% include "includes/base_icons.html" %}
+      </div>
+    {% endblock %}
+
+    {% include 'includes/navbar_' + newsroom.name +  '.html' %}
+
+    {% block content %}{% endblock %}
+
+    {% include 'includes/footer_' + newsroom.name +  '.html' %}
+
+    {% block bottom_script %}{% endblock %}
+  </body>
+</html>

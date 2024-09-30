@@ -12,6 +12,7 @@ def bool_env(val):
 NEWSROOM = {
     "title": os.getenv("NEWSROOM_TITLE", "Texas Tribune"),
     "name": os.getenv("NEWSROOM_NAME", "texas"),
+    'domain': os.getenv("NEWSROOM_DOMAIN", "texastribune.org"),
 }
 TIMEZONE = os.getenv("TIMEZONE", "US/Central")
 MAX_SYNC_DAYS_DIFFERENCE = os.getenv("MAX_SYNC_DAYS_DIFFERENCE", 10)
