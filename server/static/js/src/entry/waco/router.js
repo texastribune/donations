@@ -71,7 +71,7 @@ function createInitialFormState(queryParams) {
 
 function createRouter() {
   return new VueRouter({
-    base: '/waco',
+    base: '/donate',
     mode: 'history',
     routes: [{ path: '/', component: RouteHandler }],
   });

@@ -1,0 +1,72 @@
+<header class="c-navbar-newsroom">
+  <div class="c-navbar-newsroom__inner">
+    <a href="https://{{ newsroom.domain }}" class="c-navbar-newsroom__logo">
+      <img src="{{ url_for('static', filename='/img/waco-header-logo.png') }}" width="166" height="40" alt="{{ newsroom.title }} logo"/>
+    </a>
+    <button class="c-navbar-newsroom__btn" id="menu-toggle" aria-controls="menu" aria-expanded="false">
+      <svg class="svg-icon" width="30" height="30" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"></path>
+      </svg><span class="is-sr-only">Menu</span>
+    </button>
+  </div>
+</header>
+<div id="overlay" class="c-overlay" aria-hidden="true"></div>
+<nav id="menu" class="c-menu has-bg-black-off has-text-white" aria-hidden="true">
+  <button id="menu-close" class="c-menu__close c-navbar-newsroom__btn font-secondary" aria-label="Close menu">
+    <span class="c-icon c-icon--baseline t-size-l">
+      <svg class="svg-icon" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="#fff"></path>
+      </svg>
+    </span>
+    Close
+  </button>
+  <div class="c-menu__inner">
+    <div class="c-menu__logo">
+      <img src="{{ url_for('static', filename='/img/waco-menu-logo.png') }}" width="144" height="120" alt="{{ newsroom.title }} logo" />
+    </div>
+    <ul>
+      <li>
+        <a href="https://{{ newsroom.domain }}/about/">About</a>
+      </li>
+      <li>
+        <a href="https://{{ newsroom.domain }}/jobs/">Jobs</a>
+      </li>
+      <li>
+        <a href="https://support.{{ newsroom.domain }}">Support Us</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var menuToggle = document.getElementById('menu-toggle');
+    var menu = document.getElementById('menu');
+    var menuClose = document.getElementById('menu-close');
+    var overlay = document.getElementById('overlay');
+
+    function toggleMenu(open) {
+      menuToggle.setAttribute('aria-expanded', open);
+      menu.setAttribute('aria-hidden', !open);
+
+      if (open) {
+        overlay.classList.add('visible');
+      } else {
+        overlay.classList.remove('visible');
+      }
+    }
+
+    menuToggle.addEventListener('click', function () {
+      var isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      toggleMenu(!isExpanded);
+    });
+
+    menuClose.addEventListener('click', function () {
+      toggleMenu(false);
+    });
+
+    overlay.addEventListener('click', function () {
+      toggleMenu(false);
+    });
+  });
+</script>

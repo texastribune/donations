@@ -41,6 +41,13 @@
     transition: transform 0.3s;
     [open] & {
       transform: rotate(0deg);
+      &--alt {
+        transform: rotate(90deg);
+      }
+    }
+    &--alt {
+      transform: rotate(0deg);
+      color: $color-yellow-tribune;
     }
   }
   // hide iOS arrow

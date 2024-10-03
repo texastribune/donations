@@ -9,7 +9,11 @@ def bool_env(val):
     """Replaces string based environment values with Python booleans"""
     return True if os.environ.get(val, False) == "True" else False
 
-
+NEWSROOM = {
+    "title": os.getenv("NEWSROOM_TITLE", "Texas Tribune"),
+    "name": os.getenv("NEWSROOM_NAME", "texas"),
+    'domain': os.getenv("NEWSROOM_DOMAIN", "texastribune.org"),
+}
 TIMEZONE = os.getenv("TIMEZONE", "US/Central")
 MAX_SYNC_DAYS_DIFFERENCE = os.getenv("MAX_SYNC_DAYS_DIFFERENCE", 10)
 
@@ -154,4 +158,5 @@ BLOCK_LIST = os.getenv("BLOCK_LIST", None)
 ########
 # Waco
 #
+ENABLE_WACO = bool_env("ENABLE_WACO")
 WACO_CAMPAIGN_ID = os.getenv("WACO_CAMPAIGN_ID", None)

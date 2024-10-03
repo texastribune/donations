@@ -2,7 +2,7 @@
 
 {% block og_meta %}
   <meta property="og:url" content="https://support.texastribune.org/donate">
-  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-fmd24.png') }}">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social.png') }}">
   <meta property="og:title" content="Support Us | The Texas Tribune">
   <meta property="og:type" content="website">
   <meta property="og:description" content="Members make our journalism possible. Support The Texas Tribune with a donation today.">
@@ -18,39 +18,32 @@
 {% endblock %}
 
 {% block content %}
+  {% if use_thermometer %}
+    {% include "includes/thermometer.html" %}
+  {% endif %}
+
   <section class="splash splash--tall grid_separator--l">
     <div class="grid_container grid_padded--xl">
       <div class="grid_row grid_wrap--l">
         <div class="col_12">
           <h1 class="splash__headline">
-            Texans need truth. <br class="hide_from--l"><span class="has-text-yellow">Help us report it.</span>
+            Texans need truth. <span class="has-text-yellow">Help us report it.</span>
           </h1>
         </div>
       </div>
     </div>
   </section>
 
-  <div class="grid_padded--xl hide_from--l">
-    {% set number = 1 %}
-    {% if use_thermometer %}
-      {% include "includes/thermometer.html" %}
-    {% endif %}
-  </div>
-
   <main class="main">
     <section class="grid_container grid_padded--xl grid_separator--xl">
-      <div class="grid_row grid_wrap--l gap-s">
-        <div class="col_12">
-          <div class="c-message grid_separator has-text-gray-dark t-size-s">
-            <p>Donate at least $50 during this Fall Member Drive to be entered for a chance to <strong>win a luxury two-night escape on Lady Bird Lake in Austin</strong>. To be entered to win, your new donation must be made by Sept. 13.</p>
-          </div>
-        </div>
-      </div>
       <div class="grid_row grid_wrap--l gap-s">
         <div class="col_7">
           <div id="join-today" class="donation_form grid_separator--l">
             <!-- where the router component attaches -->
             <div id="app" style="display:none;"></div>
+            <!--<div class="c-message grid_separator has-text-gray-dark t-size-s">
+               <p>Use this area for timely messaging (eg. membership drive, giving Tuesday, etc.)</p>
+            </div>-->
             <h2 class="grid_separator link--teal">Become a Texas Tribune Member</h2>
             <!-- where the form attaches -->
             <div id="top-form"></div>
@@ -65,12 +58,6 @@
           </div>
         </div>
         <div class="col_5">
-          {% set number = 2 %}
-          <div class="hide_until--l">
-            {% if use_thermometer %}
-              {% include "includes/thermometer.html" %}
-            {% endif %}
-          </div>
           {% include 'includes/faq.html' %}
         </div>
       </div>

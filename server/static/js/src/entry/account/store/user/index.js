@@ -209,6 +209,22 @@ const actions = {
       );
     }
   },
+  [USER_TYPES.createDonation]: async (
+    { state, rootState },
+    donation
+  ) => {
+    if (!state.viewAsEmail) {
+      const { accessToken } = rootState.tokenUser;
+
+      await axios.patch(
+        `${PORTAL_API_URL}payments/inperson/`,
+        donation,
+        {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        }
+      );
+    }
+  },
 };
 
 const getters = {

@@ -359,6 +359,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
         self.record_type_name = record_type_name
         self.stage_name = stage_name
         self.type = "Single"
+        self.newsroom = None
         self.stripe_customer = None
         self.stripe_subscription = None
         self.referral_id = None
@@ -429,6 +430,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 CampaignId,
                 RecordType.Name,
                 Type,
+                Newsroom__c,
                 Referral_ID__c,
                 LeadSource,
                 Encouraged_to_contribute_by__c,
@@ -468,6 +470,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
             y.expected_giving_date = item["Expected_Giving_Date__c"]
             y.campaign_id = item["CampaignId"]
             y.type = item["Type"]
+            y.newsroom = item["Newsroom__c"]
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
             y.encouraged_by = item["Encouraged_to_contribute_by__c"]
@@ -516,6 +519,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
             "Name": self.name,
             "StageName": self.stage_name,
             "Type": self.type,
+            "Newsroom__c": "Waco Bridge" if self.newsroom == "waco" else "Texas Tribune",
             "Stripe_Customer_ID__c": self.stripe_customer,
             "Referral_ID__c": self.referral_id,
             "LeadSource": self.lead_source,
@@ -633,6 +637,7 @@ class RDO(SalesforceObject, CampaignMixin):
         self.referral_id = None
         self._amount = 0
         self.type = "Recurring Donation"
+        self.newsroom = None
         self.date_established = date_formatted
         self.day_of_month = date.day
         self.stripe_customer = None
@@ -683,6 +688,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "Blast_Subscription_Email__c": self.blast_subscription_email,
             "Billing_Email__c": self.billing_email,
             "Type__c": self.type,
+            "Newsroom__c": "Waco Bridge" if self.newsroom == "waco" else "Texas Tribune",
             "Stripe_Card_Brand__c": self.stripe_card_brand,
             "Stripe_Card_Expiration__c": self.stripe_card_expiration,
             "Stripe_Card_Last_4__c": self.stripe_card_last_4,
@@ -705,7 +711,7 @@ class RDO(SalesforceObject, CampaignMixin):
                 npe03__Contact__c, npe03__Amount__c, npe03__Date_Established__c, Name, Stripe_Customer_Id__c,
                 Stripe_Subscription_Id__c, Lead_Source__c, Stripe_Description__c, Stripe_Agreed_to_pay_fees__c,
                 Encouraged_to_contribute_by__c, npsp__RecurringType__c, npe03__Installments__c, npsp__Day_of_Month__c,
-                npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c,
+                npe03__Installment_Period__c, Blast_Subscription_Email__c, Billing_Email__c, Type__c, Newsroom__c,
                 Stripe_Card_Brand__c, Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
                 FROM npe03__Recurring_Donation__c
                 WHERE Stripe_Subscription_Id__c = '{subscription_id}'
@@ -736,6 +742,7 @@ class RDO(SalesforceObject, CampaignMixin):
             rdo.blast_subscription_email = response["Blast_Subscription_Email__c"]
             rdo.billing_email = response["Billing_Email__c"]
             rdo.type = response["Type__c"]
+            rdo.newsroom = response["Newsroom__c"]
             rdo.stripe_card_brand = response["Stripe_Card_Brand__c"]
             rdo.stripe_card_expiration = response["Stripe_Card_Expiration__c"]
             rdo.stripe_card_last_4 = response["Stripe_Card_Last_4__c"]
@@ -766,7 +773,7 @@ class RDO(SalesforceObject, CampaignMixin):
             CloseDate, CampaignId, RecordType.Name, Type, Referral_ID__c,
             LeadSource, Encouraged_to_contribute_by__c, Stripe_Transaction_ID__c,
             Stripe_Card__c, AccountId, npsp__Closed_Lost_Reason__c,
-            Expected_Giving_Date__c, Stripe_Card_Brand__c,
+            Expected_Giving_Date__c, Newsroom__c, Stripe_Card_Brand__c,
             Stripe_Card_Expiration__c, Stripe_Card_Last_4__c, Quarantined__c
             FROM Opportunity
             WHERE npe03__Recurring_Donation__c = '{self.id}'
@@ -790,6 +797,7 @@ class RDO(SalesforceObject, CampaignMixin):
             y.expected_giving_date = item["Expected_Giving_Date__c"]
             y.campaign_id = item["CampaignId"]
             y.type = item["Type"]
+            y.newsroom = item["Newsroom__c"]
             y.referral_id = item["Referral_ID__c"]
             y.lead_source = item["LeadSource"]
             y.encouraged_by = item["Encouraged_to_contribute_by__c"]

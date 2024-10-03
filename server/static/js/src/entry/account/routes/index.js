@@ -2,7 +2,7 @@ import store from '../store';
 
 import Account from './account/Index.vue';
 
-import { USER_MODULE, USER_TYPES } from '../store/types';
+import { TOKEN_USER_MODULE, USER_MODULE, USER_TYPES } from '../store/types';
 
 const AccountOverview = () =>
   import(/* webpackChunkName: "account-overview-route" */ './account-overview/Index.vue');
@@ -16,6 +16,8 @@ const Blast = () =>
   import(/* webpackChunkName: "blast-route" */ './blast/Index.vue');
 const BlastPayments = () =>
   import(/* webpackChunkName: "blast-payments-route" */ './blast-payments/Index.vue');
+const CreateDonation = () =>
+  import(/* webpackChunkName: "create-donation" */ './create-donation/Index.vue');
 const LoggedIn = () =>
   import(/* webpackChunkName: "logged-in-route" */ './logged-in/Index.vue');
 const LoggedOut = () =>
@@ -174,6 +176,26 @@ const routes = [
             store.getters[`${USER_MODULE}/isBlastSubscriber`];
 
           if (isBlastSubscriber) {
+            return next();
+          }
+          return next({ name: 'accountOverview' });
+        },
+      },
+      {
+        path: 'create-donation/',
+        name: 'create-donation',
+        component: CreateDonation,
+        pathToRegexpOptions: { strict: true },
+        meta: {
+          isProtected: true,
+          title: 'Create a New Donation',
+          requiresParentFetch: false,
+        },
+        beforeEnter: (to, from, next) => {
+          const administrator =
+            store.getters[`${TOKEN_USER_MODULE}/canViewAs`];
+
+          if (administrator) {
             return next();
           }
           return next({ name: 'accountOverview' });

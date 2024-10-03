@@ -1,0 +1,40 @@
+<footer class="c-footer-newsroom has-bg-black-off has-text-white">
+  <div class="c-footer-newsroom__inner">
+    <div class="c-footer-newsroom__col">
+      <div class="c-footer-newsroom__logo">
+        <a href="https://{{ newsroom.domain }}">
+          <img src="{{ url_for('static', filename='/img/waco-footer-logo.png') }}" alt="{{ newsroom.title }} logo"/>
+        </a>
+      </div>
+    </div>
+    <div class="c-footer-newsroom__col t-uppercase">
+      <div class="c-footer-newsroom__list-top-border"></div>
+      <ul class="has-b-btm-marg has-b-top-marg c-footer-newsroom__list-top t-font-secondary t-weight-normal">
+        <li>
+          <a href="https://{{ newsroom.domain }}/about/" class="has-text-white">About</a>
+        </li>
+        <li>
+          <a href="https://{{ newsroom.domain }}/jobs/" class="has-text-white">Jobs</a>
+        </li>
+        <li>
+          <a href="https://support.{{ newsroom.domain }}/" class="has-text-white">Support</a>
+        </li>
+        <li>
+          <a href="https://www.facebook.com/wacobridge" class="has-text-white">Facebook</a>
+        </li>
+        <li>
+          <a href="https://texastribune.org" class="has-text-white">TexasTribune.org</a>
+        </li>
+      </ul>
+      <ul class="c-footer-newsroom__list c-footer-newsroom__list-btm t-weight-medium">
+        <li>
+          <a href="https://www.texastribune.org/about/privacy-policy/" class="has-text-white">Privacy Policy</a>
+        </li>
+        <li>
+          <a href="https://www.texastribune.org/about/terms-of-service/" class="has-text-white">Terms of Service</a>
+        </li>
+        © 2024 THE WACO BRIDGE
+      </ul>
+    </div>
+  </div>
+</footer>
