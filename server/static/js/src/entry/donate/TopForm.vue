@@ -19,6 +19,7 @@
         <radios
           :options="frequencyOptions"
           :store-module="storeModule"
+          @updateCallback="onUpdate"
           base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
         />
@@ -227,7 +228,45 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
+      initAmount: '0',
+      initMonthlyAmount: '0',
+      initFrequency: '',
     };
   },
+
+  mounted() {
+    const { storeModule } = this;
+    const getter = this.$store.getters[`${storeModule}/valueByKey`];
+    this.initAmount = getter('amount');
+    this.initFrequency = getter('installment_period');
+    // setting an initial monthly amount that is a tenth of the suggested yearly amount
+    // in hopes of getting more recurring monthly donations
+    // using Math.ceil() here to round up to the nearest whole int
+    this.initMonthlyAmount = String(Math.ceil(this.initAmount/10));
+    if (this.initFrequency == 'monthly') {
+      this.updateValue({ storeModule: storeModule, key: 'amount', value: this.initMonthlyAmount})
+    }
+  },
+
+  methods: {
+    onUpdate(frequency) {
+      const { storeModule, initAmount, initMonthlyAmount } = this;
+      const getter = this.$store.getters[`${storeModule}/valueByKey`];
+      let amount = getter('amount');
+      let needsUpdate = false;
+      if (frequency == 'monthly' && amount == initAmount) {
+        amount = initMonthlyAmount;
+        needsUpdate = true;
+      } else if (frequency != 'monthly' && amount == initMonthlyAmount) {
+        amount = initAmount;
+        needsUpdate = true;
+      };
+      // only update if the current value matches the initial amount or the initial monthly amount
+      if (needsUpdate) {
+        this.updateValue({ storeModule: storeModule, key: 'amount', value: amount})
+      };
+    },
+  }
+
 };
 </script>
