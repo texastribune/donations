@@ -243,8 +243,8 @@ export default {
     // in hopes of getting more recurring monthly donations
     // using Math.ceil() here to round up to the nearest whole int
     this.initMonthlyAmount = String(Math.ceil(this.initAmount/10));
-    if (this.initFrequency == 'monthly') {
-      this.updateValue({ storeModule: storeModule, key: 'amount', value: this.initMonthlyAmount})
+    if (this.initFrequency === 'monthly') {
+      this.updateValue({ storeModule, key: 'amount', value: this.initMonthlyAmount})
     }
   },
 
@@ -254,16 +254,16 @@ export default {
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
       let needsUpdate = false;
-      if (frequency == 'monthly' && amount == initAmount) {
+      if (frequency === 'monthly' && amount === initAmount) {
         amount = initMonthlyAmount;
         needsUpdate = true;
-      } else if (frequency != 'monthly' && amount == initMonthlyAmount) {
+      } else if (frequency !== 'monthly' && amount === initMonthlyAmount) {
         amount = initAmount;
         needsUpdate = true;
       };
       // only update if the current value matches the initial amount or the initial monthly amount
       if (needsUpdate) {
-        this.updateValue({ storeModule: storeModule, key: 'amount', value: amount})
+        this.updateValue({ storeModule, key: 'amount', value: amount})
       };
     },
   }
