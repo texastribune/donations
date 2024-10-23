@@ -1,3 +1,4 @@
+import ssl
 from celery import Celery
 from .config import SENTRY_DSN
 
@@ -9,6 +10,9 @@ def make_celery(app):
         broker_heartbeat=None,
         broker=app.config["CELERY_BROKER_URL"],
         broker_connection_timeout=60,
+        redis_backend_use_ssl = {
+            'ssl_cert_reqs': ssl.CERT_NONE,
+        },
         result_backend=None,
         event_queue_expires=60,
         worker_prefetch_multiplier=1,
