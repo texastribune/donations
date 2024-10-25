@@ -11,7 +11,7 @@ def make_celery(app):
         broker=app.config["CELERY_BROKER_URL"],
         broker_connection_timeout=60,
         redis_backend_use_ssl = {
-            'ssl_cert_reqs': ssl.CERT_NONE,
+            'ssl_cert_reqs': ssl.CERT_REQUIRED,
         } if 'rediss' in REDIS_URL else {},
         result_backend=None,
         event_queue_expires=60,
