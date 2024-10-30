@@ -229,8 +229,9 @@ export default {
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
       initAmount: '0',
-      initMonthlyAmount: '0',
+      initAltAmount: '0',
       initFrequency: '',
+      initAltFrequency: [],
     };
   },
 
@@ -239,27 +240,35 @@ export default {
     const getter = this.$store.getters[`${storeModule}/valueByKey`];
     this.initAmount = getter('amount');
     this.initFrequency = getter('installment_period');
-    // setting an initial monthly amount that is a tenth of the suggested yearly amount
-    // in hopes of getting more recurring monthly donations
+    // setting an initial alt amount that is either a tenth of the suggested amount if the init
+    // frequency is yearly/once or ten times the suggested amount if the frequency is monthly
     // using Math.ceil() here to round up to the nearest whole int
-    this.initMonthlyAmount = String(Math.ceil(this.initAmount/10));
     if (this.initFrequency === 'monthly') {
-      this.updateValue({ storeModule, key: 'amount', value: this.initMonthlyAmount})
-    }
+      this.initAltAmount = String(Math.ceil(this.initAmount*10));
+      this.initAltFrequency = ["None", "yearly"];
+    } else {
+      this.initAltAmount = String(Math.ceil(this.initAmount/10));
+      this.initAltFrequency = ["monthly"]
+    };
   },
 
   methods: {
     onUpdate(frequency) {
-      const { storeModule, initAmount, initMonthlyAmount } = this;
+      const { storeModule, initAmount, initAltAmount, initAltFrequency } = this;
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
       let needsUpdate = false;
-      if (frequency === 'monthly' && amount === initAmount) {
-        amount = initMonthlyAmount;
-        needsUpdate = true;
-      } else if (frequency !== 'monthly' && amount === initMonthlyAmount) {
-        amount = initAmount;
-        needsUpdate = true;
+
+      if (initAltFrequency.includes(frequency)) {
+        if (amount === initAmount) {
+          amount = initAltAmount;
+          needsUpdate = true;
+        };
+      } else {
+        if (amount === initAltAmount) {
+          amount = initAmount;
+          needsUpdate = true;
+        };
       };
       // only update if the current value matches the initial amount or the initial monthly amount
       if (needsUpdate) {
