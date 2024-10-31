@@ -13,4 +13,4 @@ services:
     entrypoint: python -m pytest "tests" --cov=.
     environment:
       - SECRET_KEY=sk_test_ok
-      - REDIS_URL="http://redis.test.com"
+      - REDIS_URL="http://rediss.test.com"
