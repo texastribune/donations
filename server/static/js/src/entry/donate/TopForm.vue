@@ -202,6 +202,8 @@ import ManualSubmit from '../../payment-elements/ManualSubmit.vue';
 import NativePay from '../../payment-elements/NativePay.vue';
 import formStarter from '../../mixins/connected-form/starter';
 
+import AB_TESTING_CAMPAIGN_ID from './constants';
+
 export default {
   name: 'TopForm',
 
@@ -257,15 +259,16 @@ export default {
       const { storeModule, initAmount, initAltAmount, initAltFrequency } = this;
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
+      let campaign_id = getter('campaign_id');
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
-        if (amount === initAmount) {
+        if (amount === initAmount && campaign_id === AB_TESTING_CAMPAIGN_ID) {
           amount = initAltAmount;
           needsUpdate = true;
         };
       } else {
-        if (amount === initAltAmount) {
+        if (amount === initAltAmount && campaign_id === AB_TESTING_CAMPAIGN_ID) {
           amount = initAmount;
           needsUpdate = true;
         };

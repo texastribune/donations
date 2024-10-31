@@ -16,6 +16,7 @@ NEWSROOM = {
 }
 TIMEZONE = os.getenv("TIMEZONE", "US/Central")
 MAX_SYNC_DAYS_DIFFERENCE = os.getenv("MAX_SYNC_DAYS_DIFFERENCE", 10)
+AB_TESTING_CAMPAIGN_ID = os.getenv("AB_TESTING_CAMPAIGN_ID", "")
 
 #######
 # Flask

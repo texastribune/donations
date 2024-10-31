@@ -3,6 +3,9 @@
   "scripts": {
   },
   "env": {
+    "AB_TESTING_CAMPAIGN_ID": {
+      "required": false
+    },
     "ACCOUNTING_MAIL_RECIPIENT": {
       "required": true
     },

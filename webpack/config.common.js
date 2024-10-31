@@ -31,6 +31,7 @@ module.exports = {
       'AUTH0_PORTAL_CLIENT_ID',
       'PORTAL_API_DOMAIN',
       'PORTAL_CAMPAIGN_ID',
+      'AB_TESTING_CAMPAIGN_ID',
       'ENABLE_SENTRY',
       'SENTRY_DSN',
       'SENTRY_ENVIRONMENT',
