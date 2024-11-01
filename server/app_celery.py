@@ -4,6 +4,10 @@ from .config import REDIS_URL, SENTRY_DSN
 
 
 def make_celery(app):
+    print('---------------hey look at me----------------')
+    print("REDIS_URL", REDIS_URL)
+    test_var = {'ssl_cert_reqs': ssl.CERT_OPTIONAL} if 'rediss' in REDIS_URL else {}
+    print("test_var", test_var)
     celery = Celery(
         app.import_name,
         broker_pool_limit=1,
