@@ -11,6 +11,3 @@ services:
     ports:
       - 80:5000
     entrypoint: python -m pytest "tests" --cov=.
-    environment:
-      - SECRET_KEY=sk_test_ok
-      - REDIS_URL="http://redis.test.com"
