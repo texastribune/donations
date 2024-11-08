@@ -15,6 +15,7 @@ jobs:
           docker build -f Dockerfile -t texastribune/checkout:dev .
           docker run -it --rm --workdir=/app \
           -e SECRET_KEY='sk_test_circle' \
+          -e REDIS_URL='redis://redis:6379' \
           --entrypoint=/app/circle.sh \
           texastribune/checkout:dev
 branches:
