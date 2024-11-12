@@ -187,6 +187,7 @@
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
     <hidden name="pay_fees_value" :store-module="storeModule" />
+    <hidden name="ab_testing" :store-modeule="storeModule" />
   </form>
 </template>
 
@@ -201,8 +202,6 @@ import ManualPay from '../../payment-elements/ManualPay.vue';
 import ManualSubmit from '../../payment-elements/ManualSubmit.vue';
 import NativePay from '../../payment-elements/NativePay.vue';
 import formStarter from '../../mixins/connected-form/starter';
-
-import AB_TESTING_CAMPAIGN_ID from './constants';
 
 export default {
   name: 'TopForm',
@@ -260,15 +259,16 @@ export default {
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
       let campaign_id = getter('campaign_id');
+      let ab_testing = getter('ab_testing');
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
-        if (amount === initAmount && campaign_id === AB_TESTING_CAMPAIGN_ID) {
+        if (amount === initAmount && ab_testing) {
           amount = initAltAmount;
           needsUpdate = true;
         };
       } else {
-        if (amount === initAltAmount && campaign_id === AB_TESTING_CAMPAIGN_ID) {
+        if (amount === initAltAmount && ab_testing) {
           amount = initAmount;
           needsUpdate = true;
         };

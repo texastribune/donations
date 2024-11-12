@@ -33,6 +33,7 @@ function createInitialFormState(queryParams) {
     zipcode = '',
     code = '',
     reason = '',
+    abTesting = false,
   } = cleanParams;
   let amount;
   let installmentPeriod;
@@ -71,6 +72,7 @@ function createInitialFormState(queryParams) {
     campaign_id: campaignId,
     referral_id: referralId,
     installment_period: installmentPeriod,
+    ab_testing: abTesting,
   });
 }
 

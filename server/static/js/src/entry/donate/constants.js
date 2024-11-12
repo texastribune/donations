@@ -1,6 +1,5 @@
 import * as validators from '../../utils/validators';
 
-export const AB_TESTING_CAMPAIGN_ID = process.env.AB_TESTING_CAMPAIGN_ID;
 export const AMBASSADOR_CODES = {
   'ump-1': {
     installmentPeriod: 'monthly',
@@ -65,4 +64,5 @@ export const BASE_FORM_STATE = {
   },
   campaign_id: { value: '', isValid: true, validator: null, message: null },
   referral_id: { value: '', isValid: true, validator: null, message: null },
+  ab_testing: { value: false, isValid: true, vlidator: null, message: null },
 };
