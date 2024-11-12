@@ -19,7 +19,6 @@
         <radios
           :options="frequencyOptions"
           :store-module="storeModule"
-          @updateCallback="onUpdate"
           base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
         />
