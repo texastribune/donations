@@ -257,17 +257,16 @@ export default {
       const { storeModule, initAmount, initAltAmount, initAltFrequency } = this;
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
-      let campaign_id = getter('campaign_id');
-      let ab_testing = getter('ab_testing');
+      const abTesting = getter('ab_testing');
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
-        if (amount === initAmount && ab_testing) {
+        if (amount === initAmount && abTesting) {
           amount = initAltAmount;
           needsUpdate = true;
         };
       } else {
-        if (amount === initAltAmount && ab_testing) {
+        if (amount === initAltAmount && abTesting) {
           amount = initAmount;
           needsUpdate = true;
         };
