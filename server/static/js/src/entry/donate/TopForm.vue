@@ -19,6 +19,7 @@
         <radios
           :options="frequencyOptions"
           :store-module="storeModule"
+          @updateCallback="onUpdate"
           base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
         />
@@ -186,7 +187,7 @@
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
     <hidden name="pay_fees_value" :store-module="storeModule" />
-    <hidden name="ab_testing" :store-modeule="storeModule" />
+    <hidden name="ab_testing" :store-module="storeModule" />
   </form>
 </template>
 

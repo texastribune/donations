@@ -64,5 +64,5 @@ export const BASE_FORM_STATE = {
   },
   campaign_id: { value: '', isValid: true, validator: null, message: null },
   referral_id: { value: '', isValid: true, validator: null, message: null },
-  ab_testing: { value: false, isValid: true, vlidator: null, message: null },
+  ab_testing: { value: false, isValid: true, validator: null, message: null },
 };
