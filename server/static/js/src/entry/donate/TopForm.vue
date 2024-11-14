@@ -187,7 +187,7 @@
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
     <hidden name="pay_fees_value" :store-module="storeModule" />
-    <hidden name="ab_testing" :store-module="storeModule" />
+    <hidden name="module" :store-module="storeModule" />
   </form>
 </template>
 
@@ -258,7 +258,7 @@ export default {
       const { storeModule, initAmount, initAltAmount, initAltFrequency } = this;
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
-      const abTesting = getter('ab_testing');
+      const abTesting = getter('module');
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
