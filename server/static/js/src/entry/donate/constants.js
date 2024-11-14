@@ -64,6 +64,6 @@ export const BASE_FORM_STATE = {
   },
   campaign_id: { value: '', isValid: true, validator: null, message: null },
   referral_id: { value: '', isValid: true, validator: null, message: null },
-  // module tells us whether we should engage changes we are ab testing
-  module: { value: false, isValid: true, validator: null, message: null },
+  // proof tells us if we should engage changes we are ab testing
+  proof: { value: false, isValid: true, validator: null, message: null },
 };

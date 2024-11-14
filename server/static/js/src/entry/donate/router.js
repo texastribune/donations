@@ -33,7 +33,7 @@ function createInitialFormState(queryParams) {
     zipcode = '',
     code = '',
     reason = '',
-    module = false,
+    proof = false,
   } = cleanParams;
   let amount;
   let installmentPeriod;
@@ -72,7 +72,7 @@ function createInitialFormState(queryParams) {
     campaign_id: campaignId,
     referral_id: referralId,
     installment_period: installmentPeriod,
-    module: module === "True" ? true : false,
+    proof: proof === "True" || false,
   });
 }
 
