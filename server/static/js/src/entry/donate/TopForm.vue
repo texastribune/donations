@@ -19,6 +19,7 @@
         <radios
           :options="frequencyOptions"
           :store-module="storeModule"
+          @updateCallback="onUpdate"
           base-classes="form__radios form__radios--stack-at-medium"
           name="installment_period"
         />
@@ -186,6 +187,7 @@
     <hidden name="campaign_id" :store-module="storeModule" />
     <hidden name="referral_id" :store-module="storeModule" />
     <hidden name="pay_fees_value" :store-module="storeModule" />
+    <hidden name="proof" :store-module="storeModule" />
   </form>
 </template>
 
@@ -227,7 +229,55 @@ export default {
         { id: 1, text: 'Monthly donation', value: 'monthly' },
         { id: 2, text: 'Yearly donation', value: 'yearly' },
       ],
+      initAmount: '0',
+      initAltAmount: '0',
+      initFrequency: '',
+      initAltFrequency: [],
     };
   },
+
+  mounted() {
+    const { storeModule } = this;
+    const getter = this.$store.getters[`${storeModule}/valueByKey`];
+    this.initAmount = getter('amount');
+    this.initFrequency = getter('installment_period');
+    // setting an initial alt amount that is either a tenth of the suggested amount if the init
+    // frequency is yearly/once or ten times the suggested amount if the frequency is monthly
+    // using Math.ceil() here to round up to the nearest whole int
+    if (this.initFrequency === 'monthly') {
+      this.initAltAmount = String(Math.ceil(this.initAmount*10));
+      this.initAltFrequency = ["None", "yearly"];
+    } else {
+      this.initAltAmount = String(Math.ceil(this.initAmount/10));
+      this.initAltFrequency = ["monthly"]
+    };
+  },
+
+  methods: {
+    onUpdate(frequency) {
+      const { storeModule, initAmount, initAltAmount, initAltFrequency } = this;
+      const getter = this.$store.getters[`${storeModule}/valueByKey`];
+      let amount = getter('amount');
+      const abTesting = getter('proof');
+      let needsUpdate = false;
+
+      if (initAltFrequency.includes(frequency)) {
+        if (amount === initAmount && abTesting) {
+          amount = initAltAmount;
+          needsUpdate = true;
+        };
+      } else {
+        if (amount === initAltAmount && abTesting) {
+          amount = initAmount;
+          needsUpdate = true;
+        };
+      };
+      // only update if the current value matches the initial amount or the initial monthly amount
+      if (needsUpdate) {
+        this.updateValue({ storeModule, key: 'amount', value: amount})
+      };
+    },
+  }
+
 };
 </script>
