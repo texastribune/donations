@@ -262,12 +262,12 @@ export default {
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
-        if (amount === initAmount && abTesting) {
+        if (amount === initAmount) {
           amount = initAltAmount;
           needsUpdate = true;
         };
       } else {
-        if (amount === initAltAmount && abTesting) {
+        if (amount === initAltAmount) {
           amount = initAmount;
           needsUpdate = true;
         };
