@@ -258,7 +258,8 @@ export default {
       const { storeModule, initAmount, initAltAmount, initAltFrequency } = this;
       const getter = this.$store.getters[`${storeModule}/valueByKey`];
       let amount = getter('amount');
-      const abTesting = getter('proof');
+      // comment in the next line for testing purposes
+      // const abTesting = getter('proof');
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
