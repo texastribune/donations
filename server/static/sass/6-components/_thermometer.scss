@@ -44,7 +44,7 @@
 
 .ribbon {
   width: 100%;
-  max-width: 250px;
+  max-width: 200px;
   margin: 0 auto;
   display: block;
 
@@ -57,9 +57,22 @@
   align-items: center;
 }
 
-// comment out the following line when we hide the thermometer
+// comment out the following lines when we hide the thermometer
 section.splash {
   margin-bottom: 0;
+  padding: $size-b 0;
+}
+section .splash__headline {
+  padding-bottom: 0;
+  @include mq($from: bp-m) {
+    font-size: $size-xxl;
+  }
+}
+.c-message__text {
+  font-size: $size-s;
+  @include mq($from: bp-s) {
+    font-size: $size-b;
+  }
 }
 .c-message__inner {
   max-width: 800px;
