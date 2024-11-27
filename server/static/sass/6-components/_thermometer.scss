@@ -12,6 +12,7 @@
     margin-right: $size-s;
     overflow: hidden;
     position: relative;
+    border: 2px solid $color-yellow-tribune;
 
     &_inner {
       background-color: $color-yellow-tribune;
@@ -28,8 +29,9 @@
         width: 0; // width set inline by Vue.js
       }
       &--goal {
-        opacity: 0.2;
+        // opacity: 0.2;
         width: 100%;
+        background-color: #fff;
       }
     }
   }
@@ -42,6 +44,9 @@
 
 .ribbon {
   width: 100%;
+  max-width: 250px;
+  margin: 0 auto;
+  display: block;
 
   @include mq($until: bp-s) {
     margin-bottom: $size-xxs;
@@ -52,3 +57,11 @@
   align-items: center;
 }
 
+// comment out the following line when we hide the thermometer
+section.splash {
+  margin-bottom: 0;
+}
+.c-message__inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
