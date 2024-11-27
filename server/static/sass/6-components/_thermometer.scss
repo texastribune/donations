@@ -78,3 +78,11 @@ section .splash__headline {
   max-width: 800px;
   margin: 0 auto;
 }
+.c-faq-wrap {
+  background-color: #fff;
+}
+@include mq($from: bp-m) {
+  .l-swap--from-bp-m {
+    flex-direction: row-reverse;
+  }
+}

@@ -36,7 +36,7 @@
   {% endif %}
 
     <section class="grid_container grid_padded--xl grid_separator--xl">
-      <div class="grid_row grid_wrap--l gap-s">
+      <div class="grid_row grid_wrap--l gap-s l-align-center-children">
         <div class="col_7">
           <div id="join-today" class="donation_form grid_separator--l">
             <!-- where the router component attaches -->
@@ -59,17 +59,29 @@
             </div>
           </div>
         </div>
+        {% if not use_thermometer %}
         <div class="col_5">
           {% include 'includes/faq.html' %}
         </div>
+        {% endif %}
       </div>
     </section>
 
     <section class="section-padding grid_padded--xl section-padding--filled">
-      <div class="member_benefits grid_container">
-        {% include 'includes/benefits.html' %}
-      </div>
-
+      {% if use_thermometer %}
+        <div class="grid_container grid_row grid_wrap--l gap-s l-swap--from-bp-m">
+          <div class="col_5">
+            {% include 'includes/faq.html' %}
+          </div>
+          <div class="col_7">
+            {% include 'includes/benefits.html' %}
+          </div>
+        </div>
+        {% else %}
+          <div class="member_benefits grid_container">
+            {% include 'includes/benefits.html' %}
+          </div>
+      {% endif %}
     </section>
   </main>
 {% endblock %}
