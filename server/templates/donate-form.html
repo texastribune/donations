@@ -32,8 +32,8 @@
 
   <main class="main">
     {% if use_thermometer %}
-    {% include "includes/thermometer.html" %}
-  {% endif %}
+      {% include "includes/thermometer.html" %}
+    {% endif %}
 
     <section class="grid_container grid_padded--xl grid_separator--xl">
       <div class="grid_row grid_wrap--l gap-s l-align-center-children">
@@ -77,10 +77,10 @@
             {% include 'includes/benefits.html' %}
           </div>
         </div>
-        {% else %}
-          <div class="member_benefits grid_container">
-            {% include 'includes/benefits.html' %}
-          </div>
+      {% else %}
+        <div class="member_benefits grid_container">
+          {% include 'includes/benefits.html' %}
+        </div>
       {% endif %}
     </section>
   </main>
