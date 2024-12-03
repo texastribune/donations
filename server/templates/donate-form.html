@@ -2,7 +2,7 @@
 
 {% block og_meta %}
   <meta property="og:url" content="https://support.texastribune.org/donate">
-  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social.png') }}">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-gt24.png') }}">
   <meta property="og:title" content="Support Us | The Texas Tribune">
   <meta property="og:type" content="website">
   <meta property="og:description" content="Members make our journalism possible. Support The Texas Tribune with a donation today.">
@@ -18,10 +18,6 @@
 {% endblock %}
 
 {% block content %}
-  {% if use_thermometer %}
-    {% include "includes/thermometer.html" %}
-  {% endif %}
-
   <section class="splash splash--tall grid_separator--l">
     <div class="grid_container grid_padded--xl">
       <div class="grid_row grid_wrap--l">
@@ -35,8 +31,12 @@
   </section>
 
   <main class="main">
+    {% if use_thermometer %}
+      {% include "includes/thermometer.html" %}
+    {% endif %}
+
     <section class="grid_container grid_padded--xl grid_separator--xl">
-      <div class="grid_row grid_wrap--l gap-s">
+      <div class="grid_row grid_wrap--l gap-s l-align-center-children">
         <div class="col_7">
           <div id="join-today" class="donation_form grid_separator--l">
             <!-- where the router component attaches -->
@@ -44,7 +44,9 @@
             <!--<div class="c-message grid_separator has-text-gray-dark t-size-s">
                <p>Use this area for timely messaging (eg. membership drive, giving Tuesday, etc.)</p>
             </div>-->
+            {% if not use_thermometer %}
             <h2 class="grid_separator link--teal">Become a Texas Tribune Member</h2>
+            {% endif %}
             <!-- where the form attaches -->
             <div id="top-form"></div>
             <div class="grid_separator"></div>
@@ -57,17 +59,29 @@
             </div>
           </div>
         </div>
+        {% if not use_thermometer %}
         <div class="col_5">
           {% include 'includes/faq.html' %}
         </div>
+        {% endif %}
       </div>
     </section>
 
     <section class="section-padding grid_padded--xl section-padding--filled">
-      <div class="member_benefits grid_container">
-        {% include 'includes/benefits.html' %}
-      </div>
-
+      {% if use_thermometer %}
+        <div class="grid_container grid_row grid_wrap--l gap-s l-swap--from-bp-m">
+          <div class="col_5">
+            {% include 'includes/faq.html' %}
+          </div>
+          <div class="col_7">
+            {% include 'includes/benefits.html' %}
+          </div>
+        </div>
+      {% else %}
+        <div class="member_benefits grid_container">
+          {% include 'includes/benefits.html' %}
+        </div>
+      {% endif %}
     </section>
   </main>
 {% endblock %}
