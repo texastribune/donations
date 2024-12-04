@@ -58,32 +58,32 @@
 }
 
 // comment out the following lines when we hide the thermometer
-section.splash {
-  margin-bottom: 0;
-  padding: $size-b 0;
-  text-align: center;
-}
-section .splash__headline {
-  padding-bottom: 0;
-  @include mq($from: bp-m) {
-    font-size: $size-xxl;
-  }
-}
-.c-message__text {
-  font-size: $size-s;
-  @include mq($from: bp-s) {
-    font-size: $size-b;
-  }
-}
-.c-message__inner {
-  max-width: 800px;
-  margin: 0 auto;
-}
-.c-faq-wrap {
-  background-color: #fff;
-}
-@include mq($from: bp-m) {
-  .l-swap--from-bp-m {
-    flex-direction: row-reverse;
-  }
-}
+// section.splash {
+//   margin-bottom: 0;
+//   padding: $size-b 0;
+//   text-align: center;
+// }
+// section .splash__headline {
+//   padding-bottom: 0;
+//   @include mq($from: bp-m) {
+//     font-size: $size-xxl;
+//   }
+// }
+// .c-message__text {
+//   font-size: $size-s;
+//   @include mq($from: bp-s) {
+//     font-size: $size-b;
+//   }
+// }
+// .c-message__inner {
+//   max-width: 800px;
+//   margin: 0 auto;
+// }
+// .c-faq-wrap {
+//   background-color: #fff;
+// }
+// @include mq($from: bp-m) {
+//   .l-swap--from-bp-m {
+//     flex-direction: row-reverse;
+//   }
+// }
