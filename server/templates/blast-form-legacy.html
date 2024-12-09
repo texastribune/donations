@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+{% block title %}
+  The Blast | The Texas Tribune
+{% endblock %}
+{% block extra_script %}
+<script src="{{ url_for('static', filename='js/blast.js') }}"></script>
+{% endblock %}
+
+{% block og_meta %}
+  <meta property="og:url" content="https://support.texastribune.org/blastform">
+  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/social-blast.png') }}">
+  <meta property="og:title" content="The Blast | The Texas Tribune">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="The Blast, The Texas Tribune’s premier newsletter, puts to use the full weight of the newsroom’s political team to serve up exclusive reporting, nonpartisan analysis and the first word on happenings in the Capitol three times a week for insiders. Don’t get left behind. Subscribe today.">
+  <meta name="twitter:card" content="summary_large_image">
+{% endblock %}
+
+{% block content %}
+
+  <section class="splash splash--blast">
+    <div class="grid_container grid_row grid_padded grid_wrap--m align-bottom">
+      <figure class="col col_5--m">
+        <a class="splash__logo" href="https://www.texastribune.org/theblast/" class="unlink"><img src="{{ url_for('static', filename='img/c-blast-header-backup-logo.png') }}"
+            alt="The Blast logo, a product of The Texas Tribune"></a>
+      </figure>
+      <div class="col col_7--m splash__bug">
+        <img src="{{ url_for('static', filename='img/TT-aprojectby.svg')}}" alt="A project by The Texas Tribune">
+      </div>
+    </div>
+  </section>
+  <div id="blast" class="grid_container blast_main">
+    <form action="/submit-blast" method="post" class="blastform grid_separator--l">
+      <input name="campaign_id" id="campaign_id" value="{{ campaign_id }}" type="hidden">
+      <input name="referral_id" id="referral_id" value="{{ referral_id }}" type="hidden">
+      <input name="level" id="level" type="hidden">
+      <div class="form-outer-section outer-section narrow">
+
+        <header class="grid_separator--l">
+          <h1>Sign up for the best political newsletter in Texas.</h1>
+        </header>
+        <div class="grid_row grid_wrap--l grid_wrap--reverse">
+          <div class="col col_7--xl">
+            <div class="grid_row grid_separator grid_wrap--m">
+              <div class="col_6">
+                {{ form.first_name.label }}<br>
+                  {{ form.first_name(maxlength=50) }}
+              </div>
+              <div class="col_6">
+                {{ form.last_name.label }}<br>
+                  {{ form.last_name(maxlength=50) }}
+              </div>
+            </div>
+            <div class="grid_row">
+              <div class="col">
+                {{ form.subscriber_email.label }}
+                  {{ form.subscriber_email(maxlength=70) }}
+                  <p class="form-subtext">&raquo; You will be prompted for the billing email address at checkout.</p>
+              </div>
+            </div>
+            <div class="grid_row">
+              <div class="col col_9--l">
+                {{ form.pay_fees.label }}
+                  {{ form.pay_fees(checked=False) }}
+                <p id="pay-fee-amount" class="label-info"><span></span></p>
+                <p id="pay-fee-info">Paying these fees directs more money in support of the Tribune’s mission.</p>
+              </div>
+            </div>
+            {{ form.pay_fees_value(value="False") }}
+            {{ form.installment_period(value=installment_period) }}
+            <div class="form-section form-error">
+              <p class="error-form-message"></p>
+            </div>
+          </div>
+          <div class="col col_5--xl form__box grid_separator">
+            <ul class="subscription grid_row">
+              {% for subfield in form.amount %}
+              <li class="col grid_separator">
+              <tr>
+                  <td>{{ subfield }}</td>
+                  <td>{{ subfield.label }}</td>
+              </tr>
+              </li>
+              {% endfor %}
+            </ul>
+            <h4 class="grid_separator--s">Would multiple people at your organization like to receive The Blast? Good news! We offer group rates.</h4>
+            <p class="subtext">Email us at <a href="mailto:blast@texastribune.org">blast@texastribune.org</a> or call <a href="tel:+15127168695">512-993-0166</a> for more information.</p>
+          </div>
+        </div>
+        {{ form.description(value='Blast Subscription') }}
+        <script src="https://checkout.stripe.com/checkout.js"></script>
+        <button id="customButton" class="button button-flat button--yellow button--l">Submit</button>
+      </div>
+    </form>
+
+
+    {% include 'includes/blast_stripe_checkout_js.html' %}
+  </div>
+  <script>
+    window.onload = function() {
+      payFeeAmount();
+      listen_for_fee_check();
+    };
+
+    $('input[name="amount"]').change(function() {
+      payFeeAmount();
+      $('input[name="amount"]').each(function() {
+        $(this).attr("checked", false);
+      });
+      $(this).attr("checked", "checked");
+      $(this).prop("checked", true);
+    });
+
+  </script>
+{% endblock %}

@@ -49,6 +49,7 @@ from .config import (
 )
 from .forms import (
     BlastForm,
+    BlastFormLegacy,
     BlastPromoForm,
     BusinessMembershipForm,
     CircleForm,
@@ -564,6 +565,9 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     elif FormType is BlastForm:
         donation_type = "blast"
+        function = add_stripe_donation.delay
+    elif FormType is BlastFormLegacy:
+        donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
         function = add_stripe_donation.delay
@@ -686,6 +690,25 @@ def business_form():
     )
 
 
+@app.route("/blast", methods=["GET", "POST"])
+def blast_form():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
+    bundles = get_bundles("blast")
+    template = "blast-form.html"
+
+    if request.method == "POST":
+        return validate_form(BlastForm, bundles=bundles, template=template)
+
+    return render_template(
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+    )
+
+
 @app.route("/waco", methods=["GET", "POST"])
 def waco_form():
     if not ENABLE_WACO:
@@ -765,7 +788,7 @@ def the_blast_form():
         return redirect(url_for("donate_form"))
 
     bundles = get_bundles("old")
-    form = BlastForm()
+    form = BlastFormLegacy()
     if request.args.get("amount"):
         amount = request.args.get("amount")
     else:
@@ -776,7 +799,7 @@ def the_blast_form():
     referral_id = request.args.get("referralId", default="")
 
     return render_template(
-        "blast-form.html",
+        "blast-form-legacy.html",
         form=form,
         campaign_id=campaign_id,
         referral_id=referral_id,
@@ -794,7 +817,7 @@ def submit_blast():
 
     bundles = get_bundles("old")
     app.logger.info(pformat(request.form))
-    form = BlastForm(request.form)
+    form = BlastFormLegacy(request.form)
 
     name = " ".join((request.form["first_name"], request.form["last_name"]))
     email_is_valid = validate_email(request.form["stripeEmail"])
