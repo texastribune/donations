@@ -111,7 +111,7 @@ class WacoForm(BaseForm):
 
 class BlastForm(BaseForm):
     installment_period = StringField(
-        u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "session"])]
     )
     level = HiddenField(u"Level", [validators.InputRequired()])
 

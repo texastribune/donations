@@ -15,7 +15,7 @@ export const BLAST_LEVELS = {
     installmentPeriod: 'yearly',
     amount: '349',
   },
-  blastTaxExemptYearly: {
+  blastTaxExempt: {
     bucket: 'tax-exempt',
     bucketFull: 'Tax-exempt subscription',
     installmentPeriod: 'yearly',
@@ -33,10 +33,10 @@ export const BLAST_LEVELS = {
     installmentPeriod: 'yearly',
     amount: '199',
   },
-  blastLegislativeYearly: {
+  blastLegislativeSession: {
     bucket: 'legislative',
     bucketFull: 'Legislative session-only',
-    installmentPeriod: 'yearly',
+    installmentPeriod: 'session',
     amount: '240',
   },
 };
@@ -59,18 +59,6 @@ export const BLAST_FORM_STATE = {
     isValid: false,
     validator: validators.isNotEmpty,
     message: 'Enter your last name',
-  },
-  reason: {
-    value: '',
-    isValid: false,
-    validator: validators.isMaxLength(255),
-    message: 'Must be 255 characters or fewer',
-  },
-  zipcode: {
-    value: '',
-    isValid: false,
-    validator: validators.isEmptyOrZip,
-    message: 'Enter a 5-digit zip code',
   },
   pay_fees_value: {
     value: 'False',

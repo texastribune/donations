@@ -60,30 +60,6 @@
         </div>
       </div>
 
-      <div class="grid_row grid_wrap--s">
-        <div class="col_6 grid_separator">
-          <text-input
-            :required="false"
-            :store-module="storeModule"
-            :show-error="showErrors"
-            label-text="I am giving because"
-            base-classes="form__text form__text--standard"
-            name="reason"
-          />
-        </div>
-        <div class="col_6 grid_separator">
-          <text-input
-            :required="false"
-            :store-module="storeModule"
-            :show-error="showErrors"
-            label-text="zip code"
-            base-classes="form__text form__text--standard"
-            name="zipcode"
-            inputmode="numeric"
-          />
-        </div>
-      </div>
-
       <div class="grid_row grid_separator">
         <div class="col">
           <pay-fees :store-module="storeModule" base-classes="form__fees" />
@@ -131,7 +107,7 @@
                 :form-is-valid="isValid && card.isValid"
                 :is-fetching-token="isFetchingToken"
                 base-classes="form__submit button button--yellow button--l"
-                value="Donate"
+                value="Activate"
                 @setLocalValue="setLocalValue"
                 @setCardValue="setCardValue"
                 @onSubmit="onSubmit"

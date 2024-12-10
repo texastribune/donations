@@ -457,10 +457,7 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     shipping_city = form_data.get("shipping_city", None)
     shipping_street = form_data.get("shipping_street", None)
     shipping_state = form_data.get("shipping_state", None)
-    if "zipcode" in form_data:
-        zipcode = form_data["zipcode"]
-    else:
-        zipcode = form_data["shipping_postalcode"]
+    zipcode = form_data.get("zipcode", form_data.get("shipping_postalcode", None))
     website = form_data.get("website", None)
     business_name = form_data.get("business_name", None)
 
@@ -1570,7 +1567,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
         "referral_id": form.get("referral_id", None),
         "pay_fees": 'X' if form["pay_fees_value"] else None,
         "encouraged_by": form.get("reason", None),
-        "subscriber_email": form.get("subscriber_email", None),
+        "subscriber_email": form.get("stripeEmail", None),
         "quarantine": 'X' if quarantine else None,
     }
 
