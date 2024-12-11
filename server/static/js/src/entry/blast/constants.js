@@ -21,23 +21,24 @@ export const BLAST_LEVELS = {
     installmentPeriod: 'yearly',
     amount: '325',
   },
-  blastAcademicMonthly: {
-    bucket: 'academic',
-    bucketFull: 'Academic discount',
-    installmentPeriod: 'monthly',
-    amount: '20',
-  },
-  blastAcademicYearly: {
-    bucket: 'academic',
-    bucketFull: 'Academic discount',
-    installmentPeriod: 'yearly',
-    amount: '199',
-  },
+  // blastAcademicMonthly: {
+  //   bucket: 'academic',
+  //   bucketFull: 'Academic discount',
+  //   installmentPeriod: 'monthly',
+  //   amount: '20',
+  // },
+  // blastAcademicYearly: {
+  //   bucket: 'academic',
+  //   bucketFull: 'Academic discount',
+  //   installmentPeriod: 'yearly',
+  //   amount: '199',
+  // },
   blastLegislativeSession: {
     bucket: 'legislative',
     bucketFull: 'Legislative session-only',
     installmentPeriod: 'session',
-    amount: '240',
+    amount: '200',
+    isFeatured: true,
   },
 };
 

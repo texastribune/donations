@@ -5,6 +5,7 @@
       :key="bucket.id"
       :class="{
         'form-buckets__item--selected': selectedBucket === bucket.name,
+        'form-buckets__item--featured': bucket.isFeatured && selectedBucket !== bucket.name,
       }"
       class="form-buckets__item col_4 grid_separator"
     >
@@ -81,24 +82,26 @@ export default {
 
       Object.keys(allLevels).forEach(levelName => {
         const level = allLevels[levelName];
-        const { bucket, bucketFull } = level;
+        const { bucket, bucketFull, isFeatured } = level;
 
         if (tempBuckets[bucket]) {
           tempBuckets[bucket].levelNames.push(levelName);
         } else {
           tempBuckets[bucket] = {
             bucketFull,
+            isFeatured,
             levelNames: [levelName],
           };
         }
       });
 
       return Object.keys(tempBuckets).map((bucketName, index) => {
-        const { bucketFull, levelNames } = tempBuckets[bucketName];
+        const { bucketFull, isFeatured, levelNames } = tempBuckets[bucketName];
         return {
           id: index,
           name: bucketName,
           heading: bucketFull,
+          isFeatured: isFeatured,
           options: this.buildOptions(levelNames),
         };
       });

@@ -245,12 +245,6 @@ support.texastribune.org.
 """
 
 
-@app.route("/blast-vip")
-# @app.route("/blast-promo")
-def the_blastvip_form():
-    return redirect("/blastform", code=302)
-
-
 @app.route("/")
 @app.route("/levels.html")
 @app.route("/faq.html")
@@ -266,6 +260,13 @@ def index_html_route():
 def circle_html_route():
     query_string = request.query_string.decode("utf-8")
     return redirect("/circle?%s" % query_string, code=302)
+
+
+@app.route("/blast-vip")
+@app.route("/blast-promo")
+@app.route("/blastform")
+def blast_html_route():
+    return redirect("/blast", code=302)
 
 
 """
@@ -686,7 +687,6 @@ def business_form():
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )
 
-
 @app.route("/blast", methods=["GET", "POST"])
 def blast_form():
     if NEWSROOM["name"] != "texas":
@@ -726,7 +726,7 @@ def waco_form():
     )
 
 
-@app.route("/blast-promo")
+# @app.route("/blast-promo")
 def the_blast_promo_form():
     if NEWSROOM["name"] != "texas":
         return redirect(url_for("donate_form"))
@@ -779,7 +779,7 @@ def submit_blast_promo():
         return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
 
 
-@app.route("/blastform")
+# @app.route("/blastform")
 def the_blast_form():
     if NEWSROOM["name"] != "texas":
         return redirect(url_for("donate_form"))
@@ -1603,6 +1603,7 @@ def find_price(prices=[], period=None, pay_fees=False):
     nickname = "fees" if pay_fees else None
     interval = "month" if period == "monthly" else "year"
     for price in prices:
+        app.logger.info(f'id: interval -> {price["id"]}: {price["recurring"]["interval"]}')
         if price["recurring"]["interval"] == interval \
             and price["nickname"] == nickname:
             return price
