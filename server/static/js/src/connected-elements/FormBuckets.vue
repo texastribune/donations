@@ -5,10 +5,14 @@
       :key="bucket.id"
       :class="{
         'form-buckets__item--selected': selectedBucket === bucket.name,
+        'form-buckets__item--selected_border_bottom': (bucket.isDefault || bucket.isFeatured) && selectedBucket === bucket.name,
+        'form-buckets__item--unselected': !bucket.isFeatured && selectedBucket !== bucket.name,
+        'form-buckets__item--unselected_border_bottom': bucket.isDefault && selectedBucket !== bucket.name,
         'form-buckets__item--featured': bucket.isFeatured && selectedBucket !== bucket.name,
       }"
       class="form-buckets__item col_4 grid_separator"
     >
+      <div class="form-buckets__prompt">{{ bucket.prompt }}</div>
       <p class="form-buckets__header grid_separator">{{ bucket.heading }}</p>
       <radios
         :options="bucket.options"
@@ -17,6 +21,7 @@
         name="level"
         @updateCallback="onUpdate"
       />
+      <div class="form-buckets__footer">{{ bucket.footer }}</div>
     </div>
   </div>
 </template>
@@ -82,7 +87,8 @@ export default {
 
       Object.keys(allLevels).forEach(levelName => {
         const level = allLevels[levelName];
-        const { bucket, bucketFull, isFeatured } = level;
+        console.log(level);
+        const { bucket, bucketFull, isFeatured, isDefault, prompt, footer } = level;
 
         if (tempBuckets[bucket]) {
           tempBuckets[bucket].levelNames.push(levelName);
@@ -90,18 +96,24 @@ export default {
           tempBuckets[bucket] = {
             bucketFull,
             isFeatured,
+            isDefault,
+            prompt,
+            footer,
             levelNames: [levelName],
           };
         }
       });
 
       return Object.keys(tempBuckets).map((bucketName, index) => {
-        const { bucketFull, isFeatured, levelNames } = tempBuckets[bucketName];
+        const { bucketFull, isFeatured, isDefault, prompt, footer, levelNames } = tempBuckets[bucketName];
         return {
           id: index,
           name: bucketName,
           heading: bucketFull,
           isFeatured: isFeatured,
+          isDefault: isDefault,
+          prompt: prompt,
+          footer: footer,
           options: this.buildOptions(levelNames),
         };
       });

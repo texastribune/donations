@@ -2,26 +2,53 @@
 
   &__item {
     border-width: 3px;
-    border-color: $color-white-off;
     border-style: solid;
-    padding: $size-s;
+    padding: $size-s $size-s $size-l;
     transition: border-color 0.2s;
     
     &--selected {
       border-color: $color-yellow-tribune;
+
+      &_border_bottom {
+        border-bottom: 2rem solid $color-yellow-tribune;
+      }
     }
 
+    &--unselected {
+      border-color: $color-white-off;
+
+      &_border_bottom {
+        border-bottom: 2rem solid $color-white-off;
+      }
+    }
+  
     &--featured {
       border-color: $color-blue-light;
+      border-bottom: 2rem solid $color-blue-light;
     }
   }
   
-
-
   &__header {
     @include font-setting('secondary');
     font-size: $size-l;
     font-weight: bold;
     line-height: 1;
+  }
+
+  &__prompt {
+    @include font-setting('secondary');
+    position: absolute;
+    top: 23.5rem;
+    font-size: $size-xs;
+    font-weight: bold;
+  }
+
+  &__footer {
+    @include font-setting('secondary');
+    position: absolute;
+    top: 35.75rem;
+    font-size: $size-m;
+    font-weight: bold;
+    text-align: center;
   }
 }

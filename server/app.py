@@ -520,7 +520,10 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         donation_type=donation_type,
         bad_actor_request=bad_actor_request,
     )
-    charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
+    if donation_type == "blast":
+        charge_template = "blast-charge.html"
+    else:
+        charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
     bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
     gtm = {
         "event_value": amount,

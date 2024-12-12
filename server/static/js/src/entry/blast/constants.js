@@ -8,6 +8,8 @@ export const BLAST_LEVELS = {
     bucketFull: 'Standard subscription',
     installmentPeriod: 'monthly',
     amount: '40',
+    isDefault: true,
+    footer: 'Save 27% with yearly',
   },
   blastYearly: {
     bucket: 'standard',
@@ -39,6 +41,8 @@ export const BLAST_LEVELS = {
     installmentPeriod: 'session',
     amount: '200',
     isFeatured: true,
+    prompt: 'Get ahead with insider news!',
+    footer: 'January 17 - June 17',
   },
 };
 
