@@ -2,22 +2,63 @@
 
   &__item {
     border-width: 3px;
-    border-color: $color-white-off;
     border-style: solid;
-    padding: $size-s;
+    padding: $size-s $size-s $size-l;
     transition: border-color 0.2s;
-    
+    position: relative;
+
     &--selected {
       border-color: $color-yellow-tribune;
     }
-  }
-  
 
+    &--unselected {
+      border-color: $color-white-off;
+    }
+
+    &--featured {
+      border-color: $color-blue-light;
+    }
+  }
 
   &__header {
     @include font-setting('secondary');
     font-size: $size-l;
     font-weight: bold;
     line-height: 1;
+  }
+
+  &__prompt {
+    @include font-setting('secondary');
+    position: absolute;
+    bottom: 100%;
+    font-size: $size-xs;
+    font-weight: bold;
+  }
+
+  &__footer {
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    background-color: $color-yellow-tribune;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: $size-b;
+    font-weight: bold;
+    text-align: center;
+    padding: .5rem;
+  }
+
+  &__item--featured {
+    .form-buckets__footer {
+      background: $color-blue-light;
+    }
+  }
+}
+
+
+.blast-buckets {
+  .form-buckets__item {
+    padding-bottom: 4rem;
   }
 }
