@@ -5,29 +5,21 @@
     border-style: solid;
     padding: $size-s $size-s $size-l;
     transition: border-color 0.2s;
-    
+    position: relative;
+
     &--selected {
       border-color: $color-yellow-tribune;
-
-      &_border_bottom {
-        border-bottom: 2rem solid $color-yellow-tribune;
-      }
     }
 
     &--unselected {
       border-color: $color-white-off;
-
-      &_border_bottom {
-        border-bottom: 2rem solid $color-white-off;
-      }
     }
-  
+
     &--featured {
       border-color: $color-blue-light;
-      border-bottom: 2rem solid $color-blue-light;
     }
   }
-  
+
   &__header {
     @include font-setting('secondary');
     font-size: $size-l;
@@ -38,17 +30,35 @@
   &__prompt {
     @include font-setting('secondary');
     position: absolute;
-    top: 23.5rem;
+    bottom: 100%;
     font-size: $size-xs;
     font-weight: bold;
   }
 
   &__footer {
-    @include font-setting('secondary');
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    background-color: $color-yellow-tribune;
     position: absolute;
-    top: 35.75rem;
-    font-size: $size-m;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: $size-b;
     font-weight: bold;
     text-align: center;
+    padding: .5rem;
+  }
+
+  &__item--featured {
+    .form-buckets__footer {
+      background: $color-blue-light;
+    }
+  }
+}
+
+
+.blast-buckets {
+  .form-buckets__item {
+    padding-bottom: 4rem;
   }
 }

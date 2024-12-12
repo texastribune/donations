@@ -21,7 +21,7 @@
         name="level"
         @updateCallback="onUpdate"
       />
-      <div class="form-buckets__footer">{{ bucket.footer }}</div>
+      <div v-if="bucket.footer" class="form-buckets__footer">{{ bucket.footer }}</div>
     </div>
   </div>
 </template>

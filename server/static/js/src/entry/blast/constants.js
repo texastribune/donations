@@ -42,7 +42,7 @@ export const BLAST_LEVELS = {
     amount: '200',
     isFeatured: true,
     prompt: 'Get ahead with insider news!',
-    footer: 'January 17 - June 17',
+    footer: 'January 17 – June 17',
   },
 };
 

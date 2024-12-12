@@ -18,7 +18,7 @@
 
     <div class="grid_container--l grid_separator">
       <div class="grid_row">
-        <div class="col">
+        <div class="col blast-buckets">
           <form-buckets :all-levels="allLevels" :store-module="storeModule" />
         </div>
       </div>
