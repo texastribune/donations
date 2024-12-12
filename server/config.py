@@ -94,6 +94,7 @@ STRIPE_PRODUCTS = {
     "blastTaxExempt": os.getenv("STRIPE_PRODUCT_BLAST_TAX_EXEMPT", ""),
     "waco": os.getenv("STRIPE_PRODUCT_WACO_SUSTAINING", ""),
 }
+BLAST_LEGE_CAMPAIGN_ID = os.getenv("BLAST_LEGE_CAMPAIGN_ID", "")
 
 #######
 # Slack

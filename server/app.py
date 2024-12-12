@@ -46,6 +46,7 @@ from .config import (
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
     WACO_CAMPAIGN_ID,
+    BLAST_LEGE_CAMPAIGN_ID,
 )
 from .forms import (
     BlastForm,
@@ -522,9 +523,10 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     )
     if donation_type == "blast":
         charge_template = "blast-charge.html"
+        bundles = get_bundles("old")
     else:
         charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
-    bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
+        bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -566,6 +568,8 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     elif FormType is BlastForm:
         donation_type = "blast"
+        if form_data['installment_period'] == "session":
+            form_data["campaign_id"] = BLAST_LEGE_CAMPAIGN_ID
         function = add_stripe_donation.delay
     elif FormType is BlastFormLegacy:
         donation_type = "blast"
@@ -1605,8 +1609,8 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
 def find_price(prices=[], period=None, pay_fees=False):
     nickname = "fees" if pay_fees else None
     interval = "month" if period == "monthly" else "year"
+
     for price in prices:
-        app.logger.info(f'id: interval -> {price["id"]}: {price["recurring"]["interval"]}')
         if price["recurring"]["interval"] == interval \
             and price["nickname"] == nickname:
             return price
