@@ -28,10 +28,9 @@
   }
 
   &__prompt {
-    @include font-setting('secondary');
     position: absolute;
-    bottom: 100%;
-    font-size: $size-xs;
+    bottom: 102%;
+    font-size: $size-s;
     font-weight: bold;
   }
 
