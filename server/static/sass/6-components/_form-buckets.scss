@@ -30,7 +30,7 @@
   &__prompt {
     @include font-setting('secondary');
     position: absolute;
-    top: 0;
+    bottom: 100%;
     font-size: $size-xs;
     font-weight: bold;
   }
@@ -60,5 +60,8 @@
 .blast-buckets {
   .form-buckets__item {
     padding-bottom: 4rem;
+  }
+  div.form-buckets__item {
+    overflow: visible;
   }
 }
