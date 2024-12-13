@@ -72,7 +72,7 @@ export const BLAST_FORM_STATE = {
     message: null,
   },
   description: {
-    value: 'The Texas Tribune Circle Membership',
+    value: 'The Blast Subscription',
     isValid: true,
     validator: null,
     message: null,

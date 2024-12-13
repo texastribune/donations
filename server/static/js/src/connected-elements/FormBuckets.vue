@@ -87,7 +87,6 @@ export default {
 
       Object.keys(allLevels).forEach(levelName => {
         const level = allLevels[levelName];
-        console.log(level);
         const { bucket, bucketFull, isFeatured, isDefault, prompt, footer } = level;
 
         if (tempBuckets[bucket]) {
@@ -110,10 +109,10 @@ export default {
           id: index,
           name: bucketName,
           heading: bucketFull,
-          isFeatured: isFeatured,
-          isDefault: isDefault,
-          prompt: prompt,
-          footer: footer,
+          isFeatured,
+          isDefault,
+          prompt,
+          footer,
           options: this.buildOptions(levelNames),
         };
       });
