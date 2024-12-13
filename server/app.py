@@ -568,7 +568,10 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         function = add_stripe_donation.delay
     elif FormType is BlastForm:
         donation_type = "blast"
-        if form_data['installment_period'] == "session":
+        if form_data['installment_period'] == "one-time":
+            # this is the special session-only option
+            # the text comes through as one-time, but these are yearly subscriptions in Stripe
+            # we will need to close manually at the end of the session
             form_data["campaign_id"] = BLAST_LEGE_CAMPAIGN_ID
         function = add_stripe_donation.delay
     elif FormType is BlastFormLegacy:

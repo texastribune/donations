@@ -38,11 +38,11 @@ export const BLAST_LEVELS = {
   blastLegislativeSession: {
     bucket: 'legislative',
     bucketFull: 'Legislative session-only',
-    installmentPeriod: 'session',
+    installmentPeriod: 'one-time',
     amount: '200',
     isFeatured: true,
     prompt: 'Get ahead with insider news!',
-    footer: 'January 17 – June 17',
+    footer: 'January 14 – June 14',
   },
 };
 
