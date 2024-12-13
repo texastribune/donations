@@ -30,7 +30,7 @@
   &__prompt {
     @include font-setting('secondary');
     position: absolute;
-    bottom: 100%;
+    top: 0;
     font-size: $size-xs;
     font-weight: bold;
   }
