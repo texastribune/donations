@@ -86,10 +86,15 @@ STRIPE_PRODUCTS = {
     "leadershipYearly": os.getenv("STRIPE_PRODUCT_LEADERSHIP", ""),
     "editorMonthly": os.getenv("STRIPE_PRODUCT_EDITOR", ""),
     "editorYearly": os.getenv("STRIPE_PRODUCT_EDITOR", ""),
-    "blast": os.getenv("STRIPE_PRODUCT_BLAST", ""),
+    "blastMonthly": os.getenv("STRIPE_PRODUCT_BLAST", ""),
+    "blastYearly": os.getenv("STRIPE_PRODUCT_BLAST", ""),
+    "blastAcademicMonthly": os.getenv("STRIPE_PRODUCT_BLAST_ACADEMIC", ""),
+    "blastAcademicYearly": os.getenv("STRIPE_PRODUCT_BLAST_ACADEMIC", ""),
+    "blastLegislativeSession": os.getenv("STRIPE_PRODUCT_BLAST_LEGISLATIVE", ""),
     "blastTaxExempt": os.getenv("STRIPE_PRODUCT_BLAST_TAX_EXEMPT", ""),
     "waco": os.getenv("STRIPE_PRODUCT_WACO_SUSTAINING", ""),
 }
+BLAST_LEGE_CAMPAIGN_ID = os.getenv("BLAST_LEGE_CAMPAIGN_ID", "")
 
 #######
 # Slack

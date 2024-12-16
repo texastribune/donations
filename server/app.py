@@ -46,9 +46,11 @@ from .config import (
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
     WACO_CAMPAIGN_ID,
+    BLAST_LEGE_CAMPAIGN_ID,
 )
 from .forms import (
     BlastForm,
+    BlastFormLegacy,
     BlastPromoForm,
     BusinessMembershipForm,
     CircleForm,
@@ -244,12 +246,6 @@ support.texastribune.org.
 """
 
 
-@app.route("/blast-vip")
-# @app.route("/blast-promo")
-def the_blastvip_form():
-    return redirect("/blastform", code=302)
-
-
 @app.route("/")
 @app.route("/levels.html")
 @app.route("/faq.html")
@@ -265,6 +261,13 @@ def index_html_route():
 def circle_html_route():
     query_string = request.query_string.decode("utf-8")
     return redirect("/circle?%s" % query_string, code=302)
+
+
+@app.route("/blast-vip")
+@app.route("/blast-promo")
+@app.route("/blastform")
+def blast_html_route():
+    return redirect("/blast", code=302)
 
 
 """
@@ -456,10 +459,7 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
     shipping_city = form_data.get("shipping_city", None)
     shipping_street = form_data.get("shipping_street", None)
     shipping_state = form_data.get("shipping_state", None)
-    if "zipcode" in form_data:
-        zipcode = form_data["zipcode"]
-    else:
-        zipcode = form_data["shipping_postalcode"]
+    zipcode = form_data.get("zipcode", form_data.get("shipping_postalcode", None))
     website = form_data.get("website", None)
     business_name = form_data.get("business_name", None)
 
@@ -521,8 +521,12 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         donation_type=donation_type,
         bad_actor_request=bad_actor_request,
     )
-    charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
-    bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
+    if donation_type == "blast":
+        charge_template = "blast-charge.html"
+        bundles = get_bundles("old")
+    else:
+        charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
+        bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
     gtm = {
         "event_value": amount,
         "event_label": "once" if installment_period == "None" else installment_period,
@@ -563,6 +567,14 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         donation_type = "circle"
         function = add_stripe_donation.delay
     elif FormType is BlastForm:
+        donation_type = "blast"
+        if form_data['installment_period'] == "one-time":
+            # this is the special session-only option
+            # the text comes through as one-time, but these are yearly subscriptions in Stripe
+            # we will need to close manually at the end of the session
+            form_data["campaign_id"] = BLAST_LEGE_CAMPAIGN_ID
+        function = add_stripe_donation.delay
+    elif FormType is BlastFormLegacy:
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
@@ -685,6 +697,24 @@ def business_form():
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )
 
+@app.route("/blast", methods=["GET", "POST"])
+def blast_form():
+    if NEWSROOM["name"] != "texas":
+        return redirect(url_for("donate_form"))
+
+    bundles = get_bundles("blast")
+    template = "blast-form.html"
+
+    if request.method == "POST":
+        return validate_form(BlastForm, bundles=bundles, template=template)
+
+    return render_template(
+        template,
+        bundles=bundles,
+        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
+        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+    )
+
 
 @app.route("/waco", methods=["GET", "POST"])
 def waco_form():
@@ -706,7 +736,7 @@ def waco_form():
     )
 
 
-@app.route("/blast-promo")
+# @app.route("/blast-promo")
 def the_blast_promo_form():
     if NEWSROOM["name"] != "texas":
         return redirect(url_for("donate_form"))
@@ -759,13 +789,13 @@ def submit_blast_promo():
         return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM)
 
 
-@app.route("/blastform")
+# @app.route("/blastform")
 def the_blast_form():
     if NEWSROOM["name"] != "texas":
         return redirect(url_for("donate_form"))
 
     bundles = get_bundles("old")
-    form = BlastForm()
+    form = BlastFormLegacy()
     if request.args.get("amount"):
         amount = request.args.get("amount")
     else:
@@ -776,7 +806,7 @@ def the_blast_form():
     referral_id = request.args.get("referralId", default="")
 
     return render_template(
-        "blast-form.html",
+        "blast-form-legacy.html",
         form=form,
         campaign_id=campaign_id,
         referral_id=referral_id,
@@ -794,7 +824,7 @@ def submit_blast():
 
     bundles = get_bundles("old")
     app.logger.info(pformat(request.form))
-    form = BlastForm(request.form)
+    form = BlastFormLegacy(request.form)
 
     name = " ".join((request.form["first_name"], request.form["last_name"]))
     email_is_valid = validate_email(request.form["stripeEmail"])
@@ -1547,7 +1577,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
         "referral_id": form.get("referral_id", None),
         "pay_fees": 'X' if form["pay_fees_value"] else None,
         "encouraged_by": form.get("reason", None),
-        "subscriber_email": form.get("subscriber_email", None),
+        "subscriber_email": form.get("stripeEmail", None),
         "quarantine": 'X' if quarantine else None,
     }
 
@@ -1582,6 +1612,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
 def find_price(prices=[], period=None, pay_fees=False):
     nickname = "fees" if pay_fees else None
     interval = "month" if period == "monthly" else "year"
+
     for price in prices:
         if price["recurring"]["interval"] == interval \
             and price["nickname"] == nickname:

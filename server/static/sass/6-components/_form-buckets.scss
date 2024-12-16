@@ -2,22 +2,77 @@
 
   &__item {
     border-width: 3px;
-    border-color: $color-white-off;
     border-style: solid;
-    padding: $size-s;
+    padding: $size-s $size-s $size-l;
     transition: border-color 0.2s;
-    
+    position: relative;
+
     &--selected {
       border-color: $color-yellow-tribune;
     }
-  }
-  
 
+    &--unselected {
+      border-color: $color-white-off;
+    }
+
+    &--featured {
+      border-color: $color-blue-light;
+    }
+  }
 
   &__header {
     @include font-setting('secondary');
     font-size: $size-l;
     font-weight: bold;
     line-height: 1;
+  }
+
+  &__prompt {
+    left: 0;
+    bottom: 100%;
+    font-size: $size-s;
+    font-weight: bold;
+    padding-bottom: .5rem;
+    width: 100%;
+    text-align: left;
+
+    @include mq($from: bp-m) {
+      text-align: center;
+      position: absolute;
+    }
+  }
+
+  &__footer {
+    text-transform: uppercase;
+    letter-spacing: .02em;
+    background-color: $color-yellow-tribune;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    font-size: $size-b;
+    font-weight: bold;
+    text-align: center;
+    padding: .5rem;
+  }
+
+  &__item--featured {
+    .form-buckets__footer {
+      background: $color-blue-light;
+    }
+  }
+}
+
+
+.blast-buckets {
+  // add spacing for value prop
+  @include mq($from: bp-m) {
+    margin-top: $size-l;
+  }
+  .form-buckets__item {
+    padding-bottom: 4rem;
+  }
+  div.form-buckets__item {
+    overflow: visible;
   }
 }

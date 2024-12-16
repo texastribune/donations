@@ -66,7 +66,6 @@ class BaseForm(FlaskForm):
     pay_fees_value = HiddenField(
         u"Pay Fees Value", [validators.AnyOf(["True", "False"])]
     )
-    reason = StringField(u"I am giving because", [validators.Length(max=255)])
     campaign_id = HiddenField("Campaign ID")
     referral_id = HiddenField("Referral ID")
 
@@ -76,6 +75,7 @@ class DonateForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    reason = StringField(u"I am giving because", [validators.Length(max=255)])
 
 
 class CircleForm(BaseForm):
@@ -83,6 +83,7 @@ class CircleForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    reason = StringField(u"I am giving because", [validators.Length(max=255)])
     level = HiddenField(u"Level", [validators.InputRequired()])
 
 
@@ -96,6 +97,7 @@ class BusinessMembershipForm(BaseForm):
     shipping_street = StringField("Shipping Street", [validators.Length(max=255)])
     shipping_postalcode = StringField(u"ZIP Code", [validators.Length(max=20)])
     installment_period = StringField([validators.AnyOf(["yearly", "monthly"])])
+    reason = StringField(u"I am giving because", [validators.Length(max=255)])
     level = HiddenField(u"Level", [validators.InputRequired()])
 
 
@@ -104,9 +106,16 @@ class WacoForm(BaseForm):
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
     )
     zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
+    reason = StringField(u"I am giving because", [validators.Length(max=255)])
 
 
-class BlastForm(FlaskForm):
+class BlastForm(BaseForm):
+    installment_period = StringField(
+        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "one-time"])]
+    )
+    level = HiddenField(u"Level", [validators.InputRequired()])
+
+class BlastFormLegacy(FlaskForm):
     first_name = StringField(
         u"First name", [validators.required(message="Your first name is required.")]
     )

@@ -204,6 +204,9 @@
     "STRIPE_WEBHOOK_SECRET": {
       "required": true
     },
+    "BLAST_LEGE_CAMPAIGN_ID": {
+      "required": false
+    },
     "WACO_CAMPAIGN_ID": {
       "required": false
     },
