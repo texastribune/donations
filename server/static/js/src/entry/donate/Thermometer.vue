@@ -12,7 +12,7 @@
       <!-- <strong>{{ data[0].label }} raised today</strong> <br />
       to unlock {{ data[1].label }} in matching funds. -->
       <!-- Version used for 2024 EOY -->
-      <strong>{{ data[0].label }} of {{ data[1].label }} in new sustaining members</strong> <br />
+      <strong>{{ data[0].label }} of {{ data[1].label }} new sustaining members</strong> <br />
       to unlock a $5,000 challenge from our CEO.
     </div>
   </div>
