@@ -8,8 +8,12 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} raised today</strong> <br />
-      to unlock {{ data[1].label }} in matching funds.
+      <!-- Use the first version during standard drives -->
+      <!-- <strong>{{ data[0].label }} raised today</strong> <br />
+      to unlock {{ data[1].label }} in matching funds. -->
+      <!-- Version used for 2024 EOY -->
+      <strong>{{ data[0].label }} of {{ data[1].label }} new sustaining members</strong> <br />
+      to unlock a $5,000 challenge from our CEO.
     </div>
   </div>
 </template>
@@ -26,7 +30,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '$15,000', value: 15000 },
+        { slug: 'goal', label: '50', value: 50 },
       ],
     };
   },
@@ -43,7 +47,7 @@ export default {
 
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/gt2024.json';
+      const url = 'https://membership.texastribune.org/eoy2024.json';
 
       axios
         .get(url)
