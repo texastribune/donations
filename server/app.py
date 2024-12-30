@@ -70,7 +70,7 @@ from .util import (
 )
 
 ZONE = timezone(TIMEZONE)
-USE_THERMOMETER = True
+USE_THERMOMETER = False
 
 DONATION_TYPE_INFO = {
     "membership": {
