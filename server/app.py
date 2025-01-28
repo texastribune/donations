@@ -252,6 +252,7 @@ support.texastribune.org.
 @app.route("/index.html")
 @app.route("/memberform")
 @app.route("/donateform")
+@app.route("/donate/")
 def index_html_route():
     return redirect("/donate", code=302)
 
