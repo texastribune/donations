@@ -1541,7 +1541,7 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
         )
         # Since a subscription schedule defaults to any charge being on hold for
         # an hour before going through, we manually push through the first charge
-        invoice_id = subscription.get("subscription", {}).get("invoice", "")
+        invoice_id = subscription.get("subscription", {}).get("latest_invoice", "")
         stripe.Invoice.finalize_invoice(invoice_id)
         stripe.Invoice.pay(invoice_id)
     else:
