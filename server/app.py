@@ -1593,9 +1593,6 @@ def process_subscription(subscription=None, invoice=None):
     # It starts by looking for a matching Contact (or creating one).
     subscription_meta = subscription["metadata"]
 
-    # When migrating existing recurring donations from salesforce to stripe subscriptions, we pass a field
-    # called "skip_sync" to the subscription metadata to let us know that we don't need to push anything back
-    # to salesforce. In that instance, we exit the function at this point.
     rdo_id = subscription_meta.get("rdo_id", False)
     if rdo_id:
         rdo = RDO.get(id=rdo_id)
