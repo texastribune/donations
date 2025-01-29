@@ -1537,7 +1537,13 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
                 "iterations": 36 if period == "monthly" else 3,
                 "metadata": metadata,
             }],
+            expand=["subscription"],
         )
+        # Since a subscription schedule defaults to any charge being on hold for
+        # an hour before going through, we manually push through the first charge
+        invoice_id = subscription.get("subscription", {}).get("invoice", "")
+        stripe.Invoice.finalize_invoice(invoice_id)
+        stripe.Invoice.pay(invoice_id)
     else:
         subscription = stripe.Subscription.create(
             customer=customer["id"],
@@ -1623,13 +1629,6 @@ def process_subscription(subscription=None, invoice=None):
             )
             send_email_new_business_membership(account=account, contact=contact)
         else:
-            # For a circle membership, we set up a subscription schedule which defaults to all charges
-            # being on hold for an hour before going through. We manually push through the first charge
-            # at subscription creation here.
-            if donation_type == "circle" and invoice_status == "draft":
-                stripe.Invoice.finalize_invoice(invoice["id"])
-                invoice = stripe.Invoice.pay(invoice["id"])
-
             rdo = log_rdo(type=donation_type, contact=contact, customer=customer, subscription=subscription)
 
     update_next_opportunity(
