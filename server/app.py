@@ -1238,7 +1238,8 @@ def process_stripe_event(event):
     if event_type == "payout.paid":
         payout_paid.delay(event)
     if event_type == "customer.subscription.created":
-        # customer_subscription_created.delay(event_object["id"])
+        # this is now routed through the payment_intent.succeeded listener
+        # which handles this bit of business in the process_subscription func
         pass
     if event_type == "payment_intent.succeeded":
         payment_intent_succeeded.delay(event_object["id"])
