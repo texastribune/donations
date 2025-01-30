@@ -998,8 +998,6 @@ def payment_intent_succeeded(payment_intent_id):
         except stripe.error.StripeError as e:
             app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
 
-        # the initial invoice tied to a subscription is handled in the
-        # customer_subscription_created func, so we ignore it here
         if invoice['billing_reason'] == "subscription_create" or rerun == "subscription":
             process_subscription(
                 subscription=subscription,
