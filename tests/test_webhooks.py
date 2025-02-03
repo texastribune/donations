@@ -51,9 +51,10 @@ def generate_header(**kwargs) -> str:
     header = "t=%d,%s=%s" % (timestamp, scheme, signature)
     return header
 
-def mock_contact_get_or_create(email, first_name=None, last_name=None, zipcode=None):
+def mock_contact_get_or_create(email, first_name=None, last_name=None, zipcode=None, id=None):
     print("Creating contact...")
     contact = Contact()
+    contact.id = id
     contact.email = email
     contact.first_name = first_name
     contact.last_name = last_name
