@@ -982,80 +982,15 @@ def payout_paid(event):
         logging.debug(response)
 
 
-@celery.task(name="app.customer_subscription_created")
-def customer_subscription_created(subscription_id):
-    # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
-    # It starts by looking for a matching Contact (or creating one).
-    subscription = stripe.Subscription.retrieve(subscription_id, expand=["latest_invoice"])
-    subscription_meta = subscription["metadata"]
-
-    # When migrating existing recurring donations from salesforce to stripe subscriptions, we pass a field
-    # called "skip_sync" to the subscription metadata to let us know that we don't need to push anything back
-    # to salesforce. In that instance, we exit the function at this point.
-    if subscription_meta.get("skip_sync", False):
-        return None
-
-    donation_type = subscription_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
-    skip_notification = subscription_meta.get("skip_notification", False)
-
-    invoice = subscription["latest_invoice"]
-    if type(invoice) is str:
-        invoice = stripe.Invoice.retrieve(invoice)
-
-    invoice_status = invoice["status"]
-    if invoice_status == "open":
-        raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
-                        Please follow up with the subscription to proceed.")
-    customer = stripe.Customer.retrieve(subscription["customer"])
-    contact = get_contact(customer)
-
-    # For a business membership, look for a matching Account (or create one).
-    # Then add a recurring donation to the Account. Next, add an Affiliation to
-    # link the Contact with the Account. Lastly, send a notification to Slack (if configured)
-    # and send an email notification about the new membership.
-    if donation_type == "business_membership":
-        if contact.work_email is None:
-            contact.work_email = contact.email
-            contact.save()
-
-        account = get_account(customer)
-        rdo = log_rdo(type=donation_type, account=account, customer=customer, subscription=subscription)
-        affiliation = Affiliation.get_or_create(
-            account=account, contact=contact, role="Business Member Donor"
-        )
-        send_email_new_business_membership(account=account, contact=contact)
-    else:
-        # For a circle membership, we set up a subscription schedule which defaults to all charges
-        # being on hold for an hour before going through. We manually push through the first charge
-        # at subscription creation here.
-        if donation_type == "circle" and invoice_status == "draft":
-            stripe.Invoice.finalize_invoice(invoice["id"])
-            invoice = stripe.Invoice.pay(invoice["id"])
-            invoice_status = invoice["status"]
-
-        rdo = log_rdo(type=donation_type, contact=contact, customer=customer, subscription=subscription)
-
-    # if we already received an invoice object, as in the case of a circle membership,
-    # use that, otherwise retrieve the latest invoice from stripe
-    if not subscription["trial_end"] and invoice_status != "draft":
-        update_next_opportunity(
-            opps=rdo.opportunities(ordered_pledges=True),
-            invoice=invoice,
-        )
-
-    if not skip_notification and donation_type != "blast":
-        notify_slack(contact=contact, rdo=rdo)
-
-
 @celery.task(name="app.payment_intent_succeeded")
 def payment_intent_succeeded(payment_intent_id):
     payment_intent = stripe.PaymentIntent.retrieve(payment_intent_id, expand=["invoice.subscription"])
     invoice = payment_intent["invoice"]
+
     if invoice:
         app.logger.info(f"Payment intent invoice: {invoice}")
         subscription = invoice.get("subscription", {})
         rerun = invoice.get("metadata", {}).get("rerun")
-        opp_sync = subscription.get("metadata", {}).get("skip_sync")
         try:
             stripe.PaymentIntent.modify(
                 payment_intent_id,
@@ -1064,9 +999,13 @@ def payment_intent_succeeded(payment_intent_id):
         except stripe.error.StripeError as e:
             app.logger.error(f"Issue modifying {payment_intent['id']} with message: {e}")
 
-        # the initial invoice tied to a subscription is handled in the
-        # customer_subscription_created func, so we ignore it here
-        if invoice['billing_reason'] != "subscription_create" or rerun or opp_sync:
+        if invoice['billing_reason'] == "subscription_create" or rerun == "subscription":
+            process_subscription(
+                subscription=subscription,
+                invoice=invoice,
+            )
+
+        if invoice['billing_reason'] != "subscription_create" or rerun == "payment":
             update_next_opportunity(
                 invoice=invoice,
                 rerun=rerun,
@@ -1300,7 +1239,9 @@ def process_stripe_event(event):
     if event_type == "payout.paid":
         payout_paid.delay(event)
     if event_type == "customer.subscription.created":
-        customer_subscription_created.delay(event_object["id"])
+        # this is now routed through the payment_intent.succeeded listener
+        # which handles this bit of business in the process_subscription func
+        pass
     if event_type == "payment_intent.succeeded":
         payment_intent_succeeded.delay(event_object["id"])
     if event_type == "customer.subscription.deleted":
@@ -1596,7 +1537,13 @@ def create_subscription(donation_type=None, customer=None, form=None, quarantine
                 "iterations": 36 if period == "monthly" else 3,
                 "metadata": metadata,
             }],
+            expand=["subscription"],
         )
+        # Since a subscription schedule defaults to any charge being on hold for
+        # an hour before going through, we manually push through the first charge
+        invoice_id = subscription.get("subscription", {}).get("latest_invoice", "")
+        stripe.Invoice.finalize_invoice(invoice_id)
+        stripe.Invoice.pay(invoice_id)
     else:
         subscription = stripe.Subscription.create(
             customer=customer["id"],
@@ -1639,6 +1586,55 @@ def create_payment_intent(donation_type=None, customer=None, form=None, quaranti
         confirm = True
     )
     return payment
+
+
+def process_subscription(subscription=None, invoice=None):
+    # Adds an RDO (and the pieces required therein) for different kinds of recurring donations.
+    # It starts by looking for a matching Contact (or creating one).
+    subscription_meta = subscription["metadata"]
+
+    rdo_id = subscription_meta.get("rdo_id", False)
+    if rdo_id:
+        rdo = RDO.get(id=rdo_id)
+    else:
+        donation_type = subscription_meta.get("donation_type", subscription["plan"]["metadata"].get("type", "membership"))
+        skip_notification = subscription_meta.get("skip_notification", False)
+
+        if type(invoice) is str:
+            invoice = stripe.Invoice.retrieve(invoice)
+
+        invoice_status = invoice["status"]
+        if invoice_status == "open":
+            raise Exception(f"Subscription {subscription['id']} was created but its first invoice is still open.\
+                            Please follow up with the subscription to proceed.")
+        customer = stripe.Customer.retrieve(subscription["customer"])
+        contact = get_contact(customer)
+
+        # For a business membership, look for a matching Account (or create one).
+        # Then add a recurring donation to the Account. Next, add an Affiliation to
+        # link the Contact with the Account. Lastly, send a notification to Slack (if configured)
+        # and send an email notification about the new membership.
+        if donation_type == "business_membership":
+            if contact.work_email is None:
+                contact.work_email = contact.email
+                contact.save()
+
+            account = get_account(customer)
+            rdo = log_rdo(type=donation_type, account=account, customer=customer, subscription=subscription)
+            affiliation = Affiliation.get_or_create(
+                account=account, contact=contact, role="Business Member Donor"
+            )
+            send_email_new_business_membership(account=account, contact=contact)
+        else:
+            rdo = log_rdo(type=donation_type, contact=contact, customer=customer, subscription=subscription)
+
+    update_next_opportunity(
+        opps=rdo.opportunities(ordered_pledges=True),
+        invoice=invoice,
+    )
+
+    if not skip_notification and donation_type != "blast":
+        notify_slack(contact=contact, rdo=rdo)
 
 
 def get_contact(customer):
