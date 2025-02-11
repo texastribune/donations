@@ -1642,12 +1642,14 @@ def get_contact(customer):
     first_name, last_name = name_splitter(customer.get("name"))
     address = customer.get("address", None)
     zipcode = address.get("postal_code", None) if address else None
+    metadata = customer.get("metadata", {})
     app.logger.info("----Getting contact....")
     contact = Contact.get_or_create(
         email=customer.get("email", None),
         first_name=first_name,
         last_name=last_name,
-        zipcode=zipcode
+        zipcode=zipcode,
+        id=metadata.get("sf_id", None),
     )
 
     # TODO had initially commented out these next two ifs but within a day the "Subscriber Subscriber"

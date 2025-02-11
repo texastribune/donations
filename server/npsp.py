@@ -1039,8 +1039,8 @@ class Contact(SalesforceObject):
         }
 
     @classmethod
-    def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None):
-        contact = cls.get(email=email)
+    def get_or_create(cls, email, first_name=None, last_name=None, zipcode=None, id=None):
+        contact = cls.get(id=id, email=email)
         if contact:
             logging.debug(f"Contact found: {contact}")
             return contact
