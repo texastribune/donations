@@ -260,6 +260,7 @@ export default {
       let amount = getter('amount');
       // comment in the next line for testing purposes
       // const abTesting = getter('proof');
+      // eslint-disable-next-line no-unused-vars
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
