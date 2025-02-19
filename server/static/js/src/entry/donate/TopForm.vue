@@ -260,27 +260,24 @@ export default {
       let amount = getter('amount');
       // comment in the next line for testing purposes
       // const abTesting = getter('proof');
-      // eslint-disable-next-line no-unused-vars
       let needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
         if (amount === initAmount) {
           amount = initAltAmount;
-          // eslint-disable-next-line no-unused-vars
-          needsUpdate = true;
+          // needsUpdate = true;
         };
       } else {
         if (amount === initAltAmount) {
           amount = initAmount;
-          // eslint-disable-next-line no-unused-vars
-          needsUpdate = true;
+          // needsUpdate = true;
         };
       };
       // only update if the current value matches the initial amount or the initial monthly amount
-      // UPDATE 2/25: turning this off until we can be more forthcoming about the final amount at donation submission
-      // if (needsUpdate) {
-      //   this.updateValue({ storeModule, key: 'amount', value: amount})
-      // };
+      // UPDATE 2/25: effectively turning this off until we can be more forthcoming about the final amount at donation submission
+      if (needsUpdate) {
+        this.updateValue({ storeModule, key: 'amount', value: amount})
+      };
     },
   }
 
