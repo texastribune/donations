@@ -274,9 +274,10 @@ export default {
         };
       };
       // only update if the current value matches the initial amount or the initial monthly amount
-      if (needsUpdate) {
-        this.updateValue({ storeModule, key: 'amount', value: amount})
-      };
+      // UPDATE 2/25: turning this off until we can be more forthcoming about the final amount at donation submission
+      // if (needsUpdate) {
+      //   this.updateValue({ storeModule, key: 'amount', value: amount})
+      // };
     },
   }
 
