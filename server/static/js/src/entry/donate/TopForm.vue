@@ -260,7 +260,7 @@ export default {
       let amount = getter('amount');
       // comment in the next line for testing purposes
       // const abTesting = getter('proof');
-      let needsUpdate = false;
+      const needsUpdate = false;
 
       if (initAltFrequency.includes(frequency)) {
         if (amount === initAmount) {
