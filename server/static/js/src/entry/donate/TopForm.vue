@@ -266,11 +266,13 @@ export default {
       if (initAltFrequency.includes(frequency)) {
         if (amount === initAmount) {
           amount = initAltAmount;
+          // eslint-disable-next-line no-unused-vars
           needsUpdate = true;
         };
       } else {
         if (amount === initAltAmount) {
           amount = initAmount;
+          // eslint-disable-next-line no-unused-vars
           needsUpdate = true;
         };
       };
