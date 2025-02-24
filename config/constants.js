@@ -4,7 +4,7 @@ const SVG_LOCAL_DIR = './server/static/svg';
 const SVG_LIB_DIR = './node_modules/@texastribune/queso-ui/assets/icons/base/';
 const SVG_OUTPUT_SPRITE = './server/templates/includes/base_icons.html';
 
-const SCSS_FILES = ['account', 'blast', 'business', 'charge', 'circle', 'donate', 'old', 'waco'];
+const SCSS_FILES = ['account', 'blast', 'business', 'business-waco', 'charge', 'circle', 'donate', 'old', 'waco'];
 
 const SVG_LIB_FILES = [
   'bars',
