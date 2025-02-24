@@ -25,7 +25,7 @@
     </div>
 
     <div class="grid_container--m">
-      <benefits />
+      <!-- <benefits /> -->
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
