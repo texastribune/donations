@@ -243,7 +243,7 @@ import ManualPay from '../../payment-elements/ManualPay.vue';
 import ManualSubmit from '../../payment-elements/ManualSubmit.vue';
 import NativePay from '../../payment-elements/NativePay.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
-import Benefits from './Benefits.vue';
+// import Benefits from './Benefits.vue';
 import formStarter from '../../mixins/connected-form/starter';
 import { US_STATES_SELECT_LIST, BUSINESS_LEVELS } from './constants';
 
@@ -260,7 +260,7 @@ export default {
     ManualSubmit,
     NativePay,
     FormBuckets,
-    Benefits,
+    // Benefits,
   },
 
   mixins: [formStarter],
