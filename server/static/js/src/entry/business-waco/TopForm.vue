@@ -196,7 +196,7 @@
         </div>
 
         <p class="subtext">
-          The Texas Tribune is a 501(c)(3), and your organization's gift is tax
+          The Waco Bridge is a 501(c)(3), and your organization's gift is tax
           deductible
         </p>
       </div>
