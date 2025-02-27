@@ -679,10 +679,11 @@ def circle_form():
 @app.route("/business", methods=["GET", "POST"])
 def business_form():
     if NEWSROOM["name"] != "texas":
-        return redirect(url_for("donate_form"))
-
-    bundles = get_bundles("business")
-    template = "business-form.html"
+        bundles = get_bundles(f"business-{NEWSROOM['name']}")
+        template = f"business-{NEWSROOM['name']}-form.html"
+    else:
+        bundles = get_bundles("business")
+        template = "business-form.html"
 
     if request.method == "POST":
         return validate_form(
@@ -696,6 +697,7 @@ def business_form():
         bundles=bundles,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
+        newsroom=NEWSROOM,
     )
 
 @app.route("/blast", methods=["GET", "POST"])
