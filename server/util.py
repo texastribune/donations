@@ -80,11 +80,11 @@ def send_slack_message(message=None, username="moneybot"):
 
     if not ENABLE_SLACK or not message:
         return
-    message["token"] = SLACK_API_KEY
+    headers = {"Authorization": f"Bearer {SLACK_API_KEY}"}
     message["username"] = username
     url = "https://slack.com/api/chat.postMessage"
     try:
-        response = requests.post(url, params=message)
+        response = requests.post(url, headers=headers, params=message)
         slack_response = json.loads(response.text)
         if not slack_response["ok"]:
             raise Exception(slack_response["error"])
