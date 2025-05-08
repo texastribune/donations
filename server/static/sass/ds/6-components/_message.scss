@@ -40,4 +40,9 @@
       transform: initial;
     }
   }
+
+  &__promo {
+    display: flex;
+    gap: $size-xxs;
+  }
 }
