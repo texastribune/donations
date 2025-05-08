@@ -1,6 +1,6 @@
 <template>
   <p v-if="!loading && !error">
-    <strong>We've raised {{ data[0].label }} </strong> toward a goal of {{ data[1].label }}
+    <strong>{{ data[0].label }} new members</strong> toward a goal of {{ data[1].label }}
   </p>
 </template>
 
