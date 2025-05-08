@@ -181,6 +181,10 @@
       <a href="https://policies.google.com/terms">Terms of Service</a> apply.
     </p>
 
+    <p class="subtext">
+      See the <a href="https://www.texastribune.org/spring-member-drive-drawing/">full details for the Spring Member Drive Raffle</a>
+    </p>
+
     <local-hidden :value="stripeToken" name="stripeToken" />
     <local-hidden :value="recaptchaToken" name="recaptchaToken" />
     <hidden name="description" :store-module="storeModule" />
