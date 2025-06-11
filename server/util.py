@@ -1,5 +1,6 @@
-import json
+import boto3
 import hashlib
+import json
 import logging
 import smtplib
 import stripe
@@ -8,6 +9,9 @@ from collections import defaultdict
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 from .config import (
+    MWS_ACCESS_KEY,
+    MWS_SECRET_KEY,
+    AMAZON_S3_BUCKET,
     BUSINESS_MEMBER_RECIPIENT,
     DEFAULT_MAIL_SENDER,
     ENABLE_SLACK,
@@ -365,3 +369,15 @@ def donation_adder(customer: str, donation_type: str, amount: int, pay_fees: boo
         }]
     )
     return subscription
+
+
+def _push_to_s3(filename, contents):
+    # Create an S3 client, gives you lowest level access to S3 control
+    s3_client = boto3.client('s3',
+                             aws_access_key_id=MWS_ACCESS_KEY,
+                             aws_secret_access_key=MWS_SECRET_KEY,)
+
+    # Wtite the JSON-formatted SF data to the S3 bucket
+    s3_client.put_object(ACL='public-read',
+                         Body=json.dumps(contents, indent=2),
+                         Bucket=AMAZON_S3_BUCKET, Key=filename)

@@ -67,6 +67,7 @@ from .util import (
     send_slack_message,
     send_cancellation_notification,
     name_splitter,
+    _push_to_s3,
 )
 
 ZONE = timezone(TIMEZONE)
@@ -1171,6 +1172,12 @@ def authorization_notification(payload):
     notify_slack(contact=contact, opportunity=opportunity)
     if contact.duplicate_found:
         send_multiple_account_warning(contact)
+
+
+@celery.task(name="app.push_donor_list")
+def push_donor_list():
+    donor_list = Account.list_by_giving()
+    _push_to_s3(filename='donors-waco-365.json', contents=donor_list)
 
 
 def get_zip(details=None):
