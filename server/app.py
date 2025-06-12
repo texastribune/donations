@@ -882,6 +882,11 @@ def daf():
         bundles=bundles,
     )
 
+@app.route("/donor-wall")
+def donor_wall():
+    bundles = get_bundles("donate")
+    return render_template("donor-wall.html", bundles=bundles)
+
 @app.route("/error")
 def error():
     bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
