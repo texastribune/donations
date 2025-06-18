@@ -1,9 +1,11 @@
+import boto3
 import csv
 import json
 import logging
 import os
+from collections import defaultdict, OrderedDict
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from io import StringIO
 from re import match
 
@@ -987,6 +989,60 @@ class Account(SalesforceObject):
         account.created = False
 
         return account
+
+    def list_by_giving(
+        cls, sf_connection=None
+    ):
+        """
+        Adapted from donor wall pieces from the TT app.
+        Puts accounts into giving bins for easy and sorted display on a donor wall.
+        TODO: Work with our Salesforce contractor to add newsroom specific SF fields for last 365 days of giving.
+        """
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        query = """
+            SELECT
+                Name,
+                Text_For_Donor_Wall__c,
+                Total_Donor_Wall_This_Year__c
+                FROM Account
+                WHERE RecordTypeId = '01216000001IhHL'
+                AND Total_Donor_Wall_This_Year__c > 0
+            """
+        
+        donors = sf.query(query)
+        results = defaultdict(list)
+        less_than_10 = []
+        for record in donors:
+            attribution = record['Text_For_Donor_Wall__c']
+            attributions = {'sort_by': record['Name'],
+                    'attribution': attribution}
+            amount = Decimal(record['Total_Donor_Wall_This_Year__c'])
+            amount = amount.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+            if amount < 10:
+                less_than_10.append(attributions)
+            else:
+                results[amount].append(attributions)
+
+        sorted_results = OrderedDict()
+
+        # sort by decreasing amount of donation
+        for k, v in sorted(results.items(), key=lambda x: x, reverse=True):
+            items = sorted(v, key=lambda x: x['sort_by'])
+            sorted_results['${:0,.0f}'.format(k)] = [
+                    {'attribution': x['attribution']}
+                    for x in items]
+
+        # hacky, but tack this on the end so it'll show last:
+        less_than_10 = sorted(less_than_10, key=lambda x: x['sort_by'])
+        less_than_10 = [
+                {'attribution': x['attribution']}
+                for x in less_than_10]
+
+        sorted_results['Less Than $10'] = less_than_10
+
+        return sorted_results
+
 
     def save(self):
         self.sf.save(self)
