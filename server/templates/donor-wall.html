@@ -9,6 +9,8 @@
   <meta name="twitter:card" content="summary_large_image">
 {% endblock %}
 
+{% block title %}Donors and Members | The Texas Tribune{% endblock %}
+
 {% block head_scripts %}
 {% if form_data and message %}
 <script>
@@ -32,6 +34,21 @@
       <p class="has-b-btm-marg">The Texas Tribune also earns income from <a href="https://festival.texastribune.org/">Texas Tribune Festival</a> ticket sales; outside rentals of <a href="/studio-919/downtown-austin-event-space-congress/">Studio 919</a>, our events space; and subscriptions to <a href="/theblast/">The Blast</a>, our politics newsletter. That revenue is not reported here but can be found in aggregate on our <a href="http://static.texastribune.org.s3.amazonaws.com/media/documents/990_TexasTribune_Final_111417.pdf">Form 990</a>.</p>
 
     </div>
+
+    <div class="has-notch has-bg-yellow has-notch--full"></div>
+    <table class="investors-member-year c-table c-table--striped l-width-full">
+    {% for key, donorGroup in sortedDonors %}
+      <tr><td>
+      <h3 class="t-lh-m">{{ key }}</h3>
+      <ul class="l-list t-links{% if donorGroup|length > 3 %} l-multicol{% endif %}">
+      {% for donor in donorGroup %}
+        <li class="{% if not loop.last %}t-lh-m{% endif %}">{{ donor }}</li>
+      {% endfor %}
+      </ul>
+      </td></tr>
+      </td></tr>
+  {% endfor %}
+    </table>
   </main>
 {% endblock %}
 
