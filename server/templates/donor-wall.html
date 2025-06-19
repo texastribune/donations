@@ -37,15 +37,14 @@
 
     <div class="has-notch has-bg-yellow has-notch--full"></div>
     <table class="investors-member-year c-table c-table--striped l-width-full">
-    {% for key, donorGroup in sortedDonors %}
+    {% for donorGroup in sortedDonors %}
       <tr><td>
-      <h3 class="t-lh-m">{{ key }}</h3>
-      <ul class="l-list t-links{% if donorGroup|length > 3 %} l-multicol{% endif %}">
-      {% for donor in donorGroup %}
-        <li class="{% if not loop.last %}t-lh-m{% endif %}">{{ donor }}</li>
+      <h3 class="t-lh-m">{{ donorGroup }}</h3>
+      <ul class="l-list t-links{% if sortedDonors[donorGroup]|length > 3 %} l-multicol{% endif %}">
+      {% for donor in sortedDonors[donorGroup] %}
+        <li class="{% if not loop.last %}t-lh-m{% endif %}">{{ donor.attribution }} {{donor.created}}</li>
       {% endfor %}
       </ul>
-      </td></tr>
       </td></tr>
   {% endfor %}
     </table>

@@ -1004,10 +1004,12 @@ class Account(SalesforceObject):
         query = """
             SELECT
                 Name,
+                CreatedDate,
                 Text_For_Donor_Wall__c,
                 Total_Donor_Wall_This_Year__c
                 FROM Account
                 WHERE RecordTypeId = '01216000001IhHL'
+                AND CreatedDate < LAST_N_DAYS:365
                 AND Total_Donor_Wall_This_Year__c > 0
             """
 
@@ -1017,7 +1019,7 @@ class Account(SalesforceObject):
         for record in donors:
             attribution = record['Text_For_Donor_Wall__c']
             attributions = {'sort_by': record['Name'],
-                    'attribution': attribution}
+                    'attribution': attribution, 'CreatedDate': record['CreatedDate']}
             amount = Decimal(record['Total_Donor_Wall_This_Year__c'])
             amount = amount.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
             if amount < 10:
@@ -1031,7 +1033,7 @@ class Account(SalesforceObject):
         for k, v in sorted(results.items(), key=lambda x: x, reverse=True):
             items = sorted(v, key=lambda x: x['sort_by'])
             sorted_results['${:0,.0f}'.format(k)] = [
-                    {'attribution': x['attribution']}
+                    {'attribution': x['attribution'], 'created': x['CreatedDate']}
                     for x in items]
 
         # hacky, but tack this on the end so it'll show last:
