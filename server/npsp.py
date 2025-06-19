@@ -414,7 +414,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
                 AND StageName = '{stage_name}'
             """
-        
+
         order_by = f"""ORDER BY Expected_Giving_Date__c ASC""" if asc_order else ""
 
         query = f"""
@@ -614,7 +614,7 @@ class RDO(SalesforceObject, CampaignMixin):
             date = datetime.now(tz=ZONE)
         else:
             date = datetime.fromtimestamp(date)
-        
+
         date_formatted = date.strftime("%Y-%m-%d")
 
         if contact is not None:
@@ -990,6 +990,7 @@ class Account(SalesforceObject):
 
         return account
 
+    @classmethod
     def list_by_giving(
         cls, sf_connection=None
     ):
@@ -1009,7 +1010,7 @@ class Account(SalesforceObject):
                 WHERE RecordTypeId = '01216000001IhHL'
                 AND Total_Donor_Wall_This_Year__c > 0
             """
-        
+
         donors = sf.query(query)
         results = defaultdict(list)
         less_than_10 = []

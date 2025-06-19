@@ -886,8 +886,9 @@ def daf():
 @app.route("/donor-wall")
 def donor_wall():
     bundles = get_bundles("donate")
-    sortedDonors = [('$1000', ['John Doe', 'Jane Doe', 'Will Riker', 'Katherine Janeway']),('$100', ['John Doe', 'Jane Doe', 'Will Riker'])]
-    return render_template("donor-wall.html", bundles=bundles, sortedDonors=sortedDonors)
+    sorted_donors = Account.list_by_giving()
+    # sorted_donors = [('$1000', ['John Doe', 'Jane Doe', 'Will Riker', 'Katherine Janeway']),('$100', ['John Doe', 'Jane Doe', 'Will Riker'])]
+    return render_template("donor-wall.html", bundles=bundles, sortedDonors=sorted_donors)
 
 @app.route("/error")
 def error():
