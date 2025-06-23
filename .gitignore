@@ -25,3 +25,5 @@ server/templates/includes/base_icons.html
 .mypy_cache/
 .vscode/
 cov.html
+
+.idea
