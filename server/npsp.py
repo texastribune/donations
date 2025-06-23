@@ -1009,7 +1009,7 @@ class Account(SalesforceObject):
                 Total_Donor_Wall_This_Year__c
                 FROM Account
                 WHERE RecordTypeId = '01216000001IhHL'
-                AND CreatedDate > LAST_N_DAYS:365
+                AND CreatedDate = LAST_N_DAYS:365
                 AND Total_Donor_Wall_This_Year__c > 0
             """
 
