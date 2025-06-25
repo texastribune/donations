@@ -883,7 +883,7 @@ def daf():
         bundles=bundles,
     )
 
-@app.route("/donor-wall")
+@app.route("/members")
 def donor_wall():
     bundles = get_bundles("donate")
     sorted_donors = Account.list_by_giving()

@@ -1039,7 +1039,7 @@ class Account(SalesforceObject):
         # hacky, but tack this on the end so it'll show last:
         less_than_10 = sorted(less_than_10, key=lambda x: x['sort_by'])
         less_than_10 = [
-                {'attribution': x['attribution']}
+                {'attribution': x['attribution'], 'created': x['CreatedDate']}
                 for x in less_than_10]
 
         sorted_results['Less Than $10'] = less_than_10
