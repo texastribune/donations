@@ -15,6 +15,7 @@ from pprint import pformat
 import stripe
 from amazon_pay.client import AmazonPayClient
 from amazon_pay.ipn_handler import IpnHandler
+from celery import shared_task
 from flask import Flask, redirect, render_template, request, send_from_directory, url_for
 from flask_talisman import Talisman
 from nameparser import HumanName
@@ -1179,7 +1180,7 @@ def authorization_notification(payload):
         send_multiple_account_warning(contact)
 
 
-@celery.task(name="app.push_donor_list")
+@shared_task()
 def push_donor_list():
     donor_list = Account.list_by_giving()
     _push_to_s3(filename='donors-waco-365.json', contents=donor_list)
