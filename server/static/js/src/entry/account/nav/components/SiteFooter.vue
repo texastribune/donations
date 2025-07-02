@@ -12,7 +12,7 @@
         />
 
         <p class="t-size-s has-text-white">
-          &copy; {{ dates.thisYear }} The Texas Tribune
+          &copy; {{ dates.thisYear }} The Waco Bridge
         </p>
       </div>
 

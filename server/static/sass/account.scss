@@ -1,5 +1,6 @@
 // base
 @import '@texastribune/queso-ui/assets/scss/1-settings/all';
+@import '1-settings/colors-waco'; // color overrides (need to include for utility classes)
 @import '@texastribune/queso-ui/assets/scss/2-tools/all';
 @import '@texastribune/queso-ui/assets/scss/3-resets/all';
 @import '@texastribune/queso-ui/assets/scss/4-elements/all';

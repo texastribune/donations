@@ -5,7 +5,8 @@
         href="https://www.texastribune.org"
         class="c-navbar__logo l-align-center-self"
       >
-        <img alt="The Texas Tribune" src="../../svg/tt.svg" />
+        <!-- <img alt="The Texas Tribune" src="../../svg/tt.svg" /> -->
+        <img src="../../../../../../img/waco-header-logo.png" width="166" height="40"/>
       </a>
 
       <div class="c-navbar__content t-size-xxs t-uppercase t-lsp-m">
