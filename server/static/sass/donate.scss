@@ -8,6 +8,7 @@
 // Include components & typography as needed
 @import '5-typography/links';
 @import '5-typography/typography';
+@import '5-typography/t-helpers';
 
 @import '6-components/buttons';
 @import '6-components/contact';
@@ -19,6 +20,7 @@
 @import '6-components/quotes';
 @import '6-components/rotate-words';
 @import '6-components/smd';
+@import '6-components/table';
 @import '6-components/thermometer';
 
 // used for promotional messages
@@ -45,4 +47,8 @@ h2 {
   flex-wrap: wrap;
   align-items: center;
   line-height: 1;
+}
+
+.investors-member-year h3 {
+  font-size: $size-m;
 }
