@@ -885,9 +885,14 @@ def daf():
 
 @app.route("/members")
 def donor_wall():
-    bundles = get_bundles("donate")
-    sorted_donors = Account.list_by_giving()
-    return render_template("donor-wall.html", bundles=bundles, sortedDonors=sorted_donors)
+    if NEWSROOM["name"] == "waco":
+        bundles = get_bundles("waco")
+        sorted_donors = Account.list_by_giving()
+        return render_template("waco-donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
+    else:
+        bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
+        message = "Something went wrong!"
+        return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM), 404
 
 @app.route("/error")
 def error():
