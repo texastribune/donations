@@ -33,6 +33,19 @@ blockquote {
   padding: 0;
 }
 
+h1 {
+  font-size: $size-xxl;
+  line-height: 1.2;
+}
+
+h2 {
+  font-size: $size-xl;
+}
+
+h3 {
+  font-size: $size-l;
+}
+
 a {
   color: inherit;
   text-decoration: none;
