@@ -1001,26 +1001,46 @@ class Account(SalesforceObject):
         """
         sf = SalesforceConnection() if sf_connection is None else sf_connection
 
+        # query = """
+        #     SELECT
+        #         Name,
+        #         CreatedDate,
+        #         Text_For_Donor_Wall__c,
+        #         Total_Donor_Wall_This_Year__c
+        #         FROM Account
+        #         WHERE RecordTypeId = '01216000001IhHL'
+        #         AND CreatedDate = LAST_N_DAYS:365
+        #         AND Total_Donor_Wall_This_Year__c > 0
+        #         AND ShippingPostalCode IN ('76701', '76702', '76703', '76704', '76705', '76706', '76707', '76708', '76710', '76711', '76712', '76714', '76715', '76716', '76797', '76798', '76799', '78727')
+        #     """
+
         query = """
-            SELECT
-                Name,
-                CreatedDate,
-                Text_For_Donor_Wall__c,
-                Total_Donor_Wall_This_Year__c
-                FROM Account
-                WHERE RecordTypeId = '01216000001IhHL'
-                AND CreatedDate = LAST_N_DAYS:365
-                AND Total_Donor_Wall_This_Year__c > 0
+            SELECT Opportunity.Account.Name, Opportunity.Account.Id, SUM(Opportunity.Amount) TotalGiving, MIN(Opportunity.CloseDate) CreatedDate
+                FROM Opportunity
+                WHERE Opportunity.StageName = 'Closed Won'
+                AND Opportunity.Newsroom__c = 'Waco Bridge'
+                GROUP BY Opportunity.Account.Name, Opportunity.Account.Id
             """
 
         donors = sf.query(query)
+        donor_ids = []
+        for record in donors:
+            donor_ids.append(record['Id'])
+        
+        get_text_query = f"""
+            SELECT Id, Text_For_Donor_Wall__c
+                FROM Account
+                WHERE Id IN {tuple(donor_ids)}
+            """
+        donor_texts = sf.query(get_text_query)
         results = defaultdict(list)
         less_than_10 = []
         for record in donors:
-            attribution = record['Text_For_Donor_Wall__c']
+            donor_text = list(filter(lambda x:x["Id"]==record["Id"], donor_texts))
+            attribution = donor_text[0]['Text_For_Donor_Wall__c']
             attributions = {'sort_by': record['Name'],
                     'attribution': attribution, 'CreatedDate': record['CreatedDate']}
-            amount = Decimal(record['Total_Donor_Wall_This_Year__c'])
+            amount = Decimal(record['TotalGiving'])
             amount = amount.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
             if amount < 10:
                 less_than_10.append(attributions)
