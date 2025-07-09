@@ -1062,7 +1062,7 @@ class Account(SalesforceObject):
                 {'attribution': x['attribution'], 'created': x['CreatedDate']}
                 for x in less_than_10]
 
-        sorted_results['Less Than $10'] = less_than_10
+        sorted_results['Less than $10'] = less_than_10
 
         return sorted_results
 
