@@ -14,7 +14,7 @@
           :display="{ color: 'black' }"
         >
           <template #text>
-            Check your inbox for an email from The Texas Tribune with the
+            Check your inbox for an email from The Waco Bridge with the
             subject line "Please confirm your login email change," then click to
             verify your email. Having trouble? Contact
           </template>

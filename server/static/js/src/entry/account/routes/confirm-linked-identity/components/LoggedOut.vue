@@ -2,7 +2,7 @@
   <div>
     <h1 class="has-xl-btm-marg">To verify, please log in</h1>
     <p class="has-b-btm-marg">
-      To link <strong>{{ emailToLink }}</strong> to the Texas Tribune account
+      To link <strong>{{ emailToLink }}</strong> to the Waco Bridge account
       created with <strong>{{ existingEmail }}</strong
       >, please log into your account.
     </p>
@@ -78,7 +78,7 @@ export default {
         gaLabel: this.ga.userPortal.labels['login-linked-identity'],
       });
 
-      window.location.href = 'https://www.texastribune.org/';
+      window.location.href = 'https://www.wacobridge.org/';
     },
   },
 };

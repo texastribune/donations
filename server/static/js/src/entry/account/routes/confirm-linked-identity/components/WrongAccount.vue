@@ -2,11 +2,11 @@
   <div>
     <h1 class="has-xl-btm-marg">You're logged into the wrong account</h1>
     <p class="has-b-btm-marg">
-      To link <strong>{{ emailToLink }}</strong> to the Texas Tribune account
+      To link <strong>{{ emailToLink }}</strong> to the Waco Bridge account
       created with <strong>{{ existingEmail }}</strong
-      >, you need to log into Texas Tribune account:
+      >, you need to log into Waco Bridge account:
       <strong>{{ existingEmail }}</strong
-      >. Right now, you're logged into Texas Tribune account:
+      >. Right now, you're logged into Waco Bridge account:
       <strong>{{ user.email }}</strong
       >.
     </p>
@@ -77,7 +77,7 @@ export default {
     },
 
     goToHomePage() {
-      window.location.href = 'https://www.texastribune.org/';
+      window.location.href = 'https://www.wacobridge.org/';
     },
   },
 };

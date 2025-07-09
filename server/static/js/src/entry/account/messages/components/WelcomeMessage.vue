@@ -12,7 +12,7 @@
     <template #content>
       <div class="has-text-gray-dark t-size-s t-links-underlined">
         <p>
-          Thanks for creating your Texas Tribune account! You can use this login
+          Thanks for creating your Waco Bridge account! You can use this login
           to edit your contact information and view your donation history and
           yearly tax receipt.
         </p>

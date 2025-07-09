@@ -13,10 +13,10 @@
 
         <p class="has-s-btm-marg t-links-underlined t-size-b">
           <template v-if="isUnverifiedError">
-            Thanks for creating a Texas Tribune account &mdash; you’re almost
+            Thanks for creating a Waco Bridge account &mdash; you’re almost
             done! To view your account, we need you to verify your email
             address: <strong>{{ user.email }}</strong
-            >. Check your inbox for an email from The Texas Tribune with the
+            >. Check your inbox for an email from The Waco Bridge with the
             subject line &quot;Please confirm your account,&quot; then click to
             verify your email.
           </template>

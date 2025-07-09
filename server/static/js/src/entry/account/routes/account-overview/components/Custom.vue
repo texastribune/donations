@@ -2,7 +2,7 @@
   <summary-box heading="membership">
     <template #content>
       <p class="has-text-gray-dark">
-        Thank you for being a Texas Tribune member!
+        Thank you for being a Waco Bridge member!
       </p>
     </template>
 

@@ -10,7 +10,7 @@
       </template>
       <template #extra>
         <p v-if="pwResetSuccess" class="t-size-xs has-text-gray-dark">
-          Check your inbox for an email from The Texas Tribune with the subject
+          Check your inbox for an email from The Waco Bridge with the subject
           line &quot;Reset your password.&quot;
         </p>
         <p v-if="pwResetFailure" class="t-size-xs has-text-gray-dark">

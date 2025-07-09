@@ -51,7 +51,7 @@ export const BASE_FORM_STATE = {
     message: null,
   },
   description: {
-    value: 'The Texas Tribune Membership',
+    value: 'The Waco Bridge Membership',
     isValid: true,
     validator: null,
     message: null,

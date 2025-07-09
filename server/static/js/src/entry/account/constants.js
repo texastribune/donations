@@ -10,7 +10,7 @@ export const AUTH_PORTAL_AUDIENCE = process.env.AUTH0_PORTAL_AUDIENCE;
 export const AUTH_PORTAL_CLIENT_ID = process.env.AUTH0_PORTAL_CLIENT_ID;
 export const AUTH_PORTAL_LOGOUT_COMPLETE_URL = `${window.location.origin}/account/logged-out/`;
 export const AUTH_PORTAL_LOGIN_COMPLETE_URL = `${window.location.origin}/account/logged-in/`;
-export const TITLE_SUFFIX = ' | Your Texas Tribune Account';
+export const TITLE_SUFFIX = ' | Your Waco Bridge Account';
 export const SENTRY_DSN = process.env.SENTRY_DSN;
 export const SENTRY_ENVIRONMENT = process.env.SENTRY_ENVIRONMENT;
 export const ENABLE_SENTRY = process.env.ENABLE_SENTRY.toLowerCase() === 'true';
@@ -34,7 +34,7 @@ export const GA_USER_PORTAL_NAV = {
     'community-guidelines': 'community guidelines',
     'support-landing': 'support landing',
     'privacy-policy': 'privacy policy',
-    'texas-tribune-home': 'texas tribune home',
+    'waco-bridge-home': 'waco bridge home',
     'circle-landing': 'circle landing',
     'donor-wall': 'donor wall',
   },

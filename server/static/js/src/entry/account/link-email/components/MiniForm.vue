@@ -12,7 +12,7 @@
           account.
         </p>
         <p class="t-size-xs has-text-gray">
-          Check your inbox for an email from The Texas Tribune with the subject
+          Check your inbox for an email from The Waco Bridge with the subject
           line "Link your account" and click to verify.
         </p>
       </template>

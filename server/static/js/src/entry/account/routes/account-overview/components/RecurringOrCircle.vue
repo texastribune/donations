@@ -2,7 +2,7 @@
   <summary-box heading="membership">
     <template #content>
       <p v-if="nextTransaction.card" class="has-text-gray-dark has-l-btm-marg">
-        Thank you for being a Texas Tribune member! Your next
+        Thank you for being a Waco Bridge member! Your next
         <strong>{{ nextTransaction.period }}</strong> donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> will be charged
         on <strong>{{ nextTransaction.date | longDate }}</strong
@@ -11,7 +11,7 @@
         >.
       </p>
       <p v-else class="has-text-gray-dark">
-        Thank you for being a Texas Tribune member! Your next
+        Thank you for being a Waco Bridge member! Your next
         {{ nextTransaction.period }} donation of
         <strong>{{ nextTransaction.amount | currency }}</strong> is due on
         <strong>{{ nextTransaction.date | longDate }}</strong

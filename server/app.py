@@ -1330,7 +1330,7 @@ def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
     opportunity.stripe_customer = customer["id"]
     opportunity.campaign_id = form["campaign_id"]
     opportunity.referral_id = form["referral_id"]
-    opportunity.description = "Texas Tribune Membership"
+    opportunity.description = "Waco Bridge Membership"
     opportunity.agreed_to_pay_fees = form["pay_fees_value"]
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
@@ -1399,7 +1399,7 @@ def add_recurring_donation(contact=None, form=None, customer=None, quarantine=Fa
     rdo.stripe_customer = customer["id"]
     rdo.campaign_id = form["campaign_id"]
     rdo.referral_id = form["referral_id"]
-    rdo.description = "Texas Tribune Sustaining Membership"
+    rdo.description = "Waco Bridge Sustaining Membership"
     rdo.agreed_to_pay_fees = form["pay_fees_value"]
     rdo.encouraged_by = form["reason"]
     rdo.lead_source = "Stripe"
