@@ -134,6 +134,8 @@ MWS_SECRET_KEY = os.getenv("MWS_SECRET_KEY", "")
 AMAZON_MERCHANT_ID = os.getenv("AMAZON_MERCHANT_ID", "")
 AMAZON_SANDBOX = bool_env("AMAZON_SANDBOX")
 AMAZON_CAMPAIGN_ID = os.getenv("AMAZON_CAMPAIGN_ID", "")
+AMAZON_S3_BUCKET = os.getenv("AMAZON_S3_BUCKET", "membership.texastribune.org")
+
 #######
 # Tasks
 #

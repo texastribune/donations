@@ -1,9 +1,11 @@
+import boto3
 import csv
 import json
 import logging
 import os
+from collections import defaultdict, OrderedDict
 from datetime import datetime
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from io import StringIO
 from re import match
 
@@ -412,7 +414,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
                 WHERE Stripe_Customer_ID__c = '{stripe_customer_id}'
                 AND StageName = '{stage_name}'
             """
-        
+
         order_by = f"""ORDER BY Expected_Giving_Date__c ASC""" if asc_order else ""
 
         query = f"""
@@ -612,7 +614,7 @@ class RDO(SalesforceObject, CampaignMixin):
             date = datetime.now(tz=ZONE)
         else:
             date = datetime.fromtimestamp(date)
-        
+
         date_formatted = date.strftime("%Y-%m-%d")
 
         if contact is not None:
@@ -987,6 +989,83 @@ class Account(SalesforceObject):
         account.created = False
 
         return account
+
+    @classmethod
+    def list_by_giving(
+        cls, sf_connection=None
+    ):
+        """
+        Adapted from donor wall pieces from the TT app.
+        Puts accounts into giving bins for easy and sorted display on a donor wall.
+        TODO: Work with our Salesforce contractor to add newsroom specific SF fields for last 365 days of giving.
+        """
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        # query = """
+        #     SELECT
+        #         Name,
+        #         CreatedDate,
+        #         Text_For_Donor_Wall__c,
+        #         Total_Donor_Wall_This_Year__c
+        #         FROM Account
+        #         WHERE RecordTypeId = '01216000001IhHL'
+        #         AND CreatedDate = LAST_N_DAYS:365
+        #         AND Total_Donor_Wall_This_Year__c > 0
+        #         AND ShippingPostalCode IN ('76701', '76702', '76703', '76704', '76705', '76706', '76707', '76708', '76710', '76711', '76712', '76714', '76715', '76716', '76797', '76798', '76799', '78727')
+        #     """
+
+        query = """
+            SELECT Opportunity.Account.Name, Opportunity.Account.Id, SUM(Opportunity.Amount) TotalGiving, MIN(Opportunity.CloseDate) CreatedDate
+                FROM Opportunity
+                WHERE Opportunity.StageName = 'Closed Won'
+                AND Opportunity.Newsroom__c = 'Waco Bridge'
+                GROUP BY Opportunity.Account.Name, Opportunity.Account.Id
+            """
+
+        donors = sf.query(query)
+        donor_ids = []
+        for record in donors:
+            donor_ids.append(record['Id'])
+        
+        get_text_query = f"""
+            SELECT Id, Text_For_Donor_Wall__c
+                FROM Account
+                WHERE Id IN {tuple(donor_ids)}
+            """
+        donor_texts = sf.query(get_text_query)
+        results = defaultdict(list)
+        less_than_10 = []
+        for record in donors:
+            donor_text = list(filter(lambda x:x["Id"]==record["Id"], donor_texts))
+            attribution = donor_text[0]['Text_For_Donor_Wall__c']
+            attributions = {'sort_by': record['Name'],
+                    'attribution': attribution, 'CreatedDate': record['CreatedDate']}
+            amount = Decimal(record['TotalGiving'])
+            amount = amount.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
+            if amount < 10:
+                less_than_10.append(attributions)
+            else:
+                results[amount].append(attributions)
+
+        sorted_results = OrderedDict()
+
+        # sort by decreasing amount of donation
+        for k, v in sorted(results.items(), key=lambda x: x, reverse=True):
+            items = sorted(v, key=lambda x: x['sort_by'])
+            sorted_results['${:0,.0f}'.format(k)] = [
+                    {'attribution': x['attribution'], 'created': x['CreatedDate']}
+                    for x in items]
+
+        # hacky, but tack this on the end so it'll show last:
+        less_than_10 = sorted(less_than_10, key=lambda x: x['sort_by'])
+        less_than_10 = [
+                {'attribution': x['attribution'], 'created': x['CreatedDate']}
+                for x in less_than_10]
+
+        sorted_results['Less Than $10'] = less_than_10
+
+        return sorted_results
+
 
     def save(self):
         self.sf.save(self)
