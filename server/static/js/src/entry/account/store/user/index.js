@@ -325,14 +325,15 @@ const getters = {
     !isNeverGiven &&
     !isRecurringDonor &&
     !!membershipExpirationDate &&
-    !isMDev &&
     !isCircleDonor,
 
   isRecurringDonor: (
     { data: { is_recurring_donor: isRecurringDonor, is_mdev: isMDev } },
     { isCircleDonor, membershipExpirationDate }
-  ) =>
-    isRecurringDonor && !!membershipExpirationDate && !isMDev && !isCircleDonor,
+  ) => {
+    console.log(isRecurringDonor && !isCircleDonor);
+    return isRecurringDonor && !isCircleDonor
+  },
 
   isCustomDonor: (
     { data: { is_mdev: isMDev } },
@@ -340,21 +341,21 @@ const getters = {
   ) =>
     (isMDev && !isCircleDonor) || (!isNeverGiven && !membershipExpirationDate),
 
-  hasGivenNotCustom: (_, { isCircleDonor, isSingleDonor, isRecurringDonor }) =>
-    isCircleDonor || isSingleDonor || isRecurringDonor,
+  hasGivenNotCustom: (_, { isCircleDonor, isSingleDonor, isRecurringDonor, isCustomDonor }) =>
+    isCircleDonor || isSingleDonor || isRecurringDonor || isCustomDonor,
 
   isExpired: (_, { membershipExpirationDate }) => {
     if (membershipExpirationDate) {
       return isPast(parse(membershipExpirationDate));
     }
-    return null;
+    return false;
   },
 
   willExpire: (_, { isExpired, nextTransaction, membershipExpirationDate }) => {
     if (membershipExpirationDate) {
       return !nextTransaction && !isExpired;
     }
-    return null;
+    return false;
   },
 
   transactions: ({ data: { transactions = [] } }) =>

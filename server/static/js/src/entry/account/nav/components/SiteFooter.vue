@@ -3,7 +3,7 @@
     <div class="c-site-footer__inner l-container--xl l-align-center-x">
       <div class="c-site-footer__col">
         <div class="has-b-btm-marg">
-          <icon name="bug" :display="{ color: 'yellow', inlineSize: '4rem' }" />
+          <img src="../../../../../../img/waco-footer-logo.png" width="150" height="150"/>
         </div>
 
         <div
@@ -148,10 +148,10 @@
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.footer"
-              :ga-event-label="ga.userPortalNav.labels['texas-tribune-home']"
-              href="https://www.texastribune.org/"
+              :ga-event-label="ga.userPortalNav.labels['waco-bridge-home']"
+              href="https://www.wacobridge.org/"
             >
-              texastribune.org
+              wacobridge.org
             </a>
           </li>
         </ul>
