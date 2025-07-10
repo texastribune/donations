@@ -3,9 +3,9 @@
     <a href="https://{{ newsroom.domain }}" class="c-navbar-newsroom__logo">
       <img src="{{ url_for('static', filename='/img/waco-header-logo.png') }}" width="166" height="40" alt="{{ newsroom.title }} logo"/>
     </a>
-    <div style="align-items: center;">
+    <div>
       <button class="button c-navbar-newsroom__newsletter_btn">
-        <a href="https://{{ newsroom.domain }}/newsletters">Newsletter</a>
+        <a href="https://{{ newsroom.domain }}/newsletter">Newsletter</a>
       </button>
       <button class="c-navbar-newsroom__menu_btn" id="menu-toggle" aria-controls="menu" aria-expanded="false">
         <svg class="svg-icon" width="30" height="30" aria-hidden="true" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -29,10 +29,13 @@
   <div class="c-menu__inner">
     <ul>
       <li>
-        <a href="/account">Account</a>
+        <a href="https://{{ newsroom.domain }}/category/education">Education</a>
       </li>
       <li>
-        <a href="https://support.{{ newsroom.domain }}/members/">Our Supporters</a>
+        <a href="https://{{ newsroom.domain }}/category/waco-government-and-growth/">Growth</a>
+      </li>
+      <li>
+        <a href="https://{{ newsroom.domain }}/category/community">Community</a>
       </li>
       <li>
         <a href="https://{{ newsroom.domain }}/about/">About</a>
