@@ -117,6 +117,7 @@ axios.interceptors.response.use(
 
     if (response) {
       const { data, status } = response;
+      console.log(response);
       errorDetail.status = status;
       errorDetail.extra.data = data;
       errorDetail.extra.gotResponse = true;
