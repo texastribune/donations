@@ -90,7 +90,7 @@ body {
 }
 
 .c-navbar-newsroom {
-  border-bottom: 2px solid #d6d5a0;
+  border-bottom: 2px solid $color-tan;
   padding: 1.85rem 0 1rem;
   margin-bottom: 3rem;
 
@@ -107,9 +107,19 @@ body {
     width: 150px;
   }
 
-  &__btn {
+  &__newsletter_btn {
+    color: $color-white-pure;
+    padding: 8px 25px;
+    background-color: $color-black-off;
+    border: 1px transparent;
+    border-radius: 20px;
+    font-size: 16px;
+  }
+
+  &__menu_btn {
     background-color: transparent;
     border: none;
+    padding-left: 10px;
   }
 
   @media (min-width: 768px) {
@@ -135,7 +145,7 @@ body {
 
   @media only screen and (min-width: 1000px) {
     width: 25vw;
-    padding: 60px;
+    padding: 80px 20px 20px 20px;
   }
 
   &[aria-hidden='false'] {
@@ -144,6 +154,7 @@ body {
 
   &__logo {
     text-align: center;
+    padding-top: 40px;
   }
 
   &__inner {
@@ -155,11 +166,9 @@ body {
     list-style: none;
     padding: 0;
     margin: 0;
-    font-size: 27px;
-    line-height: 43.2px;
 
     li {
-      border-top: solid white 1px;
+      border-top: solid 1px $color-tan;
       padding: 5px 0;
 
       &:first-child {
@@ -214,7 +223,7 @@ body {
     padding: clamp(min(1.5rem, 3.5rem), -0.06rem + 10.2vw, max(3.06rem, 5.06rem));
     width: 1300px;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 30px;
     word-break: break-word;
   }
@@ -228,7 +237,7 @@ body {
     }
   }
   &__list-top-border {
-    border-top: solid white 1px;
+    border-top: solid 1px $color-tan;
   }
   &__list-top {
     margin-top: 10px;
