@@ -272,6 +272,11 @@ def blast_html_route():
     return redirect("/blast", code=302)
 
 
+@app.route("/members/")
+def members_html_route():
+    return redirect("/members", code=302)
+
+
 """
 Read the Webpack assets manifest and then provide the
 scripts, including cache-busting hache, as template context.
