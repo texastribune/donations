@@ -165,7 +165,6 @@ function refreshTokens() {
 store
   .dispatch(`${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`)
   .then(() => {
-    console.log('in the store .then');
     const isReady = store.getters[`${TOKEN_USER_MODULE}/isReady`];
     const router = new VueRouter({
       base: '/account',
@@ -186,18 +185,19 @@ store
     router.onError(err => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
+      console.log('inside router.onError');
 
       if (!(err instanceof UnverifiedError)) {
+        console.log('onErrors error: ' + err);
         logError({ err });
       }
+      console.log('end of onError');
     });
 
     router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
-      console.log('in router.beforeEach before isVerified');
       const isVerified = store.getters[`${TOKEN_USER_MODULE}/isVerified`];
-      console.log('in router.beforeEach after isVerified');
       const { isLoggedIn, error: tokenUserError } = store.state[
         TOKEN_USER_MODULE
       ];
