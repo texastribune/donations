@@ -128,6 +128,8 @@ axios.interceptors.response.use(
     if (code) {
       errorDetail.extra.code = code;
     }
+    
+    console.log(errorDetail);
 
     return Promise.reject(new AxiosError(errorDetail));
   }
