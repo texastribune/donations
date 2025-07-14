@@ -116,8 +116,8 @@ axios.interceptors.response.use(
     const errorDetail = { message, extra: {} };
 
     if (response) {
+      console.log('found a response');
       const { data, status } = response;
-      console.log(response);
       errorDetail.status = status;
       errorDetail.extra.data = data;
       errorDetail.extra.gotResponse = true;
@@ -165,6 +165,7 @@ function refreshTokens() {
 store
   .dispatch(`${TOKEN_USER_MODULE}/${TOKEN_USER_TYPES.getTokenUser}`)
   .then(() => {
+    console.log('in the store .then');
     const isReady = store.getters[`${TOKEN_USER_MODULE}/isReady`];
     const router = new VueRouter({
       base: '/account',
