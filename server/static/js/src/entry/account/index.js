@@ -195,7 +195,9 @@ store
     router.beforeEach(async (to, from, next) => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, true);
 
+      console.log('in router.beforeEach before isVerified');
       const isVerified = store.getters[`${TOKEN_USER_MODULE}/isVerified`];
+      console.log('in router.beforeEach after isVerified');
       const { isLoggedIn, error: tokenUserError } = store.state[
         TOKEN_USER_MODULE
       ];
