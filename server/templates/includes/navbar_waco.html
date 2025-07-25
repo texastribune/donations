@@ -1,7 +1,10 @@
 <header class="c-navbar-newsroom">
   <div class="c-navbar-newsroom__inner">
-    <a href="https://{{ newsroom.domain }}" class="c-navbar-newsroom__logo">
+    <a href="https://{{ newsroom.domain }}" class="c-navbar-newsroom__logo is-hidden-until-bp-l">
       <img src="{{ url_for('static', filename='/img/waco-header-logo.png') }}" width="166" height="40" alt="{{ newsroom.title }} logo"/>
+    </a>
+    <a href="https://{{ newsroom.domain }}" class="c-navbar-newsroom__logo is-hidden-from-bp-l">
+      <img src="{{ url_for('static', filename='/img/waco-header-logo-mobile.png') }}" width="45" height="40" alt="{{ newsroom.title }} logo"/>
     </a>
     <div>
       <button class="button c-navbar-newsroom__newsletter_btn">
