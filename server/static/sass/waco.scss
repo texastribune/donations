@@ -220,7 +220,7 @@ body {
     // layout TK
     margin: auto;
     max-width: 90vw;
-    padding: clamp(min(1.5rem, 3.5rem), -0.06rem + 10.2vw, max(3.06rem, 5.06rem));
+    padding: 4rem 0rem;
     width: 1300px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -229,6 +229,7 @@ body {
   }
   &__col {
     width: 100%;
+    position: relative;
   }
   &__logo {
     img {
@@ -238,22 +239,28 @@ body {
   }
   &__list-top-border {
     border-top: solid 1px $color-tan;
+    position: absolute;
+    width: 50%;
+  }
+  .is-hidden-from-bp-l > &__list-top-border {
+    top: 0;
   }
   &__list-top {
     margin-top: 10px;
-    font-size: 22px;
+    font-size: 16px;
     line-height: 29px;
   }
   &__list-btm {
+    opacity: 70%;
     font-size: 11px;
     line-height: 19.2px;
   }
-  @media (min-width: 768px) {
-    &__list-top {
-      font-size: 16px;
-    }
+  @include mq($until: bp-l) {
     &__list-btm {
       font-size: 12px;
+    }
+    &__inner {
+      grid-template-columns: 1fr 1fr;
     }
   }
   ul {
