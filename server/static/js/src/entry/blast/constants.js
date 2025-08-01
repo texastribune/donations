@@ -44,6 +44,15 @@ export const BLAST_LEVELS = {
   //   prompt: 'Get ahead with insider news!',
   //   footer: 'January 14 – June 14',
   // },
+  blastSpecialSession: {
+    bucket: 'special',
+    bucketFull: 'Special session-only',
+    installmentPeriod: 'one-time',
+    amount: '100',
+    isFeatured: true,
+    prompt: 'Get ahead with insider news!',
+    footer: 'July 21 – August 21',
+  },
 };
 
 export const BLAST_FORM_STATE = {
