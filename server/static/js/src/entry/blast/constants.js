@@ -46,12 +46,11 @@ export const BLAST_LEVELS = {
   // },
   blastSpecialSession: {
     bucket: 'special',
-    bucketFull: 'Special session-only',
+    bucketFull: 'Special Session Pricing',
     installmentPeriod: 'one-time',
     amount: '100',
     isFeatured: true,
     prompt: 'Get ahead with insider news!',
-    footer: 'July 21 – August 21',
   },
 };
 
