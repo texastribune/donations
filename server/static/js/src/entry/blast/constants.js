@@ -47,7 +47,7 @@ export const BLAST_LEVELS = {
   blastSpecialSession: {
     bucket: 'special',
     bucketFull: 'Special session pricing',
-    installmentPeriod: 'one-time',
+    installmentPeriod: 'one-time for 2025',
     amount: '100',
     isFeatured: true,
     prompt: 'Get ahead with insider news!',
