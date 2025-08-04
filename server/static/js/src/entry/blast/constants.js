@@ -46,11 +46,12 @@ export const BLAST_LEVELS = {
   // },
   blastSpecialSession: {
     bucket: 'special',
-    bucketFull: 'Special Session Pricing',
+    bucketFull: 'Special session pricing',
     installmentPeriod: 'one-time',
     amount: '100',
     isFeatured: true,
     prompt: 'Get ahead with insider news!',
+    footer: 'Renews at $250 in 2026',
   },
 };
 
