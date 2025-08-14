@@ -8,7 +8,7 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} new members</strong> <br />
+      <strong>{{ data[0].label }} raised</strong> <br />
       toward a goal of {{ data[1].label }}.
     </div>
   </div>
@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '20', value: 20 },
-        { slug: 'goal', label: '500', value: 500 },
+        { slug: 'goal', label: '$15,000', value: 15000 },
       ],
     };
   },
@@ -43,7 +43,7 @@ export default {
 
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/smd2025.json';
+      const url = 'https://membership.texastribune.org/bts2025.json';
 
       axios
         .get(url)
