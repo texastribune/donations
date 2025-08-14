@@ -35,14 +35,23 @@ export const BLAST_LEVELS = {
   //   installmentPeriod: 'yearly',
   //   amount: '199',
   // },
-  blastLegislativeSession: {
-    bucket: 'legislative',
-    bucketFull: 'Legislative session-only',
-    installmentPeriod: 'one-time',
-    amount: '200',
+  // blastLegislativeSession: {
+  //   bucket: 'legislative',
+  //   bucketFull: 'Legislative session-only',
+  //   installmentPeriod: 'one-time',
+  //   amount: '200',
+  //   isFeatured: true,
+  //   prompt: 'Get ahead with insider news!',
+  //   footer: 'January 14 – June 14',
+  // },
+  blastSpecialSession: {
+    bucket: 'special',
+    bucketFull: 'Special session pricing',
+    installmentPeriod: 'one-time for 2025',
+    amount: '100',
     isFeatured: true,
     prompt: 'Get ahead with insider news!',
-    footer: 'January 14 – June 14',
+    footer: 'Renews at $250 in 2026',
   },
 };
 

@@ -91,6 +91,7 @@ STRIPE_PRODUCTS = {
     "blastAcademicMonthly": os.getenv("STRIPE_PRODUCT_BLAST_ACADEMIC", ""),
     "blastAcademicYearly": os.getenv("STRIPE_PRODUCT_BLAST_ACADEMIC", ""),
     "blastLegislativeSession": os.getenv("STRIPE_PRODUCT_BLAST_LEGISLATIVE", ""),
+    "blastSpecialSession": os.getenv("STRIPE_PRODUCT_BLAST_SPECIAL", ""),
     "blastTaxExempt": os.getenv("STRIPE_PRODUCT_BLAST_TAX_EXEMPT", ""),
     "waco": os.getenv("STRIPE_PRODUCT_WACO_SUSTAINING", ""),
 }
