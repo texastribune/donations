@@ -121,7 +121,7 @@ export default {
           ) {
             this.$emit(
               'onFailure',
-              'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org',
+              'An internal error occurred. Please try again and if the issue persists, contact us at membership@wacobridge.org',
             )
           }
           else if (

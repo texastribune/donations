@@ -228,7 +228,7 @@ export default {
             if (
               err.extra.data.detail === "missing data"
             ) {
-              this.messageBody = 'An internal error occurred. Please try again and if the issue persists, contact us at membership@texastribune.org'
+              this.messageBody = 'An internal error occurred. Please try again and if the issue persists, contact us at membership@wacobridge.org'
             }
             else if (
               err.extra.data.detail === "invalid card"

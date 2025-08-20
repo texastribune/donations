@@ -37,10 +37,10 @@ export default async function buildTaxReceipt({
   doc.setFontSize(10);
   doc.text(
     [
-      '919 Congress Avenue, Sixth Floor',
-      'Austin, TX 78701',
-      'P: 512-993-0166',
-      'www.texastribune.org',
+      'The Waco Bridge',
+      'P.O. Box 702',
+      'Waco, Texas 76703',
+      'www.wacobridge.org',
     ],
     425,
     topEdge,

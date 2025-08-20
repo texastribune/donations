@@ -115,10 +115,10 @@
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.footer"
-              :ga-event-label="ga.userPortalNav.labels['community-guidelines']"
-              href="https://www.texastribune.org/about/community-guidelines/"
+              :ga-event-label="ga.userPortalNav.labels['terms-of-service']"
+              href="https://wacobridge.org/waco-bridge-terms-of-service/"
             >
-              Community Guidelines
+              Terms of Service
             </a>
           </li>
           <li>
@@ -138,7 +138,7 @@
               :ga-event-category="ga.userPortalNav.category"
               :ga-event-action="ga.userPortalNav.actions.footer"
               :ga-event-label="ga.userPortalNav.labels['privacy-policy']"
-              href="https://www.texastribune.org/about/privacy-policy/"
+              href="https://wacobridge.org/waco-bridge-privacy-policy/"
             >
               Privacy Policy
             </a>

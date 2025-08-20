@@ -67,7 +67,6 @@ const actions = {
             if (err) {
               reject(err);
             } else {
-              console.log(authResult);
               commit(SET_READY, {
                 accessToken: authResult.accessToken,
                 idToken: authResult.idToken,

@@ -17,7 +17,7 @@ import { RecaptchaError, StripeError } from '../errors';
 import { RECAPTCHA_ERROR_MESSAGE } from '../constants';
 
 const CARD_ERROR_MESSAGE =
-  'There was an issue processing your card. Please try a different card and submit the form again. If the issue persists, contact inquiries@texastribune.org.';
+  'There was an issue processing your card. Please try a different card and submit the form again. If the issue persists, contact membership@wacobridge.org.';
 
 export default {
   name: 'ManualSubmit',

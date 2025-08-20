@@ -109,7 +109,7 @@ export default {
         return this.urls.circle;
       }
 
-      return 'mailto:membership@texastribune.org?subject=Upgrade%20my%20Tribune%20membership&body=Hi!%20I%20would%20like%20to%20increase%20my%20support%20for%20The%20Texas%20Tribune.';
+      return 'mailto:membership@wacobridge.org?subject=Upgrade%20my%20Bridge%20membership&body=Hi!%20I%20would%20like%20to%20increase%20my%20support%20for%20The%20Waco%20Bridge.';
     },
   },
 };

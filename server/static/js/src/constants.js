@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 
 export const RECAPTCHA_ERROR_MESSAGE =
-  'There was an error submitting your donation. Please try again. If the issue persists, contact membership@texastribune.org.';
+  'There was an error submitting your donation. Please try again. If the issue persists, contact membership@wacobridge.org.';
 
 export const STRIPE_KEY = window.__STRIPE_KEY__;
 

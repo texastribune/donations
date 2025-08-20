@@ -72,7 +72,7 @@
             <template #extra>
               <p v-show="showConfirmedEmail" class="t-size-xs has-text-error">
                 <strong>Are you sure?</strong> Changing this email will
-                immediately log you out of texastribune.org, and you won't be
+                immediately log you out of wacobridge.org, and you won't be
                 able to log back in with
                 <strong>{{ initialFields.email }}</strong
                 >.
@@ -154,7 +154,7 @@ localize({
   en: {
     fields: {
       email: {
-        required: 'You must have an email to log into texastribune.org.',
+        required: 'You must have an email to log into wacobridge.org.',
         email: 'Please enter a valid email address.',
       },
 
@@ -166,7 +166,7 @@ localize({
 
       firstName: {
         required:
-          'Please provide your first and last name. They appear with comments on texastribune.org to promote a more transparent and personable atmosphere.',
+          'Please provide your first and last name. They appear with comments on wacobridge.org to promote a more transparent and personable atmosphere.',
       },
 
       lastName: {

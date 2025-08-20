@@ -2,7 +2,7 @@
   <nav class="c-navbar c-navbar--light">
     <div class="c-navbar__top l-align-center-x">
       <a
-        href="https://www.texastribune.org"
+        href="https://www.wacobridge.org"
         class="c-navbar__logo l-align-center-self"
       >
         <!-- <img alt="The Texas Tribune" src="../../svg/tt.svg" /> -->

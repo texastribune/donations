@@ -88,14 +88,14 @@ export default {
       if (email) {
         return email;
       }
-      if (isBlast) {
-        return 'blast@texastribune.org';
-      }
+      // if (isBlast) {
+      //   return 'blast@texastribune.org';
+      // }
       if (isMembership) {
-        return 'membership@texastribune.org';
+        return 'membership@wacobridge.org';
       }
 
-      return 'community@texastribune.org';
+      return 'community@wacobridge.org';
     },
 
     computedSubject() {

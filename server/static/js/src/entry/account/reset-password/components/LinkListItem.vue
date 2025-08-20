@@ -16,8 +16,8 @@
         <p v-if="pwResetFailure" class="t-size-xs has-text-gray-dark">
           There was an issue resetting your password. If you continue having
           trouble, email
-          <a href="mailto:community@texastribune.org"
-            >community@texastribune.org </a
+          <a href="mailto:community@wacobridge.org"
+            >community@wacobridge.org </a
           >.
         </p>
       </template>

@@ -116,7 +116,6 @@ axios.interceptors.response.use(
     const errorDetail = { message, extra: {} };
 
     if (response) {
-      console.log('found a response');
       const { data, status } = response;
       errorDetail.status = status;
       errorDetail.extra.data = data;
@@ -129,7 +128,6 @@ axios.interceptors.response.use(
       errorDetail.extra.code = code;
     }
     
-    console.log(errorDetail);
 
     return Promise.reject(new AxiosError(errorDetail));
   }
@@ -185,13 +183,10 @@ store
     router.onError(err => {
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setError}`, err);
       store.dispatch(`${CONTEXT_MODULE}/${CONTEXT_TYPES.setIsFetching}`, false);
-      console.log('inside router.onError');
 
       if (!(err instanceof UnverifiedError)) {
-        console.log('onErrors error: ' + err);
         logError({ err });
       }
-      console.log('end of onError');
     });
 
     router.beforeEach(async (to, from, next) => {

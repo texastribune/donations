@@ -74,13 +74,9 @@ const actions = {
 
   [USER_TYPES.getUser]: async ({ commit, rootState }) => {
     const { accessToken } = rootState.tokenUser;
-    console.log('in getUser before axios get');
-    console.log('right here -> ' + accessToken)
-    console.log('also here -> ' + `${PORTAL_API_URL}self/`)
     const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
-    console.log('in getUser after axios get with data: ' + data);
 
     commit(SET_ME, data);
   },
@@ -120,7 +116,7 @@ const actions = {
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
     if (!state.viewAsEmail ||
-      (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
+      (state.viewAsEmail && idTokenPayload['https://wacobridge.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
       updates.userInitiated = !state.viewAsEmail
@@ -142,7 +138,7 @@ const actions = {
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
     if (!state.viewAsEmail ||
-      (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
+      (state.viewAsEmail && idTokenPayload['https://wacobridge.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -163,7 +159,7 @@ const actions = {
   ) => {
     const { idTokenPayload } = rootState.tokenUser;
     if (!state.viewAsEmail ||
-      (state.viewAsEmail && idTokenPayload['https://texastribune.org/is_staff'])) {
+      (state.viewAsEmail && idTokenPayload['https://wacobridge.org/is_staff'])) {
       const { accessToken } = rootState.tokenUser;
       const { userId } = getters;
 
@@ -335,7 +331,6 @@ const getters = {
     { data: { is_recurring_donor: isRecurringDonor, is_mdev: isMDev } },
     { isCircleDonor, membershipExpirationDate }
   ) => {
-    console.log(isRecurringDonor && !isCircleDonor);
     return isRecurringDonor && !isCircleDonor
   },
 
