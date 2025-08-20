@@ -75,6 +75,8 @@ const actions = {
   [USER_TYPES.getUser]: async ({ commit, rootState }) => {
     const { accessToken } = rootState.tokenUser;
     console.log('in getUser before axios get');
+    console.log('right here -> ' + accessToken)
+    console.log('also here -> ' + `${PORTAL_API_URL}self/`)
     const { data } = await axios.get(`${PORTAL_API_URL}self/`, {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
