@@ -45,7 +45,7 @@ export const BASE_FORM_STATE = {
     message: null,
   },
   description: {
-    value: 'The Waco Local News Membership',
+    value: 'The Waco Bridge Membership',
     isValid: true,
     validator: null,
     message: null,
