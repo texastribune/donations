@@ -180,7 +180,7 @@
       <a href="https://policies.google.com/privacy">Privacy Policy</a> and
       <a href="https://policies.google.com/terms">Terms of Service</a> apply.
     </p>
-
+    <br>
     <p class="subtext">
       See the <a href="https://www.texastribune.org/prize/">full details for the Fall Member Drive Raffle</a>
     </p>
