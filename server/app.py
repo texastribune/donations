@@ -7,6 +7,7 @@ import calendar
 import json
 import locale
 import logging
+# import matplotlib.pyplot as plt
 import os
 import re
 from datetime import datetime
@@ -889,6 +890,10 @@ def donor_wall():
         bundles = get_bundles("waco")
         sorted_donors = Account.list_by_giving()
         return render_template("waco-donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
+    elif NEWSROOM['name'] == "texas":
+        bundles = get_bundles("donate")
+        sorted_donors = Account.list_by_giving()
+        return render_template("donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
     else:
         bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
         message = "Something went wrong!"
@@ -1280,6 +1285,30 @@ def sync_stripe_event(event):
     process_stripe_event(stripe_event)
 
     return stripe_event
+
+
+# def build_yearly_pdf(newsroom):
+#     print(newsroom)
+#     giving_list = Account.list_by_giving(newsroom=newsroom)
+
+#     pdf = plt
+#     pdf.figure(figsize=(8, 10))
+#     pdf.axis('off')
+#     donor_entries = []
+#     for amount, donors in giving_list.items():
+#         # if amount == 'Less Than $10':
+#         #     donor_entries.append(f"{amount}:")
+#         # else:
+#         #     formatted_amount = locale.format_string('%d', int(re.sub(r'[$,]', '', amount)), grouping=True)
+#         #     donor_entries.append(f"${formatted_amount}:")
+#         donor_entries.append(f"{amount}:")
+#         for donor in donors:
+#             donor_entries.append(f".   {donor['attribution']}")
+#         donor_entries.append("")
+
+#     pdf.text(0.1, 0.95, '\n'.join(donor_entries), fontsize=10, verticalalignment='top')
+#     pdf.tight_layout()
+#     pdf.savefig('testing4.pdf', bbox_inches='tight')
 
 
 # this is just a temp func version of a piece of add_donation we're
