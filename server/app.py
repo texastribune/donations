@@ -899,6 +899,16 @@ def donor_wall():
         message = "Something went wrong!"
         return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM), 404
 
+@app.route("/corporate-sponsors")
+def corporate_wall():
+    if NEWSROOM['name'] == "texas":
+        bundles = get_bundles("donate")
+        return render_template("corporate-wall.html", bundles=bundles, newsroom=NEWSROOM)
+    else:
+        bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
+        message = "Something went wrong!"
+        return render_template("error.html", message=message, bundles=bundles, newsroom=NEWSROOM), 404
+
 @app.route("/error")
 def error():
     bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
