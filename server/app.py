@@ -897,11 +897,11 @@ def daf():
 def donor_wall():
     if NEWSROOM["name"] == "waco":
         bundles = get_bundles("waco")
-        sorted_donors = Account.list_by_giving()
+        sorted_donors = Account.list_by_giving_this_year()
         return render_template("waco-donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
     elif NEWSROOM['name'] == "texas":
         bundles = get_bundles("donate")
-        sorted_donors = Account.list_by_giving()
+        sorted_donors = Account.list_by_giving_this_year()
         return render_template("donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
     else:
         bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
@@ -1211,7 +1211,7 @@ def authorization_notification(payload):
 
 @celery.task(name="app.push_donor_list")
 def push_donor_list():
-    donor_list = Account.list_by_giving()
+    donor_list = Account.list_by_giving_this_year()
     _push_to_s3(filename='donors-waco-365.json', contents=donor_list)
 
 
