@@ -991,8 +991,8 @@ class Account(SalesforceObject):
         return account
 
     @classmethod
-    def list_by_giving(
-        cls, newsroom='', sf_connection=None
+    def list_by_giving_this_year(
+        cls, sf_connection=None
     ):
         """
         Adapted from donor wall pieces from the TT app.
@@ -1007,16 +1007,16 @@ class Account(SalesforceObject):
                 CreatedDate,
                 Text_For_Donor_Wall__c,
                 Total_Donor_Wall_This_Year__c
-                FROM Account
-                WHERE RecordTypeId IN ('01216000001IhHL', '01216000001IhHMAA0')
-                AND Total_Donor_Wall_This_Year__c > 0
+            FROM Account
+            WHERE RecordTypeId IN ('01216000001IhHL', '01216000001IhHMAA0')
+            AND Total_Donor_Wall_This_Year__c > 0
             """
 
         # query = f"""
         #     SELECT Opportunity.Account.Name, Opportunity.Account.Id, SUM(Opportunity.Amount) TotalGiving, MIN(Opportunity.CloseDate) CreatedDate
         #         FROM Opportunity
         #         WHERE Opportunity.StageName = 'Closed Won'
-        #         AND Opportunity.Newsroom__c = '{newsroom}'
+        #         AND Opportunity.Newsroom__c = 'Waco Bridge'
         #         AND Opportunity.CloseDate = THIS_YEAR
         #         GROUP BY Opportunity.Account.Name, Opportunity.Account.Id
         #     """
@@ -1032,6 +1032,39 @@ class Account(SalesforceObject):
         #         WHERE Id IN {tuple(donor_ids)}
         #     """
         # donor_texts = sf.query(get_text_query)
+        print(len(donors))
+        return cls.bucket_donors(donors, 'Total_Donor_Wall_This_Year__c')
+
+
+    @classmethod
+    def list_by_giving_all_time(
+        cls, sf_connection=None
+    ):
+        """
+        Adapted from donor wall pieces from the TT app.
+        Puts accounts into giving bins for easy and sorted display on a donor wall.
+        TODO: Work with our Salesforce contractor to add newsroom specific SF fields for last 365 days of giving.
+        """
+        sf = SalesforceConnection() if sf_connection is None else sf_connection
+
+        query = """
+            SELECT
+                Name,
+                CreatedDate,
+                Text_For_Donor_Wall__c,
+                Total_Amt_For_Donor_Wall_All_Time__c
+            FROM Account
+            WHERE RecordTypeId IN ('01216000001IhHL', '01216000001IhHMAA0')
+            AND Total_Amt_For_Donor_Wall_All_Time__c > 0
+            """
+
+        donors = sf.query(query)
+
+        print(len(donors))
+        return cls.bucket_donors(donors, 'Total_Amt_For_Donor_Wall_All_Time__c')
+
+
+    def bucket_donors(donors, amount_field):
         results = defaultdict(list)
         less_than_10 = []
         for record in donors:
@@ -1039,7 +1072,7 @@ class Account(SalesforceObject):
             attribution = record['Text_For_Donor_Wall__c']
             attributions = {'sort_by': record['Name'],
                     'attribution': attribution, 'CreatedDate': record['CreatedDate']}
-            amount = Decimal(record['Total_Donor_Wall_This_Year__c'])
+            amount = Decimal(record[amount_field])
             amount = amount.quantize(Decimal('1'), rounding=ROUND_HALF_UP)
             if amount < 10:
                 less_than_10.append(attributions)

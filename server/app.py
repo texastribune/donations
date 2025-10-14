@@ -4,14 +4,21 @@ run', 'python app.py' or via a WSGI server like gunicorn or uwsgi.
 
 """
 import calendar
+import io
 import json
 import locale
 import logging
+# import matplotlib
+# matplotlib.use("PDF")
 # import matplotlib.pyplot as plt
+# from matplotlib.backends.backend_pgf import PdfPages
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
 import os
 import re
 from datetime import datetime
 from pprint import pformat
+from PyPDF2 import PdfMerger, PdfReader
 
 import stripe
 from amazon_pay.client import AmazonPayClient
@@ -228,6 +235,8 @@ app.config.update(
     CELERY_IMPORTS=("server", "server.npsp", "server.batch"),
 )
 stripe.api_key = app.config["STRIPE_KEYS"]["secret_key"]
+
+# matplotlib.use('Agg')
 
 celery = make_celery(app)
 
@@ -1297,28 +1306,109 @@ def sync_stripe_event(event):
     return stripe_event
 
 
-# def build_yearly_pdf(newsroom):
-#     print(newsroom)
-#     giving_list = Account.list_by_giving(newsroom=newsroom)
+def build_yearly_pdf():
+    giving_list = Account.list_by_giving_all_time()
 
-#     pdf = plt
-#     pdf.figure(figsize=(8, 10))
-#     pdf.axis('off')
-#     donor_entries = []
-#     for amount, donors in giving_list.items():
-#         # if amount == 'Less Than $10':
-#         #     donor_entries.append(f"{amount}:")
-#         # else:
-#         #     formatted_amount = locale.format_string('%d', int(re.sub(r'[$,]', '', amount)), grouping=True)
-#         #     donor_entries.append(f"${formatted_amount}:")
-#         donor_entries.append(f"{amount}:")
-#         for donor in donors:
-#             donor_entries.append(f".   {donor['attribution']}")
-#         donor_entries.append("")
+    current_page = 1
+    line_count = 0
+    max_lines = 47
 
-#     pdf.text(0.1, 0.95, '\n'.join(donor_entries), fontsize=10, verticalalignment='top')
-#     pdf.tight_layout()
-#     pdf.savefig('testing4.pdf', bbox_inches='tight')
+    donor_entries = []
+    pdfs = []
+    for amount, donors in giving_list.items():
+        donor_entries.append(f"{amount}:")
+        line_count += 1
+        for donor in donors:
+            donor_entries.append(f".   {donor['attribution']}")
+            line_count += 1
+
+            if line_count >= max_lines:
+                pdfs.append(print_the_report(f"donors{current_page}.pdf", donor_entries, current_page))
+
+                # Reset for next page
+                donor_entries = []
+                line_count = 0
+                current_page += 1
+
+        donor_entries.append("")
+        line_count += 1
+
+    if donor_entries:
+        pdfs.append(print_the_report(f"donors{current_page}.pdf", donor_entries, current_page))
+
+    merge_em_up(pdfs=pdfs)
+    
+
+# def print_the_page(pdf, donor_entries, current_page):
+#     plt.rcParams['text.usetex'] = False  # Add this before your plotting code
+
+#     fig = plt.figure(figsize=(8.5, 11), dpi=100)
+#     ax = fig.add_subplot(111)
+#     ax.axis('off')
+
+#     safe_entries = [
+#         entry.replace('&', r'&amp;')
+#               .replace('<', r'&lt;')
+#               .replace('>', r'&gt;')
+#         for entry in donor_entries
+#     ]
+
+#     ax.text(
+#         0.05, 0.95, 
+#         '\n'.join(safe_entries), 
+#         fontsize=10, 
+#         verticalalignment='top', 
+#         fontfamily='sans-serif'
+#     )
+
+#     # Add page number
+#     ax.text(
+#         0.5, 0.02, 
+#         f'Page {current_page}', 
+#         horizontalalignment='center', 
+#         fontsize=8, 
+#         fontfamily='sans-serif'
+#     )
+    
+#     plt.tight_layout()
+
+#     pdf.savefig(fig, bbox_inches="tight")
+#     plt.close(fig)
+
+
+def print_the_report(pdf_path, donor_entries, current_page):
+    c = canvas.Canvas(pdf_path, pagesize=letter)
+    width, height = letter
+    
+    # Write donor entries
+    c.setFont("Helvetica", 10)
+    y_position = height - 50  # Start near the top
+    for entry in donor_entries:
+        c.drawString(50, y_position, entry)
+        y_position -= 15  # Move down for next entry
+    
+    # Add page number
+    c.setFont("Helvetica", 8)
+    c.drawCentredString(width - 50, 20, f'Page {current_page}')
+    
+    c.showPage()
+    c.save()
+
+    return pdf_path
+
+
+def merge_em_up(pdfs=[]):
+    merger = PdfMerger()
+
+    merger.append('letterhead.pdf')
+
+    for pdf in pdfs:
+        merger.append(pdf)
+
+    with open('TT_Giving.pdf', 'wb') as output_file:
+        merger.write(output_file)
+
+    merger.close()
 
 
 # this is just a temp func version of a piece of add_donation we're
