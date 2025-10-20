@@ -893,7 +893,7 @@ def daf():
         bundles=bundles,
     )
 
-@app.route("/members")
+# @app.route("/members")
 def donor_wall():
     if NEWSROOM["name"] == "waco":
         bundles = get_bundles("waco")
