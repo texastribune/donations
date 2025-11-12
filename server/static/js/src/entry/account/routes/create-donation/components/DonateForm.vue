@@ -171,6 +171,7 @@ export default {
         { id: 0, text: 'One-time donation', value: 'once', recurring: false },
         { id: 1, text: 'Monthly donation', value: 'monthly', recurring: true },
         { id: 2, text: 'Yearly donation', value: 'yearly', recurring: true },
+        { id: 3, text: 'Merchandise', value: 'merch', recurring: false},
       ],
     }
   },
