@@ -1947,10 +1947,13 @@ def log_opportunity(contact, payment_intent):
 
     payment_meta = payment_intent["metadata"]
     customer_id = payment_intent["customer"]
+    is_non_donation = payment_meta.get("tax_calculation_id", None)
 
     app.logger.info("----Adding opportunity...")
 
     opportunity = Opportunity(contact=contact)
+    if is_non_donation:
+        opportunity.record_type_name = "Misc"
     opportunity.stage_name = "Closed Won"
     opportunity.newsroom = payment_meta.get("newsroom", "").lower()
     opportunity.amount = payment_intent.get("amount", 0) / 100
