@@ -45,7 +45,6 @@ from .config import (
     STRIPE_PRODUCTS,
     STRIPE_WEBHOOK_SECRET,
     TIMEZONE,
-    WACO_CAMPAIGN_ID,
     BLAST_LEGE_CAMPAIGN_ID,
 )
 from .forms import (
@@ -55,7 +54,6 @@ from .forms import (
     BusinessMembershipForm,
     CircleForm,
     DonateForm,
-    WacoForm,
 )
 from .npsp import RDO, Account, Affiliation, Contact, Opportunity, SalesforceConnection
 from .util import (
@@ -566,9 +564,6 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
 
     if FormType is DonateForm:
         donation_type = "membership"
-        # TODO discuss when we don't need to default to the WACO_CAMPAIGN_ID
-        if NEWSROOM["name"] == "waco":
-            form_data["campaign_id"] = WACO_CAMPAIGN_ID
         function = add_stripe_donation.delay
     elif FormType is CircleForm:
         donation_type = "circle"
@@ -585,11 +580,6 @@ def validate_form(FormType, bundles, template, function=add_donation.delay):
         donation_type = "blast"
     elif FormType is BusinessMembershipForm:
         donation_type = "business_membership"
-        function = add_stripe_donation.delay
-    #remove this after Waco launch
-    elif FormType is WacoForm:
-        donation_type = "waco"
-        form_data["campaign_id"] = WACO_CAMPAIGN_ID
         function = add_stripe_donation.delay
     else:
         raise Exception("Unrecognized form type")
@@ -720,26 +710,6 @@ def blast_form():
         bundles=bundles,
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
-    )
-
-
-@app.route("/waco", methods=["GET", "POST"])
-def waco_form():
-    if not ENABLE_WACO:
-        return redirect("https://support.wacobridge.org")
-
-    bundles = get_bundles("waco")
-    template = "waco-form.html"
-
-    if request.method == "POST":
-        return validate_form(WacoForm, bundles=bundles, template=template)
-
-    return render_template(
-        template,
-        bundles=bundles,
-        stripe=app.config["STRIPE_KEYS"]["publishable_key"],
-        recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
-        use_thermometer=USE_THERMOMETER,
     )
 
 
