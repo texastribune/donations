@@ -8,22 +8,27 @@ import TopForm from './TopForm.vue';
 import BusinessWall from './BusinessWall.vue';
 import mergeValuesIntoStartState from '../../utils/merge-values-into-start-state';
 import sanitizeParams from '../../utils/sanitize-params';
+import STRIPE_KEY from '../../constants';
 import {
-  BUSINESS_LEVELS,
+  BUSINESS_LEVELS_MAPPING,
   BUSINESS_FORM_STATE,
-  DEFAULT_LEVEL,
+  DEFAULT_LEVEL_MAPPING,
 } from './constants';
 
 Vue.use(VueRouter);
 
 function getStateFromParams(queryParams) {
+  console.log('up in here');
+  // console.log(NEWSROOM);
   const cleanParams = sanitizeParams(queryParams);
   const { campaignId = '', referralId = '' } = cleanParams;
-  let { level = DEFAULT_LEVEL } = cleanParams;
+  const defaultLevel = DEFAULT_LEVEL_MAPPING['waco'];
+  const businessLevels = BUSINESS_LEVELS_MAPPING['waco'];
+  let { level = defaultLevel } = cleanParams;
 
-  if (!BUSINESS_LEVELS[level]) level = DEFAULT_LEVEL;
+  if (!businessLevels[level]) level = defaultLevel;
 
-  const { amount, installmentPeriod } = BUSINESS_LEVELS[level];
+  const { amount, installmentPeriod } = businessLevels[level];
 
   return {
     level,
@@ -61,7 +66,7 @@ function createRouter() {
 function bindRouterEvents(router, routeHandler, store) {
   router.onReady(() => {
     const topForm = new Vue({ ...TopForm, store });
-    const wall = new Vue({ ...BusinessWall });
+    // const wall = new Vue({ ...BusinessWall });
     const {
       currentRoute: { query },
     } = router;

@@ -684,11 +684,20 @@ def circle_form():
 
 @app.route("/business", methods=["GET", "POST"])
 def business_form():
-    if NEWSROOM["name"] != "texas":
-        return redirect(url_for("donate_form"))
-
     bundles = get_bundles("business")
-    template = "business-form.html"
+    print('hello there')
+
+    if NEWSROOM["name"] != "texas":
+        template = "newsroom-business-form.html"
+        newsroom = {
+            "name": NEWSROOM["name"],
+            "title": NEWSROOM["title"],
+            "domain": NEWSROOM["domain"],
+            "subhed": "Join as a Business Member today to support our mission to provide reliable information that empowers residents, strengthens connections and deepens the understanding of what’s happening in Waco and why.",
+        }
+    else:
+        template = "business-form.html"
+        newsroom = {}
 
     if request.method == "POST":
         return validate_form(
@@ -696,10 +705,13 @@ def business_form():
             bundles=bundles,
             template=template,
         )
+    print(newsroom["name"])
 
     return render_template(
         template,
         bundles=bundles,
+        newsroom=newsroom,
+        newsroomname='waco',
         stripe=app.config["STRIPE_KEYS"]["publishable_key"],
         recaptcha=app.config["RECAPTCHA_KEYS"]["site_key"],
     )

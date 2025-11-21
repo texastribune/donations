@@ -25,7 +25,7 @@
     </div>
 
     <div class="grid_container--m">
-      <benefits />
+      <benefitsWaco/>
       <div class="grid_row grid_separator">
         <div class="col">
           <text-input
@@ -196,8 +196,7 @@
         </div>
 
         <p class="subtext">
-          The Texas Tribune is a 501(c)(3), and your organization's gift is tax
-          deductible
+          The Waco Bridge, supported by The Texas Tribune, is a 501(c)(3), and your organization's gift is tax deductible
         </p>
       </div>
 
@@ -244,8 +243,10 @@ import ManualSubmit from '../../payment-elements/ManualSubmit.vue';
 import NativePay from '../../payment-elements/NativePay.vue';
 import LocalHidden from '../../local-elements/Hidden.vue';
 import Benefits from './Benefits.vue';
+import BenefitsWaco from './BenefitsWaco.vue'
 import formStarter from '../../mixins/connected-form/starter';
-import { US_STATES_SELECT_LIST, BUSINESS_LEVELS } from './constants';
+// import { NEWSROOM } from '../../constants';
+import { US_STATES_SELECT_LIST, BUSINESS_LEVELS_MAPPING } from './constants';
 
 export default {
   name: 'TopForm',
@@ -261,6 +262,7 @@ export default {
     NativePay,
     FormBuckets,
     Benefits,
+    BenefitsWaco,
   },
 
   mixins: [formStarter],
@@ -271,7 +273,7 @@ export default {
       serverErrorMessage: window.__TOP_FORM_SERVER_ERROR_MESSAGE__,
       usStatesOptions: US_STATES_SELECT_LIST,
       storeModule: 'businessForm',
-      allLevels: BUSINESS_LEVELS,
+      allLevels: BUSINESS_LEVELS_MAPPING['waco'],
     };
   },
 };

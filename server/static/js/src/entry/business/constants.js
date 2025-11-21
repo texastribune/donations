@@ -6,6 +6,12 @@ const DEFAULT_STATE_SELECTED = 'TX';
 
 // master setting for default selection
 export const DEFAULT_LEVEL = 'bigTexYearly';
+export const WACO_DEFAULT_LEVEL = 'pillarYearly';
+
+export const DEFAULT_LEVEL_MAPPING = {
+  'texas': DEFAULT_LEVEL,
+  'waco': WACO_DEFAULT_LEVEL,
+}
 
 // no order dependency in code for these.
 // the key is the bucket
@@ -47,6 +53,52 @@ export const BUSINESS_LEVELS = {
     amount: '42',
   },
 };
+
+// no order dependency in code for these.
+// the key is the bucket
+export const WACO_BUSINESS_LEVELS = {
+  pillarYearly: {
+    bucket: 'pillar',
+    bucketFull: 'Pillar',
+    installmentPeriod: 'yearly',
+    amount: '2000',
+  },
+  pillarMonthly: {
+    bucket: 'pillar',
+    bucketFull: 'Pillar',
+    installmentPeriod: 'monthly',
+    amount: '167',
+  },
+  archYearly: {
+    bucket: 'arch',
+    bucketFull: 'Arch',
+    installmentPeriod: 'yearly',
+    amount: '1250',
+  },
+  archMonthly: {
+    bucket: 'arch',
+    bucketFull: 'Arch',
+    installmentPeriod: 'monthly',
+    amount: '104',
+  },
+  builderYearly: {
+    bucket: 'builder',
+    bucketFull: "Builder",
+    installmentPeriod: 'yearly',
+    amount: '500',
+  },
+  builderMonthly: {
+    bucket: 'builder',
+    bucketFull: "Builder",
+    installmentPeriod: 'monthly',
+    amount: '42',
+  },
+};
+
+export const BUSINESS_LEVELS_MAPPING = {
+  'texas': BUSINESS_LEVELS,
+  'waco': WACO_BUSINESS_LEVELS,
+}
 
 // for select list
 export const US_STATES_SELECT_LIST = [
