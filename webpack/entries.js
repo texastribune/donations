@@ -7,7 +7,6 @@ const entriesNames = [
   'business',
   'blast',
   'waco',
-  'austin',
   'old',
   'account',
 ];
