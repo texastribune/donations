@@ -1,7 +1,7 @@
 .link--teal,
 %link--teal {
   a {
-    color: $color-teal-gray;
+    color: $color-teal;
     font-weight: 700;
     text-decoration: none;
 
@@ -21,8 +21,8 @@
 
     &:hover,
     &:active {
-      border-bottom: 1px solid $color-teal-gray;
-      box-shadow: inset 0 -2px 0 0 $color-teal-gray;
+      border-bottom: 1px solid $color-teal;
+      box-shadow: inset 0 -2px 0 0 $color-teal;
       color: inherit;
       text-decoration: none;
       transition: all .8s ease;

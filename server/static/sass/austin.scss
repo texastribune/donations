@@ -1,6 +1,6 @@
 // same as ds-toolbox-base (with some overrides)
 @import '@texastribune/queso-ui/assets/scss/1-settings/all';
-@import '1-settings/colors-waco'; // color overrides (need to include for utility classes)
+@import '1-settings/colors-austin'; // color overrides (need to include for utility classes)
 @import '@texastribune/queso-ui/assets/scss/2-tools/all';
 @import '@texastribune/queso-ui/assets/scss/5-typography/t-helpers';
 @import '@texastribune/queso-ui/assets/scss/5-typography/t-size';
@@ -21,8 +21,8 @@
 @import '@texastribune/queso-ui/assets/scss/utilities/sr-only';
 
 @import '1-settings/all';
-@import '1-settings/colors-waco'; // color overrides
-@import '1-settings/fonts-waco'; // font overrides
+@import '1-settings/colors-austin'; // color overrides
+@import '1-settings/fonts-austin'; // font overrides
 @import '2-tools/all';
 @import '3-generic/all';
 @import '4-elements/all';

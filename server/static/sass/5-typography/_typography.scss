@@ -39,7 +39,7 @@
 
       &:active,
       &:hover {
-        color: $color-teal-gray;
+        color: $color-teal;
         text-decoration: none;
       }
     }
@@ -47,7 +47,7 @@
 
   &--teal {
     @extend .smallcaps;
-    color: $color-teal-gray;
+    color: $color-teal;
   }
 
   &--white {
