@@ -8,8 +8,7 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} raised today</strong> <br />
-      to unlock {{ data[1].label }} in matching funds.
+      <strong>{{ data[0].label }} raised</strong> toward our {{ data[1].label }} goal!
     </div>
   </div>
 </template>
