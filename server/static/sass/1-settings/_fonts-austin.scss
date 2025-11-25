@@ -1,0 +1,9 @@
+// font overrides:
+$font-family-primary: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$font-family-secondary: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+%font-serif {
+  font-family: $font-family-primary;
+}
+%font-sansserif {
+  font-family: $font-family-secondary;
+}
