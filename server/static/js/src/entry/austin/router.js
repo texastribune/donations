@@ -44,7 +44,7 @@ function createInitialFormState(queryParams) {
       amount = amount || '60';
       break;
     case 'monthly':
-      amount = amount || '35';
+      amount = amount || '10';
       break;
     case 'yearly':
       amount = amount || '75';
