@@ -3,7 +3,7 @@
     <div class="c-site-footer__inner l-container--xl l-align-center-x">
       <div class="c-site-footer__col">
         <div class="has-b-btm-marg">
-          <img src="../../../../../../img/waco-footer-logo.png" width="150" height="150"/>
+          <img src="../../../../../../img/austin-stacked-white.svg" width="150" height="150"/>
         </div>
 
         <div
@@ -12,7 +12,7 @@
         />
 
         <p class="t-size-s has-text-white">
-          &copy; {{ dates.thisYear }} The Waco Bridge
+          &copy; {{ dates.thisYear }} Austin Current
         </p>
       </div>
 

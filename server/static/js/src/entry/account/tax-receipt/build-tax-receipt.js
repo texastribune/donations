@@ -37,10 +37,11 @@ export default async function buildTaxReceipt({
   doc.setFontSize(10);
   doc.text(
     [
-      'The Waco Bridge',
-      'P.O. Box 702',
-      'Waco, Texas 76703',
-      'www.wacobridge.org',
+      'Austin Current',
+      '919 South Congress',
+      'Sixth Floor',
+      'Austin, Texas 78701',
+      'www.austincurrent.org',
     ],
     425,
     topEdge,
@@ -51,7 +52,7 @@ export default async function buildTaxReceipt({
   doc.text(`${format(new Date(), 'MMMM D, YYYY')}`, leftEdge, 130);
   doc.text(`Dear ${greeting || 'Donor'},`, leftEdge, 155);
   doc.text(
-    `Thank you for your support of The Waco Bridge — the only nonpartisan, member-supported, digitally focused news organization that covers Texas public policy, politics, government and statewide issues. Our nonprofit newsroom relies on the generosity of people like you, which is why your support helps us produce serious journalism about issues that matter to Texas. Please find your ${lastYear} giving summary below.`,
+    `Thank you for your support of Austin Current — the only nonpartisan, member-supported, digitally focused news organization that covers Austin public policy, politics, government and statewide issues. Our nonprofit newsroom relies on the generosity of people like you, which is why your support helps us produce serious journalism about issues that matter to Austin. Please find your ${lastYear} giving summary below.`,
     leftEdge,
     180,
     { maxWidth: '385' }
@@ -76,15 +77,15 @@ export default async function buildTaxReceipt({
       365
     );
 
-    doc.text('The Waco Bridge Team', leftEdge, 390);
+    doc.text('Austin Current Team', leftEdge, 390);
     doc.text(
-      'Questions: membership@wacobridge.org / 737.802.6665',
+      'Questions: community@austincurrent.org',
       leftEdge,
       402
     );
 
     doc.text(
-      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Waco Bridge is a 501(c)3 nonprofit organization with Federal Tax ID #26-4527097.',
+      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. Austin Current is a 501(c)3 nonprofit organization with Federal Tax ID #26-4527097.',
       leftEdge,
       427,
       { maxWidth: '385' }
@@ -104,15 +105,15 @@ export default async function buildTaxReceipt({
       327
     );
 
-    doc.text('The Waco Bridge Team', leftEdge, 352);
+    doc.text('Austin Current Team', leftEdge, 352);
     doc.text(
-      'Questions: membership@wacobridge.org / 737.802.6665',
+      'Questions: community@austincurrent.org',
       leftEdge,
       364
     );
 
     doc.text(
-      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. The Waco Bridge is a 501(c)3 nonprofit organization with Federal Tax ID #26-4527097.',
+      'No goods or services were provided in exchange for this contribution. This letter may be used as a receipt for tax purposes. Austin Current is a 501(c)3 nonprofit organization with Federal Tax ID #26-4527097.',
       leftEdge,
       389,
       { maxWidth: '385' }

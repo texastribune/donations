@@ -2,7 +2,7 @@
   <div>
     <h1 class="has-xl-btm-marg">To verify, please log in</h1>
     <p class="has-b-btm-marg">
-      To link <strong>{{ emailToLink }}</strong> to the Waco Bridge account
+      To link <strong>{{ emailToLink }}</strong> to Austin Current account
       created with <strong>{{ existingEmail }}</strong
       >, please log into your account.
     </p>

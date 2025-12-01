@@ -91,11 +91,6 @@ DONATION_TYPE_INFO = {
         "description": "Blast Subscription",
         "recurring_type": "Open",
     },
-    "waco": {
-         "type": "Waco Membership",
-         "description": "Waco Bridge Sustaining Membership",
-         "open_ended_status": "Open",
-     },
 }
 
 if ENABLE_SENTRY:
@@ -422,7 +417,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
     payer wait for them. It sends a notification about the donation to Slack (if configured).
     """
     quarantine = False
-    if donation_type in ["membership", "waco"] and ENABLE_BAD_ACTOR_API:
+    if donation_type == "membership" and ENABLE_BAD_ACTOR_API:
         bad_actor_response = BadActor(bad_actor_request=bad_actor_request)
         quarantine = bad_actor_response.quarantine
 
@@ -445,7 +440,7 @@ def add_stripe_donation(form=None, customer=None, donation_type=None, bad_actor_
         return True
     else:
         logging.info("----Creating recurring payment...")
-        if donation_type in ["membership", "waco"]:
+        if donation_type == "membership":
             subscription = create_custom_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
         else:
             subscription = create_subscription(donation_type=donation_type, customer=customer, form=form, quarantine=quarantine)
@@ -529,7 +524,7 @@ def do_charge_or_show_errors(form_data, template, bundles, function, donation_ty
         charge_template = "blast-charge.html"
         bundles = get_bundles("old")
     else:
-        charge_template = f"charge_{NEWSROOM['name']}.html" if donation_type != "waco" else "charge_waco.html"
+        charge_template = f"charge_{NEWSROOM['name']}.html"
         bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "donate")
     gtm = {
         "event_value": amount,
@@ -1304,7 +1299,7 @@ def add_opportunity(contact=None, form=None, customer=None, quarantine=False):
     opportunity.stripe_customer = customer["id"]
     opportunity.campaign_id = form["campaign_id"]
     opportunity.referral_id = form["referral_id"]
-    opportunity.description = "Waco Bridge Membership"
+    opportunity.description = "Austin Current Membership"
     opportunity.agreed_to_pay_fees = form["pay_fees_value"]
     opportunity.encouraged_by = form["reason"]
     opportunity.lead_source = "Stripe"
@@ -1373,7 +1368,7 @@ def add_recurring_donation(contact=None, form=None, customer=None, quarantine=Fa
     rdo.stripe_customer = customer["id"]
     rdo.campaign_id = form["campaign_id"]
     rdo.referral_id = form["referral_id"]
-    rdo.description = "Waco Bridge Sustaining Membership"
+    rdo.description = "Austin Current Sustaining Membership"
     rdo.agreed_to_pay_fees = form["pay_fees_value"]
     rdo.encouraged_by = form["reason"]
     rdo.lead_source = "Stripe"
@@ -1465,7 +1460,7 @@ def create_custom_subscription(donation_type=None, customer=None, form=None, qua
         description = donation_type_info["description"],
         metadata = {
             "donation_type": donation_type,
-            "newsroom": NEWSROOM["name"] if donation_type != "waco" else "waco",
+            "newsroom": NEWSROOM["name"],
             "donor_selected_amount": form.get("amount", 0),
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],
@@ -1565,9 +1560,9 @@ def create_payment_intent(donation_type=None, customer=None, form=None, quaranti
         amount=int(amount * 100),
         currency="usd",
         customer=customer["id"],
-        description=f"{NEWSROOM['title']} Membership" if donation_type != "waco" else "Waco Bridge Membership",
+        description=f"{NEWSROOM['title']} Membership",
         metadata={
-            "newsroom": NEWSROOM["name"] if donation_type != "waco" else "waco",
+            "newsroom": NEWSROOM["name"],
             "donation_type": donation_type,
             "campaign_id": form["campaign_id"],
             "referral_id": form["referral_id"],

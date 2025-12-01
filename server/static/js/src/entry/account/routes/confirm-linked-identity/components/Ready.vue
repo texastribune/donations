@@ -4,7 +4,7 @@
   <div v-else>
     <h1 class="has-xl-btm-marg">Are you sure?</h1>
     <p class="has-b-btm-marg">
-      You're about to link <strong>{{ emailToLink }}</strong> to Waco Bridge
+      You're about to link <strong>{{ emailToLink }}</strong> to Austin Current
       account: <strong>{{ existingEmail }}</strong
       >. Click below to confirm this update to your account.
     </p>

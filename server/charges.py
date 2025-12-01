@@ -71,14 +71,14 @@ def generate_stripe_description(opportunity) -> str:
 
     description_map = {
         "The Blast": "Blast Subscription",
-        "Recurring Donation": "Waco Bridge Sustaining Membership",
-        "Single": "Waco Bridge Membership",
-        "Giving Circle": "Waco Bridge Circle Membership",
+        "Recurring Donation": "Austin Current Sustaining Membership",
+        "Single": "Austin Current Membership",
+        "Giving Circle": "Austin Current Circle Membership",
     }
     if opportunity.type in description_map.keys():
         return description_map[opportunity.type]
     else:
-        return "Waco Bridge"
+        return "Austin Current"
 
 
 def charge(opportunity):

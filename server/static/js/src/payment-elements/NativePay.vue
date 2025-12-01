@@ -65,7 +65,7 @@ export default {
 
       if (isNumeric) {
         const total = {
-          label: 'Waco Bridge Donation',
+          label: 'Austin Current Donation',
           amount: newAmount,
         };
 
@@ -86,7 +86,7 @@ export default {
         country: 'US',
         currency: 'usd',
         total: {
-          label: 'Waco Bridge Donation',
+          label: 'Austin Current Donation',
           amount: this.amount,
         },
       });

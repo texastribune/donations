@@ -521,7 +521,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
             "Name": self.name,
             "StageName": self.stage_name,
             "Type": self.type,
-            "Newsroom__c": "Waco Bridge" if self.newsroom == "waco" else "Texas Tribune",
+            "Newsroom__c": "Au" if self.newsroom == "austin" else "Texas Tribune",
             "Stripe_Customer_ID__c": self.stripe_customer,
             "Referral_ID__c": self.referral_id,
             "LeadSource": self.lead_source,
@@ -690,7 +690,7 @@ class RDO(SalesforceObject, CampaignMixin):
             "Blast_Subscription_Email__c": self.blast_subscription_email,
             "Billing_Email__c": self.billing_email,
             "Type__c": self.type,
-            "Newsroom__c": "Waco Bridge" if self.newsroom == "waco" else "Texas Tribune",
+            "Newsroom__c": "Austin Current" if self.newsroom == "austin" else "Texas Tribune",
             "Stripe_Card_Brand__c": self.stripe_card_brand,
             "Stripe_Card_Expiration__c": self.stripe_card_expiration,
             "Stripe_Card_Last_4__c": self.stripe_card_last_4,
@@ -1018,7 +1018,7 @@ class Account(SalesforceObject):
             SELECT Opportunity.Account.Name, Opportunity.Account.Id, SUM(Opportunity.Amount) TotalGiving, MIN(Opportunity.CloseDate) CreatedDate
                 FROM Opportunity
                 WHERE Opportunity.StageName = 'Closed Won'
-                AND Opportunity.Newsroom__c = 'Waco Bridge'
+                AND Opportunity.Newsroom__c = 'Austin Current'
                 GROUP BY Opportunity.Account.Name, Opportunity.Account.Id
             """
 

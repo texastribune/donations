@@ -2,11 +2,11 @@
   <div>
     <h1 class="has-xl-btm-marg">You're logged into the wrong account</h1>
     <p class="has-b-btm-marg">
-      To link <strong>{{ emailToLink }}</strong> to the Waco Bridge account
+      To link <strong>{{ emailToLink }}</strong> to the Austin Current account
       created with <strong>{{ existingEmail }}</strong
-      >, you need to log into Waco Bridge account:
+      >, you need to log into Austin Current account:
       <strong>{{ existingEmail }}</strong
-      >. Right now, you're logged into Waco Bridge account:
+      >. Right now, you're logged into Austin Current account:
       <strong>{{ user.email }}</strong
       >.
     </p>
