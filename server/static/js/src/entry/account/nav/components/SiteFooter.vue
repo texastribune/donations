@@ -110,7 +110,7 @@
               Donate
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -120,7 +120,7 @@
             >
               Terms of Service
             </a>
-          </li>
+          </li> -->
           <li>
             <a
               ga-on="click"
@@ -132,7 +132,7 @@
               About Membership
             </a>
           </li>
-          <li>
+          <!-- <li>
             <a
               ga-on="click"
               :ga-event-category="ga.userPortalNav.category"
@@ -142,7 +142,7 @@
             >
               Privacy Policy
             </a>
-          </li>
+          </li> -->
           <li>
             <a
               ga-on="click"
