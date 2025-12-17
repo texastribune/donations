@@ -1790,9 +1790,13 @@ def log_opportunity(contact, payment_intent):
 
     app.logger.info("----Adding opportunity...")
 
+    if payment_meta.get("donorbox_campaign", ""):
+        opportunity.newsroom = "austin"
+    else:
+        opportunity.newsroom = payment_meta.get("newsroom", "").lower()
+
     opportunity = Opportunity(contact=contact)
     opportunity.stage_name = "Closed Won"
-    opportunity.newsroom = payment_meta.get("newsroom", "").lower()
     opportunity.amount = payment_intent.get("amount", 0) / 100
     opportunity.stripe_customer = customer_id
     opportunity.stripe_transaction_id = payment_intent["latest_charge"]
