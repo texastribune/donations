@@ -521,7 +521,7 @@ class Opportunity(SalesforceObject, CampaignMixin):
             "Name": self.name,
             "StageName": self.stage_name,
             "Type": self.type,
-            "Newsroom__c": "Au" if self.newsroom == "austin" else "Texas Tribune",
+            "Newsroom__c": "Austin" if self.newsroom == "austin" else "Texas Tribune",
             "Stripe_Customer_ID__c": self.stripe_customer,
             "Referral_ID__c": self.referral_id,
             "LeadSource": self.lead_source,
