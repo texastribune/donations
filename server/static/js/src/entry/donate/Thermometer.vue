@@ -8,7 +8,7 @@
       ></div>
     </div>
     <div class="text">
-      <strong>Up to $20,000 will be matched!</strong> <br />
+      <strong>Up to $20,000 matched!</strong> <br />
       {{ data[0].label }} raised so far!
     </div>
   </div>
