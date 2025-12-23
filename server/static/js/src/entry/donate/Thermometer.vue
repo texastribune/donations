@@ -8,8 +8,8 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} raised today</strong> <br />
-      to unlock {{ data[1].label }} in matching funds.
+      <strong>Up to $20,000 will be matched!</strong> <br />
+      {{ data[0].label }} raised so far!
     </div>
   </div>
 </template>
@@ -43,7 +43,7 @@ export default {
 
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/gt2024.json';
+      const url = 'https://membership.texastribune.org/eoy2025.json';
 
       axios
         .get(url)
