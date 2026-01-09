@@ -6,48 +6,66 @@
         <h2 class="link--blue">Business Member Benefits</h2>
       </header>
       <h3 class="smallcaps--light grid_separator">
-        <strong>Included with every Business Membership</strong>
+        <strong>Included with Pillar Membership</strong>
       </h3>
       <ul class="list--bulleted">
         <li>
           Organization name featured on the donor wall and on the business membership page with a link to the business member’s website
         </li>
         <li>
-          Organization name and site link in the "thank you" segment/sponsor message box in The Waco Bridge Newsletter — once annually
+          Opportunity to include the business member's site link and approximately 20 words of copy regularly, in a sponsor message box of The Waco Bridge Newsletter, on a rotating basis
         </li>
         <li>
-          Opportunity to include the business member's site link and approximately 20 words of copy in the sponsor message box of The Waco Bridge Newsletter — once annual (value of $250)
+          Invitation to invite up to 8 guests to exclusive Waco Bridge “Members Only” events
         </li>
-        <li>
-          Invitation to Waco Bridge #MembersOnly events and podcasts
-        </li>  
         <li>
           First opportunity to RSVP for select, limited-capacity Waco Bridge Events
+        </li>  
+        <li>
+          Visible Recognition at Waco Bridge events
         </li>
         <li>
-          A Waco Bridge Business Membership self standing card for display, logo badge to place on the business member's site, and social media graphic/copy to share with the member’s communities
+          Window sticker recognizing membership
         </li>
       </ul>
     </div>
 
     <div class="grid_separator--xl">
       <h3 class="smallcaps--light grid_separator">
-        <strong>Included at Arch and Pillar levels</strong>
+        <strong>Included at Arch level</strong>
       </h3>
       <ul class="list--bulleted">
         <li>
-          Invitation to the Annual Waco Business Town Hall in person event
+          Organization name featured on the donor wall and on the business membership page
         </li>
         <li>
-          Business text link and approximately 20 words of copy in the sponsor message box of The Waco Bridge Newsletter
-          <ul>
-            <li>
-              Community Partner Membership receives a total of three additional community newsletter sends annually (value of $750)
-            </li>
-            <li>
-              Community Champion Membership receives a total of six additional community newsletter sends annually (value of $1,500)
-            </li>
-          </ul>
+          Invitation to invite up to 5 guests to exclusive Waco Bridge “Members Only” events
+        </li>
+        <li>
+          Visible Recognition at Waco Bridge events
+        </li>
+        <li>
+          Window sticker recognizing membership
+        </li>
+        <li>
+          Business text link and approximately 20 words of copy, quarterly in the sponsor message box of The Waco Bridge Newsletter
+        </li>
+      </ul>
+    </div>
+
+    <div class="grid_separator--xl">
+      <h3 class="smallcaps--light grid_separator">
+        <strong>Included at Builder level</strong>
+      </h3>
+      <ul class="list--bulleted">
+        <li>
+          Organization name featured on the donor wall and on the business membership page
+        </li>
+        <li>
+          Window sticker recognizing membership
+        </li>
+        <li>
+          One featured business text link and approximately 20 words of copy, in the sponsor message box of The Waco Bridge Newsletter
         </li>
       </ul>
     </div>
