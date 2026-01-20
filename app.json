@@ -207,9 +207,6 @@
     "BLAST_LEGE_CAMPAIGN_ID": {
       "required": false
     },
-    "WACO_CAMPAIGN_ID": {
-      "required": false
-    },
     "AUTH0_PORTAL_M2M_CLIENT_ID": {
       "required": true
     },

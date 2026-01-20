@@ -5,8 +5,8 @@ const DEFAULT_PAY_FEES = 'True';
 const DEFAULT_STATE_SELECTED = 'TX';
 
 // master setting for default selection
-export const DEFAULT_LEVEL = 'bigTexYearly';
-export const WACO_DEFAULT_LEVEL = 'pillarYearly';
+export const DEFAULT_LEVEL = 'businessTopYearly';
+export const WACO_DEFAULT_LEVEL = 'businessTopYearly';
 
 export const DEFAULT_LEVEL_MAPPING = {
   'texas': DEFAULT_LEVEL,
@@ -16,38 +16,38 @@ export const DEFAULT_LEVEL_MAPPING = {
 // no order dependency in code for these.
 // the key is the bucket
 export const BUSINESS_LEVELS = {
-  bigTexYearly: {
-    bucket: 'bigTex',
+  businessTopYearly: {
+    bucket: 'businessTop',
     bucketFull: 'Big Tex',
     installmentPeriod: 'yearly',
     amount: '2500',
   },
-  bigTexMonthly: {
-    bucket: 'bigTex',
+  businessTopMonthly: {
+    bucket: 'businessTop',
     bucketFull: 'Big Tex',
     installmentPeriod: 'monthly',
     amount: '208',
   },
-  loneStarYearly: {
-    bucket: 'loneStar',
+  businessMidYearly: {
+    bucket: 'businessMid',
     bucketFull: 'Lone Star',
     installmentPeriod: 'yearly',
     amount: '1500',
   },
-  loneStarMonthly: {
-    bucket: 'loneStar',
+  businessMidMonthly: {
+    bucket: 'businessMid',
     bucketFull: 'Lone Star',
     installmentPeriod: 'monthly',
     amount: '125',
   },
-  hatsOffYearly: {
-    bucket: 'hatsOff',
+  businessBasicYearly: {
+    bucket: 'businessBasic',
     bucketFull: "Hat's Off",
     installmentPeriod: 'yearly',
     amount: '500',
   },
-  hatsOffMonthly: {
-    bucket: 'hatsOff',
+  businessBasicMonthly: {
+    bucket: 'businessBasic',
     bucketFull: "Hat's Off",
     installmentPeriod: 'monthly',
     amount: '42',
@@ -57,41 +57,41 @@ export const BUSINESS_LEVELS = {
 // no order dependency in code for these.
 // the key is the bucket
 export const WACO_BUSINESS_LEVELS = {
-  pillarYearly: {
-    bucket: 'pillar',
+  businessTopYearly: {
+    bucket: 'businessTop',
     bucketFull: 'Pillar',
     installmentPeriod: 'yearly',
     amount: '2000',
   },
-  pillarMonthly: {
-    bucket: 'pillar',
+  businessTopMonthly: {
+    bucket: 'businessTop',
     bucketFull: 'Pillar',
     installmentPeriod: 'monthly',
     amount: '167',
   },
-  archYearly: {
-    bucket: 'arch',
+  businessMidYearly: {
+    bucket: 'businessMid',
     bucketFull: 'Arch',
     installmentPeriod: 'yearly',
-    amount: '1250',
+    amount: '1500',
   },
-  archMonthly: {
-    bucket: 'arch',
+  businessMidMonthly: {
+    bucket: 'businessMid',
     bucketFull: 'Arch',
     installmentPeriod: 'monthly',
-    amount: '104',
+    amount: '125',
   },
-  builderYearly: {
-    bucket: 'builder',
+  businessBasicYearly: {
+    bucket: 'businessBasic',
     bucketFull: "Builder",
     installmentPeriod: 'yearly',
-    amount: '500',
+    amount: '750',
   },
-  builderMonthly: {
-    bucket: 'builder',
+  businessBasicMonthly: {
+    bucket: 'businessBasic',
     bucketFull: "Builder",
     installmentPeriod: 'monthly',
-    amount: '42',
+    amount: '62.50',
   },
 };
 
