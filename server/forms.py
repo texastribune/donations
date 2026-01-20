@@ -101,14 +101,6 @@ class BusinessMembershipForm(BaseForm):
     level = HiddenField(u"Level", [validators.InputRequired()])
 
 
-class WacoForm(BaseForm):
-    installment_period = StringField(
-        u"Installment Period", [validators.AnyOf(["yearly", "monthly", "None"])]
-    )
-    zipcode = StringField(u"ZIP Code", [validators.Length(max=5)])
-    reason = StringField(u"I am giving because", [validators.Length(max=255)])
-
-
 class BlastForm(BaseForm):
     installment_period = StringField(
         u"Installment Period", [validators.AnyOf(["yearly", "monthly", "one-time"])]
