@@ -35,15 +35,15 @@ export const BLAST_LEVELS = {
   //   installmentPeriod: 'yearly',
   //   amount: '199',
   // },
-  blastLegislativeSession: {
-    bucket: 'legislative',
-    bucketFull: 'Legislative session-only',
-    installmentPeriod: 'one-time',
-    amount: '200',
-    isFeatured: true,
-    prompt: 'Get ahead with insider news!',
-    footer: 'January 14 – June 14',
-  },
+  // blastLegislativeSession: {
+  //   bucket: 'legislative',
+  //   bucketFull: 'Legislative session-only',
+  //   installmentPeriod: 'one-time',
+  //   amount: '200',
+  //   isFeatured: true,
+  //   prompt: 'Get ahead with insider news!',
+  //   footer: 'January 14 – June 14',
+  // },
 };
 
 export const BLAST_FORM_STATE = {
