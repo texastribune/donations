@@ -38,6 +38,7 @@ export default {
   },
 
   errorCaptured(err) {
+    console.log(err);
     this[CONTEXT_TYPES.setError](err);
 
     logError({ err });

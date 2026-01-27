@@ -1,12 +1,13 @@
 <template>
   <summary-box heading="membership">
     <template #content>
+      <p>{{ lastTransaction }}</p>
       <p v-if="lastTransaction.card" class="has-text-gray-dark has-l-btm-marg">
         Thank you for being a Texas Tribune member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged on
         <strong>{{ lastTransaction.date | longDate }}</strong
         >, to your card ending in
-        <strong>{{ lastTransaction.card.last4 }}</strong
+        <!-- <strong>{{ lastTransaction.card.last4 }}</strong -->
         >. Your membership is good through
         <strong>{{ membershipExpirationDate | longDate }}</strong
         >.
