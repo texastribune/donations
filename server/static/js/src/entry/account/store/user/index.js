@@ -371,6 +371,7 @@ const getters = {
   },
 
   lastTransaction: ({ data: { last_transaction: lastTransaction } }) => {
+    console.log('here i am');
     if (lastTransaction) {
       console.log(lastTransaction);
       return formatTransaction(lastTransaction);
