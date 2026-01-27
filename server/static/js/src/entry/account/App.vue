@@ -28,6 +28,7 @@ export default {
 
   computed: {
     showLoader() {
+      console.log(this.context.error);
       return this.context.isFetching && !this.context.error;
     },
 
