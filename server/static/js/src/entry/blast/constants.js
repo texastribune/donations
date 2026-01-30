@@ -17,12 +17,12 @@ export const BLAST_LEVELS = {
     installmentPeriod: 'yearly',
     amount: '150',
   },
-  blastTaxExempt: {
-    bucket: 'tax-exempt',
-    bucketFull: 'Tax-exempt subscription',
-    installmentPeriod: 'yearly',
-    amount: '140',
-  },
+  // blastTaxExempt: {
+  //   bucket: 'tax-exempt',
+  //   bucketFull: 'Tax-exempt subscription',
+  //   installmentPeriod: 'yearly',
+  //   amount: '140',
+  // },
   // blastAcademicMonthly: {
   //   bucket: 'academic',
   //   bucketFull: 'Academic discount',
