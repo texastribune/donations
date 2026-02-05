@@ -1761,7 +1761,9 @@ def update_next_opportunity(opps=[], invoice=None, rerun=False):
         )
 
     next_opp = opps[0]
-    next_opp_date = datetime.strptime(next_opp.expected_giving_date, "%Y-%m-%d")
+    donation_date = next_opp.expected_giving_date if next_opp.expected_giving_date else next_opp.close_date
+    
+    next_opp_date = datetime.strptime(donation_date, "%Y-%m-%d")
     charged_on_date = datetime.fromtimestamp(invoice["effective_at"])
     days_difference = abs((charged_on_date - next_opp_date).days)
     if days_difference > int(MAX_SYNC_DAYS_DIFFERENCE) and not rerun:
