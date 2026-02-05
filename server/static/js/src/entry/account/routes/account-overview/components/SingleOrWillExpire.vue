@@ -1,7 +1,7 @@
 <template>
   <summary-box heading="membership">
     <template #content>
-      <p v-if="lastTransaction.card" class="has-text-gray-dark has-l-btm-marg">
+      <p v-if="lastTransaction && lastTransaction.card" class="has-text-gray-dark has-l-btm-marg">
         Thank you for being a Waco Bridge member! Your last donation of
         <strong>{{ lastTransaction.amount | currency }}</strong> was charged on
         <strong>{{ lastTransaction.date | longDate }}</strong
