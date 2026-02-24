@@ -1,5 +1,5 @@
 <template>
-  <div class="grid_row grid_wrap--m form-buckets">
+  <div class="grid_row_centered grid_wrap--m form-buckets">
     <div
       v-for="bucket in buckets"
       :key="bucket.id"

@@ -73,6 +73,12 @@
     flex-wrap: nowrap;
   }
 
+  &_row_centered {
+    @extend %flex-grid;
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+
   // .grid_padded -- DEFAULT
   // adds left/right padding on small screens
   &_padded {

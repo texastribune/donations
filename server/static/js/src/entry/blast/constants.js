@@ -7,22 +7,22 @@ export const BLAST_LEVELS = {
     bucket: 'standard',
     bucketFull: 'Standard subscription',
     installmentPeriod: 'monthly',
-    amount: '40',
+    amount: '15',
     isDefault: true,
-    footer: 'Save 27% with yearly',
+    footer: 'Save 17% with yearly',
   },
   blastYearly: {
     bucket: 'standard',
     bucketFull: 'Standard subscription',
     installmentPeriod: 'yearly',
-    amount: '349',
+    amount: '150',
   },
-  blastTaxExempt: {
-    bucket: 'tax-exempt',
-    bucketFull: 'Tax-exempt subscription',
-    installmentPeriod: 'yearly',
-    amount: '325',
-  },
+  // blastTaxExempt: {
+  //   bucket: 'tax-exempt',
+  //   bucketFull: 'Tax-exempt subscription',
+  //   installmentPeriod: 'yearly',
+  //   amount: '140',
+  // },
   // blastAcademicMonthly: {
   //   bucket: 'academic',
   //   bucketFull: 'Academic discount',
@@ -35,15 +35,15 @@ export const BLAST_LEVELS = {
   //   installmentPeriod: 'yearly',
   //   amount: '199',
   // },
-  blastLegislativeSession: {
-    bucket: 'legislative',
-    bucketFull: 'Legislative session-only',
-    installmentPeriod: 'one-time',
-    amount: '200',
-    isFeatured: true,
-    prompt: 'Get ahead with insider news!',
-    footer: 'January 14 – June 14',
-  },
+  // blastLegislativeSession: {
+  //   bucket: 'legislative',
+  //   bucketFull: 'Legislative session-only',
+  //   installmentPeriod: 'one-time',
+  //   amount: '200',
+  //   isFeatured: true,
+  //   prompt: 'Get ahead with insider news!',
+  //   footer: 'January 14 – June 14',
+  // },
 };
 
 export const BLAST_FORM_STATE = {
