@@ -12,37 +12,37 @@ export const DEFAULT_LEVEL = 'bigTexYearly';
 export const BUSINESS_LEVELS = {
   bigTexYearly: {
     bucket: 'bigTex',
-    bucketFull: 'Big Tex',
+    bucketFull: 'Maximum Impact',
     installmentPeriod: 'yearly',
     amount: '2500',
   },
   bigTexMonthly: {
     bucket: 'bigTex',
-    bucketFull: 'Big Tex',
+    bucketFull: 'Maximum Impact',
     installmentPeriod: 'monthly',
     amount: '208',
   },
   loneStarYearly: {
     bucket: 'loneStar',
-    bucketFull: 'Lone Star',
+    bucketFull: 'Events & Newsletter',
     installmentPeriod: 'yearly',
     amount: '1500',
   },
   loneStarMonthly: {
     bucket: 'loneStar',
-    bucketFull: 'Lone Star',
+    bucketFull: 'Events & Newsletter',
     installmentPeriod: 'monthly',
     amount: '125',
   },
   hatsOffYearly: {
     bucket: 'hatsOff',
-    bucketFull: "Hat's Off",
+    bucketFull: "Members & Webpage",
     installmentPeriod: 'yearly',
     amount: '500',
   },
   hatsOffMonthly: {
     bucket: 'hatsOff',
-    bucketFull: "Hat's Off",
+    bucketFull: "Members & Webpage",
     installmentPeriod: 'monthly',
     amount: '42',
   },

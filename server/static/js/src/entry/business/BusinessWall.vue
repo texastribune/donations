@@ -25,7 +25,7 @@ export default {
 
   data() {
     return {
-      orderedGroupNames: ['Big Tex', 'Lone Star', "Hat's Off"],
+      orderedGroupNames: ['Maximum Impact', 'Events & Newsletter', 'Members & Webpage'],
     };
   },
 };

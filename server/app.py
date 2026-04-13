@@ -668,9 +668,6 @@ def circle_form():
 
 @app.route("/business", methods=["GET", "POST"])
 def business_form():
-    if NEWSROOM["name"] != "texas":
-        return redirect(url_for("donate_form"))
-
     bundles = get_bundles("business")
     template = "business-form.html"
 
