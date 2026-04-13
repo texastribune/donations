@@ -70,12 +70,12 @@ STRIPE_KEYS = {
 STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 STRIPE_PRODUCTS = {
     "membership": os.getenv("STRIPE_PRODUCT_SUSTAINING", ""),
-    "bigTexMonthly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
-    "bigTexYearly": os.getenv("STRIPE_PRODUCT_BIG_TEX", ""),
-    "loneStarMonthly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
-    "loneStarYearly": os.getenv("STRIPE_PRODUCT_LONE_STAR", ""),
-    "hatsOffMonthly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
-    "hatsOffYearly": os.getenv("STRIPE_PRODUCT_HATS_OFF", ""),
+    "businessBasicMonthly": os.getenv("STRIPE_PRODUCT_BUSINESS_BASIC", ""),
+    "businessBasicYearly": os.getenv("STRIPE_PRODUCT_BUSINESS_BASIC", ""),
+    "businessMidMonthly": os.getenv("STRIPE_PRODUCT_BUSINESS_MID", ""),
+    "businessMidYearly": os.getenv("STRIPE_PRODUCT_BUSINESS_MID", ""),
+    "businessTopMonthly": os.getenv("STRIPE_PRODUCT_BUSINESS_TOP", ""),
+    "businessTopYearly": os.getenv("STRIPE_PRODUCT_BRUSINESS_TOP", ""),
     "foundersMonthly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
     "foundersYearly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
     "ceoMonthly": os.getenv("STRIPE_PRODUCT_CEO", ""),

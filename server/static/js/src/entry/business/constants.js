@@ -1,47 +1,47 @@
 import * as validators from '../../utils/validators';
 
-const LONG_PROGRAM_NAME = 'The Texas Tribune Business Membership';
+const LONG_PROGRAM_NAME = 'Austin Current Business Membership';
 const DEFAULT_PAY_FEES = 'True';
 const DEFAULT_STATE_SELECTED = 'TX';
 
 // master setting for default selection
-export const DEFAULT_LEVEL = 'bigTexYearly';
+export const DEFAULT_LEVEL = 'businessTopYearly';
 
 // no order dependency in code for these.
 // the key is the bucket
 export const BUSINESS_LEVELS = {
-  bigTexYearly: {
-    bucket: 'bigTex',
+  businessTopYearly: {
+    bucket: 'businessTop',
     bucketFull: 'Maximum Impact',
     installmentPeriod: 'yearly',
     amount: '2500',
   },
-  bigTexMonthly: {
-    bucket: 'bigTex',
+  businessTopMonthly: {
+    bucket: 'businessTop',
     bucketFull: 'Maximum Impact',
     installmentPeriod: 'monthly',
     amount: '208',
   },
-  loneStarYearly: {
-    bucket: 'loneStar',
+  businessMidYearly: {
+    bucket: 'businessMid',
     bucketFull: 'Events & Newsletter',
     installmentPeriod: 'yearly',
     amount: '1500',
   },
-  loneStarMonthly: {
-    bucket: 'loneStar',
+  businessMidMonthly: {
+    bucket: 'businessMid',
     bucketFull: 'Events & Newsletter',
     installmentPeriod: 'monthly',
     amount: '125',
   },
-  hatsOffYearly: {
-    bucket: 'hatsOff',
+  businessBasicYearly: {
+    bucket: 'businessBasic',
     bucketFull: "Members & Webpage",
     installmentPeriod: 'yearly',
     amount: '500',
   },
-  hatsOffMonthly: {
-    bucket: 'hatsOff',
+  businessBasicMonthly: {
+    bucket: 'businessBasic',
     bucketFull: "Members & Webpage",
     installmentPeriod: 'monthly',
     amount: '42',
