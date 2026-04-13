@@ -1,13 +1,13 @@
-{% extends "new_layout.html" %}
+{% extends "new_layout_newsroom.html" %}
 
-{% block title %}Business Membership | The Texas Tribune{% endblock %}
+{% block title %}Business Membership | Austin Current{% endblock %}
 
 {% block og_meta %}
-  <meta property="og:url" content="https://support.texastribune.org/businessform">
-  <meta property="og:image" content="https://support.texastribune.org{{ url_for('static', filename='img/business-social.jpg') }}">
-  <meta property="og:title" content="Business Membership | The Texas Tribune">
+  <meta property="og:url" content="https://support.austincurrent.org/business">
+  <meta property="og:image" content="{{ url_for('static', filename='img/social-' + newsroom.name + '.png') }}">
+  <meta property="og:title" content="Business Membership | Austin Current">
   <meta property="og:type" content="website">
-  <meta property="og:description" content="At The Texas Tribune, members make all the difference. Join me in supporting the Tribune’s nonprofit newsroom by becoming a Business Member today.">
+  <meta property="og:description" content="At Austin Current, members make all the difference. Join me in supporting the Current’s nonprofit newsroom by becoming a Business Member today.">
 {% endblock %}
 
 {% block head_scripts %}
@@ -26,14 +26,14 @@
     <!-- hero component -->
     {% with
       helperClass="hero--business",
-      title="Join Our Business Membership Program",
-      intro="Make an annual contribution to The Texas Tribune in your organization's name and join a roster of community-minded businesses."
+      title="Join Austin Current’s Annual Business Membership Program",
+      intro="Join as a Business Member today to support our mission to provide community-centered reporting and give Austinites the information they need to navigate daily life, understand the issues shaping our future and hold leaders accountable."
     %}
       {% include "includes/hero.html" %}
     {% endwith %}
 
     <div class="grid_container grid_padded--xl section-padding">
-      {% include 'includes/business_opening_pitch.html' %}
+      <!-- {% include 'includes/business_opening_pitch.html' %} -->
     </div>
 
     <!-- for hash links when a form is invalid -->
