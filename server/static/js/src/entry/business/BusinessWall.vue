@@ -1,11 +1,11 @@
 <template>
   <wall
-    json-file="business-member-roster"
+    json-file="austin-business-member-roster"
     :ordered-group-names="orderedGroupNames"
   >
     <template #heading>
       <div class="border--yellow_notch"></div>
-      <h2 class="grid_separator">Our Business Members</h2>
+      <h2 class="grid_separator">We’re honored to have the support of the following Austin Current business members</h2>
     </template>
     <template #member="{ member }">
       <span class="wall__name"

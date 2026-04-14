@@ -10,6 +10,12 @@
       </h3>
       <ul class="list--bulleted">
         <li>
+          Invites to exclusive quarterly in-person briefings with Austin Current leadership
+        </li>
+        <li>
+          Dedicated one-week graphic or logo placement on our highly trafficked home webpage
+        </li>
+        <li>
           Inclusion in all Austin Current event branding and signage
         </li>
         <li>
@@ -19,7 +25,7 @@
           Logo featured in every edition of our monthly member newsletter
         </li>
         <li>
-          Recognition on business membership webpage
+          Recognition on business membership webpage (name and link)
         </li>
       </ul>
     </div>
@@ -39,7 +45,7 @@
           Logo featured in every edition of our monthly member newsletter
         </li>
         <li>
-          Recognition on business membership webpage
+          Recognition on business membership webpage (name and link)
         </li>
       </ul>
     </div>
@@ -53,7 +59,7 @@
           Logo featured in every edition of our monthly member newsletter
         </li>
         <li>
-          Recognition on business membership webpage
+          Recognition on business membership webpage (name and link)
         </li>
       </ul>
     </div>
