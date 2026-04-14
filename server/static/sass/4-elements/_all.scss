@@ -1,15 +1,18 @@
-// ELEMENTS - Raw tag styles
+@import 'font-families';
 
-// Set font root sizes for desktop, tablet, mobile
 html {
-  @include font-setting('primary');
   font-size: $font-root;
   @include mq($until: bp-s) {
     font-size: $font-root-mobile;
   }
 }
 
-// Strip margin and padding from all headers a paragraphs
+body {
+  @include font-setting('primary');
+  color: $color-black-off;
+}
+
+// We made some tag decisions here based on repeated overriding of browser defaults
 html,
 body,
 dd,
@@ -23,43 +26,52 @@ h3,
 h4,
 h5,
 h6,
-p {
+p,
+figure,
+blockquote {
   margin: 0;
   padding: 0;
 }
 
-// Set base typography proportions for headers, paragraphs, etc.
-// sizing variables in settings/_breakpoints.scss
-h1 {
-  font-size: $size-xxl;
-  line-height: 1.2;
-}
-
-h2 {
-  font-size: $size-xl;
-}
-
-h3 {
-  font-size: $size-l;
-}
-
-h4 {
-  font-size: $size-m;
-}
-
-h5 {
-  font-size: $size-s;
-}
-
-p {
-  font-size: $size-b;
-}
-
 a {
+  color: inherit;
   text-decoration: none;
 }
 
 // We want all of our cite elements to not be italicized
 cite {
   font-style: normal;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+// No bullets by default
+ul {
+  list-style: none;
+}
+
+hr {
+  border: 1px solid $color-gray-light;
+}
+
+// By default we add leading to paragraphs, lists, and captions
+p,
+ul,
+figcaption {
+  line-height: $font-line-height-b;
+}
+
+
+// hide details/summary arrow (webkit)
+details summary::-webkit-details-marker {
+  display: none;
+}
+// hide details/summary arrow (chrome/ff)
+details summary::marker {
+  content: '';
 }

@@ -1,0 +1,54 @@
+{% extends "new_layout_newsroom.html" %}
+
+{% block title %}Donors and Members | The Waco Bridge{% endblock %}
+
+{% block head_scripts %}
+{% if form_data and message %}
+<script>
+  window.location.replace('#join-today');
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+  <main id="main-tt-content" class="l-container">
+    <header class="has-page-padding" style="margin-top: 2rem">
+      <h1 class="t-serif has-b-btm-marg">Our Supporters</h1>
+      <div class="has-notch has-bg-yellow has-xxl-btm-marg"></div>
+    </header>
+    <div class="t-serif t-links-underlined t-size-b has-page-padding">
+
+      <p class="has-b-btm-marg">Donors and members subscribe to The Waco Bridge’s belief that promoting greater civic engagement and informed discourse is a direct route to a better and more productive Waco. They play no role in guiding the journalism produced by the Bridge or the planning and execution of events.</p>
+      <p class="has-b-btm-marg">If you are interested in becoming a donor or a member, click <a href="https://support.wacobridge.org/donate">here</a>.</p>
+      <p class="has-b-btm-marg">When it comes to our donors and <a href="/support-us/corporate-sponsors/">corporate sponsors</a>, the Bridge is committed to full transparency. Current-year and all time totals below include both pledged and received gifts. Amounts listed are updated daily and are subject to change. If you have a question about an amount you see below, please contact us at <a href="mailto:membership@wacobridge.org">membership@wacobridge.org</a>.</p>
+      <p class="has-b-btm-marg">When donors or <a href="/support-us/corporate-sponsors/">corporate sponsors</a> who have given $1,000 or more to the Bridge are named in our stories, we disclose them on those pages.</p>
+    </div>
+
+    <div class="has-page-padding has-l-btm-marg">
+      <p class="has-xxl-btm-marg">
+        <a href="https://support.wacobridge.org/donate?installmentPeriod=monthly&amount=20&campaignId=701Pe00000B4GENIA3" class="c-button l-display-ib" ga-event-category="donations" ga-event-action="membership-intent" ga-event-label="donor wall">Become a member</a>
+      </p>
+    </div>
+
+
+    <div class="has-notch has-bg-yellow has-notch--full"></div>
+    <table class="investors-member-year c-table c-table--striped l-width-full">
+    {% for donorGroup in sortedDonors %}
+      <tr><td>
+      <h3 class="t-lh-m">{{ donorGroup }}</h3>
+      <ul class="l-list t-links{% if sortedDonors[donorGroup]|length > 3 %} l-multicol{% endif %}">
+      {% for donor in sortedDonors[donorGroup] %}
+        <li class="{% if not loop.last %}t-lh-m{% endif %}">{{ donor.attribution }}</li>
+      {% endfor %}
+      </ul>
+      </td></tr>
+  {% endfor %}
+    </table>
+  </main>
+{% endblock %}
+
+{% block bottom_script %}
+
+{% endblock %}
+
+

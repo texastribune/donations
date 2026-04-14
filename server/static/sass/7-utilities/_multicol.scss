@@ -1,0 +1,14 @@
+// Multi column  (l-multicol)
+//
+// Add 2 columns on larger viewports. In the future, this could be extended to support other column counts.
+//
+//
+// Markup: <ul class="l-multicol {{ className }}"><li>Blue cheese</li><li>Feta</li><li>Swiss</li><li>Colby Jack</li><li>Pepper Jack</li><li>Cheddar</li></ul>
+//
+//
+// Styleguide 7.0.4
+.l-multicol {
+  @include mq($from: bp-s) {
+    columns: 2;
+  }
+}

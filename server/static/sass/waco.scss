@@ -30,6 +30,8 @@
 // Include components & typography as needed
 @import '5-typography/links';
 @import '5-typography/typography';
+@import '5-typography/t-helpers';
+
 
 // typography overrides
 .prose {
@@ -52,6 +54,8 @@
 @import '6-components/rotate-words';
 @import '6-components/smd';
 @import '6-components/thermometer';
+@import '6-components/table';
+
 
 // used for promotional messages
 @import './ds/6-components/message';

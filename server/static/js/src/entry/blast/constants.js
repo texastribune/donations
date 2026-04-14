@@ -7,22 +7,22 @@ export const BLAST_LEVELS = {
     bucket: 'standard',
     bucketFull: 'Standard subscription',
     installmentPeriod: 'monthly',
-    amount: '40',
+    amount: '15',
     isDefault: true,
-    footer: 'Save 27% with yearly',
+    footer: 'Save 17% with yearly',
   },
   blastYearly: {
     bucket: 'standard',
     bucketFull: 'Standard subscription',
     installmentPeriod: 'yearly',
-    amount: '349',
+    amount: '150',
   },
-  blastTaxExempt: {
-    bucket: 'tax-exempt',
-    bucketFull: 'Tax-exempt subscription',
-    installmentPeriod: 'yearly',
-    amount: '325',
-  },
+  // blastTaxExempt: {
+  //   bucket: 'tax-exempt',
+  //   bucketFull: 'Tax-exempt subscription',
+  //   installmentPeriod: 'yearly',
+  //   amount: '140',
+  // },
   // blastAcademicMonthly: {
   //   bucket: 'academic',
   //   bucketFull: 'Academic discount',
@@ -44,15 +44,6 @@ export const BLAST_LEVELS = {
   //   prompt: 'Get ahead with insider news!',
   //   footer: 'January 14 – June 14',
   // },
-  blastSpecialSession: {
-    bucket: 'special',
-    bucketFull: 'Special session pricing',
-    installmentPeriod: 'one-time for 2025',
-    amount: '100',
-    isFeatured: true,
-    prompt: 'Get ahead with insider news!',
-    footer: 'Renews at $250 in 2026',
-  },
 };
 
 export const BLAST_FORM_STATE = {

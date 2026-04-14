@@ -1,0 +1,155 @@
+// Text font variant (t-<font-variant>)
+//
+// Helper to define if serif or sans font is to be used. This uses the `@include font-setting` mixin, which establishes the font-family according to whether or not the `.fonts-loaded` class is present. <br><br> General rule for this is `t-serif` _for editorial_ and `t-sans` _for everything else_<br><br>**Note:** The default font is `t-sans`. That means most of the time you won't need to explicitly set it. {{isHelper}}
+//
+// .t-serif - Default serif
+// .t-sans - Default sans
+//
+// Markup: <h4 class="{{ className }}">Change inherit font family</h4>
+//
+//
+// Styleguide 5.2.2
+.t-serif {
+  @include font-setting('secondary');
+}
+
+.t-sans {
+  @include font-setting;
+}
+
+// Text case (t-<case>)
+//
+// Text-transform helpers. {{isHelper}}
+//
+// .t-titlecase - Text transformed to Title Case
+// .t-uppercase - Text transformed to UPPERCASE. Don't forget to add kerning `t-lsp-<size>` with uppercase text.
+//
+// Markup: <p class="{{ className }}">Text transform helper.</p>
+//
+//
+// Styleguide 5.2.5
+.t-titlecase {
+  text-transform: capitalize;
+}
+
+.t-uppercase {
+  text-transform: uppercase;
+}
+
+// Text align (t-align-<dir>)
+//
+// Text-align helpers. {{isHelper}}
+//
+// .t-align-left - Left aligned
+// .t-align-center - Center aligned
+// .t-align-right - Right aligned
+//
+// Markup: <p class="{{ className }}">Example</p>
+//
+//
+// Styleguide 5.2.7
+
+.t-align-left {
+  text-align: left;
+}
+
+.t-align-center {
+  text-align: center;
+}
+
+.t-align-right {
+  text-align: right;
+}
+
+
+// Text line-height (t-lh-<size>)
+//
+// Various sizes of unitless line-height. {{isHelper}}
+//
+// t-lh-s - `line-height: 1.2`
+// t-lh-b - `line-height: 1.4` (used on paragraphs, lists, and figcaptions)
+// t-lh-m - `line-height: 1.5`
+// t-lh-l - `line-height: 2`
+//
+// Markup: <h2 class="{{ className }}">Texas again mistakenly flags voters for citizenship reviews</h2>
+//
+//
+// Styleguide 5.2.7
+//
+$line-height-type: (
+  s: $font-line-height-s,
+  b: $font-line-height-b,
+  m: $font-line-height-m,
+  l: $font-line-height-l,
+);
+
+@each $type-set, $line-height in $line-height-type {
+  .t-lh-#{$type-set} {
+    line-height: $line-height;
+  }
+}
+
+// Text letter-spacing (t-lsp-<size>)
+//
+// Kerning helpers. We generally use this in conjunction with `t-uppercase`. {{isHelper}}
+//
+// t-lsp-s - `letter-spacing: .02em`
+// t-lsp-b - `letter-spacing: .03em`
+// t-lsp-m - `letter-spacing: .05em`
+// t-lsp-l - `letter-spacing: .07em`
+//
+// Markup: <h2 class="{{ className }} t-uppercase">Texas again mistakenly flags voters for citizenship reviews</h2>
+//
+//
+// Styleguide 5.2.7
+//
+$letter-spacing-type: (
+  s: $font-letter-spacing-s,
+  b: $font-letter-spacing-b,
+  m: $font-letter-spacing-m,
+  l: $font-letter-spacing-l,
+);
+
+@each $type-set, $letter-spacing in $letter-spacing-type {
+  .t-lsp-#{$type-set} {
+    letter-spacing: $letter-spacing;
+  }
+}
+
+// Text wrap (t-wrap-<setting>)
+//
+// Helper classes for handling how words are allowed to wrap and break. {{isHelper}}
+//
+// .t-wrap-break - Allow a word to wrap to the next line mid-word
+// .t-wrap-balance - Allow a word to wrap to the next line, but try to keep the lines balanced. This isn't supported in all browsers and could be used in conjunction with our fork of [NYT's balanacer helper](https://github.com/texastribune/text-balancer).
+//
+// Markup: 5-typography/wrap.html
+//
+//
+// Styleguide 5.3.6
+.t-wrap-break {
+  word-break: break-all;
+}
+
+.t-wrap-balance {
+  text-wrap: balance;
+}
+
+// Text weight (t-weight-<setting>)
+//
+// Helper for adding bold/normal `font-weight`. Sometimes individual `<strong>` can be redundant tags. {{isHelper}}
+//
+// .t-weight-bold - `font-weight: 700`
+// .t-weight-normal - `font-weight: 400`
+//
+// Markup: <p class="{{ className }}">Example text</p>
+//
+//
+// Styleguide 5.3.6
+.t-weight-bold {
+  font-weight: 700;
+}
+
+.t-weight-normal {
+  font-weight: 400;
+}

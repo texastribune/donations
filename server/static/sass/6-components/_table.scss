@@ -1,0 +1,81 @@
+@mixin fixed-table-widths($widths) {
+  @for $i from 1 through length($widths) {
+    $curr: nth($widths, $i);
+
+    thead tr:first-child > th:nth-child(#{$i}),
+    tbody tr:first-child > td:nth-child(#{$i}) {
+      width: $curr;
+    }
+  }
+}
+
+// Table (c-table)
+//
+// Tabular display classes. Tables should be constructed with a `<thead>` and `<tbody>`. <br><br>
+// Tip: Use `transform: scaleY(-1);` to flip ascending/descending icons
+//
+// .c-table--striped - Zebra stripes odd rows
+// .c-table--bordered - Bordered table, cells, rows and headings
+// .c-table--bordered-rows - Bordered rows
+// .c-table--10-45-45 - Three-column table with col widths 10%, 45%, 45%
+// .c-table--15-70-15 - Two-column table with col widths 15%, 70%, 15%
+// .c-table--fixed - Adds `table-layout: fixed`. Helpful for mobile-friendly tables.
+//
+// Markup: 6-components/table/table.html
+//
+// Styleguide 6.1.5
+.c-table {
+  border-collapse: collapse;
+
+  &--fixed {
+    table-layout: fixed;
+  }
+
+  td,
+  th {
+    // not a standard size
+    padding: 0.5rem;
+  }
+
+  &--10-45-45 {
+    @include fixed-table-widths(10% 45% 45%);
+    table-layout: fixed;
+  }
+
+  &--30-70 {
+    @include fixed-table-widths(30% 70%);
+    table-layout: fixed;
+  }
+
+  &--15-70-15 {
+    @include fixed-table-widths(15% 70% 15%);
+    table-layout: fixed;
+  }
+
+  &--striped {
+    tbody > tr:nth-child(odd) {
+      // not a standard color
+      background-color: #f7f7f7;
+    }
+  }
+
+  &--bordered-rows {
+    tbody > tr {
+      border-top: 1px solid $color-white-off;
+    }
+  }
+
+  &--bordered {
+    border: 1px solid $color-white-off;
+
+    tbody > tr,
+    thead > tr {
+      border-top: 1px solid $color-white-off;
+    }
+
+    tr > td,
+    tr > th {
+      border-left: 1px solid $color-white-off;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+// Tabs (c-tabs)
+//
+// The tabs HTML is based on a [w3 example](https://www.w3.org/TR/wai-aria-practices-1.1/examples/tabs/tabs-1/tabs.html). The JS in the example uses [w3's script](https://www.w3.org/TR/wai-aria-practices-1.1/examples/tabs/tabs-1/js/tabs.js), but state change implementation will vary by environment.
+//
+// Markup: 6-components/tabs/tabs.html
+//
+// Styleguide 6.1.3
+.c-tabs {
+  &__list {
+    border-bottom: 1px solid $color-gray-light;
+    display: flex;
+  }
+
+  &__tab {
+    padding-bottom: $size-xs;
+
+    &--active {
+      &:after {
+        background-color: currentColor;
+        bottom: -2px;
+        content: '';
+        height: 3px;
+        left: 0;
+        position: absolute;
+        width: 100%;
+      }
+    }
+
+    // prevent outline on mouse click
+    &:focus {
+      outline: 2px solid inherit;
+    }
+
+    &:not(:focus-visible) {
+      outline: none;
+    }
+
+    &:focus-visible {
+      outline: 2px solid inherit;
+    }
+  }
+}
