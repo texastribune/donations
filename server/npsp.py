@@ -175,7 +175,7 @@ class SalesforceConnection(object):
             return response["records"] + self.query(
                 query=None, path=response["nextRecordsUrl"]
             )
-        logging.debug(response)
+        # logging.debug(response)
         return response["records"]
 
     def post(self, path, data):

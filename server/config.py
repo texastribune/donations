@@ -75,7 +75,7 @@ STRIPE_PRODUCTS = {
     "businessMidMonthly": os.getenv("STRIPE_PRODUCT_BUSINESS_MID", ""),
     "businessMidYearly": os.getenv("STRIPE_PRODUCT_BUSINESS_MID", ""),
     "businessTopMonthly": os.getenv("STRIPE_PRODUCT_BUSINESS_TOP", ""),
-    "businessTopYearly": os.getenv("STRIPE_PRODUCT_BRUSINESS_TOP", ""),
+    "businessTopYearly": os.getenv("STRIPE_PRODUCT_BUSINESS_TOP", ""),
     "foundersMonthly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
     "foundersYearly": os.getenv("STRIPE_PRODUCT_FOUNDERS", ""),
     "ceoMonthly": os.getenv("STRIPE_PRODUCT_CEO", ""),
