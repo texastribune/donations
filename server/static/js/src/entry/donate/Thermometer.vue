@@ -8,8 +8,8 @@
       ></div>
     </div>
     <div class="text">
-      <strong>{{ data[0].label }} raised today</strong> <br />
-      to unlock {{ data[1].label }} in matching funds.
+      <strong>{{ data[0].label }} new members</strong> <br />
+      toward goal of {{ data[1].label }}.
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
       error: false,
       data: [
         { slug: 'actual', label: '0', value: 0 },
-        { slug: 'goal', label: '$15,000', value: 15000 },
+        { slug: 'goal', label: '500', value: 500 },
       ],
     };
   },
