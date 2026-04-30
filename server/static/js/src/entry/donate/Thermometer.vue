@@ -43,7 +43,7 @@ export default {
 
   methods: {
     getSalesforceReport() {
-      const url = 'https://membership.texastribune.org/gt2024.json';
+      const url = 'https://membership.texastribune.org/smd2026.json';
 
       axios
         .get(url)
