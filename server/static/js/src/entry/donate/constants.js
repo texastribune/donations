@@ -45,7 +45,7 @@ export const BASE_FORM_STATE = {
     message: 'Enter numeric amount above $1',
   },
   pay_fees_value: {
-    value: 'False',
+    value: 'True',
     isValid: true,
     validator: null,
     message: null,
