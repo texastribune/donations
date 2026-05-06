@@ -1056,6 +1056,7 @@ class Account(SalesforceObject):
             FROM Account
             WHERE RecordTypeId IN ('01216000001IhHL', '01216000001IhHMAA0')
             AND Total_Amt_For_Donor_Wall_All_Time__c > 0
+            AND CreatedDate < 2026-01-01T00:00:00-06:00
             """
 
         donors = sf.query(query)
