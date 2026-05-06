@@ -27,3 +27,4 @@ server/templates/includes/base_icons.html
 cov.html
 
 .idea
+env-docker.shell
