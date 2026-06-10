@@ -12,4 +12,4 @@ services:
       - /bin/sh
       - ./shell.sh
     env_file:
-      - ./env-docker
+      - ./env-docker.shell
