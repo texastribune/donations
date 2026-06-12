@@ -862,10 +862,10 @@ def daf():
 
 @app.route("/members")
 def donor_wall():
-    if NEWSROOM["name"] == "waco":
-        bundles = get_bundles("waco")
+    if NEWSROOM["name"] == "austin":
+        bundles = get_bundles("austin")
         sorted_donors = Account.list_by_giving()
-        return render_template("waco-donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
+        return render_template("austin-donor-wall.html", bundles=bundles, sortedDonors=sorted_donors, newsroom=NEWSROOM)
     else:
         bundles = get_bundles(NEWSROOM["name"] if NEWSROOM["name"] != "texas" else "old")
         message = "Something went wrong!"
