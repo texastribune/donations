@@ -1019,7 +1019,7 @@ class Account(SalesforceObject):
                 FROM Opportunity
                 WHERE Opportunity.StageName = 'Closed Won'
                 AND Opportunity.Newsroom__c = 'Austin'
-                AND Opportunity.CloseDate >= 2025-12-01T00:00:00Z
+                AND Opportunity.CloseDate >= 2025-12-01
                 GROUP BY Opportunity.Account.Name, Opportunity.Account.Id
             """
 
