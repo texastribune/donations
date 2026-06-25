@@ -85,13 +85,13 @@ export const WACO_BUSINESS_LEVELS = {
     bucket: 'businessBasic',
     bucketFull: "Builder",
     installmentPeriod: 'yearly',
-    amount: '750',
+    amount: '500',
   },
   businessBasicMonthly: {
     bucket: 'businessBasic',
     bucketFull: "Builder",
     installmentPeriod: 'monthly',
-    amount: '62.50',
+    amount: '42',
   },
 };
 
