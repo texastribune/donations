@@ -19,6 +19,7 @@ import re
 from datetime import datetime
 from pprint import pformat
 from PyPDF2 import PdfMerger, PdfReader
+from urllib.parse import urlsplit, urlunsplit
 
 import stripe
 from amazon_pay.client import AmazonPayClient
@@ -262,8 +263,15 @@ def redirect_external_page():
     if request.method != "GET":
         return None
 
-    destination = app.config["EXTERNAL_REDIRECTS"].get(request.path)
+    path = request.path.rstrip("/") or "/"
+    destination = app.config["EXTERNAL_REDIRECTS"].get(path)
     if destination:
+        scheme, netloc, destination_path, query, fragment = urlsplit(destination)
+        incoming_query = request.query_string.decode("utf-8")
+        query = "&".join(filter(None, [query, incoming_query]))
+        destination = urlunsplit(
+            (scheme, netloc, destination_path, query, fragment)
+        )
         return redirect(destination, code=302)
 
     return None
