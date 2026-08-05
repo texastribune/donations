@@ -25,6 +25,13 @@ FLASK_DEBUG = os.getenv("FLASK_DEBUG", 0)
 WTF_CSRF_ENABLED = False
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
+EXTERNAL_REDIRECTS = {
+    "/": "",
+    "/business": "",
+    "/circle": "",
+    "/blast": "",
+}
+
 ########
 # Celery
 #

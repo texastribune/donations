@@ -257,6 +257,18 @@ support.texastribune.org.
 """
 
 
+@app.before_request
+def redirect_external_page():
+    if request.method != "GET":
+        return None
+
+    destination = app.config["EXTERNAL_REDIRECTS"].get(request.path)
+    if destination:
+        return redirect(destination, code=302)
+
+    return None
+
+
 @app.route("/")
 @app.route("/levels.html")
 @app.route("/faq.html")
