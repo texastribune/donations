@@ -260,7 +260,7 @@ support.texastribune.org.
 
 @app.before_request
 def redirect_external_page():
-    if request.method != "GET":
+    if request.method not in ("GET", "HEAD"):
         return None
 
     path = request.path.rstrip("/") or "/"
