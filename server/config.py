@@ -34,7 +34,7 @@ EXTERNAL_REDIRECTS = {
         "/blast": "https://www.texastribune.org/the-blast-the-texas-tribune/?c_src=redirect&c_src2=legacy",
     },
     "austin": {
-        "/": "",
+        "/": "https://give.austincurrent.org/campaign/819606/donate?c_src=redirect&c_src2=legacy",
         "/donate": "https://give.austincurrent.org/campaign/819606/donate?c_src=redirect&c_src2=legacy",
         "/business": "https://give.austincurrent.org/campaign/819020/donate?c_src=redirect&c_src2=legacy",
     },
