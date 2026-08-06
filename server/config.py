@@ -26,11 +26,23 @@ WTF_CSRF_ENABLED = False
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 EXTERNAL_REDIRECTS = {
-    "/": "https://give.texastribune.org/campaign/814363/donate?c_src=redirect&c_src2=legacy",
-    "/donate": "https://give.texastribune.org/campaign/814363/donate?c_src=redirect&c_src2=legacy",
-    "/business": "https://give.texastribune.org/campaign/816274/donate?c_src=redirect&c_src2=legacy",
-    "/circle": "https://give.texastribune.org/campaign/819868/donate?c_src=redirect&c_src2=legacy",
-    "/blast": "https://www.texastribune.org/the-blast-the-texas-tribune/?c_src=redirect&c_src2=legacy",
+    "texas": {
+        "/": "https://give.texastribune.org/campaign/814363/donate?c_src=redirect&c_src2=legacy",
+        "/donate": "https://give.texastribune.org/campaign/814363/donate?c_src=redirect&c_src2=legacy",
+        "/business": "https://give.texastribune.org/campaign/816274/donate?c_src=redirect&c_src2=legacy",
+        "/circle": "https://give.texastribune.org/campaign/819868/donate?c_src=redirect&c_src2=legacy",
+        "/blast": "https://www.texastribune.org/the-blast-the-texas-tribune/?c_src=redirect&c_src2=legacy",
+    },
+    "austin": {
+        "/": "",
+        "/donate": "https://give.austincurrent.org/campaign/819606/donate?c_src=redirect&c_src2=legacy",
+        "/business": "https://give.austincurrent.org/campaign/819020/donate?c_src=redirect&c_src2=legacy",
+    },
+    "waco": {
+        "/": "https://give.wacobridge.org/campaign/819605/donate?c_src=redirect&c_src2=legacy",
+        "/donate": "https://give.wacobridge.org/campaign/819605/donate?c_src=redirect&c_src2=legacy",
+        "/business": "https://give.wacobridge.org/campaign/819021/donate?c_src=redirect&c_src2=legacy",
+    },
 }
 
 ########

@@ -264,7 +264,10 @@ def redirect_external_page():
         return None
 
     path = request.path.rstrip("/") or "/"
-    destination = app.config["EXTERNAL_REDIRECTS"].get(path)
+    newsroom_redirects = app.config["EXTERNAL_REDIRECTS"].get(
+        NEWSROOM["name"], {}
+    )
+    destination = newsroom_redirects.get(path)
     if destination:
         scheme, netloc, destination_path, query, fragment = urlsplit(destination)
         incoming_query = request.query_string.decode("utf-8")
