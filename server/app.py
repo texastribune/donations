@@ -11,6 +11,7 @@ import os
 import re
 from datetime import datetime
 from pprint import pformat
+from urllib.parse import urlsplit, urlunsplit
 
 import stripe
 from amazon_pay.client import AmazonPayClient
@@ -238,6 +239,26 @@ part of the old donations app that lived at
 support.texastribune.org.
 """
 
+@app.before_request
+def redirect_external_page():
+    if request.method not in ("GET", "HEAD"):
+        return None
+
+    path = request.path.rstrip("/") or "/"
+    newsroom_redirects = app.config["EXTERNAL_REDIRECTS"].get(
+        NEWSROOM["name"], {}
+    )
+    destination = newsroom_redirects.get(path)
+    if destination:
+        scheme, netloc, destination_path, query, fragment = urlsplit(destination)
+        incoming_query = request.query_string.decode("utf-8")
+        query = "&".join(filter(None, [query, incoming_query]))
+        destination = urlunsplit(
+            (scheme, netloc, destination_path, query, fragment)
+        )
+        return redirect(destination, code=302)
+
+    return None
 
 @app.route("/")
 @app.route("/levels.html")
