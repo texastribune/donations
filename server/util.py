@@ -7,6 +7,7 @@ import stripe
 from datetime import datetime
 from collections import defaultdict
 from decimal import Decimal
+from email.message import EmailMessage
 from zoneinfo import ZoneInfo
 from .config import (
     MWS_ACCESS_KEY,
@@ -251,23 +252,22 @@ def send_email(recipient, subject, body, sender=None):
         FROM = sender
 
     TO = recipient if type(recipient) is list else [recipient]
-    SUBJECT = subject
-    TEXT = body.encode('ascii', errors='ignore').decode('ascii')
 
-    # Prepare actual message
-    message = """\From: %s\nTo: %s\nSubject: %s\n\n%s
-    """ % (
-        FROM,
-        ", ".join(TO),
-        SUBJECT,
-        TEXT,
-    )
     try:
+        # EmailMessage takes care of encoding: non-ASCII characters in the subject
+        # and body (accented names, business names, etc.) are sent as UTF-8
+        # instead of making smtplib raise UnicodeEncodeError.
+        message = EmailMessage()
+        message["From"] = FROM
+        message["To"] = ", ".join(TO)
+        message["Subject"] = subject
+        message.set_content(body)
+
         server = smtplib.SMTP(MAIL_SERVER, MAIL_PORT)
         server.ehlo()
         server.starttls()
         server.login(MAIL_USERNAME, MAIL_PASSWORD)
-        server.sendmail(FROM, TO, message)
+        server.send_message(message, FROM, TO)
         server.close()
         logging.debug("successfully sent the mail")
         logging.debug(message)
